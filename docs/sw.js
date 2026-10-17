@@ -1,6 +1,6 @@
 // Number Arcade offline cache (the home page and every game). Everything is served from the cache first, and refreshed in the
 // background, so the game opens instantly (even with no internet) and picks up a new version
-// on the next launch. The build replaces 87448ef3ff with a hash of the page.
+// on the next launch. The build replaces d7b1b05698 with a hash of the page.
 const CACHE = 'number-dash-__VERSION__';
 const CORE = ['./', './index.html', './dash/', './dash/index.html', './ladder/', './ladder/index.html', './pair/', './pair/index.html', './pop/', './pop/index.html', './spell/', './spell/index.html', './quest/', './quest/index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png'];
 
