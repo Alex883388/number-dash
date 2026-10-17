@@ -385,6 +385,83 @@
         { "kind": "phrasal", "q": "Type your name and password to ___ to the game.", "opts": ["log in", "log out", "sit down", "look after"], "a": 0, "why": "'Log in' means type your name and password to start using a website or a game." },
         { "kind": "wordform", "q": "Always use the internet ___ (safe).", "opts": ["safely", "safe", "safety", "safest"], "a": 0, "why": "We need an adverb with -ly to say how you use it: safely." }
       ]
+    },
+    {
+      "id": "flyer-6",
+      "title": "Music and art",
+      "emoji": "🎼",
+      "words": [
+        { "w": "concert", "def": "a show where people play music or sing for a lot of people", "ex": "We bought tickets for the ___ and listened to our favourite band.", "pos": "noun" },
+        { "w": "instrument", "def": "a thing that you play to make music, like a piano or a drum", "ex": "The guitar is my favourite ___. I play it every day.", "pos": "noun" },
+        { "w": "piano", "def": "a big instrument with black and white keys that you press", "ex": "There's a big ___ at school, and our teacher plays it while we sing.", "pos": "noun", "pic": "🎹" },
+        { "w": "violin", "def": "a small wooden instrument with strings that you hold under your chin", "ex": "She holds the ___ under her chin and plays it with a bow.", "pos": "noun", "pic": "🎻" },
+        { "w": "trumpet", "def": "a metal instrument that you play by blowing into it", "ex": "He blew into the ___ and it made a very loud noise.", "pos": "noun", "pic": "🎺" },
+        { "w": "singer", "def": "a person who sings, often as a job", "ex": "The ___ in the band has got a beautiful voice.", "pos": "noun", "pic": "🎤" },
+        { "w": "song", "def": "a short piece of music with words that you sing", "ex": "Let's sing a ___ for Grandpa's birthday!", "pos": "noun", "pic": "🎶" },
+        { "w": "dancer", "def": "a person who dances, often as a job", "ex": "The ___ jumped and turned on the stage in her ballet shoes.", "pos": "noun", "pic": "💃" },
+        { "w": "painting", "def": "a picture that someone makes with paint", "ex": "There is a famous ___ of a smiling woman in a museum in Paris.", "pos": "noun", "pic": "🖼️" },
+        { "w": "drawing", "def": "a picture that you make with a pencil or a pen", "ex": "Look at my ___ of a horse. I did it with a pencil.", "pos": "noun", "pic": "✏️" },
+        { "w": "gallery", "def": "a building where people can look at paintings and other art", "ex": "My uncle's paintings are in a ___ in London, and people can buy them.", "pos": "noun" },
+        { "w": "statue", "def": "a model of a person or an animal made of stone or metal", "ex": "In the middle of the square there is a big ___ of a king on a horse.", "pos": "noun", "pic": "🗽" },
+        { "w": "colour", "def": "red, blue, green and yellow are all examples of this", "ex": "Purple is my favourite ___.", "pos": "noun", "pic": "🎨" },
+        { "w": "practise", "def": "to do something again and again to get better at it", "ex": "If you want to play the violin well, you have to ___ every day.", "pos": "verb" },
+        { "w": "famous", "def": "known by lots and lots of people", "ex": "Everyone knows that singer. She's very ___.", "pos": "adj", "pic": "⭐" },
+        { "w": "stage", "def": "the high floor in a theatre or a hall where people sing, dance or act", "ex": "The actors walked onto the ___ and everyone clapped.", "pos": "noun" },
+        { "w": "musician", "def": "a person who plays music, often as a job", "ex": "My uncle is a ___. He plays the piano and the guitar in a band.", "pos": "noun" },
+        { "w": "loud", "def": "making a lot of noise", "ex": "The music at the concert was so ___ that I put my hands over my ears.", "pos": "adj", "pic": "🔊" },
+        { "w": "clap", "def": "to hit your hands together again and again to show you like something", "ex": "At the end of the show, everyone stood up to ___.", "pos": "verb", "pic": "👏" },
+        { "w": "prize", "def": "something you get when you win a competition", "ex": "Leo's painting won first ___ in the school art competition.", "pos": "noun", "pic": "🏅" }
+      ],
+      "grammar": [
+        { "q": "I ___ practising the piano when you phoned.", "opts": ["was", "were", "am"], "a": 0, "why": "With I, use 'was' + -ing: I was practising when you phoned." },
+        { "q": "Have you ever ___ a real orchestra?", "opts": ["heard", "hear", "hearing"], "a": 0, "why": "Present perfect: have + past participle. 'Hear' is irregular: hear, heard." },
+        { "q": "I have ___ played the trumpet, but I'd like to try.", "opts": ["never", "ever", "yet"], "a": 0, "why": "'Never' means not at any time in your life: I have never played it." },
+        { "q": "The trumpet is the ___ instrument in our band.", "opts": ["loudest", "louder", "most loud"], "a": 0, "why": "Short adjectives add -est: loud, the loudest." },
+        { "q": "The song ___ won the competition was about the sea.", "opts": ["which", "who", "where"], "a": 0, "why": "Use 'which' for things, like songs: the song which won." },
+        { "q": "If you practise every day, you ___ get better.", "opts": ["will", "would", "are"], "a": 0, "why": "First conditional: if + present simple, then will + verb." },
+        { "q": "You ___ clap at the end of the song, not in the middle.", "opts": ["should", "shouldn't", "should to"], "a": 0, "why": "Use 'should' + verb (with no 'to') to say what is the right thing to do." },
+        { "q": "How ___ music do you listen to every day?", "opts": ["much", "many", "a lot"], "a": 0, "why": "'Music' is uncountable, so use 'how much'." },
+        { "q": "What ___ the children doing when the music stopped?", "opts": ["were", "was", "did"], "a": 0, "why": "'The children' means they, so use 'were' + -ing: What were they doing?" },
+        { "q": "The concert finishes at ten, so I think we ___ get home before eleven.", "opts": ["won't", "don't", "didn't"], "a": 0, "why": "Use 'won't' (will not) + verb to say what you think will not happen." }
+      ],
+      "sentences": [
+        "Have you ever heard a real orchestra?",
+        "Which instrument do you want to learn?",
+        "My sister is learning to play the violin.",
+        "The singer has got a beautiful voice.",
+        "Who painted this famous picture?",
+        "Is the music too loud for you?"
+      ],
+      "reading": [
+        {
+          "title": "The school concert",
+          "text": "Last Friday our school had a big concert in the hall. Parents, grandparents and teachers came to watch. First, the youngest children sang a funny song about a cat. Then my friend Max played the trumpet. He was very nervous, but he played really well.\n\nI play the violin, and I practised every day for three months before the concert. When I walked onto the stage, my hands were shaking a little. But when I started to play, I felt happy. At the end, everyone stood up and clapped. Our music teacher said, 'That was the best concert we have ever had!'",
+          "qs": [
+            { "type": "mc", "q": "Where was the concert?", "opts": ["in the school hall", "in a park", "in a theatre", "in the music room"], "a": 0 },
+            { "type": "mc", "q": "What did the youngest children do?", "opts": ["They played the trumpet.", "They sang a funny song.", "They danced."], "a": 1 },
+            { "type": "tf", "q": "Max played badly because he was nervous.", "opts": ["True", "False"], "a": 1 },
+            { "type": "mc", "q": "How long did the writer practise before the concert?", "opts": ["three days", "three weeks", "three months"], "a": 2 },
+            { "type": "tf", "q": "At the end, everyone stood up and clapped.", "opts": ["True", "False"], "a": 0 }
+          ]
+        },
+        {
+          "title": "A day at the gallery",
+          "text": "On Saturday, Lily and her mum went to an art gallery in the city. The gallery had paintings, drawings and statues from all over the world.\n\nLily's favourite painting was very big and full of colour. It showed a busy market with hundreds of people. 'How long did the artist take to paint this?' Lily asked. 'Two years,' said the guide.\n\nIn the last room, children could paint their own pictures. Lily painted a picture of her cat with bright orange and purple colours. The guide liked it so much that she put it on the wall for a week. Lily was very proud. 'I think I'll be a famous artist one day!' she said.",
+          "qs": [
+            { "type": "mc", "q": "Who did Lily go to the gallery with?", "opts": ["her dad", "her mum", "her teacher", "her friend"], "a": 1 },
+            { "type": "mc", "q": "What did Lily's favourite painting show?", "opts": ["a cat", "a busy market", "the sea"], "a": 1 },
+            { "type": "tf", "q": "The artist took two years to paint Lily's favourite painting.", "opts": ["True", "False"], "a": 0 },
+            { "type": "mc", "q": "What did Lily paint?", "opts": ["her mum", "her cat", "a market"], "a": 1 },
+            { "type": "tf", "q": "The guide put Lily's picture on the wall for a month.", "opts": ["True", "False"], "a": 1 }
+          ]
+        }
+      ],
+      "extra": [
+        { "kind": "collocation", "q": "Let's ___ a song together!", "opts": ["sing", "say", "tell", "speak"], "a": 0, "why": "We sing a song. We say words and we tell stories." },
+        { "kind": "preposition", "q": "Who is the girl ___ the painting?", "opts": ["in", "on", "at", "of"], "a": 0, "why": "We say a person is 'in' a painting or 'in' a photo." },
+        { "kind": "phrasal", "q": "If you don't win the prize this time, don't ___! Try again next year.", "opts": ["give up", "get up", "look after", "turn on"], "a": 0, "why": "'Give up' means stop trying." },
+        { "kind": "wordform", "q": "She sings ___ (beautiful).", "opts": ["beautifully", "beautiful", "beauty", "beautify"], "a": 0, "why": "Use an adverb with -ly to say how she sings: beautifully." }
+      ]
     }
   ]
 }

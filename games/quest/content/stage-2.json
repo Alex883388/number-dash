@@ -385,6 +385,83 @@
         { "kind": "collocation", "q": "I hope you ___ better soon!", "opts": ["get", "make", "do", "have"], "a": 0, "why": "We say 'get better' when an ill person starts to feel well again." },
         { "kind": "wordform", "q": "Brush your teeth ___ (careful).", "opts": ["carefully", "careful", "careless", "care"], "a": 0, "why": "Use an adverb with -ly to say how you do something: brush carefully." }
       ]
+    },
+    {
+      "id": "mover-6",
+      "title": "In the kitchen",
+      "emoji": "🍳",
+      "words": [
+        { "w": "cook", "def": "to make food hot so you can eat it, for example in an oven", "ex": "Dad likes to ___ fish and rice for dinner.", "pos": "verb", "pic": "🍳" },
+        { "w": "plate", "def": "a flat round dish that you put food on", "ex": "Put your chips on your ___ and come to the table.", "pos": "noun", "pic": "🍽️" },
+        { "w": "bowl", "def": "a round deep dish for soup, rice or cereal", "ex": "I eat my cereal from a big ___ with a spoon.", "pos": "noun", "pic": "🥣" },
+        { "w": "cup", "def": "a small round thing with a handle that you drink hot drinks from", "ex": "Would you like a ___ of tea, Grandma?", "pos": "noun" },
+        { "w": "glass", "def": "you drink water or juice from it, and you can see through it", "ex": "Put the orange juice in a tall ___ with some ice.", "pos": "noun", "pic": "🥛" },
+        { "w": "spoon", "def": "a small thing with a round end that you use to eat soup", "ex": "You eat soup with a ___, not with a fork.", "pos": "noun", "pic": "🥄" },
+        { "w": "fork", "def": "a thing with three or four points that you use to pick up food", "ex": "Hold your ___ in your left hand and your knife in your right.", "pos": "noun" },
+        { "w": "bottle", "def": "a tall thing, often made of glass or plastic, for drinks like water or milk", "ex": "There is a ___ of water in my school bag.", "pos": "noun" },
+        { "w": "fridge", "def": "a cold cupboard in the kitchen that keeps food fresh", "ex": "The cheese and the milk are in the ___ to keep them cold.", "pos": "noun" },
+        { "w": "pancake", "def": "a thin, flat, round cake that you cook in a pan", "ex": "I like my ___ with lemon and sugar.", "pos": "noun", "pic": "🥞" },
+        { "w": "soup", "def": "a hot food made from vegetables or meat in water, that you eat with a spoon", "ex": "It's cold outside, so let's have some hot tomato ___.", "pos": "noun", "pic": "🍲" },
+        { "w": "salad", "def": "a cold mix of vegetables like tomatoes and green leaves", "ex": "I'm making a ___ with tomatoes, carrots and green leaves.", "pos": "noun", "pic": "🥗" },
+        { "w": "cheese", "def": "a yellow or white food made from milk", "ex": "Pizza has got tomato and ___ on it.", "pos": "noun", "pic": "🧀" },
+        { "w": "meat", "def": "food from animals, like chicken or beef", "ex": "Lions eat ___. They don't eat grass.", "pos": "noun", "pic": "🥩" },
+        { "w": "honey", "def": "a sweet, sticky, yellow food that bees make", "ex": "Bears love sweet ___.", "pos": "noun", "pic": "🍯" },
+        { "w": "salt", "def": "small white bits that you put on food to make it taste better", "ex": "Sea water tastes of ___.", "pos": "noun", "pic": "🧂" },
+        { "w": "vegetable", "def": "a plant that we eat, like a carrot or a potato", "ex": "My favourite ___ is broccoli.", "pos": "noun", "pic": "🥦" },
+        { "w": "hungry", "def": "wanting to eat", "ex": "I didn't have breakfast, so I'm very ___ now.", "pos": "adj" },
+        { "w": "delicious", "def": "with a very good taste", "ex": "Mmm! This chocolate cake is ___!", "pos": "adj", "pic": "😋" },
+        { "w": "hot", "def": "very warm; the opposite of cold", "ex": "Don't touch the pan. It's very ___!", "pos": "adj" }
+      ],
+      "grammar": [
+        { "q": "Are there ___ eggs in the fridge?", "opts": ["any", "a", "much"], "a": 0, "why": "Use 'any' in questions: Are there any eggs?" },
+        { "q": "We haven't got ___ milk. Let's buy some.", "opts": ["any", "some", "a"], "a": 0, "why": "Use 'any' after 'not': we haven't got any milk." },
+        { "q": "Children ___ use the oven without a grown-up.", "opts": ["mustn't", "must", "don't must"], "a": 0, "why": "'Mustn't' means it is not allowed. Don't use the oven on your own!" },
+        { "q": "Dad ___ pancakes right now. Can you smell them?", "opts": ["is making", "makes", "make"], "a": 0, "why": "'Right now' means at this moment, so use is + -ing: he is making." },
+        { "q": "I'm ___ make a cake for Grandma's birthday tomorrow.", "opts": ["going to", "go to", "going"], "a": 0, "why": "Use am, is or are + 'going to' + verb for plans." },
+        { "q": "Yesterday we ___ soup for lunch.", "opts": ["ate", "eated", "eat"], "a": 0, "why": "'Eat' is irregular. In the past it is 'ate'." },
+        { "q": "Mum's soup is ___ than the soup in the cafe.", "opts": ["more delicious", "deliciouser", "delicious"], "a": 0, "why": "Long words use 'more' to compare: more delicious than." },
+        { "q": "I ___ have cereal for breakfast. I eat it every day!", "opts": ["always", "never", "sometimes"], "a": 0, "why": "'Always' means every time. I eat it every day, so I always have it." },
+        { "q": "How often ___ you wash the dishes?", "opts": ["do", "does", "are"], "a": 0, "why": "Ask with 'do' for I, you, we and they: How often do you...?" },
+        { "q": "Last night I ___ a glass of milk before bed.", "opts": ["drank", "drinked", "drink"], "a": 0, "why": "'Drink' is irregular. In the past it is 'drank'." }
+      ],
+      "sentences": [
+        "Dad is making a big pancake.",
+        "Is there any milk in the fridge?",
+        "You must wash your hands.",
+        "Can you give me the salt?",
+        "This soup is too hot!",
+        "We haven't got any cheese."
+      ],
+      "reading": [
+        {
+          "title": "Pancakes for breakfast",
+          "text": "It's Saturday morning, and Tom and his dad are in the kitchen. They are going to make pancakes! Tom puts some flour, two eggs and some milk in a big bowl. Dad mixes them with a spoon, and then he cooks the pancakes. Tom eats his pancake with honey, but Dad has his with cheese. 'Mmm, delicious!' says Tom. After breakfast, they wash all the plates and bowls.",
+          "qs": [
+            { "type": "mc", "q": "What are Tom and his dad going to make?", "opts": ["soup", "pancakes", "a salad"], "a": 1 },
+            { "type": "mc", "q": "How many eggs does Tom put in the bowl?", "opts": ["one", "two", "three"], "a": 1 },
+            { "type": "tf", "q": "Tom mixes the eggs and the milk.", "opts": ["True", "False"], "a": 1 },
+            { "type": "mc", "q": "What does Tom eat his pancake with?", "opts": ["cheese", "honey", "salt"], "a": 1 },
+            { "type": "tf", "q": "They wash the plates and bowls after breakfast.", "opts": ["True", "False"], "a": 0 }
+          ]
+        },
+        {
+          "title": "Grandma's vegetable soup",
+          "text": "Last Sunday, Mia visited her grandma. It was cold and rainy, so Grandma made her famous vegetable soup. Mia helped her. She washed the carrots and potatoes, and Grandma cut them. They put them in a big pot with some water and salt. The soup cooked for an hour. When it was ready, it was very hot, so they waited for ten minutes. Then they ate it with bread and cheese. It was the best soup in the world!",
+          "qs": [
+            { "type": "mc", "q": "What was the weather like last Sunday?", "opts": ["sunny and hot", "cold and rainy", "windy and snowy"], "a": 1 },
+            { "type": "tf", "q": "Mia cut the carrots and potatoes.", "opts": ["True", "False"], "a": 1 },
+            { "type": "tf", "q": "The soup cooked for an hour.", "opts": ["True", "False"], "a": 0 },
+            { "type": "tf", "q": "They waited ten minutes before they ate the soup.", "opts": ["True", "False"], "a": 0 },
+            { "type": "mc", "q": "What did they eat with the soup?", "opts": ["rice", "bread and cheese", "salad"], "a": 1 }
+          ]
+        }
+      ],
+      "extra": [
+        { "kind": "collocation", "q": "I ___ a mistake and put salt in the cake!", "opts": ["made", "did", "took", "had"], "a": 0, "why": "We say 'make a mistake', not 'do a mistake'." },
+        { "kind": "phrasal", "q": "Please ___ the oven when you finish.", "opts": ["turn off", "turn up", "get off", "take off"], "a": 0, "why": "'Turn off' means stop a machine working." },
+        { "kind": "preposition", "q": "Put the milk back ___ the fridge, please.", "opts": ["in", "at", "on", "to"], "a": 0, "why": "'In' means inside: the milk goes in the fridge." },
+        { "kind": "linking", "q": "I'm hungry, ___ I'm going to make a sandwich.", "opts": ["so", "because", "but", "or"], "a": 0, "why": "Use 'so' to say what happens because of something: I'm hungry, so I'm making a sandwich." }
+      ]
     }
   ]
 }

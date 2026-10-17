@@ -657,7 +657,7 @@ ND.LEVELS.forEach((d) => {
   if (d.song && !SONGS[d.id]) SONGS[d.id] = genSong(d);
   if (d.look && !PAL[d.id]) PAL[d.id] = genPalette(d.look);
 });
-const PACKS = [['main', 'Adventure'], ['normal', 'Normal pack'], ['hard', 'Hard pack'], ['expert', 'Expert pack']];
+const PACKS = [['main', 'Adventure'], ['chill', 'Chill pack'], ['normal', 'Normal pack'], ['hard', 'Hard pack'], ['expert', 'Expert pack']];
 
 /* ================= canvas drawing ================= */
 const cv = $('#game'), cx = cv.getContext('2d');

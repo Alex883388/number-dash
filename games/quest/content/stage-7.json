@@ -3140,6 +3140,606 @@
           "why": "The first balances both views and gives a clear, reasoned position. The others list art forms, are informal and unsupported, or misstate the question."
         }
       ]
+    },
+    {
+      "id": "band8-6",
+      "title": "Conservation and heritage",
+      "emoji": "🏰",
+      "words": [
+        {
+          "w": "outlaw",
+          "def": "to make something illegal by passing a law",
+          "ex": "In 1989, a worldwide agreement was reached to ___ the international trade in ivory, making it a crime.",
+          "pos": "verb",
+          "syn": [
+            "ban",
+            "prohibit"
+          ]
+        },
+        {
+          "w": "wilderness",
+          "def": "a large natural area that has not been changed by farming, building or other human activity",
+          "ex": "Antarctica is the last great ___ on Earth, with no permanent towns or roads.",
+          "pos": "noun"
+        },
+        {
+          "w": "dwindle",
+          "def": "to become gradually smaller in size or number until little remains",
+          "ex": "As their nesting beaches were built on, the turtle population began to ___.",
+          "pos": "verb",
+          "syn": [
+            "shrink",
+            "decrease"
+          ],
+          "ant": [
+            "grow",
+            "increase"
+          ]
+        },
+        {
+          "w": "replenish",
+          "def": "to fill something up again, or to bring it back to its former level",
+          "ex": "If fishing stops for a few years, the fish stocks in the bay have time to ___ themselves.",
+          "pos": "verb",
+          "syn": [
+            "refill",
+            "restore"
+          ]
+        },
+        {
+          "w": "rewilding",
+          "def": "returning an area of land to its natural state, often by bringing back animals that once lived there",
+          "ex": "Supporters of ___ argue that the best way to restore nature is often to step back and let wild plants and animals take over.",
+          "pos": "noun"
+        },
+        {
+          "w": "sanctuary",
+          "def": "a place where birds or animals are protected and can live safely",
+          "ex": "Rescued baby elephants are cared for at a ___ in Kenya until they are ready to return to the wild.",
+          "pos": "noun",
+          "syn": [
+            "refuge"
+          ]
+        },
+        {
+          "w": "irreversible",
+          "def": "impossible to change back to how it was before",
+          "ex": "Once a species has disappeared, the loss is ___: it can never be brought back.",
+          "pos": "adj",
+          "syn": [
+            "permanent"
+          ],
+          "ant": [
+            "reversible"
+          ]
+        },
+        {
+          "w": "deterioration",
+          "def": "the process of slowly becoming worse in condition",
+          "ex": "Damp air and pollution have caused the steady ___ of the cathedral's stone carvings.",
+          "pos": "noun",
+          "ant": [
+            "improvement"
+          ],
+          "forms": {
+            "noun": "deterioration",
+            "verb": "deteriorate"
+          }
+        },
+        {
+          "w": "listed building",
+          "def": "in Britain, a building protected by law because of its historical or architectural importance",
+          "ex": "Because the old mill is a ___, its owners need special permission even to replace its windows.",
+          "pos": "phrase"
+        },
+        {
+          "w": "erode",
+          "def": "to wear something away gradually, as wind, rain or the sea do to rock and soil",
+          "ex": "Every winter, storm waves ___ a little more of the cliff beneath the old lighthouse.",
+          "pos": "verb",
+          "syn": [
+            "wear"
+          ],
+          "forms": {
+            "verb": "erode",
+            "noun": "erosion"
+          }
+        },
+        {
+          "w": "archaeological",
+          "def": "connected with the study of the past through the objects and buildings that people left behind",
+          "ex": "Builders must stop work if they uncover ___ remains, so that experts can examine them first.",
+          "pos": "adj",
+          "forms": {
+            "adj": "archaeological",
+            "noun": "archaeology"
+          }
+        },
+        {
+          "w": "indispensable",
+          "def": "so important or useful that it is impossible to manage without it",
+          "ex": "Local volunteers have become ___ to the reserve, which could not run without their help.",
+          "pos": "adj",
+          "syn": [
+            "essential",
+            "vital"
+          ],
+          "ant": [
+            "unnecessary"
+          ]
+        },
+        {
+          "w": "captive breeding",
+          "def": "breeding animals in zoos or centres so that their young can later be released into the wild",
+          "ex": "Thanks to ___, the Arabian oryx was saved and returned to the deserts where it once lived.",
+          "pos": "phrase"
+        },
+        {
+          "w": "flagship species",
+          "def": "a popular animal used to win support for protecting the whole area in which it lives",
+          "ex": "The giant panda is a ___: money raised to protect it also protects forests where many other animals live.",
+          "pos": "phrase"
+        },
+        {
+          "w": "conservationist",
+          "def": "a person who works to protect animals, plants and the natural environment",
+          "ex": "The ___ spent ten years counting the snow leopards that live high in the mountains.",
+          "pos": "noun"
+        },
+        {
+          "w": "relic",
+          "def": "an object, building or custom that has survived from the distant past",
+          "ex": "This stone axe, a ___ of the first farmers who lived in the valley, is over five thousand years old.",
+          "pos": "noun"
+        },
+        {
+          "w": "coral bleaching",
+          "def": "the loss of colour in coral when warm water forces out the tiny algae that live inside it",
+          "ex": "During unusually hot summers, ___ can turn large areas of a reef white.",
+          "pos": "phrase"
+        },
+        {
+          "w": "stewardship",
+          "def": "the careful and responsible management of something that you have been trusted to look after",
+          "ex": "Good ___ of the countryside means managing it so that it stays healthy for future generations.",
+          "pos": "noun"
+        },
+        {
+          "w": "legislation",
+          "def": "a law, or a set of laws, passed by a parliament",
+          "ex": "New ___ makes it illegal to damage the nests of protected birds.",
+          "pos": "noun",
+          "forms": {
+            "noun": "legislation",
+            "verb": "legislate"
+          }
+        },
+        {
+          "w": "marine reserve",
+          "def": "an area of sea where fishing and other activities are limited by law to protect wildlife",
+          "ex": "Since the bay became a ___, fishing has been banned there and lobster numbers have risen sharply.",
+          "pos": "phrase"
+        }
+      ],
+      "grammar": [
+        {
+          "q": "Only through careful management ___ the island's seabird colonies recover.",
+          "opts": [
+            "can",
+            "are",
+            "have",
+            "is"
+          ],
+          "a": 0,
+          "why": "After 'Only through + noun' at the start, invert: can + subject + base form (recover)."
+        },
+        {
+          "q": "So fragile ___ the ancient manuscript that only two scholars a year may handle it.",
+          "opts": [
+            "is",
+            "does",
+            "has",
+            "it is"
+          ],
+          "a": 0,
+          "why": "After 'So + adjective' at the start, the verb comes before the subject: So fragile is the manuscript."
+        },
+        {
+          "q": "It is not the tourists themselves but the litter they leave ___ does the most damage.",
+          "opts": [
+            "that",
+            "what",
+            "where",
+            "who"
+          ],
+          "a": 0,
+          "why": "In the cleft pattern 'It is not X but Y that...', use 'that'; 'who' is only for people, and the focus here is 'the litter'."
+        },
+        {
+          "q": "The cave's entrance is thought ___ by a rockfall long ago, which kept the paintings hidden until 1940.",
+          "opts": [
+            "to have been blocked",
+            "to be blocked",
+            "to have blocked",
+            "that it was blocked"
+          ],
+          "a": 0,
+          "why": "The blocking happened in the past and was done to the entrance, so use the perfect passive infinitive: to have been blocked."
+        },
+        {
+          "q": "Not until the 1970s ___ governments begin to protect wetlands through international agreements.",
+          "opts": [
+            "did",
+            "had",
+            "have",
+            "were"
+          ],
+          "a": 0,
+          "why": "After 'Not until + time' at the start, invert the main clause; with the base form 'begin' in the past we need 'did'."
+        },
+        {
+          "q": "The committee insisted that the new visitor centre ___ in the same local stone as the castle.",
+          "opts": [
+            "be built",
+            "is building",
+            "building",
+            "to be built"
+          ],
+          "a": 0,
+          "why": "After 'insist that', formal English uses the base form (the subjunctive); here it is passive: be built."
+        },
+        {
+          "q": "___ as the project's aims are, it has struggled to raise enough money.",
+          "opts": [
+            "Admirable",
+            "Although admirable",
+            "However admirable",
+            "Despite admirable"
+          ],
+          "a": 0,
+          "why": "'Adjective + as + subject + verb' is a formal concession: Admirable as they are = Although they are admirable."
+        },
+        {
+          "q": "___ the water continue to warm, more of the reef could suffer from bleaching.",
+          "opts": [
+            "Should",
+            "Were",
+            "Had",
+            "Would"
+          ],
+          "a": 0,
+          "why": "'Should + subject + base form' is a formal way to say 'If...': Should the water continue. 'Were' would need 'to continue'."
+        },
+        {
+          "q": "___ badly by a storm, the old lighthouse was rebuilt using its original stones.",
+          "opts": [
+            "Damaged",
+            "Damaging",
+            "Having damaged",
+            "To damage"
+          ],
+          "a": 0,
+          "why": "The lighthouse was damaged by the storm (passive meaning), so the participle clause starts with 'Damaged'."
+        },
+        {
+          "q": "There is little doubt ___ ecotourism, when well managed, can benefit local communities.",
+          "opts": [
+            "that",
+            "whether",
+            "what",
+            "of"
+          ],
+          "a": 0,
+          "why": "'There is little doubt that + clause' states something as almost certain. 'Of' would need a noun, and 'whether' and 'what' do not fit."
+        }
+      ],
+      "sentences": [
+        "Thanks to captive breeding, the Arabian oryx was returned to the wild.",
+        "So fragile is the manuscript that only two scholars may handle it.",
+        "Every winter, storm waves erode a little more of the cliff.",
+        "The giant panda is a flagship species for the protection of forests.",
+        "Damp air has caused the deterioration of the cathedral's stone carvings.",
+        "Not until the 1970s did governments begin to protect wetlands."
+      ],
+      "reading": [
+        {
+          "title": "Moving a temple",
+          "text": "In the early 1960s, Egypt began building the Aswan High Dam across the River Nile. The dam promised to control flooding and generate electricity, but the vast lake that would form behind it threatened to submerge dozens of ancient monuments. Among them were the two magnificent temples at Abu Simbel, carved into a sandstone cliff more than three thousand years ago on the orders of the pharaoh Ramesses II.\n\nIn response, UNESCO launched an international campaign to rescue the monuments, and dozens of countries contributed money and expertise. The solution chosen for Abu Simbel was as bold as it was risky. Between 1964 and 1968, engineers sawed the temples, including their colossal statues, into more than a thousand huge blocks. Each block was numbered, lifted and reassembled on higher ground, about 65 metres above the original site, against an artificial hill built to recreate the cliff.\n\nThe work demanded extraordinary precision. The ancient builders had aligned the main temple so that, on two days each year, the rising sun shines deep inside it and lights up statues in its innermost room. Remarkably, the engineers preserved this effect, although the dates on which it occurs are thought to have shifted by about a day.\n\nNot everyone regards the rescue as a complete success. Some archaeologists point out that a monument cut away from its original setting loses part of its meaning, and that the joins between the blocks remain visible on close inspection. Others note that many smaller sites in the region could not be saved and now lie beneath the lake.\n\nNevertheless, the campaign had a lasting influence. It demonstrated that protecting outstanding places could be treated as a shared international responsibility, an idea that led to the World Heritage Convention, adopted by UNESCO in 1972. Today, more than a thousand sites around the world are protected under that agreement.",
+          "qs": [
+            {
+              "type": "tfng",
+              "q": "The temples were moved to a lower position, closer to the river.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 1
+            },
+            {
+              "type": "tfng",
+              "q": "The blocks were carried to their new site on boats along the Nile.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 2
+            },
+            {
+              "type": "mc",
+              "q": "According to the passage, what is remarkable about the rebuilt main temple?",
+              "opts": [
+                "Sunlight still reaches its innermost room on two days a year, almost as it did originally.",
+                "It is now larger than the original temple.",
+                "Its statues were replaced with modern copies.",
+                "The joins between its blocks are completely invisible."
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "What can be inferred from the archaeologists' criticism?",
+              "opts": [
+                "They believe a monument's original location is part of its value.",
+                "They think the temples should have been left to flood.",
+                "They were not invited to take part in the campaign.",
+                "They prefer modern buildings to ancient ones."
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "What is the main purpose of the final paragraph?",
+              "opts": [
+                "to show that the rescue changed the way the world protects important places",
+                "to describe how the World Heritage Convention is organised",
+                "to argue that the High Dam should never have been built",
+                "to list the sites that are protected today"
+              ],
+              "a": 0
+            }
+          ]
+        },
+        {
+          "title": "The antelope that came back",
+          "text": "The Arabian oryx is a white antelope with long, straight horns, superbly adapted to the deserts of the Arabian Peninsula. It can survive for long periods without drinking, obtaining moisture from the plants it eats, and it is said to be able to sense rainfall from a great distance. Yet these remarkable abilities could not protect it from hunters equipped with cars and rifles. By 1972, the last wild oryx had disappeared.\n\nFortunately, conservationists had anticipated the danger. In the early 1960s, a small number of wild oryx were captured and, together with animals donated from private collections, became the founders of a captive herd at Phoenix Zoo in the United States. This 'World Herd', as it became known, bred successfully, and its descendants were later shared among zoos and breeding centres.\n\nIn 1982, the first captive-bred oryx were released into the wild in Oman, and further reintroductions followed in Saudi Arabia, Israel and elsewhere. The recovery was so successful that in 2011 the species' status was improved from 'endangered' to 'vulnerable', making it the first animal to reach this category after once having been extinct in the wild.\n\nThe story, however, is not one of uninterrupted triumph. In Oman, the Arabian Oryx Sanctuary had been declared a UNESCO World Heritage Site in 1994. After illegal hunting and capture caused the population there to fall sharply, and the government reduced the protected area by around ninety per cent, UNESCO removed the site from its list in 2007, the first time it had ever done so.\n\nThe oryx's history therefore offers two lessons. Captive breeding can rescue a species on the brink, but long-term survival depends on protecting the places where animals are returned, and on the continued commitment of the people who live alongside them.",
+          "qs": [
+            {
+              "type": "tfng",
+              "q": "The Arabian oryx needs to drink water every day in order to survive.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 1
+            },
+            {
+              "type": "tfng",
+              "q": "Most visitors to the Arabian Oryx Sanctuary came from Europe.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 2
+            },
+            {
+              "type": "mc",
+              "q": "What made the change in the oryx's status in 2011 unique?",
+              "opts": [
+                "No animal had recovered to that level before after vanishing from the wild.",
+                "It was the first antelope ever to be bred in a zoo.",
+                "It was the first time an animal had been released in Oman.",
+                "It was the only species protected by UNESCO."
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "What can be inferred from the fourth paragraph?",
+              "opts": [
+                "World Heritage status alone could not guarantee the oryx's protection.",
+                "UNESCO removes sites from its list every year.",
+                "The oryx population in Oman grew after 2007.",
+                "The government of Oman enlarged the sanctuary."
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "Which statement best summarises the writer's conclusion?",
+              "opts": [
+                "Captive breeding can save a species, but protecting its wild home is essential for its future.",
+                "Zoos are the safest place for endangered animals to live.",
+                "Reintroducing animals to the wild never succeeds.",
+                "The oryx no longer needs any protection."
+              ],
+              "a": 0
+            }
+          ]
+        }
+      ],
+      "extra": [
+        {
+          "kind": "collocation",
+          "q": "The new law ___ a significant step towards protecting the country's coastline.",
+          "opts": [
+            "marks",
+            "does",
+            "puts",
+            "takes up"
+          ],
+          "a": 0,
+          "why": "Something 'marks a step' when it is an important stage in progress; 'does', 'puts' and 'takes up' do not go with 'step' like this."
+        },
+        {
+          "kind": "phrasal",
+          "q": "Conservation projects often rely on volunteers who ___ their weekends to plant trees and clear rubbish.",
+          "opts": [
+            "give up",
+            "give in",
+            "give off",
+            "give out"
+          ],
+          "a": 0,
+          "why": "To 'give up' your time means to spend it on something for others. 'Give in' means surrender, 'give off' means produce a smell or heat, and 'give out' means hand out."
+        },
+        {
+          "kind": "paraphrase",
+          "q": "Which sentence means the same as: 'Captive breeding can rescue a species on the brink.'?",
+          "opts": [
+            "Breeding animals in zoos can save a species that is close to disappearing.",
+            "Zoos are the best place for every species to live.",
+            "Species on the brink cannot be saved by captive breeding.",
+            "Captive breeding causes species to disappear."
+          ],
+          "a": 0,
+          "why": "'On the brink' means very close to disaster, here close to disappearing, and 'rescue' means save."
+        },
+        {
+          "kind": "paraphrase",
+          "q": "Which is the closest paraphrase of: 'The solution chosen for Abu Simbel was as bold as it was risky.'?",
+          "opts": [
+            "The plan for Abu Simbel was both daring and dangerous.",
+            "The plan was bold but carried no risk at all.",
+            "The plan was too risky to be carried out.",
+            "The plan was less bold than the other solutions."
+          ],
+          "a": 0,
+          "why": "'As bold as it was risky' means it was equally bold and risky, so both daring and dangerous."
+        },
+        {
+          "kind": "register",
+          "q": "Which sentence is most suitable for an academic essay?",
+          "opts": [
+            "Tourism can generate revenue for conservation, yet large visitor numbers may accelerate the deterioration of fragile sites.",
+            "Tourists bring cash, but they kind of wreck stuff too.",
+            "Loads of tourists means loads of money, but loads of damage as well.",
+            "Tourism? Good for money, bad for old buildings, obviously."
+          ],
+          "a": 0,
+          "why": "Academic writing is balanced and precise ('generate revenue', 'may accelerate'); 'kind of wreck stuff', 'loads' and 'obviously' are conversational."
+        },
+        {
+          "kind": "linking",
+          "q": "___ attracting much-needed funds, tourism can damage the very sites it depends on.",
+          "opts": [
+            "While",
+            "Owing to",
+            "Unless",
+            "So that"
+          ],
+          "a": 0,
+          "why": "'While + -ing' admits one point and then contrasts it with another. The others give a cause, a condition or a purpose, which do not fit."
+        },
+        {
+          "kind": "cohesion",
+          "q": "Which sentence best fills the gap? 'Coral reefs support around a quarter of all marine species. ___ Protecting them is therefore a priority for ocean conservation.'",
+          "opts": [
+            "Yet they cover less than one per cent of the ocean floor.",
+            "For example, many tourists enjoy snorkelling.",
+            "However, coral reefs are of little importance to fish.",
+            "As a result, reefs need no protection at all."
+          ],
+          "a": 0,
+          "why": "Only the first adds a fact that strengthens the case: so much life in so small an area makes reefs a priority. The others are off topic or contradict the point."
+        },
+        {
+          "kind": "wordform",
+          "q": "Many historic buildings are ___ (replace), so damaging them means losing them for ever.",
+          "opts": [
+            "irreplaceable",
+            "replaceable",
+            "replacement",
+            "replacing"
+          ],
+          "a": 0,
+          "why": "We need a negative adjective meaning 'impossible to replace': irreplaceable, which matches 'losing them for ever'."
+        },
+        {
+          "kind": "mainidea",
+          "q": "Which heading best fits this paragraph? 'In the past, many zoos kept animals mainly to entertain the public. Today, the best zoos see their role differently. They run breeding programmes for threatened species, fund conservation work in the wild and teach visitors about the challenges that animals face.'",
+          "opts": [
+            "How the role of zoos has changed",
+            "Why animals should never be kept in zoos",
+            "The most popular animals in zoos",
+            "How to plan a family day out"
+          ],
+          "a": 0,
+          "why": "The paragraph contrasts zoos 'in the past' with what the best zoos do 'today'."
+        },
+        {
+          "kind": "collocation",
+          "q": "The government has ___ a ban on building within one kilometre of the coast.",
+          "opts": [
+            "imposed",
+            "made",
+            "done",
+            "put out"
+          ],
+          "a": 0,
+          "why": "We 'impose a ban' (or restrictions), meaning we officially introduce it; 'made', 'done' and 'put out' do not go with 'ban'."
+        }
+      ],
+      "writing": [
+        {
+          "kind": "paragraph",
+          "sents": [
+            "Mass tourism presents a serious dilemma for those who look after historic sites.",
+            "On the one hand, visitors' ticket fees often provide the funds needed to maintain fragile buildings.",
+            "On the other hand, the sheer number of visitors can wear away floors, damage paintings and increase pollution.",
+            "To resolve this tension, many sites now limit daily visitor numbers or require tickets to be booked in advance.",
+            "Such measures allow heritage to be enjoyed without being destroyed by its own popularity."
+          ]
+        },
+        {
+          "kind": "paragraph",
+          "sents": [
+            "Protecting habitats is generally more effective than trying to save individual species.",
+            "When a forest or wetland is preserved, every plant and animal that depends on it benefits at the same time.",
+            "By contrast, programmes that focus on a single species can be extremely expensive and may fail if the wider habitat continues to decline.",
+            "For this reason, many conservationists argue that funding should be directed towards protecting whole ecosystems."
+          ]
+        },
+        {
+          "kind": "upgrade",
+          "q": "Which is the most precise way to say: 'People should look after old buildings better because they're really important.'?",
+          "opts": [
+            "Historic buildings merit greater protection, as they embody a society's cultural identity and history.",
+            "People should take better care of old buildings because they're super important.",
+            "Old buildings are important and stuff, so look after them.",
+            "Every old building in the world must be kept exactly as it is for ever."
+          ],
+          "a": 0,
+          "why": "The first is formal and specific about why buildings matter ('embody a society's cultural identity'). The others are informal or make an extreme, absolute claim."
+        },
+        {
+          "kind": "topic",
+          "q": "Which topic sentence fits best? '___ Around a small island off the coast of England, fishing has been banned since 2003, and lobsters there have since become larger and more numerous. Similar no-fishing zones elsewhere have seen fish populations grow.'",
+          "opts": [
+            "Protecting areas of sea from fishing can allow marine life to recover.",
+            "Lobsters are a popular and expensive seafood.",
+            "England has many small islands around its coast.",
+            "The sea is full of fish and other creatures."
+          ],
+          "a": 0,
+          "why": "Both examples show sea life recovering after fishing stops. The others mention a minor detail of the example or are far too general."
+        },
+        {
+          "kind": "thesis",
+          "q": "Some people think that historic buildings should be preserved at all costs, while others believe they should be replaced with modern buildings when necessary. Discuss both views and give your own opinion. Which is the clearest thesis statement?",
+          "opts": [
+            "While not every old building can be saved, I would argue that structures of genuine historical or architectural value should be preserved, as they are irreplaceable once lost.",
+            "Historic buildings are often found in the centres of old towns.",
+            "Old buildings are ugly, so knock them all down.",
+            "There are many different opinions about buildings, both old and new."
+          ],
+          "a": 0,
+          "why": "The first balances both views and states a clear, reasoned position. The others state a fact, give an informal and extreme view, or avoid answering."
+        }
+      ]
     }
   ]
 }

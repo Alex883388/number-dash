@@ -2,7 +2,7 @@
 module.exports = [
   { viewport: [1280, 720, false, false] },
   { eval: "document.querySelector('[data-go=\"levels\"]').click(); 'menu'" }, { sleep: 800 },
-  { eval: "document.querySelectorAll('.pack-head')[1].scrollIntoView(); 'scroll'" }, { sleep: 300 }, { shot: 'p01-normal-pack' },
+  { eval: "document.querySelectorAll('.pack-head')[2].scrollIntoView(); 'scroll'" }, { sleep: 300 }, { shot: 'p01-normal-pack' },
   { log: "[...document.querySelectorAll('.pack-head')].map(h => h.textContent)" },
   { eval: "window.__t.play('n01'); window.__auto = true; 'n01'" },
   { waitFor: "window.__nd.game.p.x > 70", timeout: 30000 }, { shot: 'p02-n01' }, { log: "window.__t.state()" },

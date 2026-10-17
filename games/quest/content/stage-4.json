@@ -425,6 +425,91 @@
         { "kind": "thesis", "q": "Essay question: 'Some people think that more money should be spent on exploring space. Others think it should be spent on problems on Earth. Discuss both views and give your opinion.' Which is the clearest thesis statement?", "opts": ["Although exploring space teaches us a great deal, I believe money should first be spent on problems on Earth, such as protecting the oceans.", "Space is very big and full of stars.", "Rockets are expensive and they look cool.", "There are two views about this question."], "a": 0, "why": "The best thesis mentions both views and gives a clear opinion. The others do not answer the question." },
         { "kind": "topic", "q": "Read the rest of a paragraph: 'The ocean covers more than 70 per cent of the Earth's surface, but most of it has never been explored in detail. Many deep-sea creatures have not even been given names yet.' Which topic sentence fits best?", "opts": ["We still know surprisingly little about the ocean.", "The ocean is wet and salty.", "Space is easier to explore than the sea.", "Fish are my favourite animals."], "a": 0, "why": "Both sentences show how much of the ocean is still unknown. The others are too obvious, about space or about the writer." }
       ]
+    },
+    {
+      "id": "explorer-6",
+      "title": "Money and shopping",
+      "emoji": "💰",
+      "words": [
+        { "w": "budget", "def": "a plan for how much money you can spend and what you will spend it on", "ex": "We set a ___ of £20 for the birthday party.", "pos": "noun" },
+        { "w": "bargain", "def": "something you buy for much less than its usual price", "ex": "At only £3, this warm winter coat was a real ___.", "pos": "noun", "syn": ["deal"] },
+        { "w": "discount", "def": "an amount of money taken off the usual price", "ex": "Students get a 10 per cent ___ at the museum shop.", "pos": "noun", "syn": ["reduction"] },
+        { "w": "refund", "def": "money that a shop gives back to you when you return something", "ex": "The toy was broken, so the shop gave us a full ___.", "pos": "noun" },
+        { "w": "receipt", "def": "a piece of paper that shows what you bought and how much you paid", "ex": "Keep the ___ in case you need to take the shirt back.", "pos": "noun", "pic": "🧾" },
+        { "w": "purchase", "def": "to buy something (a more formal word)", "ex": "You can ___ tickets online or at the door.", "pos": "verb", "syn": ["buy"] },
+        { "w": "lend", "def": "to give something to someone for a short time and expect to get it back", "ex": "Could you ___ me your pen for a minute?", "pos": "verb", "ant": ["borrow"] },
+        { "w": "currency", "def": "the kind of money that is used in a country", "ex": "The euro is the ___ of many countries in Europe.", "pos": "noun", "pic": "💶" },
+        { "w": "exchange", "def": "to take something back to a shop and get a different thing instead", "ex": "Can I ___ these jeans for a bigger size?", "pos": "verb", "syn": ["swap"] },
+        { "w": "compare", "def": "to look at two or more things to see how they are similar or different", "ex": "Always ___ prices before you buy something expensive.", "pos": "verb", "forms": { "noun": "comparison", "verb": "compare" } },
+        { "w": "brand", "def": "the name of a product made by a particular company", "ex": "This ___ of trainers is very popular with teenagers.", "pos": "noun" },
+        { "w": "second-hand", "def": "owned by someone else before you", "ex": "I bought a ___ bike, and it works perfectly.", "pos": "adj", "ant": ["new"] },
+        { "w": "queue", "def": "a line of people who are waiting for something", "ex": "We waited in a ___ for twenty minutes to buy ice cream.", "pos": "noun" },
+        { "w": "deliver", "def": "to take things such as letters or shopping to someone's home", "ex": "The shop will ___ our new sofa on Friday.", "pos": "verb", "pic": "📦", "forms": { "noun": "delivery", "verb": "deliver" } },
+        { "w": "worth", "def": "having a particular value in money", "ex": "This old comic is now ___ more than £100.", "pos": "adj" },
+        { "w": "charity", "def": "an organisation that collects money to help people or animals in need", "ex": "Our class raised £200 for a ___ that protects wild birds.", "pos": "noun" },
+        { "w": "donate", "def": "to give money or things to help others, often through an organisation", "ex": "Every summer, we ___ our old books to the school library.", "pos": "verb", "forms": { "noun": "donation", "verb": "donate" } },
+        { "w": "salary", "def": "the money that you get every month for doing your job", "ex": "My aunt's ___ is paid into her bank account at the end of each month.", "pos": "noun", "syn": ["pay"] },
+        { "w": "value", "def": "how much something is worth", "ex": "The ___ of an old coin depends on how rare it is.", "pos": "noun", "forms": { "noun": "value", "adj": "valuable" } },
+        { "w": "essential", "def": "completely necessary; something you must have", "ex": "Bread and milk are ___ items that most families buy every week.", "pos": "adj", "ant": ["unnecessary"] }
+      ],
+      "grammar": [
+        { "q": "I ___ enough money for a new bike yet.", "opts": ["haven't saved", "didn't save", "don't save", "hasn't saved"], "a": 0, "why": "Use the present perfect with 'yet' for something that hasn't happened up to now. 'I' goes with 'haven't'." },
+        { "q": "Last Saturday, we ___ a second-hand bike at the market.", "opts": ["bought", "have bought", "buy", "were bought"], "a": 0, "why": "'Last Saturday' is a finished time, so use the past simple: bought." },
+        { "q": "If I ___ a lot of money, I would buy a house by the sea for my parents.", "opts": ["won", "win", "will win", "would win"], "a": 0, "why": "This is imaginary (second conditional), so use the past simple after 'if' (won), then would + verb." },
+        { "q": "If you ___ your receipt, the shop will give you a refund.", "opts": ["keep", "will keep", "kept", "keeping"], "a": 0, "why": "First conditional: if + present simple (keep), then will + verb. Don't use 'will' after 'if'." },
+        { "q": "In the UK, coins ___ by the Royal Mint in Wales.", "opts": ["are made", "make", "is made", "are making"], "a": 0, "why": "The coins don't make anything; the Royal Mint makes them. Use the present passive: are + made (plural, because 'coins')." },
+        { "q": "The first paper money ___ in China about 1,000 years ago.", "opts": ["was used", "used", "is used", "were used"], "a": 0, "why": "Use the past passive for a finished time. 'Money' is uncountable, so use 'was', not 'were'." },
+        { "q": "People ___ pay for everything with coins and notes, but now many use cards or phones.", "opts": ["used to", "use to", "were used to", "are used to"], "a": 0, "why": "'Used to' + verb describes a past habit that is not true now." },
+        { "q": "'I want to save my money,' said Ben. Ben said that he ___ to save his money.", "opts": ["wanted", "want", "wanting", "was want"], "a": 0, "why": "In reported speech, the present simple (want) usually moves back to the past simple (wanted)." },
+        { "q": "My sister is saving up ___ a new phone.", "opts": ["to buy", "buying", "buy", "bought"], "a": 0, "why": "Use 'to' + verb to give the purpose: she is saving up so that she can buy a phone." },
+        { "q": "A charity shop is a shop ___ sells things that people have given away.", "opts": ["that", "who", "where", "what"], "a": 0, "why": "Use 'that' (or 'which') to say which shop you mean. 'Where' would need a subject after it: a shop where people sell things." }
+      ],
+      "sentences": [
+        "This jumper was a bargain in the sales.",
+        "Coins are made by the Royal Mint in Wales.",
+        "My sister is saving up to buy a new phone.",
+        "A charity shop sells things that people have donated.",
+        "Have you ever bought anything second-hand?",
+        "The queue at the till was very long."
+      ],
+      "reading": [
+        {
+          "title": "The story of money",
+          "text": "Long ago, before money was invented, people who wanted something had to swap. A farmer might exchange a bag of grain for a pair of shoes. But this was not always easy. What if the shoemaker did not want any grain?\n\nTo solve this problem, people began to use objects that everyone agreed were valuable. In parts of Africa and Asia, small, shiny cowrie shells were used as money for centuries.\n\nThe first coins were made about 2,600 years ago in Lydia, in what is now Turkey. Coins were small, strong and easy to carry. Later, about 1,000 years ago, paper money was used for the first time in China. It was much lighter than a heavy bag of coins.\n\nToday, money is changing again. In many countries, people pay with cards or phones, and some shops no longer accept cash at all. Who knows what money will look like in the future?",
+          "qs": [
+            { "type": "mc", "q": "Why was swapping not always easy?", "opts": ["The other person might not want what you had.", "Shoes were too expensive.", "Farmers did not grow any grain.", "People did not like shopping."], "a": 0 },
+            { "type": "tfng", "q": "Shells were once used as money in some parts of the world.", "opts": ["True", "False", "Not Given"], "a": 0 },
+            { "type": "tfng", "q": "The first coins were made in China.", "opts": ["True", "False", "Not Given"], "a": 1 },
+            { "type": "tfng", "q": "Gold coins were worth more than paper money.", "opts": ["True", "False", "Not Given"], "a": 2 },
+            { "type": "mc", "q": "What was one advantage of paper money?", "opts": ["It was lighter than coins.", "It was made of shells.", "It never got old.", "It could only be used in Turkey."], "a": 0 }
+          ]
+        },
+        {
+          "title": "The secrets of the supermarket",
+          "text": "Have you ever gone to the supermarket for a pint of milk and come home with a full bag? If so, you are not alone. Supermarkets are carefully designed to make us buy more.\n\nFor example, everyday items such as milk and bread are often placed at the back of the shop. To reach them, customers have to walk past hundreds of other products, and many people pick up something they had not planned to buy.\n\nPrices are also chosen carefully. A price of £1.99 seems much lower than £2, even though the difference is only one penny. Sweets used to be displayed near the tills, where children waiting in the queue could easily see them. In England, large shops are no longer allowed to do this.\n\nKnowing these tricks can help you to save money. Before you go shopping, write a list and decide how much you want to spend. Then stick to your budget!",
+          "qs": [
+            { "type": "mc", "q": "What is the main idea of the text?", "opts": ["Supermarkets use clever tricks to make us spend more.", "Milk is cheaper than bread.", "Children should not go shopping.", "Shops in England are closing."], "a": 0 },
+            { "type": "tfng", "q": "Milk and bread are often found near the entrance of the shop.", "opts": ["True", "False", "Not Given"], "a": 1 },
+            { "type": "tfng", "q": "A price ending in 99 can make something seem cheaper.", "opts": ["True", "False", "Not Given"], "a": 0 },
+            { "type": "tfng", "q": "Most people spend more at the supermarket on Saturdays.", "opts": ["True", "False", "Not Given"], "a": 2 },
+            { "type": "mc", "q": "What does the writer advise you to do before you go shopping?", "opts": ["Write a list and set a budget.", "Go when you are very hungry.", "Take a younger brother or sister.", "Only buy things from the back of the shop."], "a": 0 }
+          ]
+        }
+      ],
+      "extra": [
+        { "kind": "collocation", "q": "Can I ___ by card, please?", "opts": ["pay", "buy", "spend", "cost"], "a": 0, "why": "We say 'pay by card' or 'pay in cash'. You 'buy' a thing and 'spend' money." },
+        { "kind": "preposition", "q": "How much did you spend ___ your new trainers?", "opts": ["on", "for", "at", "with"], "a": 0, "why": "We 'spend money on' something." },
+        { "kind": "phrasal", "q": "I'm ___ a birthday present for my dad. Have you got any ideas?", "opts": ["looking for", "looking after", "looking up", "looking out"], "a": 0, "why": "'Look for' means try to find something." },
+        { "kind": "wordform", "q": "Thank you for your kind ___ to the school fair. (donate)", "opts": ["donation", "donate", "donor", "donated"], "a": 0, "why": "After 'your kind' we need a noun for the thing you gave: donation. A 'donor' is a person." },
+        { "kind": "linking", "q": "I wanted to buy the game, ___ I didn't have enough money.", "opts": ["but", "so", "because", "or"], "a": 0, "why": "'But' joins two ideas that go against each other: I wanted it, but I couldn't pay." },
+        { "kind": "paraphrase", "q": "Which sentence means the same as 'These shoes were a bargain'?", "opts": ["These shoes cost less than they usually do.", "These shoes were very expensive.", "These shoes were a present.", "These shoes did not fit."], "a": 0, "why": "A 'bargain' is something that you buy for less than its usual price." }
+      ],
+      "writing": [
+        { "kind": "paragraph", "sents": ["Many parents give their children pocket money every week.", "This helps children to learn how to manage money.", "For example, they may need to save for several weeks to buy something special.", "In this way, they learn that they cannot have everything at once.", "These are lessons that will be useful for the rest of their lives."] },
+        { "kind": "paragraph", "sents": ["Charity shops are a great place to find a bargain.", "They sell clothes, books and toys that people have given away.", "Because the shop gets these things for free, it can sell them at low prices.", "The money it makes is then used to help people or animals in need.", "So when you shop there, you save money and help others at the same time."] },
+        { "kind": "upgrade", "q": "Which is the most precise way to say: 'The price of the game went down a bit in the sale.'?", "opts": ["The price of the game fell slightly in the sale.", "The game got a bit cheaper, kind of.", "The price of the game went down loads.", "The game's price did a small drop."], "a": 0, "why": "'Fell slightly' is short and exact. 'Kind of' is vague, 'loads' is chatty and changes the meaning, and 'did a small drop' is not natural English." },
+        { "kind": "thesis", "q": "Essay question: 'Should children get pocket money for helping at home? Give your opinion.' Which is the clearest thesis statement?", "opts": ["I think children should get pocket money for helping at home, because it teaches them that work has value.", "Pocket money is money that children get.", "My friend gets five pounds a week.", "Helping at home can mean many different things."], "a": 0, "why": "The best thesis answers the question and gives a reason. The others only explain a word, tell a story or stay vague." }
+      ]
     }
   ]
 }

@@ -408,15 +408,36 @@ const SCIENCE = [
    ['The gas most of the air is made of: ?', 'nitrogen', ['oxygen', 'carbon dioxide', 'helium']], ['Planet with the biggest rings: ?', 'Saturn', ['Mars', 'Mercury', 'Venus']],
    ['Speed of light is about 300,000 km per: ?', 'second', ['hour', 'day', 'year']], ['Layer of gas around the Earth: ?', 'atmosphere', ['crust', 'core', 'mantle']]]
 ];
+// geography facts, same shape as SCIENCE; the wrong answers are real places that are clearly wrong
+const WORLD = [
+  [['The biggest ocean: ?', 'Pacific', ['Atlantic', 'Indian', 'Arctic']], ['The coldest continent: ?', 'Antarctica', ['Africa', 'Asia', 'Europe']],
+   ['Land with water all around it: ?', 'island', ['hill', 'valley', 'desert']], ['A very dry, sandy place: ?', 'desert', ['forest', 'river', 'island']],
+   ['A mountain that can erupt: ?', 'volcano', ['valley', 'lake', 'beach']], ['Water flowing across the land to the sea: ?', 'river', ['desert', 'cliff', 'cave']],
+   ['How many continents are there: ?', '7', ['5', '10', '3']], ['Kangaroos live in the wild in: ?', 'Australia', ['Canada', 'Norway', 'Brazil']],
+   ['Giant pandas live in the wild in: ?', 'China', ['Kenya', 'Mexico', 'France']], ['A big area of land covered in trees: ?', 'forest', ['beach', 'desert', 'ocean']],
+   ['Polar bears live near the: ?', 'North Pole', ['South Pole', 'equator', 'Sahara']], ['Salty water covering most of the Earth: ?', 'ocean', ['lake', 'pond', 'river']]],
+  [['The largest continent: ?', 'Asia', ['Europe', 'Africa', 'Australia']], ['The River Nile is in: ?', 'Africa', ['Asia', 'Europe', 'South America']],
+   ['The Amazon rainforest is mostly in: ?', 'Brazil', ['Egypt', 'India', 'Spain']], ['The highest mountain on Earth: ?', 'Everest', ['Kilimanjaro', 'Ben Nevis', 'Mont Blanc']],
+   ['The line around the middle of the Earth: ?', 'equator', ['horizon', 'coastline', 'border']], ['The biggest hot desert: ?', 'Sahara', ['Gobi', 'Atacama', 'Kalahari']],
+   ['The ocean between Europe and America: ?', 'Atlantic', ['Pacific', 'Indian', 'Arctic']], ['The Great Barrier Reef is near: ?', 'Australia', ['Iceland', 'Canada', 'Russia']],
+   ['Big Ben is in: ?', 'London', ['Paris', 'Rome', 'Madrid']], ['The Eiffel Tower is in: ?', 'Paris', ['London', 'Berlin', 'Rome']],
+   ['The pyramids of Giza are in: ?', 'Egypt', ['Greece', 'Japan', 'Brazil']], ['A tool whose needle points north: ?', 'compass', ['ruler', 'clock', 'telescope']]],
+  [['The longest river in South America: ?', 'Amazon', ['Nile', 'Danube', 'Thames']], ['The smallest country in the world: ?', 'Vatican City', ['Monaco', 'Malta', 'Luxembourg']],
+   ['Mountains between Spain and France: ?', 'Pyrenees', ['Alps', 'Andes', 'Himalayas']], ['The mountain range with Everest: ?', 'Himalayas', ['Andes', 'Alps', 'Rockies']],
+   ['Mountains along the west of South America: ?', 'Andes', ['Alps', 'Urals', 'Pyrenees']], ['The line of 0° longitude: ?', 'Prime Meridian', ['equator', 'Arctic Circle', 'Tropic of Cancer']],
+   ['The river that flows through London: ?', 'Thames', ['Seine', 'Danube', 'Rhine']], ['The river that flows through Paris: ?', 'Seine', ['Thames', 'Tiber', 'Volga']],
+   ['The deepest place in the oceans: ?', 'Mariana Trench', ['Grand Canyon', 'Dead Sea', 'Great Rift Valley']], ['The largest island (not a continent): ?', 'Greenland', ['Iceland', 'Ireland', 'Sicily']],
+   ['The continent with the most countries: ?', 'Africa', ['Europe', 'South America', 'Australia']], ['Lines on a map joining places of equal height: ?', 'contour lines', ['grid lines', 'borders', 'roads']]]
+];
 // A quiz question: t has one "?" for the answer; wrong = n - 1 real but wrong answers
 function quizQuestion(tier, n) {
-  const t3 = Math.max(0, Math.min(2, tier)), kind = pick(['capital', 'capital', 'science', 'science', 'baby']);
+  const t3 = Math.max(0, Math.min(2, tier)), kind = pick(['capital', 'capital', 'science', 'science', 'world', 'world', 'baby']);
   let t, a, wrong;
   if (kind === 'capital') { const [c, cap] = pick(CAPITALS[t3]); t = 'Capital of ' + c + ': ?'; a = cap; wrong = shuffle(CAPITALS[t3].filter((x) => x[1] !== cap).map((x) => x[1])); }
   else if (kind === 'baby') {
     const [, an, b] = pick(BABIES[t3]); t = 'Baby ' + an + ': ?'; a = b;
     wrong = shuffle(BABIES[t3].map((x) => x[2]).filter((x, i, all) => x !== b && all.indexOf(x) === i));
-  } else { const [q, ans, bad] = pick(SCIENCE[t3]); t = q; a = ans; wrong = shuffle(bad.slice()); }
+  } else { const [q, ans, bad] = pick((kind === 'world' ? WORLD : SCIENCE)[t3]); t = q; a = ans; wrong = shuffle(bad.slice()); }
   return { t: t, a: a, quiz: true, english: true, kind: kind, wrong: wrong.slice(0, n - 1) };
 }
 // The ladder's own question picker: easier sums low down, harder ones near the top.

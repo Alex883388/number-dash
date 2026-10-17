@@ -3172,6 +3172,616 @@
           "why": "The first answers the question with a clear, qualified position. The others only describe water, give no real reason, or announce the topic without an opinion."
         }
       ]
+    },
+    {
+      "id": "expert-6",
+      "title": "Work and the future of jobs",
+      "emoji": "💼",
+      "words": [
+        {
+          "w": "employability",
+          "def": "the skills and qualities that make a person likely to find and keep a job",
+          "ex": "Universities now publish ___ figures showing how many graduates find work within six months.",
+          "pos": "noun",
+          "forms": {
+            "noun": "employability",
+            "adj": "employable"
+          }
+        },
+        {
+          "w": "remote working",
+          "def": "doing your job from home or another place away from the workplace, using the internet",
+          "ex": "With ___, many office staff now do their jobs at their kitchen tables instead of travelling in.",
+          "pos": "phrase"
+        },
+        {
+          "w": "freelance",
+          "def": "working on separate projects for several different organisations, rather than for one employer",
+          "ex": "As a ___ designer, she works on projects for several different companies each year.",
+          "pos": "adj",
+          "forms": {
+            "adj": "freelance",
+            "noun": "freelancer"
+          }
+        },
+        {
+          "w": "vocational",
+          "def": "connected with the skills and training needed for a particular job",
+          "ex": "Many colleges offer ___ courses in plumbing and electrical work that prepare students for a trade.",
+          "pos": "adj"
+        },
+        {
+          "w": "apprenticeship",
+          "def": "a period of training in which a young person learns a skilled job while working for an employer",
+          "ex": "During her four-year ___, she earned a wage while learning to repair aircraft engines.",
+          "pos": "noun",
+          "forms": {
+            "noun": "apprenticeship",
+            "verb": "apprentice"
+          }
+        },
+        {
+          "w": "workforce",
+          "def": "all the people who work in a particular company, industry or country",
+          "ex": "Women now make up almost half of the country's ___.",
+          "pos": "noun",
+          "syn": [
+            "staff",
+            "employees"
+          ]
+        },
+        {
+          "w": "upskill",
+          "def": "to learn new skills, or to teach workers new skills, so that they can cope with a changing job",
+          "ex": "Older employees are being encouraged to ___ so that they can use the new software.",
+          "pos": "verb"
+        },
+        {
+          "w": "flexitime",
+          "def": "a system that lets employees choose, within limits, when they start and finish work",
+          "ex": "Thanks to ___, staff can start at seven and leave at three, or arrive later and stay later.",
+          "pos": "noun"
+        },
+        {
+          "w": "work-life balance",
+          "def": "a healthy division of your time between your job and your family, rest and hobbies",
+          "ex": "Very long hours at the office can damage your ___, leaving little time for family and hobbies.",
+          "pos": "phrase"
+        },
+        {
+          "w": "occupation",
+          "def": "a person's job or profession",
+          "ex": "On the form, please write your name, age and ___, for example 'teacher' or 'nurse'.",
+          "pos": "noun",
+          "syn": [
+            "job",
+            "profession"
+          ],
+          "forms": {
+            "noun": "occupation",
+            "adj": "occupational"
+          }
+        },
+        {
+          "w": "entrepreneur",
+          "def": "a person who starts their own business, often taking financial risks to do so",
+          "ex": "At sixteen, the young ___ launched an app that helps students swap second-hand textbooks.",
+          "pos": "noun",
+          "forms": {
+            "noun": "entrepreneur",
+            "adj": "entrepreneurial"
+          }
+        },
+        {
+          "w": "incentive",
+          "def": "something, such as extra money, that encourages a person to work harder or to do something",
+          "ex": "Many companies offer a bonus as an ___ for staff who meet their targets.",
+          "pos": "noun",
+          "syn": [
+            "encouragement",
+            "reward"
+          ]
+        },
+        {
+          "w": "collaborate",
+          "def": "to work together with other people in order to produce or achieve something",
+          "ex": "Engineers in three countries had to ___ closely to design the new high-speed train.",
+          "pos": "verb",
+          "syn": [
+            "cooperate"
+          ],
+          "forms": {
+            "verb": "collaborate",
+            "noun": "collaboration",
+            "adj": "collaborative"
+          }
+        },
+        {
+          "w": "menial",
+          "def": "describing work that is boring, needs little skill and is often poorly paid",
+          "ex": "Robots can take over ___ tasks, such as lifting boxes, leaving people free for more interesting work.",
+          "pos": "adj"
+        },
+        {
+          "w": "mentor",
+          "def": "an experienced person who advises and helps someone with less experience",
+          "ex": "Each new nurse is paired with a ___ who has worked on the ward for many years.",
+          "pos": "noun",
+          "syn": [
+            "adviser"
+          ]
+        },
+        {
+          "w": "workload",
+          "def": "the amount of work that a person is expected to do",
+          "ex": "With two colleagues away, her ___ doubled and she had to stay late every evening.",
+          "pos": "noun"
+        },
+        {
+          "w": "recruit",
+          "def": "to find new people to join a company or an organisation",
+          "ex": "The hospital plans to ___ two hundred new nurses over the next year.",
+          "pos": "verb",
+          "syn": [
+            "hire",
+            "employ"
+          ],
+          "forms": {
+            "verb": "recruit",
+            "noun": "recruitment"
+          }
+        },
+        {
+          "w": "versatile",
+          "def": "able to do many different things, or to be used in many different ways",
+          "ex": "A ___ worker who can cook, serve customers and manage stock is valuable in a small cafe.",
+          "pos": "adj",
+          "syn": [
+            "adaptable",
+            "flexible"
+          ],
+          "forms": {
+            "adj": "versatile",
+            "noun": "versatility"
+          }
+        },
+        {
+          "w": "sector",
+          "def": "one part of a country's economy, such as farming, manufacturing or services",
+          "ex": "The tourism ___ employs more people than farming in many coastal regions.",
+          "pos": "noun"
+        },
+        {
+          "w": "aptitude",
+          "def": "a natural ability to learn or to do something well",
+          "ex": "Some employers ask applicants to take an ___ test that measures their talent for logical thinking.",
+          "pos": "noun",
+          "syn": [
+            "talent",
+            "gift"
+          ]
+        }
+      ],
+      "grammar": [
+        {
+          "q": "Not only ___ from home, but she chooses her own working hours too.",
+          "opts": [
+            "does she work",
+            "she works",
+            "works she",
+            "she does work"
+          ],
+          "a": 0,
+          "why": "When 'Not only' starts a sentence, use question order: Not only does she work..."
+        },
+        {
+          "q": "It ___ that millions of new jobs will be created in renewable energy over the next decade.",
+          "opts": [
+            "is predicted",
+            "predicts",
+            "is predicting",
+            "has predicted"
+          ],
+          "a": 0,
+          "why": "'It is predicted that...' reports a general forecast without saying who made it."
+        },
+        {
+          "q": "What most employees value ___ the chance to keep learning new skills.",
+          "opts": [
+            "is",
+            "are",
+            "it is",
+            "being"
+          ],
+          "a": 0,
+          "why": "A 'What' clause is a singular subject, and here the complement 'the chance' is singular too, so use 'is'."
+        },
+        {
+          "q": "___ by the success of the trial, the company introduced a four-day week for all its staff.",
+          "opts": [
+            "Encouraged",
+            "Encouraging",
+            "Having encouraged",
+            "To encourage"
+          ],
+          "a": 0,
+          "why": "The company was encouraged by the results (passive meaning), so the participle clause starts with 'Encouraged'."
+        },
+        {
+          "q": "If she hadn't done an apprenticeship, she ___ such a well-paid job now.",
+          "opts": [
+            "wouldn't have",
+            "wouldn't have had",
+            "won't have",
+            "didn't have"
+          ],
+          "a": 0,
+          "why": "Mixed conditional: a past condition (hadn't done) with a present result (now) takes 'would + verb'."
+        },
+        {
+          "q": "The manager recommended that every new employee ___ a mentor.",
+          "opts": [
+            "be given",
+            "is giving",
+            "giving",
+            "to be given"
+          ],
+          "a": 0,
+          "why": "After 'recommend that', formal English uses the base form (the subjunctive); here it is passive: be given."
+        },
+        {
+          "q": "Demand for care workers ___ to grow as people live longer.",
+          "opts": [
+            "is likely",
+            "likes",
+            "is liking",
+            "likely"
+          ],
+          "a": 0,
+          "why": "'Be likely to' is a cautious way to make a prediction; the sentence needs the verb 'is' before 'likely'."
+        },
+        {
+          "q": "Rarely ___ a single invention changed working life as much as the internet has.",
+          "opts": [
+            "has",
+            "have",
+            "did",
+            "was"
+          ],
+          "a": 0,
+          "why": "After 'Rarely' at the start, invert: has + singular subject + past participle (changed)."
+        },
+        {
+          "q": "The ___ of new technology has changed the way many offices work.",
+          "opts": [
+            "introduction",
+            "introduce",
+            "introductory",
+            "introduced"
+          ],
+          "a": 0,
+          "why": "After 'The' and before 'of' we need a noun: introduce becomes introduction (nominalisation)."
+        },
+        {
+          "q": "___ the factory not trained its staff in time, it would have had to close.",
+          "opts": [
+            "Had",
+            "If",
+            "Should",
+            "Were"
+          ],
+          "a": 0,
+          "why": "'Had + subject + not + past participle' is the inverted form of 'If the factory had not trained...' about the past."
+        }
+      ],
+      "sentences": [
+        "Many colleges offer vocational courses that prepare students for skilled trades.",
+        "Each new nurse is paired with an experienced mentor.",
+        "The company is paying for evening classes to upskill its staff.",
+        "Transferable skills remain useful even if you change careers.",
+        "Had the factory not trained its staff, it would have closed.",
+        "Rarely has a single invention changed working life so much."
+      ],
+      "reading": [
+        {
+          "title": "Working four days, paid for five",
+          "text": "In 2022, around sixty British companies took part in what was then the largest trial of a four-day working week. For six months, about 2,900 employees worked roughly a fifth fewer hours, with no reduction in pay. The aim was not simply to squeeze five days of work into four longer ones; instead, organisations were encouraged to cut unnecessary meetings, reorganise tasks and find more efficient ways of working.\n\nThe results, published in 2023, attracted worldwide attention. The great majority of the companies chose to continue with the shorter week after the trial ended, and several made the change permanent. Employees reported less stress and tiredness, took fewer days off sick and were less likely to leave their jobs. Meanwhile, the companies' revenue remained broadly stable.\n\nSupporters argue that these findings show that long hours and high productivity are not the same thing. Rested workers, they suggest, concentrate better and make fewer mistakes, so they can achieve as much in less time.\n\nCritics, however, urge caution. The companies volunteered to take part, so they may have been unusually well suited to the experiment, and many were small, office-based organisations. It is far less clear how a four-day week would work in a hospital, a school or a factory, where many tasks must be covered at fixed times. Furthermore, six months may not be long enough to show whether the benefits last.\n\nFor now, the trial has shifted the debate. Rather than asking whether shorter weeks are possible, many employers are beginning to ask in which kinds of work they might succeed.",
+          "qs": [
+            {
+              "type": "tfng",
+              "q": "Employees in the trial had to accept lower pay in return for working fewer hours.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 1
+            },
+            {
+              "type": "tfng",
+              "q": "Most of the companies in the trial were based in London.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 2
+            },
+            {
+              "type": "mc",
+              "q": "According to the passage, how were companies expected to cope with fewer working hours?",
+              "opts": [
+                "by working more efficiently, for example by holding fewer unnecessary meetings",
+                "by asking staff to work much longer days",
+                "by employing extra workers on the fifth day",
+                "by cutting the pay of their managers"
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "Why do the critics mention hospitals, schools and factories?",
+              "opts": [
+                "to suggest that the results may not apply to jobs that need people at set times",
+                "to show that these workplaces took part in the trial",
+                "to argue that these workers deserve higher pay",
+                "to prove that shorter weeks always fail"
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "What is the main point of the final paragraph?",
+              "opts": [
+                "The trial has changed the question that people ask about shorter working weeks.",
+                "The trial has proved that every job can move to a four-day week.",
+                "Employers have lost interest in shorter working weeks.",
+                "A longer trial is about to begin in hospitals."
+              ],
+              "a": 0
+            }
+          ]
+        },
+        {
+          "title": "The cash machine and the bank clerk",
+          "text": "When automated teller machines, or ATMs, began to spread across the United States in the 1970s and 1980s, many observers assumed that human bank tellers would soon disappear. After all, the machines could hand out cash and accept deposits at any hour of the day, without ever needing a break.\n\nWhat actually happened was more surprising. According to research by the economist James Bessen, the number of bank tellers in the United States did not fall as ATMs became common; in fact, it rose slightly over the following decades. The explanation lies in costs. Because cash machines reduced the number of staff needed in each branch, it became cheaper to run a branch, and banks responded by opening many more of them. More branches meant more tellers overall, even though each branch employed fewer.\n\nJust as importantly, the job itself changed. With machines handling routine withdrawals, tellers spent more of their time on tasks that required human skills, such as advising customers and explaining financial products. In other words, the technology took over particular tasks rather than an entire occupation.\n\nThis story is often used to argue that automation tends to transform jobs rather than destroy them. However, it should not be over-interpreted. Since the 2010s, as more people have turned to online and mobile banking, the number of tellers in the United States has declined, and many branches have closed. The lesson may be that the effects of a technology depend on how it changes the wider economy, and that these effects can shift over time.",
+          "qs": [
+            {
+              "type": "tfng",
+              "q": "Many people expected cash machines to make bank tellers unnecessary.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 0
+            },
+            {
+              "type": "tfng",
+              "q": "James Bessen worked as a bank teller before he became an economist.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 2
+            },
+            {
+              "type": "mc",
+              "q": "According to the passage, why did the number of tellers rise?",
+              "opts": [
+                "Branches became cheaper to run, so banks opened more of them and needed more staff in total.",
+                "Each branch employed more tellers than before.",
+                "Customers refused to use the new machines.",
+                "The machines often broke down and needed people to repair them."
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "What can be inferred about the tellers' work after cash machines arrived?",
+              "opts": [
+                "It came to depend more on communicating with customers.",
+                "It consisted mainly of counting cash by hand.",
+                "It became less skilled than before.",
+                "It was done mostly at night."
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "Why does the writer mention online and mobile banking?",
+              "opts": [
+                "to warn that the cash machine example should not be used for overconfident predictions",
+                "to show that tellers prefer working online",
+                "to argue that banks should close all their branches",
+                "to explain how cash machines were invented"
+              ],
+              "a": 0
+            }
+          ]
+        }
+      ],
+      "extra": [
+        {
+          "kind": "collocation",
+          "q": "Over twenty years, she ___ a successful career in engineering.",
+          "opts": [
+            "built",
+            "made up",
+            "did",
+            "gave"
+          ],
+          "a": 0,
+          "why": "We 'build a career' step by step; 'made up', 'did' and 'gave' do not go with 'career'."
+        },
+        {
+          "kind": "collocation",
+          "q": "The new scheme aims to ___ the gap between what schools teach and what employers need.",
+          "opts": [
+            "bridge",
+            "build",
+            "jump",
+            "close up"
+          ],
+          "a": 0,
+          "why": "To 'bridge a gap' means to connect two things that are far apart; 'build', 'jump' and 'close up' are not used with 'the gap between'."
+        },
+        {
+          "kind": "wordform",
+          "q": "Employers increasingly look for people who can work ___ (collaborate) with colleagues.",
+          "opts": [
+            "collaboratively",
+            "collaborative",
+            "collaboration",
+            "collaborator"
+          ],
+          "a": 0,
+          "why": "After the verb 'work' we need an adverb: collaboratively."
+        },
+        {
+          "kind": "wordform",
+          "q": "A four-day week may not be ___ (practice) in hospitals, where staff are needed at all hours.",
+          "opts": [
+            "practical",
+            "practise",
+            "practically",
+            "practicality"
+          ],
+          "a": 0,
+          "why": "After 'be' we need an adjective: practical, meaning possible and sensible to do."
+        },
+        {
+          "kind": "paraphrase",
+          "q": "Which sentence means the same as: 'The technology took over particular tasks rather than an entire occupation.'?",
+          "opts": [
+            "Machines replaced some parts of the job, but not the job as a whole.",
+            "Machines replaced the whole job but left a few tasks.",
+            "The technology created a completely new occupation.",
+            "People refused to let machines do any of their tasks."
+          ],
+          "a": 0,
+          "why": "'Particular tasks' are parts of a job, and 'rather than an entire occupation' means not the whole job."
+        },
+        {
+          "kind": "register",
+          "q": "Which sentence is most suitable for an IELTS Writing Task 2 essay?",
+          "opts": [
+            "Remote working can offer employees greater flexibility, although it may reduce opportunities for teamwork.",
+            "Working from home is awesome, but you miss your mates.",
+            "Working from home is the best, no question.",
+            "Honestly, offices are kind of pointless now."
+          ],
+          "a": 0,
+          "why": "Task 2 needs balanced, formal language ('greater flexibility', 'may reduce'); the others use slang or one-sided chat."
+        },
+        {
+          "kind": "linking",
+          "q": "Remote working saves time on commuting; ___, some employees find it harder to separate work from home life.",
+          "opts": [
+            "on the other hand",
+            "as a result",
+            "in the same way",
+            "for this reason"
+          ],
+          "a": 0,
+          "why": "The second idea is a disadvantage that contrasts with the first, so we need 'on the other hand'."
+        },
+        {
+          "kind": "cohesion",
+          "q": "Which order is most logical? A: As a result, the firm decided to offer flexitime to all its staff. B: A small company noticed that many employees were arriving late because of the school run. C: Within a year, fewer people were late and staff said they were happier at work.",
+          "opts": [
+            "B, A, C",
+            "A, B, C",
+            "C, B, A",
+            "B, C, A"
+          ],
+          "a": 0,
+          "why": "B gives the problem, A ('As a result') the firm's decision, and C ('Within a year') the outcome."
+        },
+        {
+          "kind": "mainidea",
+          "q": "Which heading best fits this paragraph? 'Many of the jobs that today's pupils will do have not yet been invented. Twenty years ago, few people had heard of app developers or social media managers. Because the job market changes so quickly, schools increasingly focus on skills such as problem-solving and adaptability.'",
+          "opts": [
+            "Preparing pupils for jobs that do not yet exist",
+            "How to become an app developer",
+            "The history of social media",
+            "Why schools should teach only one career"
+          ],
+          "a": 0,
+          "why": "The paragraph explains that future jobs are unknown and how schools respond to this."
+        },
+        {
+          "kind": "phrasal",
+          "q": "The shop had to ___ several new workers to cope with the busy holiday season.",
+          "opts": [
+            "take on",
+            "take off",
+            "take after",
+            "take in"
+          ],
+          "a": 0,
+          "why": "'Take on' workers means to employ them. 'Take off' means remove or leave the ground, and 'take after' means look like a relative."
+        }
+      ],
+      "writing": [
+        {
+          "kind": "paragraph",
+          "sents": [
+            "Remote working has brought both benefits and challenges for employees.",
+            "On the positive side, people who work from home save the time and money they would otherwise spend commuting.",
+            "Many also find that they can concentrate better without the interruptions of a busy office.",
+            "On the other hand, working alone can make it harder to share ideas and to feel part of a team.",
+            "For this reason, many companies now combine home working with regular days in the office."
+          ]
+        },
+        {
+          "kind": "paragraph",
+          "sents": [
+            "Apprenticeships offer young people a valuable alternative to university.",
+            "Instead of studying full-time, apprentices learn a skilled trade while working for an employer.",
+            "This means that they earn a wage from the start and avoid large student debts.",
+            "Moreover, because they gain real experience, they are often well placed to find permanent jobs when their training ends.",
+            "Governments could therefore do more to encourage employers to offer such schemes."
+          ]
+        },
+        {
+          "kind": "upgrade",
+          "q": "Which is the most precise way to say: 'Working from home is good because you don't waste time on the bus and stuff.'?",
+          "opts": [
+            "Remote working can save employees a considerable amount of time that would otherwise be spent commuting.",
+            "Working from home is good because you save time on the bus.",
+            "Working from home is great, as you don't have to bother with buses and things.",
+            "Nobody ever wastes any time when they work from home."
+          ],
+          "a": 0,
+          "why": "The first uses precise terms ('remote working', 'commuting') and a cautious 'can'. The others stay informal ('and things') or make an absolute claim."
+        },
+        {
+          "kind": "topic",
+          "q": "Which topic sentence fits best? '___ Doctors and nurses must care for patients through the night, and many factories run their machines around the clock. In such workplaces, a shorter week would mean hiring extra staff or reorganising shifts.'",
+          "opts": [
+            "A four-day week would be much harder to introduce in some jobs than in others.",
+            "Nurses work very hard and deserve more pay.",
+            "Factories use many different kinds of machines.",
+            "Work is something that most adults do."
+          ],
+          "a": 0,
+          "why": "The body explains why round-the-clock workplaces would struggle with a shorter week. The others are off topic or far too general."
+        },
+        {
+          "kind": "thesis",
+          "q": "Some people believe that in the future most jobs will be done by robots and computers, while others think people will always be needed at work. Discuss both views and give your opinion. Which is the clearest thesis statement?",
+          "opts": [
+            "Although machines will take over many routine tasks, I believe human workers will remain essential in roles that depend on creativity, care and judgement.",
+            "Robots and computers are used in many workplaces today.",
+            "Robots will do absolutely every job, so there is no point in studying.",
+            "Some people think one thing and others think another about robots."
+          ],
+          "a": 0,
+          "why": "The first weighs both views and gives a clear, reasoned opinion. The others describe, overclaim, or simply repeat the question without a position."
+        }
+      ]
     }
   ]
 }

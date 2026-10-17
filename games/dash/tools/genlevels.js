@@ -1,4 +1,4 @@
-// Level generator for the Normal, Hard and Expert packs.
+// Level generator for the Chill, Normal, Hard and Expert packs.
 // Builds each level from small, known-good pieces around a theme, tests every piece at the
 // level's tempo, then keeps a level only if the checker proves it beatable for every door
 // layout, all 3 stars are reachable, and its measured difficulty sits in the pack's band.
@@ -43,9 +43,23 @@ const SPECS = [
   { id: 'e09', name: 'Ring Storm', pack: 'expert', bpm: 106, theme: ['rings', 'gravity', 'pads'], fresh: 'Rings, gravity, pads', hue: 140, night: false },
   { id: 'e10', name: 'Final Frontier', pack: 'expert', bpm: 108, theme: ['rocket', 'ufo', 'wave', 'ball', 'gravity', 'rings', 'speed'], fresh: 'Everything, expert', hue: 280, night: true }
 ];
-const isHard = (spec) => spec.pack !== 'normal';                 // hard and expert share the hard pieces
-const themeOf = (spec) => THEME[spec.pack === 'expert' ? 'hard' : spec.pack];
-const DIFF = { normal: 'Normal', hard: 'Hard', expert: 'Expert' };
+// Chill: younger players, the gentle normal pieces at slow tempos, three forks and wide timing windows
+SPECS.push(
+  { id: 'c01', name: 'Puddle Jump', pack: 'chill', bpm: 74, theme: ['blocks'], fresh: 'Easy hops', hue: 200, night: false },
+  { id: 'c02', name: 'Kite Day', pack: 'chill', bpm: 78, theme: ['rocket'], fresh: 'Gentle rocket', hue: 170, night: false },
+  { id: 'c03', name: 'Bounce House', pack: 'chill', bpm: 76, theme: ['pads'], fresh: 'Bouncy pads', hue: 320, night: false },
+  { id: 'c04', name: 'Rolling Meadow', pack: 'chill', bpm: 76, theme: ['ball'], fresh: 'Slow rolling', hue: 95, night: false },
+  { id: 'c05', name: 'Ring Garden', pack: 'chill', bpm: 78, theme: ['rings'], fresh: 'Easy rings', hue: 140, night: false },
+  { id: 'c06', name: 'Starry Stroll', pack: 'chill', bpm: 78, theme: ['blocks', 'pads'], fresh: 'Night walk', hue: 240, night: true },
+  { id: 'c07', name: 'Little Saucer', pack: 'chill', bpm: 80, theme: ['ufo'], fresh: 'Easy UFO', hue: 260, night: false },
+  { id: 'c08', name: 'Tiny Trail', pack: 'chill', bpm: 80, theme: ['mini', 'blocks'], fresh: 'Mini size', hue: 40, night: false },
+  { id: 'c09', name: 'Sunny Skies', pack: 'chill', bpm: 82, theme: ['rocket', 'rings'], fresh: 'Rocket and rings', hue: 55, night: false },
+  { id: 'c10', name: 'Rainbow Road', pack: 'chill', bpm: 82, theme: ['blocks', 'rocket', 'ball'], fresh: 'A bit of everything', hue: 290, night: false }
+);
+const isHard = (spec) => spec.pack === 'hard' || spec.pack === 'expert';     // hard and expert share the hard pieces
+const baseOf = (spec) => (spec.pack === 'expert' ? 'hard' : spec.pack === 'chill' ? 'normal' : spec.pack);   // chill uses the normal pieces
+const themeOf = (spec) => THEME[baseOf(spec)];
+const DIFF = { chill: 'Easy', normal: 'Normal', hard: 'Hard', expert: 'Expert' };
 
 // ---------- random helpers ----------
 function rng(seed) {
@@ -196,7 +210,7 @@ function pieceOk(spec, kind, src) {
       L.gates.forEach((g) => { g.correct = Math.min(v, g.lanes); });
       const a = analyzeVariant(L, { quick: v > 1, trials: 40 });
       if (!a.ok) ok = false;
-      else if (v === 1 && a.minTap < (spec.pack === 'expert' ? 55 : spec.pack === 'hard' ? 60 : 80)) ok = false;
+      else if (v === 1 && a.minTap < (spec.pack === 'chill' ? 95 : spec.pack === 'expert' ? 55 : spec.pack === 'hard' ? 60 : 80)) ok = false;
     }
     if (ok && L.starCount) { L.gates.forEach((g) => { g.correct = 1; }); const s = solve(L, true); ok = s.ok && popcount(s.stars) === L.starCount; }
   } catch (e) { ok = false; }
@@ -208,7 +222,7 @@ function compose(spec, seed) {
   const r = rng(seed), hard = isHard(spec), speed = 6 * spec.bpm / 60;
   const themePool = [].concat(...spec.theme.map((t) => themeOf(spec)[t] || []));
   // the forks: one for each flying theme move, the rest cube forks
-  const nGates = spec.pack === 'expert' ? 5 : hard ? 4 + (r() < 0.5 ? 1 : 0) : 3 + (r() < 0.5 ? 1 : 0);
+  const nGates = spec.pack === 'expert' ? 5 : spec.pack === 'chill' ? 3 : hard ? 4 + (r() < 0.5 ? 1 : 0) : 3 + (r() < 0.5 ? 1 : 0);
   let gates = spec.theme.map((t) => GATE_OF[t]).filter(Boolean);
   while (gates.length < nGates) gates.push('cubeGate');
   gates = gates.slice(0, nGates).sort(() => r() - 0.5);
@@ -219,7 +233,7 @@ function compose(spec, seed) {
     const n = 1 + (r() < 0.55 ? 1 : 0);
     for (let i = 0; i < n; i++) {
       let k, tries = 0;
-      do { k = r() < 0.7 && themePool.length ? pick(r, themePool) : pick(r, GENERAL[spec.pack === 'expert' ? 'hard' : spec.pack]); } while (k === last && ++tries < 6);
+      do { k = r() < 0.7 && themePool.length ? pick(r, themePool) : pick(r, GENERAL[baseOf(spec)]); } while (k === last && ++tries < 6);
       plan.push({ k }); last = k;
     }
     plan.push({ k: g }); last = g;
@@ -245,7 +259,7 @@ function render(spec, plan, r, speed, hard) {
     }
     // a piece that never works at this tempo is swapped for another one of the same kind of job
     if (!src && !/Gate$/.test(p.k)) {
-      const subs = (p.star ? ['spikes', 'blockHop', 'padWall'] : themePool.concat(GENERAL[spec.pack === 'expert' ? 'hard' : spec.pack])).filter((k) => k !== p.k);
+      const subs = (p.star ? ['spikes', 'blockHop', 'padWall'] : themePool.concat(GENERAL[baseOf(spec)])).filter((k) => k !== p.k);
       for (let t = 0; t < 12 && !src; t++) {
         const k = pick(r, subs), s = P[k](r, hard, !!p.star, speed);
         if (pieceOk(spec, k, s)) { src = s; p.k = k; }
@@ -280,7 +294,7 @@ function judge(spec, parts) {
   const out = { secs: +secs.toFixed(1), gates: L.gates.length, stars: L.starCount };
   if (L.starCount !== 3) return Object.assign(out, { fail: 'stars placed ' + L.starCount });
   const longOk = L.gates.filter((g) => g.lanes === 3).length + (spec.theme.includes('ball') ? 1 : 0) >= 3 ? 6 : 0;
-  if (secs < (hard ? 48 : 42) || secs > (hard ? 70 : 62) + longOk) return Object.assign(out, { fail: 'length ' + secs.toFixed(0) + ' s' });
+  if (secs < (hard ? 48 : spec.pack === 'chill' ? 36 : 42) || secs > (hard ? 70 : 62) + longOk) return Object.assign(out, { fail: 'length ' + secs.toFixed(0) + ' s' });
   const lanes = Math.max(1, ...L.gates.map((g) => g.lanes));
   for (let v = lanes; v >= 2; v--) {
     L.gates.forEach((g) => { g.correct = Math.min(v, g.lanes); });
@@ -290,7 +304,7 @@ function judge(spec, parts) {
   const a = analyzeVariant(L, { trials: 300 });
   if (!a.ok) return Object.assign(out, { fail: 'door 1 impossible' });
   Object.assign(out, { rate25: +a.rate25.toFixed(2), rate40: +a.rate40.toFixed(2), minTap: Math.round(a.minTap) });
-  const band = spec.pack === 'expert' ? { r25: [0.08, 0.6], r40: [0, 0.2], tap: 45 } : hard ? { r25: [0.2, 0.85], r40: [0.02, 0.35], tap: 50 } : { r25: [0.45, 0.95], r40: [0.15, 0.8], tap: 70 };
+  const band = spec.pack === 'chill' ? { r25: [0.8, 1], r40: [0.45, 1], tap: 95 } : spec.pack === 'expert' ? { r25: [0.08, 0.6], r40: [0, 0.2], tap: 45 } : hard ? { r25: [0.2, 0.85], r40: [0.02, 0.35], tap: 50 } : { r25: [0.45, 0.95], r40: [0.15, 0.8], tap: 70 };
   if (a.rate25 < band.r25[0] || a.rate25 > band.r25[1] || a.rate40 < band.r40[0] || a.rate40 > band.r40[1]) return Object.assign(out, { fail: 'difficulty' });
   if (a.minTap < band.tap) return Object.assign(out, { fail: 'tight tap ' + Math.round(a.minTap) + ' ms' });
   const s = solve(L, true);
@@ -334,7 +348,7 @@ function combine() {
       '      // checked: ' + g.stats.secs + ' s, sloppy player clears ' + Math.round(g.stats.rate25 * 100) + '% / ' + Math.round(g.stats.rate40 * 100) + '%, tightest tap ' + g.stats.minTap + ' ms\n' +
       '      map: [\n        ' + g.parts.join(',\n        ') + '\n      ]\n    }');
   }
-  const src = '/* Normal, Hard and Expert level packs, generated by tools/genlevels.js from checked pieces.\n' +
+  const src = '/* Chill, Normal, Hard and Expert level packs, generated by tools/genlevels.js from checked pieces.\n' +
     '   Regenerate instead of hand-editing; every level here passed the level checker. */\n' +
     '(function (root) {\n  var ND = root.ND, B = ND.B;\n  ND.LEVELS.push(\n' + levels.join(',\n') + '\n  );\n})(typeof window !== \'undefined\' ? window : globalThis);\n';
   fs.writeFileSync(path.join(__dirname, '..', 'src', 'packs.js'), src);

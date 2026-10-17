@@ -29,7 +29,7 @@ function checkStage(n) {
   let data;
   try { data = JSON.parse(fs.readFileSync(file, 'utf8')); } catch (e) { err('file', 'not valid JSON: ' + e.message); return; }
   if (data.stage !== n) err('file', '"stage" must be ' + n);
-  if (!Array.isArray(data.units) || data.units.length !== 5) { err('file', 'needs exactly 5 units'); return; }
+  if (!Array.isArray(data.units) || data.units.length < 5 || data.units.length > 6) { err('file', 'needs 5 or 6 units'); return; }
   const stageWords = new Set();
   const opts = (where, o, a, lo, hi) => {
     if (!Array.isArray(o) || o.length < lo || o.length > hi) { err(where, 'needs ' + (lo === hi ? lo : lo + '–' + hi) + ' options, has ' + (o ? o.length : 0)); return; }

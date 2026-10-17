@@ -450,6 +450,96 @@
         { "kind": "topic", "q": "Read the rest of a paragraph: 'Regular training builds stamina and strength. Just as importantly, playing in a team teaches young people how to cooperate and how to cope with losing.' Which topic sentence fits best?", "opts": ["Playing sport has both physical and social benefits for young people.", "Many sports are played with a ball.", "Losing a match is never fun.", "Sport is awesome and I love it!"], "a": 0, "why": "The paragraph gives one benefit for the body and one for getting on with others, so the topic sentence must mention both. The others are off topic, too narrow or chatty." },
         { "kind": "thesis", "q": "Essay question: 'Some people think that professional athletes are paid too much money. Do you agree or disagree?' Which is the clearest thesis statement?", "opts": ["I agree that top athletes are paid too much, because they earn far more than doctors and nurses, whose work saves lives.", "Football players are famous all over the world.", "Money is important for everyone.", "Athletes are paid, and some people think it is too much."], "a": 0, "why": "The best thesis gives a clear position and a reason. The others are off topic, too vague or only repeat the question." }
       ]
+    },
+    {
+      "id": "achiever-6",
+      "title": "Holidays and tourism",
+      "emoji": "🏖️",
+      "words": [
+        { "w": "destination", "def": "the place that someone is travelling to", "ex": "Spain is the most popular holiday ___ for British tourists.", "pos": "noun" },
+        { "w": "accommodation", "def": "a place to stay, such as a hotel, a flat or a campsite", "ex": "The price of the trip includes flights and ___.", "pos": "noun" },
+        { "w": "itinerary", "def": "a plan of a journey that shows where you will go and when", "ex": "Our ___ includes three days in Rome and two days in Florence.", "pos": "noun" },
+        { "w": "landmark", "def": "a famous building or place that is easy to recognise", "ex": "The Eiffel Tower is the most famous ___ in Paris.", "pos": "noun", "pic": "🗼" },
+        { "w": "heritage", "def": "the buildings, traditions and history that a country has kept from the past", "ex": "Stonehenge is an important part of Britain's ___.", "pos": "noun" },
+        { "w": "excursion", "def": "a short trip to visit a place, usually as part of a longer holiday", "ex": "On the third day, we went on an ___ to a volcano.", "pos": "noun", "syn": ["trip", "outing"] },
+        { "w": "package holiday", "def": "a holiday in which the travel and the hotel are booked together for one price", "ex": "A ___ is often cheaper than booking flights and hotels separately.", "pos": "noun" },
+        { "w": "backpacker", "def": "a person who travels cheaply, carrying their things in a large bag on their back", "ex": "Every ___ in the hostel had a map and a guidebook.", "pos": "noun", "pic": "🎒" },
+        { "w": "ecotourism", "def": "travel to natural places that tries to protect the environment and help local people", "ex": "In Costa Rica, ___ brings money to villages and helps to protect the rainforest.", "pos": "noun" },
+        { "w": "peak season", "def": "the busiest time of year for travel, when prices are highest", "ex": "Flights cost much more in the ___, when schools are on holiday.", "pos": "noun" },
+        { "w": "jet lag", "def": "a tired feeling after a long flight to a place where the time is very different", "ex": "After flying from London to Tokyo, I had terrible ___ for three days.", "pos": "noun" },
+        { "w": "reservation", "def": "an arrangement to keep a room, a table or a seat for you", "ex": "We made a ___ at the restaurant for eight o'clock.", "pos": "noun", "syn": ["booking"] },
+        { "w": "departure", "def": "the act of leaving a place, especially at the start of a journey", "ex": "Please arrive at the airport two hours before ___.", "pos": "noun", "ant": ["arrival"], "forms": { "noun": "departure", "verb": "depart" } },
+        { "w": "resort", "def": "a place where many people go on holiday, with hotels, beaches or ski slopes", "ex": "The ski ___ was packed with families during the February half-term.", "pos": "noun" },
+        { "w": "scenery", "def": "the natural things you can see in a place, such as mountains, lakes and forests", "ex": "The ___ in the Scottish Highlands is wild and beautiful.", "pos": "noun" },
+        { "w": "culture shock", "def": "a confused or upset feeling when you visit a place where life is very different", "ex": "Many students feel ___ when they first move to a new country.", "pos": "noun" },
+        { "w": "picturesque", "def": "pretty, especially in an old-fashioned way, like a scene in a painting", "ex": "We stayed in a ___ village with stone cottages and a little harbour.", "pos": "adj" },
+        { "w": "breathtaking", "def": "extremely beautiful or amazing", "ex": "From the top of the hill, the view was ___.", "pos": "adj", "syn": ["stunning"] },
+        { "w": "unspoilt", "def": "still beautiful and natural, without many new buildings or visitors", "ex": "The island has long, ___ beaches with hardly any hotels.", "pos": "adj" },
+        { "w": "wander", "def": "to walk slowly around a place without a clear plan", "ex": "It's fun to ___ through the narrow streets of an old town.", "pos": "verb" }
+      ],
+      "grammar": [
+        { "q": "If we had booked earlier, we ___ a cheaper flight.", "opts": ["would have got", "will have got", "would got", "had got"], "a": 0, "why": "Third conditional: if + had + past participle, then would have + past participle (would have got)." },
+        { "q": "I wish we ___ here for another week. The holiday is going too quickly!", "opts": ["were staying", "are staying", "will stay", "have stayed"], "a": 0, "why": "To wish that the present were different, use a past form after 'wish': I wish we were staying." },
+        { "q": "If only we ___ the reviews of the hotel before we booked it!", "opts": ["had checked", "checked", "have checked", "would check"], "a": 0, "why": "For a regret about the past, use 'if only' + had + past participle: if only we had checked." },
+        { "q": "We ___ booked our hotel in advance. Now everything in the town is full.", "opts": ["should have", "should", "can have", "would"], "a": 0, "why": "'Should have' + past participle means it was a good idea, but we didn't do it." },
+        { "q": "These days, Machu Picchu ___ by thousands of people every day.", "opts": ["is visited", "visits", "is visiting", "has visited"], "a": 0, "why": "Machu Picchu doesn't visit anyone; people visit it. Use the present simple passive: is visited." },
+        { "q": "The Eiffel Tower ___ for the World's Fair of 1889.", "opts": ["was built", "built", "has been built", "is built"], "a": 0, "why": "1889 is a finished time, and the tower didn't build anything, so use the past simple passive: was built." },
+        { "q": "We had our photo ___ in front of the Taj Mahal.", "opts": ["taken", "take", "taking", "to take"], "a": 0, "why": "'Have something done': someone else took the photo for us. Use the past participle: taken." },
+        { "q": "Venice, ___ is famous for its canals, welcomes millions of visitors every year.", "opts": ["which", "that", "who", "where"], "a": 0, "why": "Use 'which' for a place or thing in a non-defining clause (between commas) when the verb follows. 'That' is not used after a comma." },
+        { "q": "The receptionist asked us how long ___.", "opts": ["we were staying", "were we staying", "are we staying", "we are stay"], "a": 0, "why": "In a reported question, use normal word order (we were staying), not question order, and move the tense back." },
+        { "q": "___ it rained every day, we had a wonderful holiday.", "opts": ["Although", "Despite", "In spite of", "However"], "a": 0, "why": "'Although' is followed by a full clause (it rained every day). 'Despite' and 'in spite of' need a noun or an -ing form." }
+      ],
+      "sentences": [
+        "The Eiffel Tower was built for the World's Fair of 1889.",
+        "We should have booked our hotel in advance.",
+        "The receptionist asked us how long we were staying.",
+        "I wish we were staying here for another week.",
+        "Jet lag can make travellers feel tired for several days.",
+        "Have you ever been on a package holiday?"
+      ],
+      "reading": [
+        {
+          "title": "The man who invented the package holiday",
+          "text": "Today, millions of people buy package holidays, in which the travel and the accommodation are arranged together. The idea goes back to a British cabinet-maker called Thomas Cook.\n\nIn 1841, Cook organised a day trip by train for about 500 people from Leicester to a meeting in Loughborough, around 11 miles away. Each passenger paid one shilling, and the price included the train ticket and food for the journey. Railways were still new at the time, and a group trip like this was something completely different.\n\nThe trip was such a success that Cook began to organise more. Over the next few years, he took groups to the seaside and to Scotland, and in 1855 he led his first tour across the Channel, to an exhibition in Paris. His customers did not need to plan anything themselves: Cook booked the tickets, arranged where they would stay and often travelled with them as a guide.\n\nIn 1872, he led the first organised tour around the world, which lasted more than 200 days. By then, travel was no longer only for the rich. Thanks to cheap train tickets and careful planning, ordinary working families could explore places that their grandparents had only heard about.",
+          "qs": [
+            { "type": "mc", "q": "What is the writer's main purpose?", "opts": ["to explain how one man made organised travel possible for ordinary people", "to describe the history of the railway", "to persuade readers to buy package holidays", "to compare holidays in Leicester and Paris"], "a": 0 },
+            { "type": "tfng", "q": "The passengers on the 1841 trip had to pay for their food separately.", "opts": ["True", "False", "Not Given"], "a": 1 },
+            { "type": "tfng", "q": "Cook's customers did not have to find their own places to stay.", "opts": ["True", "False", "Not Given"], "a": 0 },
+            { "type": "tfng", "q": "Thomas Cook had travelled abroad many times before 1841.", "opts": ["True", "False", "Not Given"], "a": 2 },
+            { "type": "mc", "q": "How long did the first organised tour around the world last?", "opts": ["more than 200 days", "one day", "about 11 days", "three years"], "a": 0 }
+          ]
+        },
+        {
+          "title": "Why jet lag happens",
+          "text": "Flying across the world is exciting, but many travellers spend the first days of their holiday feeling tired, hungry at strange times and wide awake in the middle of the night. This is jet lag, and it happens because of the body clock.\n\nDeep inside your brain, a tiny group of cells works like a clock. It tells your body when to feel sleepy and when to wake up, mainly by noticing light and darkness. Normally, it matches the day and night outside. However, if you fly from London to Tokyo, which is eight or nine hours ahead, your body clock is still on British time. When it is morning in Japan, your body thinks it is the middle of the night.\n\nThe body clock can only adjust slowly, often by about an hour a day. As a result, recovering from a long flight can take several days. Many people also find that flying east is harder than flying west, because it is easier for the body to stay up later than to go to sleep earlier.\n\nExperts suggest a few ways to adjust more quickly. One of the most effective is to spend time outside in daylight at your destination, as sunlight helps to reset the clock. Eating meals at local times can help too.",
+          "qs": [
+            { "type": "mc", "q": "What is the main idea of the text?", "opts": ["Jet lag happens when the body clock does not match the time in a new place.", "Tokyo is a difficult city to visit.", "People should never fly east.", "It is impossible to sleep on a plane."], "a": 0 },
+            { "type": "tfng", "q": "The body clock uses light and darkness to decide when you should sleep.", "opts": ["True", "False", "Not Given"], "a": 0 },
+            { "type": "tfng", "q": "Most people recover from a long flight within a few hours.", "opts": ["True", "False", "Not Given"], "a": 1 },
+            { "type": "tfng", "q": "Children suffer from jet lag less than adults.", "opts": ["True", "False", "Not Given"], "a": 2 },
+            { "type": "mc", "q": "According to the text, what is one of the best ways to adjust?", "opts": ["spending time outside in daylight", "sleeping all afternoon", "drinking coffee late at night", "staying in a dark hotel room"], "a": 0 }
+          ]
+        }
+      ],
+      "extra": [
+        { "kind": "collocation", "q": "We ___ a room at a small hotel near the beach.", "opts": ["booked", "made", "did", "reserved for"], "a": 0, "why": "We 'book a room' (or 'reserve a room'). We don't 'make' or 'do' a room." },
+        { "kind": "phrasal", "q": "We ___ early in the morning to catch the first ferry.", "opts": ["set off", "set up", "put off", "took up"], "a": 0, "why": "'Set off' means start a journey. 'Put off' means move something to a later time." },
+        { "kind": "phrasal", "q": "When we arrived at the hotel, we ___ at the reception desk.", "opts": ["checked in", "checked out", "looked up", "gave in"], "a": 0, "why": "You 'check in' when you arrive at a hotel and 'check out' when you leave." },
+        { "kind": "preposition", "q": "We arrived ___ Paris late in the evening.", "opts": ["in", "at", "to", "on"], "a": 0, "why": "We 'arrive in' a city or country, and 'arrive at' a building such as a station or a hotel. We never 'arrive to' a place." },
+        { "kind": "preposition", "q": "Tourism has a huge effect ___ small islands.", "opts": ["on", "to", "for", "at"], "a": 0, "why": "We say 'an effect on' something, just as we say 'an impact on' it." },
+        { "kind": "linking", "q": "The hotel was small and quite old. ___, the views from our room were breathtaking.", "opts": ["However", "Therefore", "For example", "Because"], "a": 0, "why": "'However' introduces a contrast: first the bad points, then a good one." },
+        { "kind": "wordform", "q": "Tourism brings great ___ benefits to the region. (economy)", "opts": ["economic", "economical", "economy", "economically"], "a": 0, "why": "'Economic' means connected with money and jobs in a country. 'Economical' means cheap to use, like an economical car." },
+        { "kind": "register", "q": "Which sentence is the most suitable for a formal letter of complaint to a hotel?", "opts": ["I am writing to complain about the condition of my room.", "Your hotel was a total disaster, mate.", "OMG, the room was so gross!", "Just wanted to say the room wasn't great."], "a": 0, "why": "A formal letter starts politely and clearly: 'I am writing to complain about...'. The others are rude or chatty." },
+        { "kind": "paraphrase", "q": "Which sentence means the same as 'The hotel was fully booked'?", "opts": ["There were no free rooms at the hotel.", "The hotel had a lot of books.", "The hotel was closed for the winter.", "We booked the whole hotel."], "a": 0, "why": "'Fully booked' means that every room has already been reserved." },
+        { "kind": "cohesion", "q": "Which sentence best continues the text? 'Tourism can bring problems to popular places. ___'", "opts": ["For example, crowds of visitors can damage old buildings and natural sites.", "However, many people enjoy going on holiday.", "In conclusion, tourists like taking photos.", "Paris is the capital of France."], "a": 0, "why": "'For example' introduces a problem that supports the sentence before it. The others change the subject." }
+      ],
+      "writing": [
+        { "kind": "paragraph", "sents": ["Tourism can bring many benefits to a region.", "The most important is that it creates jobs in hotels, restaurants and shops.", "People with these jobs then spend their wages locally, which helps other businesses too.", "In addition, entrance fees paid by tourists can be used to protect historic buildings.", "For these reasons, many countries work hard to attract more visitors."] },
+        { "kind": "paragraph", "sents": ["There are several simple ways to be a responsible tourist.", "First, try to stay in small, locally owned hotels and eat in local restaurants.", "This means that more of your money stays in the community you are visiting.", "Second, respect local customs, such as dressing modestly when you visit religious buildings.", "Small actions like these help to make tourism good for everyone."] },
+        { "kind": "upgrade", "q": "Which is the most precise way to say: 'Loads more people go on holiday abroad than before.'?", "opts": ["The number of people travelling abroad has risen considerably.", "Way more people go abroad now.", "People go abroad, and there are more of them.", "Going abroad is more and more and stuff."], "a": 0, "why": "'The number of people... has risen considerably' is precise and formal. 'Way more' and 'stuff' are chatty, and the third option is clumsy." },
+        { "kind": "topic", "q": "Read the rest of a paragraph: 'For example, crowds of visitors can wear away the paths in national parks. In some popular cities, rents have also risen so much that many local people can no longer afford to live in the centre.' Which topic sentence fits best?", "opts": ["Tourism can cause serious problems for the places that people visit.", "National parks are beautiful places to visit.", "Rents are very high in many cities.", "Holidays are the best, aren't they?"], "a": 0, "why": "'For example' shows that examples of a general point follow. Both examples are problems caused by tourism. The others are off topic, too narrow or chatty." },
+        { "kind": "thesis", "q": "Essay question: 'International tourism has grown rapidly in recent decades. Do the advantages of this outweigh the disadvantages?' Which is the clearest thesis statement?", "opts": ["In my view, the advantages outweigh the disadvantages, because tourism creates jobs and helps people to understand other cultures.", "Tourism has grown a lot in recent decades.", "There are advantages and disadvantages to everything in life.", "Last summer, I went to Italy with my family."], "a": 0, "why": "The best thesis answers the question clearly and gives reasons. The others repeat the question, stay vague or tell a story." }
+      ]
     }
   ]
 }

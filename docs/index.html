@@ -126,6 +126,18 @@ h1 span { color: var(--sun-deep); }
 .todo .ic { font: 1.9rem/1 var(--emoji); text-align: center; }
 .todo b { display: block; font: 700 1.05rem/1.2 var(--font-display); }
 .todo span span { display: block; color: var(--ink-soft); font-size: .9rem; line-height: 1.3; }
+/* badges: what the games' records add up to */
+.badges { background: var(--card); border-radius: 26px; box-shadow: var(--shadow); padding: 18px 20px; display: grid; gap: 12px; }
+.badges h2 { margin: 0; font: 700 1.5rem/1.1 var(--font-display); }
+.shelf { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+.badge { display: grid; grid-template-columns: 40px 1fr; gap: 8px; align-items: center; background: var(--card-2); border: 2px solid var(--line); border-radius: 16px; padding: 8px 10px; min-height: 58px; box-sizing: border-box; min-width: 0; }
+.badge i { font: normal 1.75rem/1 var(--emoji); text-align: center; }
+.badge b { display: block; font: 700 .95rem/1.2 var(--font-display); }
+.badge small { display: block; color: var(--ink-soft); font-size: .8rem; line-height: 1.25; }
+.badge.locked i { filter: grayscale(1); opacity: .35; }
+.badge.locked b { color: var(--ink-soft); }
+.badge.new { border-color: var(--sun-deep); box-shadow: 0 0 0 3px rgba(240, 181, 68, .35); }
+.badge.new small { color: var(--sun-deep); font-weight: 800; }
 .parents { background: var(--card); border-radius: 18px; padding: 12px 16px; box-shadow: 0 4px 14px rgba(41, 52, 90, .1); }
 .parents summary { cursor: pointer; font: 700 1.05rem/1.2 var(--font-display); min-height: 32px; display: flex; align-items: center; }
 .parents ul { margin: 10px 0 0; padding-left: 20px; display: grid; gap: 6px; line-height: 1.45; }
@@ -157,7 +169,7 @@ h1 span { color: var(--sun-deep); }
         <h2>Number Dash</h2>
         <p>Run, jump and fly to the beat. Steer into the lane whose door shows the right answer.</p>
         <div class="skills"><span>Math</span><span>Quick thinking</span></div>
-        <span class="meta" id="dashMeta">40 levels</span>
+        <span class="meta" id="dashMeta">50 levels</span>
         <span class="play">Play</span>
       </div>
     </a>
@@ -186,7 +198,7 @@ h1 span { color: var(--sun-deep); }
         <h2>Pair Up</h2>
         <p>Flip two cards and find pairs that belong together: 7 × 8 and 56, a picture and its English word, hot and cold.</p>
         <div class="skills"><span>Memory</span><span>Math</span><span>English</span></div>
-        <span class="meta" id="pairMeta">13 kinds of cards</span>
+        <span class="meta" id="pairMeta">14 kinds of cards</span>
         <span class="play">Play</span>
       </div>
     </a>
@@ -235,6 +247,7 @@ h1 span { color: var(--sun-deep); }
     </a>
   </div>
   <dl class="stats" id="stats"></dl>
+  <section class="badges" aria-label="Badges"><div class="today-head"><h2>Badges</h2><span class="streak" id="badgeCount"></span></div><div class="shelf" id="shelf" role="list"></div></section>
   <details class="parents" id="parents"><summary>Progress for parents</summary><ul id="parentList"></ul><p>Saved on this device only. IELTS bands are practice estimates from the CEFR stage.</p></details>
   <p class="tip" id="tip" hidden>On iPad: tap Share, then Add to Home Screen. Number Arcade then opens full screen from its own icon and works without internet.</p>
 </main>
@@ -248,8 +261,8 @@ h1 span { color: var(--sun-deep); }
   var right = (d.math && d.math.right) || 0, stars = 0, done = 0;
   for (var k in (d.levels || {})) { var lv = d.levels[k]; stars += (lv.stars || []).filter(Boolean).length; if (lv.done) done++; }
   var cell = function (k, v) { return '<div><dt>' + k + '</dt><dd>' + v + '</dd></div>'; };
-  document.getElementById('stats').innerHTML = cell('Answers right', right) + cell('Dash stars', stars + ' / 120') + cell('Ladder best', (l.best || 0) + ' / 30') + cell('Pairs found', pu.pairs || 0) + cell('Words learned', learned) + cell('English stage', EQ[eqStage - 1].split(' · ')[1]);
-  if (done) document.getElementById('dashMeta').textContent = done + ' of 40 levels finished';
+  document.getElementById('stats').innerHTML = cell('Answers right', right) + cell('Dash stars', stars + ' / 150') + cell('Ladder best', (l.best || 0) + ' / 30') + cell('Pairs found', pu.pairs || 0) + cell('Words learned', learned) + cell('English stage', EQ[eqStage - 1].split(' · ')[1]);
+  if (done) document.getElementById('dashMeta').textContent = done + ' of 50 levels finished';
   if (pu.wins) document.getElementById('pairMeta').textContent = pu.wins + (pu.wins === 1 ? ' board' : ' boards') + ' cleared';
   if (popStars) document.getElementById('popMeta').textContent = popStars + ' of 36 stars';
   if (eq.lessons) document.getElementById('questMeta').textContent = 'Now at ' + EQ[eqStage - 1];
@@ -270,7 +283,7 @@ h1 span { color: var(--sun-deep); }
       : { href: 'quest/', ic: '🧭', t: 'English Quest · ' + EQ[eqStage - 1], d: reviewEq ? reviewEq + ' to review, then the next lesson' : 'Next lesson on the path' },
     [{ href: 'pop/', ic: '🫧', t: 'Number Pop', d: popNext ? 'Get 3 stars in ' + (POP[popNext - 1] || 'a new world') : 'Beat a best time' },
      { href: 'ladder/', ic: '🪜', t: 'Number Ladder', d: l.best ? (l.best >= 30 ? 'Climb it again in English mode' : 'Beat your best: rung ' + l.best) : 'Climb to rung 10' },
-     { href: 'dash/', ic: '🏃', t: 'Number Dash', d: done ? 'Finish a new level (' + done + ' of 40 done)' : 'Start with Cloud Hop' }][dayNo % 3],
+     { href: 'dash/', ic: '🏃', t: 'Number Dash', d: done ? 'Finish a new level (' + done + ' of 50 done)' : 'Start with Cloud Hop' }][dayNo % 3],
     [{ href: 'spell/', ic: '✏️', t: 'Spell It', d: missedSpell ? 'Practise ' + missedSpell + ' tricky ' + (missedSpell === 1 ? 'word' : 'words') : 'Learn 10 new words' },
      { href: 'pair/', ic: '🃏', t: 'Pair Up', d: pu.wins ? 'Try a new kind of cards' : 'Find 6 pairs' }][dayNo % 2]
   ];
@@ -283,9 +296,40 @@ h1 span { color: var(--sun-deep); }
     '<b>Spelling:</b> ' + learned + ' words spelled perfectly' + (sp.rounds ? ' in ' + sp.rounds + ' rounds' : '') + (missedSpell ? ', ' + missedSpell + ' still tricky' : ''),
     '<b>Math:</b> ' + right + ' answers right' + (tricky ? ', ' + tricky + (tricky === 1 ? ' fact' : ' facts') + ' still being practised' : ''),
     '<b>Memory:</b> ' + (pu.wins || 0) + ' Pair Up boards cleared, ' + (pu.pairs || 0) + ' pairs found',
-    '<b>Games:</b> Dash ' + stars + ' / 120 stars, Ladder best rung ' + (l.best || 0) + ' / 30, Pop ' + popStars + ' stars',
+    '<b>Games:</b> Dash ' + stars + ' / 150 stars, Ladder best rung ' + (l.best || 0) + ' / 30, Pop ' + popStars + ' stars',
     '<b>Days played:</b> ' + week + ' of the last 7' + (streak ? ', streak ' + streak : '')
   ].map(function (t) { return '<li>' + t + '</li>'; }).join('');
+  // badges, in the order a child meets them; one earned since the last visit says New! once
+  var eqTests = 0; for (var st in (eq.tests || {})) if (eq.tests[st] && eq.tests[st].passed) eqTests++;
+  var mocks = Array.isArray(eq.mocks) ? eq.mocks : [];
+  var tookL = mocks.some(function (m) { return m.k === 'L'; }), tookR = mocks.some(function (m) { return !m.k; });
+  var gamesPlayed = [Object.keys(d.levels || {}).length, l.best || l.tops, pu.wins, popStars, sp.rounds || learned, eq.lessons].filter(Boolean).length;
+  var BADGES = [
+    ['🌟', 'First star', 'Get a star in Number Dash', stars >= 1],
+    ['🪜', 'Halfway up', 'Reach rung 15 on the ladder', (l.best || 0) >= 15],
+    ['🃏', 'Sharp memory', 'Clear 10 Pair Up boards', (pu.wins || 0) >= 10],
+    ['🫧', 'Bubble popper', 'Get 12 stars in Number Pop', popStars >= 12],
+    ['✏️', 'Word wizard', 'Spell 50 words perfectly', learned >= 50],
+    ['🧭', 'English explorer', 'Finish 5 English lessons', (eq.lessons || 0) >= 5],
+    ['🔥', 'On fire', 'Play 3 days in a row', streak >= 3],
+    ['🌈', 'All-rounder', 'Play all six games', gamesPlayed >= 6],
+    ['⭐', 'Star collector', 'Get 30 Dash stars', stars >= 30],
+    ['🏔️', 'Top of the tower', 'Climb all 30 rungs', (l.tops || 0) >= 1],
+    ['🔢', 'Math whiz', 'Get 500 answers right', right >= 500],
+    ['🎓', 'Stage passed', 'Pass an English stage test', eqTests >= 1],
+    ['📅', 'Full week', 'Play every day for a week', streak >= 7],
+    ['📚', 'Bookworm', 'Spell 200 words perfectly', learned >= 200],
+    ['📝', 'Test ready', 'Try both IELTS practice tests', tookL && tookR],
+    ['🏆', 'Dash champion', 'Get 100 Dash stars', stars >= 100]
+  ];
+  var seenB = read('arcade-badges.v1'), gotB = 0, freshB = [];
+  BADGES.forEach(function (b) { if (b[3]) { gotB++; if (!seenB[b[1]]) freshB.push(b[1]); } });
+  document.getElementById('badgeCount').textContent = gotB + ' of ' + BADGES.length;
+  document.getElementById('shelf').innerHTML = BADGES.map(function (b) {
+    var isNew = freshB.indexOf(b[1]) >= 0;
+    return '<div class="badge' + (b[3] ? '' : ' locked') + (isNew ? ' new' : '') + '" role="listitem" aria-label="' + esc(b[1]) + (b[3] ? ', earned' : ', not yet: ' + esc(b[2])) + '"><i aria-hidden="true">' + b[0] + '</i><span><b>' + esc(b[1]) + '</b><small>' + (b[3] ? (isNew ? 'New!' : 'Earned') : esc(b[2])) + '</small></span></div>';
+  }).join('');
+  if (freshB.length) { freshB.forEach(function (n) { seenB[n] = Date.now(); }); try { localStorage.setItem('arcade-badges.v1', JSON.stringify(seenB)); } catch (e) { /* private mode: it glows again next time */ } }
   if (learned) document.getElementById('spellMeta').textContent = learned + (learned === 1 ? ' word' : ' words') + ' spelled perfectly';
   if (l.tops) document.getElementById('ladderMeta').textContent = 'Reached the top ' + l.tops + (l.tops === 1 ? ' time' : ' times');
   else if (l.best) document.getElementById('ladderMeta').textContent = 'Best so far: rung ' + l.best + ' of 30';

@@ -359,6 +359,78 @@
         }
       ],
       "extra": []
+    },
+    {
+      "id": "starter-6",
+      "title": "At the park",
+      "emoji": "🌳",
+      "words": [
+        { "w": "park", "def": "a big green place in a town where people walk and play", "ex": "On Sundays we walk to the ___ and play on the swings.", "pos": "noun", "pic": "🏞️" },
+        { "w": "tree", "def": "a very big plant with a lot of green leaves", "ex": "I'm sitting under a big ___. It's nice and cool here.", "pos": "noun", "pic": "🌳" },
+        { "w": "flower", "def": "the pretty, coloured part of a plant", "ex": "This ___ is red and yellow, and it smells very nice.", "pos": "noun", "pic": "🌸" },
+        { "w": "playground", "def": "a place outside where children play, often with swings and slides", "ex": "We play in the school ___ at break time.", "pos": "noun" },
+        { "w": "sand", "def": "very small yellow bits of rock, like on a beach", "ex": "I'm making a big castle with ___.", "pos": "noun" },
+        { "w": "sun", "def": "the big hot light in the sky in the day", "ex": "Put on your hat. The ___ is very hot today!", "pos": "noun", "pic": "☀️" },
+        { "w": "water", "def": "you drink it, and it is in rivers and the sea", "ex": "The ducks are swimming on the ___ in the park.", "pos": "noun", "pic": "💧" },
+        { "w": "boat", "def": "it carries people on water", "ex": "We sit in a little ___ on the lake.", "pos": "noun", "pic": "🛶" },
+        { "w": "picnic", "def": "a meal that you eat outside, for example in a park", "ex": "Let's take some sandwiches and have a ___ in the park!", "pos": "noun", "pic": "🧺" },
+        { "w": "run", "def": "to move your legs very fast", "ex": "Can you ___ fast? Let's have a race!", "pos": "verb", "pic": "🏃" },
+        { "w": "jump", "def": "to go up into the air with your feet off the ground", "ex": "Kangaroos can ___ very high.", "pos": "verb" },
+        { "w": "walk", "def": "to move on your feet, not fast", "ex": "Grandma can't run, so we ___ slowly with her.", "pos": "verb", "pic": "🚶" },
+        { "w": "swim", "def": "to move in water using your arms and legs", "ex": "Let's ___ in the sea. The water is warm!", "pos": "verb", "pic": "🏊" },
+        { "w": "throw", "def": "to send a ball through the air with your hand", "ex": "Can you ___ the ball to me? I want to catch it.", "pos": "verb" },
+        { "w": "wave", "def": "to move your hand to say hello or goodbye", "ex": "Look! Grandma is at the window. Let's ___ to her!", "pos": "verb", "pic": "👋" },
+        { "w": "ride", "def": "to sit on a bike or a horse and make it go", "ex": "I can ___ my bike in the park.", "pos": "verb", "pic": "🚴" },
+        { "w": "baseball", "def": "a game where players hit a ball with a bat and then run", "ex": "In ___, you hit the ball with a bat and run.", "pos": "noun", "pic": "⚾" },
+        { "w": "badminton", "def": "a game where you hit a light thing with feathers over a high net", "ex": "Dad and I play ___ in the garden with a net and two rackets.", "pos": "noun", "pic": "🏸" },
+        { "w": "smile", "def": "to make a happy face with your mouth", "ex": "Look at the camera and ___!", "pos": "verb", "pic": "😊" },
+        { "w": "sit", "def": "to put your bottom on a chair or on the floor", "ex": "Come and ___ next to me on the grass.", "pos": "verb" }
+      ],
+      "grammar": [
+        { "q": "___ you swim? Yes, I can.", "opts": ["Can", "Are", "Have"], "a": 0, "why": "Ask 'Can you...?' about things people are able to do." },
+        { "q": "My little brother can't ___ yet. He is only one.", "opts": ["walk", "walks", "walking"], "a": 0, "why": "After 'can' or 'can't', use the verb on its own: can't walk." },
+        { "q": "There ___ a big tree in the park.", "opts": ["is", "are", "am"], "a": 0, "why": "Use 'there is' for one thing: there is a tree." },
+        { "q": "Is ___ your hat over there, under the tree?", "opts": ["that", "this", "these"], "a": 0, "why": "Use 'that' for one thing far from you: over there." },
+        { "q": "The dog is sleeping ___ the tree, out of the sun.", "opts": ["under", "in", "on"], "a": 0, "why": "'Under' means below something. The dog is below the tree." },
+        { "q": "Where's my hat? Look, it's ___ your head!", "opts": ["on", "in", "under"], "a": 0, "why": "'On' means on top of something: the hat is on your head." },
+        { "q": "___ the ball to me, please!", "opts": ["Throw", "Throws", "Throwing"], "a": 0, "why": "To ask someone to do something, use the verb on its own: Throw the ball." },
+        { "q": "___ are you doing? I'm flying my kite.", "opts": ["What", "Who", "Where"], "a": 0, "why": "Use 'what' to ask about things and actions: What are you doing?" },
+        { "q": "There are lots of ___ in the playground.", "opts": ["children", "childs", "child"], "a": 0, "why": "'Child' changes for more than one: one child, two children." },
+        { "q": "___ flowers here are for you, Mum!", "opts": ["These", "This", "That"], "a": 0, "why": "Use 'these' for more than one thing near you." }
+      ],
+      "sentences": [
+        "The dog is running in the park.",
+        "Can you throw me the ball?",
+        "How many boats can you see?",
+        "Don't walk on the grass!",
+        "My sister is sitting under a big tree.",
+        "Let's have a picnic in the park!"
+      ],
+      "reading": [
+        {
+          "title": "A sunny day in the park",
+          "text": "It is a sunny day and Lucy is at the park with her dad. There are lots of flowers and big green trees. Lucy can't swim, but she can ride her bike. Her dad is reading under a tree. Two boys are playing baseball. Lucy waves to them and smiles.",
+          "qs": [
+            { "type": "mc", "q": "Who is Lucy with?", "opts": ["her mum", "her dad", "her friend"], "a": 1 },
+            { "type": "tf", "q": "Lucy can swim.", "opts": ["True", "False"], "a": 1 },
+            { "type": "mc", "q": "What is Lucy's dad doing?", "opts": ["reading", "swimming", "playing baseball"], "a": 0 },
+            { "type": "mc", "q": "What are the two boys playing?", "opts": ["football", "badminton", "baseball"], "a": 2 },
+            { "type": "tf", "q": "Lucy waves to the boys.", "opts": ["True", "False"], "a": 0 }
+          ]
+        },
+        {
+          "title": "Tom's picnic",
+          "text": "Tom and his family are having a picnic in the park. They sit on the grass next to the water. There are three boats on the water: a red boat, a blue boat and a yellow boat. Tom's sister is in the playground. She is playing in the sand. Tom wants to play badminton with Mum.",
+          "qs": [
+            { "type": "mc", "q": "Where is Tom's family?", "opts": ["at the zoo", "in the park", "at home"], "a": 1 },
+            { "type": "mc", "q": "How many boats are there?", "opts": ["two", "three", "four"], "a": 1 },
+            { "type": "tf", "q": "There is a green boat on the water.", "opts": ["True", "False"], "a": 1 },
+            { "type": "mc", "q": "Where is Tom's sister?", "opts": ["in the playground", "in a boat", "under a tree"], "a": 0 },
+            { "type": "tf", "q": "Tom wants to play badminton with Mum.", "opts": ["True", "False"], "a": 0 }
+          ]
+        }
+      ],
+      "extra": []
     }
   ]
 }

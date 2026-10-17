@@ -109,7 +109,7 @@ Starter to Flyer: none. Items:
 | reading | 1 | 1 or 2: `reading` may be one object or a list of two, each with its own title |
 | extra | per stage below | Starter–Flyer 0–5, Explorer 4–8, Achiever–Band 8 6–12 |
 
-### Units (exactly 5 per stage)
+### Units (5 per stage, a 6th may be added after them)
 
 - `id`: `<stage id>-<1..5>`, e.g. `explorer-3`. `title`: up to 32 characters. `emoji`: one emoji for the topic.
 - Units within a stage get a little harder from 1 to 5.
