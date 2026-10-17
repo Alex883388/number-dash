@@ -671,15 +671,33 @@ const TIME = [
    ['Months in a quarter of a year: ?', '3', ['4', '6', '2']], ['How often a leap year comes (years): ?', '4', ['2', '5', '10']],
    ['18:30 on a 12-hour clock: ?', '6:30 pm', ['8:30 pm', '6:30 am', '1:30 pm']], ['Days in March, July and August together: ?', '93', ['90', '92', '91']]]
 ];
+// animal facts, same shape as SCIENCE (wrong answers are clearly wrong, never a second right one)
+const ANIMALS = [
+  [['The fastest land animal: ?', 'cheetah', ['elephant', 'cow', 'tortoise']], ['The tallest animal: ?', 'giraffe', ['horse', 'bear', 'lion']],
+   ['An animal that carries its baby in a pouch: ?', 'kangaroo', ['zebra', 'wolf', 'goat']], ['A bird that cannot fly: ?', 'penguin', ['eagle', 'robin', 'owl']],
+   ['The biggest animal that has ever lived: ?', 'blue whale', ['elephant', 'shark', 'giraffe']], ['Spiders spin: ?', 'webs', ['nests', 'shells', 'tunnels']],
+   ['Bees live in a: ?', 'hive', ['den', 'stable', 'kennel']], ['An animal with black and white stripes: ?', 'zebra', ['lion', 'bear', 'camel']],
+   ['A camel stores fat in its: ?', 'hump', ['tail', 'ears', 'feet']], ['An elephant picks things up with its: ?', 'trunk', ['tail', 'ears', 'tusks']]],
+  [['The largest land animal: ?', 'elephant', ['giraffe', 'hippo', 'rhino']], ['Animals that sleep through the winter: ?', 'hibernate', ['migrate', 'hatch', 'hunt']],
+   ['Birds that fly to warmer places for winter: ?', 'migrate', ['hibernate', 'nest', 'hatch']], ['A group of wolves: ?', 'pack', ['herd', 'flock', 'swarm']],
+   ['A group of sheep: ?', 'flock', ['pack', 'pride', 'swarm']], ['A group of lions: ?', 'pride', ['pack', 'flock', 'herd']],
+   ['How many legs an insect has: ?', '6', ['8', '4', '10']], ['How many legs a spider has: ?', '8', ['6', '4', '10']],
+   ['The only mammal that can really fly: ?', 'bat', ['ostrich', 'eagle', 'dolphin']], ['A whale breathes through its: ?', 'blowhole', ['gills', 'fins', 'tail']]],
+  [['Cold-blooded animals with scales, like snakes: ?', 'reptiles', ['mammals', 'birds', 'amphibians']], ['Animals that live in water and on land, like frogs: ?', 'amphibians', ['reptiles', 'mammals', 'insects']],
+   ['Animals that are active at night: ?', 'nocturnal', ['migratory', 'aquatic', 'diurnal']], ['A scientist who studies animals: ?', 'zoologist', ['botanist', 'geologist', 'astronomer']],
+   ['A scientist who studies plants: ?', 'botanist', ['zoologist', 'geologist', 'astronomer']], ['The natural home of an animal or plant: ?', 'habitat', ['climate', 'colony', 'cocoon']],
+   ['A species with none left alive: ?', 'extinct', ['endangered', 'dormant', 'captive']], ['A caterpillar turning into a butterfly: ?', 'metamorphosis', ['photosynthesis', 'evaporation', 'hibernation']],
+   ['An animal without a backbone: ?', 'invertebrate', ['vertebrate', 'mammal', 'reptile']], ['Mammals that carry babies in a pouch: ?', 'marsupials', ['rodents', 'primates', 'reptiles']]]
+];
 // A quiz question: t has one "?" for the answer; wrong = n - 1 real but wrong answers
 function quizQuestion(tier, n) {
-  const t3 = Math.max(0, Math.min(2, tier)), kind = pick(['capital', 'capital', 'science', 'science', 'world', 'world', 'time', 'baby']);
+  const t3 = Math.max(0, Math.min(2, tier)), kind = pick(['capital', 'capital', 'science', 'science', 'world', 'world', 'time', 'animal', 'baby']);
   let t, a, wrong;
   if (kind === 'capital') { const [c, cap] = pick(CAPITALS[t3]); t = 'Capital of ' + c + ': ?'; a = cap; wrong = shuffle(CAPITALS[t3].filter((x) => x[1] !== cap).map((x) => x[1])); }
   else if (kind === 'baby') {
     const [, an, b] = pick(BABIES[t3]); t = 'Baby ' + an + ': ?'; a = b;
     wrong = shuffle(BABIES[t3].map((x) => x[2]).filter((x, i, all) => x !== b && all.indexOf(x) === i));
-  } else { const [q, ans, bad] = pick((kind === 'world' ? WORLD : kind === 'time' ? TIME : SCIENCE)[t3]); t = q; a = ans; wrong = shuffle(bad.slice()); }
+  } else { const [q, ans, bad] = pick((kind === 'world' ? WORLD : kind === 'time' ? TIME : kind === 'animal' ? ANIMALS : SCIENCE)[t3]); t = q; a = ans; wrong = shuffle(bad.slice()); }
   return { t: t, a: a, quiz: true, english: true, kind: kind, wrong: wrong.slice(0, n - 1) };
 }
 // words that go together (collocations): [word, partner, other words the partner also goes with...].
