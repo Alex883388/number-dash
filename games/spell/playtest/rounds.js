@@ -4,7 +4,10 @@
 // letter is right. Checks per word: the layout fits, the right tile is always there, the word was read aloud,
 // and per round: 8 perfect = 2 stars, the results lists, the "♪ remix" toast on every round after the first.
 // Then: a perfect round (3 stars), a slippy one (1 star), a Listen only round on IELTS Hard (no look, no look again, its own record), a capital typed in small letters,
-// a homophone typed with the other spelling (refused), a rule card, missed words coming back, a keyboard, a pause, the records.
+// a homophone typed with the other spelling (refused), a rule card, capitals in the topic decks (Atlantic: a small a tapped first is a slip, then
+// the word typed in small letters; Thursday and London by tile taps; a Listen only round of Time & calendar Hard), missed words coming back, a keyboard,
+// a pause, the records. 14 decks x 3 levels = 42 rounds (Number words Hard is sums), so the Feelings & people, Places & geography and Time & calendar
+// rounds are all played here.
 const PLAY = `(async () => {
   const S = __spell, sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   const waitFor = async (fn, what, ms) => { const t0 = performance.now(); while (!fn()) { if (performance.now() - t0 > (ms || 20000)) throw new Error('timeout: ' + what); await sleep(10); } };
@@ -69,7 +72,7 @@ const PLAY = `(async () => {
 
 const MORE = `(async () => {
   const S = __spell, out = {}, sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-  // records after the 27 rounds
+  // records after the 42 rounds
   out.records = { rounds: S.rec.rounds, learned: S.rec.learned.length, missed: S.rec.missed.length, perfect: S.rec.perfect, best: S.rec.best, mathTricky: S.save.math.tricky.length };
   // a perfect round, then one with a slip on 5 words
   S.start('animals', 'medium');
@@ -105,6 +108,37 @@ const MORE = `(async () => {
   // a rule card: "stop + ed" -> stopped
   S.start('endings', 'medium', ['stopped']);
   out.rule = { card: document.getElementById('pic').innerText.replace(/\\n+/g, ' / '), said: S.Speech.said.slice(-1)[0], fits: S.fits() };
+  // capitals in the topic decks: "Atlantic" has a capital A and its own small a. The small a tapped first is refused (a slip),
+  // then the word typed in small letters fills the capital and the small ones
+  const caps = { problems: [] };
+  S.start('places', 'hard', ['Atlantic']);
+  while (S.state() !== 'spell') await sleep(10);
+  caps.atlanticTiles = S.tiles().map((t) => t.ch).join('');
+  S.tap(S.game.tiles.findIndex((t) => t.ch === 'a'));
+  if (S.pos() !== 0 || S.game.slips !== 1) caps.problems.push('small a for capital A: pos ' + S.pos() + ', slips ' + S.game.slips);
+  'atlantic'.split('').forEach((c) => key(c));
+  const atl = S.game.results[0] || {};
+  if (S.state() !== 'done' || atl.w !== 'Atlantic' || atl.slips !== 1) caps.problems.push('Atlantic typed: ' + S.state() + ' ' + JSON.stringify(atl));
+  if (S.Speech.said.slice(-1)[0] !== 'Atlantic') caps.problems.push('Atlantic not read aloud: ' + S.Speech.said.slice(-1)[0]);
+  // "Thursday" and "London" by tile taps, the capital tile first: perfect
+  for (const [d, l, w] of [['time', 'medium', 'Thursday'], ['places', 'easy', 'London']]) {
+    S.start(d, l, [w]);
+    while (S.state() !== 'spell') await sleep(10);
+    if (S.tiles().filter((t) => /[A-Z]/.test(t.ch)).length !== 1) caps.problems.push('capital tiles for ' + w + ': ' + S.tiles().map((t) => t.ch).join(''));
+    let g = 0; while (S.state() === 'spell' && g++ < 30) S.tap(S.nextIndex());
+    const r0 = S.game.results[0] || {};
+    if (!r0.perfect || r0.w !== w) caps.problems.push(w + ' by taps: ' + JSON.stringify(r0));
+    if (Array.from(document.querySelectorAll('#word .box')).map((b) => b.textContent).join('') !== w) caps.problems.push(w + ' boxes: ' + document.getElementById('word').textContent);
+    caps[w] = r0.perfect ? 'perfect' : 'not perfect';
+  }
+  // a whole Listen only round of Time & calendar Hard: names are heard, never seen, and still spelled with their capital
+  S.setListen(true);
+  S.start('time', 'hard');
+  r = await window.__playRound(2, -1);
+  caps.listenTimeHard = r.perfect + ' perfect, ' + r.stars + '★, ' + r.words.join(' ');
+  if (r.perfect !== 9 || r.problems.length) caps.problems.push('listen time/hard: ' + r.perfect + ' perfect ' + r.problems.join(' / '));
+  S.setListen(false);
+  out.capitals = caps;
   S.goHome();
   // missed words come back now and then
   let back = 0, rounds = 0;

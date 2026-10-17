@@ -2,6 +2,9 @@
 //   node games/spell/build.js && ND_CDP=9361 ND_PROFILE=edge-profile-spell ND_URL=file:///D:/Github/number-dash/games/spell/dist/preview.html ND_READY='!!window.__spell' ND_BOT=none node games/dash/playtest/shoot.js games/spell/playtest/words.js
 // - lists: letters only (a hyphen in number words, an apostrophe in homophones like they're), picture decks
 //   (Animals, Food, Around us, Actions, Body & clothes) Easy 3-4 / Medium 5-6 / Hard 7+ letters, Science 3-6 / 4-8 / 7+, no repeats in a deck,
+//   Feelings & people, Places & geography, Time & calendar: 3-6 / 4-8 / 7+, British forms only (mum, harbour, autumn; never mom,
+//   harbor), a capital only on names (London, Monday), no word from any other deck (Wednesday, February and millennium are
+//   also in IELTS spelling on purpose), no clue holding the word's stem (happy / happiness, Victorian / Victoria), a note per level,
 //   no picture twice in a deck, no US/UK spelling in a word or a clue, one gap per sentence that never gives the word
 //   away, every homophone's sound-alikes are in the deck, every rule card changes its base word, 30+ words per level;
 // - tiles: 25 deals of every word (and every number word, and Hard sums at every math level) hold all its letters,
@@ -19,7 +22,18 @@ const LISTS = `(() => {
     'realise realize organise organize apologise apologize mustache moustache plow plough catalog catalogue program programme curb kerb armor armour ' +
     'honor honour flavor flavour humor humour behavior behaviour harbor harbour meter metre liter litre centimeters centimetres kilometres kilometers ' +
     'traveled travelled traveling travelling canceled cancelled woolly wooly cozy cosy mold mould pants trousers jumper sweater trainers sneakers zipper ' +
-    'torch flashlight postman mailman petrol gasoline rubbish trash garbage pavement sidewalk vest waistcoat suspenders braces sledge sled autumn').split(' ');
+    'torch flashlight postman mailman petrol gasoline rubbish trash garbage pavement sidewalk vest waistcoat suspenders braces sledge sled autumn ' +
+    'neighbourhood neighborhood').split(' ');
+  // the topic decks are plain British English: of the words above, only these British forms may appear in a word or a clue
+  const BRITISH = ('colour colours colourful favourite centre grey mum mummy biscuit biscuits sweets crisps doughnut pyjamas tyre theatre ' +
+    'aluminium aeroplane aubergine courgette nappy practise ladybird lorry chilli yoghurt omelette jewellery neighbour neighbourhood realise ' +
+    'organise apologise moustache plough catalogue programme kerb armour honour flavour humour behaviour harbour metre litre centimetres ' +
+    'kilometres travelled travelling cancelled cosy mould trousers jumper trainers petrol rubbish pavement waistcoat sledge autumn').split(' ');
+  const TOPIC = ['people', 'places', 'time'], NAMES = ['ielts', 'places', 'time'], ALSO_IELTS = ['wednesday', 'february', 'millennium'];
+  const lower = {};
+  for (const d of S.DECK_IDS) for (const l of S.LEVELS) if (!(d === 'numbers' && l === 'hard')) for (const x of S.wordList(d, l)) (lower[x.w.toLowerCase()] = lower[x.w.toLowerCase()] || new Set()).add(d);
+  for (let n = 1; n < 100; n++) (lower[S.numWord(n)] = lower[S.numWord(n)] || new Set()).add('numbers');
+  out.topic = { words: 0, britishForms: [], capitals: 0, alsoInIelts: [] };
   const PICTURE = ['animals', 'food', 'around', 'actions', 'body'];
   const seen = {};
   const hasUSUK = (t) => USUK.filter((u) => new RegExp('\\\\b' + u + '\\\\b', 'i').test(t));
@@ -32,15 +46,36 @@ const LISTS = `(() => {
       if (list.length < 30 && d !== 'numbers') bad(d + '/' + l + ' has only ' + list.length + ' words');
       for (const x of list) {
         const w = x.w;
-        // IELTS spelling teaches British forms on purpose (colour, organise), and a few words start with a capital
-        const british = d === 'ielts';
-        const re = d === 'numbers' ? /^[a-z]+(-[a-z]+)?$/ : d === 'homophones' ? /^[a-z]+('[a-z]+)?$/ : british ? /^[A-Z]?[a-z]+$/ : /^[a-z]+$/;
+        // IELTS spelling teaches British forms on purpose (colour, organise); a few words start with a capital (IELTS, places, days and months)
+        const british = d === 'ielts', topic = TOPIC.indexOf(d) >= 0;
+        const re = d === 'numbers' ? /^[a-z]+(-[a-z]+)?$/ : d === 'homophones' ? /^[a-z]+('[a-z]+)?$/ : NAMES.indexOf(d) >= 0 ? /^[A-Z]?[a-z]+$/ : /^[a-z]+$/;
         if (!re.test(w)) bad('odd letters: ' + w);
         if (deckWords.has(w)) bad('repeat in ' + d + ': ' + w);
         deckWords.add(w);
         if (seen[w] && seen[w] !== d) out.dupAcross.push(w + ' (' + seen[w] + ', ' + d + ')');
         seen[w] = d;
         if (british) out.british = (out.british || 0) + (hasUSUK(w).length ? 1 : 0);
+        else if (topic) {
+          const u = hasUSUK(w + ' ' + (x.clue || ''));
+          u.forEach((f) => { if (BRITISH.indexOf(f.toLowerCase()) < 0) bad('not a British form in ' + d + ': ' + w + ' (' + f + ')'); else if (out.topic.britishForms.indexOf(f.toLowerCase()) < 0) out.topic.britishForms.push(f.toLowerCase()); });
+          if (/[a-z](ize|izes|ized|izing|yze)$/i.test(w)) bad('-ize spelling: ' + w);
+          out.topic.words++;
+          if (/^[A-Z]/.test(w)) out.topic.capitals++;
+          // no word from another deck (compared in small letters, so Turkey would meet turkey)
+          const elsewhere = Array.from(lower[w.toLowerCase()] || []).filter((o) => o !== d);
+          if (elsewhere.length && !(ALSO_IELTS.indexOf(w.toLowerCase()) >= 0 && elsewhere.join() === 'ielts')) bad('in another deck: ' + d + '/' + w + ' (' + elsewhere.join(', ') + ')');
+          else if (elsewhere.length) out.topic.alsoInIelts.push(w);
+          if (l === 'easy' && (w.length < 3 || w.length > 6)) bad(d + ' easy length: ' + w);
+          if (l === 'medium' && (w.length < 4 || w.length > 8)) bad(d + ' medium length: ' + w);
+          if (l === 'hard' && w.length < 7) bad(d + ' hard length: ' + w);
+          if (x.clue) {
+            // the clue never holds the word's stem (happy -> happiness, weekend -> week) nor a big piece of it (waterfall -> water)
+            const lw = w.toLowerCase(), stem = lw.slice(0, Math.max(4, lw.length - 3));
+            const cw = x.clue.replace('____', ' ').toLowerCase().split(/[^a-z]+/).filter(Boolean);
+            const hit = cw.filter((y) => y.indexOf(stem) === 0 || (y.length >= 4 && lw.indexOf(y) === 0 && y.length / lw.length >= 0.5));
+            if (hit.length) bad('clue gives away ' + w + ': ' + hit.join(','));
+          }
+        }
         else if (hasUSUK(w).length) bad('US/UK word: ' + w);
         if (PICTURE.indexOf(d) >= 0) {
           if (l === 'easy' && (w.length < 3 || w.length > 4)) bad('easy length: ' + d + '/' + w);
@@ -62,7 +97,7 @@ const LISTS = `(() => {
           if (gaps !== 1) bad('gaps in clue for ' + w + ': ' + gaps);
           if (new RegExp('(^|[^a-z’\\'])' + w.replace("'", "['’]") + '($|[^a-z’\\'])', 'i').test(x.clue.replace('____', ''))) bad('clue gives away ' + w);
           const u = hasUSUK(x.clue + ' ' + (x.kind === 'rule' ? x.pic : ''));
-          if (u.length && d !== 'ielts') bad('US/UK word in clue for ' + w + ': ' + u.join(','));
+          if (u.length && d !== 'ielts' && TOPIC.indexOf(d) < 0) bad('US/UK word in clue for ' + w + ': ' + u.join(','));
           if (x.clue.length > 64) bad('long clue for ' + w + ': ' + x.clue.length);
         }
         if (x.kind === 'homo') {
@@ -77,6 +112,16 @@ const LISTS = `(() => {
       }
     }
   }
+  // every topic deck level has its own note on the home screen (not the picture decks' "3–4 letter words")
+  const keepDeck = S.rec.deck, keepLevel = S.rec.level;
+  out.notes = {};
+  for (const d of TOPIC) for (const l of S.LEVELS) {
+    S.rec.deck = d; S.rec.level = l; S.setListen(false);
+    const t = document.getElementById('deckNote').textContent;
+    out.notes[d + '/' + l] = t;
+    if (!t || /letter words|letters or more/.test(t)) bad('no note for ' + d + '/' + l + ': ' + t);
+  }
+  S.rec.deck = keepDeck; S.rec.level = keepLevel; S.setListen(false);
   // number words
   const nw = { 1: 'one', 13: 'thirteen', 20: 'twenty', 21: 'twenty-one', 40: 'forty', 42: 'forty-two', 77: 'seventy-seven', 90: 'ninety', 99: 'ninety-nine' };
   for (const k in nw) if (S.numWord(+k) !== nw[k]) bad('numWord(' + k + ') = ' + S.numWord(+k));
@@ -117,6 +162,14 @@ const LISTS = `(() => {
       const spare = x.alt && x.alt.some((a) => a.indexOf("'") >= 0) && w.indexOf("'") < 0 ? 1 : 0;
       if (t.filter((c) => c === "'").length - (w.match(/'/g) || []).length > spare) return 'a spare apostrophe';
       if (t.join('').indexOf(w) >= 0) out.inOrder = (out.inOrder || 0) + 1;
+      if (/^[A-Z]/.test(w)) {
+        // a capital word: one capital tile, and no small copy of it as a decoy when the word has none of its own
+        // (Wednesday never gets a w; Atlantic and Netherlands keep their own a and n, and may get a doubled one like any word)
+        const spare = t.slice(); for (const c of w) spare.splice(spare.indexOf(c), 1);
+        if (t.filter((c) => /[A-Z]/.test(c)).length !== 1) return 'capital tiles ' + t.join('');
+        if (w.indexOf(w[0].toLowerCase()) < 0 && spare.indexOf(w[0].toLowerCase()) >= 0) return 'a spare small ' + w[0].toLowerCase();
+        out.capitalDeals = (out.capitalDeals || 0) + 1;
+      }
       if (k === 0 && x.alt) {
         homos++;
         // can each sound-alike be built from these tiles too? (the sentence has to decide, not the tiles)
@@ -155,6 +208,7 @@ const LISTS = `(() => {
   }
   out.emoji = pics.length;
   out.total = Object.keys(out.counts).reduce((a, k) => a + out.counts[k], 0);
+  out.decks = S.DECK_IDS.length;
   window.__pics = pics;
   return out;
 })()`;
@@ -183,7 +237,7 @@ const FITS_ALL = `(() => {
   }
   S.save.settings.mathLevel = keep;
   S.setListen(true);
-  for (const d of ['tricky', 'homophones', 'endings', 'science', 'ielts']) for (const l of S.LEVELS) go(d, l, S.wordList(d, l).map((x) => x.w));
+  for (const d of ['tricky', 'homophones', 'endings', 'science', 'ielts', 'people', 'places', 'time']) for (const l of S.LEVELS) go(d, l, S.wordList(d, l).map((x) => x.w));
   S.setListen(false);
   S.goHome();
   return { size: innerWidth + 'x' + innerHeight, checked: n, problems: bad.length, first: bad.slice(0, 12) };

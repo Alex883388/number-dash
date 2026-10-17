@@ -4,6 +4,9 @@
 // again), pause, finish the round, play again (a new remix). Listen only switched on by finger and a homophone with
 // an apostrophe ("they're") spelled unseen; a rule card. Then iPad portrait, a phone, dark mode and calm mode,
 // with the longest words ("seventy-seven", "caterpillar", "temperature", "stationery", a sentence clue, a sum, rules).
+// The topic decks (Feelings & people, Places & geography, Time & calendar): picked by finger on the 14-deck home, "Wednesday"
+// spelled by finger from its capital W and a whole round finished, the longest words (neighbourhood, granddaughter,
+// chronological) on an iPad both ways and a phone, and the home screen checked for scrolling at every size.
 const tap = [{ eval: '__spell.markNext()' }, { touchEl: '[data-bot="tap"]' }];
 const FINISH = `(async () => {
   const S = __spell, sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -105,6 +108,35 @@ module.exports = [
   { shot: 'spell-36-science-ipad' }, fits,
   { eval: '__spell.goHome(); "home"' },
 
+  // the topic decks on the landscape iPad: picked by finger, a capital spelled by finger, a whole round
+  { touchEl: '.deck[data-deck="time"] span' },
+  { touchEl: 'input[name="level"][value="hard"] + span' }, { sleep: 300 },
+  { shot: 'spell-41-home-time-ipad' },
+  { log: "['home', __spell.rec.deck, __spell.rec.level, document.getElementById('deckNote').textContent, 'scrolls', document.getElementById('screens').scrollHeight > innerHeight, document.querySelectorAll('.deck').length + ' decks', getComputedStyle(document.getElementById('decks')).gridTemplateColumns.split(' ').length + ' columns']" },
+  { eval: "__spell.forceNext(['Wednesday']); 'next round starts with Wednesday'" },
+  { touchEl: '#startBtn' },
+  { waitFor: "__spell.state() === 'look'", timeout: 5000 }, { sleep: 400 },
+  { shot: 'spell-42-time-look-ipad' }, fits,
+  { waitFor: "__spell.state() === 'spell'", timeout: 9000 }, { sleep: 450 },
+  { shot: 'spell-43-time-spell-ipad' }, fits,
+  { log: "['tiles', __spell.tiles().map((t) => t.ch).join('')]" },
+  ...tap, ...tap, ...tap, ...tap, ...tap, ...tap, ...tap, ...tap, ...tap,
+  { sleep: 250 },
+  { shot: 'spell-44-time-done-ipad' },
+  { log: "[__spell.state(), JSON.stringify(__spell.game.results[0]), __spell.Speech.said.slice(-1)[0]]" },
+  { eval: FINISH }, { sleep: 600 },
+  { shot: 'spell-45-results-time-ipad' },
+  { log: "[document.getElementById('doneNote').textContent, document.getElementById('perfectList').innerText.replace(/\\n+/g, ' ')]" },
+  { eval: "__spell.start('people', 'easy', ['cheeky']); 'look'" }, { sleep: 500 },
+  { shot: 'spell-46-people-look-ipad' }, fits,
+  ...spellNow('people', 'hard', 'disappointed'),
+  { shot: 'spell-47-people-ipad' }, fits,
+  { eval: "__spell.start('places', 'hard', ['neighbourhood']); 'look'" }, { sleep: 500 },
+  { shot: 'spell-48-places-look-ipad' }, fits,
+  ...spellNow('places', 'medium', 'motorway'),
+  { shot: 'spell-49-places-ipad' }, fits,
+  { eval: '__spell.goHome(); "home"' },
+
   // iPad portrait
   { viewport: [820, 1180, true, false, 2] },
   { reload: true }, { sleep: 700 },
@@ -115,6 +147,21 @@ module.exports = [
   { shot: 'spell-12-spell-portrait' }, fits,
   ...spellNow('tricky', 'hard', 'different'),
   { shot: 'spell-13-tricky-portrait' }, fits,
+  // the topic decks on the portrait iPad
+  { eval: "__spell.start('places', 'hard', ['Mississippi']); 'look'" }, { sleep: 500 },
+  { shot: 'spell-50-places-look-portrait' }, fits,
+  ...spellNow('places', 'hard', 'neighbourhood'),
+  { shot: 'spell-51-places-portrait' }, fits,
+  ...spellNow('people', 'hard', 'granddaughter'),
+  { shot: 'spell-52-people-portrait' }, fits,
+  { eval: "__spell.start('people', 'medium', ['worried']); 'look'" }, { sleep: 500 },
+  { shot: 'spell-53-people-look-portrait' }, fits,
+  ...spellNow('time', 'hard', 'chronological'),
+  { shot: 'spell-54-time-portrait' }, fits,
+  { eval: '__spell.goHome(); "home"' }, { sleep: 300 },
+  { touchEl: '.deck[data-deck="people"] span' }, { sleep: 300 },
+  { shot: 'spell-55-home-people-portrait' },
+  { log: "['portrait home', __spell.rec.deck, document.getElementById('deckNote').textContent, 'scrolls', document.getElementById('screens').scrollHeight > innerHeight, getComputedStyle(document.getElementById('decks')).gridTemplateColumns.split(' ').length + ' columns']" },
 
   // phone
   { viewport: [390, 844, true, false, 3] },
@@ -140,6 +187,12 @@ module.exports = [
   { shot: 'spell-37-science-phone' }, fits,
   { eval: "__spell.start('ielts', 'hard', ['questionnaire']); 'look'" }, { sleep: 500 },
   { shot: 'spell-38-ielts-phone' }, fits,
+  ...spellNow('places', 'hard', 'neighbourhood'),
+  { shot: 'spell-56-places-phone' }, fits,
+  ...spellNow('people', 'hard', 'enthusiastic'),
+  { shot: 'spell-57-people-phone' }, fits,
+  { eval: "__spell.start('time', 'hard', ['chronological']); 'look'" }, { sleep: 500 },
+  { shot: 'spell-58-time-look-phone' }, fits,
 
   // dark
   { viewport: [1180, 820, true, true, 2] },
@@ -161,6 +214,8 @@ module.exports = [
   { shot: 'spell-34-body-dark' }, fits,
   ...spellNow('science', 'medium', 'volcano'),
   { shot: 'spell-39-science-dark' }, fits,
+  ...spellNow('time', 'easy', 'autumn'),
+  { shot: 'spell-59-time-dark' }, fits,
   { eval: '__spell.goHome(); "home"' }, { sleep: 400 },
   { shot: 'spell-40-home-dark' },
   { log: "['dark home fits', document.getElementById('screens').scrollHeight, innerHeight]" },
