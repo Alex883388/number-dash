@@ -382,7 +382,11 @@ const Speech = (function () {
   function choose() {
     if (!ok) return;
     const en = speechSynthesis.getVoices().filter((v) => /^en[-_]/i.test(v.lang));
-    voice = en.find((v) => /Samantha|Karen|Moira|Daniel|Aria|Jenny|Google US English/i.test(v.name)) || en.find((v) => /^en[-_]US/i.test(v.lang)) || en[0] || null;
+    // British English first (the games teach British spelling and IELTS uses British voices), the clearest voices first
+    // (on-device voices before online ones, so read-aloud still works offline)
+    const gb = en.filter((v) => /^en[-_]GB/i.test(v.lang)).sort((x, y) => (y.localService ? 1 : 0) - (x.localService ? 1 : 0));
+    voice = gb.find((v) => /Serena|Kate|Arthur|Martha|Sonia|Libby|Ryan|Google UK English/i.test(v.name)) || gb.find((v) => /Daniel/i.test(v.name)) || gb[0] ||
+      en.find((v) => /Samantha|Karen|Moira|Aria|Jenny|Google US English/i.test(v.name)) || en.find((v) => /^en[-_]US/i.test(v.lang)) || en[0] || null;
   }
   if (ok) { choose(); try { speechSynthesis.addEventListener('voiceschanged', choose); } catch (e) { speechSynthesis.onvoiceschanged = choose; } }
   function say(text, rate) {
@@ -391,7 +395,7 @@ const Speech = (function () {
     try {
       const u = new SpeechSynthesisUtterance(text);
       if (voice) u.voice = voice;
-      u.lang = voice ? voice.lang : 'en-US'; u.rate = rate || 0.9; u.pitch = 1.05;
+      u.lang = voice ? voice.lang : 'en-GB'; u.rate = rate || 0.9; u.pitch = 1.05;
       // some iOS versions drop a word spoken straight after cancel(), so only cut in when something is
       // still talking, and then give the voice a moment
       if (speechSynthesis.speaking || speechSynthesis.pending) { speechSynthesis.cancel(); setTimeout(() => speechSynthesis.speak(u), 60); }
