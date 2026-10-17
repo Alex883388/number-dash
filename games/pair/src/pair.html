@@ -161,6 +161,7 @@ const DECKS = [
   { id: 'coll', name: 'Go together', icon: '🧩', note: 'make → a decision', words: true },
   { id: 'shape', name: 'Shapes', icon: '🔷', note: 'hexagon → 6 sides', words: true },
   { id: 'sci', name: 'Body & science', icon: '🔬', note: 'heart → pumps blood', words: true },
+  { id: 'pre', name: 'Prefixes', icon: '🔤', note: 'unhappy → not happy', words: true },
   { id: 'mix', name: 'Mix', icon: '🎲', note: 'a bit of all', words: true }
 ];
 const SIZES = [{ id: 'small', name: '6 pairs', n: 6, peek: 3 }, { id: 'medium', name: '8 pairs', n: 8, peek: 4 }, { id: 'big', name: '12 pairs', n: 12, peek: 5 }];
@@ -230,6 +231,20 @@ const SCI = [
    ['producer', 'makes its own food', 'food'], ['predator', 'hunts other animals'], ['prey', 'is hunted for food'], ['vertebrate', 'has a backbone'],
    ['invertebrate', 'has no backbone'], ['conductor', 'lets electricity flow'], ['insulator', 'stops heat or electricity']]
 ];
+// prefixes: [word, what it means]; un- and re- first, then dis-, mis-, pre-, im-, in-, over-, under-,
+// then anti-, sub-, inter-, trans-, auto-, bi-, tri-, semi-, micro-, tele-, multi-, non-
+const PREFIX = [
+  [['unhappy', 'not happy'], ['unkind', 'not kind'], ['untidy', 'not tidy'], ['unfair', 'not fair'], ['unsafe', 'not safe'], ['unlock', 'open a lock'],
+   ['unwrap', 'take the paper off'], ['unpack', 'take things out'], ['redo', 'do again'], ['replay', 'play again'], ['rebuild', 'build again'],
+   ['reread', 'read again'], ['retell', 'tell again'], ['refill', 'fill again']],
+  [['disagree', 'not agree'], ['dislike', 'not like'], ['disappear', 'go out of sight'], ['misspell', 'spell wrongly'], ['misunderstand', 'understand wrongly'],
+   ['mislead', 'lead the wrong way'], ['preview', 'see before'], ['prehistoric', 'before written history'], ['impossible', 'not possible'],
+   ['impolite', 'not polite'], ['incorrect', 'not correct'], ['invisible', 'cannot be seen'], ['overcook', 'cook too long'], ['underwater', 'below the water']],
+  [['anticlockwise', 'opposite to a clock'], ['submarine', 'a boat under the sea'], ['international', 'between nations'], ['transatlantic', 'across the Atlantic'],
+   ['autobiography', 'your own life story'], ['automatic', 'works by itself'], ['bilingual', 'speaks two languages'], ['bicycle', 'two wheels'],
+   ['tricycle', 'three wheels'], ['semicircle', 'half a circle'], ['microscope', 'to see very small things'], ['telescope', 'to see things far away'],
+   ['multicoloured', 'many colours'], ['non-fiction', 'writing about real things']]
+];
 const FRACS = [
   [['½', 'one half'], ['⅓', 'one third'], ['⅔', 'two thirds'], ['¼', 'one quarter'], ['¾', 'three quarters'], ['⅕', 'one fifth'], ['⅖', 'two fifths'], ['⅗', 'three fifths'],
    ['⅘', 'four fifths'], ['⅙', 'one sixth'], ['⅚', 'five sixths'], ['⅛', 'one eighth'], ['⅜', 'three eighths'], ['⅝', 'five eighths'], ['⅞', 'seven eighths'], ['⅒', 'one tenth']],
@@ -288,8 +303,8 @@ function wordsPair(deck, tier, used) {
       if (used.coll.alts.has(x) || alts.some((w) => used.coll.words.has(w))) continue;   // another card could match too
       p = { a: { kind: 'word', v: x, say: x + ' ' + y }, b: { kind: 'word', v: y, say: x + ' ' + y }, learned: x + ' ' + y, key: [x, y], coll: [x, alts] };
     }
-    else if (deck === 'shape' || deck === 'sci') {
-      const [x, y, grp] = pick((deck === 'sci' ? SCI : SHAPES)[tier]), sayY = y.replace(/°/g, ' degrees');
+    else if (deck === 'shape' || deck === 'sci' || deck === 'pre') {
+      const [x, y, grp] = pick((deck === 'sci' ? SCI : deck === 'pre' ? PREFIX : SHAPES)[tier]), sayY = y.replace(/°/g, ' degrees');
       p = { a: { kind: 'word', v: x, say: x }, b: { kind: 'word', v: y, say: sayY }, learned: x + ': ' + y, key: grp ? [x, y, deck + '-' + grp] : [x, y] };
     }
     else if (deck === 'cap') { const [c, t] = pick(CAPITALS[tier]); p = { a: { kind: 'word', v: c, say: c }, b: { kind: 'word', v: t, say: t }, learned: c + ' → ' + t, key: [c, t] }; }
@@ -312,7 +327,7 @@ function dealPairs(deck, n) {
   const tier = tierOf(), used = { texts: new Set(), faces: new Set(), words: new Set() }, out = [];
   for (let i = 0; out.length < n && i < n * 4; i++) {
     let d = deck;
-    if (deck === 'mix') d = ['times', 'plus', 'pics', 'opp', 'numw', 'past', 'syn', 'time', 'frac', 'baby', 'cap', 'coll', 'shape', 'sci'][out.length % 14];
+    if (deck === 'mix') d = ['times', 'plus', 'pics', 'opp', 'numw', 'past', 'syn', 'time', 'frac', 'baby', 'cap', 'coll', 'shape', 'sci', 'pre'][out.length % 15];
     const p = MATH_KINDS[d] ? mathPair(MATH_KINDS[d][tier], used, DECK_OPS[d]) : wordsPair(d, tier, used);
     if (p) out.push(p);
   }
