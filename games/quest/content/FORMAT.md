@@ -82,6 +82,23 @@ food, travel, the environment, technology). Nothing frightening, violent, politi
 }
 ```
 
+### `writing` (Explorer and up)
+
+IELTS Writing skills the game can mark: putting a paragraph in order and choosing better writing. Explorer:
+exactly 4 items per unit (2 `paragraph` + 2 others); Achiever, Expert, Band 8: exactly 5 (2 `paragraph` + 3 others);
+Starter to Flyer: none. Items:
+
+- `{ "kind": "paragraph", "sents": ["…", "…", "…", "…"] }`: 4 or 5 sentences of one paragraph on the unit topic,
+  **in the right order**. The game shuffles them and the learner rebuilds the paragraph, so the order must be the
+  only sensible one: a clear topic sentence first, then support tied by reference words and linking ("This…",
+  "For example", "However", "As a result"), and a closing sentence. Each sentence 5–30 words.
+- `{ "kind": "upgrade" | "topic" | "thesis", "q": "…", "opts": [4], "a": index, "why": "…" }`:
+  - `upgrade`: "Which is the most precise way to say: 'The number of tourists got very big.'?" (opts: four rewrites,
+    one clearly best for academic writing: "The number of tourists rose sharply.").
+  - `topic`: a short paragraph body in `q` (2–3 sentences) and "Which topic sentence fits best?"
+  - `thesis`: an IELTS Task 2 style question in `q` and "Which is the clearest thesis statement?"
+  Exactly one option is clearly best; the others have a real flaw (too informal, off topic, too vague, not an answer).
+
 ### Bank sizes (per unit)
 
 | Bank | First set | Allowed |

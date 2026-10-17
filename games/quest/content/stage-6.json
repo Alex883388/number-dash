@@ -591,6 +591,64 @@
           "a": 0,
           "why": "'Despite' + noun phrase shows contrast. 'Although' needs a clause, and 'because of' and 'owing to' give a cause, which makes no sense here."
         }
+      ],
+      "writing": [
+        {
+          "kind": "paragraph",
+          "sents": [
+            "Retrieval practice is one of the most effective ways to make learning last.",
+            "Instead of rereading their notes, learners try to recall information from memory, for example by answering practice questions.",
+            "This effort of searching memory appears to strengthen the pathways that lead back to the information.",
+            "As a result, material that has been actively recalled is usually remembered for much longer.",
+            "Students would therefore benefit from testing themselves regularly rather than simply reviewing their notes."
+          ]
+        },
+        {
+          "kind": "paragraph",
+          "sents": [
+            "Sleep plays a crucial role in turning new information into lasting memories.",
+            "During deep sleep, the brain appears to replay experiences from the day.",
+            "This replay is thought to consolidate memories, moving them into long-term storage.",
+            "Consequently, pupils who stay up late to revise may remember less than those who rest properly.",
+            "A good night's sleep, in other words, is part of studying rather than a break from it."
+          ]
+        },
+        {
+          "kind": "upgrade",
+          "q": "Which is the most precise way to say: 'Lots of studies say testing yourself is really good for remembering stuff.'?",
+          "opts": [
+            "A considerable body of research suggests that self-testing improves long-term retention.",
+            "Many studies say testing yourself is very good for remembering things.",
+            "Testing yourself is good, and studies have shown it loads of times, I think.",
+            "Research proves that testing always makes people remember everything."
+          ],
+          "a": 0,
+          "why": "The first is formal, precise and suitably cautious ('suggests'). The others stay vague ('things'), sound chatty ('loads', 'I think') or overclaim ('proves', 'always')."
+        },
+        {
+          "kind": "topic",
+          "q": "Which topic sentence fits best? '___ For example, a child who learns the violin develops stronger connections in the brain areas that control the fingers. Even in older adults, learning a new skill such as juggling can produce measurable changes in brain structure.'",
+          "opts": [
+            "The brain continues to change physically in response to learning throughout life.",
+            "Playing the violin is a popular hobby among children.",
+            "Older adults should all learn to juggle.",
+            "The brain is very interesting and has lots of different parts."
+          ],
+          "a": 0,
+          "why": "Both examples show the brain changing through learning at different ages. The others pick out one detail, give advice the paragraph never gives, or are vague."
+        },
+        {
+          "kind": "thesis",
+          "q": "Some people believe that children learn best by memorising facts, while others think that understanding is more important. Discuss both views and give your opinion. Which is the clearest thesis statement?",
+          "opts": [
+            "While memorising facts has some value, this essay argues that deep understanding should be the main aim, as it allows knowledge to be applied.",
+            "Memorising and understanding are both things that children do at school.",
+            "In this essay I will talk about memory.",
+            "Memorising facts is completely useless and should be banned in every school."
+          ],
+          "a": 0,
+          "why": "The first recognises both views, takes a clear position and gives a reason. The others describe without answering, are vague, or overclaim and ignore one side."
+        }
       ]
     },
     {
@@ -1155,6 +1213,64 @@
           ],
           "a": 0,
           "why": "We 'raise awareness' of something. 'Rise' cannot take an object, and 'lift' and 'make' do not go with 'awareness'."
+        }
+      ],
+      "writing": [
+        {
+          "kind": "paragraph",
+          "sents": [
+            "Pollinators are essential to both wild ecosystems and human food supplies.",
+            "Bees, butterflies and other animals carry pollen between flowers, allowing plants to produce seeds and fruit.",
+            "Without this service, many crops, such as apples and almonds, would give far smaller harvests.",
+            "However, pollinator numbers have declined in many regions because of habitat loss and the use of pesticides.",
+            "Protecting wild flowers and reducing chemical use could therefore help to secure future food production."
+          ]
+        },
+        {
+          "kind": "paragraph",
+          "sents": [
+            "Wildlife corridors offer a practical solution to the problem of habitat fragmentation.",
+            "When roads and farms divide a forest, animals can become trapped in small, isolated patches.",
+            "Such isolation makes it harder for them to find food and mates.",
+            "A corridor, such as a strip of woodland or a bridge over a motorway, reconnects these patches.",
+            "As a result, animals can move freely again, and their populations become more stable."
+          ]
+        },
+        {
+          "kind": "upgrade",
+          "q": "Which is the most precise way to say: 'Lots of animals are dying out because people are wrecking where they live.'?",
+          "opts": [
+            "Many species are in decline as a result of habitat destruction caused by human activity.",
+            "Loads of animals are disappearing because people are destroying their homes.",
+            "Animals are dying because of things people do.",
+            "Every animal on Earth will soon disappear because of humans."
+          ],
+          "a": 0,
+          "why": "The first uses precise academic terms ('species', 'in decline', 'habitat destruction'). The others are informal ('loads'), vague ('things people do') or overclaim ('every animal')."
+        },
+        {
+          "kind": "topic",
+          "q": "Which topic sentence fits best? '___ A single oak tree, for instance, can support hundreds of species of insects, birds and fungi. When such trees are cut down, many of these species lose both their food and their shelter.'",
+          "opts": [
+            "Old trees provide homes for a remarkable range of wildlife.",
+            "Oak trees grow slowly and can live for hundreds of years.",
+            "Fungi are living things that are neither plants nor animals.",
+            "Trees are nice and we should like them more."
+          ],
+          "a": 0,
+          "why": "The body is about the many species that depend on one tree. The other sentences are off topic or too vague and informal for a topic sentence."
+        },
+        {
+          "kind": "thesis",
+          "q": "Some people think that protecting wild animals is a waste of money when there are so many human problems to solve. To what extent do you agree or disagree? Which is the clearest thesis statement?",
+          "opts": [
+            "I disagree, because protecting wildlife also protects the clean water, food and stable climate on which people depend.",
+            "There are many wild animals and many human problems in the world.",
+            "Animals are cute, so obviously we have to save them.",
+            "Not a single penny should be spent on people until every animal is safe."
+          ],
+          "a": 0,
+          "why": "The first answers the question directly and links wildlife to human needs. The others give no position, rely on a weak and informal reason, or take an extreme view."
         }
       ]
     },
@@ -1730,6 +1846,63 @@
           ],
           "a": 0,
           "why": "'Of comparable complexity' means just as complicated, and 'no device is known' means none has been found from that period."
+        }
+      ],
+      "writing": [
+        {
+          "kind": "paragraph",
+          "sents": [
+            "The development of irrigation was a turning point for early civilisations.",
+            "In Mesopotamia, farmers dug canals to carry water from the Tigris and Euphrates rivers to their fields.",
+            "This allowed them to grow far more food than they needed for themselves.",
+            "The resulting surplus meant that some people could stop farming and become builders, traders or scribes.",
+            "In this way, a simple technology helped to create the first cities."
+          ]
+        },
+        {
+          "kind": "paragraph",
+          "sents": [
+            "Radiocarbon dating has transformed the way archaeologists establish the age of their finds.",
+            "The method measures how much of a particular form of carbon remains in material that was once alive, such as wood or bone.",
+            "Because this carbon decays at a known rate, scientists can calculate roughly when the plant or animal died.",
+            "Thanks to this technique, many earlier estimates based only on styles of pottery have since been corrected."
+          ]
+        },
+        {
+          "kind": "upgrade",
+          "q": "Which is the most precise way to say: 'The Romans did lots of stuff that we still use today.'?",
+          "opts": [
+            "Many Roman innovations, such as concrete and paved roads, continue to influence modern engineering.",
+            "The Romans made loads of things we still use.",
+            "We still use Roman things today, like stuff for building.",
+            "Everything we use today was invented by the Romans."
+          ],
+          "a": 0,
+          "why": "The first names specific examples and uses precise words ('innovations', 'influence'). The others are vague or informal ('loads', 'stuff') or overclaim ('everything')."
+        },
+        {
+          "kind": "topic",
+          "q": "Which topic sentence fits best? '___ Clay tablets from Mesopotamia record the sale of grain and cattle, while Egyptian papyri list the taxes paid by farmers. Without such records, large cities would have been very difficult to organise.'",
+          "opts": [
+            "Early writing systems played a vital role in organising trade and taxation.",
+            "Papyrus was made from reeds that grew along the Nile.",
+            "Cattle were very important animals in the ancient world.",
+            "Writing is something people have done for a really long time."
+          ],
+          "a": 0,
+          "why": "Both examples are records of trade and tax, and the last sentence explains why they mattered. The others focus on a minor detail or are vague."
+        },
+        {
+          "kind": "thesis",
+          "q": "Some people believe that money spent on archaeological excavations would be better spent on modern needs. To what extent do you agree or disagree? Which is the clearest thesis statement?",
+          "opts": [
+            "Although modern needs are pressing, I believe funding archaeology is justified, since understanding the past helps societies to make wiser decisions today.",
+            "Archaeology involves digging up old objects from the ground.",
+            "Old stuff is boring, so who cares about it?",
+            "In this essay, both archaeology and modern needs will be mentioned."
+          ],
+          "a": 0,
+          "why": "The first states a clear, reasoned position on the question. The others only describe archaeology, are too informal, or promise to mention the topic without taking a view."
         }
       ]
     },
@@ -2308,6 +2481,62 @@
           "a": 0,
           "why": "After the verb 'behave' we need an adverb: predictably, meaning in a way people can expect."
         }
+      ],
+      "writing": [
+        {
+          "kind": "paragraph",
+          "sents": [
+            "One clear benefit of robots is their ability to carry out tasks that are dangerous for people.",
+            "For example, robots are now used to inspect deep tunnels, clean the insides of tall chimneys and examine the hulls of ships underwater.",
+            "In each of these situations, a machine can work for hours without being harmed by heat, darkness or a lack of oxygen.",
+            "As a result, fewer workers need to put themselves at risk."
+          ]
+        },
+        {
+          "kind": "paragraph",
+          "sents": [
+            "Artificial intelligence systems are only as fair as the data used to train them.",
+            "If a system learns mainly from photos of one group of people, it may recognise other groups less accurately.",
+            "Such errors are not deliberate, but they can still lead to unfair outcomes.",
+            "Developers therefore need to test their systems on a wide variety of people before releasing them."
+          ]
+        },
+        {
+          "kind": "upgrade",
+          "q": "Which is the most precise way to say: 'Robots are going to take loads of jobs soon.'?",
+          "opts": [
+            "Automation is likely to replace a significant number of routine jobs in the coming decades.",
+            "Robots will take lots of jobs very soon.",
+            "Every single job will be done by robots by next year.",
+            "Jobs and robots are connected in some way."
+          ],
+          "a": 0,
+          "why": "The first is precise ('routine jobs', 'coming decades') and cautious ('is likely to'). The others stay vague, overclaim wildly or say almost nothing."
+        },
+        {
+          "kind": "topic",
+          "q": "Which topic sentence fits best? '___ A robot vacuum cleaner, for example, can map a room and avoid furniture without any human help. Similarly, some delivery robots can find their way along pavements and cross quiet roads on their own.'",
+          "opts": [
+            "Many everyday machines can now perform tasks autonomously.",
+            "Vacuum cleaners were invented more than a hundred years ago.",
+            "Robots are really cool and do lots of things.",
+            "Pavements in many cities are too narrow."
+          ],
+          "a": 0,
+          "why": "Both examples show machines working without human control. The others are off topic or too informal and vague to introduce the paragraph."
+        },
+        {
+          "kind": "thesis",
+          "q": "Some people think that artificial intelligence will do more harm than good. To what extent do you agree or disagree? Which is the clearest thesis statement?",
+          "opts": [
+            "I largely disagree: although artificial intelligence raises genuine risks, careful regulation can allow its benefits in medicine and science to outweigh them.",
+            "Artificial intelligence is a type of technology used in computers and phones.",
+            "Artificial intelligence will definitely destroy the world, so it must be stopped immediately.",
+            "There are good things and bad things about artificial intelligence, as with everything."
+          ],
+          "a": 0,
+          "why": "The first gives a clear, balanced position with a reason. The others describe instead of answering, overclaim, or sit on the fence without a view."
+        }
       ]
     },
     {
@@ -2885,6 +3114,62 @@
           ],
           "a": 0,
           "why": "'Take a toll on' something is a fixed phrase meaning to cause it serious harm over time."
+        }
+      ],
+      "writing": [
+        {
+          "kind": "paragraph",
+          "sents": [
+            "Reducing food waste may be one of the simplest ways to feed a growing population.",
+            "A large share of the food produced worldwide is never eaten: some is lost on farms or during transport, and some is thrown away at home.",
+            "If even part of this waste were prevented, more people could be fed without clearing any new land.",
+            "To achieve this, simple measures such as better storage and clearer date labels would help."
+          ]
+        },
+        {
+          "kind": "paragraph",
+          "sents": [
+            "Drip irrigation allows farmers to grow crops using far less water.",
+            "Instead of flooding whole fields, the system delivers small amounts of water directly to the roots of each plant through narrow pipes.",
+            "This means that much less water is lost through evaporation or runoff.",
+            "As a result, the method has become especially valuable in dry regions where water is scarce."
+          ]
+        },
+        {
+          "kind": "upgrade",
+          "q": "Which is the most precise way to say: 'Lots of people in the world don't have enough clean water, which is really bad.'?",
+          "opts": [
+            "A substantial proportion of the world's population lacks reliable access to safe drinking water.",
+            "Many people don't have clean water and it's terrible.",
+            "Nobody in the world has clean water any more.",
+            "Water is something people need, and some people have it."
+          ],
+          "a": 0,
+          "why": "The first is precise and formal ('substantial proportion', 'lacks reliable access'). The others are informal, plainly untrue, or too vague to say anything."
+        },
+        {
+          "kind": "topic",
+          "q": "Which topic sentence fits best? '___ In the Netherlands, for instance, greenhouses use LED lighting and recycled water to grow large quantities of tomatoes on very little land. Such methods could help countries with limited farmland to produce more of their own food.'",
+          "opts": [
+            "Technology can greatly increase the amount of food grown on a small area of land.",
+            "Tomatoes are a popular ingredient in many dishes.",
+            "The Netherlands is a small country in Europe.",
+            "Farming is a job that lots of people do."
+          ],
+          "a": 0,
+          "why": "The example and the conclusion are both about high yields from little land. The others mention a detail of the example or are too general."
+        },
+        {
+          "kind": "thesis",
+          "q": "Some people think that governments should make water more expensive to encourage people to use less. To what extent do you agree or disagree? Which is the clearest thesis statement?",
+          "opts": [
+            "I partly agree: higher prices for heavy users could reduce waste, but a basic daily amount should remain affordable for every household.",
+            "Water is used for drinking, cooking and washing.",
+            "Water should cost loads, because why not?",
+            "This essay will look at the topic of water prices."
+          ],
+          "a": 0,
+          "why": "The first answers the question with a clear, qualified position. The others only describe water, give no real reason, or announce the topic without an opinion."
         }
       ]
     }

@@ -99,6 +99,10 @@
 .boxes i.cur { border-color: var(--lilac); }
 .boxes i.ok { border-color: var(--mint); }
 .check-row { display: flex; gap: 10px; justify-content: center; }
+.build.para, .tiles.para { flex-direction: column; align-items: stretch; }
+.build.para .tile, .tiles.para .tile { text-align: left; font: 700 1.02rem/1.4 var(--font-body); padding: 10px 14px; min-height: 48px; }
+.tiles.para .tile.used { display: none; }
+.build.para { min-height: 120px; justify-content: flex-start; }
 .tiles.spot .tile { font-family: var(--font-body); font-weight: 800; font-size: 1.15rem; }
 .tile.wrongword { background: #ffe1e4; border-color: #d9505d; box-shadow: 0 4px 0 #d9505d; color: #5a1f27; text-decoration: line-through; }
 .fixword { align-self: center; font: 700 1.2rem/1 var(--font-display); color: #1d8a65; background: #dff8ec; border: 3px solid #4fd1a5; border-radius: 14px; padding: 10px 12px; }
@@ -335,6 +339,20 @@ function spotQ(s, u, i) {
   }
   return null;
 }
+// writing: a paragraph to rebuild from its shuffled sentences, or a better-writing choice
+const WRITING_LABEL = { upgrade: 'Better words', topic: 'Topic sentence', thesis: 'Thesis statement' };
+function writingQ(s, u, i) {
+  const x = (unitOf(s, u).writing || [])[i];
+  if (!x) return null;
+  const ref = { s: s, u: u, t: 'write', i: i };
+  if (x.kind === 'paragraph') {
+    let tiles = shuffle(x.sents.slice());
+    for (let k = 0; k < 8 && tiles.join(' ') === x.sents.join(' '); k++) tiles = shuffle(x.sents.slice());
+    return { kind: 'order', para: true, skill: 'writing', label: 'Order the paragraph', sentence: x.sents.join(' '), words: x.sents.slice(), tiles: tiles, listen: '', ref: ref };
+  }
+  const o = { skill: 'writing', label: WRITING_LABEL[x.kind] || 'Writing', text: x.q, opts: x.opts, a: x.a, why: x.why, long: true, ref: ref };
+  return choice(o);
+}
 const EXTRA_LABEL = { collocation: 'Words that go together', linking: 'Linking ideas', paraphrase: 'Same meaning', register: 'Formal or informal?', wordform: 'Word families',
   phrasal: 'Phrasal verbs', idiom: 'Idioms', preposition: 'Prepositions', mainidea: 'Main idea', cohesion: 'Joining ideas' };
 function extraQ(s, u, i) {
@@ -382,6 +400,7 @@ function unitLesson(s, u) {
   gi.forEach((i, k) => qs.splice(1 + k * 3, 0, (k === 1 && s >= 2 && Math.random() < 0.6 && spotQ(s, u, i)) || grammarQ(s, u, i)));
   qs.push(orderQ(s, u, si[0], false), orderQ(s, u, si[1], true));
   if (un.extra && un.extra.length) sample(un.extra.map((_, i) => i), s >= 4 ? 2 : 1).forEach((i) => qs.push(extraQ(s, u, i)));
+  if (un.writing && un.writing.length) { const w = writingQ(s, u, anyIdx(un.writing)); if (w) qs.push(w); }
   const ri = anyIdx(readingsOf(un)), rq = readingsOf(un)[ri].qs, hear = s >= 3 && Math.random() < 0.35;
   return qs.concat(readingQs(s, u, sample(rq.map((_, j) => j), Math.min(3, rq.length)).sort(), ri, hear));
 }
@@ -396,6 +415,8 @@ function stageTest(s) {
   if (ex.length) sample(ex, 2).forEach((u) => qs.push(extraQ(s, u, rnd(0, unitOf(s, u).extra.length - 1))));
   else sample(units, 2).forEach((u) => qs.push(wordQ(s, u, anyIdx(U(u).words))));
   const wu = pick(units); qs.push(wordQ(s, wu, anyIdx(U(wu).words)));
+  const pu = units.filter((u) => (U(u).writing || []).some((x) => x.kind === 'paragraph'));
+  if (pu.length) { const u = pick(pu), w = U(u).writing; const pi = w.map((x, i) => (x.kind === 'paragraph' ? i : -1)).filter((i) => i >= 0); qs.push(writingQ(s, u, pick(pi))); }
   const ru = pick(units);
   const rri = anyIdx(readingsOf(U(ru))), rrq = readingsOf(U(ru))[rri].qs;
   return shuffle(qs).concat(readingQs(s, ru, sample(rrq.map((_, j) => j), Math.min(3, rrq.length)).sort(), rri));
@@ -424,6 +445,7 @@ function fromRef(r) {
     if (r.t === 'word') return wordQ(r.s, r.u, r.i, r.qt);
     if (r.t === 'grammar') return grammarQ(r.s, r.u, r.i);
     if (r.t === 'spot') return spotQ(r.s, r.u, r.i) || grammarQ(r.s, r.u, r.i);
+    if (r.t === 'write') return writingQ(r.s, r.u, r.i);
     if (r.t === 'extra') return extraQ(r.s, r.u, r.i);
     if (r.t === 'read' || r.t === 'hear') return readingQs(r.s, r.u, [r.i], r.r || 0, r.t === 'hear')[0];
     if (r.t === 'order' || r.t === 'listen') return orderQ(r.s, r.u, r.i, r.t === 'listen');
@@ -491,7 +513,8 @@ function showQ() {
   if (q.gap) h += '<div class="prompt">' + gapHtml(q.gap) + '</div>';
   if (q.kind === 'choice') h += '<div class="opts' + (q.long ? ' long' : q.keep ? ' row' : '') + '">' + q.opts.map((o, k) => '<button class="opt" data-k="' + k + '"><span class="k">' + (k + 1) + '</span> ' + esc(o) + '</button>').join('') + '</div>';
   if (q.kind === 'spot') h += '<div class="prompt">Tap the word that is wrong.</div><div class="tiles spot" id="spot">' + q.tiles.map((t, k) => '<button class="tile" data-k="' + k + '">' + esc(t) + '</button>').join('') + '</div>';
-  if (q.kind === 'order') h += '<div class="build" id="build" aria-label="Your sentence"></div><div class="tiles" id="tiles">' + q.tiles.map((t, k) => '<button class="tile" data-k="' + k + '">' + esc(t) + '</button>').join('') + '</div><div class="check-row"><button class="btn sun" id="checkBtn" disabled>Check</button></div>';
+  if (q.kind === 'order' && q.para) h += '<div class="prompt">Tap the sentences in the right order.</div>';
+  if (q.kind === 'order') h += '<div class="build' + (q.para ? ' para' : '') + '" id="build" aria-label="Your ' + (q.para ? 'paragraph' : 'sentence') + '"></div><div class="tiles' + (q.para ? ' para' : '') + '" id="tiles">' + q.tiles.map((t, k) => '<button class="tile" data-k="' + k + '">' + esc(t) + '</button>').join('') + '</div><div class="check-row"><button class="btn sun" id="checkBtn" disabled>Check</button></div>';
   if (q.kind === 'spell') { h += '<div class="boxes" id="boxes">' + q.word.split('').map(() => '<i></i>').join('') + '</div><div class="tiles" id="tiles">' + q.tiles.map((t, k) => '<button class="tile" data-k="' + k + '">' + t + '</button>').join('') + '</div>'; q.pos = 0; q.slips = 0; }
   box.innerHTML = h;
   box.parentElement.scrollTop = 0;
@@ -528,7 +551,7 @@ function onTap(e) {
   if (q.kind === 'order') {
     if (tile && tile.classList.contains('placed')) { q.built.splice(+tile.dataset.n, 1); Sound.sfx.click(); renderBuild(q); return; }
     if (tile) { const k = +tile.dataset.k; if (!q.built.includes(k)) { q.built.push(k); Sound.sfx.click(); renderBuild(q); } return; }
-    if (e.target.closest('#checkBtn')) { const got = q.built.map((k) => q.tiles[k]).join(' '); finish(got === q.sentence, 'The sentence is: ' + q.sentence); }
+    if (e.target.closest('#checkBtn')) { const got = q.built.map((k) => q.tiles[k]).join(' '); finish(got === q.sentence, q.para ? 'The paragraph goes: ' + q.words.map((t, n) => (n + 1) + '. ' + t).join('  ') : 'The sentence is: ' + q.sentence); }
     return;
   }
   if (q.kind === 'spell' && tile && !tile.classList.contains('used')) {
@@ -739,7 +762,7 @@ window.addEventListener('keydown', (e) => {
 arcadeGuards(() => Speech.stop());
 arcadeLinks();
 
-window.__quest = { L, rec, save, STAGES, CONTENT, has, next, startLesson, nextStep, unitOpen, testOpen, wordQ, unitLesson, stageTest, spotQ, showQ, renderWords, mockBand, Speech,
+window.__quest = { L, rec, save, STAGES, CONTENT, has, next, startLesson, nextStep, unitOpen, testOpen, wordQ, unitLesson, stageTest, spotQ, writingQ, showQ, renderWords, mockBand, Speech,
   // answer the current question: right = true picks the right answer (or builds / spells it), false picks a wrong one
   answer(right) {
     const q = L.qs[L.i]; if (!q || L.answered) return false;

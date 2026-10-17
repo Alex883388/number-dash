@@ -108,6 +108,8 @@ button, label, input, .btn { touch-action: manipulation; }
 }
 @keyframes qpop { 0% { transform: translateX(-50%) scale(.85); } 70% { transform: translateX(-50%) scale(1.04); } 100% { transform: translateX(-50%) scale(1); } }
 .q.good { border-color: var(--mint); color: var(--mint-deep); }
+.q.long { white-space: normal; text-wrap: balance; font-size: clamp(22px, min(4.6vw, 5vh), 44px); width: max-content; max-width: min(calc(100vw - 140px), 760px); box-sizing: border-box; text-align: center; }
+@media (max-width: 640px) { .q.long { max-width: calc(100vw - 32px); } }
 .q b { color: var(--mint-deep); }
 #meter {
   position: absolute; right: max(18px, env(safe-area-inset-right, 0px)); top: 50%; transform: translateY(-50%);
@@ -128,7 +130,7 @@ button, label, input, .btn { touch-action: manipulation; }
 .toast.hello { top: calc(max(128px, 20%) + env(safe-area-inset-top, 0px)); color: var(--ink); border: 3px solid var(--lilac); }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 @media (pointer: coarse) { .hud-btn { width: 58px; height: 58px; } }
-@media (max-width: 640px) { .q { max-width: calc(100% - 32px); top: calc(70px + env(safe-area-inset-top, 0px)); } #meter { height: 34vh; } }
+@media (max-width: 640px) { .q { max-width: calc(100% - 32px); top: calc(84px + env(safe-area-inset-top, 0px)); } #meter { height: 34vh; } }
 @media (prefers-reduced-motion: reduce) { .screen, .q, #oops, .toast { animation: none; } }
 </style>
 </head>
@@ -160,7 +162,7 @@ button, label, input, .btn { touch-action: manipulation; }
   <section class="screen" id="s-home">
     <div class="card">
       <h1 class="logo">Number <span>Ladder</span></h1>
-      <p class="tag">Climb a tower of 30 questions, math or English. Land on the right answer to build the next floor. Land on a wrong one and you drop all the way to the ground.</p>
+      <p class="tag">Climb a tower of 30 questions: math, English or a quiz. Land on the right answer to build the next floor. Land on a wrong one and you drop all the way to the ground.</p>
       <div class="row"><button class="btn sun big" id="playBtn">Climb</button></div>
       <p class="how">Tap anywhere (or press Space) to jump.</p>
       <div>
@@ -176,7 +178,8 @@ button, label, input, .btn { touch-action: manipulation; }
         <div class="seg" style="margin-top:8px">
           <label><input type="radio" name="subject" value="math"><span>Math</span></label>
           <label><input type="radio" name="subject" value="english"><span>English</span></label>
-          <label><input type="radio" name="subject" value="both"><span>Both</span></label>
+          <label><input type="radio" name="subject" value="quiz"><span>Quiz</span></label>
+          <label><input type="radio" name="subject" value="mixed"><span>Mixed</span></label>
         </div>
       </div>
       <dl class="stats" id="homeStats"></dl>
@@ -384,6 +387,54 @@ function englishQuestion(tier, n, kinds) {
   for (const x of wrong) { if (opts.length >= n - 1) break; if (!used.has(x)) { used.add(x); opts.push(x); } }
   return { t: t, a: a, english: true, kind: kind, wrong: opts };
 }
+// animals and their young: [animal emoji, animal, baby]
+const BABIES = [
+  [['🐄', 'cow', 'calf'], ['🐑', 'sheep', 'lamb'], ['🐈', 'cat', 'kitten'], ['🐕', 'dog', 'puppy'], ['🐔', 'hen', 'chick'], ['🐎', 'horse', 'foal'], ['🦆', 'duck', 'duckling'], ['🐖', 'pig', 'piglet'],
+   ['🐸', 'frog', 'tadpole'], ['🐻', 'bear', 'cub'], ['🦋', 'butterfly', 'caterpillar'], ['🐐', 'goat', 'kid']],
+  [['🦁', 'lion', 'cub'], ['🦘', 'kangaroo', 'joey'], ['🦢', 'swan', 'cygnet'], ['🦌', 'deer', 'fawn'], ['🦉', 'owl', 'owlet'], ['🐇', 'rabbit', 'kit'], ['🦊', 'fox', 'cub'], ['🐋', 'whale', 'calf'],
+   ['🐘', 'elephant', 'calf'], ['🦅', 'eagle', 'eaglet'], ['🐿️', 'squirrel', 'kit'], ['🐢', 'turtle', 'hatchling'], ['🦈', 'shark', 'pup'], ['🦙', 'llama', 'cria'], ['🦚', 'peacock', 'peachick'], ['🦜', 'parrot', 'chick']],
+  [['🐨', 'koala', 'joey'], ['🦭', 'seal', 'pup'], ['🐟', 'fish', 'fry'], ['🦇', 'bat', 'pup'], ['🐦', 'pigeon', 'squab'], ['🦒', 'giraffe', 'calf'], ['🦓', 'zebra', 'foal'], ['🐊', 'crocodile', 'hatchling'],
+   ['🦔', 'hedgehog', 'hoglet'], ['🐍', 'snake', 'snakelet'], ['🦫', 'beaver', 'kit'], ['🐧', 'penguin', 'chick'], ['🐝', 'bee', 'larva'], ['🦗', 'cricket', 'nymph']]
+];
+// countries and their capital cities, well-known first
+const CAPITALS = [
+  [['Vietnam', 'Hanoi'], ['Japan', 'Tokyo'], ['France', 'Paris'], ['England', 'London'], ['China', 'Beijing'], ['Italy', 'Rome'], ['Spain', 'Madrid'], ['Germany', 'Berlin'],
+   ['Russia', 'Moscow'], ['Egypt', 'Cairo'], ['Thailand', 'Bangkok'], ['South Korea', 'Seoul'], ['Greece', 'Athens'], ['USA', 'Washington']],
+  [['Australia', 'Canberra'], ['Canada', 'Ottawa'], ['India', 'New Delhi'], ['Brazil', 'Brasília'], ['Mexico', 'Mexico City'], ['Argentina', 'Buenos Aires'], ['Kenya', 'Nairobi'], ['Austria', 'Vienna'],
+   ['Philippines', 'Manila'], ['Ireland', 'Dublin'], ['Portugal', 'Lisbon'], ['Norway', 'Oslo'], ['Sweden', 'Stockholm'], ['Netherlands', 'Amsterdam'], ['Malaysia', 'Kuala Lumpur'], ['Cambodia', 'Phnom Penh']],
+  [['Turkey', 'Ankara'], ['New Zealand', 'Wellington'], ['Switzerland', 'Bern'], ['Morocco', 'Rabat'], ['Nigeria', 'Abuja'], ['Pakistan', 'Islamabad'], ['Bangladesh', 'Dhaka'], ['Peru', 'Lima'],
+   ['Chile', 'Santiago'], ['Laos', 'Vientiane'], ['Myanmar', 'Naypyidaw'], ['Finland', 'Helsinki'], ['Poland', 'Warsaw'], ['Iceland', 'Reykjavík'], ['Mongolia', 'Ulaanbaatar'], ['Colombia', 'Bogotá']]
+];
+// science facts: [question with ? for the answer, answer, wrong answers that are clearly wrong]
+const SCIENCE = [
+  [['The Sun is a: ?', 'star', ['planet', 'moon', 'cloud']], ['Bees make: ?', 'honey', ['milk', 'silk', 'wax paper']], ['Ice melts into: ?', 'water', ['steam', 'sand', 'snow']],
+   ['We see with our: ?', 'eyes', ['ears', 'nose', 'hands']], ['Plants grow from: ?', 'seeds', ['rocks', 'shells', 'bones']], ['A magnet pulls: ?', 'iron', ['wood', 'paper', 'glass']],
+   ['The planet we live on: ?', 'Earth', ['Mars', 'Venus', 'Jupiter']], ['Frogs start life as: ?', 'tadpoles', ['caterpillars', 'chicks', 'kittens']], ['Water freezes into: ?', 'ice', ['steam', 'mud', 'salt']],
+   ['Our heart pumps: ?', 'blood', ['air', 'water', 'food']], ['A rainbow has seven: ?', 'colours', ['days', 'clouds', 'legs']], ['Fish breathe with: ?', 'gills', ['lungs', 'fins', 'scales']],
+   ['We get daylight from the: ?', 'Sun', ['Moon', 'sea', 'wind']], ['Spiders have eight: ?', 'legs', ['wings', 'eyes', 'tails']]],
+  [['Planet nearest the Sun: ?', 'Mercury', ['Venus', 'Mars', 'Saturn']], ['Largest planet: ?', 'Jupiter', ['Earth', 'Mars', 'Mercury']], ['The red planet: ?', 'Mars', ['Venus', 'Neptune', 'Jupiter']],
+   ['Gas we breathe in to live: ?', 'oxygen', ['helium', 'smoke', 'steam']], ['Water boils at (°C): ?', '100', ['50', '10', '1000']], ['Solid, liquid and gas are states of: ?', 'matter', ['weather', 'energy', 'motion']],
+   ['The force that pulls things down: ?', 'gravity', ['friction', 'magnetism', 'wind']], ['Animals that eat only plants: ?', 'herbivores', ['carnivores', 'predators', 'insects']],
+   ['Largest organ of the body: ?', 'skin', ['heart', 'brain', 'lungs']], ['Bones that protect the brain: ?', 'skull', ['ribs', 'spine', 'knees']], ['A baby frog breathes with: ?', 'gills', ['lungs', 'wings', 'shells']],
+   ['Plant roots take in: ?', 'water', ['light', 'sound', 'smoke']], ['Plants make food using: ?', 'sunlight', ['moonlight', 'rocks', 'plastic']], ['The Moon goes round the: ?', 'Earth', ['Mars', 'Venus', 'Jupiter']]],
+  [['Fe is the symbol for: ?', 'iron', ['lead', 'gold', 'copper']], ['Au is the symbol for: ?', 'gold', ['silver', 'aluminium', 'iron']], ['Gas plants use to make food: ?', 'carbon dioxide', ['helium', 'neon', 'hydrogen']],
+   ['Process by which plants make food: ?', 'photosynthesis', ['digestion', 'evaporation', 'erosion']], ['Water turning into vapour: ?', 'evaporation', ['condensation', 'freezing', 'melting']],
+   ['Bones in an adult human: ?', '206', ['106', '306', '26']], ['Centre of an atom: ?', 'nucleus', ['electron', 'shell', 'orbit']], ['Animals with a backbone: ?', 'vertebrates', ['invertebrates', 'insects', 'fungi']],
+   ['Rock formed from cooled lava: ?', 'igneous', ['fossil', 'chalk', 'coral']], ['Cells carrying oxygen in blood: ?', 'red blood cells', ['white blood cells', 'nerve cells', 'skin cells']],
+   ['The gas most of the air is made of: ?', 'nitrogen', ['oxygen', 'carbon dioxide', 'helium']], ['Planet with the biggest rings: ?', 'Saturn', ['Mars', 'Mercury', 'Venus']],
+   ['Speed of light is about 300,000 km per: ?', 'second', ['hour', 'day', 'year']], ['Layer of gas around the Earth: ?', 'atmosphere', ['crust', 'core', 'mantle']]]
+];
+// A quiz question: t has one "?" for the answer; wrong = n - 1 real but wrong answers
+function quizQuestion(tier, n) {
+  const t3 = Math.max(0, Math.min(2, tier)), kind = pick(['capital', 'capital', 'science', 'science', 'baby']);
+  let t, a, wrong;
+  if (kind === 'capital') { const [c, cap] = pick(CAPITALS[t3]); t = 'Capital of ' + c + ': ?'; a = cap; wrong = shuffle(CAPITALS[t3].filter((x) => x[1] !== cap).map((x) => x[1])); }
+  else if (kind === 'baby') {
+    const [, an, b] = pick(BABIES[t3]); t = 'Baby ' + an + ': ?'; a = b;
+    wrong = shuffle(BABIES[t3].map((x) => x[2]).filter((x, i, all) => x !== b && all.indexOf(x) === i));
+  } else { const [q, ans, bad] = pick(SCIENCE[t3]); t = q; a = ans; wrong = shuffle(bad.slice()); }
+  return { t: t, a: a, quiz: true, english: true, kind: kind, wrong: wrong.slice(0, n - 1) };
+}
 // The ladder's own question picker: easier sums low down, harder ones near the top.
 const TIERS = {
   starter: [['add20', 'sub20', 'make10', 'double'], ['add20', 'sub20', 'make10', 'double', 'table2510'], ['table2510', 'table2510', 'sub20', 'add20', 'double']],
@@ -394,8 +445,11 @@ const TIERS = {
 const ENGLISH_TIER = { starter: [0, 0, 1], explorer: [0, 1, 2], genius: [1, 2, 2] };
 function ladderQuestion(r, n) {
   const tier = r <= 10 ? 0 : r <= 20 ? 1 : 2;
-  if (rec.subject === 'english' || (rec.subject === 'both' && Math.random() < 0.5)) {
-    const e = englishQuestion((ENGLISH_TIER[save.settings.mathLevel] || ENGLISH_TIER.explorer)[tier], n);
+  // Mixed (old saves say "both") takes math, English and quiz in turn at random
+  const sub = rec.subject === 'both' || rec.subject === 'mixed' ? pick(['math', 'english', 'quiz']) : rec.subject;
+  if (sub === 'english' || sub === 'quiz') {
+    const lt = (ENGLISH_TIER[save.settings.mathLevel] || ENGLISH_TIER.explorer)[tier];
+    const e = sub === 'quiz' ? quizQuestion(lt, n) : englishQuestion(lt, n);
     const opts = shuffle([e.a].concat(e.wrong));
     return { text: e.t, answer: e.a, choices: opts, correct: opts.indexOf(e.a), raw: e };
   }
@@ -1363,7 +1417,7 @@ function updateHud() {
 }
 function showQuestion(q) {
   const b = $('#question');
-  b.classList.remove('good'); b.textContent = q.text; b.hidden = false;
+  b.classList.remove('good'); b.classList.toggle('long', q.text.length > 22); b.textContent = q.text; b.hidden = false;
   b.style.animation = 'none'; void b.offsetWidth; b.style.animation = '';
 }
 let qTimer = 0;
@@ -1391,7 +1445,7 @@ function showScreen(name) {
 }
 function renderHome() {
   const el = document.querySelector('input[name="math"][value="' + save.settings.mathLevel + '"]');
-  const sub = document.querySelector('input[name="subject"][value="' + (rec.subject || 'math') + '"]');
+  const sub = document.querySelector('input[name="subject"][value="' + (rec.subject === 'both' ? 'mixed' : rec.subject || 'math') + '"]');
   if (sub) sub.checked = true;
   if (el) el.checked = true;
   $('#homeStats').innerHTML = stat('Best rung', rec.best + ' / ' + TOP) + stat('Best time', rec.bestTime ? fmtTime(rec.bestTime) : '–') + stat('Reached top', rec.tops);

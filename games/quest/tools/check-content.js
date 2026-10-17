@@ -121,6 +121,29 @@ function checkStage(n) {
       if (!x.why || x.why.length < 8 || x.why.length > 200) err(X, 'why missing or not 8–200 characters');
     });
     if (st.kinds && new Set(ex.map((x) => x.kind)).size < st.kinds) err(U, 'extra items need at least ' + st.kinds + ' different kinds');
+    // writing (Explorer up): paragraphs to order, and better-writing choices
+    const wr = u.writing || [], wantW = n < 4 ? 0 : n === 4 ? 4 : 5;
+    if (u.writing !== undefined || wantW) {
+      if (wr.length !== wantW) err(U, 'needs ' + wantW + ' writing items, has ' + wr.length);
+      if (wantW && wr.filter((x) => x.kind === 'paragraph').length !== 2) err(U, 'needs exactly 2 writing paragraphs');
+      wr.forEach((x, i) => {
+        const Wn = U + ' writing ' + (i + 1);
+        if (x.kind === 'paragraph') {
+          if (!Array.isArray(x.sents) || x.sents.length < 4 || x.sents.length > 5) { err(Wn, 'paragraph needs 4 or 5 sentences'); return; }
+          if (new Set(x.sents).size !== x.sents.length) err(Wn, 'two sentences are the same');
+          x.sents.forEach((t, k) => {
+            const nw = typeof t === 'string' ? words(t) : 0;
+            if (nw < 5 || nw > 30) err(Wn, 'sentence ' + (k + 1) + ' has ' + nw + ' words, needs 5–30');
+            else if (!/^[A-Z0-9"']/.test(t) || !/[.?!]$/.test(t)) err(Wn, 'sentence ' + (k + 1) + ': capital first, end with . ? or !');
+            if (CURLY.test(t || '')) err(Wn, 'curly quotes (use straight quotes)');
+          });
+        } else if (['upgrade', 'topic', 'thesis'].includes(x.kind)) {
+          if (!x.q) err(Wn, 'q missing');
+          opts(Wn, x.opts, x.a, 4, 4);
+          if (!x.why || x.why.length < 8 || x.why.length > 220) err(Wn, 'why missing or not 8–220 characters');
+        } else err(Wn, 'kind must be paragraph, upgrade, topic or thesis');
+      });
+    }
   });
   console.log('stage ' + n + ' (' + st.id + '): checked ' + stageWords.size + ' words');
 }

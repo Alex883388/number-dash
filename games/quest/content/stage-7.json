@@ -586,6 +586,64 @@
           "a": 0,
           "why": "'Transposes into' means changes into another form, and 'an ordinary spoken language' means one that already exists."
         }
+      ],
+      "writing": [
+        {
+          "kind": "paragraph",
+          "sents": [
+            "The revival of Welsh shows that a declining language can be brought back into everyday use.",
+            "During the twentieth century, the proportion of Welsh speakers fell steadily as English dominated work, the media and education.",
+            "From the 1960s onwards, however, campaigners won greater recognition for the language, and Welsh-medium schools expanded.",
+            "These schools have produced a generation of young people who can speak Welsh with confidence.",
+            "The Welsh experience suggests that education plays a central role in the survival of a language."
+          ]
+        },
+        {
+          "kind": "paragraph",
+          "sents": [
+            "English owes much of its enormous vocabulary to borrowing from other languages.",
+            "After 1066, for example, thousands of French words entered English, particularly in areas such as law, food and government.",
+            "Later, the Renaissance brought a wave of Latin and Greek terms into scholarly writing.",
+            "As a result of these layers, English often has several words for a single idea, such as 'kingly', 'royal' and 'regal'.",
+            "This richness allows writers to make fine distinctions of tone and register."
+          ]
+        },
+        {
+          "kind": "upgrade",
+          "q": "Which is the most precise way to say: 'Lots of languages are kind of disappearing these days.'?",
+          "opts": [
+            "A significant proportion of the world's languages are at risk of falling out of use within the coming decades.",
+            "Loads of languages are disappearing nowadays.",
+            "Every language except English will vanish by next year.",
+            "Languages are things that come and go, sort of."
+          ],
+          "a": 0,
+          "why": "The first is precise and measured ('a significant proportion', 'at risk of'). The others are informal ('loads', 'sort of'), absurdly overclaimed, or vague."
+        },
+        {
+          "kind": "topic",
+          "q": "Which topic sentence fits best? '___ Speakers of some Australian languages, for example, describe positions using compass directions rather than words for left and right. Similarly, Russian has two separate basic words for lighter and darker shades of blue.'",
+          "opts": [
+            "Languages differ in the distinctions that they require their speakers to make.",
+            "Australia is home to a great many indigenous languages.",
+            "Blue is one of the most popular colours in the world.",
+            "Languages are very different and quite interesting."
+          ],
+          "a": 0,
+          "why": "Both examples show a language making speakers mark a particular distinction. The others focus on a side detail or are too vague for academic writing."
+        },
+        {
+          "kind": "thesis",
+          "q": "Some people argue that the spread of English as a global language is a positive development, while others believe it threatens local cultures. Discuss both views and give your own opinion. Which is the clearest thesis statement?",
+          "opts": [
+            "Although a shared global language undeniably facilitates trade and research, I would argue that its benefits can be kept without sacrificing local languages, provided these are actively supported in schools.",
+            "English is spoken as a first or second language in many countries.",
+            "English is the best language and everyone should just use it.",
+            "There are many arguments on both sides, and it is a very complex issue."
+          ],
+          "a": 0,
+          "why": "The first weighs both views and gives a clear, conditional opinion. The others state a fact, give an informal and one-sided claim, or avoid taking a position."
+        }
       ]
     },
     {
@@ -1140,6 +1198,64 @@
           ],
           "a": 0,
           "why": "We need an adverb to describe how it has grown: exponentially, meaning faster and faster."
+        }
+      ],
+      "writing": [
+        {
+          "kind": "paragraph",
+          "sents": [
+            "Green roofs offer cities a practical means of adapting to more extreme weather.",
+            "When rooftops are covered with soil and plants, buildings can absorb a substantial share of the rain that falls on them.",
+            "This reduces the volume of water rushing into drains during storms, lowering the risk of flash floods.",
+            "In addition, the plants cool the surrounding air as water evaporates from their leaves, mitigating the heat that builds up in dense centres.",
+            "Given these combined benefits, several cities now require green roofs on certain new buildings."
+          ]
+        },
+        {
+          "kind": "paragraph",
+          "sents": [
+            "Closing city-centre roads to cars often fails to cause the chaos that critics predict.",
+            "When a road is removed, some drivers switch to public transport, while others change the time or route of their journeys.",
+            "This phenomenon, known as 'traffic evaporation', means that much of the expected congestion never appears.",
+            "Seoul's decision to demolish a motorway and restore the Cheonggyecheon stream is a well-known example of traffic evaporation.",
+            "Such cases suggest that planners could be bolder in reclaiming street space from vehicles."
+          ]
+        },
+        {
+          "kind": "upgrade",
+          "q": "Which is the most precise way to say: 'Cities are getting way bigger and it's causing loads of problems.'?",
+          "opts": [
+            "Rapid urban growth is placing increasing pressure on housing, transport and public services.",
+            "Cities are growing a lot, and that causes problems.",
+            "Cities are getting bigger, which is a nightmare, to be honest.",
+            "Because of growth, every city in the world has completely stopped working."
+          ],
+          "a": 0,
+          "why": "The first names the process ('rapid urban growth') and the specific effects. The others remain vague, sound conversational, or exaggerate absurdly."
+        },
+        {
+          "kind": "topic",
+          "q": "Which topic sentence fits best? '___ Abandoned warehouses can become flats, offices or galleries, and disused railway lines can be turned into parks. Reusing existing structures in this way also avoids much of the waste and pollution produced by demolition.'",
+          "opts": [
+            "Converting old buildings is often a more sustainable alternative to knocking them down.",
+            "Most warehouses were built during the Industrial Revolution.",
+            "Parks are pleasant places to walk in at weekends.",
+            "Old buildings are a thing that every city has."
+          ],
+          "a": 0,
+          "why": "The body gives examples of reuse and an environmental benefit, which the first sentence introduces. The others are off topic or too vague."
+        },
+        {
+          "kind": "thesis",
+          "q": "In many cities, governments are encouraging people to live in high-rise apartment blocks rather than in houses. Do the advantages of this outweigh the disadvantages? Which is the clearest thesis statement?",
+          "opts": [
+            "In my view, the advantages outweigh the drawbacks, since well-designed high-rise housing uses land efficiently and supports public transport, provided that green space is protected.",
+            "High-rise blocks are tall buildings with many floors.",
+            "Living in a tower block is awful, end of story.",
+            "There are advantages and disadvantages, and people have different opinions."
+          ],
+          "a": 0,
+          "why": "The first answers 'do the advantages outweigh...' directly, with reasons and a condition. The others define, give an informal unsupported view, or take no position."
         }
       ]
     },
@@ -1717,6 +1833,64 @@
           "a": 0,
           "why": "'Even so' needs something that should have helped: daily exercise reduces the weakening, yet recovery still takes weeks."
         }
+      ],
+      "writing": [
+        {
+          "kind": "paragraph",
+          "sents": [
+            "Space debris poses a growing threat to the satellites on which modern life depends.",
+            "Fragments of old rockets and broken satellites circle the Earth at speeds of several kilometres per second.",
+            "At such speeds, even a piece the size of a marble can seriously damage a working spacecraft.",
+            "Collisions also create further fragments, raising the risk of a chain reaction.",
+            "For this reason, space agencies are now developing methods to remove debris from orbit."
+          ]
+        },
+        {
+          "kind": "paragraph",
+          "sents": [
+            "Robotic probes have several advantages over crewed missions to other planets.",
+            "First, they need no food, water or air, which makes them far cheaper to send.",
+            "Second, they can be sent on one-way journeys and can operate for years in conditions that no human could survive.",
+            "Nevertheless, a human geologist could probably achieve in days what a rover takes months to complete.",
+            "The ideal approach, therefore, may combine robotic scouting with carefully chosen human expeditions."
+          ]
+        },
+        {
+          "kind": "upgrade",
+          "q": "Which is the most precise way to say: 'Space trips cost a crazy amount of money.'?",
+          "opts": [
+            "Space missions require substantial financial investment, often running into billions of dollars.",
+            "Going to space costs heaps of cash.",
+            "Space trips are expensive and stuff.",
+            "Space missions are the most expensive things humans have ever done, without exception."
+          ],
+          "a": 0,
+          "why": "The first is formal and specific ('substantial financial investment', 'billions of dollars'). The others are slang ('heaps of cash', 'and stuff') or an unsupported absolute claim."
+        },
+        {
+          "kind": "topic",
+          "q": "Which topic sentence fits best? '___ Satellites allow forecasters to track storms days before they reach land, and satellite navigation guides ships, aircraft and delivery vans. Even many card payments rely on precise timing signals sent from orbit.'",
+          "opts": [
+            "Modern life depends on space technology far more than most people realise.",
+            "Storms can cause serious damage to coastal towns.",
+            "Card payments are faster than paying with cash.",
+            "Space is very big and full of stars."
+          ],
+          "a": 0,
+          "why": "Every example shows everyday life relying on satellites. The other sentences pick up a single word from the body or are vague."
+        },
+        {
+          "kind": "thesis",
+          "q": "Some people believe that space exploration is a waste of money, while others think it brings important benefits. Discuss both views and give your own opinion. Which is the clearest thesis statement?",
+          "opts": [
+            "While the costs of space exploration are considerable, I believe they are justified by the scientific knowledge and practical technologies that such programmes have produced.",
+            "Space exploration began in the twentieth century with the first satellites.",
+            "Space is awesome, so we should obviously spend whatever it takes.",
+            "Some people agree and some people disagree about space exploration."
+          ],
+          "a": 0,
+          "why": "The first acknowledges the cost and gives a clear, reasoned opinion. The others give history, an informal overclaim, or simply repeat the question."
+        }
       ]
     },
     {
@@ -2286,6 +2460,63 @@
           "a": 0,
           "why": "A research paper uses precise, impersonal terms ('participants', 'control group', 'significantly'), not chatty words like 'way', 'loads' or 'guess what'."
         }
+      ],
+      "writing": [
+        {
+          "kind": "paragraph",
+          "sents": [
+            "The overuse of antibiotics has accelerated the spread of drug-resistant bacteria.",
+            "Whenever antibiotics are taken, the most vulnerable bacteria are killed, but any naturally resistant ones may survive.",
+            "These survivors then multiply, passing their resistance on to future generations of bacteria.",
+            "Taking antibiotics unnecessarily, for example for colds caused by viruses, therefore adds to the problem without bringing any benefit."
+          ]
+        },
+        {
+          "kind": "paragraph",
+          "sents": [
+            "Well-designed clinical trials are essential for establishing whether a new treatment works.",
+            "In a typical trial, volunteers are randomly divided into two groups.",
+            "One group receives the new medicine, while the other is given a placebo that looks identical.",
+            "Ideally, neither the patients nor the doctors know who is in which group until the trial ends.",
+            "This 'double-blind' design prevents expectations from influencing the results."
+          ]
+        },
+        {
+          "kind": "upgrade",
+          "q": "Which is the most precise way to say: 'The new drug worked really well on most people.'?",
+          "opts": [
+            "The new drug proved highly effective in the majority of participants.",
+            "The new drug was super good for most people.",
+            "The new drug cured absolutely everyone who took it.",
+            "The new drug did something to people."
+          ],
+          "a": 0,
+          "why": "The first uses precise, formal terms ('proved highly effective', 'the majority of participants'). The others are informal, overclaim, or too vague to be useful."
+        },
+        {
+          "kind": "topic",
+          "q": "Which topic sentence fits best? '___ Regular exercise strengthens the heart and helps to control weight, while a balanced diet reduces the risk of several serious illnesses. Vaccination programmes, meanwhile, protect whole communities from diseases that once spread easily.'",
+          "opts": [
+            "Many of the greatest gains in public health come from prevention rather than cure.",
+            "Exercise is more fun when you do it with friends.",
+            "The heart is a muscle that pumps blood around the body.",
+            "Health is a thing that matters a lot to people."
+          ],
+          "a": 0,
+          "why": "Exercise, diet and vaccination are all ways of preventing illness. The other sentences are off topic, about one detail, or too vague."
+        },
+        {
+          "kind": "thesis",
+          "q": "Some people think that the best way to improve public health is to build more sports facilities, while others believe other measures would be more effective. Discuss both views and give your own opinion. Which is the clearest thesis statement?",
+          "opts": [
+            "Although sports facilities can encourage activity, I would argue that measures targeting diet and everyday habits, such as clearer food labelling, are likely to have a greater overall impact.",
+            "Sports facilities include gyms, swimming pools and playing fields.",
+            "Gyms are boring, so nobody would use them anyway.",
+            "Public health is a big topic with many different sides to it."
+          ],
+          "a": 0,
+          "why": "The first compares the two views and states which is more effective, with an example. The others list facilities, overgeneralise informally, or are vague."
+        }
       ]
     },
     {
@@ -2849,6 +3080,64 @@
           ],
           "a": 0,
           "why": "'Though + past participle' shows concession (although it was dismissed). The other words give a reason, a condition or a time, which do not fit."
+        }
+      ],
+      "writing": [
+        {
+          "kind": "paragraph",
+          "sents": [
+            "Arts subjects deserve a secure place in the school curriculum.",
+            "Music, drama and painting develop creativity, which employers increasingly value in a wide range of careers.",
+            "These subjects also give pupils a way of expressing ideas and feelings that may be difficult to put into words.",
+            "Finally, there is some evidence that learning a musical instrument supports concentration and memory.",
+            "Cutting arts lessons to save money could therefore prove to be a false economy."
+          ]
+        },
+        {
+          "kind": "paragraph",
+          "sents": [
+            "The invention of the collapsible paint tube changed the way artists worked.",
+            "Before the 1840s, painters had to grind and mix their own colours, which made working outdoors impractical.",
+            "Once paint could be bought ready-made in portable tubes, artists were free to paint directly in front of a landscape.",
+            "This freedom helped the Impressionists to capture changing light and weather in their pictures.",
+            "Renoir is reported to have said that without paint in tubes there would have been no Impressionism."
+          ]
+        },
+        {
+          "kind": "upgrade",
+          "q": "Which is the most precise way to say: 'Lots of people think modern art is rubbish and anyone could do it.'?",
+          "opts": [
+            "Modern art is often criticised by those who regard it as requiring little technical skill.",
+            "Many people say modern art is rubbish.",
+            "Everyone agrees that modern art is completely worthless.",
+            "Modern art is a thing some people have views on."
+          ],
+          "a": 0,
+          "why": "The first reports the criticism precisely and neutrally. The others keep the informal 'rubbish', overclaim ('everyone agrees') or say almost nothing."
+        },
+        {
+          "kind": "topic",
+          "q": "Which topic sentence fits best? '___ Studies have found that singing in a choir can lift people's mood and reduce feelings of loneliness. Similarly, painting or playing an instrument can offer a welcome break from everyday stress.'",
+          "opts": [
+            "Taking part in creative activities can bring real benefits to people's well-being.",
+            "Choirs usually rehearse once or twice a week.",
+            "Painting requires brushes, paper and paints.",
+            "Art is nice and lots of people like it."
+          ],
+          "a": 0,
+          "why": "Both sentences describe how creative activities help well-being. The others give unrelated details or are too vague and informal."
+        },
+        {
+          "kind": "thesis",
+          "q": "Some people believe that governments should spend money on supporting the arts, while others think this money should go to more practical needs such as healthcare. Discuss both views and give your own opinion. Which is the clearest thesis statement?",
+          "opts": [
+            "While healthcare must remain a priority, I believe a modest level of public funding for the arts is justified, given their contribution to education, tourism and community life.",
+            "The arts include painting, music, theatre and dance.",
+            "Art is a total waste of money, honestly.",
+            "This essay will discuss whether art is good or bad."
+          ],
+          "a": 0,
+          "why": "The first balances both views and gives a clear, reasoned position. The others list art forms, are informal and unsupported, or misstate the question."
         }
       ]
     }

@@ -112,5 +112,16 @@ module.exports = [
   { eval: "(async () => { const Q = window.__quest, before = Q.rec.review.length, sleep = (ms) => new Promise((r) => setTimeout(r, ms)); for (let k = 0; k < 10 && !document.getElementById('lesson').hidden; k++) { const sheetShown = !document.getElementById('sheet').hidden; Q.answer(k % 4 !== 0); await sleep(700); if (sheetShown) return 'feedback showed during the test'; } await sleep(300); return [document.getElementById('doneTitle').textContent, document.getElementById('doneMsg').textContent, Q.rec.review.length - before, JSON.stringify(Q.rec.mocks.slice(-1))]; })()" },
   { shot: 'quest-28-mock-result' },
   { log: "[window.__quest.mockBand(10, 10), window.__quest.mockBand(9, 10), window.__quest.mockBand(8, 10), window.__quest.mockBand(7, 10), window.__quest.mockBand(5, 10), window.__quest.mockBand(2, 10)].join(' ')" },
+  // writing: a paragraph rebuilt by finger, sentence by sentence
+  { viewport: [1180, 820, true, false, 2] },
+  { eval: "(() => { const Q = window.__quest; Q.startLesson('unit', 5, 1); const w = Q.CONTENT[4].units[1].writing; const pi = w.findIndex((x) => x.kind === 'paragraph'); Q.L.qs[Q.L.i] = Q.writingQ(5, 1, pi); Q.showQ(); const q = Q.L.qs[Q.L.i]; const used = []; q.words.forEach((s) => used.push(q.tiles.findIndex((x, k) => x === s && !used.includes(k)))); window.__para = used; return q.label + ': ' + q.words.length + ' sentences'; })()" },
+  { sleep: 300 }, { shot: 'quest-29-paragraph' },
+  ...[0, 1, 2, 3, 4, 5].flatMap((n) => [
+    { eval: `(() => { document.querySelectorAll('[data-tap]').forEach((e) => e.removeAttribute('data-tap')); const k = window.__para[${n}]; const el = k !== undefined ? document.querySelector('#tiles .tile[data-k="' + k + '"]') : document.getElementById('checkBtn'); el.setAttribute('data-tap', '1'); return k !== undefined ? 'sentence ' + k : 'check'; })()` },
+    { touchEl: '[data-tap]' }
+  ]),
+  { sleep: 300 }, { shot: 'quest-30-paragraph-done' },
+  { log: "[document.getElementById('sheet').className, document.getElementById('sheetTitle').textContent]" },
+  { eval: "(() => { const Q = window.__quest; let n = 0; for (let s = 4; s <= 7; s++) Q.CONTENT[s - 1].units.forEach((un, u) => (un.writing || []).forEach((x, i) => { if (Q.writingQ(s, u, i)) n++; })); return 'writing questions built: ' + n; })()" },
   { log: 'JSON.stringify(window.__errs)' }
 ];
