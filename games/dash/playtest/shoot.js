@@ -3,7 +3,7 @@
 // ND_SERVE=docs serves that folder on http://localhost:5599/ from this process (needed for the offline worker).
 // Usage: node playtest/shoot.js playtest/scenarios/<name>.js   — the scenario exports an array of steps:
 //   { viewport: [w, h, mobile?, dark?, scale?] } | { eval: 'js' } | { waitFor: 'js expr', timeout } | { sleep: ms } | { shot: 'name' } | { log: 'js expr' }
-//   { touch: [x, y, holdMs] } (a finger press in CSS pixels) | { ipad: true } (iPad Safari identity + touch screen) | { offline: bool } | { reload: true }
+//   { touch: [x, y, holdMs] } (a finger press in CSS pixels) | { touchEl: 'css selector' } (a finger tap on that element's middle) | { ipad: true } (iPad Safari identity + touch screen) | { offline: bool } | { reload: true }
 const { spawn } = require('child_process');
 const fs = require('fs'), path = require('path'), http = require('http');
 const EDGE = 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe';
@@ -23,12 +23,14 @@ if (process.env.ND_SERVE) {
       res.end(buf);
     });
   }).listen(5599, '127.0.0.1');
-  URL0 = 'http://localhost:5599/';
+  URL0 = 'http://localhost:5599/' + (process.env.ND_PATH || '');
 }
 const dir = __dirname, shots = path.join(dir, 'shots');
 fs.mkdirSync(shots, { recursive: true });
 const steps = require(path.resolve(process.argv[2]));
-const BOT = fs.readFileSync(path.join(dir, 'bot.js'), 'utf8');
+// ND_READY: expression that is true once the game has loaded; ND_BOT=none skips the Number Dash autopilot
+const READY = process.env.ND_READY || '!!(window.ND && window.__nd)';
+const BOT = process.env.ND_BOT === 'none' ? '' : fs.readFileSync(path.join(dir, 'bot.js'), 'utf8');
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 (async () => {
@@ -60,10 +62,11 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     await applyVp();
     const load = async () => {
       await send('Page.navigate', { url: URL0 });
-      for (let i = 0; i < 100; i++) { if (await evaluate('!!(window.ND && window.__nd)')) break; await sleep(150); }
-      if (!(await evaluate('!!(window.ND && window.__nd)'))) throw new Error('game did not load at ' + URL0 + ' (' + (await evaluate('location.href')) + ')');
+      for (let i = 0; i < 100; i++) { if (await evaluate(READY)) break; await sleep(150); }
+      if (!(await evaluate(READY))) throw new Error('game did not load at ' + URL0 + ' (' + (await evaluate('location.href')) + ')');
       await sleep(400);
-      await evaluate(BOT);
+      if (BOT) await evaluate(BOT);
+      else await evaluate("window.__errs = window.__errs || []; window.addEventListener('error', (e) => window.__errs.push(String(e.message))); window.addEventListener('blur', (e) => e.stopImmediatePropagation(), true); window.addEventListener('visibilitychange', (e) => e.stopImmediatePropagation(), true); 'ok'");
     };
     await load();
     for (const s of steps) {
@@ -74,8 +77,14 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
         await send('Network.setUserAgentOverride', { userAgent: 'Mozilla/5.0 (iPad; CPU OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', platform: 'iPad' });
         await send('Emulation.setTouchEmulationEnabled', { enabled: true, maxTouchPoints: 5 });
         await send('Emulation.setEmitTouchEventsForMouse', { enabled: true, configuration: 'mobile' });
-      } else if (s.touch) {
-        const [x, y, hold] = s.touch;
+      } else if (s.touch || s.touchEl) {
+        let [x, y, hold] = s.touch || [0, 0, 60];
+        if (s.touchEl) {
+          const c = await evaluate('(() => { const e = document.querySelector(' + JSON.stringify(s.touchEl) + '); if (!e) return null; const r = e.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; })()');
+          if (!c) throw new Error('touchEl not found: ' + s.touchEl);
+          [x, y] = c;
+          console.log('  finger on ' + s.touchEl + ' at ' + c.map(Math.round).join(','));
+        }
         await send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x, y, id: 1 }] });
         await sleep(hold || 60);
         await send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });

@@ -1,84 +1,72 @@
-# Number Dash
+# Number Arcade
 
-A gentle Geometry Dash–style runner for kids aged 8–12. Jump the spikes, fly the rocket, and steer into the lane whose door shows the right answer. Only the correct door opens. Music is chill lo-fi made live in the browser, and every new attempt plays a different remix.
+Math games for kids aged 8–12, made to be gentle on the eyes, with chill lo-fi music made live in the browser. Every game is one self-contained HTML page; together they make a small website that works offline and installs on an iPad home screen.
 
-Play it: https://alex883388.github.io/number-dash/ (on iPad: open in Safari, then Share > Add to Home Screen).
+Play: https://alex883388.github.io/number-dash/ (on iPad: open in Safari, then Share > Add to Home Screen).
 
-## What's in the game
+| # | Game | Link | How it plays |
+| --- | --- | --- | --- |
+| 1 | Number Dash | [/dash/](https://alex883388.github.io/number-dash/dash/) | A Geometry Dash–style runner with 30 levels. Jump the spikes, fly the rocket, steer into the lane whose door shows the right answer. Details in [games/dash/README.md](games/dash/README.md). |
+| 2 | Number Ladder | [/ladder/](https://alex883388.github.io/number-dash/ladder/) | Climb a tower of 30 equations. The cube walks back and forth on its floor; tap to jump onto the answer platform with the right number. A right answer builds the next floor, a wrong one drops the cube all the way to the ground. |
 
-- **10 levels**, each bringing something new. Speed is tied to the tempo (6 blocks per beat).
+## Number Ladder
 
-  | # | Level | Difficulty | Tempo | New |
-  | --- | --- | --- | --- | --- |
-  | 1 | Cloud Hop | Easy | 80 | Jumps, pads and the rocket |
-  | 2 | Lemon Lane | Normal | 86 | Ring chains |
-  | 3 | Bubble Bay | Normal | 84 | Rolling ball |
-  | 4 | Moonlit Meadow | Hard | 92 | Upside-down gravity |
-  | 5 | Candy Clouds | Hard | 90 | UFO and mini size |
-  | 6 | Rocket Garden | Hard | 94 | Speed portals, purple super pads, green rings |
-  | 7 | Starlight Drift | Harder | 100 | Blue flip rings |
-  | 8 | Zigzag Reef | Harder | 98 | Zig-zag wave |
-  | 9 | Rainbow Rapids | Expert | 104 | Everything, a bit faster |
-  | 10 | Galaxy Finale | Master | 108 | All the moves together |
-
-- **Normal pack and Hard pack**: 20 more levels (10 each), built by `tools/genlevels.js` from the same checked pieces around a theme (blocks, rocket, ball, rings, gravity, mini, UFO, speed, pads, wave, or a mix). Each one has its own generated song and color palette, 3 stars and 3 to 5 math forks.
-- **Moves**: cube (tap to jump, hold to keep hopping), rocket (hold to rise), ball (tap to roll onto the ceiling and back), UFO (each tap is a little flap), wave (hold to zig up, let go to zag down), mini size, speed portals (slower / normal / faster), yellow pads, purple super pads, yellow, pink, blue and green rings, gravity portals. A tap while touching a ring always uses the ring.
-- **Slow motion**: Shift, S or ↓ (or the clock button) slows everything to a third of the speed for 1 second, 3 times per attempt. It is pure time-stretching, so it never changes what is possible, only how much time you have to think.
-- **Math doors**: a question appears before each fork, floating big in the open sky (it shrinks under the progress bar only inside low corridors). Cube forks have 2 lanes (jump onto the shelf or stay low), ball forks have 2 (ceiling or floor), rocket, UFO and wave forks have 3. Each attempt asks a new question. Missed facts are saved and come back 30% of the time.
-- **Math levels**: Starter (ages 7–8), Explorer (9–10), Genius (11–12). Thinking time can be set to Extra (question shows about 2 s sooner).
-- **Music**: the first attempt plays the level's song from its intro. Each later attempt plays the next of 7 remixes (key, chord order, groove, piano style, lead sound and a new melody), cycling with fresh melodies.
-- **Kid-friendly look**: pastel palettes, a gentler dusk sky that follows dark mode, no flashing, a Calm visuals switch.
-- **Practice mode** drops checkpoints (never inside a math question), **stars** (3 per level, counted in normal runs) unlock cube colors, right answers unlock faces.
-- Progress lives in the browser's localStorage on each device.
-
-## Playing on an iPad
-
-`node build.js` also writes a small website to `docs/`: the game page, an app icon, a home-screen manifest and an offline cache. Host that folder anywhere static (GitHub Pages can serve `docs/` straight from this repository). On the iPad, open the link in Safari, then Share > Add to Home Screen: the game gets its own icon, opens full screen, and keeps working without internet. Progress is saved per browser, so the home-screen app and Safari keep separate scores.
-
-Touch controls: tap anywhere to jump, hold to keep hopping, the clock button (bottom left) for slow motion, the pause button at the top. Pinch and double-tap zoom are switched off, and sound plays even with the silent switch on.
+- **The climb**: each rung asks one question with answer platforms floating above the cube's floor: 2 up to rung 8, 3 up to rung 18, then 4 narrower ones. From rung 14 the platforms sway side to side, a little more each rung. A dotted guide shows the arc a jump right now would take; above rung 10 it shows only the start of the arc.
+- **A wrong answer**: the platform cracks, the cube falls past every floor it built, and a card shows the right answer before the next climb starts from the ground. The music changes to the next remix after each fall, the same way Number Dash remixes per attempt.
+- **Math**: questions follow the shared math level (Starter 7–8, Explorer 9–10, Genius 11–12) and get harder in three bands (rungs 1–10, 11–20, 21–30). Missed facts are saved and come back now and then, shared with Number Dash.
+- **Records**: best rung, best time to the top, times reached the top, total falls. A "Best" flag on the wall marks the rung to beat. The sky turns from morning to sunset to night on the way up.
+- **Controls**: tap anywhere (Space, ↑, W or Enter on a keyboard) to jump. Esc or P pauses, M mutes.
 
 ## Layout
 
 | Path | What it is |
 | --- | --- |
-| `src/engine.js` | Level data, level builders and the physics. No DOM, so the checker runs the exact same rules. |
-| `src/template.html` | The page: drawing, music, math questions, menus. `/*__ENGINE__*/` marks where the engine is inlined. |
-| `build.js` | Writes `dist/number-dash.html` (the single file to publish) and `dist/preview.html` (same page in a full HTML skeleton for local testing). |
-| `src/packs.js` | The Normal and Hard packs, written by `tools/genlevels.js --combine`. Regenerate rather than hand-edit. |
-| `tools/genlevels.js` | Pack generator: composes a level from pieces, tests every piece at the level's tempo, and keeps a level only if it is beatable for every door layout, all 3 stars are reachable, it fits the length, and the sloppy-player clear rates sit in the pack's band (Normal 45–95% / 15–80%, Hard 20–85% / 2–35%, tightest tap at least 70 / 50 ms). |
-| `tools/check.js` | Level checker: a bot proves every level can be finished for every correct-door layout, measures each jump's timing window, and estimates how often a slightly sloppy player clears it. |
-| `playtest/` | Headless Edge playtests over the DevTools protocol, with an in-page autopilot (`bot.js`). Scenarios live in `playtest/scenarios/`. Screenshots go to `playtest/shots/`. |
+| `games/dash/` | Number Dash: engine, page template, level checker, pack generator, playtests (see its README). |
+| `games/ladder/src/ladder.html` | Number Ladder: the whole game in one page (drawing, physics, questions, menus). |
+| `games/ladder/playtest/` | Ladder scenarios: `climb.js` (a bot climbs, falls once on purpose, then reaches the top) and `arcade-ipad.js` (finger taps through the whole site on an emulated iPad, portrait, phone and offline). |
+| `shared/` | Code both games use: math questions, the music remix engine, sound effects, cube looks, cube drawing. A game page marks the spot with `/*__SHARED:name__*/` and the build fills it in. |
+| `web/` | The arcade home page (`hub.html`), the offline service worker, the app manifest and icons (`make-icons.js` redraws the icons). |
+| `build.js` | Builds every game into `games/*/dist/` and the website into `docs/`: the home page, one folder per game, the manifest, icons and an offline cache whose version changes with the content. |
+| `docs/` | The built website. GitHub Pages serves it from the `main` branch. Do not edit by hand. |
+
+Progress is saved in each browser's localStorage: `number-dash.v1` holds Number Dash levels plus the settings and math record both games share, `number-ladder.v1` holds the ladder records. The home page reads both for its stats.
 
 ## Commands
+
+Build everything (games and website):
 
 ```bash
 npm run build
 ```
 
-```bash
-npm run check
-```
+Prove every Number Dash level is still beatable:
 
 ```bash
-node playtest/shoot.js playtest/scenarios/music-remix.js
+npm run check:dash:quick
 ```
 
-To remake a pack level, delete its file in `tools/gen-out/`, then:
+Play-test Number Ladder with the climbing bot (headless Edge, screenshots in `games/dash/playtest/shots/`):
 
 ```bash
-node tools/genlevels.js n03
+ND_SERVE=../../docs ND_PATH=ladder/ ND_READY='!!window.__ladder' ND_BOT=none node games/dash/playtest/shoot.js games/ladder/playtest/climb.js
 ```
+
+Tap through the whole site on an emulated iPad:
 
 ```bash
-node tools/genlevels.js --combine
+ND_SERVE=../../docs ND_READY='document.readyState === "complete"' ND_BOT=none node games/dash/playtest/shoot.js games/ladder/playtest/arcade-ipad.js
 ```
 
-`npm run check:quick` only proves the levels are beatable. The full `npm run check` also prints the tightest jump windows and clear rates. Measured for the shipped levels (sloppy player, 25 ms / 40 ms timing error, ship flying and math not counted): Cloud Hop 97% / 74%, Lemon Lane ~50% / ~30%, Moonlit Meadow ~50% / ~14%, Starlight Drift ~35% / ~5%.
+Play-test Number Dash on the built site:
 
-## Editing levels
+```bash
+ND_SERVE=../../docs ND_PATH=dash/ node games/dash/playtest/shoot.js games/dash/playtest/scenarios/ipad.js
+```
 
-Levels are lists of ASCII stamps in `src/engine.js` (bottom row sits on the ground):
+To publish, build, commit `docs/` and push to `main`; GitHub Pages updates in about a minute.
 
-`#` block · `^` `v` spike up/down · `,` small spike · `p` pad · `r` purple super pad · `o` yellow ring · `i` pink ring · `u` blue ring · `g` green ring · `S` rocket · `F` UFO · `W` wave · `B` ball · `C` cube · `G` `N` gravity flip/normal · `m` `M` mini/normal size · `<` `=` `>` slow/normal/fast speed · `*` star · `?` math question · `1` `2` `3` door lanes · `x` `y` `z` floating answer chips · `X` `Y` `Z` answer chips painted on a block
+## Adding a game
 
-The builders `cubeGate()`, `ship()` (with `portal: 'F'` or `'W'` for UFO and wave corridors), `ball()` and `grav()` make the common pieces. `node tools/pieces.js <name>` tries one piece on its own and reports its tightest tap. After any change, run `npm run check` so no level becomes impossible, then `npm run build` and publish `dist/number-dash.html`.
+1. Make `games/<name>/src/<name>.html`: styles, then a `<!--BODY-->` line, then the page. Use `/*__SHARED:name__*/` for shared code, and show an "All games" link when `window.ARCADE_HOME` is set.
+2. Give it a `games/<name>/build.js` that exports a `build()` returning the page (copy the ladder's).
+3. Add it to `GAMES` in `build.js`, a card in `web/hub.html` and its folder to `CORE` in `web/sw.js`.

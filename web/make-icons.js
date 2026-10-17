@@ -1,9 +1,9 @@
 // Draws the app icon (the smiling cube on a sky with a spike) in headless Edge and saves
-// the PNG sizes the site needs. Usage: node tools/icons.js
+// the PNG sizes the site needs. Usage: node web/make-icons.js
 const { spawn } = require('child_process');
 const fs = require('fs'), path = require('path');
 const EDGE = 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe';
-const PORT = 9352, OUT = path.join(__dirname, '..', 'web');
+const PORT = 9352, OUT = __dirname;
 fs.mkdirSync(OUT, { recursive: true });
 
 const DRAW = `(() => {
@@ -34,7 +34,7 @@ const DRAW = `(() => {
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 (async () => {
-  const edge = spawn(EDGE, ['--headless=new', '--disable-gpu', '--remote-debugging-port=' + PORT, '--user-data-dir=' + path.join(__dirname, '..', 'playtest', 'edge-profile-icons'), 'about:blank'], { stdio: 'ignore' });
+  const edge = spawn(EDGE, ['--headless=new', '--disable-gpu', '--remote-debugging-port=' + PORT, '--user-data-dir=' + path.join(__dirname, '.edge-profile'), 'about:blank'], { stdio: 'ignore' });
   try {
     let tgt = null;
     for (let i = 0; i < 50 && !tgt; i++) { try { tgt = await (await fetch(`http://127.0.0.1:${PORT}/json/new?about:blank`, { method: 'PUT' })).json(); } catch (e) { await sleep(200); } }

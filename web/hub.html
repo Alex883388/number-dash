@@ -1,0 +1,136 @@
+<title>Number Arcade</title>
+<meta name="description" content="Math games for kids: Number Dash and Number Ladder.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap">
+<style>
+/* Layout: a short sky page with one card per game; each card's picture shows how the game plays. */
+:root {
+  --sky-top: #8fd1fb; --sky-bot: #e8f6ff; --ink: #29345a; --ink-soft: #5d6890; --card: #fdfeff; --card-2: #eef5fc; --line: #d0dff0;
+  --sun: #ffc94d; --sun-deep: #e2a526; --sun-ink: #4a3500; --mint: #4fd1a5; --mint-deep: #2a9f78; --lilac: #9d84ff;
+  --door: #fff3d6; --door-edge: #f0b544; --door-ink: #3a3f6b; --shadow: 0 12px 32px rgba(41, 52, 90, .16);
+  --font-display: "Fredoka", "Arial Rounded MT Bold", ui-rounded, "Segoe UI", system-ui, sans-serif;
+  --font-body: "Nunito", ui-rounded, "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --sky-top: #1d2350; --sky-bot: #3b3a7e; --ink: #edf0ff; --ink-soft: #b4bbe3; --card: #283063; --card-2: #222955; --line: #3b437f;
+    --sun: #ffcd5a; --sun-deep: #d99f2c; --sun-ink: #3d2a00; --mint: #5adbb0; --mint-deep: #5adbb0; --lilac: #ab95ff;
+    --shadow: 0 14px 36px rgba(0, 0, 0, .42); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --sky-top: #1d2350; --sky-bot: #3b3a7e; --ink: #edf0ff; --ink-soft: #b4bbe3; --card: #283063; --card-2: #222955; --line: #3b437f;
+  --sun: #ffcd5a; --sun-deep: #d99f2c; --sun-ink: #3d2a00; --mint: #5adbb0; --mint-deep: #5adbb0; --lilac: #ab95ff;
+  --shadow: 0 14px 36px rgba(0, 0, 0, .42); color-scheme: dark;
+}
+html { min-height: 100%; background: var(--sky-bot); }
+body {
+  margin: 0; min-height: 100%; color: var(--ink); font-family: var(--font-body); -webkit-tap-highlight-color: transparent;
+  background: linear-gradient(var(--sky-top), var(--sky-bot) 70%);
+}
+.hub {
+  max-width: 980px; margin: 0 auto; display: grid; gap: 26px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: calc(28px + env(safe-area-inset-top, 0px)) calc(28px + env(safe-area-inset-bottom, 0px));
+}
+header { text-align: center; display: grid; gap: 10px; }
+.glyphs { display: flex; justify-content: center; gap: .55em; font: 700 1.4rem/1 var(--font-display); }
+.glyphs span { display: inline-grid; place-items: center; width: 1.6em; height: 1.6em; border-radius: .5em; color: #fff; }
+.glyphs span:nth-child(1) { background: #5cb8ff; transform: rotate(-8deg); }
+.glyphs span:nth-child(2) { background: #4fd1a5; transform: rotate(5deg); }
+.glyphs span:nth-child(3) { background: #9d84ff; transform: rotate(-4deg); }
+.glyphs span:nth-child(4) { background: #ff9fcf; transform: rotate(7deg); }
+h1 { margin: 0; font: 700 clamp(2.6rem, 9vw, 4.4rem)/.95 var(--font-display); text-wrap: balance; }
+h1 span { color: var(--sun-deep); }
+.lead { margin: 0; color: var(--ink-soft); font-size: 1.15rem; }
+.games { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+.game {
+  display: grid; grid-template-rows: auto 1fr; background: var(--card); border-radius: 26px; overflow: hidden; box-shadow: var(--shadow);
+  color: inherit; text-decoration: none; transition: transform .12s ease; touch-action: manipulation;
+}
+.game:hover { transform: translateY(-3px); }
+.game:active { transform: translateY(1px); }
+.game:focus-visible { outline: 4px solid var(--lilac); outline-offset: 4px; }
+.art { height: 170px; position: relative; overflow: hidden; }
+.body { padding: 18px 20px 20px; display: grid; gap: 10px; align-content: start; }
+.num { font: 700 .8rem/1 var(--font-display); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); }
+.game h2 { margin: 0; font: 700 1.8rem/1.05 var(--font-display); }
+.game p { margin: 0; color: var(--ink-soft); line-height: 1.45; }
+.meta { font-weight: 800; color: var(--ink); font-variant-numeric: tabular-nums; }
+.play {
+  justify-self: start; margin-top: 4px; font: 600 1.25rem/1 var(--font-display); background: var(--sun); color: var(--sun-ink);
+  border: 2px solid var(--sun-deep); border-radius: 18px; padding: .6em 1.8em; box-shadow: 0 4px 0 var(--sun-deep);
+}
+/* game pictures */
+.dash-art { background: linear-gradient(#8fd1fb, #e4f5ff); }
+.dash-art::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 34px; background: #7cc6a5; border-top: 6px solid #abe6c9; }
+.dash-art .cube { position: absolute; left: 18%; bottom: 74px; width: 44px; height: 44px; border-radius: 11px; background: #5cb8ff; border: 4px solid #3a8fd6; transform: rotate(-18deg); }
+.dash-art .spike { position: absolute; bottom: 40px; width: 0; height: 0; border-left: 17px solid transparent; border-right: 17px solid transparent; border-bottom: 32px solid #ff7b86; }
+.dash-art .door { position: absolute; right: 12%; bottom: 40px; width: 46px; height: 92px; border-radius: 14px; background: var(--door); border: 4px solid var(--door-edge); display: grid; place-items: center; font: 700 1.4rem/1 var(--font-display); color: var(--door-ink); }
+.ladder-art { background: linear-gradient(#f2a9c4, #ffe3c6); }
+.ladder-art .floor { position: absolute; left: 14%; right: 14%; height: 14px; border-radius: 7px; background: #9fe3c8; border: 3px solid #6cc4a2; }
+.ladder-art .wall { position: absolute; top: 0; bottom: 0; width: 9%; background: repeating-linear-gradient(#c9d3f0 0 14px, #b5c1e6 14px 16px); }
+.ladder-art .chip { position: absolute; top: 26px; width: 64px; height: 34px; border-radius: 12px; background: var(--door); border: 3px solid var(--door-edge); display: grid; place-items: center; font: 700 1.2rem/1 var(--font-display); color: var(--door-ink); }
+.ladder-art .cube { position: absolute; left: 44%; bottom: 82px; width: 34px; height: 34px; border-radius: 9px; background: #5cb8ff; border: 4px solid #3a8fd6; }
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 0; }
+.stats div { background: var(--card); border-radius: 18px; padding: 14px 8px; text-align: center; box-shadow: 0 4px 14px rgba(41, 52, 90, .1); min-width: 0; }
+.stats dt { font-size: .76rem; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-soft); font-weight: 800; }
+.stats dd { margin: 4px 0 0; font: 700 1.7rem/1 var(--font-display); font-variant-numeric: tabular-nums; }
+.tip { margin: 0; text-align: center; color: var(--ink-soft); background: var(--card); border-radius: 16px; padding: 12px 16px; line-height: 1.45; }
+@media (prefers-reduced-motion: reduce) { .game { transition: none; } }
+</style>
+<!--BODY-->
+<main class="hub">
+  <header>
+    <div class="glyphs" aria-hidden="true"><span>+</span><span>&minus;</span><span>&times;</span><span>&divide;</span></div>
+    <h1>Number <span>Arcade</span></h1>
+    <p class="lead">Math games for curious kids. Pick one!</p>
+  </header>
+  <div class="games">
+    <a class="game" href="dash/">
+      <div class="art dash-art" aria-hidden="true"><i class="cube"></i><i class="spike" style="left:40%"></i><i class="spike" style="left:52%"></i><span class="door">63</span></div>
+      <div class="body">
+        <span class="num">Game 1</span>
+        <h2>Number Dash</h2>
+        <p>Run, jump and fly to the beat. Steer into the lane whose door shows the right answer.</p>
+        <span class="meta" id="dashMeta">30 levels</span>
+        <span class="play">Play</span>
+      </div>
+    </a>
+    <a class="game" href="ladder/">
+      <div class="art ladder-art" aria-hidden="true">
+        <i class="wall" style="left:0"></i><i class="wall" style="right:0"></i>
+        <i class="floor" style="bottom:18px"></i><i class="floor" style="bottom:66px"></i>
+        <i class="cube"></i>
+        <span class="chip" style="left:22%">48</span><span class="chip" style="right:22%">56</span>
+      </div>
+      <div class="body">
+        <span class="num">Game 2</span>
+        <h2>Number Ladder</h2>
+        <p>Climb a tower of 30 equations. Land on the right answer to go up, a wrong one drops you to the ground.</p>
+        <span class="meta" id="ladderMeta">30 rungs to the top</span>
+        <span class="play">Play</span>
+      </div>
+    </a>
+  </div>
+  <dl class="stats" id="stats"></dl>
+  <p class="tip" id="tip" hidden>On iPad: tap Share, then Add to Home Screen. Number Arcade then opens full screen from its own icon and works without internet.</p>
+</main>
+<script>
+(function () {
+  var d = {}, l = {};
+  try { d = JSON.parse(localStorage.getItem('number-dash.v1') || '{}') || {}; l = JSON.parse(localStorage.getItem('number-ladder.v1') || '{}') || {}; } catch (e) { /* storage blocked */ }
+  var right = (d.math && d.math.right) || 0, stars = 0, done = 0;
+  for (var k in (d.levels || {})) { var lv = d.levels[k]; stars += (lv.stars || []).filter(Boolean).length; if (lv.done) done++; }
+  var cell = function (k, v) { return '<div><dt>' + k + '</dt><dd>' + v + '</dd></div>'; };
+  document.getElementById('stats').innerHTML = cell('Answers right', right) + cell('Dash stars', stars + ' / 90') + cell('Ladder best', (l.best || 0) + ' / 30');
+  if (done) document.getElementById('dashMeta').textContent = done + ' of 30 levels finished';
+  if (l.tops) document.getElementById('ladderMeta').textContent = 'Reached the top ' + l.tops + (l.tops === 1 ? ' time' : ' times');
+  else if (l.best) document.getElementById('ladderMeta').textContent = 'Best so far: rung ' + l.best + ' of 30';
+  var ios = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var standalone = navigator.standalone === true || (window.matchMedia && matchMedia('(display-mode: standalone)').matches);
+  var framed = false; try { framed = window.self !== window.top; } catch (e) { framed = true; }
+  document.getElementById('tip').hidden = !(ios && !standalone && !framed);
+})();
+</script>

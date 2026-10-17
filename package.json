@@ -1,13 +1,13 @@
 {
-  "name": "number-dash",
-  "version": "1.0.0",
+  "name": "number-arcade",
+  "version": "2.0.0",
   "private": true,
-  "description": "Kid-friendly Geometry Dash-style runner with math doors and live lo-fi music",
+  "description": "Math games for kids: Number Dash and Number Ladder",
   "scripts": {
     "build": "node build.js",
-    "check": "node tools/check.js",
-    "check:quick": "node tools/check.js --quick",
-    "serve": "node playtest/serve.js 5517",
-    "playtest": "node playtest/shoot.js"
+    "check:dash": "node games/dash/tools/check.js",
+    "check:dash:quick": "node games/dash/tools/check.js --quick",
+    "playtest": "node games/dash/playtest/shoot.js",
+    "icons": "node web/make-icons.js"
   }
 }

@@ -1,0 +1,1298 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#8fd1fb">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Number Arcade">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icon-180.png">
+<link rel="icon" type="image/png" href="../icon-192.png">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}body{margin:0;font:14px system-ui}img{max-width:100%}[hidden]{display:none!important}</style>
+<script>window.ARCADE_HOME = "../";</script>
+<title>Number Ladder</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Climb a ladder of 30 equations: land on the right answer to build the next floor, a wrong one drops you to the ground.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap">
+<style>
+/* Layout: one full-bleed canvas with a tower in the middle; the equation floats big at the
+   top, menus are cards over the scenery. Same palette family as Number Dash: pastel sky,
+   sunny yellow for the main action, gold-edged answer panels. */
+:root {
+  --sky: #e6f3fc; --ink: #29345a; --ink-soft: #5d6890; --card: #fdfeff; --card-2: #eef5fc; --line: #d0dff0;
+  --sun: #ffc94d; --sun-deep: #e2a526; --sun-ink: #4a3500; --mint: #4fd1a5; --mint-deep: #2a9f78; --lilac: #9d84ff;
+  --coral: #ff7b86; --door: #fff3d6; --door-edge: #f0b544; --door-ink: #3a3f6b; --veil: rgba(230, 243, 252, .55);
+  --shadow: 0 12px 32px rgba(41, 52, 90, .16);
+  --font-display: "Fredoka", "Arial Rounded MT Bold", ui-rounded, "Segoe UI", system-ui, sans-serif;
+  --font-body: "Nunito", ui-rounded, "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --sky: #1c2147; --ink: #edf0ff; --ink-soft: #b4bbe3; --card: #283063; --card-2: #222955; --line: #3b437f;
+    --sun: #ffcd5a; --sun-deep: #d99f2c; --sun-ink: #3d2a00; --mint: #5adbb0; --mint-deep: #34a882; --lilac: #ab95ff;
+    --coral: #ff8a94; --veil: rgba(28, 33, 71, .5); --shadow: 0 14px 36px rgba(0, 0, 0, .42); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --sky: #1c2147; --ink: #edf0ff; --ink-soft: #b4bbe3; --card: #283063; --card-2: #222955; --line: #3b437f;
+  --sun: #ffcd5a; --sun-deep: #d99f2c; --sun-ink: #3d2a00; --mint: #5adbb0; --mint-deep: #34a882; --lilac: #ab95ff;
+  --coral: #ff8a94; --veil: rgba(28, 33, 71, .5); --shadow: 0 14px 36px rgba(0, 0, 0, .42); color-scheme: dark;
+}
+html, body { height: 100%; overscroll-behavior: none; -webkit-touch-callout: none; -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--sky); color: var(--ink); font-family: var(--font-body); overflow: hidden; -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
+#game { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+button { font: inherit; color: inherit; }
+button, label, input, .btn { touch-action: manipulation; }
+.btn {
+  font: 600 1.05rem/1.1 var(--font-display); color: var(--ink); background: var(--card-2); border: 2px solid var(--line); border-radius: 16px;
+  padding: .75em 1.15em; box-shadow: 0 4px 0 var(--line); cursor: pointer; text-decoration: none; display: inline-block;
+  transition: transform .08s ease, box-shadow .08s ease, background .15s;
+}
+.btn:hover { background: var(--card); }
+.btn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--line); }
+.btn:focus-visible, .seg input:focus-visible + span { outline: 3px solid var(--lilac); outline-offset: 3px; }
+.btn.sun { background: var(--sun); border-color: var(--sun-deep); color: var(--sun-ink); box-shadow: 0 4px 0 var(--sun-deep); }
+.btn.sun:active { box-shadow: 0 1px 0 var(--sun-deep); }
+.btn.big { font-size: 1.6rem; padding: .6em 2.2em; border-radius: 22px; }
+.row { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+
+#screens {
+  position: fixed; inset: 0; display: grid; place-items: center; overflow-y: auto; pointer-events: none; touch-action: pan-y;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: calc(16px + env(safe-area-inset-top, 0px)) calc(16px + env(safe-area-inset-bottom, 0px));
+}
+#screens.dim { background: var(--veil); }
+.screen { pointer-events: auto; width: min(100%, 560px); animation: rise .35s ease both; }
+.card { background: var(--card); border-radius: 28px; box-shadow: var(--shadow); padding: clamp(18px, 4vw, 34px); display: grid; gap: 18px; text-align: center; }
+@keyframes rise { from { transform: translateY(14px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes pop { 0% { transform: scale(.85); } 70% { transform: scale(1.04); } 100% { transform: scale(1); } }
+.logo { margin: 0; font: 700 clamp(2.6rem, 9vw, 4.2rem)/.95 var(--font-display); text-wrap: balance; }
+.logo span { color: var(--mint-deep); }
+.tag { margin: 0 auto; max-width: 38ch; color: var(--ink-soft); font-size: 1.08rem; line-height: 1.5; text-wrap: balance; }
+.how { margin: 0; color: var(--ink-soft); font-weight: 700; }
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 0; }
+.stats div { background: var(--card-2); border-radius: 16px; padding: 12px 6px; min-width: 0; }
+.stats dt { font-size: .74rem; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-soft); font-weight: 800; }
+.stats dd { margin: 4px 0 0; font: 700 1.6rem/1 var(--font-display); font-variant-numeric: tabular-nums; }
+.seg { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.seg label { cursor: pointer; }
+.seg input { position: absolute; opacity: 0; pointer-events: none; }
+.seg span { display: block; font: 600 .95rem/1.15 var(--font-display); padding: .55em .85em; border-radius: 14px; background: var(--card-2); border: 2px solid var(--line); }
+.seg input:checked + span { background: var(--sun); border-color: var(--sun-deep); color: var(--sun-ink); }
+.seg-title { margin: 0; font: 600 .9rem/1 var(--font-display); color: var(--ink-soft); }
+.small-card h2 { margin: 0; font: 700 clamp(1.9rem, 6vw, 2.6rem)/1.05 var(--font-display); text-wrap: balance; }
+.small-card p { margin: 0; color: var(--ink-soft); }
+
+#hud { position: fixed; inset: 0; pointer-events: none; }
+.hud-top {
+  position: absolute; left: 0; right: 0; top: 0; display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding-top: calc(10px + env(safe-area-inset-top, 0px));
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.chipbox { background: var(--card); border-radius: 99px; box-shadow: 0 4px 14px rgba(41, 52, 90, .14); }
+.hud-chips { display: grid; gap: 6px; justify-items: start; }
+.chip { font: 600 1.05rem/1 var(--font-display); padding: 8px 14px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.chip.soft { font-size: .85rem; padding: 6px 12px; color: var(--ink-soft); }
+.hud-btn { pointer-events: auto; width: 46px; height: 46px; border-radius: 50%; border: 0; background: var(--card); box-shadow: 0 4px 14px rgba(41, 52, 90, .14); cursor: pointer; display: grid; place-items: center; flex: none; }
+.hud-btn:focus-visible { outline: 3px solid var(--lilac); outline-offset: 2px; }
+.q {
+  position: absolute; left: 50%; top: calc(12px + env(safe-area-inset-top, 0px)); transform: translateX(-50%);
+  background: var(--card); border-radius: 26px; padding: 10px 26px; box-shadow: var(--shadow); border: 4px solid var(--door-edge);
+  font: 700 clamp(30px, min(8vw, 8vh), 72px)/1.05 var(--font-display); font-variant-numeric: tabular-nums; white-space: nowrap;
+  max-width: calc(100% - 200px); animation: qpop .35s ease both;
+}
+@keyframes qpop { 0% { transform: translateX(-50%) scale(.85); } 70% { transform: translateX(-50%) scale(1.04); } 100% { transform: translateX(-50%) scale(1); } }
+.q.good { border-color: var(--mint); color: var(--mint-deep); }
+.q b { color: var(--mint-deep); }
+#meter {
+  position: absolute; right: max(18px, env(safe-area-inset-right, 0px)); top: 50%; transform: translateY(-50%);
+  width: 16px; height: 46vh; border-radius: 99px; background: var(--card); box-shadow: 0 4px 14px rgba(41, 52, 90, .14); padding: 3px;
+}
+#meter i { position: absolute; left: 3px; right: 3px; bottom: 3px; height: 0; border-radius: 99px; background: linear-gradient(0deg, var(--mint), var(--sun)); transition: height .3s ease; }
+#meter b { position: absolute; left: -7px; right: -7px; height: 4px; border-radius: 4px; background: var(--sun-deep); bottom: 0; }
+#oops {
+  position: fixed; left: 50%; top: 50%; translate: -50% -50%; width: min(calc(100% - 32px), 440px);
+  background: var(--card); border-radius: 26px; box-shadow: var(--shadow); padding: 20px 22px; text-align: center;
+  display: grid; gap: 8px; border: 3px solid var(--door-edge); animation: pop .35s ease both; pointer-events: none;
+}
+#oops h2 { margin: 0; font: 700 1.6rem/1.1 var(--font-display); }
+#oops .fact { font: 700 clamp(30px, 8vw, 44px)/1.1 var(--font-display); font-variant-numeric: tabular-nums; }
+#oops .fact b { color: var(--mint-deep); }
+#oops p { margin: 0; color: var(--ink-soft); font-weight: 700; }
+.toast { position: absolute; left: 50%; top: 42%; translate: -50% 0; font: 700 1.4rem/1 var(--font-display); padding: 12px 20px; animation: pop .3s ease both; white-space: nowrap; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+@media (pointer: coarse) { .hud-btn { width: 58px; height: 58px; } }
+@media (max-width: 640px) { .q { max-width: calc(100% - 32px); top: calc(70px + env(safe-area-inset-top, 0px)); } #meter { height: 34vh; } }
+@media (prefers-reduced-motion: reduce) { .screen, .q, #oops, .toast { animation: none; } }
+</style>
+</head>
+<body>
+<canvas id="game" aria-label="Number Ladder game area"></canvas>
+
+<div id="hud" hidden>
+  <div class="hud-top">
+    <div class="hud-chips">
+      <span class="chip chipbox" id="rungChip">Rung 0 / 30</span>
+      <span class="chip soft chipbox" id="fallChip">Falls 0</span>
+    </div>
+    <button class="hud-btn" id="pauseBtn" aria-label="Pause">
+      <svg width="18" height="20" viewBox="0 0 16 18" aria-hidden="true"><rect x="1" y="1" width="5" height="16" rx="2" fill="currentColor"/><rect x="10" y="1" width="5" height="16" rx="2" fill="currentColor"/></svg>
+    </button>
+  </div>
+  <div class="q" id="question" hidden></div>
+  <div id="meter" aria-hidden="true"><i id="meterFill"></i><b id="meterBest"></b></div>
+  <div class="toast chipbox" id="toast" hidden></div>
+  <div class="sr" aria-live="polite" id="announce"></div>
+</div>
+<div id="oops" hidden>
+  <h2 id="oopsTitle">Whoops!</h2>
+  <div class="fact" id="oopsFact"></div>
+  <p id="oopsHint"></p>
+</div>
+
+<main id="screens">
+  <section class="screen" id="s-home">
+    <div class="card">
+      <h1 class="logo">Number <span>Ladder</span></h1>
+      <p class="tag">Climb a tower of 30 equations. Land on the right answer to build the next floor. Land on a wrong one and you drop all the way to the ground.</p>
+      <div class="row"><button class="btn sun big" id="playBtn">Climb</button></div>
+      <p class="how">Tap anywhere (or press Space) to jump.</p>
+      <div>
+        <p class="seg-title">Math level</p>
+        <div class="seg" style="margin-top:8px">
+          <label><input type="radio" name="math" value="starter" id="mStarter"><span>Starter · 7–8</span></label>
+          <label><input type="radio" name="math" value="explorer" id="mExplorer"><span>Explorer · 9–10</span></label>
+          <label><input type="radio" name="math" value="genius" id="mGenius"><span>Genius · 11–12</span></label>
+        </div>
+      </div>
+      <dl class="stats" id="homeStats"></dl>
+      <div class="row">
+        <button class="btn" id="soundBtn">Music on</button>
+        <a class="btn" id="hubLink" hidden href="../">All games</a>
+      </div>
+    </div>
+  </section>
+  <section class="screen" id="s-pause" hidden>
+    <div class="card small-card">
+      <h2>Paused</h2>
+      <p id="pauseInfo"></p>
+      <div class="row"><button class="btn sun big" id="resumeBtn">Keep climbing</button></div>
+      <div class="row"><button class="btn" id="restartBtn">Start over</button><button class="btn" id="homeBtn">Home</button></div>
+    </div>
+  </section>
+  <section class="screen" id="s-top" hidden>
+    <div class="card small-card">
+      <h2>You reached the top!</h2>
+      <p id="topNote"></p>
+      <dl class="stats" id="topStats"></dl>
+      <div class="row"><button class="btn sun big" id="againBtn">Climb again</button></div>
+      <div class="row"><button class="btn" id="topHomeBtn">Home</button><a class="btn" id="topHubLink" hidden href="../">All games</a></div>
+    </div>
+  </section>
+</main>
+
+<script>
+(function () {
+'use strict';
+const $ = (s) => document.querySelector(s);
+const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
+const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+const frac = (v) => ((v % 1) + 1) % 1;
+function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+
+/* ================= saved progress (this device) =================
+   The arcade save is shared with Number Dash: cube look, math level, sound, math stats.
+   The ladder keeps its own records next to it. */
+const SAVE_KEY = 'number-dash.v1', LADDER_KEY = 'number-ladder.v1';
+const reduceMotion = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+const save = {
+  levels: {},
+  math: { right: 0, wrong: 0, streak: 0, best: 0, tricky: [] },
+  settings: { mathLevel: 'explorer', think: 'normal', music: 0.7, sfx: 0.8, sky: 'auto', calm: reduceMotion },
+  cube: { color: 0, face: 0 }
+};
+const rec = { best: 0, bestTime: 0, tops: 0, falls: 0 };
+try {
+  const raw = localStorage.getItem(SAVE_KEY);
+  if (raw) { const d = JSON.parse(raw); for (const k of Object.keys(save)) if (d && d[k] && typeof d[k] === 'object') Object.assign(save[k], d[k]); }
+  const lr = localStorage.getItem(LADDER_KEY);
+  if (lr) Object.assign(rec, JSON.parse(lr));
+} catch (e) { /* storage blocked: play without saving */ }
+function writeSave() {
+  try {
+    const cur = JSON.parse(localStorage.getItem(SAVE_KEY) || '{}');
+    cur.math = save.math; cur.settings = save.settings; cur.cube = save.cube;
+    if (!cur.levels) cur.levels = save.levels;
+    localStorage.setItem(SAVE_KEY, JSON.stringify(cur));
+    localStorage.setItem(LADDER_KEY, JSON.stringify(rec));
+  } catch (e) { /* ignore */ }
+}
+
+/* ================= math questions ================= */
+const MINUS = '−', TIMES = '×', DIV = '÷';
+const FRAC = { 2: '½', 3: '⅓', 4: '¼', 5: '⅕', 10: '⅒' };
+const MATH = {
+  starter: { name: 'Starter', kinds: ['add20', 'add20', 'sub20', 'sub20', 'make10', 'double', 'table2510', 'table2510'] },
+  explorer: { name: 'Explorer', kinds: ['add100', 'sub100', 'table10', 'table10', 'table10', 'div10', 'div10', 'missing'] },
+  genius: { name: 'Genius', kinds: ['table12', 'table12', 'div12', 'order', 'order', 'fraction', 'percent', 'big', 'missingMul'] }
+};
+const KINDS = {
+  add20() { const a = rnd(3, 12), b = rnd(2, 20 - a); return { t: a + ' + ' + b, a: a + b }; },
+  sub20() { const a = rnd(9, 20), b = rnd(2, a - 2); return { t: a + ' ' + MINUS + ' ' + b, a: a - b }; },
+  make10() { const b = rnd(1, 9); return { t: (10 - b) + ' + ? = 10', a: b }; },
+  double() { const a = rnd(3, 10); return { t: a + ' + ' + a, a: a * 2 }; },
+  table2510() { const m = pick([2, 5, 10]), b = rnd(1, 10); return { t: b + ' ' + TIMES + ' ' + m, a: b * m, f: [b, m] }; },
+  add100() { const a = rnd(14, 68), b = rnd(7, 99 - a); return { t: a + ' + ' + b, a: a + b }; },
+  sub100() { const a = rnd(31, 99), b = rnd(8, a - 11); return { t: a + ' ' + MINUS + ' ' + b, a: a - b }; },
+  table10() { const a = rnd(2, 10), b = rnd(2, 10); return { t: a + ' ' + TIMES + ' ' + b, a: a * b, f: [a, b] }; },
+  div10() { const b = rnd(2, 10), c = rnd(2, 10); return { t: (b * c) + ' ' + DIV + ' ' + b, a: c }; },
+  missing() { const a = rnd(6, 40), c = a + rnd(5, 30); return { t: a + ' + ? = ' + c, a: c - a }; },
+  table12() { const a = rnd(3, 12), b = rnd(3, 12); return { t: a + ' ' + TIMES + ' ' + b, a: a * b, f: [a, b] }; },
+  div12() { const b = rnd(3, 12), c = rnd(3, 12); return { t: (b * c) + ' ' + DIV + ' ' + b, a: c }; },
+  order() {
+    const a = rnd(2, 9), b = rnd(2, 9), c = rnd(2, 9);
+    return Math.random() < 0.5
+      ? { t: c + ' + ' + a + ' ' + TIMES + ' ' + b, a: c + a * b, trap: (c + a) * b }
+      : { t: a + ' ' + TIMES + ' (' + b + ' + ' + c + ')', a: a * (b + c), trap: a * b + c };
+  },
+  fraction() { const d = pick([2, 3, 4, 5, 10]), n = rnd(2, 12) * d; return { t: FRAC[d] + ' of ' + n, a: n / d }; },
+  percent() {
+    const p = pick([10, 25, 50]);
+    const base = p === 25 ? rnd(2, 12) * 4 : p === 50 ? rnd(3, 20) * 2 : rnd(2, 15) * 10;
+    return { t: p + '% of ' + base, a: base * p / 100 };
+  },
+  big() { const a = rnd(11, 45) * 5, b = rnd(5, 30) * 5; return Math.random() < 0.5 ? { t: a + ' + ' + b, a: a + b } : { t: (a + b) + ' ' + MINUS + ' ' + b, a: a }; },
+  missingMul() { const a = rnd(3, 12), b = rnd(3, 12); return { t: '? ' + TIMES + ' ' + a + ' = ' + (a * b), a: b, f: [b, a] }; }
+};
+function wrongAnswers(q, n) {
+  const ans = q.a, used = new Set([ans]), out = [];
+  const cands = [ans + 1, ans - 1, ans + 2, ans - 2];
+  if (q.trap !== undefined) cands.push(q.trap, q.trap);
+  if (q.f) { const a = q.f[0], b = q.f[1]; cands.push(a * (b + 1), a * (b - 1), (a + 1) * b, (a - 1) * b); }
+  if (ans >= 10) {
+    cands.push(ans + 10, ans - 10);
+    const s = String(ans);
+    if (s.length === 2 && s[0] !== s[1] && s[1] !== '0') cands.push(+(s[1] + s[0]));
+  }
+  for (const v of shuffle(cands)) {
+    if (out.length >= n) break;
+    if (v >= (ans > 0 ? 1 : 0) && Number.isInteger(v) && !used.has(v)) { used.add(v); out.push(v); }
+  }
+  while (out.length < n) { const v = ans + rnd(3, 7) * (Math.random() < 0.5 ? -1 : 1); if (v >= (ans > 0 ? 1 : 0) && !used.has(v)) { used.add(v); out.push(v); } }
+  return out;
+}
+let lastAsked = '';
+function makeQuestion(lanes) {
+  const lv = MATH[save.settings.mathLevel] || MATH.explorer;
+  let q = null;
+  const tricky = (save.math.tricky || []).filter((t) => t.t !== lastAsked);
+  if (tricky.length && Math.random() < 0.3) q = Object.assign({}, pick(tricky), { again: true });
+  for (let i = 0; !q || (q.t === lastAsked && i < 6); i++) q = KINDS[pick(lv.kinds)]();
+  lastAsked = q.t;
+  const choices = shuffle([q.a].concat(wrongAnswers(q, lanes - 1)));
+  return { text: q.t.indexOf('?') >= 0 ? q.t : q.t + ' = ?', answer: q.a, choices: choices, correct: choices.indexOf(q.a) + 1, raw: q, done: false };
+}
+function solvedText(q) { return q.raw.t.indexOf('?') >= 0 ? q.raw.t.replace('?', '<b>' + q.answer + '</b>') : q.raw.t + ' = <b>' + q.answer + '</b>'; }
+// The ladder's own question picker: easier sums low down, harder ones near the top.
+const TIERS = {
+  starter: [['add20', 'sub20', 'make10', 'double'], ['add20', 'sub20', 'make10', 'double', 'table2510'], ['table2510', 'table2510', 'sub20', 'add20', 'double']],
+  explorer: [['add100', 'sub100', 'table2510', 'missing'], ['table10', 'div10', 'add100', 'sub100', 'missing'], ['table10', 'div10', 'table12', 'div12', 'missing']],
+  genius: [['table10', 'div10', 'big', 'missing'], ['table12', 'div12', 'fraction', 'percent', 'big', 'missingMul'], ['order', 'order', 'table12', 'div12', 'fraction', 'percent', 'missingMul']]
+};
+function ladderQuestion(r, n) {
+  const tiers = TIERS[save.settings.mathLevel] || TIERS.explorer, tier = r <= 10 ? 0 : r <= 20 ? 1 : 2;
+  let q = null;
+  const tricky = (save.math.tricky || []).filter((t) => t.t !== lastAsked);
+  if (tricky.length && Math.random() < 0.25) q = Object.assign({}, pick(tricky), { again: true });
+  for (let i = 0; !q || (q.t === lastAsked && i < 6); i++) q = KINDS[pick(tiers[tier])]();
+  lastAsked = q.t;
+  const choices = shuffle([q.a].concat(wrongAnswers(q, n - 1)));
+  return { text: q.t.indexOf('?') >= 0 ? q.t : q.t + ' = ?', answer: q.a, choices: choices, correct: choices.indexOf(q.a), raw: q };
+}
+function mathRight(q) {
+  const m = save.math;
+  m.right++; m.streak++; m.best = Math.max(m.best, m.streak);
+  if (q.raw.again) m.tricky = m.tricky.filter((t) => t.t !== q.raw.t);
+  writeSave();
+}
+function mathWrong(q) {
+  const m = save.math;
+  m.wrong++; m.streak = 0;
+  const r = { t: q.raw.t, a: q.raw.a };
+  if (q.raw.f) r.f = q.raw.f;
+  if (q.raw.trap !== undefined) r.trap = q.raw.trap;
+  m.tricky = m.tricky.filter((t) => t.t !== r.t).concat([r]).slice(-12);
+  writeSave();
+}
+
+/* ================= music ================= */
+const SONGS = {
+  menu: { bpm: 72, swing: 0.14, prog: [[52, 55, 59, 62], [55, 59, 60, 64], [57, 60, 64, 67], [55, 57, 62, 64]], bass: [36, 45, 41, 43],
+          keys: [[0, 1, 4, 15], [10, 0.45, 2, 4]], bassPat: [[0, 0.8, 0, 12]], drums: false,
+          hats: [[0, 0.22], [4, 0.12], [8, 0.22], [12, 0.12]], scale: [72, 74, 76, 79, 81, 84], density: 0.42, seed: 3 },
+  ladder: { bpm: 84, swing: 0.16, prog: [[52, 55, 59, 60], [55, 57, 60, 64], [53, 57, 60, 62], [55, 59, 62, 64]], bass: [36, 45, 38, 43],
+          keys: [[0, 1, 4, 14], [10, 0.5, 2, 4]], bassPat: [[0, 1, 0, 6], [10, 0.7, 0, 3], [14, 0.5, 7, 2]], drums: true,
+          kick: [0, 10], snare: [4, 12], ghost: [],
+          hats: [[0, 0.45], [2, 0.3], [4, 0.45], [6, 0.3], [8, 0.45], [10, 0.3], [12, 0.45], [14, 0.3]], scale: [72, 74, 76, 79, 81, 84], density: 0.5, seed: 131 }
+};
+// Every new attempt plays the next remix of the level's song: a new key and chord
+// order, another groove and comping style, another lead sound, and a fresh melody.
+const HATS = {
+  eighths: [[0, 0.5], [2, 0.3], [4, 0.5], [6, 0.3], [8, 0.5], [10, 0.3], [12, 0.5], [14, 0.3]],
+  sixteenths: Array.from({ length: 16 }, (_, i) => [i, i % 4 === 0 ? 0.45 : i % 2 ? 0.14 : 0.3]),
+  swing: [[0, 0.45], [3, 0.25], [4, 0.45], [7, 0.25], [8, 0.45], [11, 0.25], [12, 0.45], [15, 0.25]],
+  soft: [[0, 0.3], [4, 0.2], [8, 0.3], [12, 0.2], [14, 0.15]]
+};
+const COMP = {
+  long: [[0, 1, 5, 16]],
+  stabs: [[0, 0.9, 4, 3], [6, 0.6, 3, 2], [10, 0.7, 3, 3], [14, 0.4, 2, 2]],
+  offbeat: [[2, 0.75, 4, 2], [6, 0.6, 3, 2], [10, 0.75, 4, 2], [14, 0.5, 3, 2]]
+};
+const REMIXES = [
+  { name: 'Bubble Beat', shift: 2, rot: 1, kick: [0, 3, 8, 10], hats: 'sixteenths', comp: 'stabs', lead: 'marimba', cutoff: 2900 },
+  { name: 'Sleepy Swing', shift: -3, rot: 2, kick: [0, 10], hats: 'swing', swing: 0.26, comp: 'long', lead: 'flute', cutoff: 1700 },
+  { name: 'Hop Step', shift: 5, rot: 3, kick: [0, 6, 8], hats: 'eighths', comp: 'offbeat', lead: 'bell', cutoff: 2500 },
+  { name: 'Moon Walk', shift: -2, rot: 1, kick: [0, 7, 10], ghost: [11, 15], hats: 'sixteenths', comp: 'arp', lead: 'pluck', cutoff: 2100 },
+  { name: 'Cloud Bounce', shift: 3, rot: 2, kick: [0, 2, 10], hats: 'eighths', comp: 'stabs', lead: 'flute', cutoff: 2600 },
+  { name: 'Starry Glide', shift: -5, rot: 3, kick: [0, 10, 14], hats: 'soft', comp: 'arp', lead: 'bell', cutoff: 2000 },
+  { name: 'Sunny Shuffle', shift: 1, rot: 0, kick: [0, 3, 7, 10], hats: 'swing', swing: 0.24, comp: 'offbeat', lead: 'marimba', cutoff: 2800 }
+];
+function remixOf(s, n) {
+  if (!n || !s.drums) return Object.assign({}, s, { name: '', lead: 'pluck', cutoff: 2300, arp: false });
+  const r = REMIXES[(n - 1) % REMIXES.length], round = Math.floor((n - 1) / REMIXES.length);
+  const len = s.prog.length, sh = r.shift;
+  return Object.assign({}, s, {
+    name: r.name + (round ? ' ' + (round + 1) : ''),
+    prog: s.prog.map((_, i) => s.prog[(i + r.rot) % len].map((m) => m + sh)),
+    bass: s.bass.map((_, i) => s.bass[(i + r.rot) % len] + sh),
+    scale: s.scale.map((m) => m + sh),
+    kick: r.kick, ghost: r.ghost || [], hats: HATS[r.hats],
+    keys: COMP[r.comp] || s.keys, arp: r.comp === 'arp',
+    bassPat: r.kick.map((k, i) => [k, i ? 0.7 : 1, i % 2 ? 7 : 0, i ? 2 : 5]),
+    swing: r.swing || s.swing, lead: r.lead, cutoff: r.cutoff,
+    seed: ((s.seed * 7919 + n * 104729) % 2147483646) + 1,
+    density: clamp(s.density + (((n * 37) % 5) - 2) * 0.04, 0.35, 0.7)
+  });
+}
+const Sound = (function () {
+  let ctx = null, out, musicBus, musicLP, sfxBus, verbSend, keysIn, keysLP, bassIn, drumIn, melIn, wowGain, noise, crackleGain;
+  let song = null, vari = null, songId = '', songStart = 0, step = 0, phrases = null, G = null;
+  const mtof = (m) => 440 * Math.pow(2, (m - 69) / 12);
+
+  function makeNoise(sec) {
+    const b = ctx.createBuffer(1, Math.floor(ctx.sampleRate * sec), ctx.sampleRate), d = b.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    return b;
+  }
+  function makeCrackle(sec) {
+    const b = ctx.createBuffer(1, Math.floor(ctx.sampleRate * sec), ctx.sampleRate), d = b.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = (Math.random() < 0.0007 ? (Math.random() * 2 - 1) * 0.7 : 0) + (Math.random() * 2 - 1) * 0.004;
+    return b;
+  }
+  function makeVerb(sec) {
+    const len = Math.floor(ctx.sampleRate * sec), b = ctx.createBuffer(2, len, ctx.sampleRate);
+    for (let c = 0; c < 2; c++) { const d = b.getChannelData(c); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2.8); }
+    return b;
+  }
+  function filter(type, f, q) { const n = ctx.createBiquadFilter(); n.type = type; n.frequency.value = f; if (q) n.Q.value = q; return n; }
+
+  function init() {
+    if (ctx) { if (ctx.state === 'suspended') ctx.resume(); return; }
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    // iPhone and iPad: play through the speaker even when the silent switch is on
+    try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) { /* older Safari */ }
+    try { ctx = new AC(); } catch (e) { ctx = null; return; }
+    const comp = ctx.createDynamicsCompressor();
+    comp.threshold.value = -16; comp.ratio.value = 3; comp.attack.value = 0.01; comp.release.value = 0.2;
+    out = ctx.createGain(); out.gain.value = 0.9; out.connect(comp); comp.connect(ctx.destination);
+    musicBus = ctx.createGain(); musicLP = filter('lowpass', 16000, 0.5); musicBus.connect(musicLP); musicLP.connect(out);
+    sfxBus = ctx.createGain(); sfxBus.connect(out);
+    const verb = ctx.createConvolver(); verb.buffer = makeVerb(2.4);
+    verbSend = ctx.createGain(); verbSend.gain.value = 0.26; verbSend.connect(verb); verb.connect(musicBus);
+    keysIn = ctx.createGain();
+    keysLP = filter('lowpass', 2300);
+    const trem = ctx.createGain(); trem.gain.value = 0.86;
+    const lfo = ctx.createOscillator(); lfo.frequency.value = 4.2; const lfoG = ctx.createGain(); lfoG.gain.value = 0.12;
+    lfo.connect(lfoG); lfoG.connect(trem.gain); lfo.start();
+    keysIn.connect(keysLP); keysLP.connect(trem); trem.connect(musicBus); trem.connect(verbSend);
+    const wow = ctx.createOscillator(); wow.frequency.value = 0.55; wowGain = ctx.createGain(); wowGain.gain.value = 7; wow.connect(wowGain); wow.start();
+    bassIn = ctx.createGain(); const bLP = filter('lowpass', 520); bassIn.connect(bLP); bLP.connect(musicBus);
+    drumIn = ctx.createGain(); const dLP = filter('lowpass', 6500); drumIn.connect(dLP); dLP.connect(musicBus);
+    melIn = ctx.createGain();
+    const delay = ctx.createDelay(1.5), fb = ctx.createGain(), delLP = filter('lowpass', 2600);
+    delay.delayTime.value = 0.42; fb.gain.value = 0.3;
+    melIn.connect(musicBus); melIn.connect(delay); delay.connect(delLP); delLP.connect(fb); fb.connect(delay); delLP.connect(musicBus); melIn.connect(verbSend);
+    noise = makeNoise(1);
+    crackleGain = ctx.createGain(); crackleGain.gain.value = 0;
+    const cr = ctx.createBufferSource(); cr.buffer = makeCrackle(3.3); cr.loop = true;
+    const cHP = filter('highpass', 1200); cr.connect(cHP); cHP.connect(crackleGain); crackleGain.connect(musicBus); cr.start();
+    newGen();
+    setVolumes();
+    setInterval(tick, 25);
+  }
+  // Notes enter through a per-song "generation" of gains, so a song or remix change
+  // can fade out the notes still ringing from the one before.
+  function newGen() {
+    const old = G;
+    G = { keys: ctx.createGain(), bass: ctx.createGain(), drum: ctx.createGain(), mel: ctx.createGain() };
+    G.keys.connect(keysIn); G.bass.connect(bassIn); G.drum.connect(drumIn); G.mel.connect(melIn);
+    if (!old) return;
+    for (const k in old) old[k].gain.setTargetAtTime(0, ctx.currentTime, 0.06);
+    setTimeout(() => { for (const k in old) { try { old[k].disconnect(); } catch (e) { /* gone */ } } }, 4000);
+  }
+  function setVolumes() {
+    if (!ctx) return;
+    musicBus.gain.setTargetAtTime(save.settings.music * 0.6, ctx.currentTime, 0.05);
+    sfxBus.gain.setTargetAtTime(save.settings.sfx * 0.6, ctx.currentTime, 0.05);
+  }
+
+  // ---- instruments ----
+  function keyNote(t, m, v, dur) {
+    const f = mtof(m), g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(v, t + 0.012);
+    g.gain.exponentialRampToValueAtTime(v * 0.32, t + 0.7);
+    g.gain.setTargetAtTime(0.0001, t + Math.max(0.75, dur), 0.25);
+    const o = ctx.createOscillator(); o.type = 'sine'; o.frequency.value = f;
+    const o2 = ctx.createOscillator(); o2.type = 'sine'; o2.frequency.value = f * 2;
+    const g2 = ctx.createGain(); g2.gain.setValueAtTime(0.5, t); g2.gain.exponentialRampToValueAtTime(0.0001, t + 0.45);
+    wowGain.connect(o.detune);
+    o.connect(g); o2.connect(g2); g2.connect(g); g.connect(G.keys);
+    o.start(t); o2.start(t); o.stop(t + dur + 1.4); o2.stop(t + 0.5);
+    o.onended = () => { try { wowGain.disconnect(o.detune); } catch (e) { /* already gone */ } };
+  }
+  function bassNote(t, m, v, dur) {
+    const f = mtof(m), g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.02);
+    g.gain.setTargetAtTime(v * 0.6, t + 0.05, 0.2); g.gain.setTargetAtTime(0.0001, t + dur, 0.07);
+    const o = ctx.createOscillator(); o.type = 'triangle'; o.frequency.value = f;
+    const o2 = ctx.createOscillator(); o2.type = 'sine'; o2.frequency.value = f;
+    o.connect(g); o2.connect(g); g.connect(G.bass);
+    o.start(t); o2.start(t); o.stop(t + dur + 0.5); o2.stop(t + dur + 0.5);
+  }
+  function kick(t, v) {
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.frequency.setValueAtTime(115, t); o.frequency.exponentialRampToValueAtTime(46, t + 0.12);
+    g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.38);
+    o.connect(g); g.connect(G.drum); o.start(t); o.stop(t + 0.4);
+  }
+  function snare(t, v) {
+    const s = ctx.createBufferSource(); s.buffer = noise;
+    const bp = filter('bandpass', 1700, 0.8), g = ctx.createGain();
+    g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.2);
+    s.connect(bp); bp.connect(g); g.connect(G.drum); g.connect(verbSend);
+    s.start(t, Math.random() * 0.5, 0.25);
+    const o = ctx.createOscillator(); o.type = 'triangle';
+    o.frequency.setValueAtTime(190, t); o.frequency.exponentialRampToValueAtTime(140, t + 0.08);
+    const g2 = ctx.createGain(); g2.gain.setValueAtTime(v * 0.6, t); g2.gain.exponentialRampToValueAtTime(0.0001, t + 0.1);
+    o.connect(g2); g2.connect(G.drum); o.start(t); o.stop(t + 0.12);
+  }
+  function hat(t, v, open) {
+    const s = ctx.createBufferSource(); s.buffer = noise;
+    const hp = filter('highpass', 7000), g = ctx.createGain();
+    g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(0.0001, t + (open ? 0.22 : 0.045));
+    s.connect(hp); hp.connect(g); g.connect(G.drum);
+    s.start(t, Math.random() * 0.5, 0.3);
+  }
+  function pluck(t, m, v, dur, dest) {
+    const f = mtof(m), g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.006);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + Math.max(0.35, dur));
+    const o = ctx.createOscillator(); o.type = 'sine'; o.frequency.value = f;
+    const o2 = ctx.createOscillator(); o2.type = 'sine'; o2.frequency.value = f * 3;
+    const g2 = ctx.createGain(); g2.gain.value = 0.12;
+    o.connect(g); o2.connect(g2); g2.connect(g); g.connect(dest || G.mel);
+    o.start(t); o2.start(t); o.stop(t + dur + 0.45); o2.stop(t + dur + 0.45);
+  }
+  // melody voices for the remixes: a short wooden marimba, a ringing bell, a soft flute
+  function lead(t, m, v, dur, kind) {
+    if (kind !== 'marimba' && kind !== 'bell' && kind !== 'flute') { pluck(t, m, v, dur); return; }
+    const f = mtof(m), g = ctx.createGain(), o = ctx.createOscillator();
+    g.gain.setValueAtTime(0.0001, t);
+    let end;
+    if (kind === 'flute') {
+      o.type = 'triangle'; o.frequency.value = f;
+      const vib = ctx.createOscillator(), vg = ctx.createGain();
+      vib.frequency.value = 5; vg.gain.value = 7; vib.connect(vg); vg.connect(o.detune);
+      g.gain.exponentialRampToValueAtTime(v * 0.75, t + 0.06);
+      g.gain.setTargetAtTime(0.0001, t + Math.max(0.2, dur * 0.9), 0.08);
+      end = t + dur + 0.5; vib.start(t); vib.stop(end);
+    } else {
+      o.type = 'sine'; o.frequency.value = f;
+      const o2 = ctx.createOscillator(), g2 = ctx.createGain();
+      o2.type = 'sine'; o2.frequency.value = f * (kind === 'bell' ? 2.76 : 4);
+      g2.gain.value = kind === 'bell' ? 0.2 : 0.08;
+      o2.connect(g2); g2.connect(g);
+      const decay = kind === 'bell' ? 1.3 : 0.24;
+      g.gain.exponentialRampToValueAtTime(v * (kind === 'bell' ? 0.8 : 1.1), t + 0.004);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + decay);
+      end = t + decay + 0.05; o2.start(t); o2.stop(end);
+    }
+    o.connect(g); g.connect(G.mel); o.start(t); o.stop(end);
+  }
+
+  // ---- scheduler: a 16-bar arrangement that loops its last 12 bars ----
+  function buildPhrases(s) {
+    let seed = s.seed;
+    const r = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+    const slots = [0, 3, 6, 8, 10, 12, 14, 16, 19, 22, 24, 26, 28, 30];
+    const make = () => {
+      const notes = [];
+      let d = 2 + Math.floor(r() * 3);
+      for (const st of slots) {
+        if (r() < s.density) {
+          d = clamp(d + [-2, -1, -1, 0, 1, 1, 2][Math.floor(r() * 7)], 0, s.scale.length - 1);
+          notes.push({ st: st, m: s.scale[d], len: [2, 3, 4][Math.floor(r() * 3)], v: 0.7 + r() * 0.3 });
+        }
+      }
+      return notes;
+    };
+    return [make(), make()];
+  }
+  function sectionOf(bar) { return bar < 16 ? bar : 4 + ((bar - 4) % 12); }
+  function playStep(i, t, d16) {
+    const s = vari, bar = Math.floor(i / 16), st = i % 16, sec = sectionOf(bar);
+    const ci = bar % s.prog.length, chord = s.prog[ci], root = s.bass[ci];
+    const intro = sec < 2, light = sec < 4, brk = sec === 15;
+    if (s.arp) {
+      if (st === 0) chord.forEach((m, k) => keyNote(t + k * 0.012, m, 0.03, d16 * 16));
+      if (!intro && st % 2 === 0) {
+        const order = chord.concat(chord.slice(1, -1).reverse());
+        keyNote(t, order[(st / 2) % order.length] + 12, 0.036, d16 * 3);
+      }
+    } else for (const h of s.keys) {
+      if (h[0] !== st || (intro && st !== 0)) continue;
+      const notes = h[2] >= chord.length ? chord : chord.slice(chord.length - h[2]);
+      notes.forEach((m, k) => keyNote(t + k * 0.012, m, 0.05 * h[1] * (intro ? 0.85 : 1), d16 * h[3]));
+    }
+    if (!intro && !brk) for (const b of s.bassPat) if (b[0] === st) bassNote(t, root + (b[2] || 0), 0.2 * b[1], d16 * b[3]);
+    if (s.drums && !light) {
+      if (s.kick.indexOf(st) >= 0 && !(brk && st > 6)) kick(t, 0.5);
+      if (s.snare.indexOf(st) >= 0 && !brk) snare(t, 0.11);
+      if (s.ghost.indexOf(st) >= 0 && !brk) snare(t, 0.035);
+    }
+    if (!intro) for (const hh of s.hats) if (hh[0] === st) hat(t, hh[1] * 0.07 * (light ? 0.6 : 1), hh[2]);
+    if (sec >= 6 && sec <= 13 && phrases) {
+      const ph = phrases[((sec - 6) >> 1) % 2], pi = (sec % 2) * 16 + st;
+      for (const n of ph) if (n.st === pi) lead(t, n.m, 0.065 * n.v, d16 * n.len, s.lead);
+    }
+  }
+  function tick() {
+    if (!ctx || !song || ctx.state !== 'running') return;
+    const d16 = 60 / song.bpm / 4, ahead = ctx.currentTime + 0.16;
+    for (;;) {
+      const t = songStart + step * d16 + (step % 2 ? vari.swing * d16 : 0);
+      if (t > ahead) break;
+      if (t > ctx.currentTime - 0.04) playStep(step, t, d16);
+      step++;
+    }
+  }
+  function play(id, restart) {
+    if (!ctx) return;
+    if (songId === id && song && !restart) return;
+    songId = id; song = SONGS[id] || SONGS.menu;
+    vari = remixOf(song, 0); phrases = buildPhrases(vari);
+    newGen();
+    keysLP.frequency.setTargetAtTime(vari.cutoff, ctx.currentTime, 0.05);
+    songStart = ctx.currentTime + 0.08; step = 0;
+    crackleGain.gain.setTargetAtTime(0.05, ctx.currentTime, 0.3);
+  }
+  // Attempt n gets remix n, started straight into the full groove (bar 4) and lined
+  // up so the beat falls where it would if the player had run from the start.
+  function remix(n, phaseBeats, id) {
+    const base = song && songId === id ? song : SONGS[id];
+    const v = base ? remixOf(base, n) : null;
+    if (!ctx || !song || songId !== id || !v) return v ? v.name : '';
+    vari = v; phrases = buildPhrases(vari);
+    newGen();
+    keysLP.frequency.setTargetAtTime(vari.cutoff, ctx.currentTime, 0.05);
+    const startBeat = 16 + frac(phaseBeats || 0);
+    songStart = ctx.currentTime + 0.03 - startBeat * 60 / song.bpm;
+    step = Math.floor(startBeat * 4);
+    return vari.name;
+  }
+  function beatAt(perfMs) {
+    if (!ctx || !song) return null;
+    return (ctx.currentTime + (perfMs - performance.now()) / 1000 - songStart) * song.bpm / 60;
+  }
+  function muffle(on) { if (ctx) musicLP.frequency.setTargetAtTime(on ? 700 : 16000, ctx.currentTime, on ? 0.04 : 0.25); }
+  // slow motion: the music goes soft and underwater for the second it lasts
+  function slow(on) {
+    if (!ctx) return;
+    musicLP.frequency.setTargetAtTime(on ? 1400 : 16000, ctx.currentTime, on ? 0.05 : 0.2);
+    blip('sine', on ? 700 : 330, on ? 330 : 700, 0.28, 0.1);
+  }
+
+  // ---- effects ----
+  function blip(type, f0, f1, dur, v, delay) {
+    if (!ctx) return;
+    const t = ctx.currentTime + (delay || 0), o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = type; o.frequency.setValueAtTime(f0, t);
+    if (f1 !== f0) o.frequency.exponentialRampToValueAtTime(f1, t + dur);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.012); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(sfxBus); o.start(t); o.stop(t + dur + 0.05);
+  }
+  function bell(m, v, delay) { if (ctx) pluck(ctx.currentTime + (delay || 0), m, v, 0.5, sfxBus); }
+  function whoosh() {
+    if (!ctx) return;
+    const t = ctx.currentTime, s = ctx.createBufferSource(); s.buffer = noise;
+    const bp = filter('bandpass', 500, 1.2), g = ctx.createGain();
+    bp.frequency.setValueAtTime(500, t); bp.frequency.exponentialRampToValueAtTime(2600, t + 0.3);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.12, t + 0.05); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.34);
+    s.connect(bp); bp.connect(g); g.connect(sfxBus); s.start(t, 0, 0.4);
+  }
+  const sfx = {
+    orb() { blip('sine', 520, 900, 0.14, 0.18); },
+    pad() { blip('triangle', 260, 760, 0.18, 0.16); },
+    portal: whoosh,
+    star() { [84, 88, 91].forEach((m, i) => bell(m, 0.15, i * 0.07)); },
+    right() { bell(76, 0.2, 0); bell(83, 0.2, 0.09); bell(88, 0.14, 0.18); },
+    wrong() { blip('sine', 330, 170, 0.32, 0.2, 0.05); },
+    die() { blip('sine', 240, 90, 0.22, 0.22); },
+    win() { [72, 76, 79, 84, 88, 91].forEach((m, i) => bell(m, 0.15, i * 0.09)); },
+    click() { blip('sine', 880, 880, 0.04, 0.05); },
+    check() { blip('sine', 660, 990, 0.09, 0.07); }
+  };
+  return { init, play, remix, beatAt, muffle, slow, setVolumes, sfx, bpm: () => (song ? song.bpm : 80), ready: () => !!ctx };
+})();
+
+/* ================= look ================= */
+const CUBES = [
+  { name: 'Sky', fill: '#5cb8ff', edge: '#3a8fd6', need: 0 },
+  { name: 'Mint', fill: '#4fd1a5', edge: '#2fa47e', need: 0 },
+  { name: 'Sunny', fill: '#ffc94d', edge: '#df9f22', need: 0 },
+  { name: 'Lilac', fill: '#a98bff', edge: '#7f63e0', need: 0 },
+  { name: 'Bubblegum', fill: '#ff96cb', edge: '#e066a3', need: 3 },
+  { name: 'Tangerine', fill: '#ffa64d', edge: '#e08028', need: 8 },
+  { name: 'Ocean', fill: '#3d8bff', edge: '#2766cc', need: 15 },
+  { name: 'Rainbow', fill: 'rainbow', edge: '#7f63e0', need: 24 }
+];
+const FACES = [
+  { id: 'happy', name: 'Happy', need: 0 }, { id: 'wink', name: 'Wink', need: 10 }, { id: 'cool', name: 'Cool', need: 25 },
+  { id: 'cat', name: 'Kitty', need: 50 }, { id: 'robot', name: 'Robot', need: 100 }
+];
+function rr(g, x, y, w, h, r) {
+  g.beginPath();
+  r = Math.min(r, w / 2, h / 2);
+  g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r);
+  g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath();
+}
+function cubeFill(g, c, s) {
+  if (c.fill !== 'rainbow') return c.fill;
+  const gr = g.createLinearGradient(-s / 2, -s / 2, s / 2, s / 2);
+  ['#ff9aa8', '#ffc77a', '#ffe68a', '#9fe3be', '#8ccfff', '#b9a3ff'].forEach((col, i) => gr.addColorStop(i / 5, col));
+  return gr;
+}
+function drawCube(g, x, y, s, rot, ci, fi, sq, faceRot) {
+  const c = CUBES[ci] || CUBES[0], face = (FACES[fi] || FACES[0]).id, k = sq || 0;
+  g.save(); g.translate(x, y); g.rotate(rot); g.scale(1 + k * 0.12, 1 - k * 0.12);
+  const h = s / 2;
+  if (face === 'cat') {
+    g.fillStyle = c.fill === 'rainbow' ? '#ff9aa8' : c.fill; g.strokeStyle = c.edge; g.lineWidth = s * 0.06; g.lineJoin = 'round';
+    [-1, 1].forEach((d) => { g.beginPath(); g.moveTo(d * s * 0.38, -h + s * 0.12); g.lineTo(d * s * 0.3, -h - s * 0.16); g.lineTo(d * s * 0.1, -h + s * 0.06); g.closePath(); g.fill(); g.stroke(); });
+  }
+  if (face === 'robot') {
+    g.strokeStyle = c.edge; g.lineWidth = s * 0.06; g.beginPath(); g.moveTo(0, -h + s * 0.05); g.lineTo(0, -h - s * 0.14); g.stroke();
+    g.fillStyle = '#ff7b86'; g.beginPath(); g.arc(0, -h - s * 0.16, s * 0.07, 0, 6.283); g.fill();
+  }
+  rr(g, -h + s * 0.04, -h + s * 0.04, s * 0.92, s * 0.92, s * 0.22);
+  g.fillStyle = cubeFill(g, c, s); g.fill();
+  g.lineWidth = s * 0.065; g.strokeStyle = c.edge; g.stroke();
+  rr(g, -h + s * 0.15, -h + s * 0.13, s * 0.32, s * 0.11, s * 0.055); g.fillStyle = 'rgba(255,255,255,.45)'; g.fill();
+  if (faceRot !== undefined) g.rotate(faceRot - rot);
+  const ink = '#2b3658';
+  const eye = (ex, ey) => { g.fillStyle = '#ffffff'; g.beginPath(); g.arc(ex, ey, s * 0.12, 0, 6.283); g.fill(); g.fillStyle = ink; g.beginPath(); g.arc(ex + s * 0.02, ey + s * 0.015, s * 0.062, 0, 6.283); g.fill(); };
+  const smile = (w) => { g.strokeStyle = ink; g.lineWidth = s * 0.06; g.lineCap = 'round'; g.beginPath(); g.arc(0, s * 0.08, s * w, 0.18 * Math.PI, 0.82 * Math.PI); g.stroke(); g.lineCap = 'butt'; };
+  const cheeks = () => { g.fillStyle = 'rgba(255,120,150,.35)'; g.beginPath(); g.arc(-s * 0.28, s * 0.13, s * 0.065, 0, 6.283); g.arc(s * 0.28, s * 0.13, s * 0.065, 0, 6.283); g.fill(); };
+  if (face === 'happy') { eye(-s * 0.17, -s * 0.06); eye(s * 0.17, -s * 0.06); smile(0.17); cheeks(); }
+  else if (face === 'wink') {
+    eye(-s * 0.17, -s * 0.06);
+    g.strokeStyle = ink; g.lineWidth = s * 0.055; g.lineCap = 'round'; g.beginPath(); g.arc(s * 0.17, -s * 0.03, s * 0.08, 1.1 * Math.PI, 1.9 * Math.PI); g.stroke(); g.lineCap = 'butt';
+    smile(0.16); cheeks();
+  } else if (face === 'cool') {
+    g.fillStyle = ink; rr(g, -s * 0.34, -s * 0.15, s * 0.3, s * 0.17, s * 0.06); g.fill(); rr(g, s * 0.04, -s * 0.15, s * 0.3, s * 0.17, s * 0.06); g.fill();
+    g.fillRect(-s * 0.06, -s * 0.11, s * 0.12, s * 0.04);
+    g.fillStyle = 'rgba(255,255,255,.5)'; g.fillRect(-s * 0.3, -s * 0.12, s * 0.08, s * 0.035); g.fillRect(s * 0.08, -s * 0.12, s * 0.08, s * 0.035);
+    smile(0.13);
+  } else if (face === 'cat') {
+    eye(-s * 0.17, -s * 0.06); eye(s * 0.17, -s * 0.06);
+    g.strokeStyle = ink; g.lineWidth = s * 0.045; g.lineCap = 'round';
+    g.beginPath(); g.arc(-s * 0.06, s * 0.1, s * 0.06, 0.1 * Math.PI, 0.9 * Math.PI); g.arc(s * 0.06, s * 0.1, s * 0.06, 0.1 * Math.PI, 0.9 * Math.PI); g.stroke();
+    g.beginPath(); g.moveTo(-s * 0.42, s * 0.06); g.lineTo(-s * 0.26, s * 0.09); g.moveTo(s * 0.42, s * 0.06); g.lineTo(s * 0.26, s * 0.09); g.stroke(); g.lineCap = 'butt';
+  } else if (face === 'robot') {
+    g.fillStyle = '#e9fbff'; rr(g, -s * 0.3, -s * 0.16, s * 0.22, s * 0.18, s * 0.04); g.fill(); rr(g, s * 0.08, -s * 0.16, s * 0.22, s * 0.18, s * 0.04); g.fill();
+    g.fillStyle = '#3fb5d8'; g.fillRect(-s * 0.23, -s * 0.12, s * 0.08, s * 0.1); g.fillRect(s * 0.15, -s * 0.12, s * 0.08, s * 0.1);
+    g.fillStyle = ink; rr(g, -s * 0.18, s * 0.12, s * 0.36, s * 0.1, s * 0.03); g.fill();
+    g.fillStyle = '#e9fbff'; for (let i = 0; i < 3; i++) g.fillRect(-s * 0.13 + i * s * 0.1, s * 0.14, s * 0.05, s * 0.06);
+  }
+  g.restore();
+}
+function hex2rgb(h) { const n = parseInt(h.slice(1), 16); return [n >> 16 & 255, n >> 8 & 255, n & 255]; }
+function mix(a, b, t) {
+  const A = hex2rgb(a), B = hex2rgb(b);
+  return '#' + A.map((v, i) => Math.round(v + (B[i] - v) * clamp(t, 0, 1)).toString(16).padStart(2, '0')).join('');
+}
+// the sky changes as you climb: morning at the bottom, sunset halfway, a starry night at the top
+const SKY = [
+  [0, '#8fd1fb', '#e4f5ff'], [0.45, '#f2a9c4', '#ffe3c6'], [0.75, '#6262b8', '#d29fd2'], [1, '#141a45', '#3d3a8a']
+];
+function skyAt(h) {
+  for (let i = 1; i < SKY.length; i++) {
+    if (h <= SKY[i][0]) { const a = SKY[i - 1], b = SKY[i], t = (h - a[0]) / (b[0] - a[0]); return [mix(a[1], b[1], t), mix(a[2], b[2], t)]; }
+  }
+  return [SKY[SKY.length - 1][1], SKY[SKY.length - 1][2]];
+}
+const BANDS = [
+  { fill: '#9fe3c8', top: '#d4f7ea', edge: '#6cc4a2' },   // rungs 1-10
+  { fill: '#ffd1a6', top: '#ffe8d1', edge: '#e0a77a' },   // rungs 11-20
+  { fill: '#cdbaf5', top: '#ece4ff', edge: '#9b86d6' },   // rungs 21-29
+  { fill: '#ffd45e', top: '#fff0b8', edge: '#e2a526' }    // the top
+];
+const bandOf = (r) => (r >= 30 ? 3 : r > 20 ? 2 : r > 10 ? 1 : 0);
+const WALL = { fill: '#c9d3f0', top: '#e3e9fb', edge: '#a3b0dd', window: '#8494c9', lit: '#ffe9a8' };
+const PANEL = { fill: '#fff3d6', edge: '#f0b544', ink: '#3a3f6b', right: '#bff0da', rightEdge: '#2fae84', wrong: '#ffc2c8', wrongEdge: '#e35d6f' };
+
+/* ================= the climb ================= */
+const D = 4.2, SHAFT = 12, TOP = 30;
+const PH = { G: 42, JV: 21, JVX: 3.6, WALK: 3.0, MAXFALL: 34, DT: 1 / 240 };
+const calm = () => !!save.settings.calm;
+const game = {
+  state: 'menu', rung: 0, row: null, oldRow: null, floors: [], ghost: false, ghostAt: 0,
+  cube: { x: 5.5, y: 0, vx: 0, vy: 0, dir: 1, ground: true },
+  t: 0, simT: 0, buffer: 0, nextRowAt: 0, wrongAt: 0, wrongPlat: null, crashAt: 0, fallFrom: 0,
+  climbing: false, climbStart: 0, climbFalls: 0, climbRight: 0, falls: 0, prev: 'play', pausedAt: 0,
+  rot: 0, face: 0, sq: 0, lastQ: null
+};
+const PLAYING = new Set(['play', 'build', 'wrong', 'falling', 'oops']);
+const inClimb = () => PLAYING.has(game.state);
+
+function layout(n) {
+  const w = n === 4 ? 2.0 : n === 3 ? 2.6 : 2.8;
+  return Array.from({ length: n }, (_, i) => ({ bx: 0.6 + 10.8 * (i + 0.5) / n - w / 2, w: w }));
+}
+function makeRow(r) {
+  const n = r <= 8 ? 2 : r <= 18 ? 3 : 4, q = ladderQuestion(r, n), lay = layout(n);
+  let amp = r >= 14 ? 0.5 + (r - 14) * 0.08 : 0;
+  const room = Math.min.apply(null, lay.map((p) => Math.min(p.bx - 0.15, SHAFT - 0.15 - (p.bx + p.w))));
+  amp = Math.max(0, Math.min(amp, room));
+  return {
+    r: r, y: r * D, q: q, amp: amp, period: Math.max(2.6, 4.8 - (r - 14) * 0.12), phase: Math.random() * 6.283, dir: r % 2 ? 1 : -1, born: game.t,
+    plats: lay.map((p, i) => ({ bx: p.bx, w: p.w, val: q.choices[i], correct: i === q.correct, state: 'live', t: 0, dy: 0, vy: 0 }))
+  };
+}
+function platX(row, p, t) { return p.bx + (row.amp ? row.amp * Math.sin(row.dir * (t - row.born) * 6.2832 / row.period + row.phase) : 0); }
+
+function spawnRow(r) {
+  game.row = makeRow(r);
+  showQuestion(game.row.q);
+  announce('Rung ' + r + '. ' + game.row.q.text.replace('?', 'what') + '. Answers: ' + game.row.q.choices.join(', '));
+}
+function startClimb(fresh) {
+  game.state = 'play'; game.rung = 0; game.floors = []; game.ghost = false; game.oldRow = null; game.wrongPlat = null;
+  game.climbing = false; game.climbRight = 0;
+  if (fresh) { game.climbFalls = 0; game.falls = 0; }
+  const c = game.cube; c.y = 0; c.vy = 0; c.vx = 0; c.ground = true; if (fresh) { c.x = 5.5; c.dir = 1; }
+  $('#oops').hidden = true;
+  Sound.muffle(false);
+  spawnRow(1);
+  updateHud();
+}
+function jump() {
+  const c = game.cube;
+  if (!c.ground || !(game.state === 'play' || game.state === 'build')) return false;
+  c.ground = false; c.vy = PH.JV; c.vx = c.dir * PH.JVX; game.buffer = 0;
+  if (!game.climbing) { game.climbing = true; game.climbStart = game.t; }
+  if (!calm()) burst(c.x + 0.5, c.y, 5, '#ffffff', 2, 0.08, 0.35);
+  return true;
+}
+function press() {
+  if (game.state === 'oops') { if (game.t - game.crashAt > 0.8) continueAfterFall(); return; }
+  if (game.state !== 'play' && game.state !== 'build') return;
+  if (!jump()) game.buffer = 0.12;
+}
+
+function land(p) {
+  const row = game.row, c = game.cube;
+  game.sq = 1;
+  if (p.correct) {
+    p.state = 'right'; p.t = game.t;
+    row.plats.forEach((o) => { if (o !== p) { o.state = 'gone'; o.t = game.t; } });
+    game.floors.push({ y: row.y, cx: platX(row, p, game.t) + p.w / 2, born: game.t, band: bandOf(row.r) });
+    game.rung = row.r; game.climbRight++;
+    if (game.rung > rec.best) { rec.best = game.rung; }
+    mathRight(row.q);
+    Sound.sfx.right();
+    burst(c.x + 0.5, c.y + 0.4, 16, '#9fe3be', 4, 0.1, 0.7);
+    goodQuestion(row.q);
+    game.oldRow = row; game.row = null;
+    if (game.rung >= TOP) { reachTop(); return; }
+    if (game.rung === 10 || game.rung === 20) toast(game.rung === 10 ? 'One third of the way!' : 'Two thirds there!');
+    else if (game.rung === 25) toast('Almost at the top!');
+    game.state = 'build'; game.nextRowAt = game.t + 0.6;
+    updateHud();
+  } else {
+    p.state = 'wrong'; p.t = game.t;
+    game.wrongPlat = p; game.state = 'wrong'; game.wrongAt = game.t;
+    mathWrong(row.q);
+    Sound.sfx.wrong();
+    hideQuestion();
+  }
+}
+function startFall() {
+  const c = game.cube, p = game.wrongPlat;
+  game.state = 'falling'; game.ghost = true; game.ghostAt = game.t;
+  game.fallFrom = game.row ? game.row.r - 1 : game.rung;
+  if (p) { p.state = 'drop'; p.vy = 2; }
+  c.ground = false; c.vy = 3; c.vx = 0;
+  Sound.sfx.portal();
+  Sound.muffle(true);
+}
+function crash() {
+  const c = game.cube, q = game.row ? game.row.q : null;
+  game.state = 'oops'; game.crashAt = game.t;
+  game.falls++; game.climbFalls++; rec.falls++; writeSave();
+  burst(c.x + 0.5, 0.2, 18, '#ffffff', 4, 0.12, 0.7);
+  Sound.sfx.die();
+  $('#oopsTitle').textContent = pick(['Whoops!', 'Down you go!', 'Not that one!']);
+  $('#oopsFact').innerHTML = q ? solvedText(q) : '';
+  $('#oopsHint').textContent = (game.fallFrom > 0 ? 'You fell from rung ' + game.fallFrom + '. ' : '') + 'Tap to climb again';
+  $('#oops').hidden = false;
+  if (q) announce('Wrong answer. ' + q.raw.t.replace('?', String(q.answer)) + (q.raw.t.indexOf('?') >= 0 ? '' : ' equals ' + q.answer) + '. Back to the ground.');
+  game.oopsUntil = game.t + 3.2;
+  updateHud();
+}
+function continueAfterFall() {
+  const name = Sound.remix(game.falls, 0, 'ladder');
+  startClimb(false);
+  if (name) toast('♪ ' + name);
+}
+function reachTop() {
+  game.state = 'top';
+  const time = game.t - game.climbStart;
+  rec.tops++;
+  const firstOrBetter = !rec.bestTime || time < rec.bestTime;
+  if (firstOrBetter) rec.bestTime = time;
+  writeSave();
+  hideQuestion();
+  Sound.sfx.win();
+  confetti();
+  updateHud();
+  setTimeout(() => {
+    if (game.state !== 'top') return;
+    $('#topNote').textContent = firstOrBetter ? (rec.tops === 1 ? 'Your first climb to the top!' : 'A new best time!') : 'Best time so far: ' + fmtTime(rec.bestTime);
+    $('#topStats').innerHTML = stat('Time', fmtTime(time)) + stat('Falls', game.climbFalls) + stat('Answers right', game.climbRight);
+    showScreen('top');
+  }, 1600);
+}
+const fmtTime = (s) => Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+const stat = (k, v) => '<div><dt>' + k + '</dt><dd>' + v + '</dd></div>';
+
+function moveCube(dt) {
+  const c = game.cube;
+  if (c.ground) {
+    c.x += c.dir * PH.WALK * dt;
+    if (c.x <= 0) { c.x = 0; c.dir = 1; } else if (c.x >= SHAFT - 1) { c.x = SHAFT - 1; c.dir = -1; }
+    return;
+  }
+  const oy = c.y;
+  c.vy = Math.max(c.vy - PH.G * dt, -PH.MAXFALL);
+  c.x += c.vx * dt; c.y += c.vy * dt;
+  if (c.x <= 0) { c.x = 0; c.vx = Math.abs(c.vx); c.dir = 1; } else if (c.x >= SHAFT - 1) { c.x = SHAFT - 1; c.vx = -Math.abs(c.vx); c.dir = -1; }
+  if (c.vy > 0) return;
+  const row = game.row;
+  if (game.state === 'play' && row && oy >= row.y - 1e-6 && c.y <= row.y) {
+    const mid = c.x + 0.5;
+    for (const p of row.plats) {
+      if (p.state !== 'live') continue;
+      const px = platX(row, p, game.t);
+      if (mid >= px - 0.1 && mid <= px + p.w + 0.1) { c.y = row.y; c.vy = 0; c.vx = 0; c.ground = true; land(p); return; }
+    }
+  }
+  const floorY = game.ghost ? 0 : game.rung * D;
+  if (oy >= floorY - 1e-6 && c.y <= floorY) {
+    c.y = floorY; c.vy = 0; c.vx = 0; c.ground = true; game.sq = 1;
+    if (game.state === 'falling') crash();
+  }
+}
+function step(dt) {
+  game.t += dt;
+  if (game.state === 'menu') { moveCube(dt); return; }
+  if (game.state === 'build' && game.t >= game.nextRowAt) { game.state = 'play'; spawnRow(game.rung + 1); }
+  if (game.buffer > 0) { game.buffer -= dt; if (game.cube.ground) jump(); }
+  if (game.state === 'wrong') { if (game.t - game.wrongAt >= 0.45) startFall(); return; }
+  if (game.state === 'oops') { if (game.t >= game.oopsUntil) continueAfterFall(); return; }
+  if (game.state === 'top') { moveCube(dt); return; }
+  moveCube(dt);
+  if (game.wrongPlat && game.wrongPlat.state === 'drop') { game.wrongPlat.vy -= PH.G * 0.6 * dt; game.wrongPlat.dy += game.wrongPlat.vy * dt; }
+}
+// where a jump made right now would land (the guide on the lower rungs, and the test bot)
+function predict() {
+  const c = game.cube, row = game.row;
+  let x = c.x, y = c.y, vx = c.dir * PH.JVX, vy = PH.JV, t = 0;
+  const pts = [], h = 1 / 120, floorY = game.rung * D;
+  while (t < 1.8) {
+    const oy = y;
+    vy = Math.max(vy - PH.G * h, -PH.MAXFALL); x += vx * h; y += vy * h; t += h;
+    if (x <= 0) { x = 0; vx = Math.abs(vx); } else if (x >= SHAFT - 1) { x = SHAFT - 1; vx = -Math.abs(vx); }
+    pts.push([x + 0.5, y + 0.5]);
+    if (vy <= 0 && row && oy >= row.y && y <= row.y) {
+      for (let i = 0; i < row.plats.length; i++) {
+        const p = row.plats[i];
+        if (p.state !== 'live') continue;
+        const px = platX(row, p, game.t + t);
+        if (x + 0.5 >= px - 0.1 && x + 0.5 <= px + p.w + 0.1) return { pts: pts, plat: i, x: x, y: row.y, t: t, px: px };
+      }
+    }
+    if (vy <= 0 && oy >= floorY && y <= floorY) return { pts: pts, plat: -1, x: x, y: floorY };
+  }
+  return { pts: pts, plat: -1, x: x, y: y };
+}
+
+/* ================= drawing ================= */
+const cv = $('#game'), cx = cv.getContext('2d');
+let W = 0, H = 0, DPR = 1, U = 40, camY = -1.2;
+const sxp = (x) => W / 2 + (x - SHAFT / 2) * U;
+const syp = (y) => H - (y - camY) * U;
+const FONT = (w, px) => w + ' ' + Math.round(px) + 'px Fredoka, "Arial Rounded MT Bold", ui-rounded, sans-serif';
+function resize() {
+  DPR = Math.min(window.devicePixelRatio || 1, 2);
+  cv.width = Math.max(1, Math.round(window.innerWidth * DPR)); cv.height = Math.max(1, Math.round(window.innerHeight * DPR));
+  W = cv.width; H = cv.height;
+  U = Math.min(H / 15, W / 16.5);
+}
+function mulberry(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const sr = mulberry(21);
+const STARS = Array.from({ length: 90 }, () => ({ x: sr(), y: sr(), r: 0.6 + sr() * 1.5, ph: sr() * 6.28 }));
+const CLOUDS = Array.from({ length: 34 }, (_, i) => ({ x: -9 + sr() * 30, y: 3 + i * 3.6 + sr() * 2, s: 0.8 + sr() * 1.1, puffs: Array.from({ length: 4 }, () => [sr() * 1.6 - 0.8, sr() * 0.35 - 0.15, 0.35 + sr() * 0.35]) }));
+const heightNow = () => clamp((camY + H / U / 2) / (TOP * D), 0, 1);
+
+function drawSky(now) {
+  const h = heightNow(), s = skyAt(h);
+  const g = cx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, s[0]); g.addColorStop(1, s[1]);
+  cx.fillStyle = g; cx.fillRect(0, 0, W, H);
+  const starA = clamp((h - 0.55) / 0.3, 0, 1);
+  if (starA > 0) {
+    cx.fillStyle = '#ffffff';
+    for (const st of STARS) { cx.globalAlpha = starA * (calm() ? 0.75 : 0.5 + 0.35 * Math.sin(now / 1500 + st.ph)); cx.beginPath(); cx.arc(st.x * W, st.y * H * 0.85, st.r * DPR, 0, 6.283); cx.fill(); }
+    cx.globalAlpha = 1;
+  }
+  const r = U * 1.3, x = W * 0.84, y = H * 0.2;
+  const sunA = clamp(1 - h * 1.8, 0, 1), moonA = clamp((h - 0.5) * 2.5, 0, 1);
+  if (sunA > 0) { cx.globalAlpha = sunA; cx.fillStyle = '#fff3c4'; cx.beginPath(); cx.arc(x, y, r, 0, 6.283); cx.fill(); }
+  if (moonA > 0) { cx.globalAlpha = moonA; cx.fillStyle = '#f4f0d6'; cx.beginPath(); cx.arc(x, y, r * 0.85, 0, 6.283); cx.fill(); cx.fillStyle = s[0]; cx.beginPath(); cx.arc(x + r * 0.35, y - r * 0.2, r * 0.7, 0, 6.283); cx.fill(); }
+  cx.globalAlpha = 1;
+}
+function drawClouds() {
+  const h = heightNow(), col = mix('#ffffff', '#8a86c9', clamp((h - 0.5) * 2, 0, 1));
+  cx.fillStyle = col; cx.globalAlpha = 0.75;
+  for (const c of CLOUDS) {
+    const y = H - (c.y - camY * 0.6) * U, x = W / 2 + (c.x - 6) * U * 1.15, s = c.s * U;
+    if (y < -s * 2 || y > H + s * 2) continue;
+    cx.beginPath();
+    for (const p of c.puffs) { cx.moveTo(x + p[0] * s + p[2] * s, y + p[1] * s); cx.arc(x + p[0] * s, y + p[1] * s, p[2] * s, 0, 6.283); }
+    cx.fill();
+  }
+  cx.globalAlpha = 1;
+}
+function drawGround() {
+  const gy = syp(0);
+  if (gy > H + U * 4) return;
+  cx.fillStyle = '#a2dbc4';
+  cx.beginPath(); cx.moveTo(0, gy);
+  for (let x = 0; x <= W + 10; x += 10 * DPR) cx.lineTo(x, gy - (1.1 + Math.sin(x / U * 0.35) * 0.6 + Math.sin(x / U * 0.13 + 1) * 0.5) * U * 1.2);
+  cx.lineTo(W, gy); cx.closePath(); cx.fill();
+  cx.fillStyle = '#7cc6a5'; cx.fillRect(0, gy, W, H - gy + 2);
+  cx.fillStyle = '#abe6c9'; cx.fillRect(0, gy, W, U * 0.18);
+}
+function drawWalls() {
+  const yTop = camY + H / U + 1, yBot = Math.max(camY - 1, -0.5);
+  const bh = 0.7;
+  for (const side of [-1, 1]) {
+    const x0 = side < 0 ? -1.5 : SHAFT, x1 = x0 + 1.5;
+    for (let j = Math.floor(yBot / bh); j * bh < yTop; j++) {
+      const y = j * bh, off = (j % 2) ? 0.75 : 0;
+      for (let k = -1; k < 2; k++) {
+        const bx = Math.max(x0, x0 + k * 1.5 + off), bx2 = Math.min(x1, x0 + (k + 1) * 1.5 + off);
+        if (bx2 - bx < 0.05) continue;
+        rr(cx, sxp(bx) + 1, syp(y + bh) + 1, (bx2 - bx) * U - 2, bh * U - 2, U * 0.12);
+        cx.fillStyle = WALL.fill; cx.fill();
+      }
+    }
+    cx.fillStyle = 'rgba(255,255,255,.18)'; cx.fillRect(sxp(x0), syp(yTop), U * 0.1, (yTop - yBot) * U);
+  }
+  // little windows that light up at night, and the rung numbers on the left wall
+  const night = clamp((heightNow() - 0.55) / 0.3, 0, 1);
+  for (let k = 0; k <= TOP; k++) {
+    const y = k * D;
+    if (y < yBot - D || y > yTop + 1) continue;
+    for (const side of [-1, 1]) {
+      const wx = side < 0 ? -1.05 : SHAFT + 0.45;
+      rr(cx, sxp(wx), syp(y + 2.6), U * 0.6, U * 0.9, U * 0.25);
+      cx.fillStyle = mix(WALL.window, WALL.lit, night); cx.fill();
+    }
+    if (k > 0) {
+      const on = k <= game.rung;
+      rr(cx, sxp(-1.35), syp(y + 0.15) - U * 0.62, U * 1.1, U * 0.62, U * 0.2);
+      cx.fillStyle = on ? '#ffffff' : 'rgba(255,255,255,.55)'; cx.fill();
+      cx.fillStyle = on ? '#2a9f78' : '#5d6890'; cx.font = FONT(700, U * 0.42); cx.textAlign = 'center'; cx.textBaseline = 'middle';
+      cx.fillText(String(k), sxp(-0.8), syp(y + 0.15) - U * 0.3);
+    }
+  }
+  if (rec.best > game.rung) { // a mark still ahead to beat; while setting a record it would only sit under the cube
+    const y = rec.best * D, fx = sxp(SHAFT + 0.2), fy = syp(y + 1.6);
+    if (fy > -U * 2 && fy < H + U * 2) {
+      cx.strokeStyle = '#7a6a4f'; cx.lineWidth = U * 0.07; cx.beginPath(); cx.moveTo(fx, syp(y)); cx.lineTo(fx, fy); cx.stroke();
+      cx.fillStyle = '#ffd45e'; cx.beginPath(); cx.moveTo(fx, fy); cx.lineTo(fx + U * 0.9, fy + U * 0.3); cx.lineTo(fx, fy + U * 0.6); cx.closePath(); cx.fill();
+      cx.fillStyle = '#4a3500'; cx.font = FONT(700, U * 0.32); cx.textAlign = 'left'; cx.textBaseline = 'middle'; cx.fillText('Best', fx + U * 0.12, fy - U * 0.25);
+    }
+  }
+}
+function drawBlock(x, yTop, w, band, alpha) {
+  const c = BANDS[band];
+  cx.globalAlpha = alpha;
+  rr(cx, sxp(x) + U * 0.04, syp(yTop) + U * 0.02, w * U - U * 0.08, U * 0.72, U * 0.2);
+  cx.fillStyle = c.fill; cx.fill(); cx.lineWidth = Math.max(1, U * 0.05); cx.strokeStyle = c.edge; cx.stroke();
+  rr(cx, sxp(x) + U * 0.14, syp(yTop) + U * 0.1, w * U - U * 0.28, U * 0.16, U * 0.08); cx.fillStyle = c.top; cx.fill();
+  cx.globalAlpha = 1;
+}
+function drawFloors() {
+  const fade = game.ghost ? clamp(1 - (game.t - game.ghostAt) / 0.9, 0.18, 1) * (game.state === 'oops' ? clamp(1 - (game.t - game.crashAt) / 1.2, 0, 1) : 1) : 1;
+  for (const f of game.floors) {
+    if (syp(f.y) < -U || syp(f.y) > H + U * 2) continue;
+    const reach = (game.t - f.born) * 26 + 1.4;
+    for (let i = 0; i < SHAFT; i++) {
+      if (Math.abs(i + 0.5 - f.cx) > reach) continue;
+      drawBlock(i, f.y, 1, f.band, fade);
+    }
+  }
+}
+function fitText(text, maxW, maxH, weight) {
+  let size = maxH; cx.font = FONT(weight || 700, size);
+  const w = cx.measureText(text).width;
+  if (w > maxW) { size *= maxW / w; cx.font = FONT(weight || 700, size); }
+}
+function drawRow(row, now) {
+  if (!row) return;
+  const pop = clamp((game.t - row.born) / 0.25, 0, 1);
+  for (const p of row.plats) {
+    let a = 1, sc = pop, fill = PANEL.fill, edge = PANEL.edge;
+    if (p.state === 'gone') { const k = clamp((game.t - p.t) / 0.3, 0, 1); a = 1 - k; sc = 1 - k * 0.3; if (a <= 0) continue; }
+    if (p.state === 'right') { fill = PANEL.right; edge = PANEL.rightEdge; a = clamp(1 - (game.t - p.t - 0.25) / 0.3, 0, 1); if (a <= 0) continue; }
+    if (p.state === 'wrong' || p.state === 'drop') { fill = PANEL.wrong; edge = PANEL.wrongEdge; }
+    const x = platX(row, p, game.t), y = row.y + p.dy, w = p.w;
+    const cxm = sxp(x + w / 2), cym = syp(y) + U * 0.45;
+    const shake = p.state === 'wrong' && !calm() ? Math.sin((game.t - p.t) * 60) * U * 0.05 : 0;
+    cx.save(); cx.globalAlpha = a; cx.translate(cxm + shake, cym); cx.scale(sc, sc);
+    if (p.state === 'drop') cx.rotate((game.t - p.t) * 1.5);
+    rr(cx, -w * U / 2, -U * 0.45, w * U, U * 0.9, U * 0.28);
+    cx.fillStyle = fill; cx.fill(); cx.lineWidth = Math.max(2, U * 0.08); cx.strokeStyle = edge; cx.stroke();
+    cx.fillStyle = PANEL.ink; cx.textAlign = 'center'; cx.textBaseline = 'middle';
+    fitText(String(p.val), w * U * 0.8, U * 0.66);
+    cx.fillText(String(p.val), 0, U * 0.03);
+    if (p.state === 'wrong' || p.state === 'drop') {
+      cx.strokeStyle = PANEL.wrongEdge; cx.lineWidth = U * 0.05; cx.beginPath();
+      cx.moveTo(-w * U * 0.1, -U * 0.45); cx.lineTo(w * U * 0.02, -U * 0.05); cx.lineTo(-w * U * 0.06, U * 0.2); cx.lineTo(w * U * 0.08, U * 0.45); cx.stroke();
+    }
+    cx.restore();
+  }
+}
+function drawGuide() {
+  const row = game.row, c = game.cube;
+  if (!row || game.state !== 'play' || !c.ground || row.r > 20) return;
+  const pr = predict(), pts = pr.pts, show = row.r <= 10 ? pts.length : Math.floor(pts.length * 0.35);
+  cx.fillStyle = 'rgba(255,255,255,.85)';
+  for (let i = 3; i < show; i += 5) { cx.beginPath(); cx.arc(sxp(pts[i][0]), syp(pts[i][1]), U * 0.07, 0, 6.283); cx.fill(); }
+  if (row.r <= 10 && pr.plat >= 0) {
+    cx.strokeStyle = 'rgba(255,255,255,.9)'; cx.lineWidth = U * 0.06;
+    cx.beginPath(); cx.ellipse(sxp(pr.x + 0.5), syp(pr.y), U * 0.45, U * 0.14, 0, 0, 6.283); cx.stroke();
+  }
+}
+function drawTop() {
+  const y = TOP * D;
+  if (syp(y) > H + U * 4 || syp(y) < -U * 6) return;
+  const x = sxp(SHAFT / 2), by = syp(y + 2.6);
+  cx.save(); cx.translate(x, by);
+  cx.fillStyle = '#ffd45e'; cx.strokeStyle = '#e2a526'; cx.lineWidth = U * 0.08; cx.lineJoin = 'round';
+  cx.beginPath(); cx.moveTo(-U * 0.9, U * 0.5); cx.lineTo(-U * 0.9, -U * 0.2); cx.lineTo(-U * 0.45, U * 0.15); cx.lineTo(0, -U * 0.55); cx.lineTo(U * 0.45, U * 0.15); cx.lineTo(U * 0.9, -U * 0.2); cx.lineTo(U * 0.9, U * 0.5); cx.closePath();
+  cx.fill(); cx.stroke();
+  cx.restore();
+}
+/* particles */
+const parts = [];
+function burst(x, y, n, color, speed, size, life) {
+  if (calm()) n = Math.ceil(n / 3);
+  for (let i = 0; i < n; i++) { const a = Math.random() * 6.283, v = speed * (0.4 + Math.random() * 0.8); parts.push({ x: x, y: y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, r: size * (0.5 + Math.random() * 0.8), life: life * (0.6 + Math.random() * 0.6), t: 0, c: color, g: 0 }); }
+}
+function confetti() {
+  const cols = ['#ff9aa8', '#ffc77a', '#ffe68a', '#9fe3be', '#8ccfff', '#b9a3ff'];
+  for (let i = 0; i < (calm() ? 30 : 90); i++) parts.push({ x: Math.random() * SHAFT, y: TOP * D + 6 + Math.random() * 4, vx: (Math.random() - 0.5) * 2, vy: -1 - Math.random() * 2, r: 0.09 + Math.random() * 0.08, life: 3 + Math.random() * 2, t: 0, c: pick(cols), g: -0.4, sq: true });
+}
+function stepParts(dt) {
+  for (let i = parts.length - 1; i >= 0; i--) { const q = parts[i]; q.t += dt; if (q.t >= q.life) { parts.splice(i, 1); continue; } q.x += q.vx * dt; q.y += q.vy * dt; q.vy += q.g * dt; q.vx *= 0.985; if (!q.g) q.vy *= 0.985; }
+}
+function drawParts() {
+  for (const q of parts) {
+    cx.globalAlpha = Math.max(0, 1 - q.t / q.life) * 0.9; cx.fillStyle = q.c;
+    if (q.sq) { const s = q.r * U; cx.save(); cx.translate(sxp(q.x), syp(q.y)); cx.rotate(q.t * 3 + q.x); cx.fillRect(-s, -s * 0.6, s * 2, s * 1.2); cx.restore(); }
+    else { cx.beginPath(); cx.arc(sxp(q.x), syp(q.y), q.r * U, 0, 6.283); cx.fill(); }
+  }
+  cx.globalAlpha = 1;
+}
+function render(now, dt) {
+  const viewH = H / U, c = game.cube;
+  let target;
+  if (game.state === 'menu') target = -1.2;
+  else if (game.state === 'falling') target = c.y - viewH * 0.45;
+  else if (game.state === 'top') target = TOP * D - viewH * 0.3;
+  else target = game.rung * D - viewH * 0.27;
+  target = Math.max(-1.2, target);
+  camY += (target - camY) * Math.min(1, dt * (game.state === 'falling' ? 10 : 3.5));
+  drawSky(now);
+  drawClouds();
+  drawGround();
+  drawWalls();
+  drawFloors();
+  drawTop();
+  drawRow(game.oldRow, now);
+  drawRow(game.row, now);
+  drawGuide();
+  // the cube: spins in the air, settles the right way up on landing
+  if (c.ground) {
+    const tgt = Math.round(game.rot / (Math.PI / 2)) * (Math.PI / 2);
+    game.rot += (tgt - game.rot) * Math.min(1, dt * 18);
+    const ft = Math.round(game.face / (2 * Math.PI)) * 2 * Math.PI;
+    game.face += (ft - game.face) * Math.min(1, dt * 9);
+  } else { const spin = (game.state === 'falling' ? 4 : 7) * dt * (c.vx >= 0 ? 1 : -1); game.rot += spin; game.face += spin; }
+  game.sq = Math.max(0, game.sq - dt * 6);
+  drawCube(cx, sxp(c.x + 0.5), syp(c.y + 0.5), U, game.rot, save.cube.color, save.cube.face, calm() ? 0 : game.sq * 0.6, game.face);
+  drawParts();
+}
+
+/* ================= HUD and menus ================= */
+function updateHud() {
+  $('#rungChip').textContent = 'Rung ' + game.rung + ' / ' + TOP;
+  $('#fallChip').textContent = 'Falls ' + game.climbFalls;
+  $('#meterFill').style.height = 'calc(' + (game.rung / TOP * 100).toFixed(1) + '% - 6px)';
+  $('#meterBest').style.bottom = (rec.best / TOP * 100).toFixed(1) + '%';
+}
+function showQuestion(q) {
+  const b = $('#question');
+  b.classList.remove('good'); b.textContent = q.text; b.hidden = false;
+  b.style.animation = 'none'; void b.offsetWidth; b.style.animation = '';
+}
+let qTimer = 0;
+function goodQuestion(q) {
+  const b = $('#question');
+  b.classList.add('good'); b.innerHTML = solvedText(q);
+  clearTimeout(qTimer); qTimer = setTimeout(() => { if (b.classList.contains('good')) b.hidden = true; }, 900);
+}
+function hideQuestion() { clearTimeout(qTimer); $('#question').hidden = true; }
+let toastTimer = 0;
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.hidden = false;
+  t.style.animation = 'none'; void t.offsetWidth; t.style.animation = '';
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, 1500);
+}
+function announce(msg) { $('#announce').textContent = msg; }
+
+const screens = ['home', 'pause', 'top'];
+function showScreen(name) {
+  screens.forEach((s) => { $('#s-' + s).hidden = s !== name; });
+  $('#screens').classList.toggle('dim', name === 'pause' || name === 'top');
+  if (name === 'home') renderHome();
+}
+function renderHome() {
+  const el =document.querySelector('input[name="math"][value="' + save.settings.mathLevel + '"]');
+  if (el) el.checked = true;
+  $('#homeStats').innerHTML = stat('Best rung', rec.best + ' / ' + TOP) + stat('Best time', rec.bestTime ? fmtTime(rec.bestTime) : '–') + stat('Reached top', rec.tops);
+  $('#soundBtn').textContent = save.settings.music > 0 ? 'Music on' : 'Music off';
+}
+function goHome() {
+  game.state = 'menu'; game.row = null; game.oldRow = null; game.floors = []; game.ghost = false; game.rung = 0;
+  const c = game.cube; c.y = 0; c.vy = 0; c.ground = true;
+  $('#hud').hidden = true; $('#oops').hidden = true; hideQuestion();
+  Sound.muffle(false); Sound.play('menu');
+  showScreen('home');
+}
+function play() {
+  Sound.init();
+  Sound.play('ladder', true);
+  showScreen(null);
+  $('#hud').hidden = false;
+  if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+  startClimb(true);
+}
+function pause() {
+  if (!inClimb()) return;
+  game.prev = game.state; game.state = 'pause'; game.pausedAt = performance.now();
+  Sound.muffle(true);
+  $('#pauseInfo').textContent = 'Rung ' + game.rung + ' of ' + TOP + ' · best ' + rec.best;
+  showScreen('pause');
+}
+function resume() {
+  if (game.state !== 'pause') return;
+  showScreen(null);
+  game.state = game.prev; lastFrame = performance.now(); acc = 0;
+  Sound.muffle(game.state === 'oops' || game.state === 'falling');
+}
+$('#playBtn').addEventListener('click', play);
+$('#againBtn').addEventListener('click', play);
+$('#resumeBtn').addEventListener('click', resume);
+$('#restartBtn').addEventListener('click', () => { showScreen(null); startClimb(true); });
+$('#homeBtn').addEventListener('click', goHome);
+$('#topHomeBtn').addEventListener('click', goHome);
+$('#pauseBtn').addEventListener('click', (e) => { e.stopPropagation(); pause(); });
+$('#pauseBtn').addEventListener('pointerdown', (e) => e.stopPropagation());
+$('#soundBtn').addEventListener('click', () => {
+  save.settings.music = save.settings.music > 0 ? 0 : 0.7; writeSave(); Sound.init(); Sound.setVolumes(); renderHome();
+});
+document.addEventListener('change', (e) => { if (e.target.name === 'math') { save.settings.mathLevel = e.target.value; writeSave(); } });
+if (window.ARCADE_HOME) { ['#hubLink', '#topHubLink'].forEach((s) => { const a = $(s); a.href = window.ARCADE_HOME; a.hidden = false; }); }
+
+/* ================= input ================= */
+const JUMP = new Set(['Space', 'ArrowUp', 'KeyW', 'Enter']);
+window.addEventListener('keydown', (e) => {
+  if (JUMP.has(e.code) && inClimb()) { e.preventDefault(); if (!e.repeat) press(); return; }
+  if ((e.code === 'Escape' || e.code === 'KeyP') && !e.repeat) { if (inClimb()) { e.preventDefault(); pause(); } else if (game.state === 'pause') { e.preventDefault(); resume(); } }
+  else if (e.code === 'KeyM' && !e.repeat) { save.settings.music = save.settings.music > 0 ? 0 : 0.7; Sound.init(); Sound.setVolumes(); writeSave(); }
+});
+cv.addEventListener('pointerdown', (e) => { if (!inClimb()) return; e.preventDefault(); press(); });
+cv.addEventListener('contextmenu', (e) => e.preventDefault());
+document.addEventListener('pointerdown', () => Sound.init());
+document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); else Sound.init(); });
+window.addEventListener('blur', () => pause());
+document.addEventListener('gesturestart', (e) => e.preventDefault());
+document.addEventListener('dblclick', (e) => e.preventDefault());
+window.addEventListener('resize', resize);
+
+/* ================= loop ================= */
+let lastFrame = performance.now(), acc = 0;
+function frame(now) {
+  requestAnimationFrame(frame);
+  const dt = Math.min(0.05, Math.max(0, (now - lastFrame) / 1000));
+  lastFrame = now;
+  if (game.state !== 'pause') {
+    acc += dt;
+    while (acc >= PH.DT) { step(PH.DT); acc -= PH.DT; }
+    stepParts(dt);
+  }
+  render(now, dt);
+}
+resize();
+renderHome();
+showScreen('home');
+requestAnimationFrame(frame);
+if (document.fonts && document.fonts.load) document.fonts.load('700 40px Fredoka').catch(() => {});
+window.__ladder = { game, predict, press, rec, save, PH, D, TOP };
+})();
+</script>
+<script>if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('../sw.js').catch(function () {});</script>
+</body>
+</html>
