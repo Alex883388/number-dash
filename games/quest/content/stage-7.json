@@ -141,6 +141,89 @@
             "noun": "etymology",
             "adj": "etymological"
           }
+        },
+        {
+          "w": "vernacular",
+          "def": "the plain, everyday language that ordinary people speak, rather than formal or technical language",
+          "ex": "Scientists writing for children must translate technical terms into the ___, using everyday words.",
+          "pos": "noun"
+        },
+        {
+          "w": "connotation",
+          "def": "a feeling or idea that a word suggests in addition to its basic meaning",
+          "ex": "'Cheap' and 'inexpensive' mean almost the same, but 'cheap' can carry a negative ___ of poor quality.",
+          "pos": "noun",
+          "forms": {
+            "noun": "connotation",
+            "verb": "connote"
+          }
+        },
+        {
+          "w": "ambiguous",
+          "def": "having more than one possible meaning, so that it is unclear",
+          "ex": "The sentence 'I saw her duck' is ___, since 'duck' could be a bird or a quick movement.",
+          "pos": "adj",
+          "ant": [
+            "clear",
+            "unambiguous"
+          ],
+          "forms": {
+            "adj": "ambiguous",
+            "noun": "ambiguity",
+            "adv": "ambiguously"
+          }
+        },
+        {
+          "w": "articulate",
+          "def": "to pronounce sounds or words clearly and carefully",
+          "ex": "Singers are trained to ___ every consonant so that the words can be heard at the back of the hall.",
+          "pos": "verb",
+          "forms": {
+            "verb": "articulate",
+            "noun": "articulation"
+          }
+        },
+        {
+          "w": "colloquial",
+          "def": "used in informal conversation rather than in formal speech or writing",
+          "ex": "'Gonna' is a ___ form of 'going to' and is best avoided in an essay.",
+          "pos": "adj",
+          "syn": [
+            "informal",
+            "conversational"
+          ],
+          "ant": [
+            "formal"
+          ],
+          "forms": {
+            "adj": "colloquial",
+            "noun": "colloquialism"
+          }
+        },
+        {
+          "w": "lexicon",
+          "def": "all the words of a language, or all the words that one person knows",
+          "ex": "The Oxford English Dictionary aims to record the entire ___ of English, from everyday words to rare technical terms.",
+          "pos": "noun",
+          "syn": [
+            "vocabulary"
+          ]
+        },
+        {
+          "w": "polyglot",
+          "def": "a person who can speak many languages",
+          "ex": "The word ___ comes from Greek and means 'many tongues', a fitting name for someone who speaks many languages.",
+          "pos": "noun"
+        },
+        {
+          "w": "denote",
+          "def": "to be a sign of something, or to mean it",
+          "ex": "On most maps, blue lines are used to ___ rivers and streams.",
+          "pos": "verb",
+          "syn": [
+            "represent",
+            "indicate"
+          ]
         }
       ],
       "grammar": [
@@ -209,72 +292,179 @@
           ],
           "a": 0,
           "why": "In 'Such + be + subject + that...', the verb agrees with the singular subject 'the popularity'."
+        },
+        {
+          "q": "___ subtitles, many viewers would be unable to enjoy films in foreign languages.",
+          "opts": [
+            "But for",
+            "Except",
+            "Unless",
+            "Despite"
+          ],
+          "a": 0,
+          "why": "'But for + noun' is a formal way of saying 'If it were not for': But for subtitles... 'Unless' and 'Except' do not work here, and 'Despite' makes no sense."
+        },
+        {
+          "q": "Rarely, if ever, ___ a dictionary taken as long to complete as the Oxford English Dictionary.",
+          "opts": [
+            "has",
+            "have",
+            "did",
+            "was"
+          ],
+          "a": 0,
+          "why": "After 'Rarely, if ever' at the start, invert: has + singular subject + past participle (taken). 'Did' would need the base form 'take'."
+        },
+        {
+          "q": "___ language a child is born into, they will master its basic grammar within the first few years of life.",
+          "opts": [
+            "Whatever",
+            "However",
+            "Whoever",
+            "Wherever"
+          ],
+          "a": 0,
+          "why": "'Whatever + noun' means 'no matter which': whatever language. 'However', 'Whoever' and 'Wherever' cannot come directly before a noun like this."
+        },
+        {
+          "q": "The rules of English spelling are so complex ___ to confuse even many native speakers.",
+          "opts": [
+            "as",
+            "that",
+            "so",
+            "for"
+          ],
+          "a": 0,
+          "why": "The pattern is 'so + adjective + as to + verb': so complex as to confuse. 'That' would need a full clause."
         }
       ],
       "sentences": [
         "English has assimilated words from almost every language it has encountered.",
         "A skilled translator must capture every nuance of the original text.",
         "Little did he realise that his invented word would become so popular.",
-        "English has become the lingua franca of international science."
+        "English has become the lingua franca of international science.",
+        "Rarely, if ever, has a dictionary taken so long to complete.",
+        "Many English words carry connotations that learners find hard to grasp."
       ],
-      "reading": {
-        "title": "Does language shape thought?",
-        "text": "Does the language we speak influence the way we think? The question has fascinated thinkers for generations, and few ideas in linguistics have been as hotly contested.\n\nThe best-known version of the claim is associated with the American linguist Benjamin Lee Whorf, who argued in the 1930s that the structure of a language shapes how its speakers perceive the world. Whorf suggested, for instance, that the Hopi language of North America contained no words for time as Europeans understood it, and that its speakers therefore experienced time differently. Later researchers challenged his analysis, showing that Hopi does in fact have many ways of expressing time, and for several decades the whole idea fell out of favour.\n\nRecent studies, however, have revived interest in a more modest form of the theory. Speakers of Guugu Yimithirr, an Aboriginal language of northern Australia, describe locations using compass directions rather than words such as 'left' and 'right'. Instead of saying 'the cup is to your left', they might say 'the cup is to the north'. Remarkably, speakers appear to keep track of their orientation at all times, even in unfamiliar buildings, an ability that seems closely linked to the demands of their language.\n\nColour offers another intriguing example. Russian has two separate basic words for lighter and darker blue, and in laboratory experiments Russian speakers were slightly quicker than English speakers at telling apart shades that fall on either side of that boundary.\n\nCrucially, none of this suggests that language imprisons thought. English speakers can learn to use compass directions, and anyone can see the difference between two shades of blue. What the evidence implies is subtler: the habits of a language may gently steer attention towards certain features of experience, making some distinctions more automatic than others. In that sense, learning a new language may offer not only new words, but also new ways of noticing.",
-        "qs": [
-          {
-            "type": "tfng",
-            "q": "Whorf's claims about the Hopi language were later shown to be inaccurate.",
-            "opts": [
-              "True",
-              "False",
-              "Not Given"
-            ],
-            "a": 0
-          },
-          {
-            "type": "tfng",
-            "q": "Guugu Yimithirr is spoken by more people today than it was a century ago.",
-            "opts": [
-              "True",
-              "False",
-              "Not Given"
-            ],
-            "a": 2
-          },
-          {
-            "type": "tfng",
-            "q": "In the experiments, Russian speakers could see differences between shades of blue that English speakers were unable to see.",
-            "opts": [
-              "True",
-              "False",
-              "Not Given"
-            ],
-            "a": 1
-          },
-          {
-            "type": "mc",
-            "q": "What does the writer imply about the Guugu Yimithirr speakers' sense of direction?",
-            "opts": [
-              "It is probably sharpened by the constant need to use compass terms when speaking.",
-              "It is something they are born with, whichever language they learn.",
-              "It works less well inside unfamiliar buildings than outdoors.",
-              "It is less reliable than the sense of direction of English speakers."
-            ],
-            "a": 0
-          },
-          {
-            "type": "mc",
-            "q": "Which statement best expresses the writer's overall position?",
-            "opts": [
-              "Language may influence what we pay attention to, but it does not limit what we can think.",
-              "Language completely determines what its speakers are able to think.",
-              "Language has no effect at all on the way people think.",
-              "Whorf's original theory has now been fully confirmed."
-            ],
-            "a": 0
-          }
-        ]
-      },
+      "reading": [
+        {
+          "title": "Does language shape thought?",
+          "text": "Does the language we speak influence the way we think? The question has fascinated thinkers for generations, and few ideas in linguistics have been as hotly contested.\n\nThe best-known version of the claim is associated with the American linguist Benjamin Lee Whorf, who argued in the 1930s that the structure of a language shapes how its speakers perceive the world. Whorf suggested, for instance, that the Hopi language of North America contained no words for time as Europeans understood it, and that its speakers therefore experienced time differently. Later researchers challenged his analysis, showing that Hopi does in fact have many ways of expressing time, and for several decades the whole idea fell out of favour.\n\nRecent studies, however, have revived interest in a more modest form of the theory. Speakers of Guugu Yimithirr, an Aboriginal language of northern Australia, describe locations using compass directions rather than words such as 'left' and 'right'. Instead of saying 'the cup is to your left', they might say 'the cup is to the north'. Remarkably, speakers appear to keep track of their orientation at all times, even in unfamiliar buildings, an ability that seems closely linked to the demands of their language.\n\nColour offers another intriguing example. Russian has two separate basic words for lighter and darker blue, and in laboratory experiments Russian speakers were slightly quicker than English speakers at telling apart shades that fall on either side of that boundary.\n\nCrucially, none of this suggests that language imprisons thought. English speakers can learn to use compass directions, and anyone can see the difference between two shades of blue. What the evidence implies is subtler: the habits of a language may gently steer attention towards certain features of experience, making some distinctions more automatic than others. In that sense, learning a new language may offer not only new words, but also new ways of noticing.",
+          "qs": [
+            {
+              "type": "tfng",
+              "q": "Whorf's claims about the Hopi language were later shown to be inaccurate.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 0
+            },
+            {
+              "type": "tfng",
+              "q": "Guugu Yimithirr is spoken by more people today than it was a century ago.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 2
+            },
+            {
+              "type": "tfng",
+              "q": "In the experiments, Russian speakers could see differences between shades of blue that English speakers were unable to see.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 1
+            },
+            {
+              "type": "mc",
+              "q": "What does the writer imply about the Guugu Yimithirr speakers' sense of direction?",
+              "opts": [
+                "It is probably sharpened by the constant need to use compass terms when speaking.",
+                "It is something they are born with, whichever language they learn.",
+                "It works less well inside unfamiliar buildings than outdoors.",
+                "It is less reliable than the sense of direction of English speakers."
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "Which statement best expresses the writer's overall position?",
+              "opts": [
+                "Language may influence what we pay attention to, but it does not limit what we can think.",
+                "Language completely determines what its speakers are able to think.",
+                "Language has no effect at all on the way people think.",
+                "Whorf's original theory has now been fully confirmed."
+              ],
+              "a": 0
+            }
+          ]
+        },
+        {
+          "title": "A language born in a playground",
+          "text": "Linguists rarely have the chance to watch a language come into existence. Almost every language in use today developed gradually over thousands of years, long before anyone could record how it began. In Nicaragua in the late 1970s and 1980s, however, researchers were able to observe something close to the birth of a new language.\n\nUntil then, deaf people in Nicaragua had few opportunities to meet one another. Most grew up in hearing families and communicated with relatives through simple gestures of their own invention, known as home signs, which were not shared beyond the household. That changed when new schools for deaf children opened in the capital, Managua, bringing hundreds of pupils together for the first time.\n\nThe teachers concentrated on lip-reading and spoken Spanish, with limited success. Outside the classroom, though, in the playground and on the school buses, the children began combining their different home signs into a shared system of communication. Strikingly, when younger children later joined the schools and learnt this system from the older pupils, they did not simply copy it. They made it faster, more regular and more grammatically complex.\n\nIn 1986, the American linguist Judy Kegl was invited to study the children's signing. She and later researchers, notably Ann Senghas, found clear differences between the generations. Older signers, for instance, tended to describe an event such as something rolling down a hill with a single sign showing the whole movement at once, much as hearing people do when they gesture while speaking. Younger signers were more likely to break the event into separate signs for the manner of the movement and for its direction, and then combine them in sequence, a pattern typical of fully developed languages.\n\nMany linguists regard Nicaraguan Sign Language as powerful evidence that children do not merely absorb a language but actively reshape it. The case does not settle every debate about how much of our capacity for grammar is innate. It does suggest, however, that when young minds have a community to communicate with, they can turn a loose collection of gestures into a structured language within a few generations of learners.",
+          "qs": [
+            {
+              "type": "tfng",
+              "q": "Before the new schools opened, deaf people across Nicaragua already shared one common sign language.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 1
+            },
+            {
+              "type": "tfng",
+              "q": "The girls and the boys at the schools developed different versions of the signing system.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 2
+            },
+            {
+              "type": "mc",
+              "q": "According to the passage, how did the younger children change the signing system?",
+              "opts": [
+                "They made it quicker, more consistent and richer in grammar.",
+                "They replaced it with the spoken Spanish taught in class.",
+                "They copied it exactly as the older pupils used it.",
+                "They returned to the home signs used by their own families."
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "What can be inferred from the comparison with hearing people's gestures?",
+              "opts": [
+                "The older signers' descriptions were closer to everyday gesture than to a fully developed language.",
+                "Hearing people in Nicaragua had learnt to sign from the deaf pupils.",
+                "The younger signers could not describe movement at all.",
+                "Gestures made while speaking are more complex than any sign language."
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "Which statement best expresses the main idea of the passage?",
+              "opts": [
+                "A new language arose when deaf children were brought together, and each new group of learners made it more structured.",
+                "Lip-reading is the most effective way to teach deaf children.",
+                "Nicaraguan Sign Language has existed for thousands of years.",
+                "Linguists have proved exactly how much of grammar is innate."
+              ],
+              "a": 0
+            }
+          ]
+        }
+      ],
       "extra": [
         {
           "kind": "collocation",
@@ -347,6 +537,54 @@
           ],
           "a": 0,
           "why": "The idiom is 'lost in translation': meaning or effect that disappears when words change language."
+        },
+        {
+          "kind": "linking",
+          "q": "The island's valleys are deep and steep; ___, whistling a message was often far quicker than walking to deliver it.",
+          "opts": [
+            "hence",
+            "whereas",
+            "albeit",
+            "nonetheless"
+          ],
+          "a": 0,
+          "why": "Quicker whistling is the result of the steep valleys, so we need a cause-and-effect link: hence. The others show contrast or concession."
+        },
+        {
+          "kind": "mainidea",
+          "q": "Which heading best fits this paragraph? 'Some words cross borders more easily than others. Terms for new technology, food and sport are often borrowed directly, so that words like football or sushi sound similar in dozens of languages. Words for basic ideas, such as numbers, body parts and family members, resist borrowing and can remain stable for thousands of years.'",
+          "opts": [
+            "Which kinds of words are most likely to be borrowed",
+            "The international history of football",
+            "Why numbers are difficult to learn",
+            "How new technology is invented"
+          ],
+          "a": 0,
+          "why": "The paragraph contrasts words that are easily borrowed with words that resist borrowing; the other headings pick out single examples."
+        },
+        {
+          "kind": "collocation",
+          "q": "A year spent abroad can ___ a lifelong interest in other cultures.",
+          "opts": [
+            "kindle",
+            "light up",
+            "burn",
+            "fire off"
+          ],
+          "a": 0,
+          "why": "To 'kindle an interest' means to start it, like lighting a small fire. 'Light up', 'burn' and 'fire off' do not combine with 'interest'."
+        },
+        {
+          "kind": "paraphrase",
+          "q": "Which is the closest paraphrase of: 'Each one transposes an ordinary spoken language into whistles.'?",
+          "opts": [
+            "Each turns an existing spoken language into a whistled form.",
+            "Each is a completely new language made only of whistles.",
+            "Each can be understood by speakers of any language.",
+            "Each replaces whistling with ordinary speech."
+          ],
+          "a": 0,
+          "why": "'Transposes into' means changes into another form, and 'an ordinary spoken language' means one that already exists."
         }
       ]
     },
@@ -481,6 +719,65 @@
           "syn": [
             "crumbling"
           ]
+        },
+        {
+          "w": "commuter belt",
+          "def": "the area around a large city where many people who work in the city live",
+          "ex": "House prices in the ___ around London have risen as more workers move out of the capital.",
+          "pos": "phrase"
+        },
+        {
+          "w": "retrofit",
+          "def": "to add new parts or equipment to an older building or machine",
+          "ex": "Engineers are able to ___ old buses with electric motors, so they no longer need diesel.",
+          "pos": "verb"
+        },
+        {
+          "w": "thoroughfare",
+          "def": "a main road through a town or city that many people and vehicles use",
+          "ex": "Once a busy ___ full of lorries, the street is now a quiet avenue lined with trees.",
+          "pos": "noun"
+        },
+        {
+          "w": "municipal",
+          "def": "belonging to, or run by, the local government of a town or city",
+          "ex": "The ___ swimming pool is run by the city council and costs very little to use.",
+          "pos": "adj"
+        },
+        {
+          "w": "repurpose",
+          "def": "to change something so that it can be used for a different purpose",
+          "ex": "Instead of knocking down the old power station, architects chose to ___ it as an art gallery.",
+          "pos": "verb",
+          "syn": [
+            "adapt"
+          ]
+        },
+        {
+          "w": "permeable",
+          "def": "allowing liquids, such as rainwater, to pass through",
+          "ex": "Paving made from ___ materials lets rainwater soak into the ground instead of flooding the street.",
+          "pos": "adj",
+          "ant": [
+            "impermeable",
+            "waterproof"
+          ]
+        },
+        {
+          "w": "footfall",
+          "def": "the number of people who visit a shop, street or area during a period of time",
+          "ex": "After the street was closed to cars, ___ rose and many shops reported higher sales.",
+          "pos": "noun"
+        },
+        {
+          "w": "encroach",
+          "def": "to spread gradually into an area that belongs to something or someone else",
+          "ex": "As the city expanded, new housing began to ___ on the surrounding farmland.",
+          "pos": "verb",
+          "forms": {
+            "verb": "encroach",
+            "noun": "encroachment"
+          }
         }
       ],
       "grammar": [
@@ -549,73 +846,180 @@
           ],
           "a": 0,
           "why": "Use the passive reporting verb with a continuous infinitive for a predicted situation: are expected to be living."
+        },
+        {
+          "q": "It was only when the river flooded the city centre ___ the council took the problem seriously.",
+          "opts": [
+            "that",
+            "which",
+            "what",
+            "so"
+          ],
+          "a": 0,
+          "why": "The cleft pattern is 'It was only when + clause + that...'; it stresses the moment something finally happened."
+        },
+        {
+          "q": "Only once the new metro line had opened ___ traffic in the centre begin to ease.",
+          "opts": [
+            "did",
+            "had",
+            "was",
+            "does"
+          ],
+          "a": 0,
+          "why": "After 'Only once + clause' at the start, invert the main clause; with the base form 'begin' in the past we need 'did'."
+        },
+        {
+          "q": "The old market hall is currently ___ into a library and community centre.",
+          "opts": [
+            "being converted",
+            "been converted",
+            "converting",
+            "to be converted"
+          ],
+          "a": 0,
+          "why": "For a passive action in progress now, use 'is being + past participle': is currently being converted."
+        },
+        {
+          "q": "There is growing evidence ___ green spaces improve the well-being of city residents.",
+          "opts": [
+            "that",
+            "which",
+            "what",
+            "of"
+          ],
+          "a": 0,
+          "why": "'Evidence that + clause' explains what the evidence shows. 'Of' would need a noun or '-ing', and 'which' and 'what' do not fit."
         }
       ],
       "sentences": [
         "Green roofs help to mitigate flooding by soaking up rainwater.",
         "The regeneration of the old docks created thousands of new homes.",
         "Hong Kong is one of the most densely populated places on Earth.",
-        "Cutting down street trees can exacerbate the summer heat."
+        "Cutting down street trees can exacerbate the summer heat.",
+        "The council plans to retrofit its tower blocks with solar panels.",
+        "Architects chose to repurpose the power station as an art gallery."
       ],
-      "reading": {
-        "title": "A stream beneath the motorway",
-        "text": "For much of the late twentieth century, the Cheonggyecheon stream in central Seoul was invisible. It had been covered with concrete in the 1950s and 1960s, and an elevated motorway was later built above it, carrying vast numbers of vehicles through the heart of the South Korean capital.\n\nIn 2003, the city authorities took the unprecedented step of demolishing the motorway and uncovering the stream. Critics predicted that removing such a major road would exacerbate traffic problems and bring the centre to a standstill. In the event, the anticipated gridlock never materialised, partly because the project coincided with a major reorganisation of the city's bus network, which encouraged many commuters to leave their cars at home.\n\nWhen the restored stream opened in 2005, its success with the public was immediate. The banks, lined with walkways, bridges and planting, attracted large numbers of visitors, and the area quickly became one of the city's most popular amenities. Studies also indicated that temperatures along the stream on hot days were several degrees lower than on nearby roads, suggesting that urban waterways can help to mitigate the heat that builds up in dense city centres.\n\nNevertheless, the project has not escaped criticism. Since the original stream had largely dried up, much of the water that flows through it today has to be pumped in from the Han River and from underground sources, at considerable ongoing cost. Some ecologists argue that the result resembles a long, landscaped fountain more than a genuine natural habitat, while others point out that the design gave priority to appearance rather than to the needs of wildlife.\n\nEven so, Cheonggyecheon has inspired planners around the world. Its significance lies less in its precise design than in the question it raised: if a city can live without a motorway that once seemed essential, what other assumptions about urban life might be open to change?",
-        "qs": [
-          {
-            "type": "tfng",
-            "q": "Building the new stream cost less than building the original motorway had done.",
-            "opts": [
-              "True",
-              "False",
-              "Not Given"
-            ],
-            "a": 2
-          },
-          {
-            "type": "tfng",
-            "q": "Most of the water in today's stream reaches it naturally from the stream's original source.",
-            "opts": [
-              "True",
-              "False",
-              "Not Given"
-            ],
-            "a": 1
-          },
-          {
-            "type": "mc",
-            "q": "According to the passage, why did the predicted traffic problems not happen?",
-            "opts": [
-              "Changes to public transport at the same time persuaded many people not to drive.",
-              "Most drivers chose to move out of the city centre.",
-              "A new motorway was built alongside the stream.",
-              "The stream was used as a route for boats instead of cars."
-            ],
-            "a": 0
-          },
-          {
-            "type": "mc",
-            "q": "What can be inferred about the ecologists mentioned in the fourth paragraph?",
-            "opts": [
-              "They doubt that the stream has real value as a home for wildlife.",
-              "They want the stream to be covered with concrete again.",
-              "They believe the water should come only from underground.",
-              "They were responsible for designing the walkways and bridges."
-            ],
-            "a": 0
-          },
-          {
-            "type": "mc",
-            "q": "What is the writer's main purpose in the final paragraph?",
-            "opts": [
-              "to suggest that the project's wider importance lies in challenging fixed ideas about cities",
-              "to recommend that every city should demolish its motorways",
-              "to describe the exact design of the stream in detail",
-              "to argue that the critics of the project were completely wrong"
-            ],
-            "a": 0
-          }
-        ]
-      },
+      "reading": [
+        {
+          "title": "A stream beneath the motorway",
+          "text": "For much of the late twentieth century, the Cheonggyecheon stream in central Seoul was invisible. It had been covered with concrete in the 1950s and 1960s, and an elevated motorway was later built above it, carrying vast numbers of vehicles through the heart of the South Korean capital.\n\nIn 2003, the city authorities took the unprecedented step of demolishing the motorway and uncovering the stream. Critics predicted that removing such a major road would exacerbate traffic problems and bring the centre to a standstill. In the event, the anticipated gridlock never materialised, partly because the project coincided with a major reorganisation of the city's bus network, which encouraged many commuters to leave their cars at home.\n\nWhen the restored stream opened in 2005, its success with the public was immediate. The banks, lined with walkways, bridges and planting, attracted large numbers of visitors, and the area quickly became one of the city's most popular amenities. Studies also indicated that temperatures along the stream on hot days were several degrees lower than on nearby roads, suggesting that urban waterways can help to mitigate the heat that builds up in dense city centres.\n\nNevertheless, the project has not escaped criticism. Since the original stream had largely dried up, much of the water that flows through it today has to be pumped in from the Han River and from underground sources, at considerable ongoing cost. Some ecologists argue that the result resembles a long, landscaped fountain more than a genuine natural habitat, while others point out that the design gave priority to appearance rather than to the needs of wildlife.\n\nEven so, Cheonggyecheon has inspired planners around the world. Its significance lies less in its precise design than in the question it raised: if a city can live without a motorway that once seemed essential, what other assumptions about urban life might be open to change?",
+          "qs": [
+            {
+              "type": "tfng",
+              "q": "Building the new stream cost less than building the original motorway had done.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 2
+            },
+            {
+              "type": "tfng",
+              "q": "Most of the water in today's stream reaches it naturally from the stream's original source.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 1
+            },
+            {
+              "type": "mc",
+              "q": "According to the passage, why did the predicted traffic problems not happen?",
+              "opts": [
+                "Changes to public transport at the same time persuaded many people not to drive.",
+                "Most drivers chose to move out of the city centre.",
+                "A new motorway was built alongside the stream.",
+                "The stream was used as a route for boats instead of cars."
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "What can be inferred about the ecologists mentioned in the fourth paragraph?",
+              "opts": [
+                "They doubt that the stream has real value as a home for wildlife.",
+                "They want the stream to be covered with concrete again.",
+                "They believe the water should come only from underground.",
+                "They were responsible for designing the walkways and bridges."
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "What is the writer's main purpose in the final paragraph?",
+              "opts": [
+                "to suggest that the project's wider importance lies in challenging fixed ideas about cities",
+                "to recommend that every city should demolish its motorways",
+                "to describe the exact design of the stream in detail",
+                "to argue that the critics of the project were completely wrong"
+              ],
+              "a": 0
+            }
+          ]
+        },
+        {
+          "title": "The Great Stink",
+          "text": "In the hot summer of 1858, the River Thames in London smelt so foul that the period became known as the Great Stink. For decades, the city's waste had flowed more or less directly into the river, and as London's population soared, the problem had grown steadily worse. With the stench drifting into the Houses of Parliament, where curtains were soaked in chemicals in an attempt to mask it, politicians who had long delayed action suddenly found the matter impossible to ignore.\n\nWithin weeks, funding was approved for an ambitious scheme designed by Joseph Bazalgette, chief engineer of the city's Metropolitan Board of Works. His plan was to intercept waste before it reached the central stretch of the river and carry it eastwards, beyond the city, through a network of large brick tunnels. Construction occupied much of the following two decades and required some 130 kilometres of main sewers, linked to roughly 1,800 kilometres of smaller street sewers. Along parts of the river, the tunnels were hidden inside newly built embankments, which also created roads and riverside gardens.\n\nBazalgette is often praised for his foresight. Having calculated the pipe sizes the city required, he reportedly doubled them to allow for future growth, a decision that helped the system cope with a population far larger than he could have imagined.\n\nIronically, the scheme was largely motivated by a mistaken belief that disease spread through bad air. In fact, many illnesses were carried by dirty water. By keeping waste away from the drinking water supply, the new sewers nevertheless brought dramatic improvements in public health.\n\nEven so, no design lasts for ever. By the early twenty-first century, heavy rain regularly overwhelmed the Victorian system, sending overflow into the Thames. A new 25-kilometre 'super sewer' beneath the river, completed in the mid-2020s, was built to tackle the problem, a reminder that the hidden structures beneath a city must evolve as the city above them does.",
+          "qs": [
+            {
+              "type": "tfng",
+              "q": "Once the smell reached Parliament, the authorities acted on the problem without much further delay.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 0
+            },
+            {
+              "type": "tfng",
+              "q": "Bazalgette's design was chosen in a competition between several engineers.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 2
+            },
+            {
+              "type": "mc",
+              "q": "What does the writer find ironic about the scheme?",
+              "opts": [
+                "It improved health for a reason that its planners had not understood.",
+                "It made the smell of the river worse instead of better.",
+                "It was paid for by the politicians who had opposed it.",
+                "It was finished long before anyone needed it."
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "What can be inferred about Bazalgette's decision to double the pipe sizes?",
+              "opts": [
+                "It kept the system useful for far longer than it might otherwise have been.",
+                "It made the project too expensive to finish.",
+                "It was criticised as a waste of money by later engineers.",
+                "It caused the overflows that happen during heavy rain today."
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "What is the main point of the final paragraph?",
+              "opts": [
+                "Even a highly successful system must eventually be updated as a city changes.",
+                "The Victorian sewers were badly designed from the start.",
+                "Heavy rain in London is more common than it was in the past.",
+                "The new tunnel will be the last one London ever needs."
+              ],
+              "a": 0
+            }
+          ]
+        }
+      ],
       "extra": [
         {
           "kind": "collocation",
@@ -688,6 +1092,54 @@
           ],
           "a": 0,
           "why": "After 'were' and before 'about' we need an adjective: sceptical (British spelling)."
+        },
+        {
+          "kind": "mainidea",
+          "q": "Which heading best fits this paragraph? 'In a number of cities, old railway lines that no longer carry trains have been turned into raised parks. The Promenade Plantée in Paris, opened in 1993, was one of the first, and New York's High Line later followed its example. Such projects give residents green space without the need to knock down any buildings.'",
+          "opts": [
+            "New life for disused railways",
+            "The history of the Paris metro",
+            "Why trains are faster than cars",
+            "How a railway bridge is built"
+          ],
+          "a": 0,
+          "why": "The paragraph describes old railway lines being turned into parks and the benefit this brings."
+        },
+        {
+          "kind": "collocation",
+          "q": "Planners must ___ a balance between building new homes and protecting green space.",
+          "opts": [
+            "strike",
+            "hit",
+            "beat",
+            "knock"
+          ],
+          "a": 0,
+          "why": "'Strike a balance' is a fixed phrase meaning to find a fair middle point between two needs."
+        },
+        {
+          "kind": "linking",
+          "q": "___ its high cost, the new tram line has proved hugely popular with residents.",
+          "opts": [
+            "For all",
+            "Because of",
+            "Thanks to",
+            "As well as"
+          ],
+          "a": 0,
+          "why": "'For all + noun' is a formal way of saying 'despite'. A high cost does not cause popularity, so 'because of' and 'thanks to' do not fit."
+        },
+        {
+          "kind": "wordform",
+          "q": "The city's population has grown ___ (exponent) over the past fifty years.",
+          "opts": [
+            "exponentially",
+            "exponential",
+            "exponent",
+            "exponents"
+          ],
+          "a": 0,
+          "why": "We need an adverb to describe how it has grown: exponentially, meaning faster and faster."
         }
       ]
     },
@@ -826,6 +1278,83 @@
             "verb": "deploy",
             "noun": "deployment"
           }
+        },
+        {
+          "w": "cosmonaut",
+          "def": "an astronaut from the Soviet Union or Russia",
+          "ex": "Yuri Gagarin, a Soviet ___, became the first person to travel into space in 1961.",
+          "pos": "noun",
+          "syn": [
+            "astronaut"
+          ]
+        },
+        {
+          "w": "luminous",
+          "def": "giving out light, or shining brightly, especially in the dark",
+          "ex": "Through the telescope, the comet appeared as a ___ smudge with a long, faint tail.",
+          "pos": "adj",
+          "syn": [
+            "glowing",
+            "bright"
+          ],
+          "ant": [
+            "dim"
+          ]
+        },
+        {
+          "w": "inhospitable",
+          "def": "very difficult to live or survive in because the conditions are so harsh",
+          "ex": "With its crushing pressure and a surface hot enough to melt lead, Venus is extremely ___.",
+          "pos": "adj",
+          "ant": [
+            "hospitable",
+            "welcoming"
+          ]
+        },
+        {
+          "w": "rendezvous",
+          "def": "a planned meeting, especially of two spacecraft in space",
+          "ex": "After two days in orbit, the capsule made a successful ___ with the space station.",
+          "pos": "noun"
+        },
+        {
+          "w": "microgravity",
+          "def": "the condition of near weightlessness that astronauts experience in orbit",
+          "ex": "In ___, astronauts' muscles weaken, so they must exercise for about two hours a day.",
+          "pos": "noun"
+        },
+        {
+          "w": "terrain",
+          "def": "land of a particular kind, described by what its surface is like",
+          "ex": "The rover was designed to climb over steep, uneven ___ such as the walls of craters.",
+          "pos": "noun",
+          "syn": [
+            "ground",
+            "landscape"
+          ]
+        },
+        {
+          "w": "elliptical",
+          "def": "shaped like a flattened circle; oval",
+          "ex": "Comets follow long, ___ orbits that carry them close to the Sun and then far out again.",
+          "pos": "adj",
+          "syn": [
+            "oval"
+          ],
+          "forms": {
+            "adj": "elliptical",
+            "noun": "ellipse"
+          }
+        },
+        {
+          "w": "jettison",
+          "def": "to throw away something that is no longer needed, especially from a vehicle that is moving",
+          "ex": "Once their fuel is used up, rockets ___ their empty stages, which fall back towards Earth.",
+          "pos": "verb",
+          "syn": [
+            "discard",
+            "dump"
+          ]
         }
       ],
       "grammar": [
@@ -894,72 +1423,179 @@
           ],
           "a": 0,
           "why": "'Whose' shows possession in a relative clause: the telescope's sunshield."
+        },
+        {
+          "q": "At no point ___ the astronauts in any real danger during the spacewalk.",
+          "opts": [
+            "were",
+            "was",
+            "did",
+            "had"
+          ],
+          "a": 0,
+          "why": "'At no point' is negative, so the verb comes before the subject; the plural 'astronauts' needs 'were'."
+        },
+        {
+          "q": "___ through space for more than forty years, Voyager 1 is now the most distant human-made object.",
+          "opts": [
+            "Having travelled",
+            "Travelled",
+            "To travel",
+            "Having been travelled"
+          ],
+          "a": 0,
+          "why": "Voyager has done the travelling (active, over a long earlier period), so use 'Having + past participle'. 'Travel' has no passive."
+        },
+        {
+          "q": "___ a crew ever reach Mars, they will need to grow much of their own food.",
+          "opts": [
+            "Should",
+            "Would",
+            "Had",
+            "Were"
+          ],
+          "a": 0,
+          "why": "'Should + subject + base form' is a formal way to say 'If...ever': Should a crew reach. 'Were' would need 'to reach'."
+        },
+        {
+          "q": "___ that sunlight takes about eight minutes to reach us, we always see the Sun as it was slightly in the past.",
+          "opts": [
+            "Given",
+            "Giving",
+            "Despite",
+            "Although"
+          ],
+          "a": 0,
+          "why": "'Given that + clause' means 'because we know that'. 'Despite' needs a noun, and 'Although that' is not possible."
         }
       ],
       "sentences": [
         "No sooner had the rocket cleared the tower than the crowd cheered.",
         "Astronomers are searching for habitable planets beyond our solar system.",
         "Space debris poses a growing threat to working satellites.",
-        "Reusable rockets have made frequent launches financially feasible."
+        "Reusable rockets have made frequent launches financially feasible.",
+        "Rockets jettison empty stages once their fuel is used up.",
+        "At no point were the astronauts in any real danger."
       ],
-      "reading": {
-        "title": "Time capsules from the asteroids",
-        "text": "Meteorites have been falling to Earth for billions of years, and scientists have long studied them for clues about the early solar system. Yet these natural visitors have a serious drawback: by the time they are found, they have been heated while passing through the atmosphere and have often lain on the ground for years, absorbing water and microbes. Distinguishing what they originally contained from what they have picked up on Earth is notoriously difficult.\n\nTo obtain more reliable material, space agencies have attempted something far more ambitious: collecting rock and dust directly from asteroids and bringing it home. Japan's Hayabusa2 mission returned samples from the asteroid Ryugu in 2020, and NASA's OSIRIS-REx spacecraft delivered material from the asteroid Bennu in 2023. In both cases, the samples were sealed inside capsules, protected during their fiery descent and opened only in specially designed clean rooms.\n\nThe reason for such precautions is that asteroids like Ryugu and Bennu are thought to have changed relatively little since the solar system formed around four and a half billion years ago. They therefore act as time capsules, preserving the raw ingredients from which the planets were assembled. Analyses of both samples have revealed water-bearing minerals and a variety of carbon-based molecules, including some of the amino acids that living things use to build proteins.\n\nThese findings do not mean that life existed on the asteroids. They do, however, lend weight to the idea that some of the building blocks of life may have been delivered to the early Earth from space. Equally importantly, because the material has never been exposed to Earth's environment, researchers can be considerably more confident that what they detect was genuinely present in space.\n\nPerhaps the most far-sighted decision was to set aside a large part of the material, untouched, for future generations. Scientists recognise that instruments not yet invented may one day answer questions that nobody has yet thought to ask.",
-        "qs": [
-          {
-            "type": "tfng",
-            "q": "Meteorites can be altered by conditions on Earth after they land.",
-            "opts": [
-              "True",
-              "False",
-              "Not Given"
-            ],
-            "a": 0
-          },
-          {
-            "type": "tfng",
-            "q": "The Bennu samples contained a greater number of amino acids than the Ryugu samples.",
-            "opts": [
-              "True",
-              "False",
-              "Not Given"
-            ],
-            "a": 2
-          },
-          {
-            "type": "tfng",
-            "q": "The writer states that the samples prove life once existed on the asteroids.",
-            "opts": [
-              "True",
-              "False",
-              "Not Given"
-            ],
-            "a": 1
-          },
-          {
-            "type": "mc",
-            "q": "Why were the samples most likely opened only in special clean rooms?",
-            "opts": [
-              "to avoid mixing material from Earth with material from space",
-              "to protect scientists from dangerous chemicals",
-              "to keep the samples at a very high temperature",
-              "to allow members of the public to watch"
-            ],
-            "a": 0
-          },
-          {
-            "type": "mc",
-            "q": "Why does the writer mention instruments 'not yet invented'?",
-            "opts": [
-              "to explain why some of the material has deliberately been left unstudied",
-              "to criticise the quality of the equipment used today",
-              "to suggest that the missions were launched too early",
-              "to warn that the samples will soon be used up"
-            ],
-            "a": 0
-          }
-        ]
-      },
+      "reading": [
+        {
+          "title": "Time capsules from the asteroids",
+          "text": "Meteorites have been falling to Earth for billions of years, and scientists have long studied them for clues about the early solar system. Yet these natural visitors have a serious drawback: by the time they are found, they have been heated while passing through the atmosphere and have often lain on the ground for years, absorbing water and microbes. Distinguishing what they originally contained from what they have picked up on Earth is notoriously difficult.\n\nTo obtain more reliable material, space agencies have attempted something far more ambitious: collecting rock and dust directly from asteroids and bringing it home. Japan's Hayabusa2 mission returned samples from the asteroid Ryugu in 2020, and NASA's OSIRIS-REx spacecraft delivered material from the asteroid Bennu in 2023. In both cases, the samples were sealed inside capsules, protected during their fiery descent and opened only in specially designed clean rooms.\n\nThe reason for such precautions is that asteroids like Ryugu and Bennu are thought to have changed relatively little since the solar system formed around four and a half billion years ago. They therefore act as time capsules, preserving the raw ingredients from which the planets were assembled. Analyses of both samples have revealed water-bearing minerals and a variety of carbon-based molecules, including some of the amino acids that living things use to build proteins.\n\nThese findings do not mean that life existed on the asteroids. They do, however, lend weight to the idea that some of the building blocks of life may have been delivered to the early Earth from space. Equally importantly, because the material has never been exposed to Earth's environment, researchers can be considerably more confident that what they detect was genuinely present in space.\n\nPerhaps the most far-sighted decision was to set aside a large part of the material, untouched, for future generations. Scientists recognise that instruments not yet invented may one day answer questions that nobody has yet thought to ask.",
+          "qs": [
+            {
+              "type": "tfng",
+              "q": "Meteorites can be altered by conditions on Earth after they land.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 0
+            },
+            {
+              "type": "tfng",
+              "q": "The Bennu samples contained a greater number of amino acids than the Ryugu samples.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 2
+            },
+            {
+              "type": "tfng",
+              "q": "The writer states that the samples prove life once existed on the asteroids.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 1
+            },
+            {
+              "type": "mc",
+              "q": "Why were the samples most likely opened only in special clean rooms?",
+              "opts": [
+                "to avoid mixing material from Earth with material from space",
+                "to protect scientists from dangerous chemicals",
+                "to keep the samples at a very high temperature",
+                "to allow members of the public to watch"
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "Why does the writer mention instruments 'not yet invented'?",
+              "opts": [
+                "to explain why some of the material has deliberately been left unstudied",
+                "to criticise the quality of the equipment used today",
+                "to suggest that the missions were launched too early",
+                "to warn that the samples will soon be used up"
+              ],
+              "a": 0
+            }
+          ]
+        },
+        {
+          "title": "One twin in orbit",
+          "text": "Sending people on long journeys to Mars will require a detailed understanding of how the human body copes with months in space. One of the most unusual experiments in this field took advantage of a rare opportunity. In 2015, the American astronaut Scott Kelly began a stay of almost a year aboard the International Space Station, while his identical twin brother, Mark, also a former astronaut, remained on Earth. Because the brothers share the same genes, scientists could compare them to see which changes might be caused by spaceflight itself.\n\nTen research teams examined everything from the brothers' blood and gut bacteria to their thinking skills. Some of the findings were striking. In microgravity, body fluids shift towards the head, and Scott showed changes in his eyes and in the walls of a major artery in his neck. The caps at the ends of his chromosomes, known as telomeres, which normally shorten with age, unexpectedly grew longer during the mission, only to shorten rapidly once he returned. Many of his genes also changed their level of activity.\n\nReassuringly, most of these changes faded within months of his return to Earth. His immune system responded normally to a flu vaccine given in space, and the bacteria in his gut, which had altered during the flight, returned to something close to their earlier state. However, a small proportion of the changes in gene activity persisted for at least six months, and his performance in some mental tests declined slightly after landing.\n\nThe researchers were careful not to overstate their conclusions. A study of a single pair of people cannot show which effects would appear in every astronaut, and some differences between the twins may have had other causes. Nevertheless, the project provided a valuable starting point, identifying areas that deserve closer study before crews undertake the far longer voyages that a mission to Mars would involve.",
+          "qs": [
+            {
+              "type": "tfng",
+              "q": "Mark Kelly had never travelled into space himself.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 1
+            },
+            {
+              "type": "tfng",
+              "q": "Scott Kelly was selected for the mission because he had a twin brother.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 2
+            },
+            {
+              "type": "mc",
+              "q": "What happened to Scott Kelly's telomeres?",
+              "opts": [
+                "Contrary to expectations, they lengthened in space but quickly shortened after he came back.",
+                "They shortened in space and then grew back to their normal length on Earth.",
+                "They stayed exactly the same throughout the study.",
+                "They grew longer in space and remained longer for years afterwards."
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "Why was it useful that the brothers were identical twins?",
+              "opts": [
+                "Any differences between them were unlikely to be caused by their genes.",
+                "They could both live on the space station at the same time.",
+                "Identical twins are known to cope better with spaceflight.",
+                "It meant that the study could include many more people."
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "What is the main purpose of the final paragraph?",
+              "opts": [
+                "to point out the limits of the study while recognising its value",
+                "to argue that the study proved spaceflight is safe for everyone",
+                "to suggest that a mission to Mars should be cancelled",
+                "to describe the next experiment that the twins will take part in"
+              ],
+              "a": 0
+            }
+          ]
+        }
+      ],
       "extra": [
         {
           "kind": "collocation",
@@ -1032,6 +1668,54 @@
           ],
           "a": 0,
           "why": "We need an adjective meaning 'not changed': unchanged. 'Unchangeable' means it cannot be changed."
+        },
+        {
+          "kind": "mainidea",
+          "q": "Which heading best fits this paragraph? 'On the International Space Station, water is far too precious to waste. Moisture from the crew's breath and sweat is collected from the air, and even urine is filtered and purified. As a result, almost all of the station's water is recycled and used again.'",
+          "opts": [
+            "How the space station recycles its water",
+            "Why astronauts drink less water than people on Earth",
+            "The dangers of sweating in space",
+            "How water was discovered on the Moon"
+          ],
+          "a": 0,
+          "why": "Every sentence explains how water is collected, cleaned and reused on board the station."
+        },
+        {
+          "kind": "collocation",
+          "q": "The discovery of ice on the Moon has ___ fresh impetus to plans for a lunar base.",
+          "opts": [
+            "given",
+            "made",
+            "taken",
+            "done"
+          ],
+          "a": 0,
+          "why": "We 'give impetus to' a plan, meaning we make it move forward faster; make, take and do do not go with 'impetus'."
+        },
+        {
+          "kind": "paraphrase",
+          "q": "Which sentence means the same as: 'The researchers were careful not to overstate their conclusions.'?",
+          "opts": [
+            "The researchers took care not to claim more than their results showed.",
+            "The researchers refused to publish any conclusions.",
+            "The researchers made their conclusions sound as dramatic as possible.",
+            "The researchers could not reach any conclusions at all."
+          ],
+          "a": 0,
+          "why": "To 'overstate' something is to make it seem bigger or more certain than it really is."
+        },
+        {
+          "kind": "cohesion",
+          "q": "Which sentence best fills the gap? 'Muscles and bones weaken in microgravity. ___ Even so, many astronauts need several weeks to regain their strength after landing.'",
+          "opts": [
+            "To reduce this, crew members exercise for about two hours every day.",
+            "As a result, astronauts never need to exercise in space.",
+            "For example, the station circles the Earth about every ninety minutes.",
+            "Therefore, nobody has ever felt weak after a long mission."
+          ],
+          "a": 0,
+          "why": "'Even so' needs something that should have helped: daily exercise reduces the weakening, yet recovery still takes weeks."
         }
       ]
     },
@@ -1163,6 +1847,82 @@
             "adj": "susceptible",
             "noun": "susceptibility"
           }
+        },
+        {
+          "w": "eradicate",
+          "def": "to destroy or get rid of something completely",
+          "ex": "A worldwide vaccination campaign helped to ___ smallpox, which was declared gone for good in 1980.",
+          "pos": "verb",
+          "syn": [
+            "eliminate",
+            "destroy"
+          ],
+          "forms": {
+            "verb": "eradicate",
+            "noun": "eradication"
+          }
+        },
+        {
+          "w": "inoculate",
+          "def": "to protect a person against a disease by putting a weak or harmless form of it into their body",
+          "ex": "In 1796, Edward Jenner used material from cowpox to ___ a young boy against smallpox.",
+          "pos": "verb",
+          "syn": [
+            "vaccinate"
+          ],
+          "forms": {
+            "verb": "inoculate",
+            "noun": "inoculation"
+          }
+        },
+        {
+          "w": "clinical",
+          "def": "connected with examining and treating patients, rather than with theory or laboratory work",
+          "ex": "Before a new medicine is approved, it must pass several stages of ___ trials involving volunteers.",
+          "pos": "adj"
+        },
+        {
+          "w": "genome",
+          "def": "the complete set of genetic information in a living thing",
+          "ex": "Scientists finished reading almost the entire human ___ in 2003, after thirteen years of work.",
+          "pos": "noun"
+        },
+        {
+          "w": "dosage",
+          "def": "the amount of a medicine that should be taken at one time, and how often",
+          "ex": "The correct ___ for a child is usually much lower than for an adult.",
+          "pos": "noun",
+          "syn": [
+            "dose"
+          ]
+        },
+        {
+          "w": "metabolism",
+          "def": "the chemical processes in the body that turn food into energy",
+          "ex": "Hummingbirds have an extremely fast ___, so they must feed almost constantly.",
+          "pos": "noun",
+          "forms": {
+            "noun": "metabolism",
+            "adj": "metabolic"
+          }
+        },
+        {
+          "w": "sedentary",
+          "def": "involving a lot of sitting and very little physical activity",
+          "ex": "Doctors warn that a ___ lifestyle, with long hours in front of screens, can harm children's health.",
+          "pos": "adj",
+          "syn": [
+            "inactive"
+          ],
+          "ant": [
+            "active"
+          ]
+        },
+        {
+          "w": "longevity",
+          "def": "long life, or the length of a person's or animal's life",
+          "ex": "Greenland sharks are famous for their ___: some are thought to live for more than 250 years.",
+          "pos": "noun"
         }
       ],
       "grammar": [
@@ -1231,73 +1991,180 @@
           ],
           "a": 0,
           "why": "'Under no circumstances' is already negative and needs inversion, so use 'should' without 'not'."
+        },
+        {
+          "q": "Scarcely ___ the vaccine been approved when millions of doses were ordered.",
+          "opts": [
+            "had",
+            "has",
+            "did",
+            "was"
+          ],
+          "a": 0,
+          "why": "'Scarcely had + subject + past participle... when' shows that one past event followed another immediately."
+        },
+        {
+          "q": "___ the right dose, the medicine can relieve pain within an hour.",
+          "opts": [
+            "Taken at",
+            "Taking at",
+            "Having taken at",
+            "To take at"
+          ],
+          "a": 0,
+          "why": "The medicine is taken by the patient (passive meaning), so the participle clause starts with the past participle 'Taken'."
+        },
+        {
+          "q": "If the trial ___ to fail, the company would lose years of work.",
+          "opts": [
+            "were",
+            "was being",
+            "is",
+            "has"
+          ],
+          "a": 0,
+          "why": "'If + subject + were to + verb' describes an unlikely or imagined future event, followed by 'would' in the result clause."
+        },
+        {
+          "q": "Only later ___ that they had been given a placebo rather than the real drug.",
+          "opts": [
+            "did the volunteers discover",
+            "the volunteers discovered",
+            "had discovered the volunteers",
+            "the volunteers did discover"
+          ],
+          "a": 0,
+          "why": "When 'Only later' starts the sentence, the main clause uses question order: did the volunteers discover."
         }
       ],
       "sentences": [
         "Vaccines help the body build immunity against a particular disease.",
         "Early diagnosis makes many illnesses far easier to treat.",
         "Doctors recommend that every patient complete the full course of antibiotics.",
-        "Gentle exercise can help to alleviate the symptoms of back pain."
+        "Gentle exercise can help to alleviate the symptoms of back pain.",
+        "A worldwide campaign helped to eradicate smallpox by 1980.",
+        "Greenland sharks are thought to live for more than 250 years."
       ],
-      "reading": {
-        "title": "The power of expectation",
-        "text": "In clinical trials, new medicines are usually compared not with nothing at all but with a placebo: a pill or treatment that looks identical to the real one but contains no active ingredient. Strikingly, many volunteers who receive the placebo report that they feel better. Far from being a nuisance, this so-called placebo effect has become a fascinating subject of research in its own right.\n\nThe effect appears to depend heavily on expectation. Studies have found that, in some circumstances, two placebo pills tend to work better than one, injections better than pills, and pills described as expensive better than those described as cheap. Even colour may play a part. Such findings suggest that the brain, anticipating relief, can alter how the body experiences symptoms, particularly pain, which is strongly influenced by attention and mood.\n\nMore surprising still are studies of open-label placebos, in which patients are told quite openly that the pills they are taking contain no medicine. In several trials, a proportion of these patients nevertheless reported meaningful improvements in their symptoms. Researchers are still debating why: the ritual of taking a pill, the care and attention of a doctor, or simply the hope of getting better may all contribute.\n\nIt is important, however, not to exaggerate what placebos can do. Their effects are largely confined to symptoms that people feel and report, such as pain, tiredness or nausea. A placebo cannot destroy bacteria or mend a broken bone, and relying on one instead of proven treatment could be dangerous. The reverse phenomenon, known as the nocebo effect, also exists: people warned about possible side effects sometimes experience them even when they have been given no active drug.\n\nFor doctors, the lesson may not be to prescribe sugar pills, but to recognise that the way a treatment is explained and delivered can influence how well it works.",
-        "qs": [
-          {
-            "type": "tfng",
-            "q": "Blue placebo pills have been shown to work better than red ones.",
-            "opts": [
-              "True",
-              "False",
-              "Not Given"
-            ],
-            "a": 2
-          },
-          {
-            "type": "tfng",
-            "q": "According to the passage, a placebo can help a broken bone to heal.",
-            "opts": [
-              "True",
-              "False",
-              "Not Given"
-            ],
-            "a": 1
-          },
-          {
-            "type": "mc",
-            "q": "How does the writer explain the effect of placebos on pain?",
-            "opts": [
-              "The expectation of relief can change how the body experiences symptoms.",
-              "Placebo pills contain small amounts of real medicine.",
-              "Pain usually disappears on its own after a few days.",
-              "Patients who expect relief are given stronger medicines."
-            ],
-            "a": 0
-          },
-          {
-            "type": "mc",
-            "q": "What does the writer imply in the final paragraph?",
-            "opts": [
-              "The way doctors communicate with patients may form part of an effective treatment.",
-              "Doctors should give sugar pills instead of real medicines.",
-              "Placebos are more dangerous than most real medicines.",
-              "Patients should not be told how their treatment works."
-            ],
-            "a": 0
-          },
-          {
-            "type": "mc",
-            "q": "What is the main idea of the passage?",
-            "opts": [
-              "The placebo effect is real and intriguing, but its power is limited.",
-              "Placebos can cure most illnesses if patients believe in them.",
-              "Clinical trials no longer need to use placebos.",
-              "The nocebo effect is more important than the placebo effect."
-            ],
-            "a": 0
-          }
-        ]
-      },
+      "reading": [
+        {
+          "title": "The power of expectation",
+          "text": "In clinical trials, new medicines are usually compared not with nothing at all but with a placebo: a pill or treatment that looks identical to the real one but contains no active ingredient. Strikingly, many volunteers who receive the placebo report that they feel better. Far from being a nuisance, this so-called placebo effect has become a fascinating subject of research in its own right.\n\nThe effect appears to depend heavily on expectation. Studies have found that, in some circumstances, two placebo pills tend to work better than one, injections better than pills, and pills described as expensive better than those described as cheap. Even colour may play a part. Such findings suggest that the brain, anticipating relief, can alter how the body experiences symptoms, particularly pain, which is strongly influenced by attention and mood.\n\nMore surprising still are studies of open-label placebos, in which patients are told quite openly that the pills they are taking contain no medicine. In several trials, a proportion of these patients nevertheless reported meaningful improvements in their symptoms. Researchers are still debating why: the ritual of taking a pill, the care and attention of a doctor, or simply the hope of getting better may all contribute.\n\nIt is important, however, not to exaggerate what placebos can do. Their effects are largely confined to symptoms that people feel and report, such as pain, tiredness or nausea. A placebo cannot destroy bacteria or mend a broken bone, and relying on one instead of proven treatment could be dangerous. The reverse phenomenon, known as the nocebo effect, also exists: people warned about possible side effects sometimes experience them even when they have been given no active drug.\n\nFor doctors, the lesson may not be to prescribe sugar pills, but to recognise that the way a treatment is explained and delivered can influence how well it works.",
+          "qs": [
+            {
+              "type": "tfng",
+              "q": "Blue placebo pills have been shown to work better than red ones.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 2
+            },
+            {
+              "type": "tfng",
+              "q": "According to the passage, a placebo can help a broken bone to heal.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 1
+            },
+            {
+              "type": "mc",
+              "q": "How does the writer explain the effect of placebos on pain?",
+              "opts": [
+                "The expectation of relief can change how the body experiences symptoms.",
+                "Placebo pills contain small amounts of real medicine.",
+                "Pain usually disappears on its own after a few days.",
+                "Patients who expect relief are given stronger medicines."
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "What does the writer imply in the final paragraph?",
+              "opts": [
+                "The way doctors communicate with patients may form part of an effective treatment.",
+                "Doctors should give sugar pills instead of real medicines.",
+                "Placebos are more dangerous than most real medicines.",
+                "Patients should not be told how their treatment works."
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "What is the main idea of the passage?",
+              "opts": [
+                "The placebo effect is real and intriguing, but its power is limited.",
+                "Placebos can cure most illnesses if patients believe in them.",
+                "Clinical trials no longer need to use placebos.",
+                "The nocebo effect is more important than the placebo effect."
+              ],
+              "a": 0
+            }
+          ]
+        },
+        {
+          "title": "The accidental ray",
+          "text": "In November 1895, the German physicist Wilhelm Röntgen was experimenting with a glass tube through which he passed an electric current. Although the tube was covered in black card, he noticed that a screen coated with a special chemical was glowing faintly on a bench nearby. Some invisible form of radiation, it seemed, was passing straight through the card. Not knowing what it was, Röntgen called it 'X', the symbol used in mathematics for an unknown quantity.\n\nOver the following weeks, he investigated the mysterious rays with great care, discovering that they passed easily through paper, wood and flesh but were blocked by denser materials such as metal and bone. He also produced an image of the bones in his wife's hand, complete with her wedding ring. When he published his findings at the end of the year, the news spread around the world with remarkable speed, and within months doctors in several countries were using X-rays to locate broken bones and swallowed objects.\n\nRöntgen declined to patent his discovery, reportedly believing that it should benefit everyone, and in 1901 he received the first Nobel Prize in Physics.\n\nThe early enthusiasm, however, outpaced understanding. Since nobody yet realised that high doses of radiation could harm living tissue, X-rays were used with little caution. Researchers who exposed themselves repeatedly suffered burns, and for several decades some shoe shops even offered X-ray machines that allowed customers to see the bones of their feet inside new shoes. Only gradually did scientists establish safe limits.\n\nToday, X-rays remain one of the most widely used tools in medicine, although modern machines use doses far smaller than those of the early years. Röntgen's story illustrates a recurring pattern in science: a chance observation, followed by patient investigation, can transform a field, yet the full consequences of a discovery may take decades to understand.",
+          "qs": [
+            {
+              "type": "tfng",
+              "q": "Röntgen gave the rays their name because he did not know what they were.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 0
+            },
+            {
+              "type": "tfng",
+              "q": "Röntgen had trained and worked as a doctor before he became a physicist.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 2
+            },
+            {
+              "type": "mc",
+              "q": "According to the passage, why were X-rays used carelessly at first?",
+              "opts": [
+                "Their power to damage the body had not yet been recognised.",
+                "Röntgen had told people that they were completely safe.",
+                "The early machines produced only very weak rays.",
+                "Doctors were not allowed to use them for patients."
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "What can be inferred about the shoe-shop X-ray machines?",
+              "opts": [
+                "They exposed customers to radiation before proper safety limits existed.",
+                "They were invented by Röntgen himself.",
+                "They were mainly used to find broken bones in feet.",
+                "They were banned as soon as X-rays were discovered."
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "Which statement best summarises the writer's point in the final paragraph?",
+              "opts": [
+                "A lucky observation can transform a field, but its effects may not be fully understood for a long time.",
+                "Most scientific discoveries happen by accident and need no further work.",
+                "X-rays are now too dangerous to be used in hospitals.",
+                "Scientists should always patent their discoveries."
+              ],
+              "a": 0
+            }
+          ]
+        }
+      ],
       "extra": [
         {
           "kind": "collocation",
@@ -1370,6 +2237,54 @@
           ],
           "a": 0,
           "why": "Calling for larger trials shows the results did not settle the question, so we need the negative adjective: inconclusive."
+        },
+        {
+          "kind": "linking",
+          "q": "Röntgen could have made a fortune from his discovery; ___, he chose not to patent it.",
+          "opts": [
+            "instead",
+            "therefore",
+            "likewise",
+            "for example"
+          ],
+          "a": 0,
+          "why": "'Instead' introduces what he did in place of the expected choice. 'Therefore', 'likewise' and 'for example' do not show this contrast."
+        },
+        {
+          "kind": "mainidea",
+          "q": "Which heading best fits this paragraph? 'Some medicines come from surprising places. Aspirin is related to a substance found in willow bark, which people chewed to ease pain thousands of years ago. A drug for treating malaria was developed from a traditional Chinese herbal remedy, and at least one powerful painkiller was inspired by the venom of sea snails.'",
+          "opts": [
+            "Nature as a source of medicines",
+            "How to treat a headache at home",
+            "The dangers of sea snails",
+            "Why herbal remedies never work"
+          ],
+          "a": 0,
+          "why": "Each example shows a medicine that came from a plant or an animal, so the paragraph is about nature as a source of medicines."
+        },
+        {
+          "kind": "collocation",
+          "q": "The new treatment ___ a significant improvement on older methods.",
+          "opts": [
+            "represents",
+            "does",
+            "brings up",
+            "takes"
+          ],
+          "a": 0,
+          "why": "Something 'represents an improvement' when it is an example of progress; 'does', 'brings up' and 'takes' do not go with 'improvement'."
+        },
+        {
+          "kind": "register",
+          "q": "Which sentence is most appropriate in a medical research paper?",
+          "opts": [
+            "Participants who received the treatment reported significantly less pain than those in the control group.",
+            "The people who got the real pills felt way better.",
+            "Basically, the treatment worked loads better than nothing.",
+            "Guess what? The pills really helped with the pain!"
+          ],
+          "a": 0,
+          "why": "A research paper uses precise, impersonal terms ('participants', 'control group', 'significantly'), not chatty words like 'way', 'loads' or 'guess what'."
         }
       ]
     },
@@ -1501,6 +2416,77 @@
           "syn": [
             "productive"
           ]
+        },
+        {
+          "w": "pigment",
+          "def": "a coloured powder that is mixed with oil or water to make paint",
+          "ex": "Ultramarine, a deep blue ___ made from a ground-up stone, was once more costly than gold.",
+          "pos": "noun"
+        },
+        {
+          "w": "repertoire",
+          "def": "all the pieces of music, plays or songs that a performer knows and can perform",
+          "ex": "The young pianist's ___ already includes works by Bach, Chopin and Debussy.",
+          "pos": "noun"
+        },
+        {
+          "w": "fresco",
+          "def": "a painting made directly on a wall or ceiling while the plaster is still wet",
+          "ex": "Michelangelo spent four years painting the vast ___ on the ceiling of the Sistine Chapel.",
+          "pos": "noun"
+        },
+        {
+          "w": "embellish",
+          "def": "to make something more beautiful or interesting by adding decorations or details",
+          "ex": "Medieval monks would ___ the first letter of each page with gold leaf and tiny pictures.",
+          "pos": "verb",
+          "syn": [
+            "decorate"
+          ],
+          "forms": {
+            "verb": "embellish",
+            "noun": "embellishment"
+          }
+        },
+        {
+          "w": "commission",
+          "def": "to formally ask an artist to produce a piece of work, usually for payment",
+          "ex": "The city council decided to ___ a sculptor to create a statue for the new square.",
+          "pos": "verb"
+        },
+        {
+          "w": "curator",
+          "def": "a person in charge of the objects or works of art in a museum or gallery",
+          "ex": "The ___ of the gallery chose which paintings would hang in each room.",
+          "pos": "noun",
+          "forms": {
+            "noun": "curator",
+            "verb": "curate"
+          }
+        },
+        {
+          "w": "intricate",
+          "def": "having many small parts or details arranged in a complicated way",
+          "ex": "The watch's ___ mechanism contains more than a hundred tiny moving parts.",
+          "pos": "adj",
+          "syn": [
+            "complex",
+            "detailed"
+          ],
+          "ant": [
+            "simple",
+            "rudimentary"
+          ]
+        },
+        {
+          "w": "patron",
+          "def": "a person who gives money or support to artists or to an activity such as music",
+          "ex": "Lorenzo de' Medici, a wealthy ___ of the arts, paid many Florentine painters and sculptors to work for him.",
+          "pos": "noun",
+          "syn": [
+            "sponsor",
+            "supporter"
+          ]
         }
       ],
       "grammar": [
@@ -1569,73 +2555,180 @@
           ],
           "a": 0,
           "why": "The pattern 'The more..., the more...' needs 'the + comparative' in both halves."
+        },
+        {
+          "q": "Nowhere ___ the influence of Japanese prints more obvious than in the work of Van Gogh.",
+          "opts": [
+            "is",
+            "are",
+            "does",
+            "has"
+          ],
+          "a": 0,
+          "why": "After 'Nowhere' at the start, invert the verb and subject; the singular subject 'the influence' needs 'is'."
+        },
+        {
+          "q": "The Mona Lisa ___ to have been painted over a period of several years.",
+          "opts": [
+            "is thought",
+            "thinks",
+            "is thinking",
+            "has thought"
+          ],
+          "a": 0,
+          "why": "A painting cannot think, so use the passive reporting pattern 'is thought to have been + past participle'."
+        },
+        {
+          "q": "___ much they practise, few musicians ever feel that a piece is truly perfect.",
+          "opts": [
+            "However",
+            "Whatever",
+            "Although",
+            "Despite"
+          ],
+          "a": 0,
+          "why": "'However much + clause' means 'no matter how much'. 'Whatever', 'Although' and 'Despite' cannot be followed by 'much' in this way."
+        },
+        {
+          "q": "___ in a damp cellar for over a century, the painting needed careful cleaning.",
+          "opts": [
+            "Having been stored",
+            "Having stored",
+            "Storing",
+            "To store"
+          ],
+          "a": 0,
+          "why": "Someone stored the painting earlier (passive and before the main action), so use 'Having been + past participle'."
         }
       ],
       "sentences": [
         "Jazz musicians are famous for improvising solos on the spot.",
         "Picasso was one of the most prolific artists of the twentieth century.",
         "The invention of the paint tube allowed artists to work outdoors.",
-        "Critics dismissed the song as derivative of earlier hits."
+        "Critics dismissed the song as derivative of earlier hits.",
+        "Michelangelo spent four years painting the ceiling of the Sistine Chapel.",
+        "The curator chose which paintings would hang in each room."
       ],
-      "reading": {
-        "title": "The improvising brain",
-        "text": "When a jazz pianist improvises, she is composing and performing at the same moment, producing music that has never existed before and will never be played in exactly the same way again. For centuries, such spontaneous creativity was regarded as something close to magic. Recently, however, neuroscientists have begun to investigate what actually happens in the brain when musicians invent music on the spot.\n\nIn a well-known study published in 2008, researchers in the United States asked professional jazz pianists to play a specially designed keyboard while lying inside a brain scanner. The musicians alternated between playing a memorised piece and improvising freely. During improvisation, the scans showed reduced activity in a region at the front of the brain associated with self-monitoring and conscious control, while an area linked to self-expression became more active. Later studies of freestyle rappers reported a broadly similar pattern.\n\nOne interpretation is that improvisation requires musicians to switch off, at least partially, the inner critic that constantly judges what they are doing. Rather than evaluating every note before playing it, the performer allows ideas to flow, trusting years of practice to keep them within the rules of the style.\n\nIt would be a mistake, though, to conclude that creativity is simply a matter of letting go. The musicians in these experiments were highly trained experts who had spent thousands of hours mastering scales, harmonies and patterns. Their apparent freedom rested on an extensive store of knowledge that had become automatic. A beginner who silenced their inner critic would be unlikely to produce anything comparable.\n\nMoreover, researchers caution that a scanner is a highly artificial setting, and that studies involving small numbers of participants cannot reveal the full complexity of artistic invention. What the research does suggest is that creativity may involve a delicate balance between discipline and spontaneity: the hard work of learning, followed by the courage to stop thinking and play.",
-        "qs": [
-          {
-            "type": "tfng",
-            "q": "The pianists who took part in the 2008 study had all played together in the same band.",
-            "opts": [
-              "True",
-              "False",
-              "Not Given"
-            ],
-            "a": 2
-          },
-          {
-            "type": "tfng",
-            "q": "The writer believes that beginners could improvise as well as experts if they simply stopped judging themselves.",
-            "opts": [
-              "True",
-              "False",
-              "Not Given"
-            ],
-            "a": 1
-          },
-          {
-            "type": "mc",
-            "q": "According to the passage, what happens to the 'inner critic' during improvisation?",
-            "opts": [
-              "It becomes less active, so ideas can flow more freely.",
-              "It becomes more active and checks every note.",
-              "It is replaced by pieces of music learnt by heart.",
-              "It stops the musician from following the rules of the style."
-            ],
-            "a": 0
-          },
-          {
-            "type": "mc",
-            "q": "What can be inferred about the experts' 'apparent freedom'?",
-            "opts": [
-              "It only looked effortless because of years of earlier training.",
-              "It was caused by the design of the special keyboard.",
-              "It was greater when they played memorised pieces.",
-              "It disappeared once they were lying inside the scanner."
-            ],
-            "a": 0
-          },
-          {
-            "type": "mc",
-            "q": "Why does the writer mention that a scanner is 'a highly artificial setting'?",
-            "opts": [
-              "to point out a limitation of the research",
-              "to explain why the musicians played badly",
-              "to argue that the studies should never have been carried out",
-              "to show that the results apply to every kind of artist"
-            ],
-            "a": 0
-          }
-        ]
-      },
+      "reading": [
+        {
+          "title": "The improvising brain",
+          "text": "When a jazz pianist improvises, she is composing and performing at the same moment, producing music that has never existed before and will never be played in exactly the same way again. For centuries, such spontaneous creativity was regarded as something close to magic. Recently, however, neuroscientists have begun to investigate what actually happens in the brain when musicians invent music on the spot.\n\nIn a well-known study published in 2008, researchers in the United States asked professional jazz pianists to play a specially designed keyboard while lying inside a brain scanner. The musicians alternated between playing a memorised piece and improvising freely. During improvisation, the scans showed reduced activity in a region at the front of the brain associated with self-monitoring and conscious control, while an area linked to self-expression became more active. Later studies of freestyle rappers reported a broadly similar pattern.\n\nOne interpretation is that improvisation requires musicians to switch off, at least partially, the inner critic that constantly judges what they are doing. Rather than evaluating every note before playing it, the performer allows ideas to flow, trusting years of practice to keep them within the rules of the style.\n\nIt would be a mistake, though, to conclude that creativity is simply a matter of letting go. The musicians in these experiments were highly trained experts who had spent thousands of hours mastering scales, harmonies and patterns. Their apparent freedom rested on an extensive store of knowledge that had become automatic. A beginner who silenced their inner critic would be unlikely to produce anything comparable.\n\nMoreover, researchers caution that a scanner is a highly artificial setting, and that studies involving small numbers of participants cannot reveal the full complexity of artistic invention. What the research does suggest is that creativity may involve a delicate balance between discipline and spontaneity: the hard work of learning, followed by the courage to stop thinking and play.",
+          "qs": [
+            {
+              "type": "tfng",
+              "q": "The pianists who took part in the 2008 study had all played together in the same band.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 2
+            },
+            {
+              "type": "tfng",
+              "q": "The writer believes that beginners could improvise as well as experts if they simply stopped judging themselves.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 1
+            },
+            {
+              "type": "mc",
+              "q": "According to the passage, what happens to the 'inner critic' during improvisation?",
+              "opts": [
+                "It becomes less active, so ideas can flow more freely.",
+                "It becomes more active and checks every note.",
+                "It is replaced by pieces of music learnt by heart.",
+                "It stops the musician from following the rules of the style."
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "What can be inferred about the experts' 'apparent freedom'?",
+              "opts": [
+                "It only looked effortless because of years of earlier training.",
+                "It was caused by the design of the special keyboard.",
+                "It was greater when they played memorised pieces.",
+                "It disappeared once they were lying inside the scanner."
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "Why does the writer mention that a scanner is 'a highly artificial setting'?",
+              "opts": [
+                "to point out a limitation of the research",
+                "to explain why the musicians played badly",
+                "to argue that the studies should never have been carried out",
+                "to show that the results apply to every kind of artist"
+              ],
+              "a": 0
+            }
+          ]
+        },
+        {
+          "title": "Why tunes get stuck",
+          "text": "Almost everyone has experienced it: a fragment of a song begins playing in the mind and refuses to stop, sometimes for hours. Psychologists call these unwanted repetitions 'involuntary musical imagery', although they are better known by a name borrowed from German, 'earworms'. In one large survey carried out in Finland, around nine in ten people reported having an earworm at least once a week, suggesting that the experience is less a quirk than a normal feature of how the mind works.\n\nWhy do some tunes get stuck more readily than others? In a 2016 study, researchers in London asked around three thousand people to name the songs that most often became earworms for them, and then compared the features of those songs with similar songs that were rarely named. The 'sticky' tunes tended to be relatively fast, with a common, easy-to-sing melodic shape, but they also contained some unusual leaps or repetitions that made them distinctive. In other words, a successful earworm seems to combine the familiar with the surprising.\n\nRecent exposure plays an important part too. Songs heard frequently, or heard shortly before the earworm begins, are particularly likely to return. Stress and tasks that demand little attention, such as repetitive chores, can also leave the mind more open to them.\n\nFor those who find earworms irritating, research offers a few modest remedies. One study found that chewing gum reduced the number of times participants heard a tune in their heads, perhaps because it interferes with the inner 'voice' we use when silently rehearsing sounds. Absorbing tasks, such as a moderately difficult puzzle, may also help. Some people even recommend listening to the whole song, on the theory that an unfinished fragment is what keeps the loop going, though this idea remains largely untested.\n\nFor most people, however, earworms are harmless, and many report that their stuck songs are ones they actually enjoy.",
+          "qs": [
+            {
+              "type": "tfng",
+              "q": "The survey in Finland suggested that earworms are an unusual experience.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 1
+            },
+            {
+              "type": "tfng",
+              "q": "All the songs in the 2016 study had been in the music charts in the same year.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 2
+            },
+            {
+              "type": "mc",
+              "q": "According to the 2016 study, what made a tune more likely to become an earworm?",
+              "opts": [
+                "a mixture of a familiar, simple shape and a few unexpected features",
+                "a very slow speed and very few repeated notes",
+                "being completely unlike any other song",
+                "being sung by a famous performer"
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "What can be inferred about the advice to listen to the whole song?",
+              "opts": [
+                "There is little scientific evidence so far that it works.",
+                "It has been proved to be the best remedy.",
+                "It works only for people who chew gum.",
+                "Researchers have shown that it makes earworms worse."
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "What is the main purpose of the passage?",
+              "opts": [
+                "to explain what earworms are, why they happen and how they might be reduced",
+                "to warn readers that earworms are harmful to health",
+                "to compare the musical tastes of people in Finland and London",
+                "to argue that people should listen to less music"
+              ],
+              "a": 0
+            }
+          ]
+        }
+      ],
       "extra": [
         {
           "kind": "collocation",
@@ -1708,6 +2801,54 @@
           ],
           "a": 0,
           "why": "After 'a striking' and before 'of' we need a noun: juxtaposition."
+        },
+        {
+          "kind": "mainidea",
+          "q": "Which heading best fits this paragraph? 'Before the 1840s, painters who wanted to work outdoors had to mix their own colours and carry them in delicate pig's bladders, which often burst. The invention of the metal paint tube changed this. Paint could now be stored for long periods and carried easily, making it far more practical to paint a landscape while looking at it.'",
+          "opts": [
+            "How a small invention helped painters to work outside",
+            "Why landscapes are hard to paint",
+            "The life of a famous landscape painter",
+            "How colours are made from plants"
+          ],
+          "a": 0,
+          "why": "The paragraph describes a problem for outdoor painters and how the paint tube solved it."
+        },
+        {
+          "kind": "collocation",
+          "q": "The exhibition ___ record numbers of visitors in its first month.",
+          "opts": [
+            "drew",
+            "pulled down",
+            "made",
+            "did"
+          ],
+          "a": 0,
+          "why": "An event 'draws' visitors or crowds, meaning it attracts them; 'pulled down', 'made' and 'did' do not have this meaning."
+        },
+        {
+          "kind": "paraphrase",
+          "q": "Which sentence means the same as: 'A successful earworm seems to combine the familiar with the surprising.'?",
+          "opts": [
+            "Tunes that stick usually mix predictable features with unexpected ones.",
+            "Only completely new tunes become earworms.",
+            "Familiar tunes are never surprising.",
+            "Surprising tunes are easier to forget than familiar ones."
+          ],
+          "a": 0,
+          "why": "'Combine the familiar with the surprising' means it contains both things we expect and things we do not."
+        },
+        {
+          "kind": "linking",
+          "q": "___ dismissed by critics at first, the painting is now one of the gallery's most admired works.",
+          "opts": [
+            "Though",
+            "Because",
+            "Unless",
+            "Since"
+          ],
+          "a": 0,
+          "why": "'Though + past participle' shows concession (although it was dismissed). The other words give a reason, a condition or a time, which do not fit."
         }
       ]
     }

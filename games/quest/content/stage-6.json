@@ -141,6 +141,93 @@
           "ant": [
             "learned"
           ]
+        },
+        {
+          "w": "facilitate",
+          "def": "to make an action or a process easier",
+          "ex": "Clear diagrams can ___ learning by making difficult ideas easier to grasp.",
+          "pos": "verb",
+          "syn": [
+            "ease",
+            "help"
+          ],
+          "ant": [
+            "hinder"
+          ],
+          "forms": {
+            "verb": "facilitate",
+            "noun": "facilitation"
+          }
+        },
+        {
+          "w": "mnemonic",
+          "def": "a short rhyme, phrase or pattern of letters that helps you remember something",
+          "ex": "'Richard Of York Gave Battle In Vain' is a ___ for the colours of the rainbow.",
+          "pos": "noun"
+        },
+        {
+          "w": "synapse",
+          "def": "the tiny gap across which one nerve cell passes a signal to the next",
+          "ex": "A signal must jump across a ___, the narrow gap between two nerve cells.",
+          "pos": "noun"
+        },
+        {
+          "w": "cortex",
+          "def": "the folded outer layer of the brain, involved in thinking, language and memory",
+          "ex": "The ___, the brain's wrinkled outer layer, plays a key role in language and planning.",
+          "pos": "noun"
+        },
+        {
+          "w": "deliberate",
+          "def": "done on purpose, with careful thought and attention",
+          "ex": "Musicians improve fastest through ___ practice, working hardest on the passages they find most difficult.",
+          "pos": "adj",
+          "syn": [
+            "intentional",
+            "planned"
+          ],
+          "ant": [
+            "accidental"
+          ],
+          "forms": {
+            "adj": "deliberate",
+            "adv": "deliberately"
+          }
+        },
+        {
+          "w": "notion",
+          "def": "an idea or belief about what something is like",
+          "ex": "The ___ that we use only ten per cent of our brains is a popular myth.",
+          "pos": "noun",
+          "syn": [
+            "idea",
+            "belief"
+          ]
+        },
+        {
+          "w": "comprehension",
+          "def": "the ability to understand something, especially spoken or written language",
+          "ex": "The reading test checks ___ by asking questions about the meaning of each passage.",
+          "pos": "noun",
+          "forms": {
+            "noun": "comprehension",
+            "verb": "comprehend",
+            "adj": "comprehensible"
+          }
+        },
+        {
+          "w": "alter",
+          "def": "to change something, often only slightly or in one particular part",
+          "ex": "Learning to juggle can physically ___ the structure of the brain within a few months.",
+          "pos": "verb",
+          "syn": [
+            "change",
+            "modify"
+          ],
+          "forms": {
+            "verb": "alter",
+            "noun": "alteration"
+          }
         }
       ],
       "grammar": [
@@ -209,73 +296,180 @@
           ],
           "a": 0,
           "why": "'More research is needed' calls for cautious hedging, and the plural subject 'breaks' needs 'appear to'."
+        },
+        {
+          "q": "Not until the late 1990s ___ evidence that adult human brains can produce new nerve cells.",
+          "opts": [
+            "did scientists find",
+            "scientists found",
+            "did scientists found",
+            "scientists did find"
+          ],
+          "a": 0,
+          "why": "After 'Not until + time' at the start, the main clause uses question order: did scientists find."
+        },
+        {
+          "q": "What the brain ___ during deep sleep is replay the events of the day.",
+          "opts": [
+            "does",
+            "makes",
+            "is",
+            "has"
+          ],
+          "a": 0,
+          "why": "A 'What' cleft that focuses on an action uses 'do': What the brain does is replay..."
+        },
+        {
+          "q": "___ the list of words twice, the pupils were asked to write down as many as they could remember.",
+          "opts": [
+            "Having read",
+            "Have read",
+            "To read",
+            "Read"
+          ],
+          "a": 0,
+          "why": "The pupils read the list before writing (an earlier action they did), so use 'Having + past participle'."
+        },
+        {
+          "q": "The teacher suggested that each pupil ___ a short quiz at the end of every lesson.",
+          "opts": [
+            "take",
+            "taking",
+            "to take",
+            "to be taking"
+          ],
+          "a": 0,
+          "why": "After 'suggest that', formal English uses the base form (the subjunctive): each pupil take."
         }
       ],
       "sentences": [
         "Sleep plays a vital role in the consolidation of new memories.",
         "The brain's remarkable plasticity allows it to adapt throughout life.",
         "Mental fatigue makes it much harder for students to concentrate.",
-        "Babies appear to have an innate ability to recognise faces."
+        "Babies appear to have an innate ability to recognise faces.",
+        "A mnemonic can help pupils remember the order of the planets.",
+        "Deliberate practice involves focusing on the skills you find hardest."
       ],
-      "reading": {
-        "title": "Why testing beats rereading",
-        "text": "For generations, students have prepared for exams by rereading their notes and highlighting key passages. It feels productive: the material looks increasingly familiar, and familiarity is easily mistaken for understanding. Yet a large body of research in cognitive psychology suggests that this popular method is surprisingly inefficient.\n\nThe alternative, known as retrieval practice, involves deliberately recalling information without looking at it, for example by answering practice questions or explaining a topic from memory. In a well-known series of experiments, students who tested themselves after reading a passage remembered considerably more a week later than those who simply read it again, even though the rereaders had felt more confident. The effort of searching memory appears to strengthen the pathways that lead back to the information, making it easier to find next time.\n\nTiming matters too. Spreading study sessions over several days, rather than cramming them into a single evening, tends to produce more durable learning. Researchers believe that a small amount of forgetting between sessions is actually useful, because it forces the brain to work harder at each attempt to recall. Sleep also plays a part: during deep sleep, the brain seems to replay and consolidate what was learnt during the day.\n\nNone of this means that rereading is worthless; it can be a sensible first step when meeting a topic for the first time. However, the evidence suggests that learners who want knowledge to last should spend less time looking at their notes and more time trying to remember what is in them.",
-        "qs": [
-          {
-            "type": "tfng",
-            "q": "In the experiments described, the students who reread the passage felt less sure of themselves than those who tested themselves.",
-            "opts": [
-              "True",
-              "False",
-              "Not Given"
-            ],
-            "a": 1
-          },
-          {
-            "type": "tfng",
-            "q": "Retrieval practice was first developed by classroom teachers rather than by scientists.",
-            "opts": [
-              "True",
-              "False",
-              "Not Given"
-            ],
-            "a": 2
-          },
-          {
-            "type": "mc",
-            "q": "According to the first paragraph, why does rereading feel effective to many students?",
-            "opts": [
-              "They confuse recognising material with really understanding it.",
-              "It takes far less time than any other method.",
-              "Most teachers recommend it as the best way to revise.",
-              "It helps them to sleep better before an exam."
-            ],
-            "a": 0
-          },
-          {
-            "type": "mc",
-            "q": "The writer would most likely advise a student with a test in two weeks to",
-            "opts": [
-              "quiz themselves in short sessions spread across the two weeks.",
-              "reread all their notes several times on the evening before the test.",
-              "wait until they feel confident before they start to revise.",
-              "highlight every important sentence in their textbook."
-            ],
-            "a": 0
-          },
-          {
-            "type": "mc",
-            "q": "What is the writer's main purpose in the passage?",
-            "opts": [
-              "to argue that active recall is a more effective way to study than rereading",
-              "to explain in detail how nerve cells carry messages",
-              "to criticise students who never revise for their exams",
-              "to show that rereading is of no value at any stage of learning"
-            ],
-            "a": 0
-          }
-        ]
-      },
+      "reading": [
+        {
+          "title": "Why testing beats rereading",
+          "text": "For generations, students have prepared for exams by rereading their notes and highlighting key passages. It feels productive: the material looks increasingly familiar, and familiarity is easily mistaken for understanding. Yet a large body of research in cognitive psychology suggests that this popular method is surprisingly inefficient.\n\nThe alternative, known as retrieval practice, involves deliberately recalling information without looking at it, for example by answering practice questions or explaining a topic from memory. In a well-known series of experiments, students who tested themselves after reading a passage remembered considerably more a week later than those who simply read it again, even though the rereaders had felt more confident. The effort of searching memory appears to strengthen the pathways that lead back to the information, making it easier to find next time.\n\nTiming matters too. Spreading study sessions over several days, rather than cramming them into a single evening, tends to produce more durable learning. Researchers believe that a small amount of forgetting between sessions is actually useful, because it forces the brain to work harder at each attempt to recall. Sleep also plays a part: during deep sleep, the brain seems to replay and consolidate what was learnt during the day.\n\nNone of this means that rereading is worthless; it can be a sensible first step when meeting a topic for the first time. However, the evidence suggests that learners who want knowledge to last should spend less time looking at their notes and more time trying to remember what is in them.",
+          "qs": [
+            {
+              "type": "tfng",
+              "q": "In the experiments described, the students who reread the passage felt less sure of themselves than those who tested themselves.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 1
+            },
+            {
+              "type": "tfng",
+              "q": "Retrieval practice was first developed by classroom teachers rather than by scientists.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 2
+            },
+            {
+              "type": "mc",
+              "q": "According to the first paragraph, why does rereading feel effective to many students?",
+              "opts": [
+                "They confuse recognising material with really understanding it.",
+                "It takes far less time than any other method.",
+                "Most teachers recommend it as the best way to revise.",
+                "It helps them to sleep better before an exam."
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "The writer would most likely advise a student with a test in two weeks to",
+              "opts": [
+                "quiz themselves in short sessions spread across the two weeks.",
+                "reread all their notes several times on the evening before the test.",
+                "wait until they feel confident before they start to revise.",
+                "highlight every important sentence in their textbook."
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "What is the writer's main purpose in the passage?",
+              "opts": [
+                "to argue that active recall is a more effective way to study than rereading",
+                "to explain in detail how nerve cells carry messages",
+                "to criticise students who never revise for their exams",
+                "to show that rereading is of no value at any stage of learning"
+              ],
+              "a": 0
+            }
+          ]
+        },
+        {
+          "title": "The taxi drivers' brains",
+          "text": "To earn a licence to drive one of London's famous black cabs, a trainee must pass a notoriously demanding test known as the Knowledge. Candidates are expected to learn the layout of roughly 25,000 streets within six miles of Charing Cross, together with thousands of landmarks, and most spend several years travelling around the city on motorbikes before they are ready to be examined.\n\nIn 2000, the neuroscientist Eleanor Maguire and her colleagues at University College London used brain scans to compare qualified taxi drivers with people who did not drive taxis. They found that the rear part of the hippocampus, a region closely linked to memory for places, was larger in the drivers. Moreover, the longer a driver had been working, the larger this area tended to be.\n\nA difference of this kind, however, does not prove that learning caused it, since people born with a larger hippocampus might simply be more likely to choose the job. To address this problem, the team later followed a group of trainees for about four years. At the start, their brains looked much the same as those of a comparison group. By the end, only the trainees who had passed the test showed growth in the rear hippocampus, which strongly suggests that the effort of learning had altered their brains.\n\nIn another study, the researchers compared taxi drivers with bus drivers, who also spend long days in traffic but follow fixed routes. Only the taxi drivers showed the difference, so driving itself did not seem to be responsible. The taxi drivers, though, were worse at remembering some new visual information, such as a complicated drawing. The brain, it seems, can adapt to intense demands, but perhaps not without a cost.",
+          "qs": [
+            {
+              "type": "tfng",
+              "q": "Trainees usually need only a few weeks to prepare for the Knowledge.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 1
+            },
+            {
+              "type": "tfng",
+              "q": "Most of the trainees in the four-year study eventually passed the test.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 2
+            },
+            {
+              "type": "mc",
+              "q": "Why did the researchers compare taxi drivers with bus drivers?",
+              "opts": [
+                "to rule out the idea that long hours of driving explained the difference",
+                "because bus drivers also have to pass the Knowledge",
+                "to prove that bus drivers have better memories for drawings",
+                "because bus drivers know more streets than taxi drivers"
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "What can be inferred from the four-year study of trainees?",
+              "opts": [
+                "The difference in the drivers' brains was probably not there before their training began.",
+                "People with a large hippocampus are the most likely to become taxi drivers.",
+                "The trainees who failed the test had not studied at all.",
+                "Learning the streets made every part of the brain grow larger."
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "Which statement best expresses the point of the final sentence?",
+              "opts": [
+                "Adapting to a very demanding task may bring losses as well as gains.",
+                "Intense demands always damage the brain in the end.",
+                "The brain cannot change once a person becomes an adult.",
+                "Taxi drivers should avoid looking at complicated drawings."
+              ],
+              "a": 0
+            }
+          ]
+        }
+      ],
       "extra": [
         {
           "kind": "collocation",
@@ -348,6 +542,54 @@
           ],
           "a": 0,
           "why": "'This is partly because' gives a reason for the claim. The others contradict it or change the topic."
+        },
+        {
+          "kind": "collocation",
+          "q": "The researchers were careful not to ___ firm conclusions from such a small study.",
+          "opts": [
+            "draw",
+            "pull",
+            "take",
+            "make"
+          ],
+          "a": 0,
+          "why": "We 'draw' (or reach) a conclusion; pull, take and make are not used with 'conclusions' in academic English."
+        },
+        {
+          "kind": "wordform",
+          "q": "The trainees' brains changed only after a ___ (prolong) period of intense study.",
+          "opts": [
+            "prolonged",
+            "prolonging",
+            "prolongation",
+            "prolong"
+          ],
+          "a": 0,
+          "why": "Before the noun 'period' we need an adjective: prolonged, meaning lasting a long time."
+        },
+        {
+          "kind": "mainidea",
+          "q": "Which heading best fits this paragraph? 'Many people believe that they learn best when lessons match their preferred learning style, such as pictures or spoken words. However, careful experiments have found little evidence that teaching people in their favourite style helps them remember more. What seems to matter far more is whether the method suits the material being learnt.'",
+          "opts": [
+            "A popular belief that the evidence does not support",
+            "How to discover your own learning style",
+            "Why pictures always work better than words",
+            "The history of teaching in schools"
+          ],
+          "a": 0,
+          "why": "The paragraph describes a common belief ('many people believe') and then shows that experiments do not back it up."
+        },
+        {
+          "kind": "linking",
+          "q": "___ its small size, the study attracted attention from scientists around the world.",
+          "opts": [
+            "Despite",
+            "Although",
+            "Because of",
+            "Owing to"
+          ],
+          "a": 0,
+          "why": "'Despite' + noun phrase shows contrast. 'Although' needs a clause, and 'because of' and 'owing to' give a cause, which makes no sense here."
         }
       ]
     },
@@ -482,6 +724,76 @@
             "noun": "evolution",
             "adj": "evolutionary"
           }
+        },
+        {
+          "w": "biodiversity",
+          "def": "the variety of plants, animals and other living things in a particular place",
+          "ex": "A healthy coral reef has such rich ___ that it can be home to thousands of different species.",
+          "pos": "noun"
+        },
+        {
+          "w": "aquatic",
+          "def": "living or growing in water",
+          "ex": "Frogs begin life as ___ tadpoles, breathing through gills, before they move onto land.",
+          "pos": "adj"
+        },
+        {
+          "w": "flourish",
+          "def": "to grow strongly and healthily",
+          "ex": "Once the goats were removed from the island, rare plants began to ___ again.",
+          "pos": "verb",
+          "syn": [
+            "thrive"
+          ]
+        },
+        {
+          "w": "reintroduce",
+          "def": "to bring a plant or animal back to an area where it used to live",
+          "ex": "Conservationists plan to ___ beavers to rivers where they have not lived for centuries.",
+          "pos": "verb",
+          "forms": {
+            "verb": "reintroduce",
+            "noun": "reintroduction"
+          }
+        },
+        {
+          "w": "dispersal",
+          "def": "the spreading of things, such as seeds, over a wide area",
+          "ex": "Birds that eat berries help with seed ___, dropping the seeds far from the parent plant.",
+          "pos": "noun",
+          "forms": {
+            "noun": "dispersal",
+            "verb": "disperse"
+          }
+        },
+        {
+          "w": "inhabit",
+          "def": "to live in a particular place",
+          "ex": "Polar bears ___ the frozen coasts of the Arctic, hunting seals on the sea ice.",
+          "pos": "verb",
+          "syn": [
+            "occupy"
+          ],
+          "forms": {
+            "verb": "inhabit",
+            "noun": "inhabitant"
+          }
+        },
+        {
+          "w": "niche",
+          "def": "the particular role and place of a living thing within its environment",
+          "ex": "Each species of finch fills its own ___, feeding on a different kind of seed.",
+          "pos": "noun"
+        },
+        {
+          "w": "coexist",
+          "def": "to live or exist together in the same place at the same time",
+          "ex": "In some forests, wolves and bears manage to ___ peacefully, each keeping out of the other's way.",
+          "pos": "verb",
+          "forms": {
+            "verb": "coexist",
+            "noun": "coexistence"
+          }
         }
       ],
       "grammar": [
@@ -550,72 +862,179 @@
           ],
           "a": 0,
           "why": "In a cleft sentence 'It was X that...', use 'that'; 'who' is only for people."
+        },
+        {
+          "q": "Only after the rats had been removed ___ to nest on the island again.",
+          "opts": [
+            "did the seabirds begin",
+            "the seabirds began",
+            "began the seabirds",
+            "the seabirds did begin"
+          ],
+          "a": 0,
+          "why": "When 'Only after + clause' starts the sentence, the main clause uses question order: did the seabirds begin."
+        },
+        {
+          "q": "Around a million species ___ to be at risk, according to a major report published in 2019.",
+          "opts": [
+            "are estimated",
+            "estimate",
+            "are estimating",
+            "it is estimated"
+          ],
+          "a": 0,
+          "why": "Species cannot estimate anything themselves, so use the passive reporting pattern: are estimated to be."
+        },
+        {
+          "q": "The ___ of wildlife corridors allows animals to move safely from one forest to another.",
+          "opts": [
+            "creation",
+            "create",
+            "creative",
+            "created"
+          ],
+          "a": 0,
+          "why": "After 'The' and before 'of' we need a noun: create becomes creation (nominalisation)."
+        },
+        {
+          "q": "It would ___ that the turtles return to the same beach to nest every few years.",
+          "opts": [
+            "appear",
+            "appears",
+            "be appeared",
+            "appearing"
+          ],
+          "a": 0,
+          "why": "'It would appear that...' is a cautious way of saying 'It seems that...'; after 'would' we need the base form."
         }
       ],
       "sentences": [
         "Bees pollinate many of the crops that we depend on for food.",
         "Healthy soils sustain an enormous variety of tiny living creatures.",
         "It is vital that every visitor keep to the marked paths.",
-        "Sea otters are a keystone species in the kelp forests of the Pacific."
+        "Sea otters are a keystone species in the kelp forests of the Pacific.",
+        "Frogs begin life as aquatic tadpoles that breathe through gills.",
+        "Polar bears inhabit the frozen coasts of the Arctic Ocean."
       ],
-      "reading": {
-        "title": "The wolves of Yellowstone",
-        "text": "In 1995, a small group of grey wolves was released into Yellowstone National Park in the United States, roughly seventy years after the animals had disappeared from the area. The decision was controversial, yet it has since become one of the most widely discussed experiments in modern conservation.\n\nWolves are often described as a keystone species, meaning that their influence on an ecosystem is far greater than their numbers would suggest. Before their return, large herds of elk grazed freely along the park's rivers, eating young willow and aspen trees before they could grow tall. Once wolves were back, the elk were not only reduced in number but also appeared to change their behaviour, spending less time in open valleys where they could easily be spotted.\n\nAccording to some researchers, this set off a chain of effects known as a trophic cascade. With less grazing, willows recovered along certain riverbanks, providing food and building material for beavers. Beaver dams, in turn, created ponds that suited fish, frogs and birds.\n\nHowever, the story may be less tidy than it is sometimes told. Other scientists point out that the recovery of plants has been patchy, and that several factors, including dry weather, a growing number of bears and the activities of people outside the park, also affected elk numbers. Separating the role of the wolves from these other influences has proved difficult.\n\nWhat few dispute is that the return of a single predator encouraged scientists to look far more closely at how the members of an ecosystem depend on one another. Whatever the precise explanation, Yellowstone has become a living laboratory for the study of nature's connections.",
-        "qs": [
-          {
-            "type": "tfng",
-            "q": "Wolves had been absent from Yellowstone for about seven decades before 1995.",
-            "opts": [
-              "True",
-              "False",
-              "Not Given"
-            ],
-            "a": 0
-          },
-          {
-            "type": "tfng",
-            "q": "The wolves released in 1995 had been brought from Canada.",
-            "opts": [
-              "True",
-              "False",
-              "Not Given"
-            ],
-            "a": 2
-          },
-          {
-            "type": "tfng",
-            "q": "Scientists all agree that the wolves were the main reason the willows recovered.",
-            "opts": [
-              "True",
-              "False",
-              "Not Given"
-            ],
-            "a": 1
-          },
-          {
-            "type": "mc",
-            "q": "What does the writer suggest by saying the story 'may be less tidy than it is sometimes told'?",
-            "opts": [
-              "The popular version may simplify a more complicated situation.",
-              "The park has become dirtier since the wolves arrived.",
-              "Scientists have decided to stop studying the wolves.",
-              "The wolves have caused more damage than anyone expected."
-            ],
-            "a": 0
-          },
-          {
-            "type": "mc",
-            "q": "Which title best summarises the passage?",
-            "opts": [
-              "Wolves and willows: a powerful but debated chain of effects",
-              "How beavers build their dams and ponds",
-              "Why wolves should be kept out of national parks",
-              "The history of Yellowstone's first human visitors"
-            ],
-            "a": 0
-          }
-        ]
-      },
+      "reading": [
+        {
+          "title": "The wolves of Yellowstone",
+          "text": "In 1995, a small group of grey wolves was released into Yellowstone National Park in the United States, roughly seventy years after the animals had disappeared from the area. The decision was controversial, yet it has since become one of the most widely discussed experiments in modern conservation.\n\nWolves are often described as a keystone species, meaning that their influence on an ecosystem is far greater than their numbers would suggest. Before their return, large herds of elk grazed freely along the park's rivers, eating young willow and aspen trees before they could grow tall. Once wolves were back, the elk were not only reduced in number but also appeared to change their behaviour, spending less time in open valleys where they could easily be spotted.\n\nAccording to some researchers, this set off a chain of effects known as a trophic cascade. With less grazing, willows recovered along certain riverbanks, providing food and building material for beavers. Beaver dams, in turn, created ponds that suited fish, frogs and birds.\n\nHowever, the story may be less tidy than it is sometimes told. Other scientists point out that the recovery of plants has been patchy, and that several factors, including dry weather, a growing number of bears and the activities of people outside the park, also affected elk numbers. Separating the role of the wolves from these other influences has proved difficult.\n\nWhat few dispute is that the return of a single predator encouraged scientists to look far more closely at how the members of an ecosystem depend on one another. Whatever the precise explanation, Yellowstone has become a living laboratory for the study of nature's connections.",
+          "qs": [
+            {
+              "type": "tfng",
+              "q": "Wolves had been absent from Yellowstone for about seven decades before 1995.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 0
+            },
+            {
+              "type": "tfng",
+              "q": "The wolves released in 1995 had been brought from Canada.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 2
+            },
+            {
+              "type": "tfng",
+              "q": "Scientists all agree that the wolves were the main reason the willows recovered.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 1
+            },
+            {
+              "type": "mc",
+              "q": "What does the writer suggest by saying the story 'may be less tidy than it is sometimes told'?",
+              "opts": [
+                "The popular version may simplify a more complicated situation.",
+                "The park has become dirtier since the wolves arrived.",
+                "Scientists have decided to stop studying the wolves.",
+                "The wolves have caused more damage than anyone expected."
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "Which title best summarises the passage?",
+              "opts": [
+                "Wolves and willows: a powerful but debated chain of effects",
+                "How beavers build their dams and ponds",
+                "Why wolves should be kept out of national parks",
+                "The history of Yellowstone's first human visitors"
+              ],
+              "a": 0
+            }
+          ]
+        },
+        {
+          "title": "A vault for the world's seeds",
+          "text": "Deep inside a frozen mountain on Spitsbergen, an island in the Norwegian Arctic, lies one of the most unusual storehouses on Earth. The Svalbard Global Seed Vault, which opened in 2008, holds copies of seeds from crop collections around the world. Its purpose is simple but ambitious: to act as a back-up, so that if seeds kept elsewhere are lost through accident, equipment failure or natural disaster, they can be replaced.\n\nThe location was chosen with great care. The vault lies well above sea level, and the surrounding rock and permafrost keep it naturally cold. Inside, the seeds are sealed in foil packets and stored at about minus 18 degrees Celsius, a temperature at which many kinds of seed can survive for decades, and some for centuries. The vault has room for around 4.5 million samples, each usually containing several hundred seeds.\n\nThe arrangement resembles a safe-deposit box at a bank. Countries and organisations that send seeds remain their owners, and only they can withdraw them. The first withdrawal took place in 2015, when a research centre that had lost access to its own collection asked for some of its samples back, so that it could grow fresh seeds at new sites.\n\nWhy does such variety matter? Old and local crop varieties often carry useful traits, such as resistance to drought or to particular pests, which plant breeders may one day need as conditions change. Once a variety disappears, these traits cannot be recreated.\n\nEven this carefully planned facility has faced surprises. In 2017, unusually warm weather allowed meltwater to flow into the entrance tunnel. The seeds themselves were not affected, but the incident led to improvements to the building. The vault, in other words, is not a guarantee, but it is a remarkable insurance policy for the plants that feed us.",
+          "qs": [
+            {
+              "type": "tfng",
+              "q": "Organisations that store seeds in the vault give up their ownership of them.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 1
+            },
+            {
+              "type": "tfng",
+              "q": "Norway pays for all the seeds to be collected and sent to the vault.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 2
+            },
+            {
+              "type": "mc",
+              "q": "According to the passage, why are old and local crop varieties valuable?",
+              "opts": [
+                "They may have qualities that plant breeders will need in the future.",
+                "They grow much faster than modern varieties.",
+                "They can easily be recreated if they are lost.",
+                "They are the only seeds that survive at low temperatures."
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "What can be inferred about the research centre that made the first withdrawal?",
+              "opts": [
+                "It had earlier sent copies of its own seeds to the vault.",
+                "It was based on the island of Spitsbergen.",
+                "It had never stored seeds anywhere before.",
+                "It wanted to study the effect of cold on seeds."
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "What is the writer's main purpose in the final paragraph?",
+              "opts": [
+                "to show that the vault is valuable even though it cannot offer complete protection",
+                "to argue that the vault should be moved to a warmer place",
+                "to explain how the entrance tunnel was first built",
+                "to suggest that the seeds are no longer safe in the vault"
+              ],
+              "a": 0
+            }
+          ]
+        }
+      ],
       "extra": [
         {
           "kind": "collocation",
@@ -688,6 +1107,54 @@
           ],
           "a": 0,
           "why": "The verb 'depend' is followed by 'on' (or 'upon')."
+        },
+        {
+          "kind": "register",
+          "q": "Which sentence is most suitable for an academic essay?",
+          "opts": [
+            "The loss of hedgerows has been linked to declining numbers of farmland birds.",
+            "Chopping down hedges is really bad news for birds.",
+            "Birds are in big trouble 'cause hedges keep disappearing.",
+            "Hedges? Get rid of them and the birds are gone, simple as that."
+          ],
+          "a": 0,
+          "why": "Academic writing is impersonal and cautious ('has been linked to') and avoids chatty phrases such as 'bad news' or 'big trouble'."
+        },
+        {
+          "kind": "cohesion",
+          "q": "Which sentence best fills the gap? 'Seed banks store samples of many plant varieties. ___ If a variety is lost in the wild, it can therefore be grown again.'",
+          "opts": [
+            "These samples can stay alive for decades at very low temperatures.",
+            "However, most seeds die within a few days in a freezer.",
+            "For example, sunflowers are popular in gardens.",
+            "In contrast, wild animals cannot be stored in this way."
+          ],
+          "a": 0,
+          "why": "'Therefore' needs a reason before it: only the fact that the samples stay alive explains why a lost variety can be grown again."
+        },
+        {
+          "kind": "paraphrase",
+          "q": "Which sentence means the same as: 'Once a variety disappears, these traits cannot be recreated.'?",
+          "opts": [
+            "If a variety is lost, its special qualities are lost for ever.",
+            "These traits disappear whenever a new variety is created.",
+            "Lost varieties can be recreated from their traits.",
+            "A variety disappears as soon as its traits are recreated."
+          ],
+          "a": 0,
+          "why": "'Once it disappears' means after it is lost, and 'cannot be recreated' means it can never be made again."
+        },
+        {
+          "kind": "collocation",
+          "q": "Conservation groups are working hard to ___ awareness of the importance of wild bees.",
+          "opts": [
+            "raise",
+            "rise",
+            "lift",
+            "make"
+          ],
+          "a": 0,
+          "why": "We 'raise awareness' of something. 'Rise' cannot take an object, and 'lift' and 'make' do not go with 'awareness'."
         }
       ]
     },
@@ -820,6 +1287,87 @@
             "simple",
             "basic"
           ]
+        },
+        {
+          "w": "papyrus",
+          "def": "a kind of paper made in ancient Egypt from the stems of a water plant",
+          "ex": "Egyptian scribes wrote on sheets of ___ made from reeds that grew along the Nile.",
+          "pos": "noun"
+        },
+        {
+          "w": "scribe",
+          "def": "a person whose job was to write out documents by hand before printing was invented",
+          "ex": "Training to become a ___ in ancient Egypt took many years of copying signs.",
+          "pos": "noun"
+        },
+        {
+          "w": "nomadic",
+          "def": "moving from place to place instead of living in one place",
+          "ex": "Before farming began, most people led a ___ life, never staying in one place for long.",
+          "pos": "adj",
+          "ant": [
+            "settled"
+          ],
+          "forms": {
+            "adj": "nomadic",
+            "noun": "nomad"
+          }
+        },
+        {
+          "w": "domesticate",
+          "def": "to tame wild animals or grow wild plants so that people can keep and use them",
+          "ex": "Wolves were the first wild animals that humans managed to ___, turning them over time into dogs.",
+          "pos": "verb",
+          "syn": [
+            "tame"
+          ],
+          "forms": {
+            "verb": "domesticate",
+            "noun": "domestication"
+          }
+        },
+        {
+          "w": "commemorate",
+          "def": "to do something special in order to remember and honour an important person or event",
+          "ex": "The coins were made to ___ the emperor's tenth year on the throne.",
+          "pos": "verb",
+          "syn": [
+            "honour"
+          ],
+          "forms": {
+            "verb": "commemorate",
+            "noun": "commemoration"
+          }
+        },
+        {
+          "w": "attribute",
+          "def": "to say that something was caused, made or written by a particular person or thing",
+          "ex": "Many historians ___ the city's decline to a long period of drought.",
+          "pos": "verb",
+          "forms": {
+            "verb": "attribute",
+            "noun": "attribution"
+          }
+        },
+        {
+          "w": "aqueduct",
+          "def": "a bridge or channel built to carry water over a long distance",
+          "ex": "The Pont du Gard in France is a Roman ___ that once carried water across a river valley.",
+          "pos": "noun"
+        },
+        {
+          "w": "subsequently",
+          "def": "after something else had happened; later",
+          "ex": "The statue was found by a farmer in 1820 and ___ taken to the Louvre in Paris.",
+          "pos": "adv",
+          "syn": [
+            "later",
+            "afterwards"
+          ],
+          "forms": {
+            "adv": "subsequently",
+            "adj": "subsequent"
+          }
         }
       ],
       "grammar": [
@@ -888,73 +1436,180 @@
           ],
           "a": 0,
           "why": "'It is thought that...' reports a general belief without saying who holds it."
+        },
+        {
+          "q": "___ surprised the archaeologists most was the size of the hidden chamber.",
+          "opts": [
+            "What",
+            "Which",
+            "That",
+            "It"
+          ],
+          "a": 0,
+          "why": "A 'What' cleft puts the focus on the key point: What surprised them most was... 'Which', 'That' and 'It' cannot start this pattern."
+        },
+        {
+          "q": "It is crucial that the site ___ carefully before any building work begins.",
+          "opts": [
+            "be surveyed",
+            "being surveyed",
+            "to be surveyed",
+            "surveying"
+          ],
+          "a": 0,
+          "why": "After 'It is crucial that...', formal English uses the base form (the subjunctive); here it is passive: the site be surveyed."
+        },
+        {
+          "q": "Little ___ the farmer know that his field hid the remains of an ancient city.",
+          "opts": [
+            "did",
+            "had",
+            "was",
+            "knew"
+          ],
+          "a": 0,
+          "why": "When 'Little' starts the sentence with a negative meaning, use 'did + subject + base form': Little did the farmer know."
+        },
+        {
+          "q": "The ___ of writing allowed early cities to keep records of trade and taxes.",
+          "opts": [
+            "invention",
+            "invent",
+            "inventive",
+            "invented"
+          ],
+          "a": 0,
+          "why": "After 'The' and before 'of' we need a noun: invent becomes invention (nominalisation)."
         }
       ],
       "sentences": [
         "Archaeologists use careful methods to excavate a site without damaging it.",
         "Many English words are derived from the language of the ancient Romans.",
         "Champollion is credited with the decipherment of Egyptian hieroglyphs.",
-        "The Great Pyramid is believed to have been built for the pharaoh Khufu."
+        "The Great Pyramid is believed to have been built for the pharaoh Khufu.",
+        "Wolves were the first wild animals that humans domesticated.",
+        "Egyptian scribes wrote on sheets made from the papyrus plant."
       ],
-      "reading": {
-        "title": "Reading the Rosetta Stone",
-        "text": "When a slab of dark stone was found near the town of Rashid, known in English as Rosetta, in 1799, few could have guessed how important it would become. The stone carries the same official message written three times: in hieroglyphs, in a later Egyptian script called Demotic, and in ancient Greek. Since scholars could already read Greek, the stone offered something extremely rare: a key to a writing system that nobody had understood for well over a thousand years.\n\nEven so, the task proved far harder than expected. Many early researchers assumed that each hieroglyph represented a whole idea, much like a small picture, and their attempts to match the signs to the Greek text led nowhere. The English scientist Thomas Young made important progress, showing that the oval shapes known as cartouches contained royal names written with signs for sounds.\n\nIt was the French scholar Jean-François Champollion who finally solved the puzzle in 1822. His great advantage was a deep knowledge of Coptic, a late form of the Egyptian language that was still used in church services. This allowed him to recognise that hieroglyphic writing was a mixture of signs: some stood for sounds, while others represented whole words or ideas.\n\nThe consequences were enormous. Thousands of inscriptions on temples, tombs and papyrus scrolls could now be read, opening a window onto Egyptian history, religion and daily life. Today the stone is one of the most visited objects in the British Museum, and its name has entered everyday English: a 'Rosetta Stone' is anything that unlocks a difficult problem.",
-        "qs": [
-          {
-            "type": "tfng",
-            "q": "When the stone was found, scholars were already able to read one of its three versions of the message.",
-            "opts": [
-              "True",
-              "False",
-              "Not Given"
-            ],
-            "a": 0
-          },
-          {
-            "type": "tfng",
-            "q": "Champollion travelled to Egypt before he solved the puzzle of the hieroglyphs.",
-            "opts": [
-              "True",
-              "False",
-              "Not Given"
-            ],
-            "a": 2
-          },
-          {
-            "type": "mc",
-            "q": "Why did many early attempts to read the hieroglyphs fail?",
-            "opts": [
-              "Researchers wrongly believed that every sign stood for a complete idea.",
-              "The Greek part of the stone was too damaged to read.",
-              "Nobody was allowed to study the stone closely.",
-              "The hieroglyphs on the stone were written in Coptic."
-            ],
-            "a": 0
-          },
-          {
-            "type": "mc",
-            "q": "What can be inferred from the passage?",
-            "opts": [
-              "Champollion built on earlier discoveries rather than working entirely alone.",
-              "Thomas Young understood hieroglyphs better than Champollion did.",
-              "Demotic was the oldest of the three scripts on the stone.",
-              "Hieroglyphs were still widely read when the stone was found."
-            ],
-            "a": 0
-          },
-          {
-            "type": "mc",
-            "q": "Why does the writer mention the everyday meaning of 'a Rosetta Stone'?",
-            "opts": [
-              "to show how deeply the discovery has influenced the way people speak",
-              "to explain how the stone was taken to the British Museum",
-              "to suggest that the stone is less important than people think",
-              "to compare the work of Champollion with that of Young"
-            ],
-            "a": 0
-          }
-        ]
-      },
+      "reading": [
+        {
+          "title": "Reading the Rosetta Stone",
+          "text": "When a slab of dark stone was found near the town of Rashid, known in English as Rosetta, in 1799, few could have guessed how important it would become. The stone carries the same official message written three times: in hieroglyphs, in a later Egyptian script called Demotic, and in ancient Greek. Since scholars could already read Greek, the stone offered something extremely rare: a key to a writing system that nobody had understood for well over a thousand years.\n\nEven so, the task proved far harder than expected. Many early researchers assumed that each hieroglyph represented a whole idea, much like a small picture, and their attempts to match the signs to the Greek text led nowhere. The English scientist Thomas Young made important progress, showing that the oval shapes known as cartouches contained royal names written with signs for sounds.\n\nIt was the French scholar Jean-François Champollion who finally solved the puzzle in 1822. His great advantage was a deep knowledge of Coptic, a late form of the Egyptian language that was still used in church services. This allowed him to recognise that hieroglyphic writing was a mixture of signs: some stood for sounds, while others represented whole words or ideas.\n\nThe consequences were enormous. Thousands of inscriptions on temples, tombs and papyrus scrolls could now be read, opening a window onto Egyptian history, religion and daily life. Today the stone is one of the most visited objects in the British Museum, and its name has entered everyday English: a 'Rosetta Stone' is anything that unlocks a difficult problem.",
+          "qs": [
+            {
+              "type": "tfng",
+              "q": "When the stone was found, scholars were already able to read one of its three versions of the message.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 0
+            },
+            {
+              "type": "tfng",
+              "q": "Champollion travelled to Egypt before he solved the puzzle of the hieroglyphs.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 2
+            },
+            {
+              "type": "mc",
+              "q": "Why did many early attempts to read the hieroglyphs fail?",
+              "opts": [
+                "Researchers wrongly believed that every sign stood for a complete idea.",
+                "The Greek part of the stone was too damaged to read.",
+                "Nobody was allowed to study the stone closely.",
+                "The hieroglyphs on the stone were written in Coptic."
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "What can be inferred from the passage?",
+              "opts": [
+                "Champollion built on earlier discoveries rather than working entirely alone.",
+                "Thomas Young understood hieroglyphs better than Champollion did.",
+                "Demotic was the oldest of the three scripts on the stone.",
+                "Hieroglyphs were still widely read when the stone was found."
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "Why does the writer mention the everyday meaning of 'a Rosetta Stone'?",
+              "opts": [
+                "to show how deeply the discovery has influenced the way people speak",
+                "to explain how the stone was taken to the British Museum",
+                "to suggest that the stone is less important than people think",
+                "to compare the work of Champollion with that of Young"
+              ],
+              "a": 0
+            }
+          ]
+        },
+        {
+          "title": "An ancient computer from the sea",
+          "text": "In 1900, a group of sponge divers sheltering from a storm near the Greek island of Antikythera came across the wreck of an ancient ship. Over the following months, divers brought up bronze and marble statues, pottery and coins. Among the finds was a shapeless lump of corroded bronze and wood that attracted little attention at first. Only later did someone notice that it contained a gearwheel.\n\nThe object, now known as the Antikythera mechanism, is thought to date from around the second or first century BC. It survives in dozens of fragments, and at least thirty bronze gears can still be identified. For most of the twentieth century, researchers could only guess how it had worked. A major step forward came in the 2000s, when X-ray scans allowed scientists to see inside the fragments and to read thousands of tiny letters inscribed on its surfaces, many of which had not been visible for two thousand years.\n\nThese studies revealed that the device was, in effect, a hand-operated calculator for the sky. By turning a handle, a user could show the positions of the Sun and Moon on a chosen date, display the phase of the Moon and predict eclipses. One dial even tracked the four-year cycle of major athletic games, including the Olympics.\n\nWhat astonishes historians is the sophistication of its design. No device of comparable complexity is known from the following thousand years or more. Some researchers suggest that it cannot have been the only one of its kind, since such skill is unlikely to have appeared from nowhere, yet no similar machine has been found. Who built it, and why, remains uncertain.",
+          "qs": [
+            {
+              "type": "tfng",
+              "q": "The divers found the shipwreck while they were deliberately searching for ancient treasure.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 1
+            },
+            {
+              "type": "tfng",
+              "q": "The mechanism was the heaviest object recovered from the wreck.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 2
+            },
+            {
+              "type": "mc",
+              "q": "According to the passage, what did the X-ray scans make possible?",
+              "opts": [
+                "reading writing on the device that could no longer be seen with the eye",
+                "rebuilding the ancient ship from its broken pieces",
+                "discovering the name of the person who built the device",
+                "proving that the device was used at the Olympic Games"
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "What can be inferred from the final paragraph?",
+              "opts": [
+                "Some experts believe similar devices once existed, although none has been discovered.",
+                "The mechanism was copied many times in the centuries that followed.",
+                "Historians know exactly who designed the mechanism.",
+                "The device was too simple to have been the only one of its kind."
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "Which title best summarises the passage?",
+              "opts": [
+                "A remarkable device whose secrets are slowly being uncovered",
+                "How sponge divers worked in ancient Greece",
+                "The early history of the Olympic Games",
+                "Why bronze objects change in sea water"
+              ],
+              "a": 0
+            }
+          ]
+        }
+      ],
       "extra": [
         {
           "kind": "collocation",
@@ -1027,6 +1682,54 @@
           ],
           "a": 0,
           "why": "The result is the opposite of what we would expect, so we need a concession link: even so."
+        },
+        {
+          "kind": "collocation",
+          "q": "The discovery ___ doubt on the idea that ancient technology was always simple.",
+          "opts": [
+            "cast",
+            "threw away",
+            "put",
+            "made"
+          ],
+          "a": 0,
+          "why": "To 'cast doubt on' an idea means to make it seem less certain; 'put' and 'made' do not go with 'doubt on', and 'threw away' means something else."
+        },
+        {
+          "kind": "mainidea",
+          "q": "Which heading best fits this paragraph? 'Many Roman harbour walls have survived in sea water for around two thousand years, while some modern concrete cracks within decades. Studies suggest that the Romans' mixture of volcanic ash, lime and seawater slowly formed new minerals, which made the material stronger over time.'",
+          "opts": [
+            "The secret of Rome's long-lasting concrete",
+            "How the Romans built their ships",
+            "Why modern harbours are larger",
+            "The dangers of living near volcanoes"
+          ],
+          "a": 0,
+          "why": "The paragraph compares Roman and modern concrete and explains why the Roman kind has lasted so long."
+        },
+        {
+          "kind": "linking",
+          "q": "The city grew rich ___ its position on a major trade route.",
+          "opts": [
+            "by virtue of",
+            "in spite of",
+            "regardless of",
+            "instead of"
+          ],
+          "a": 0,
+          "why": "'By virtue of' is a formal way to give a reason (because of). The other phrases show contrast or replacement, which does not fit."
+        },
+        {
+          "kind": "paraphrase",
+          "q": "Which sentence means the same as: 'No device of comparable complexity is known from the following thousand years.'?",
+          "opts": [
+            "For ten centuries afterwards, nothing so complicated is known to have been made.",
+            "Many similar devices were made during the following thousand years.",
+            "The device was copied exactly a thousand years later.",
+            "It took a thousand years to build such a complex device."
+          ],
+          "a": 0,
+          "why": "'Of comparable complexity' means just as complicated, and 'no device is known' means none has been found from that period."
         }
       ]
     },
@@ -1169,6 +1872,80 @@
             "verb": "replicate",
             "noun": "replication"
           }
+        },
+        {
+          "w": "artificial intelligence",
+          "def": "the ability of computers to do tasks that normally need human thinking, such as understanding speech",
+          "ex": "Thanks to ___, some apps can now translate a spoken conversation almost instantly.",
+          "pos": "phrase"
+        },
+        {
+          "w": "dataset",
+          "def": "a large collection of information that a computer can study or use",
+          "ex": "The program learnt to recognise birds after studying a ___ of over a million labelled photos.",
+          "pos": "noun"
+        },
+        {
+          "w": "malfunction",
+          "def": "to fail to work in the normal or correct way",
+          "ex": "If a sensor begins to ___, the robot switches itself off for safety.",
+          "pos": "verb",
+          "syn": [
+            "fail"
+          ]
+        },
+        {
+          "w": "humanoid",
+          "def": "having a body shaped like a human's, with a head, arms and legs",
+          "ex": "With its head, two arms and two legs, the ___ robot looked surprisingly like a person.",
+          "pos": "adj"
+        },
+        {
+          "w": "manipulate",
+          "def": "to handle or move objects skilfully, with the hands or with a machine",
+          "ex": "Picking up an egg is hard for a robot because it must ___ fragile objects without crushing them.",
+          "pos": "verb",
+          "forms": {
+            "verb": "manipulate",
+            "noun": "manipulation"
+          }
+        },
+        {
+          "w": "accountable",
+          "def": "expected to explain your decisions and to take responsibility for them",
+          "ex": "If a self-driving car makes a mistake, who should be held ___: the owner or the maker?",
+          "pos": "adj",
+          "syn": [
+            "responsible"
+          ],
+          "forms": {
+            "adj": "accountable",
+            "noun": "accountability"
+          }
+        },
+        {
+          "w": "verify",
+          "def": "to check that something is true or correct",
+          "ex": "Before trusting a chatbot's answer, it is wise to ___ it against a reliable source.",
+          "pos": "verb",
+          "syn": [
+            "check",
+            "confirm"
+          ],
+          "forms": {
+            "verb": "verify",
+            "noun": "verification"
+          }
+        },
+        {
+          "w": "intervene",
+          "def": "to become involved in a situation in order to change what happens",
+          "ex": "The robot works alone, but a human operator can ___ if something goes wrong.",
+          "pos": "verb",
+          "forms": {
+            "verb": "intervene",
+            "noun": "intervention"
+          }
         }
       ],
       "grammar": [
@@ -1237,72 +2014,179 @@
           ],
           "a": 0,
           "why": "'Used in hospitals' is a shortened passive relative clause meaning 'that are used in hospitals'."
+        },
+        {
+          "q": "___ robots to take over every household chore, people would have far more free time.",
+          "opts": [
+            "Were",
+            "Should",
+            "Did",
+            "If"
+          ],
+          "a": 0,
+          "why": "'Were + subject + to + verb' is a formal inverted way of saying 'If robots took over...'."
+        },
+        {
+          "q": "It ___ that the word 'robot' was first used in a play written in 1920.",
+          "opts": [
+            "is generally agreed",
+            "generally agrees",
+            "is generally agreeing",
+            "has generally agreed"
+          ],
+          "a": 0,
+          "why": "'It is generally agreed that...' reports a widely held view without saying who holds it."
+        },
+        {
+          "q": "Voice assistants ___ to misunderstand people who speak with a strong regional accent.",
+          "opts": [
+            "tend",
+            "tends",
+            "are tended",
+            "tending"
+          ],
+          "a": 0,
+          "why": "'Tend to' is a cautious way to describe what usually happens; the plural subject 'assistants' needs 'tend'."
+        },
+        {
+          "q": "___ in 1961, the first industrial robot lifted hot metal parts in a car factory.",
+          "opts": [
+            "Installed",
+            "Installing",
+            "Having installed",
+            "To install"
+          ],
+          "a": 0,
+          "why": "The robot was installed by people (passive meaning), so the participle clause starts with the past participle 'Installed'."
         }
       ],
       "sentences": [
         "Surgical robots can make cuts with remarkable precision.",
         "The robot uses a sensor to detect obstacles in its path.",
         "Voice assistants must interpret the meaning behind the words we say.",
-        "Training a system on biased data can lead to unfair decisions."
+        "Training a system on biased data can lead to unfair decisions.",
+        "A human operator can intervene if the robot malfunctions.",
+        "The humanoid robot walked on two legs and waved its arms."
       ],
-      "reading": {
-        "title": "Why easy is hard for robots",
-        "text": "In 1997, a computer called Deep Blue defeated the world chess champion Garry Kasparov, a moment many saw as proof that machines were about to overtake human intelligence. Yet decades later, robots still struggle with tasks such as folding a basket of laundry or picking up an unfamiliar object without dropping it. This puzzling contrast has a name: Moravec's paradox.\n\nIn the 1980s, the robotics researcher Hans Moravec and others observed that the tasks humans find difficult, such as advanced mathematics or chess, are often relatively easy for computers, whereas skills that a young child masters without effort, like recognising a face or walking across a cluttered room, are extremely hard to build into a machine.\n\nOne explanation lies in evolution. The abilities to see, balance and grasp objects have been refined over hundreds of millions of years, so they are deeply built into our nervous system and operate without our noticing. Abstract reasoning, by contrast, is a comparatively recent development, and we are aware of how much effort it requires precisely because our brains are not especially well suited to it. In other words, what feels easy to us is not necessarily simple; it may be the result of an enormous amount of hidden processing.\n\nRecent advances in machine learning have narrowed the gap. Robots trained on vast amounts of data are becoming better at recognising objects and adjusting their grip. Nevertheless, engineers still describe the messy, unpredictable real world as one of their greatest challenges. For the time being, a robot that can beat you at chess is far easier to build than one that can tidy your bedroom.",
-        "qs": [
-          {
-            "type": "tfng",
-            "q": "Deep Blue's victory persuaded some people that computers would soon be more intelligent than humans.",
-            "opts": [
-              "True",
-              "False",
-              "Not Given"
-            ],
-            "a": 0
-          },
-          {
-            "type": "tfng",
-            "q": "Hans Moravec built the first robot that was able to walk across a room.",
-            "opts": [
-              "True",
-              "False",
-              "Not Given"
-            ],
-            "a": 2
-          },
-          {
-            "type": "tfng",
-            "q": "According to the writer, humans find abstract reasoning effortless because it developed recently.",
-            "opts": [
-              "True",
-              "False",
-              "Not Given"
-            ],
-            "a": 1
-          },
-          {
-            "type": "mc",
-            "q": "What does the writer suggest about tasks that feel easy to people?",
-            "opts": [
-              "They may depend on a great deal of processing that we are not aware of.",
-              "They are always simple for machines to copy.",
-              "They have developed only in the last few thousand years.",
-              "They require more conscious effort than playing chess."
-            ],
-            "a": 0
-          },
-          {
-            "type": "mc",
-            "q": "What is the main purpose of the final paragraph?",
-            "opts": [
-              "to admit that progress has been made while stressing that a challenge remains",
-              "to argue that machine learning has completely solved the paradox",
-              "to explain in detail how chess computers are built",
-              "to suggest that robots should never be used in homes"
-            ],
-            "a": 0
-          }
-        ]
-      },
+      "reading": [
+        {
+          "title": "Why easy is hard for robots",
+          "text": "In 1997, a computer called Deep Blue defeated the world chess champion Garry Kasparov, a moment many saw as proof that machines were about to overtake human intelligence. Yet decades later, robots still struggle with tasks such as folding a basket of laundry or picking up an unfamiliar object without dropping it. This puzzling contrast has a name: Moravec's paradox.\n\nIn the 1980s, the robotics researcher Hans Moravec and others observed that the tasks humans find difficult, such as advanced mathematics or chess, are often relatively easy for computers, whereas skills that a young child masters without effort, like recognising a face or walking across a cluttered room, are extremely hard to build into a machine.\n\nOne explanation lies in evolution. The abilities to see, balance and grasp objects have been refined over hundreds of millions of years, so they are deeply built into our nervous system and operate without our noticing. Abstract reasoning, by contrast, is a comparatively recent development, and we are aware of how much effort it requires precisely because our brains are not especially well suited to it. In other words, what feels easy to us is not necessarily simple; it may be the result of an enormous amount of hidden processing.\n\nRecent advances in machine learning have narrowed the gap. Robots trained on vast amounts of data are becoming better at recognising objects and adjusting their grip. Nevertheless, engineers still describe the messy, unpredictable real world as one of their greatest challenges. For the time being, a robot that can beat you at chess is far easier to build than one that can tidy your bedroom.",
+          "qs": [
+            {
+              "type": "tfng",
+              "q": "Deep Blue's victory persuaded some people that computers would soon be more intelligent than humans.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 0
+            },
+            {
+              "type": "tfng",
+              "q": "Hans Moravec built the first robot that was able to walk across a room.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 2
+            },
+            {
+              "type": "tfng",
+              "q": "According to the writer, humans find abstract reasoning effortless because it developed recently.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 1
+            },
+            {
+              "type": "mc",
+              "q": "What does the writer suggest about tasks that feel easy to people?",
+              "opts": [
+                "They may depend on a great deal of processing that we are not aware of.",
+                "They are always simple for machines to copy.",
+                "They have developed only in the last few thousand years.",
+                "They require more conscious effort than playing chess."
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "What is the main purpose of the final paragraph?",
+              "opts": [
+                "to admit that progress has been made while stressing that a challenge remains",
+                "to argue that machine learning has completely solved the paradox",
+                "to explain in detail how chess computers are built",
+                "to suggest that robots should never be used in homes"
+              ],
+              "a": 0
+            }
+          ]
+        },
+        {
+          "title": "Can a machine fool us?",
+          "text": "In 1950, the British mathematician Alan Turing published a paper that began with a deceptively simple question: can machines think? Recognising that words such as 'think' are hard to define, Turing proposed replacing the question with a practical test, which he called the imitation game. A human judge holds written conversations with two hidden partners, one a person and the other a computer. If the judge cannot reliably tell which is which, Turing argued, we would have little reason to deny that the machine is behaving intelligently.\n\nTuring also made a cautious prediction: by around the year 2000, computers would play the game so well that an average judge would have no more than a seventy per cent chance of identifying them correctly after five minutes of questioning.\n\nInterestingly, people can be fooled by surprisingly simple programs. In the 1960s, the computer scientist Joseph Weizenbaum created ELIZA, a program that imitated a counsellor by turning users' statements into questions. Although ELIZA understood nothing, some users became convinced that it was listening to them, a reaction that troubled its creator.\n\nCritics argue that this is exactly the weakness of Turing's test. A machine might produce convincing replies by following rules, without grasping what any of the words mean. The philosopher John Searle illustrated this point in 1980 with a famous thought experiment, imagining a person who follows written instructions to answer questions in Chinese without understanding a single word of the language.\n\nToday's chatbots can hold conversations that would have astonished Turing. Yet many researchers now see the test less as a measure of intelligence than as a reminder of something about ourselves: how readily we assume that a fluent speaker must also be a thinking one.",
+          "qs": [
+            {
+              "type": "tfng",
+              "q": "Turing thought the question 'Can machines think?' could easily be answered as it stood.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 1
+            },
+            {
+              "type": "tfng",
+              "q": "ELIZA was the first computer program ever to win a prize for conversation.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 2
+            },
+            {
+              "type": "mc",
+              "q": "Which of the following best restates the prediction that Turing made?",
+              "opts": [
+                "By about 2000, an average judge would be wrong at least three times in ten after five minutes.",
+                "By 2000, computers would always beat human judges.",
+                "By 2000, judges would spot computers seventy per cent more often than before.",
+                "By 2000, computers would be able to think exactly like people."
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "Why does the writer mention Searle's thought experiment?",
+              "opts": [
+                "to illustrate how answers could seem intelligent without any real understanding",
+                "to show that Chinese is harder to learn than English",
+                "to support Turing's view that the test measures intelligence",
+                "to explain how ELIZA was built"
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "What does the writer suggest in the final paragraph?",
+              "opts": [
+                "The test may reveal more about human assumptions than about machine intelligence.",
+                "Modern chatbots have finally proved that machines can think.",
+                "Turing would have been disappointed by modern chatbots.",
+                "The test should be made longer than five minutes."
+              ],
+              "a": 0
+            }
+          ]
+        }
+      ],
       "extra": [
         {
           "kind": "collocation",
@@ -1375,6 +2259,54 @@
           ],
           "a": 0,
           "why": "'This' refers back to the progress and explains it, and 'Even so' then adds the contrast. The others break the logic."
+        },
+        {
+          "kind": "linking",
+          "q": "The program sounded intelligent; ___, it did not understand a single word.",
+          "opts": [
+            "in reality",
+            "as a result",
+            "similarly",
+            "for instance"
+          ],
+          "a": 0,
+          "why": "'In reality' introduces the true situation, which contrasts with how things seemed. The others show result, likeness or an example."
+        },
+        {
+          "kind": "mainidea",
+          "q": "Which heading best fits this paragraph? 'Robot vacuum cleaners map a room as they move, using sensors to detect walls and furniture. Over time, they build a picture of the home and plan the most efficient route. Some can even recognise objects such as socks or cables and steer around them.'",
+          "opts": [
+            "How robot vacuums find their way",
+            "Why robots are replacing cleaners",
+            "The history of household machines",
+            "How to choose a new carpet"
+          ],
+          "a": 0,
+          "why": "Every sentence describes how the robot senses, maps and moves around a home."
+        },
+        {
+          "kind": "collocation",
+          "q": "Robots are increasingly used to ___ tasks that are too dangerous for people.",
+          "opts": [
+            "carry out",
+            "carry on",
+            "make",
+            "bring out"
+          ],
+          "a": 0,
+          "why": "We 'carry out' (perform) a task. 'Carry on' means continue, and 'make' and 'bring out' do not go with 'tasks'."
+        },
+        {
+          "kind": "wordform",
+          "q": "Engineers must make sure that robots behave ___ (predict) when people are nearby.",
+          "opts": [
+            "predictably",
+            "predictable",
+            "prediction",
+            "unpredictable"
+          ],
+          "a": 0,
+          "why": "After the verb 'behave' we need an adverb: predictably, meaning in a way people can expect."
         }
       ]
     },
@@ -1503,6 +2435,95 @@
             "verb": "contaminate",
             "noun": "contamination"
           }
+        },
+        {
+          "w": "aquifer",
+          "def": "a layer of rock or sand under the ground that holds water",
+          "ex": "Farmers pump water up from a deep ___ that lies beneath the dry plain.",
+          "pos": "noun"
+        },
+        {
+          "w": "perishable",
+          "def": "likely to go bad quickly, such as fresh fruit, milk or fish",
+          "ex": "Strawberries are highly ___, so they must reach the shops within a day or two.",
+          "pos": "adj"
+        },
+        {
+          "w": "livestock",
+          "def": "farm animals such as cows, sheep, goats and pigs",
+          "ex": "Much of the world's farmland is used to grow food for ___ rather than for people.",
+          "pos": "noun"
+        },
+        {
+          "w": "cultivate",
+          "def": "to prepare land and grow crops on it",
+          "ex": "Terraces cut into the hillsides allow farmers to ___ rice where the ground would otherwise be far too steep.",
+          "pos": "verb",
+          "syn": [
+            "grow",
+            "farm"
+          ],
+          "forms": {
+            "verb": "cultivate",
+            "noun": "cultivation"
+          }
+        },
+        {
+          "w": "equitable",
+          "def": "fair and reasonable, giving everyone an equal share",
+          "ex": "The two countries reached an ___ agreement, dividing the river's water equally between them.",
+          "pos": "adj",
+          "syn": [
+            "fair"
+          ],
+          "ant": [
+            "unfair"
+          ],
+          "forms": {
+            "adj": "equitable",
+            "adv": "equitably"
+          }
+        },
+        {
+          "w": "purify",
+          "def": "to remove dirty or harmful substances from something",
+          "ex": "Boiling is a simple way to ___ water from a stream before you drink it.",
+          "pos": "verb",
+          "syn": [
+            "clean"
+          ],
+          "ant": [
+            "pollute",
+            "contaminate"
+          ],
+          "forms": {
+            "verb": "purify",
+            "noun": "purification"
+          }
+        },
+        {
+          "w": "crop rotation",
+          "def": "growing different crops in a field from year to year so that the soil stays healthy",
+          "ex": "With ___, a farmer might grow wheat one year and beans the next to keep the soil rich.",
+          "pos": "phrase"
+        },
+        {
+          "w": "adequate",
+          "def": "enough in amount, or good enough for a particular purpose",
+          "ex": "The old well provides barely ___ water for the village's daily needs.",
+          "pos": "adj",
+          "syn": [
+            "sufficient",
+            "enough"
+          ],
+          "ant": [
+            "inadequate",
+            "insufficient"
+          ],
+          "forms": {
+            "adj": "adequate",
+            "adv": "adequately"
+          }
         }
       ],
       "grammar": [
@@ -1571,72 +2592,179 @@
           ],
           "a": 0,
           "why": "Demand cannot expect anything itself, so use the passive reporting verb: is expected to rise."
+        },
+        {
+          "q": "Only by reducing waste ___ enough food for everyone on the planet.",
+          "opts": [
+            "can we produce",
+            "we can produce",
+            "we produce",
+            "can produce we"
+          ],
+          "a": 0,
+          "why": "When 'Only by + -ing' starts the sentence, the main clause uses question order: can we produce."
+        },
+        {
+          "q": "The new crops ___ to have increased yields, although the data is still incomplete.",
+          "opts": [
+            "seem",
+            "seems",
+            "are seemed",
+            "seeming"
+          ],
+          "a": 0,
+          "why": "'Seem to have + past participle' is a cautious way to describe a past result; the plural subject 'crops' needs 'seem'."
+        },
+        {
+          "q": "If the town didn't have a desalination plant, it ___ out of water during last summer's drought.",
+          "opts": [
+            "would have run",
+            "would run",
+            "will have run",
+            "had run"
+          ],
+          "a": 0,
+          "why": "Mixed conditional: a present fact (the town has a plant) with a past result (last summer) takes 'would have + past participle'."
+        },
+        {
+          "q": "___ was the demand for clean water that the new plant had to run day and night.",
+          "opts": [
+            "Such",
+            "So",
+            "Too",
+            "Very"
+          ],
+          "a": 0,
+          "why": "'Such + be + noun phrase + that...' stresses how great something was: Such was the demand that... 'So' would need an adjective."
         }
       ],
       "sentences": [
         "Rice is a staple food for billions of people around the world.",
         "It is essential that every child have access to safe drinking water.",
         "Desalination plants turn seawater into water that is safe to drink.",
-        "The provision of clean water to every home took decades."
+        "The provision of clean water to every home took decades.",
+        "Strawberries are so perishable that they must reach the shops within days.",
+        "Only by reducing waste can we produce enough food for everyone."
       ],
-      "reading": {
-        "title": "Catching water from the air",
-        "text": "In some of the driest places on Earth, the air itself may hold part of the answer to water scarcity. Along the coasts of Chile and Morocco, communities have experimented with an unusual technique: catching fog.\n\nA fog collector is essentially a large panel of fine mesh stretched between two poles. As wind pushes fog through the mesh, tiny water droplets cling to the threads, merge into larger drops and run down into a gutter at the bottom. From there, the water flows through pipes into storage tanks, where it can be used for drinking, cooking or watering vegetable gardens. The system requires no electricity and has few moving parts, which makes it relatively cheap to build and maintain.\n\nThe idea is not entirely new. Desert plants and animals have long relied on fog, and researchers have studied a beetle in the Namib Desert that collects droplets on its bumpy back before tipping them towards its mouth. Engineers have borrowed ideas from such creatures in an attempt to design more efficient materials.\n\nFog harvesting is not, however, a solution for everyone. It works only where fog is frequent and a steady wind blows it inland, usually on hills or mountains near the sea. Even in suitable places, the amount collected varies greatly from one day to the next, and nets can be torn by strong winds. For these reasons, experts tend to see fog collection as a useful supplement to other water sources rather than a replacement for them.\n\nNevertheless, for a remote village where the nearest well is far away, a few nets on a hillside can make daily life noticeably easier.",
-        "qs": [
-          {
-            "type": "tfng",
-            "q": "Fog collectors need a supply of electricity in order to work.",
-            "opts": [
-              "True",
-              "False",
-              "Not Given"
-            ],
-            "a": 1
-          },
-          {
-            "type": "tfng",
-            "q": "The first fog collectors were built in Morocco.",
-            "opts": [
-              "True",
-              "False",
-              "Not Given"
-            ],
-            "a": 2
-          },
-          {
-            "type": "tfng",
-            "q": "The quantity of water that a fog net gathers can change considerably from day to day.",
-            "opts": [
-              "True",
-              "False",
-              "Not Given"
-            ],
-            "a": 0
-          },
-          {
-            "type": "mc",
-            "q": "Which place would probably be the most suitable for a fog collector?",
-            "opts": [
-              "a windy hillside close to the sea",
-              "a sheltered valley far from the coast",
-              "a flat inland desert with clear skies",
-              "a city centre surrounded by tall buildings"
-            ],
-            "a": 0
-          },
-          {
-            "type": "mc",
-            "q": "Which statement best summarises the writer's view of fog harvesting?",
-            "opts": [
-              "It is a helpful addition to other water sources in the right places.",
-              "It will soon replace wells and rivers as the main source of water.",
-              "It is too expensive for most villages to use.",
-              "It has failed in every place where it has been tried."
-            ],
-            "a": 0
-          }
-        ]
-      },
+      "reading": [
+        {
+          "title": "Catching water from the air",
+          "text": "In some of the driest places on Earth, the air itself may hold part of the answer to water scarcity. Along the coasts of Chile and Morocco, communities have experimented with an unusual technique: catching fog.\n\nA fog collector is essentially a large panel of fine mesh stretched between two poles. As wind pushes fog through the mesh, tiny water droplets cling to the threads, merge into larger drops and run down into a gutter at the bottom. From there, the water flows through pipes into storage tanks, where it can be used for drinking, cooking or watering vegetable gardens. The system requires no electricity and has few moving parts, which makes it relatively cheap to build and maintain.\n\nThe idea is not entirely new. Desert plants and animals have long relied on fog, and researchers have studied a beetle in the Namib Desert that collects droplets on its bumpy back before tipping them towards its mouth. Engineers have borrowed ideas from such creatures in an attempt to design more efficient materials.\n\nFog harvesting is not, however, a solution for everyone. It works only where fog is frequent and a steady wind blows it inland, usually on hills or mountains near the sea. Even in suitable places, the amount collected varies greatly from one day to the next, and nets can be torn by strong winds. For these reasons, experts tend to see fog collection as a useful supplement to other water sources rather than a replacement for them.\n\nNevertheless, for a remote village where the nearest well is far away, a few nets on a hillside can make daily life noticeably easier.",
+          "qs": [
+            {
+              "type": "tfng",
+              "q": "Fog collectors need a supply of electricity in order to work.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 1
+            },
+            {
+              "type": "tfng",
+              "q": "The first fog collectors were built in Morocco.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 2
+            },
+            {
+              "type": "tfng",
+              "q": "The quantity of water that a fog net gathers can change considerably from day to day.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "Which place would probably be the most suitable for a fog collector?",
+              "opts": [
+                "a windy hillside close to the sea",
+                "a sheltered valley far from the coast",
+                "a flat inland desert with clear skies",
+                "a city centre surrounded by tall buildings"
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "Which statement best summarises the writer's view of fog harvesting?",
+              "opts": [
+                "It is a helpful addition to other water sources in the right places.",
+                "It will soon replace wells and rivers as the main source of water.",
+                "It is too expensive for most villages to use.",
+                "It has failed in every place where it has been tried."
+              ],
+              "a": 0
+            }
+          ]
+        },
+        {
+          "title": "The city that nearly ran dry",
+          "text": "In early 2018, the people of Cape Town, South Africa, faced an extraordinary prospect. After three years of unusually low rainfall, the dams that supply the city had fallen to dangerously low levels, and officials warned of 'Day Zero': the date on which most taps would be switched off. If that day came, residents would have to queue at around two hundred collection points for a daily allowance of 25 litres per person.\n\nThe warning had a dramatic effect. Residents were asked to limit their use to 50 litres per person per day, roughly the amount used in a few minutes of an ordinary shower. People saved the water from their sinks to flush toilets, kept showers to two minutes and let their gardens turn brown. Hotels removed the plugs from their baths and encouraged guests to take quick showers.\n\nThese efforts were combined with action by the authorities. Water pressure across the network was reduced to limit leaks and waste, and farmers agreed to release part of their water allowance to the city. As a result, Cape Town's daily water consumption fell to roughly half of what it had been in 2015.\n\nDay Zero was postponed several times and, when good rains finally arrived in the winter of 2018, it was called off altogether. Experts point out that the crisis was avoided not by a single technological solution but by millions of small changes in daily behaviour.\n\nThe episode offers a lesson for other growing cities. As populations rise and rainfall becomes less predictable, many places may need to treat water not as an endless resource but as one that must be carefully managed.",
+          "qs": [
+            {
+              "type": "tfng",
+              "q": "Before the crisis, Cape Town had experienced several years of heavier rain than usual.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 1
+            },
+            {
+              "type": "tfng",
+              "q": "Day Zero was first predicted by a team of university scientists.",
+              "opts": [
+                "True",
+                "False",
+                "Not Given"
+              ],
+              "a": 2
+            },
+            {
+              "type": "mc",
+              "q": "According to the passage, what would have happened on Day Zero?",
+              "opts": [
+                "People would have had to fetch a small daily ration of water from shared points.",
+                "All use of water would have been banned for one day.",
+                "Farmers would have been given extra water for their crops.",
+                "The price of water would have doubled overnight."
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "What does the writer imply about how the crisis was avoided?",
+              "opts": [
+                "Changes in everyday habits played a central part.",
+                "New technology solved the problem almost on its own.",
+                "The city authorities did nothing to help.",
+                "The rains alone would have prevented it without any other changes."
+              ],
+              "a": 0
+            },
+            {
+              "type": "mc",
+              "q": "What is the main purpose of the final paragraph?",
+              "opts": [
+                "to suggest that Cape Town's experience is relevant to other cities",
+                "to describe the heavy rains of the winter of 2018",
+                "to criticise the officials who ran the city",
+                "to explain how dams are designed and built"
+              ],
+              "a": 0
+            }
+          ]
+        }
+      ],
       "extra": [
         {
           "kind": "collocation",
@@ -1709,6 +2837,54 @@
           ],
           "a": 0,
           "why": "After 'are' and before 'to' we need an adjective: resistant to something."
+        },
+        {
+          "kind": "register",
+          "q": "Which sentence is most suitable for an IELTS Writing Task 1 report?",
+          "opts": [
+            "Water consumption in the city fell by approximately fifty per cent between 2015 and 2018.",
+            "Water use dropped loads, which was awesome.",
+            "People basically used half the water, more or less.",
+            "Check it out: water use halved in three years!"
+          ],
+          "a": 0,
+          "why": "A Task 1 report gives figures precisely and neutrally ('approximately fifty per cent'), without chatty words or exclamations."
+        },
+        {
+          "kind": "cohesion",
+          "q": "Which order is most logical? A: This forced officials to warn of a date when the taps would be turned off. B: Three dry winters left the city's dams almost empty. C: Faced with this warning, residents cut their water use by half.",
+          "opts": [
+            "B, A, C",
+            "A, B, C",
+            "C, B, A",
+            "B, C, A"
+          ],
+          "a": 0,
+          "why": "B gives the cause, A ('This forced...') the official response, and C ('Faced with this warning') how residents reacted."
+        },
+        {
+          "kind": "paraphrase",
+          "q": "Which sentence means the same as: 'Many places may need to treat water not as an endless resource but as one that must be carefully managed.'?",
+          "opts": [
+            "Many places may have to stop assuming water will never run out and look after it carefully.",
+            "Water is an endless resource, so it needs very little management.",
+            "Many places should use more water than they do now.",
+            "Water will soon run out in every place on Earth."
+          ],
+          "a": 0,
+          "why": "'Not as an endless resource' means no longer assuming it will never run out, and 'carefully managed' means looked after with care."
+        },
+        {
+          "kind": "collocation",
+          "q": "The long drought ___ a heavy toll on the farmers' harvests.",
+          "opts": [
+            "took",
+            "made",
+            "gave",
+            "did"
+          ],
+          "a": 0,
+          "why": "'Take a toll on' something is a fixed phrase meaning to cause it serious harm over time."
         }
       ]
     }

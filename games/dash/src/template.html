@@ -604,7 +604,7 @@ function usePalette(id) {
   pal = o;
 }
 
-/* ---------- songs and palettes for the generated Normal and Hard packs ---------- */
+/* ---------- songs and palettes for the generated Normal, Hard and Expert packs ---------- */
 const SONG_TPL = [
   { prog: [[53, 57, 60, 64], [52, 55, 59, 62], [50, 53, 57, 60], [48, 52, 55, 59]], bass: [41, 40, 38, 36], scale: [72, 74, 76, 79, 81, 84] },
   { prog: [[50, 53, 57, 60, 64], [53, 57, 59, 64], [52, 55, 59, 62], [55, 59, 60, 64]], bass: [38, 43, 36, 45], scale: [72, 74, 76, 79, 81, 84, 86] },
@@ -656,7 +656,7 @@ ND.LEVELS.forEach((d) => {
   if (d.song && !SONGS[d.id]) SONGS[d.id] = genSong(d);
   if (d.look && !PAL[d.id]) PAL[d.id] = genPalette(d.look);
 });
-const PACKS = [['main', 'Adventure'], ['normal', 'Normal pack'], ['hard', 'Hard pack']];
+const PACKS = [['main', 'Adventure'], ['normal', 'Normal pack'], ['hard', 'Hard pack'], ['expert', 'Expert pack']];
 
 /* ================= canvas drawing ================= */
 const cv = $('#game'), cx = cv.getContext('2d');

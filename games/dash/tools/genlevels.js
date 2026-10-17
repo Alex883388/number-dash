@@ -1,4 +1,4 @@
-// Level generator for the Normal and Hard packs.
+// Level generator for the Normal, Hard and Expert packs.
 // Builds each level from small, known-good pieces around a theme, tests every piece at the
 // level's tempo, then keeps a level only if the checker proves it beatable for every door
 // layout, all 3 stars are reachable, and its measured difficulty sits in the pack's band.
@@ -30,8 +30,22 @@ const SPECS = [
   { id: 'h07', name: 'Ring Rally', pack: 'hard', bpm: 94, theme: ['rings'], fresh: 'Long ring chains', hue: 120, night: false },
   { id: 'h08', name: 'Turbo Tunnel', pack: 'hard', bpm: 98, theme: ['speed', 'mini', 'rocket'], fresh: 'Turbo speed', hue: 230, night: false },
   { id: 'h09', name: 'Moon Bounce', pack: 'hard', bpm: 96, theme: ['gravity', 'pads'], fresh: 'Gravity and pads', hue: 240, night: true },
-  { id: 'h10', name: 'Grand Gauntlet', pack: 'hard', bpm: 100, theme: ['rocket', 'ufo', 'wave', 'ball', 'gravity', 'rings'], fresh: 'Everything, hard', hue: 265, night: true }
+  { id: 'h10', name: 'Grand Gauntlet', pack: 'hard', bpm: 100, theme: ['rocket', 'ufo', 'wave', 'ball', 'gravity', 'rings'], fresh: 'Everything, hard', hue: 265, night: true },
+  // Expert: the hard pieces at faster tempos, more forks, and a tighter (still fair) difficulty band
+  { id: 'e01', name: 'Thunder Steps', pack: 'expert', bpm: 100, theme: ['spikes', 'blocks', 'pads'], fresh: 'Fast blocks and spikes', hue: 20, night: false },
+  { id: 'e02', name: 'Sky Slalom', pack: 'expert', bpm: 100, theme: ['rocket', 'rings', 'pads'], fresh: 'Rocket and rings', hue: 200, night: false },
+  { id: 'e03', name: 'Wave Rider', pack: 'expert', bpm: 100, theme: ['wave', 'speed'], fresh: 'Fast waves', hue: 175, night: true },
+  { id: 'e04', name: 'Upside Town', pack: 'expert', bpm: 102, theme: ['gravity', 'blocks'], fresh: 'Gravity and blocks', hue: 300, night: true },
+  { id: 'e05', name: 'Marble Run', pack: 'expert', bpm: 104, theme: ['ball', 'speed'], fresh: 'Speedy ball', hue: 110, night: false },
+  { id: 'e06', name: 'Saucer Swarm', pack: 'expert', bpm: 104, theme: ['ufo', 'rings'], fresh: 'UFO and rings', hue: 240, night: true },
+  { id: 'e07', name: 'Tiny Titan', pack: 'expert', bpm: 104, theme: ['mini', 'pads', 'spikes'], fresh: 'Mini and pads', hue: 40, night: false },
+  { id: 'e08', name: 'Comet Tail', pack: 'expert', bpm: 104, theme: ['wave', 'rings'], fresh: 'Wave and rings', hue: 260, night: true },
+  { id: 'e09', name: 'Ring Storm', pack: 'expert', bpm: 106, theme: ['rings', 'gravity', 'pads'], fresh: 'Rings, gravity, pads', hue: 140, night: false },
+  { id: 'e10', name: 'Final Frontier', pack: 'expert', bpm: 108, theme: ['rocket', 'ufo', 'wave', 'ball', 'gravity', 'rings', 'speed'], fresh: 'Everything, expert', hue: 280, night: true }
 ];
+const isHard = (spec) => spec.pack !== 'normal';                 // hard and expert share the hard pieces
+const themeOf = (spec) => THEME[spec.pack === 'expert' ? 'hard' : spec.pack];
+const DIFF = { normal: 'Normal', hard: 'Hard', expert: 'Expert' };
 
 // ---------- random helpers ----------
 function rng(seed) {
@@ -168,7 +182,7 @@ const GATE_OF = { rocket: 'rocketGate', ufo: 'ufoGate', wave: 'waveGate', ball: 
 
 // ---------- testing pieces and levels ----------
 const evalSrc = (src) => new Function('B', 'return [' + src + '];')(ND.B);
-function levelFrom(spec, parts) { return { id: spec.id, name: spec.name, bpm: spec.bpm, diff: spec.pack === 'hard' ? 'Hard' : 'Normal', map: [].concat(...parts.map(evalSrc)) }; }
+function levelFrom(spec, parts) { return { id: spec.id, name: spec.name, bpm: spec.bpm, diff: DIFF[spec.pack], map: [].concat(...parts.map(evalSrc)) }; }
 const pieceCache = new Map();
 function pieceOk(spec, kind, src) {
   const key = spec.bpm + '|' + src;
@@ -182,7 +196,7 @@ function pieceOk(spec, kind, src) {
       L.gates.forEach((g) => { g.correct = Math.min(v, g.lanes); });
       const a = analyzeVariant(L, { quick: v > 1, trials: 40 });
       if (!a.ok) ok = false;
-      else if (v === 1 && a.minTap < (spec.pack === 'hard' ? 60 : 80)) ok = false;
+      else if (v === 1 && a.minTap < (spec.pack === 'expert' ? 55 : spec.pack === 'hard' ? 60 : 80)) ok = false;
     }
     if (ok && L.starCount) { L.gates.forEach((g) => { g.correct = 1; }); const s = solve(L, true); ok = s.ok && popcount(s.stars) === L.starCount; }
   } catch (e) { ok = false; }
@@ -191,10 +205,10 @@ function pieceOk(spec, kind, src) {
 }
 
 function compose(spec, seed) {
-  const r = rng(seed), hard = spec.pack === 'hard', speed = 6 * spec.bpm / 60;
-  const themePool = [].concat(...spec.theme.map((t) => THEME[spec.pack][t] || []));
+  const r = rng(seed), hard = isHard(spec), speed = 6 * spec.bpm / 60;
+  const themePool = [].concat(...spec.theme.map((t) => themeOf(spec)[t] || []));
   // the forks: one for each flying theme move, the rest cube forks
-  const nGates = hard ? 4 + (r() < 0.5 ? 1 : 0) : 3 + (r() < 0.5 ? 1 : 0);
+  const nGates = spec.pack === 'expert' ? 5 : hard ? 4 + (r() < 0.5 ? 1 : 0) : 3 + (r() < 0.5 ? 1 : 0);
   let gates = spec.theme.map((t) => GATE_OF[t]).filter(Boolean);
   while (gates.length < nGates) gates.push('cubeGate');
   gates = gates.slice(0, nGates).sort(() => r() - 0.5);
@@ -205,7 +219,7 @@ function compose(spec, seed) {
     const n = 1 + (r() < 0.55 ? 1 : 0);
     for (let i = 0; i < n; i++) {
       let k, tries = 0;
-      do { k = r() < 0.7 && themePool.length ? pick(r, themePool) : pick(r, GENERAL[spec.pack]); } while (k === last && ++tries < 6);
+      do { k = r() < 0.7 && themePool.length ? pick(r, themePool) : pick(r, GENERAL[spec.pack === 'expert' ? 'hard' : spec.pack]); } while (k === last && ++tries < 6);
       plan.push({ k }); last = k;
     }
     plan.push({ k: g }); last = g;
@@ -222,7 +236,7 @@ function compose(spec, seed) {
 
 function render(spec, plan, r, speed, hard) {
   const items = [];
-  const themePool = [].concat(...spec.theme.map((t) => THEME[spec.pack][t] || []));
+  const themePool = [].concat(...spec.theme.map((t) => themeOf(spec)[t] || []));
   for (const p of plan) {
     let src = null;
     for (let t = 0; t < 6 && !src; t++) {
@@ -231,7 +245,7 @@ function render(spec, plan, r, speed, hard) {
     }
     // a piece that never works at this tempo is swapped for another one of the same kind of job
     if (!src && !/Gate$/.test(p.k)) {
-      const subs = (p.star ? ['spikes', 'blockHop', 'padWall'] : themePool.concat(GENERAL[spec.pack])).filter((k) => k !== p.k);
+      const subs = (p.star ? ['spikes', 'blockHop', 'padWall'] : themePool.concat(GENERAL[spec.pack === 'expert' ? 'hard' : spec.pack])).filter((k) => k !== p.k);
       for (let t = 0; t < 12 && !src; t++) {
         const k = pick(r, subs), s = P[k](r, hard, !!p.star, speed);
         if (pieceOk(spec, k, s)) { src = s; p.k = k; }
@@ -262,7 +276,7 @@ function render(spec, plan, r, speed, hard) {
 function judge(spec, parts) {
   const def = levelFrom(spec, parts);
   const L = ND.parseLevel(def);
-  const secs = L.finishX / L.speed, hard = spec.pack === 'hard';
+  const secs = L.finishX / L.speed, hard = isHard(spec);
   const out = { secs: +secs.toFixed(1), gates: L.gates.length, stars: L.starCount };
   if (L.starCount !== 3) return Object.assign(out, { fail: 'stars placed ' + L.starCount });
   const longOk = L.gates.filter((g) => g.lanes === 3).length + (spec.theme.includes('ball') ? 1 : 0) >= 3 ? 6 : 0;
@@ -276,7 +290,7 @@ function judge(spec, parts) {
   const a = analyzeVariant(L, { trials: 300 });
   if (!a.ok) return Object.assign(out, { fail: 'door 1 impossible' });
   Object.assign(out, { rate25: +a.rate25.toFixed(2), rate40: +a.rate40.toFixed(2), minTap: Math.round(a.minTap) });
-  const band = hard ? { r25: [0.2, 0.85], r40: [0.02, 0.35], tap: 50 } : { r25: [0.45, 0.95], r40: [0.15, 0.8], tap: 70 };
+  const band = spec.pack === 'expert' ? { r25: [0.08, 0.6], r40: [0, 0.2], tap: 45 } : hard ? { r25: [0.2, 0.85], r40: [0.02, 0.35], tap: 50 } : { r25: [0.45, 0.95], r40: [0.15, 0.8], tap: 70 };
   if (a.rate25 < band.r25[0] || a.rate25 > band.r25[1] || a.rate40 < band.r40[0] || a.rate40 > band.r40[1]) return Object.assign(out, { fail: 'difficulty' });
   if (a.minTap < band.tap) return Object.assign(out, { fail: 'tight tap ' + Math.round(a.minTap) + ' ms' });
   const s = solve(L, true);
@@ -315,12 +329,12 @@ function combine() {
     if (!fs.existsSync(f)) { console.log('missing', spec.id); continue; }
     const g = JSON.parse(fs.readFileSync(f, 'utf8'));
     levels.push('    {\n      id: ' + lit(spec.id) + ', name: ' + lit(spec.name) + ', pack: ' + lit(spec.pack) + ', bpm: ' + spec.bpm +
-      ', diff: ' + lit(spec.pack === 'hard' ? 'Hard' : 'Normal') + ', fresh: ' + lit(spec.fresh) + ',\n' +
+      ', diff: ' + lit(DIFF[spec.pack]) + ', fresh: ' + lit(spec.fresh) + ',\n' +
       '      look: ' + lit({ hue: spec.hue, night: spec.night }) + ', song: ' + lit(g.song) + ',\n' +
       '      // checked: ' + g.stats.secs + ' s, sloppy player clears ' + Math.round(g.stats.rate25 * 100) + '% / ' + Math.round(g.stats.rate40 * 100) + '%, tightest tap ' + g.stats.minTap + ' ms\n' +
       '      map: [\n        ' + g.parts.join(',\n        ') + '\n      ]\n    }');
   }
-  const src = '/* Normal and Hard level packs, generated by tools/genlevels.js from checked pieces.\n' +
+  const src = '/* Normal, Hard and Expert level packs, generated by tools/genlevels.js from checked pieces.\n' +
     '   Regenerate instead of hand-editing; every level here passed the level checker. */\n' +
     '(function (root) {\n  var ND = root.ND, B = ND.B;\n  ND.LEVELS.push(\n' + levels.join(',\n') + '\n  );\n})(typeof window !== \'undefined\' ? window : globalThis);\n';
   fs.writeFileSync(path.join(__dirname, '..', 'src', 'packs.js'), src);

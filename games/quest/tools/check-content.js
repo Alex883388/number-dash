@@ -5,13 +5,13 @@ const fs = require('fs'), path = require('path');
 const DIR = process.env.QUEST_CONTENT || path.join(__dirname, '..', 'content');
 const STAGES = [
   null,
-  { id: 'starter', read: [25, 60], opts: [3, 3], sent: [4, 9], extra: [0, 3], pics: 8 },
-  { id: 'mover', read: [40, 90], opts: [3, 3], sent: [4, 9], extra: [0, 3], pics: 8 },
-  { id: 'flyer', read: [70, 130], opts: [3, 4], sent: [5, 12], extra: [0, 3], pics: 0 },
-  { id: 'explorer', read: [120, 190], opts: [4, 4], sent: [5, 12], extra: [4, 4], pics: 0, tfng: 2 },
-  { id: 'achiever', read: [170, 250], opts: [4, 4], sent: [7, 16], extra: [6, 6], pics: 0, tfng: 2, kinds: 4 },
-  { id: 'expert', read: [220, 320], opts: [4, 4], sent: [7, 16], extra: [6, 6], pics: 0, tfng: 2, kinds: 4 },
-  { id: 'band8', read: [250, 380], opts: [4, 4], sent: [7, 16], extra: [6, 6], pics: 0, tfng: 2, kinds: 4 }
+  { id: 'starter', read: [25, 60], opts: [3, 3], sent: [4, 9], extra: [0, 5], pics: 2 / 3 },
+  { id: 'mover', read: [40, 90], opts: [3, 3], sent: [4, 9], extra: [0, 5], pics: 2 / 3 },
+  { id: 'flyer', read: [70, 130], opts: [3, 4], sent: [5, 12], extra: [0, 5], pics: 0 },
+  { id: 'explorer', read: [120, 190], opts: [4, 4], sent: [5, 12], extra: [4, 8], pics: 0, tfng: 2 },
+  { id: 'achiever', read: [170, 250], opts: [4, 4], sent: [7, 16], extra: [6, 12], pics: 0, tfng: 2, kinds: 4 },
+  { id: 'expert', read: [220, 320], opts: [4, 4], sent: [7, 16], extra: [6, 12], pics: 0, tfng: 2, kinds: 4 },
+  { id: 'band8', read: [250, 380], opts: [4, 4], sent: [7, 16], extra: [6, 12], pics: 0, tfng: 2, kinds: 4 }
 ];
 const POS = new Set(['noun', 'verb', 'adj', 'adv', 'prep', 'phrase', 'other']);
 const KINDS = new Set(['collocation', 'linking', 'paraphrase', 'register', 'wordform', 'phrasal', 'idiom', 'preposition', 'mainidea', 'cohesion']);
@@ -44,7 +44,7 @@ function checkStage(n) {
     if (!u.title || u.title.length > 32) err(U, 'title missing or longer than 32 characters');
     if (!u.emoji) err(U, 'emoji missing');
     // words
-    if (!Array.isArray(u.words) || u.words.length !== 12) err(U, 'needs exactly 12 words, has ' + (u.words ? u.words.length : 0));
+    if (!Array.isArray(u.words) || u.words.length < 12 || u.words.length > 24) err(U, 'needs 12–24 words, has ' + (u.words ? u.words.length : 0));
     let pics = 0;
     (u.words || []).forEach((w, i) => {
       const W = U + ' word ' + (i + 1) + ' "' + (w && w.w) + '"';
@@ -63,9 +63,10 @@ function checkStage(n) {
       for (const k of ['syn', 'ant']) if (w[k] !== undefined && (!Array.isArray(w[k]) || w[k].some((x) => typeof x !== 'string' || !x))) err(W, k + ' must be an array of words');
       if (CURLY.test(w.w + w.ex)) err(W, 'curly quotes (use straight quotes)');
     });
-    if (pics < st.pics) err(U, 'needs a pic emoji on at least ' + st.pics + ' words, has ' + pics);
+    const needPics = Math.ceil((u.words || []).length * st.pics);
+    if (pics < needPics) err(U, 'needs a pic emoji on at least ' + needPics + ' words (two thirds), has ' + pics);
     // grammar
-    if (!Array.isArray(u.grammar) || u.grammar.length !== 6) err(U, 'needs exactly 6 grammar items, has ' + (u.grammar ? u.grammar.length : 0));
+    if (!Array.isArray(u.grammar) || u.grammar.length < 6 || u.grammar.length > 12) err(U, 'needs 6–12 grammar items, has ' + (u.grammar ? u.grammar.length : 0));
     (u.grammar || []).forEach((g, i) => {
       const G = U + ' grammar ' + (i + 1);
       if (!g.q || gaps(g.q) !== 1) err(G, 'q needs exactly one ___');
@@ -74,7 +75,7 @@ function checkStage(n) {
       if (CURLY.test(g.q || '')) err(G, 'curly quotes in q');
     });
     // sentences
-    if (!Array.isArray(u.sentences) || u.sentences.length !== 4) err(U, 'needs exactly 4 sentences, has ' + (u.sentences ? u.sentences.length : 0));
+    if (!Array.isArray(u.sentences) || u.sentences.length < 4 || u.sentences.length > 8) err(U, 'needs 4–8 sentences, has ' + (u.sentences ? u.sentences.length : 0));
     (u.sentences || []).forEach((s, i) => {
       const S = U + ' sentence ' + (i + 1);
       if (typeof s !== 'string') { err(S, 'must be a string'); return; }
@@ -86,23 +87,29 @@ function checkStage(n) {
       if (/\b(yesterday|today|tomorrow|usually|often|always|sometimes|then|now|also)\b/i.test(s)) warn(S, 'contains a word that can often move ("' + s.match(/\b(yesterday|today|tomorrow|usually|often|always|sometimes|then|now|also)\b/i)[0] + '"): make sure only one order is natural');
     });
     // reading
-    const r = u.reading;
+    const rs = Array.isArray(u.reading) ? u.reading : [u.reading];
+    if (Array.isArray(u.reading) && (u.reading.length < 1 || u.reading.length > 2)) err(U, 'reading list needs 1 or 2 readings');
+    const titles = new Set();
+    rs.forEach((r, ri) => {
+    const RU = U + (rs.length > 1 ? ' reading ' + (ri + 1) : ' reading');
+    if (r && r.title) { if (titles.has(r.title)) err(RU, 'two readings with the same title'); titles.add(r.title); }
     if (!r || !r.title || !r.text) err(U, 'reading needs title and text');
     else {
       const nw = words(r.text);
-      if (nw < st.read[0] || nw > st.read[1]) err(U + ' reading', 'text has ' + nw + ' words, needs ' + st.read[0] + '–' + st.read[1]);
-      if (!Array.isArray(r.qs) || r.qs.length < 3 || r.qs.length > 5) err(U + ' reading', 'needs 3–5 questions');
+      if (nw < st.read[0] || nw > st.read[1]) err(RU, 'text has ' + nw + ' words, needs ' + st.read[0] + '–' + st.read[1]);
+      if (!Array.isArray(r.qs) || r.qs.length < 3 || r.qs.length > 5) err(RU, 'needs 3–5 questions');
       let tfng = 0;
       (r.qs || []).forEach((q, i) => {
-        const Q = U + ' reading q' + (i + 1);
+        const Q = RU + ' q' + (i + 1);
         if (!q.q) err(Q, 'q missing');
         if (q.type === 'tf') { if (JSON.stringify(q.opts) !== '["True","False"]') err(Q, 'tf opts must be exactly ["True", "False"]'); opts(Q, q.opts, q.a, 2, 2); }
         else if (q.type === 'tfng') { tfng++; if (n < 4) err(Q, 'tfng is used from Explorer (stage 4) up'); if (JSON.stringify(q.opts) !== '["True","False","Not Given"]') err(Q, 'tfng opts must be exactly ["True", "False", "Not Given"]'); opts(Q, q.opts, q.a, 3, 3); }
         else if (q.type === 'mc') opts(Q, q.opts, q.a, st.opts[0], st.opts[1]);
         else err(Q, 'type must be mc, tf or tfng');
       });
-      if (st.tfng && tfng < st.tfng) err(U + ' reading', 'needs at least ' + st.tfng + ' tfng questions, has ' + tfng);
+      if (st.tfng && tfng < st.tfng) err(RU, 'needs at least ' + st.tfng + ' tfng questions, has ' + tfng);
     }
+    });
     // extra
     const ex = u.extra || [];
     if (ex.length < st.extra[0] || ex.length > st.extra[1]) err(U, 'needs ' + (st.extra[0] === st.extra[1] ? st.extra[0] : st.extra[0] + '–' + st.extra[1]) + ' extra items, has ' + ex.length);

@@ -468,6 +468,8 @@ const DECKS = [
   { id: 'syn', name: 'Same meaning', icon: '🤝', note: 'big → large', words: true },
   { id: 'time', name: 'Telling time', icon: '🕒', note: '3:15 → quarter past three', words: true },
   { id: 'frac', name: 'Fractions', icon: '🍕', note: '½ → 0.5 → 50%', math: true },
+  { id: 'baby', name: 'Animal babies', icon: '🐣', note: 'cow → calf', words: true },
+  { id: 'cap', name: 'Capital cities', icon: '🗺️', note: 'Vietnam → Hanoi', words: true },
   { id: 'mix', name: 'Mix', icon: '🎲', note: 'a bit of all', words: true }
 ];
 const SIZES = [{ id: 'small', name: '6 pairs', n: 6, peek: 3 }, { id: 'medium', name: '8 pairs', n: 8, peek: 4 }, { id: 'big', name: '12 pairs', n: 12, peek: 5 }];
@@ -489,6 +491,7 @@ const PICS = [
    ['🦖', 'dinosaur'], ['🍉', 'watermelon'], ['🚲', 'bicycle'], ['🥦', 'broccoli'], ['🍍', 'pineapple'], ['🥪', 'sandwich'], ['🎈', 'balloon'], ['🦘', 'kangaroo'], ['🐊', 'crocodile'], ['🦔', 'hedgehog'],
    ['🚁', 'helicopter'], ['💻', 'computer'], ['🔭', 'telescope'], ['🌋', 'volcano'], ['🎃', 'pumpkin'], ['🐿️', 'squirrel']]
 ];
+// opposites, easy to tricky
 const OPP = [
   [['hot', 'cold'], ['big', 'small'], ['up', 'down'], ['happy', 'sad'], ['fast', 'slow'], ['day', 'night'], ['open', 'closed'], ['in', 'out'], ['wet', 'dry'], ['yes', 'no'],
    ['old', 'new'], ['top', 'bottom'], ['full', 'empty'], ['light', 'dark'], ['high', 'low'], ['left', 'right'], ['on', 'off'], ['push', 'pull'], ['hard', 'soft'], ['loud', 'quiet']],
@@ -516,6 +519,59 @@ const SYN = [
    ['chilly', 'cold'], ['odd', 'strange'], ['reply', 'answer'], ['unhappy', 'sad'], ['shy', 'timid'], ['giggle', 'laugh'], ['mend', 'repair'], ['below', 'under'], ['almost', 'nearly'], ['shout', 'call']],
   [['assist', 'help'], ['purchase', 'buy'], ['require', 'need'], ['obtain', 'get'], ['commence', 'begin'], ['conclude', 'end'], ['vast', 'immense'], ['fragile', 'delicate'], ['accurate', 'precise'], ['rapid', 'swift'],
    ['abundant', 'plentiful'], ['cautious', 'careful'], ['eager', 'keen'], ['vanish', 'disappear'], ['demonstrate', 'show'], ['attempt', 'try'], ['sufficient', 'enough'], ['construct', 'build'], ['observe', 'watch'], ['prohibit', 'forbid']]
+];
+// one ... two ...: [singular, plural, a typical wrong plural]. Where dictionaries also accept a regular plural
+// (radiuses, funguses, mediums, nucleuses, phenomenons, criterions) the third item repeats the singular: no wrong ending offered
+const PLURALS = [
+  [['box', 'boxes', 'boxs'], ['bus', 'buses', 'bus'], ['baby', 'babies', 'babys'], ['man', 'men', 'mans'], ['woman', 'women', 'womans'], ['child', 'children', 'childs'],
+   ['foot', 'feet', 'foots'], ['tooth', 'teeth', 'tooths'], ['mouse', 'mice', 'mouses'], ['dish', 'dishes', 'dishs'], ['fox', 'foxes', 'foxs'], ['city', 'cities', 'citys'],
+   ['lady', 'ladies', 'ladys'], ['watch', 'watches', 'watchs'], ['glass', 'glasses', 'glasss']],
+  [['leaf', 'leaves', 'leafes'], ['knife', 'knives', 'knifes'], ['wolf', 'wolves', 'wolfes'], ['half', 'halves', 'halfs'], ['shelf', 'shelves', 'shelfs'], ['potato', 'potatoes', 'potatos'],
+   ['tomato', 'tomatoes', 'tomatos'], ['hero', 'heroes', 'heros'], ['goose', 'geese', 'gooses'], ['life', 'lives', 'lifes'], ['story', 'stories', 'storys'], ['family', 'families', 'familys'],
+   ['party', 'parties', 'partys'], ['loaf', 'loaves', 'loafs'], ['thief', 'thieves', 'thiefs']],
+  [['cactus', 'cacti', 'cactis'], ['fungus', 'fungi', 'fungus'], ['crisis', 'crises', 'crisises'], ['analysis', 'analyses', 'analysises'], ['phenomenon', 'phenomena', 'phenomenon'],
+   ['criterion', 'criteria', 'criterion'], ['thesis', 'theses', 'thesises'], ['ox', 'oxen', 'oxes'], ['medium', 'media', 'medium'], ['radius', 'radii', 'radius'],
+   ['nucleus', 'nuclei', 'nucleus'], ['axis', 'axes', 'axises'], ['stimulus', 'stimuli', 'stimuluses'], ['hypothesis', 'hypotheses', 'hypothesises'], ['bacterium', 'bacteria', 'bacteriums']]
+];
+// A quiz question from these lists: t has one "?" for the answer (so solved text can fill it in), wrong = n - 1
+// wrong answers that are real words of the same kind (plus, for plurals, the typical wrong ending).
+function englishQuestion(tier, n, kinds) {
+  const kind = pick(kinds || ['past', 'plural', 'opp', 'syn']), t3 = Math.max(0, Math.min(2, tier));
+  let t, a, wrong = [];
+  const others = (list, k) => shuffle(list.filter((x) => x[k] !== a).map((x) => x[k]));
+  if (kind === 'past') { const [v, p] = pick(PAST[t3]); t = 'Past of ' + v + ': ?'; a = p; wrong = others(PAST[t3], 1); }
+  else if (kind === 'plural') {
+    const [s, p, bad] = pick(PLURALS[t3]); t = 'One ' + s + ', two ?'; a = p;
+    wrong = (bad !== s && bad !== p ? [bad] : []).concat(others(PLURALS[t3], 1));
+  } else {
+    const list = kind === 'opp' ? OPP[t3] : SYN[t3], pair = pick(list), flip = Math.random() < 0.5;
+    const w = flip ? pair[1] : pair[0]; a = flip ? pair[0] : pair[1];
+    t = (kind === 'opp' ? 'Opposite of ' : 'Same as ') + w + ': ?';
+    // never offer the word itself, or a word that is its opposite / partner in another pair
+    const skip = new Set([w].concat(list.filter((x) => x.includes(w)).map((x) => (x[0] === w ? x[1] : x[0]))));
+    wrong = shuffle(list.flat().filter((x) => !skip.has(x) && x !== a));
+  }
+  const used = new Set([a]), opts = [];
+  for (const x of wrong) { if (opts.length >= n - 1) break; if (!used.has(x)) { used.add(x); opts.push(x); } }
+  return { t: t, a: a, english: true, kind: kind, wrong: opts };
+}
+// animals and their young: [animal emoji, animal, baby]
+const BABIES = [
+  [['🐄', 'cow', 'calf'], ['🐑', 'sheep', 'lamb'], ['🐈', 'cat', 'kitten'], ['🐕', 'dog', 'puppy'], ['🐔', 'hen', 'chick'], ['🐎', 'horse', 'foal'], ['🦆', 'duck', 'duckling'], ['🐖', 'pig', 'piglet'],
+   ['🐸', 'frog', 'tadpole'], ['🐻', 'bear', 'cub'], ['🦋', 'butterfly', 'caterpillar'], ['🐐', 'goat', 'kid']],
+  [['🦁', 'lion', 'cub'], ['🦘', 'kangaroo', 'joey'], ['🦢', 'swan', 'cygnet'], ['🦌', 'deer', 'fawn'], ['🦉', 'owl', 'owlet'], ['🐇', 'rabbit', 'kit'], ['🦊', 'fox', 'cub'], ['🐋', 'whale', 'calf'],
+   ['🐘', 'elephant', 'calf'], ['🦅', 'eagle', 'eaglet'], ['🐿️', 'squirrel', 'kit'], ['🐢', 'turtle', 'hatchling'], ['🦈', 'shark', 'pup'], ['🦙', 'llama', 'cria'], ['🦚', 'peacock', 'peachick'], ['🦜', 'parrot', 'chick']],
+  [['🐨', 'koala', 'joey'], ['🦭', 'seal', 'pup'], ['🐟', 'fish', 'fry'], ['🦇', 'bat', 'pup'], ['🐦', 'pigeon', 'squab'], ['🦒', 'giraffe', 'calf'], ['🦓', 'zebra', 'foal'], ['🐊', 'crocodile', 'hatchling'],
+   ['🦔', 'hedgehog', 'hoglet'], ['🐍', 'snake', 'snakelet'], ['🦫', 'beaver', 'kit'], ['🐧', 'penguin', 'chick'], ['🐝', 'bee', 'larva'], ['🦗', 'cricket', 'nymph']]
+];
+// countries and their capital cities, well-known first
+const CAPITALS = [
+  [['Vietnam', 'Hanoi'], ['Japan', 'Tokyo'], ['France', 'Paris'], ['England', 'London'], ['China', 'Beijing'], ['Italy', 'Rome'], ['Spain', 'Madrid'], ['Germany', 'Berlin'],
+   ['Russia', 'Moscow'], ['Egypt', 'Cairo'], ['Thailand', 'Bangkok'], ['South Korea', 'Seoul'], ['Greece', 'Athens'], ['USA', 'Washington']],
+  [['Australia', 'Canberra'], ['Canada', 'Ottawa'], ['India', 'New Delhi'], ['Brazil', 'Brasília'], ['Mexico', 'Mexico City'], ['Argentina', 'Buenos Aires'], ['Kenya', 'Nairobi'], ['Austria', 'Vienna'],
+   ['Philippines', 'Manila'], ['Ireland', 'Dublin'], ['Portugal', 'Lisbon'], ['Norway', 'Oslo'], ['Sweden', 'Stockholm'], ['Netherlands', 'Amsterdam'], ['Malaysia', 'Kuala Lumpur'], ['Cambodia', 'Phnom Penh']],
+  [['Turkey', 'Ankara'], ['New Zealand', 'Wellington'], ['Switzerland', 'Bern'], ['Morocco', 'Rabat'], ['Nigeria', 'Abuja'], ['Pakistan', 'Islamabad'], ['Bangladesh', 'Dhaka'], ['Peru', 'Lima'],
+   ['Chile', 'Santiago'], ['Laos', 'Vientiane'], ['Myanmar', 'Naypyidaw'], ['Finland', 'Helsinki'], ['Poland', 'Warsaw'], ['Iceland', 'Reykjavík'], ['Mongolia', 'Ulaanbaatar'], ['Colombia', 'Bogotá']]
 ];
 // fractions as words, decimals and percentages
 const FRACS = [
@@ -569,6 +625,8 @@ function wordsPair(deck, tier, used) {
     else if (deck === 'opp') { const [x, y] = pick(OPP[tier]); p = { a: { kind: 'word', v: x, say: x }, b: { kind: 'word', v: y, say: y }, learned: x + ' ↔ ' + y, key: [x, y] }; }
     else if (deck === 'past') { const [x, y] = pick(PAST[tier]); p = { a: { kind: 'word', v: x, say: x }, b: { kind: 'word', v: y, say: y }, learned: x + ' → ' + y, key: [x, y] }; }
     else if (deck === 'syn') { const [x, y] = pick(SYN[tier]); p = { a: { kind: 'word', v: x, say: x }, b: { kind: 'word', v: y, say: y }, learned: x + ' = ' + y, key: [x, y] }; }
+    else if (deck === 'baby') { const [e, an, b] = pick(BABIES[tier]); p = { a: { kind: 'word', v: e + ' ' + an, say: an }, b: { kind: 'word', v: b, say: b }, learned: an + ' → ' + b, key: [an, b] }; }
+    else if (deck === 'cap') { const [c, t] = pick(CAPITALS[tier]); p = { a: { kind: 'word', v: c, say: c }, b: { kind: 'word', v: t, say: t }, learned: c + ' → ' + t, key: [c, t] }; }
     else if (deck === 'time') { const t = timePair(tier); p = Object.assign(t, { learned: t.a.v + ' = ' + t.b.v, key: [t.a.v, t.b.v] }); }
     else if (deck === 'frac') { const [x, y] = pick(FRACS[tier]); const w = /[a-z]/.test(y); p = { a: { kind: 'num', v: x }, b: { kind: w ? 'word' : 'num', v: y, say: w ? y : undefined }, learned: x + ' = ' + y, key: [x, y] }; }
     else {
@@ -587,7 +645,7 @@ function dealPairs(deck, n) {
   const tier = tierOf(), used = { texts: new Set(), faces: new Set(), words: new Set() }, out = [];
   for (let i = 0; out.length < n && i < n * 4; i++) {
     let d = deck;
-    if (deck === 'mix') d = ['times', 'plus', 'pics', 'opp', 'numw', 'past', 'syn', 'time', 'frac'][out.length % 9];
+    if (deck === 'mix') d = ['times', 'plus', 'pics', 'opp', 'numw', 'past', 'syn', 'time', 'frac', 'baby', 'cap'][out.length % 11];
     const p = MATH_KINDS[d] ? mathPair(MATH_KINDS[d][tier], used, DECK_OPS[d]) : wordsPair(d, tier, used);
     if (p) out.push(p);
   }

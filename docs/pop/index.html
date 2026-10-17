@@ -151,7 +151,7 @@ body.menu .goal, body.menu .strip { visibility: hidden; }
   background: var(--sun); border: 4px solid var(--sun-deep); color: var(--sun-ink); border-radius: 28px; box-shadow: 0 5px 0 var(--sun-deep), var(--shadow-sm);
 }
 .goal .op { font: 800 .74rem/1 var(--font-body); text-transform: uppercase; letter-spacing: .12em; background: rgba(255, 255, 255, .55); padding: 4px 10px; border-radius: 99px; white-space: nowrap; }
-.goal[data-kind="times"] .op { background: #ece6ff; color: #4b3a9e; }
+.goal[data-kind="times"] .op, .goal[data-kind="div"] .op { background: #ece6ff; color: #4b3a9e; }
 .goal .make { font: 700 clamp(30px, min(11vw, 5.6vh), 50px)/1 var(--font-display); white-space: nowrap; font-variant-numeric: tabular-nums; }
 .goal .make b { font-size: 1.18em; }
 .goal.pulse { animation: pop .35s ease both; }
@@ -183,6 +183,11 @@ body.menu .goal, body.menu .strip { visibility: hidden; }
 #field .bub.c0 { --fill: #d6edff; --fill2: #a6d4fa; --edge: #62afe9; }
 #field .bub.c1 { --fill: #d6f7e8; --fill2: #a3e6c8; --edge: #46bf92; }
 #field .bub.c2 { --fill: #e9e2ff; --fill2: #c8b9fb; --edge: #937cea; }
+#field .bub.long { font-size: calc(var(--d, 96px) * .32); }
+#field .bub.cu { --fill: #fdeee3; --fill2: #f2c9a8; --edge: #c0773f; }
+#field .bub.ag { --fill: #f6f8fb; --fill2: #d6dce6; --edge: #8e99ad; }
+#field .bub.au { --fill: #f3f5f9; --fill2: #dde2ea; --edge: #c9a227; border-width: calc(var(--d, 96px) * .08); }
+#field .bub.note { --fill: #e3f6e9; --fill2: #b3e2c2; --edge: #3d9a60; border-radius: 30%; }
 #field .bub.neg { --fill: #ffe3e6; --fill2: #ffb4bd; --edge: #e05468; --txt: #9b2336; }
 #field .bub.on { --fill: #fff0ad; --fill2: #ffc94d; --edge: #d9961a; --txt: #4a3500; box-shadow: 0 0 0 7px rgba(255, 201, 77, .5), var(--bubble-shadow); }
 #field .bub.neg.on { --txt: #9b2336; }
@@ -199,16 +204,16 @@ body:not(.menu) .toast { top: var(--toast-top, 42%); }
 @media (min-width: 700px) { .hud-chips { flex-direction: column; align-items: flex-start; } }
 
 /* home: the worlds */
-.worlds { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.worlds { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .world {
-  min-height: 86px; display: grid; align-content: center; justify-items: center; gap: 4px; padding: 10px 6px; border-radius: 18px; cursor: pointer;
+  min-height: 74px; display: grid; align-content: center; justify-items: center; gap: 3px; padding: 7px 4px; border-radius: 18px; cursor: pointer; min-width: 0;
   background: var(--card-2); border: 2px solid var(--line); box-shadow: 0 4px 0 var(--line); color: var(--ink); transition: transform .08s ease, box-shadow .08s ease;
 }
 .world:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--line); }
 .world:focus-visible { outline: 3px solid var(--lilac); outline-offset: 3px; }
-.world b { font: 700 1.18rem/1.05 var(--font-display); }
-.world small { font-weight: 800; font-size: .86rem; color: var(--ink-soft); white-space: nowrap; }
-.world .ws { font-size: .95rem; letter-spacing: .06em; line-height: 1; background: var(--card); padding: 4px 9px; border-radius: 99px; }
+.world b { font: 700 1.12rem/1.05 var(--font-display); white-space: nowrap; }
+.world small { font-weight: 800; font-size: .82rem; color: var(--ink-soft); white-space: nowrap; }
+.world .ws { font-size: .88rem; letter-spacing: .06em; line-height: 1; background: var(--card); padding: 4px 9px; border-radius: 99px; }
 .world .ws .off { opacity: .25; filter: grayscale(1); }
 .world[aria-checked="true"] { background: var(--sun); border-color: var(--sun-deep); box-shadow: 0 4px 0 var(--sun-deep); color: var(--sun-ink); }
 .world[aria-checked="true"] small { color: var(--sun-ink); }
@@ -225,7 +230,13 @@ body:not(.menu) .toast { top: var(--toast-top, 42%); }
   .goal { max-width: 100%; }
   .strip { width: 100%; }
 }
-@media (max-width: 520px) { .worlds { grid-template-columns: repeat(2, minmax(0, 1fr)); } .world { min-height: 80px; } }
+@media (max-width: 520px) {
+  .worlds { gap: 6px; }
+  .world { min-height: 70px; padding: 6px 2px; border-radius: 14px; }
+  .world b { font-size: .98rem; }
+  .world small { font-size: .72rem; }
+  .world .ws { font-size: .74rem; padding: 3px 6px; }
+}
 @media (prefers-reduced-motion: reduce) { #bg i, .goal.pulse, .strip.shake, #doneStars span { animation: none !important; } }
 body.calm #bg i, body.calm .goal.pulse, body.calm .strip.shake { animation: none; }
 </style>
@@ -267,11 +278,11 @@ body.calm #bg i, body.calm .goal.pulse, body.calm .strip.shake { animation: none
       </div>
       <div class="row"><button class="btn sun big" id="playBtn">Play</button></div>
       <div>
-        <p class="seg-title">Times tables</p>
+        <p class="seg-title">Tables for Times, Share it and Mix</p>
         <div class="seg">
-          <label><input type="radio" name="math" value="starter"><span>2, 5 and 10</span></label>
-          <label><input type="radio" name="math" value="explorer"><span>Up to 10 × 10</span></label>
-          <label><input type="radio" name="math" value="genius"><span>Up to 12 × 12</span></label>
+          <label><input type="radio" name="math" value="starter"><span>2, 5, 10</span></label>
+          <label><input type="radio" name="math" value="explorer"><span>To 10 × 10</span></label>
+          <label><input type="radio" name="math" value="genius"><span>To 12 × 12</span></label>
         </div>
       </div>
       <div class="row">
@@ -845,7 +856,14 @@ const WORLDS = [
   { id: 3, name: 'Up to 50', ex: '23 + 18', n: 10, kind: 'plus', lo: 3, hi: 29, tLo: 20, tHi: 50, parts: [2, 2, 3], op: 'add', t3: 85, t2: 140 },
   { id: 4, name: 'Take away', ex: '12 ' + MINUS + ' 5 + 9', n: 10, kind: 'minus', lo: 3, hi: 30, nLo: 2, nHi: 9, tLo: 5, tHi: 30, parts: [2, 3], op: 'add & take away', t3: 95, t2: 160 },
   { id: 5, name: 'Times', ex: '6 ' + TIMES + ' 7', n: 10, kind: 'times', op: 'times', t3: 55, t2: 90 },
-  { id: 6, name: 'Mix', ex: '+ and ' + TIMES, n: 10, kind: 'mix', tLo: 11, tHi: 20, parts: [2, 2, 3], op: 'add', t3: 65, t2: 105 }
+  { id: 6, name: 'Mix', ex: '+ and ' + TIMES, n: 10, kind: 'mix', tLo: 11, tHi: 20, parts: [2, 2, 3], op: 'add', t3: 65, t2: 105 },
+  // bonds to 100: round tens for the first three targets, then 100; bubbles in tens and ones
+  { id: 7, name: 'Make 100', ex: '35 + 65', n: 10, kind: 'plus', lo: 1, hi: 95, parts: [2, 2, 3], op: 'bonds to 100',
+    targets: (done) => (done < 3 ? [40, 50, 60, 70, 80, 90] : [100]), split: split100, t3: 85, t2: 140 },
+  // division: the target is a quotient; any two bubbles where the bigger shared by the smaller makes it
+  { id: 8, name: 'Share it', ex: '42 ' + DIV + ' 6', n: 10, kind: 'div', op: 'divide', t3: 55, t2: 95 },
+  // British coins and a note, in pence inside; targets read 85p or £1.35
+  { id: 9, name: 'Money', ex: '50p + 20p', n: 10, kind: 'plus', money: true, gen: coin, dup: 3, tLo: 6, tHi: 800, parts: [2, 3, 3], op: 'money', t3: 105, t2: 160 }
 ];
 const worldById = (id) => WORLDS.find((w) => w.id === +id) || WORLDS[0];
 const rec = loadRecords('number-pop.v1', { world: 1, rounds: 0, popped: 0, worlds: {} });
@@ -866,6 +884,30 @@ function starsFor(w, time, slips) {
 const calm = () => !!save.settings.calm;
 const sumOf = (vs) => vs.reduce((a, b) => a + b, 0);
 const numText = (v) => (v < 0 ? MINUS + (-v) : String(v));
+// money: coins as on the coin (50p, £2), amounts as on a price tag (85p, £1.35)
+const COINS = [1, 2, 5, 10, 20, 50, 100, 200, 500], COIN_ODDS = [1, 1, 2, 3, 3, 3, 2, 2, 1];
+function coin() { let r = Math.random() * 18; for (let i = 0; i < COINS.length; i++) { r -= COIN_ODDS[i]; if (r < 0) return COINS[i]; } return 10; }
+const coinText = (v) => (v >= 100 ? '£' + v / 100 : v + 'p');
+const moneyText = (v) => (v >= 100 ? '£' + (v / 100).toFixed(2) : v + 'p');
+const coinWords = (v) => (v >= 100 && v % 100 === 0 ? v / 100 + (v === 100 ? ' pound' : ' pounds') : v >= 100 ? Math.floor(v / 100) + ' pounds ' + (v % 100) + ' pence' : v + (v === 1 ? ' penny' : ' pence'));
+const moneyMode = () => game.state !== 'menu' && !!game.w.money;
+const valText = (v) => (moneyMode() ? coinText(v) : numText(v));
+const totText = (v) => (moneyMode() ? moneyText(v) : numText(v));
+// a Make 100 bubble: often a multiple of five, often any two-digit number, now and then a single digit
+function val100() { const r = Math.random(); return r < 0.45 ? 5 * rnd(1, 19) : r < 0.85 ? rnd(11, 89) : rnd(1, 9); }
+// R cut into m Make 100 bubbles (1-95 each), or null
+function split100(R, m) {
+  if (m === 1) return R >= 1 && R <= 95 ? [R] : null;
+  for (let t = 0; t < 30; t++) {
+    const a = val100();
+    if (a >= R) continue;
+    const rest = split100(R - a, m - 1);
+    if (rest) return [a].concat(rest);
+  }
+  return null;
+}
+// the exact quotient of two bubbles (bigger by smaller), or NaN
+const divOf = (vs) => { const big = Math.max(vs[0], vs[1]), small = Math.min(vs[0], vs[1]); return small > 0 && big % small === 0 ? big / small : NaN; };
 
 /* ================= the field and its bubbles ================= */
 const field = $('#field'), fx = $('#fx'), fctx = fx.getContext('2d');
@@ -888,9 +930,10 @@ const COLS = ['#62afe9', '#46bf92', '#937cea'], NEG_COL = '#e05468';
 
 function setValue(b, v) {
   b.v = v; b.col = rnd(0, 2);
-  b.el.textContent = numText(v);
-  b.el.className = 'bub ' + (v < 0 ? 'neg' : 'c' + b.col);
-  b.el.setAttribute('aria-label', v < 0 ? 'minus ' + (-v) : String(v));
+  const label = valText(v);
+  b.el.textContent = label;
+  b.el.className = 'bub ' + (v < 0 ? 'neg' : moneyMode() ? (v < 5 ? 'cu' : v < 100 ? 'ag' : v < 500 ? 'au' : 'note') : 'c' + b.col) + (label.length > 2 ? ' long' : '');
+  b.el.setAttribute('aria-label', v < 0 ? 'minus ' + (-v) : moneyMode() ? coinWords(v) : String(v));
 }
 function setPicked(b, on) {
   b.picked = on; b.el.classList.toggle('on', on); b.el.setAttribute('aria-pressed', String(on));
@@ -914,7 +957,7 @@ function spawn(b, v) {
   b.x = p[0]; b.y = p[1]; b.vx = 0; b.vy = 0; b.th = Math.random() * 6.283; b.st = 'in'; b.t = 0; b.el.hidden = false;
 }
 function popBubble(b, n) {
-  const x = FL + b.x, y = FT + b.y, c = b.v < 0 ? NEG_COL : COLS[b.col];
+  const x = FL + b.x, y = FT + b.y, c = b.v < 0 ? NEG_COL : moneyMode() ? '#c9a227' : COLS[b.col];
   b.st = 'pop'; b.t = 0; b.picked = false; b.el.classList.remove('hint');   // keeps its sunny look while it bursts
   burst(x, y, c, n || 14);
 }
@@ -1003,6 +1046,12 @@ function valueRange() {
 }
 function randomValue() {
   const w = game.w, tb = tables(), vr = valueRange();
+  if (w.money) return coin();
+  if (w.split) return val100();
+  if (w.kind === 'div') {   // half numbers to share (table products), half numbers to share by
+    if (Math.random() < 0.5) { let a = rnd(tb.lo, tb.hi), b = rnd(tb.lo, tb.hi); for (let k = 0; k < 20 && !pairOk(a, b, tb); k++) { a = rnd(tb.lo, tb.hi); b = rnd(tb.lo, tb.hi); } return a * b; }
+    return tb.key && Math.random() < 0.45 ? pick(tb.key) : rnd(tb.lo, tb.hi);
+  }
   if (w.kind === 'minus' && Math.random() < 0.25 && slots.filter((b) => alive(b) && b.v < 0).length < 3) return -rnd(w.nLo, w.nHi);
   if ((w.kind === 'times' || w.kind === 'mix') && tb.key && Math.random() < 0.45) return pick(tb.key);
   return rnd(vr.lo, vr.hi);
@@ -1014,6 +1063,49 @@ function eachCombo(list, k, fn) {
     for (let j = start; j < list.length; j++) { idx.push(j); go(j + 1); idx.pop(); }
   })(0);
 }
+// Make 100: the target comes first (a round ten or 100), then new bubbles are cut from what is left
+function planSplit(old, fresh, w, oldVals) {
+  const targets = w.targets(game.done), last = game.target;
+  const okT = (T, loose) => targets.indexOf(T) >= 0 && !oldVals.has(T) && (loose || targets.length === 1 || T !== last);
+  if (old.length >= 2 && Math.random() < 0.55) {
+    const cands = [];
+    for (const k of new Set(w.parts)) eachCombo(old, k, (c) => { const T = sumOf(c.map((b) => b.v)); if (okT(T)) cands.push({ T: T, olds: c, vals: [] }); });
+    if (cands.length) return pick(cands);
+  }
+  for (let tries = 0; tries < 400; tries++) {
+    const T = pick(targets);
+    if (!okT(T, tries > 300)) continue;
+    const k = pick(w.parts), m = rnd(1, Math.min(k, fresh.length)), olds = shuffle(old.slice()).slice(0, k - m);
+    if (olds.length < k - m) continue;
+    const vals = w.split(T - sumOf(olds.map((o) => o.v)), m);
+    if (!vals || vals.indexOf(T) >= 0) continue;
+    return { T: T, olds: olds, vals: shuffle(vals) };
+  }
+  return null;
+}
+// Share it: a number to share and a number to share by, from the tables of the shared math level
+function planDiv(old, fresh) {
+  const tb = tables(), last = game.target;
+  if (old.length >= 2 && Math.random() < 0.55) {
+    const cands = [];
+    eachCombo(old, 2, (c) => { const q = divOf([c[0].v, c[1].v]), d = Math.min(c[0].v, c[1].v); if (q !== last && pairOk(d, q, tb)) cands.push({ T: q, olds: c, vals: [] }); });
+    if (cands.length) return pick(cands);
+  }
+  for (let tries = 0; tries < 400; tries++) {
+    const r = Math.random(), o = old.length ? pick(old) : null;
+    let d, q, olds = [], vals;
+    if (o && r < 0.35) { d = o.v; q = rnd(tb.lo, tb.hi); olds = [o]; vals = [d * q]; }   // an old bubble shares
+    else if (o && r < 0.6) {                                                             // an old bubble is shared
+      const ds = [];
+      for (let k = tb.lo; k <= tb.hi; k++) if (o.v % k === 0 && pairOk(k, o.v / k, tb)) ds.push(k);
+      if (!ds.length) continue;
+      d = pick(ds); q = o.v / d; olds = [o]; vals = [d];
+    } else { d = rnd(tb.lo, tb.hi); q = rnd(tb.lo, tb.hi); vals = [d * q, d]; }
+    if (!pairOk(d, q, tb) || (q === last && tries < 300)) continue;
+    return { T: q, olds: olds, vals: vals };
+  }
+  return null;
+}
 function planTarget(fresh) {
   const w = game.w, kind = kindNow(), tb = tables(), vr = valueRange();
   const old = slots.filter((b) => alive(b) && fresh.indexOf(b) < 0);
@@ -1022,8 +1114,9 @@ function planTarget(fresh) {
   // no single bubble may already be the answer, and the same target twice in a row is dull
   const fixedT = kind !== 'times' && w.tLo === w.tHi;
   const okT = (T, loose) => !oldVals.has(T) && (loose || fixedT || T !== last);
-  let plan = null;
-  if (old.length >= 2 && Math.random() < 0.55) {
+  let plan = kind === 'div' ? planDiv(old, fresh) : w.split ? planSplit(old, fresh, w, oldVals) : null;
+  const generic = kind !== 'div' && !w.split;
+  if (generic && old.length >= 2 && Math.random() < 0.55) {
     const cands = [];
     const sizes = kind === 'times' ? [2] : Array.from(new Set(w.parts));
     for (const k of sizes) {
@@ -1042,7 +1135,7 @@ function planTarget(fresh) {
     }
     if (cands.length) plan = pick(cands);
   }
-  for (let tries = 0; !plan && tries < 500; tries++) {
+  for (let tries = 0; generic && !plan && tries < 500; tries++) {
     const loose = tries > 400;
     if (kind === 'times') {
       const useOld = old.length > 0 && (fresh.length < 2 || Math.random() < 0.5);
@@ -1058,14 +1151,17 @@ function planTarget(fresh) {
       const olds = shuffle(pool.slice()).slice(0, k - m);
       const needNeg = kind === 'minus' && !olds.some((o) => o.v < 0);
       const vals = [];
-      for (let j = 0; j < m; j++) vals.push(needNeg && j === 0 ? -rnd(w.nLo, w.nHi) : rnd(vr.lo, vr.hi));
+      for (let j = 0; j < m; j++) vals.push(needNeg && j === 0 ? -rnd(w.nLo, w.nHi) : w.gen ? w.gen() : rnd(vr.lo, vr.hi));
       const T = sumOf(olds.map((o) => o.v)) + sumOf(vals);
       if (T < w.tLo || T > w.tHi || vals.indexOf(T) >= 0 || !okT(T, loose)) continue;
       plan = { T: T, olds: olds, vals: shuffle(vals) };
     }
   }
   if (!plan) {   // never seen in tests; a plain answer made of new bubbles only
-    if (kind === 'times') { const a = tb.key ? pick(tb.key) : rnd(tb.lo, tb.hi), b = rnd(tb.lo, tb.hi); plan = { T: a * b, olds: [], vals: [a, b] }; }
+    if (kind === 'div') { const d = tb.key ? pick(tb.key) : rnd(tb.lo, tb.hi), q = rnd(tb.lo, tb.hi); plan = { T: q, olds: [], vals: [d * q, d] }; }
+    else if (w.split) { const T = pick(w.targets(game.done)), a = 5 * Math.floor(T / 10); plan = { T: T, olds: [], vals: [a, T - a] }; }
+    else if (w.money) { plan = { T: 70, olds: [], vals: [50, 20] }; }
+    else if (kind === 'times') { const a = tb.key ? pick(tb.key) : rnd(tb.lo, tb.hi), b = rnd(tb.lo, tb.hi); plan = { T: a * b, olds: [], vals: [a, b] }; }
     else if (kind === 'minus') { const T = rnd(w.tLo, 21), n = -rnd(w.nLo, w.nHi); plan = { T: T, olds: [], vals: [T - n, n] }; }
     else { const T = rnd(w.tLo, w.tHi), a = Math.floor(T / 2); plan = { T: T, olds: [], vals: [a, T - a] }; }
   }
@@ -1075,7 +1171,7 @@ function planTarget(fresh) {
   plan.vals.forEach((v, j) => { spawn(fr[j], v); sol.push(fr[j].i); count(v); });
   for (let j = plan.vals.length; j < fr.length; j++) {
     let v = randomValue();
-    for (let k = 0; k < 60 && (v === plan.T || (counts[v] || 0) >= 2); k++) v = randomValue();
+    for (let k = 0; k < 60 && (v === plan.T || (counts[v] || 0) >= (w.dup || 2)); k++) v = randomValue();
     spawn(fr[j], v); count(v);
   }
   game.target = plan.T; game.kind = kind; game.sol = sol; game.tid++;
@@ -1085,17 +1181,20 @@ function newTarget(fresh) {
   game.picks = []; game.phase = 'pick'; game.targetAt = game.time; game.tSlips = 0; game.hints = 0; game.wrongNoted = false;
   slots.forEach((b) => b.el.classList.remove('hint'));
   showTarget(); showStrip();
-  announce('Make ' + game.target + (game.kind === 'times' ? ' with two bubbles multiplied' : '') + '. Bubbles: ' + slots.filter(alive).map((b) => numText(b.v)).join(', '));
+  announce('Make ' + (moneyMode() ? coinWords(game.target) : game.target) + (game.kind === 'times' ? ' with two bubbles multiplied' : game.kind === 'div' ? ' by dividing one bubble by another' : '') +
+    '. Bubbles: ' + slots.filter(alive).map((b) => valText(b.v)).join(', '));
 }
 
 /* ================= picking ================= */
 function factOf(vals, kind, T) {
   if (kind === 'times') return { t: vals[0] + ' ' + TIMES + ' ' + vals[1], a: T, f: [vals[0], vals[1]] };
+  if (kind === 'div') return { t: eqText(vals, kind), a: divOf(vals) };
   return { t: eqText(vals, kind), a: T };
 }
 function eqText(vals, kind) {
   if (kind === 'times') return vals.join(' ' + TIMES + ' ');
-  return vals.map((v, j) => (j === 0 ? numText(v) : v < 0 ? ' ' + MINUS + ' ' + (-v) : ' + ' + v)).join('');
+  if (kind === 'div') return Math.max(vals[0], vals[1]) + ' ' + DIV + ' ' + Math.min(vals[0], vals[1]);
+  return vals.map((v, j) => (j === 0 ? valText(v) : v < 0 ? ' ' + MINUS + ' ' + (-v) : ' + ' + valText(v))).join('');
 }
 let lastPointerTap = 0;
 function tap(i) {
@@ -1118,6 +1217,11 @@ function judge() {
   if (game.kind === 'times') {
     if (n < 2) { showStrip(); return; }
     if (vals[0] * vals[1] === T) solve(); else letGo('Not quite', true);
+    return;
+  }
+  if (game.kind === 'div') {   // two bubbles, either order: the bigger shared by the smaller
+    if (n < 2) { showStrip(); return; }
+    if (divOf(vals) === T) solve(); else letGo('Not quite', true);
     return;
   }
   const s = sumOf(vals);
@@ -1143,7 +1247,7 @@ function letGo(msg, wrongPair) {
   if (wrongPair && !game.wrongNoted) {
     game.wrongNoted = true;
     const sv = game.sol.map((i) => slots[i].v);
-    mathWrong(factOf(sv, 'times', game.target));
+    mathWrong(factOf(sv, game.kind, game.target));
   }
 }
 function releaseAll() {
@@ -1175,14 +1279,16 @@ function solve() {
 /* ================= target badge and equation strip ================= */
 function showTarget() {
   const g = $('#goal'), w = game.w;
-  $('#targetNum').textContent = String(game.target);
+  $('#targetNum').textContent = totText(game.target);
   $('#opLabel').textContent = game.kind === 'times' ? 'times' : w.kind === 'mix' ? 'add' : w.op;
   g.dataset.kind = game.kind;
   g.classList.remove('pulse'); void g.offsetWidth; g.classList.add('pulse');
 }
 function hintText() {
-  const T = '<b>' + game.target + '</b>';
+  const T = '<b>' + totText(game.target) + '</b>';
   if (game.kind === 'times') return 'Which two multiply to ' + T + '?';
+  if (game.kind === 'div') return 'Which two divide to make ' + T + '?';
+  if (game.w.money) return 'Add coins to make ' + T;
   if (game.kind === 'minus') return 'Add and take away to make ' + T;
   if (game.w.parts.length === 1) return 'Find two bubbles that make ' + T;
   return 'Add bubbles to make ' + T;
@@ -1192,13 +1298,19 @@ function showStrip(mode) {
   s.classList.remove('good', 'over');
   let html, chars = 0;
   if (!vals.length) html = '<span class="hint">' + hintText() + '</span>';
-  else if (vals.length < 2) { html = numText(vals[0]) + ' <span class="tot">' + (kind === 'times' ? TIMES : '+') + ' ?</span>'; chars = 7; }
-  else {
-    const tot = kind === 'times' ? vals[0] * vals[1] : sumOf(vals), eq = eqText(vals, kind);
-    html = '<span class="eq">' + eq + '</span> <span class="tot">= ' + numText(tot) + '</span>';
-    chars = eq.length + 3 + numText(tot).length;
+  else if (vals.length < 2) {
+    const v = vals[0];
+    // division: a big first pick is the number to share, a small one the number to share by
+    if (kind === 'div') html = v > game.target ? v + ' <span class="tot">' + DIV + ' ?</span>' : '<span class="tot">? ' + DIV + '</span> ' + v;
+    else html = valText(v) + ' <span class="tot">' + (kind === 'times' ? TIMES : '+') + ' ?</span>';
+    chars = 7;
+  } else {
+    const q = kind === 'div' ? divOf(vals) : 0, tot = kind === 'times' ? vals[0] * vals[1] : kind === 'div' ? q : sumOf(vals), eq = eqText(vals, kind);
+    const totS = kind === 'div' && !Number.isInteger(q) ? '≠ ' + game.target : '= ' + totText(tot);
+    html = '<span class="eq">' + eq + '</span> <span class="tot">' + totS + '</span>';
+    chars = eq.length + 1 + totS.length;
     if (mode === 'good') s.classList.add('good');
-    else if (mode === 'over' || (kind !== 'times' && tot > game.target)) s.classList.add('over');
+    else if (mode === 'over' || (kind !== 'times' && kind !== 'div' && tot > game.target)) s.classList.add('over');
   }
   s.innerHTML = '<span class="line">' + html + '</span>';
   const fit = chars ? Math.min(s.clientHeight * 0.62, (s.clientWidth - 40) / (chars * 0.6)) : 0;
@@ -1339,7 +1451,7 @@ function renderHome() {
 }
 function menuField() {
   game.n = 10; resize();
-  for (const b of slots) { setPicked(b, false); b.el.classList.remove('hint'); if (b.i >= game.n) { b.st = 'off'; b.el.hidden = true; } else if (!alive(b)) spawn(b, rnd(1, 20)); }
+  for (const b of slots) { setPicked(b, false); b.el.classList.remove('hint'); if (b.i >= game.n) { b.st = 'off'; b.el.hidden = true; } else if (!alive(b)) spawn(b, rnd(1, 20)); else setValue(b, rnd(1, 20)); }   // plain numbers on the home screen
 }
 function goHome() {
   game.state = 'menu'; game.phase = 'pick'; game.picks = [];

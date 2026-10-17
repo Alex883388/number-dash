@@ -83,5 +83,11 @@ module.exports = [
   { log: '[document.documentElement.scrollWidth, innerWidth, document.querySelector(".qwrap").scrollHeight, document.querySelector(".qwrap").clientHeight]' },
   { viewport: [1180, 820, true, true, 2] }, { eval: "document.getElementById('quitBtn').click(); 'home'" }, { sleep: 400 }, { shot: 'quest-20-dark-home' },
   { eval: "document.getElementById('pathBtn').click(); 'path'" }, { sleep: 400 }, { shot: 'quest-21-dark-path' },
+  // a reading turned into listening: the text is hidden and played, then shown after the answer
+  { viewport: [1180, 820, true, false, 2] },
+  { eval: "(() => { const Q = window.__quest; let tries = 0; do { Q.startLesson('unit', 5, 1); tries++; } while (!Q.L.qs.some((q) => q.hear) && tries < 60); while (!Q.L.qs[Q.L.i].hear) { Q.answer(true); Q.next(); } return ['tries ' + tries, 'transcript hidden ' + document.getElementById('transcript').hidden, 'hear box ' + !!document.querySelector('.passage.hear')]; })()" },
+  { sleep: 600 }, { shot: 'quest-22-listening' },
+  { eval: "(() => { const Q = window.__quest, said = Q.Speech.said.slice(-1)[0] || ''; Q.answer(false); return ['played the talk ' + (said === Q.L.qs[Q.L.i].passage.text), 'transcript hidden ' + document.getElementById('transcript').hidden, Q.L.qs[Q.L.i].skill]; })()" },
+  { sleep: 300 }, { shot: 'quest-23-listening-answered' },
   { log: 'JSON.stringify(window.__errs)' }
 ];

@@ -24,7 +24,7 @@ const st = "(() => { const g = window.__ladder.game; return { state: g.state, ru
 const pictureAt = (r, name, ms) => [
   { waitFor: `window.__ladder.game.row && window.__ladder.game.row.r === ${r} && window.__ladder.game.state === 'play'`, timeout: 200000 },
   { eval: "window.__lbot.mode = 'off'; 'hold'" }, { sleep: ms || 900 },
-  { log: `[window.__ladder.game.row.mo.kind, window.__ladder.game.row.mo.spin || false, document.getElementById('toast').hidden ? '' : document.getElementById('toast').textContent]` },
+  { log: `[(window.__ladder.game.row || window.__ladder.game.oldRow).mo.kind, (window.__ladder.game.row || window.__ladder.game.oldRow).mo.spin || false, document.getElementById('toast').hidden ? '' : document.getElementById('toast').textContent]` },
   { shot: name },
   { eval: "window.__lbot.mode = 'right'; 'go'" }
 ];

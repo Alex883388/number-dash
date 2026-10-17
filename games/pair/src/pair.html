@@ -156,6 +156,8 @@ const DECKS = [
   { id: 'syn', name: 'Same meaning', icon: '🤝', note: 'big → large', words: true },
   { id: 'time', name: 'Telling time', icon: '🕒', note: '3:15 → quarter past three', words: true },
   { id: 'frac', name: 'Fractions', icon: '🍕', note: '½ → 0.5 → 50%', math: true },
+  { id: 'baby', name: 'Animal babies', icon: '🐣', note: 'cow → calf', words: true },
+  { id: 'cap', name: 'Capital cities', icon: '🗺️', note: 'Vietnam → Hanoi', words: true },
   { id: 'mix', name: 'Mix', icon: '🎲', note: 'a bit of all', words: true }
 ];
 const SIZES = [{ id: 'small', name: '6 pairs', n: 6, peek: 3 }, { id: 'medium', name: '8 pairs', n: 8, peek: 4 }, { id: 'big', name: '12 pairs', n: 12, peek: 5 }];
@@ -177,33 +179,24 @@ const PICS = [
    ['🦖', 'dinosaur'], ['🍉', 'watermelon'], ['🚲', 'bicycle'], ['🥦', 'broccoli'], ['🍍', 'pineapple'], ['🥪', 'sandwich'], ['🎈', 'balloon'], ['🦘', 'kangaroo'], ['🐊', 'crocodile'], ['🦔', 'hedgehog'],
    ['🚁', 'helicopter'], ['💻', 'computer'], ['🔭', 'telescope'], ['🌋', 'volcano'], ['🎃', 'pumpkin'], ['🐿️', 'squirrel']]
 ];
-const OPP = [
-  [['hot', 'cold'], ['big', 'small'], ['up', 'down'], ['happy', 'sad'], ['fast', 'slow'], ['day', 'night'], ['open', 'closed'], ['in', 'out'], ['wet', 'dry'], ['yes', 'no'],
-   ['old', 'new'], ['top', 'bottom'], ['full', 'empty'], ['light', 'dark'], ['high', 'low'], ['left', 'right'], ['on', 'off'], ['push', 'pull'], ['hard', 'soft'], ['loud', 'quiet']],
-  [['tall', 'short'], ['thick', 'thin'], ['heavy', 'light'], ['early', 'late'], ['first', 'last'], ['win', 'lose'], ['clean', 'dirty'], ['strong', 'weak'], ['near', 'far'], ['start', 'finish'],
-   ['buy', 'sell'], ['laugh', 'cry'], ['sweet', 'sour'], ['brave', 'scared'], ['awake', 'asleep'], ['before', 'after'], ['always', 'never'], ['inside', 'outside'], ['question', 'answer'], ['remember', 'forget']],
-  [['ancient', 'modern'], ['deep', 'shallow'], ['wide', 'narrow'], ['rough', 'smooth'], ['arrive', 'depart'], ['increase', 'decrease'], ['include', 'exclude'], ['maximum', 'minimum'], ['accept', 'refuse'], ['victory', 'defeat'],
-   ['frequent', 'rare'], ['temporary', 'permanent'], ['horizontal', 'vertical'], ['generous', 'selfish'], ['success', 'failure'], ['interior', 'exterior'], ['visible', 'invisible'], ['possible', 'impossible'], ['polite', 'rude'], ['ascend', 'descend']]
+/*__SHARED:english-words__*/
+// animals and their young: [animal emoji, animal, baby]
+const BABIES = [
+  [['🐄', 'cow', 'calf'], ['🐑', 'sheep', 'lamb'], ['🐈', 'cat', 'kitten'], ['🐕', 'dog', 'puppy'], ['🐔', 'hen', 'chick'], ['🐎', 'horse', 'foal'], ['🦆', 'duck', 'duckling'], ['🐖', 'pig', 'piglet'],
+   ['🐸', 'frog', 'tadpole'], ['🐻', 'bear', 'cub'], ['🦋', 'butterfly', 'caterpillar'], ['🐐', 'goat', 'kid']],
+  [['🦁', 'lion', 'cub'], ['🦘', 'kangaroo', 'joey'], ['🦢', 'swan', 'cygnet'], ['🦌', 'deer', 'fawn'], ['🦉', 'owl', 'owlet'], ['🐇', 'rabbit', 'kit'], ['🦊', 'fox', 'cub'], ['🐋', 'whale', 'calf'],
+   ['🐘', 'elephant', 'calf'], ['🦅', 'eagle', 'eaglet'], ['🐿️', 'squirrel', 'kit'], ['🐢', 'turtle', 'hatchling'], ['🦈', 'shark', 'pup'], ['🦙', 'llama', 'cria'], ['🦚', 'peacock', 'peachick'], ['🦜', 'parrot', 'chick']],
+  [['🐨', 'koala', 'joey'], ['🦭', 'seal', 'pup'], ['🐟', 'fish', 'fry'], ['🦇', 'bat', 'pup'], ['🐦', 'pigeon', 'squab'], ['🦒', 'giraffe', 'calf'], ['🦓', 'zebra', 'foal'], ['🐊', 'crocodile', 'hatchling'],
+   ['🦔', 'hedgehog', 'hoglet'], ['🐍', 'snake', 'snakelet'], ['🦫', 'beaver', 'kit'], ['🐧', 'penguin', 'chick'], ['🐝', 'bee', 'larva'], ['🦗', 'cricket', 'nymph']]
 ];
-// verbs and their past tense (only pairs spelled differently), easy to tricky
-const PAST = [
-  [['go', 'went'], ['eat', 'ate'], ['see', 'saw'], ['run', 'ran'], ['sit', 'sat'], ['have', 'had'], ['get', 'got'], ['swim', 'swam'], ['sing', 'sang'], ['drink', 'drank'],
-   ['come', 'came'], ['give', 'gave'], ['make', 'made'], ['say', 'said'], ['play', 'played'], ['jump', 'jumped'], ['look', 'looked'], ['help', 'helped'], ['walk', 'walked'], ['win', 'won']],
-  [['buy', 'bought'], ['bring', 'brought'], ['think', 'thought'], ['catch', 'caught'], ['teach', 'taught'], ['fly', 'flew'], ['draw', 'drew'], ['grow', 'grew'], ['know', 'knew'], ['throw', 'threw'],
-   ['write', 'wrote'], ['ride', 'rode'], ['drive', 'drove'], ['speak', 'spoke'], ['break', 'broke'], ['wake', 'woke'], ['choose', 'chose'], ['forget', 'forgot'], ['find', 'found'], ['hold', 'held'],
-   ['keep', 'kept'], ['sleep', 'slept'], ['feel', 'felt'], ['meet', 'met'], ['sell', 'sold'], ['tell', 'told'], ['build', 'built'], ['carry', 'carried'], ['stop', 'stopped'], ['try', 'tried']],
-  [['begin', 'began'], ['freeze', 'froze'], ['hide', 'hid'], ['bite', 'bit'], ['shake', 'shook'], ['swing', 'swung'], ['seek', 'sought'], ['bend', 'bent'], ['lend', 'lent'], ['spend', 'spent'],
-   ['dig', 'dug'], ['stick', 'stuck'], ['strike', 'struck'], ['kneel', 'knelt'], ['lead', 'led'], ['flee', 'fled'], ['forgive', 'forgave'], ['arise', 'arose'], ['tear', 'tore'], ['wear', 'wore'],
-   ['shine', 'shone'], ['slide', 'slid'], ['spin', 'spun'], ['sink', 'sank'], ['spring', 'sprang'], ['deal', 'dealt'], ['mean', 'meant'], ['forbid', 'forbade'], ['undertake', 'undertook'], ['overcome', 'overcame']]
-];
-// words that mean (almost) the same
-const SYN = [
-  [['big', 'large'], ['little', 'small'], ['glad', 'happy'], ['quick', 'fast'], ['start', 'begin'], ['close', 'shut'], ['gift', 'present'], ['finish', 'end'], ['ill', 'sick'], ['yell', 'shout'],
-   ['rock', 'stone'], ['chat', 'talk'], ['smart', 'clever'], ['easy', 'simple'], ['angry', 'cross'], ['scared', 'afraid'], ['nice', 'kind'], ['tired', 'sleepy'], ['grab', 'take'], ['look', 'watch']],
-  [['enormous', 'huge'], ['brave', 'courageous'], ['choose', 'select'], ['correct', 'right'], ['error', 'mistake'], ['journey', 'trip'], ['gather', 'collect'], ['wealthy', 'rich'], ['silent', 'quiet'], ['complete', 'finish'],
-   ['chilly', 'cold'], ['odd', 'strange'], ['reply', 'answer'], ['unhappy', 'sad'], ['shy', 'timid'], ['giggle', 'laugh'], ['mend', 'repair'], ['below', 'under'], ['almost', 'nearly'], ['shout', 'call']],
-  [['assist', 'help'], ['purchase', 'buy'], ['require', 'need'], ['obtain', 'get'], ['commence', 'begin'], ['conclude', 'end'], ['vast', 'immense'], ['fragile', 'delicate'], ['accurate', 'precise'], ['rapid', 'swift'],
-   ['abundant', 'plentiful'], ['cautious', 'careful'], ['eager', 'keen'], ['vanish', 'disappear'], ['demonstrate', 'show'], ['attempt', 'try'], ['sufficient', 'enough'], ['construct', 'build'], ['observe', 'watch'], ['prohibit', 'forbid']]
+// countries and their capital cities, well-known first
+const CAPITALS = [
+  [['Vietnam', 'Hanoi'], ['Japan', 'Tokyo'], ['France', 'Paris'], ['England', 'London'], ['China', 'Beijing'], ['Italy', 'Rome'], ['Spain', 'Madrid'], ['Germany', 'Berlin'],
+   ['Russia', 'Moscow'], ['Egypt', 'Cairo'], ['Thailand', 'Bangkok'], ['South Korea', 'Seoul'], ['Greece', 'Athens'], ['USA', 'Washington']],
+  [['Australia', 'Canberra'], ['Canada', 'Ottawa'], ['India', 'New Delhi'], ['Brazil', 'Brasília'], ['Mexico', 'Mexico City'], ['Argentina', 'Buenos Aires'], ['Kenya', 'Nairobi'], ['Austria', 'Vienna'],
+   ['Philippines', 'Manila'], ['Ireland', 'Dublin'], ['Portugal', 'Lisbon'], ['Norway', 'Oslo'], ['Sweden', 'Stockholm'], ['Netherlands', 'Amsterdam'], ['Malaysia', 'Kuala Lumpur'], ['Cambodia', 'Phnom Penh']],
+  [['Turkey', 'Ankara'], ['New Zealand', 'Wellington'], ['Switzerland', 'Bern'], ['Morocco', 'Rabat'], ['Nigeria', 'Abuja'], ['Pakistan', 'Islamabad'], ['Bangladesh', 'Dhaka'], ['Peru', 'Lima'],
+   ['Chile', 'Santiago'], ['Laos', 'Vientiane'], ['Myanmar', 'Naypyidaw'], ['Finland', 'Helsinki'], ['Poland', 'Warsaw'], ['Iceland', 'Reykjavík'], ['Mongolia', 'Ulaanbaatar'], ['Colombia', 'Bogotá']]
 ];
 // fractions as words, decimals and percentages
 const FRACS = [
@@ -257,6 +250,8 @@ function wordsPair(deck, tier, used) {
     else if (deck === 'opp') { const [x, y] = pick(OPP[tier]); p = { a: { kind: 'word', v: x, say: x }, b: { kind: 'word', v: y, say: y }, learned: x + ' ↔ ' + y, key: [x, y] }; }
     else if (deck === 'past') { const [x, y] = pick(PAST[tier]); p = { a: { kind: 'word', v: x, say: x }, b: { kind: 'word', v: y, say: y }, learned: x + ' → ' + y, key: [x, y] }; }
     else if (deck === 'syn') { const [x, y] = pick(SYN[tier]); p = { a: { kind: 'word', v: x, say: x }, b: { kind: 'word', v: y, say: y }, learned: x + ' = ' + y, key: [x, y] }; }
+    else if (deck === 'baby') { const [e, an, b] = pick(BABIES[tier]); p = { a: { kind: 'word', v: e + ' ' + an, say: an }, b: { kind: 'word', v: b, say: b }, learned: an + ' → ' + b, key: [an, b] }; }
+    else if (deck === 'cap') { const [c, t] = pick(CAPITALS[tier]); p = { a: { kind: 'word', v: c, say: c }, b: { kind: 'word', v: t, say: t }, learned: c + ' → ' + t, key: [c, t] }; }
     else if (deck === 'time') { const t = timePair(tier); p = Object.assign(t, { learned: t.a.v + ' = ' + t.b.v, key: [t.a.v, t.b.v] }); }
     else if (deck === 'frac') { const [x, y] = pick(FRACS[tier]); const w = /[a-z]/.test(y); p = { a: { kind: 'num', v: x }, b: { kind: w ? 'word' : 'num', v: y, say: w ? y : undefined }, learned: x + ' = ' + y, key: [x, y] }; }
     else {
@@ -275,7 +270,7 @@ function dealPairs(deck, n) {
   const tier = tierOf(), used = { texts: new Set(), faces: new Set(), words: new Set() }, out = [];
   for (let i = 0; out.length < n && i < n * 4; i++) {
     let d = deck;
-    if (deck === 'mix') d = ['times', 'plus', 'pics', 'opp', 'numw', 'past', 'syn', 'time', 'frac'][out.length % 9];
+    if (deck === 'mix') d = ['times', 'plus', 'pics', 'opp', 'numw', 'past', 'syn', 'time', 'frac', 'baby', 'cap'][out.length % 11];
     const p = MATH_KINDS[d] ? mathPair(MATH_KINDS[d][tier], used, DECK_OPS[d]) : wordsPair(d, tier, used);
     if (p) out.push(p);
   }

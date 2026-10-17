@@ -137,7 +137,7 @@ h1 span { color: var(--sun-deep); }
         <h2>Number Dash</h2>
         <p>Run, jump and fly to the beat. Steer into the lane whose door shows the right answer.</p>
         <div class="skills"><span>Math</span><span>Quick thinking</span></div>
-        <span class="meta" id="dashMeta">30 levels</span>
+        <span class="meta" id="dashMeta">40 levels</span>
         <span class="play">Play</span>
       </div>
     </a>
@@ -151,8 +151,8 @@ h1 span { color: var(--sun-deep); }
       <div class="body">
         <span class="num">Game 2</span>
         <h2>Number Ladder</h2>
-        <p>Climb a tower of 30 equations. Land on the right answer to go up, a wrong one drops you to the ground.</p>
-        <div class="skills"><span>Math</span><span>Timing</span></div>
+        <p>Climb a tower of 30 questions, math or English. Land on the right answer to go up, a wrong one drops you to the ground.</p>
+        <div class="skills"><span>Math</span><span>English</span><span>Timing</span></div>
         <span class="meta" id="ladderMeta">30 rungs to the top</span>
         <span class="play">Play</span>
       </div>
@@ -166,7 +166,7 @@ h1 span { color: var(--sun-deep); }
         <h2>Pair Up</h2>
         <p>Flip two cards and find pairs that belong together: 7 × 8 and 56, a picture and its English word, hot and cold.</p>
         <div class="skills"><span>Memory</span><span>Math</span><span>English</span></div>
-        <span class="meta" id="pairMeta">10 kinds of cards</span>
+        <span class="meta" id="pairMeta">12 kinds of cards</span>
         <span class="play">Play</span>
       </div>
     </a>
@@ -178,9 +178,9 @@ h1 span { color: var(--sun-deep); }
       <div class="body">
         <span class="num">Game 4</span>
         <h2>Number Pop</h2>
-        <p>Tap the floating bubbles that make the target number. Later worlds bring take-away and times.</p>
+        <p>Tap the floating bubbles that make the target number. Later worlds bring take-away, times, sharing and money.</p>
         <div class="skills"><span>Mental math</span></div>
-        <span class="meta" id="popMeta">6 worlds</span>
+        <span class="meta" id="popMeta">9 worlds</span>
         <span class="play">Play</span>
       </div>
     </a>
@@ -227,10 +227,10 @@ h1 span { color: var(--sun-deep); }
   var right = (d.math && d.math.right) || 0, stars = 0, done = 0;
   for (var k in (d.levels || {})) { var lv = d.levels[k]; stars += (lv.stars || []).filter(Boolean).length; if (lv.done) done++; }
   var cell = function (k, v) { return '<div><dt>' + k + '</dt><dd>' + v + '</dd></div>'; };
-  document.getElementById('stats').innerHTML = cell('Answers right', right) + cell('Dash stars', stars + ' / 90') + cell('Ladder best', (l.best || 0) + ' / 30') + cell('Pairs found', pu.pairs || 0) + cell('Words learned', learned) + cell('English stage', EQ[eqStage - 1].split(' · ')[1]);
-  if (done) document.getElementById('dashMeta').textContent = done + ' of 30 levels finished';
+  document.getElementById('stats').innerHTML = cell('Answers right', right) + cell('Dash stars', stars + ' / 120') + cell('Ladder best', (l.best || 0) + ' / 30') + cell('Pairs found', pu.pairs || 0) + cell('Words learned', learned) + cell('English stage', EQ[eqStage - 1].split(' · ')[1]);
+  if (done) document.getElementById('dashMeta').textContent = done + ' of 40 levels finished';
   if (pu.wins) document.getElementById('pairMeta').textContent = pu.wins + (pu.wins === 1 ? ' board' : ' boards') + ' cleared';
-  if (popStars) document.getElementById('popMeta').textContent = popStars + ' of 18 stars';
+  if (popStars) document.getElementById('popMeta').textContent = popStars + ' of 27 stars';
   if (eq.lessons) document.getElementById('questMeta').textContent = 'Now at ' + EQ[eqStage - 1];
   if (learned) document.getElementById('spellMeta').textContent = learned + (learned === 1 ? ' word' : ' words') + ' spelled perfectly';
   if (l.tops) document.getElementById('ladderMeta').textContent = 'Reached the top ' + l.tops + (l.tops === 1 ? ' time' : ' times');

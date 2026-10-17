@@ -108,6 +108,10 @@
 .newwords li { background: var(--mint-soft); border-radius: 99px; padding: 6px 12px; font: 600 1rem/1.1 var(--font-display); }
 .big-msg { font: 700 1.2rem/1.3 var(--font-display); margin: 0; }
 .toast { --toast-top: calc(70px + env(safe-area-inset-top, 0px)); }
+.passage.hear { text-align: center; display: grid; gap: 8px; }
+.passage.hear h3 { justify-content: center; }
+.hear-tip { color: var(--ink-soft); font-weight: 700; margin: 0 !important; }
+.transcript { text-align: left; border-top: 2px dashed var(--line); padding-top: 10px; }
 @media (max-width: 560px) and (min-height: 700px) { .passage { max-height: 52vh; } }
 @media (max-height: 600px) { .pic { font-size: 3.6rem; } .bigword { font-size: 2.2rem; } .passage { max-height: 34vh; } }
 </style>
@@ -194,6 +198,9 @@ const has = (s) => !!(CONTENT && CONTENT[s - 1] && CONTENT[s - 1].units && CONTE
 const unitOf = (s, u) => CONTENT[s - 1].units[u];
 const keyOf = (s, u) => STAGES[s - 1].id + '-' + (u + 1);
 const nOpts = (s) => (s <= 2 ? 3 : 4);
+// a unit may hold any number of items, and one reading or a list of them
+const readingsOf = (un) => (Array.isArray(un.reading) ? un.reading : [un.reading]);
+const anyIdx = (list) => rnd(0, list.length - 1);
 
 const rec = loadRecords('english-quest.v1', { unlocked: 1, units: {}, tests: {}, skills: {}, review: [], days: {}, learned: [], lessons: 0, placed: 0 });
 const starsOf = (s, u) => (rec.units[keyOf(s, u)] || {}).stars || 0;
@@ -294,13 +301,15 @@ function extraQ(s, u, i) {
   if (x.q.indexOf('___') >= 0) { o.gap = x.q; o.fill = x.q.replace('___', x.opts[x.a]); } else o.text = x.q;
   return choice(o);
 }
-function readingQs(s, u, which) {
-  const r = unitOf(s, u).reading;
+// listen: the text is read aloud and hidden until the question is answered (IELTS-style listening)
+function readingQs(s, u, which, ri, listen) {
+  const all = readingsOf(unitOf(s, u)), k = ri === undefined ? anyIdx(all) : Math.min(ri, all.length - 1), r = all[k];
   const idx = which || r.qs.map((_, j) => j);
   return idx.map((j) => {
     const q = r.qs[j];
-    return choice({ skill: 'reading', label: q.type === 'tfng' ? 'True, False or Not Given?' : q.type === 'tf' ? 'True or False?' : 'Read and choose',
-      passage: r, text: q.q, opts: q.opts, a: q.a, keep: q.type !== 'mc', long: q.opts.some((t) => t.length > 26), ref: { s: s, u: u, t: 'read', i: j } });
+    const kind = q.type === 'tfng' ? 'True, False or Not Given?' : q.type === 'tf' ? 'True or False?' : listen ? 'Listen and choose' : 'Read and choose';
+    return choice({ skill: listen ? 'listening' : 'reading', label: listen ? '🎧 ' + kind : kind, hear: !!listen,
+      passage: r, text: q.q, opts: q.opts, a: q.a, keep: q.type !== 'mc', long: q.opts.some((t) => t.length > 26), ref: { s: s, u: u, t: listen ? 'hear' : 'read', i: j, r: k } });
   });
 }
 // a sentence to rebuild from its words; with listen it is played first (a listening task)
@@ -331,20 +340,23 @@ function unitLesson(s, u) {
   gi.forEach((i, k) => qs.splice(1 + k * 3, 0, grammarQ(s, u, i)));
   qs.push(orderQ(s, u, si[0], false), orderQ(s, u, si[1], true));
   if (un.extra && un.extra.length) sample(un.extra.map((_, i) => i), s >= 4 ? 2 : 1).forEach((i) => qs.push(extraQ(s, u, i)));
-  return qs.concat(readingQs(s, u, sample(un.reading.qs.map((_, j) => j), Math.min(3, un.reading.qs.length)).sort()));
+  const ri = anyIdx(readingsOf(un)), rq = readingsOf(un)[ri].qs, hear = s >= 3 && Math.random() < 0.35;
+  return qs.concat(readingQs(s, u, sample(rq.map((_, j) => j), Math.min(3, rq.length)).sort(), ri, hear));
 }
 // a stage test: 20 questions from all five units; 80% unlocks the next stage
 function stageTest(s) {
   const qs = [], units = [0, 1, 2, 3, 4];
-  units.forEach((u) => qs.push(wordQ(s, u, rnd(0, 11)), grammarQ(s, u, rnd(0, 5))));
-  sample(units, 2).forEach((u) => qs.push(grammarQ(s, u, rnd(0, 5))));
-  sample(units, 2).forEach((u) => qs.push(orderQ(s, u, rnd(0, 3), Math.random() < 0.5)));
+  const U = (u) => unitOf(s, u);
+  units.forEach((u) => qs.push(wordQ(s, u, anyIdx(U(u).words)), grammarQ(s, u, anyIdx(U(u).grammar))));
+  sample(units, 2).forEach((u) => qs.push(grammarQ(s, u, anyIdx(U(u).grammar))));
+  sample(units, 2).forEach((u) => qs.push(orderQ(s, u, anyIdx(U(u).sentences), Math.random() < 0.5)));
   const ex = units.filter((u) => (unitOf(s, u).extra || []).length);
   if (ex.length) sample(ex, 2).forEach((u) => qs.push(extraQ(s, u, rnd(0, unitOf(s, u).extra.length - 1))));
-  else sample(units, 2).forEach((u) => qs.push(wordQ(s, u, rnd(0, 11))));
-  qs.push(wordQ(s, pick(units), rnd(0, 11)));
+  else sample(units, 2).forEach((u) => qs.push(wordQ(s, u, anyIdx(U(u).words))));
+  const wu = pick(units); qs.push(wordQ(s, wu, anyIdx(U(wu).words)));
   const ru = pick(units);
-  return shuffle(qs).concat(readingQs(s, ru, sample(unitOf(s, ru).reading.qs.map((_, j) => j), 3).sort()));
+  const rri = anyIdx(readingsOf(U(ru))), rrq = readingsOf(U(ru))[rri].qs;
+  return shuffle(qs).concat(readingQs(s, ru, sample(rrq.map((_, j) => j), Math.min(3, rrq.length)).sort(), rri));
 }
 // review: the missed items, asked again (a right answer takes one off the list)
 function reviewLesson() {
@@ -356,13 +368,13 @@ function fromRef(r) {
     if (r.t === 'word') return wordQ(r.s, r.u, r.i, r.qt);
     if (r.t === 'grammar') return grammarQ(r.s, r.u, r.i);
     if (r.t === 'extra') return extraQ(r.s, r.u, r.i);
-    if (r.t === 'read') return readingQs(r.s, r.u, [r.i])[0];
+    if (r.t === 'read' || r.t === 'hear') return readingQs(r.s, r.u, [r.i], r.r || 0, r.t === 'hear')[0];
     if (r.t === 'order' || r.t === 'listen') return orderQ(r.s, r.u, r.i, r.t === 'listen');
     if (r.t === 'spell') return spellQ(r.s, r.u, r.i);
   } catch (e) { /* content changed: drop it */ }
   return null;
 }
-const refKey = (r) => [r.s, r.u, r.t, r.i].join(':');
+const refKey = (r) => [r.s, r.u, r.t, r.i, r.r || 0].join(':');
 
 /* ================= playing a lesson ================= */
 const L = { kind: '', s: 0, u: 0, qs: [], i: 0, right: 0, total: 0, answered: false, words: [], place: null, startedAt: 0 };
@@ -390,7 +402,8 @@ function placeNext() {
   while (P.s <= STAGES.length && !has(P.s)) P.s++;
   if (P.s > STAGES.length) return false;
   const s = P.s, u = rnd(0, 4), u2 = (u + rnd(1, 4)) % 5;
-  L.qs.push(grammarQ(s, u, rnd(0, 5)), wordQ(s, u2, rnd(0, 11), s >= 3 ? 'def2word' : 'pic2word'), s >= 4 && unitOf(s, u).extra.length ? extraQ(s, u, rnd(0, unitOf(s, u).extra.length - 1)) : grammarQ(s, u2, rnd(0, 5)));
+  const A = unitOf(s, u), B = unitOf(s, u2);
+  L.qs.push(grammarQ(s, u, anyIdx(A.grammar)), wordQ(s, u2, anyIdx(B.words), s >= 3 ? 'def2word' : 'pic2word'), s >= 4 && A.extra.length ? extraQ(s, u, anyIdx(A.extra)) : grammarQ(s, u2, anyIdx(B.grammar)));
   return true;
 }
 function showQ() {
@@ -402,7 +415,8 @@ function showQ() {
   $('#lcount').textContent = L.kind === 'place' ? STAGES[L.place.s - 1].cefr : (L.i + 1) + '/' + total;
   const box = $('#q');
   let h = '<span class="qlabel">' + esc(q.label) + ' · <span class="sk">' + SKILL[q.skill] + '</span></span>';
-  if (q.passage) h += '<div class="passage" id="passage"><h3><span>' + esc(q.passage.title) + '</span><button class="btn" id="readAloud">🔊 Listen</button></h3>' + q.passage.text.split(/\n+/).map((p) => '<p>' + esc(p) + '</p>').join('') + '</div>';
+  if (q.passage && q.hear) h += '<div class="passage hear" id="passage"><h3><span>🎧 ' + esc(q.passage.title) + '</span></h3><p class="hear-tip">Listen to the talk, then answer. You can play it again.</p><div class="row"><button class="btn sun" id="readAloud">🔊 Play the talk</button></div><div class="transcript" id="transcript" hidden>' + q.passage.text.split(/\n+/).map((p) => '<p>' + esc(p) + '</p>').join('') + '</div></div>';
+  else if (q.passage) h += '<div class="passage" id="passage"><h3><span>' + esc(q.passage.title) + '</span><button class="btn" id="readAloud">🔊 Listen</button></h3>' + q.passage.text.split(/\n+/).map((p) => '<p>' + esc(p) + '</p>').join('') + '</div>';
   if (q.pic) h += '<div class="pic" aria-hidden="true">' + q.pic + '</div>';
   if (q.listen) h += '<button class="listen-big" id="listenBtn" aria-label="Listen again">🔊</button>';
   if (q.big) h += '<div class="say"><span class="bigword">' + esc(q.big) + '</span></div>';
@@ -416,6 +430,7 @@ function showQ() {
   if (q.kind === 'order') { q.built = []; renderBuild(q); }
   if (q.kind === 'spell') markBox(q);
   if (q.listen) setTimeout(() => Speech.say(q.listen, 0.85), 250);
+  else if (q.hear && (L.i === 0 || L.qs[L.i - 1].passage !== q.passage)) setTimeout(() => Speech.say(q.passage.text, 0.92), 300);
   else if (q.say) setTimeout(() => Speech.say(q.say), 250);
   announce(q.label + '. ' + (q.text || q.gap || q.big || ''));
 }
@@ -472,6 +487,7 @@ function finish(ok, text) {
   ok ? Sound.sfx.right() : Sound.sfx.wrong();
   if (q.after && ok) setTimeout(() => Speech.say(q.after), 200);
   else if (q.fill && ok) setTimeout(() => Speech.say(q.fill), 200);
+  if (q.hear && $('#transcript')) { $('#transcript').hidden = false; }
   const sheet = $('#sheet');
   sheet.className = 'sheet ' + (ok ? 'good' : 'bad');
   $('#sheetTitle').textContent = ok ? pick(['Great!', 'Correct!', 'Well done!', 'Yes!', 'Brilliant!']) : 'Not quite';

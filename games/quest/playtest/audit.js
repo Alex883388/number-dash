@@ -9,7 +9,7 @@ const dump = `((stages) => {
     for (let u = 0; u < 5; u++) {
       const un = Q.CONTENT[s - 1].units[u];
       out.push('', '=== stage ' + s + ' · ' + un.id + ' · ' + un.title);
-      out.push('READING: ' + un.reading.title + ' :: ' + un.reading.text.replace(/\\n+/g, ' / '));
+      (Array.isArray(un.reading) ? un.reading : [un.reading]).forEach((r) => out.push('READING: ' + r.title + ' :: ' + r.text.replace(/\\n+/g, ' / ')));
       Q.unitLesson(s, u).forEach((q, n) => {
         let line = (n + 1) + '. [' + q.label + '] ';
         if (q.kind === 'choice') line += (q.pic ? q.pic + ' ' : '') + (q.listen ? '(hears: ' + q.listen + ') ' : '') + (q.big || '') + ' ' + (q.text || '') + (q.gap || '') + ' || ' + q.opts.map((o, k) => (k === q.a ? '*' : '') + o).join(' | ') + (q.why ? ' || ' + q.why : '');

@@ -1,10 +1,11 @@
 // Number Pop on an emulated iPad, by finger (run from the repo root):
 //   node games/pop/build.js && ND_CDP=9351 ND_PROFILE=edge-profile-pop ND_URL=file:///D:/Github/number-dash/games/pop/dist/preview.html ND_READY='!!window.__pop' ND_BOT=none node games/dash/playtest/shoot.js games/pop/playtest/ipad.js
-// Landscape iPad: pick Make 10 and Play with taps, pick a bubble, un-pick it, pop a pair, go over
-// on purpose ("Too much!"), pause and resume. Then portrait iPad (Take away), a phone, a dark
-// phone (home and Times), a dark iPad (Mix) and the results card on a phone. Every stop logs the
-// layout: bubble size, gaps between bubbles, bubbles inside the field, HUD clear of the badge and
-// strip, and no page scroll.
+// Landscape iPad: the nine worlds on the home card, pick Make 10 and Play with taps, pick a bubble,
+// un-pick it, pop a pair, go over on purpose ("Too much!"), pause and resume, then Money by finger.
+// Portrait iPad: the home card and Make 100; a phone in the same round; a dark phone (home and Share
+// it, a right pair by finger); a dark iPad (Mix) and the results card on a phone. Every stop logs
+// the layout: bubble size, gaps between bubbles, bubbles inside the field, HUD clear of the badge
+// and strip, and no page scroll; every home card logs whether Play is on screen without scrolling.
 const ST = "window.__st = () => { const s = window.__pop.state(); return [s.state, s.phase, s.world, s.kind, s.target, 'done ' + s.done, 'slips ' + s.slips, 'picks ' + s.picks.map((i) => window.__pop.slots[i].v).join(',')]; }; 'ok'";
 const st = 'window.__st()';
 // tag the planted answer's bubbles data-sol="0".."2" so a finger can find them
@@ -21,8 +22,10 @@ const LAYOUT_FN = "window.__lay = () => { const P = window.__pop, L = P.layout()
 const LAYOUT = 'window.__lay()';
 // finish the round quickly by tapping the planted answers (for the results card)
 const AUTO = "(() => { const P = window.__pop; P.setSpeed(10); let next = 0; P.hook = () => { const s = P.state(); if (s.state !== 'play' || s.phase !== 'pick' || s.time < next) return; const i = s.sol.find((j) => !P.slots[j].picked); if (i !== undefined) { P.tap(i); next = s.time + 0.5; } }; return 'auto'; })()";
-const toWorld = (w) => [
-  { touchEl: '#pauseBtn' }, { sleep: 400 }, { touchEl: '#homeBtn' }, { sleep: 500 },
+// is the Play button on screen without scrolling the home card?
+const PLAY = "(() => { const r = document.getElementById('playBtn').getBoundingClientRect(), c = document.querySelector('#s-home .card').getBoundingClientRect(); return { playBottom: Math.round(r.bottom), cardBottom: Math.round(c.bottom), screen: innerHeight, playVisible: r.bottom <= innerHeight, cardFits: c.bottom <= innerHeight + 1, worldCard: Math.round(document.querySelector('.world').getBoundingClientRect().height) + 'x' + Math.round(document.querySelector('.world').getBoundingClientRect().width) }; })()";
+const toHome = [{ touchEl: '#pauseBtn' }, { sleep: 400 }, { touchEl: '#homeBtn' }, { sleep: 600 }];
+const pickAndPlay = (w) => [
   { touchEl: '.world[data-w="' + w + '"]' }, { sleep: 200 }, { touchEl: '#playBtn' },
   { waitFor: "window.__pop.state().state === 'play' && window.__pop.state().world === " + w, timeout: 5000 },
   { log: "document.getElementById('toast').hidden ? '' : document.getElementById('toast').textContent" },
@@ -32,8 +35,7 @@ module.exports = [
   { ipad: true },
   { viewport: [1180, 820, true, false, 2] },
   { reload: true },
-  { sleep: 800 }, { eval: ST }, { eval: LAYOUT_FN }, { shot: 'pop-i01-home-ipad' },
-  { log: "[matchMedia('(pointer: coarse)').matches, document.querySelector('.world').getBoundingClientRect().height, document.getElementById('playBtn').getBoundingClientRect().height]" },
+  { sleep: 800 }, { eval: ST }, { eval: LAYOUT_FN }, { shot: 'pop-i01-home-ipad' }, { log: PLAY },
   { touchEl: '.world[data-w="1"]' }, { sleep: 200 },
   { log: "document.querySelector('.world[aria-checked=\"true\"]').dataset.w" },
   { touchEl: '#playBtn' },
@@ -52,35 +54,41 @@ module.exports = [
   // pause and resume by finger
   { touchEl: '#pauseBtn' }, { sleep: 400 }, { shot: 'pop-i06-pause-ipad' }, { log: st },
   { touchEl: '#resumeBtn' }, { sleep: 300 }, { log: st },
-  // portrait iPad: Take away, one bubble of the answer picked
-  { viewport: [820, 1180, true, false, 2] }, { sleep: 400 },
-  ...toWorld(4),
+  // Money by finger: two coins of the answer picked, then the whole answer
+  ...toHome, ...pickAndPlay(9),
   { eval: MARK }, { touchEl: '.bub[data-sol="0"]' }, { sleep: 200 }, { touchEl: '.bub[data-sol="1"]' }, { sleep: 300 },
-  { shot: 'pop-i07-takeaway-portrait' }, { log: LAYOUT }, { log: st },
+  { shot: 'pop-i07-money-ipad' }, { log: LAYOUT }, { log: st },
+  { eval: "window.__pop.state().phase === 'pick' && window.__pop.state().sol.forEach((i) => { if (!window.__pop.slots[i].picked) window.__pop.tap(i); }); window.__st()" },
+  // portrait iPad: the home card, then Make 100
+  { viewport: [820, 1180, true, false, 2] }, { sleep: 400 },
+  ...toHome, { shot: 'pop-i08-home-portrait' }, { log: PLAY },
+  ...pickAndPlay(7),
+  { eval: MARK }, { touchEl: '.bub[data-sol="0"]' }, { sleep: 300 },
+  { shot: 'pop-i09-make100-portrait' }, { log: LAYOUT }, { log: st },
   // a phone, same round
   { viewport: [390, 844, true, false, 3] }, { sleep: 600 },
-  { shot: 'pop-i08-takeaway-phone' }, { log: LAYOUT },
-  // a dark phone: home, then Times with one bubble picked
+  { shot: 'pop-i10-make100-phone' }, { log: LAYOUT },
+  // a dark phone: home, then Share it with a right pair by finger
   { viewport: [390, 844, true, true, 3] }, { sleep: 300 },
-  { touchEl: '#pauseBtn' }, { sleep: 400 }, { touchEl: '#homeBtn' }, { sleep: 600 },
-  { shot: 'pop-i09-home-phone-dark' },
+  ...toHome, { shot: 'pop-i11-home-phone-dark' }, { log: PLAY },
   { log: "[document.documentElement.scrollWidth, innerWidth, document.getElementById('screens').scrollHeight, innerHeight]" },
-  { touchEl: '.world[data-w="5"]' }, { sleep: 200 }, { touchEl: '#playBtn' },
-  { waitFor: "window.__pop.state().state === 'play' && window.__pop.state().world === 5", timeout: 5000 }, { sleep: 900 },
-  { eval: MARK }, { touchEl: '.bub[data-sol="0"]' }, { sleep: 300 },
-  { shot: 'pop-i10-times-phone-dark' }, { log: LAYOUT }, { log: st },
+  ...pickAndPlay(8),
+  { eval: MARK }, { touchEl: '.bub[data-sol="1"]' }, { sleep: 300 },
+  { shot: 'pop-i12-share-phone-dark' }, { log: LAYOUT }, { log: st },
+  { touchEl: '.bub[data-sol="0"]' }, { sleep: 120 }, { log: st },
+  { shot: 'pop-i13-share-solved-phone-dark' },
   // a dark iPad: Mix
   { viewport: [1180, 820, true, true, 2] }, { sleep: 400 },
-  ...toWorld(6),
+  ...toHome, ...pickAndPlay(6),
   { eval: MARK }, { touchEl: '.bub[data-sol="0"]' }, { sleep: 300 },
-  { shot: 'pop-i11-mix-ipad-dark' }, { log: LAYOUT }, { log: st },
+  { shot: 'pop-i14-mix-ipad-dark' }, { log: LAYOUT }, { log: st },
   // the results card on a phone
   { viewport: [390, 844, true, false, 3] }, { sleep: 300 },
   { eval: AUTO },
   { waitFor: "window.__pop.state().state === 'done'", timeout: 30000 }, { sleep: 2200 },
   { eval: "window.__pop.hook = null; window.__pop.setSpeed(1); 'manual'" },
-  { shot: 'pop-i12-results-phone' },
-  { log: "[document.getElementById('doneStats').innerText.replace(/\\n+/g, ' '), document.getElementById('doneNext').textContent]" },
+  { shot: 'pop-i15-results-phone' },
+  { log: "[document.getElementById('doneStats').innerText.split(String.fromCharCode(10)).filter(Boolean).join(' '), document.getElementById('doneNext').textContent, document.getElementById('nextBtn').hidden]" },
   { touchEl: '#againBtn' }, { sleep: 300 },
   { log: "[window.__pop.state().state, document.getElementById('toast').hidden ? '' : document.getElementById('toast').textContent]" },
   { log: 'JSON.stringify(window.__errs)' }

@@ -17,7 +17,15 @@
         { "w": "glacier", "def": "a huge mass of ice that moves very slowly down a mountain or valley", "ex": "As the planet warms, the ___ is shrinking a little every year.", "pos": "noun", "pic": "🏔️" },
         { "w": "generate", "def": "to produce energy, such as electricity or heat", "ex": "Wind turbines ___ electricity when the wind blows.", "pos": "verb", "syn": ["produce"], "forms": { "noun": "generation", "verb": "generate" } },
         { "w": "global", "def": "affecting or including the whole world", "ex": "Plastic in the oceans is a ___ problem, not just a local one.", "pos": "adj", "pic": "🌐", "syn": ["worldwide"], "ant": ["local"] },
-        { "w": "impact", "def": "a strong effect that something has on something else", "ex": "Cars have a big ___ on the air quality in cities.", "pos": "noun", "syn": ["effect"] }
+        { "w": "impact", "def": "a strong effect that something has on something else", "ex": "Cars have a big ___ on the air quality in cities.", "pos": "noun", "syn": ["effect"] },
+        { "w": "insulation", "def": "material that stops heat from escaping, for example from a house", "ex": "Thick ___ in the roof keeps the house warm in winter.", "pos": "noun", "forms": { "noun": "insulation", "verb": "insulate" } },
+        { "w": "conserve", "def": "to use as little of something as possible, so that it lasts longer", "ex": "We can ___ water by taking shorter showers.", "pos": "verb", "syn": ["save"], "ant": ["waste"], "forms": { "noun": "conservation", "verb": "conserve" } },
+        { "w": "greenhouse gas", "def": "a gas, such as carbon dioxide, that traps heat in the air around the Earth", "ex": "Methane, which is produced by cows, is a powerful ___.", "pos": "noun" },
+        { "w": "extreme", "def": "very great or very severe; much more than usual", "ex": "Scientists expect more ___ weather, such as heatwaves and floods.", "pos": "adj", "forms": { "adj": "extreme", "adv": "extremely" } },
+        { "w": "sea level", "def": "the average height of the surface of the sea", "ex": "As the ice melts, the ___ around the world is slowly rising.", "pos": "noun" },
+        { "w": "alternative", "def": "something that you can choose instead of something else", "ex": "Cycling is a cheap and healthy ___ to driving.", "pos": "noun", "syn": ["option"] },
+        { "w": "absorb", "def": "to take in a liquid, a gas or heat, like a sponge takes in water", "ex": "Dark clothes ___ more heat from the sun than white ones.", "pos": "verb", "forms": { "noun": "absorption", "verb": "absorb" } },
+        { "w": "solar panel", "def": "a flat piece of equipment that turns sunlight into electricity", "ex": "A small ___ on the roof of the shed powers the lights in our garden.", "pos": "noun", "pic": "☀️" }
       ],
       "grammar": [
         { "q": "Hundreds of new wind turbines ___ in the North Sea in recent years.", "opts": ["have been built", "have built", "were building", "has been built"], "a": 0, "why": "The turbines didn't build anything, so use the passive. 'In recent years' goes with the present perfect: have been built." },
@@ -25,32 +33,55 @@
         { "q": "Plastic bottles can ___ into new clothes.", "opts": ["be recycled", "recycle", "recycled", "be recycling"], "a": 0, "why": "After a modal verb like 'can', the passive is be + past participle: can be recycled." },
         { "q": "If we ___ the lights off last night, we would have saved energy.", "opts": ["had turned", "turned", "have turned", "would turn"], "a": 0, "why": "Third conditional (an imaginary past): if + had + past participle, then would have + past participle." },
         { "q": "I wish our school ___ solar panels on its roof.", "opts": ["had", "has", "will have", "is having"], "a": 0, "why": "When we wish the present were different, we use a past form after 'wish': I wish it had..." },
-        { "q": "___ the rain, the solar panels still produced some electricity.", "opts": ["Despite", "Although", "However", "Because"], "a": 0, "why": "'Despite' is followed by a noun (the rain). 'Although' needs a full clause, such as 'Although it rained'." }
+        { "q": "___ the rain, the solar panels still produced some electricity.", "opts": ["Despite", "Although", "However", "Because"], "a": 0, "why": "'Despite' is followed by a noun (the rain). 'Although' needs a full clause, such as 'Although it rained'." },
+        { "q": "We're going to ___ our loft insulated before the winter.", "opts": ["have", "do", "let", "put"], "a": 0, "why": "'Have something done' means you pay someone else to do the job: we're going to have the loft insulated." },
+        { "q": "The lights are still on in the empty classroom. Someone ___ forgotten to switch them off.", "opts": ["must have", "should have", "can have", "must"], "a": 0, "why": "'Must have' + past participle shows we are almost sure about the past because of the evidence." },
+        { "q": "The Sun, ___ is about 150 million kilometres away, gives the Earth almost all of its energy.", "opts": ["which", "that", "who", "where"], "a": 0, "why": "Use 'which' for a thing in a non-defining clause (between commas). 'That' is not used after a comma." },
+        { "q": "A new solar farm ___ near our village at the moment.", "opts": ["is being built", "is building", "has built", "was built"], "a": 0, "why": "The work is happening now and the farm doesn't build itself, so use the present continuous passive: is being built." }
       ],
       "sentences": [
         "Wind turbines have been built along the coast of Scotland.",
         "If only the bus ran on electricity.",
         "Have you ever calculated the size of your carbon footprint?",
-        "More houses are being fitted with solar panels."
+        "More houses are being fitted with solar panels.",
+        "Forests absorb huge amounts of carbon dioxide from the air.",
+        "A new solar farm is being built near our village."
       ],
-      "reading": {
-        "title": "An island powered by the wind",
-        "text": "Samsø is a small Danish island with about 4,000 residents. In the 1990s, it depended on oil and on electricity from coal power stations on the mainland. Today, it is famous around the world as an island that produces all of its electricity from renewable sources.\n\nThe change began in 1997, when Samsø won a national competition to become a renewable energy island. However, the plan could not succeed without local support, and at first many islanders were worried. Would wind turbines spoil their beautiful views? Would the project cost too much? Rather than forcing the idea on people, the organisers held meetings in village halls and listened to their concerns.\n\nThe key decision was to let local people own the turbines. Farmers, families and businesses bought shares, so the money from the electricity stayed on the island. As a result, the turbines became something to be proud of rather than something to complain about.\n\nWithin about ten years, Samsø's turbines were generating more electricity than the island needed, and the extra power was sold to the mainland. Many homes are now warmed by local heating stations that burn straw, a waste product from farms.\n\nSamsø shows that the biggest challenge in changing how we use energy is not always the technology. Often, it is persuading people to work together.",
-        "qs": [
-          { "type": "mc", "q": "What is the writer's main purpose?", "opts": ["to show how a community worked together to change its energy", "to explain how a wind turbine works", "to persuade readers to move to Samsø", "to compare the costs of oil and coal"], "a": 0 },
-          { "type": "tfng", "q": "Everyone on Samsø supported the project from the very beginning.", "opts": ["True", "False", "Not Given"], "a": 1 },
-          { "type": "tfng", "q": "Islanders themselves own some of the wind turbines.", "opts": ["True", "False", "Not Given"], "a": 0 },
-          { "type": "tfng", "q": "Electricity on Samsø is now cheaper than anywhere else in Denmark.", "opts": ["True", "False", "Not Given"], "a": 2 },
-          { "type": "mc", "q": "What is used to heat many homes on Samsø today?", "opts": ["straw from farms", "oil from the mainland", "coal", "electricity from the mainland"], "a": 0 }
-        ]
-      },
+      "reading": [
+        {
+          "title": "An island powered by the wind",
+          "text": "Samsø is a small Danish island with about 4,000 residents. In the 1990s, it depended on oil and on electricity from coal power stations on the mainland. Today, it is famous around the world as an island that produces all of its electricity from renewable sources.\n\nThe change began in 1997, when Samsø won a national competition to become a renewable energy island. However, the plan could not succeed without local support, and at first many islanders were worried. Would wind turbines spoil their beautiful views? Would the project cost too much? Rather than forcing the idea on people, the organisers held meetings in village halls and listened to their concerns.\n\nThe key decision was to let local people own the turbines. Farmers, families and businesses bought shares, so the money from the electricity stayed on the island. As a result, the turbines became something to be proud of rather than something to complain about.\n\nWithin about ten years, Samsø's turbines were generating more electricity than the island needed, and the extra power was sold to the mainland. Many homes are now warmed by local heating stations that burn straw, a waste product from farms.\n\nSamsø shows that the biggest challenge in changing how we use energy is not always the technology. Often, it is persuading people to work together.",
+          "qs": [
+            { "type": "mc", "q": "What is the writer's main purpose?", "opts": ["to show how a community worked together to change its energy", "to explain how a wind turbine works", "to persuade readers to move to Samsø", "to compare the costs of oil and coal"], "a": 0 },
+            { "type": "tfng", "q": "Everyone on Samsø supported the project from the very beginning.", "opts": ["True", "False", "Not Given"], "a": 1 },
+            { "type": "tfng", "q": "Islanders themselves own some of the wind turbines.", "opts": ["True", "False", "Not Given"], "a": 0 },
+            { "type": "tfng", "q": "Electricity on Samsø is now cheaper than anywhere else in Denmark.", "opts": ["True", "False", "Not Given"], "a": 2 },
+            { "type": "mc", "q": "What is used to heat many homes on Samsø today?", "opts": ["straw from farms", "oil from the mainland", "coal", "electricity from the mainland"], "a": 0 }
+          ]
+        },
+        {
+          "title": "Reading the past in ice",
+          "text": "In the middle of Antarctica, it is so cold that the snow which falls each year never melts. Instead, each new layer presses down on the layers below and slowly turns them into solid ice. Over a very long time, this ice has built up into a sheet that is more than three kilometres thick in places.\n\nAs the snow is squeezed into ice, tiny bubbles of air are trapped inside it. These bubbles are like miniature time capsules. To study them, scientists drill deep into the ice sheet and pull out long cylinders of ice, known as ice cores. The deeper the ice, the older it is, and some cores contain air from more than 800,000 years ago.\n\nBy analysing the bubbles, researchers can measure how much carbon dioxide there was in the atmosphere in the distant past. Other clues in the ice allow them to work out what the temperature was like. Their results show that, over long periods, carbon dioxide levels and temperatures have risen and fallen together.\n\nThe ice cores also reveal that there is more carbon dioxide in the air today than at any time in at least the last 800,000 years. This is one of the clearest pieces of evidence that burning fossil fuels is changing the Earth's climate.",
+          "qs": [
+            { "type": "mc", "q": "What is the writer's main purpose?", "opts": ["to explain how ice can tell us about the Earth's climate in the past", "to describe what it is like to live in Antarctica", "to persuade readers to visit the South Pole", "to explain why snow never melts"], "a": 0 },
+            { "type": "tfng", "q": "The ice at the bottom of a core is younger than the ice near the top.", "opts": ["True", "False", "Not Given"], "a": 1 },
+            { "type": "tfng", "q": "Scientists can study ancient air that is trapped in the ice.", "opts": ["True", "False", "Not Given"], "a": 0 },
+            { "type": "tfng", "q": "Drilling a deep ice core takes several years.", "opts": ["True", "False", "Not Given"], "a": 2 },
+            { "type": "mc", "q": "What have scientists learnt about carbon dioxide and temperature?", "opts": ["Over long periods, they have risen and fallen together.", "Neither of them has ever changed.", "Temperature has no link with carbon dioxide.", "Carbon dioxide only rises in winter."], "a": 0 }
+          ]
+        }
+      ],
       "extra": [
         { "kind": "collocation", "q": "Everyone can ___ a difference by using less energy at home.", "opts": ["make", "do", "take", "give"], "a": 0, "why": "'Make a difference' is a fixed phrase that means to have a good effect." },
         { "kind": "wordform", "q": "The country's energy ___ fell last year. (consume)", "opts": ["consumption", "consumer", "consuming", "consumed"], "a": 0, "why": "We need a noun for the amount used: consumption. A 'consumer' is a person who buys or uses things." },
         { "kind": "linking", "q": "Solar power is clean and cheap. ___, solar panels produce no electricity at night.", "opts": ["However", "Therefore", "For example", "In addition"], "a": 0, "why": "'However' introduces a contrast: first a good point, then a problem." },
         { "kind": "register", "q": "Which sentence is the most suitable for an academic essay?", "opts": ["Burning fossil fuels significantly increases carbon emissions.", "Burning coal and stuff is really bad for the air.", "Loads of carbon gets pumped out when we burn things.", "Fossil fuels? Seriously bad news for the planet!"], "a": 0, "why": "Academic writing uses precise words (significantly, emissions) and avoids chatty phrases like 'and stuff' or 'loads of'." },
         { "kind": "paraphrase", "q": "Which sentence means the same as 'Electricity from the sun is getting cheaper'?", "opts": ["The cost of solar power is falling.", "Solar power is becoming more expensive.", "The sun produces less electricity than before.", "Most cheap electricity comes from the sun."], "a": 0, "why": "'Electricity from the sun' is solar power, and 'getting cheaper' means the cost is falling." },
-        { "kind": "cohesion", "q": "Which sentence best continues the text? 'Many countries are building wind farms out at sea. ___'", "opts": ["This is because winds are usually stronger and steadier over the ocean.", "However, wind is a type of weather.", "For example, sea water is very salty.", "As a result, people enjoy swimming in summer."], "a": 0, "why": "'This is because' gives the reason for the idea in the sentence before it." }
+        { "kind": "cohesion", "q": "Which sentence best continues the text? 'Many countries are building wind farms out at sea. ___'", "opts": ["This is because winds are usually stronger and steadier over the ocean.", "However, wind is a type of weather.", "For example, sea water is very salty.", "As a result, people enjoy swimming in summer."], "a": 0, "why": "'This is because' gives the reason for the idea in the sentence before it." },
+        { "kind": "phrasal", "q": "If we keep using oil at this rate, one day we will ___ of it.", "opts": ["run out", "run over", "run into", "run up"], "a": 0, "why": "'Run out of' something means use all of it, so there is none left." },
+        { "kind": "preposition", "q": "Many countries want to reduce their dependence ___ oil and gas.", "opts": ["on", "of", "from", "with"], "a": 0, "why": "We say 'dependence on' something, just as we say 'depend on' it." },
+        { "kind": "mainidea", "q": "Read the paragraph: 'Electric cars do not release fumes into city streets, which helps to keep the air clean. However, they are only as clean as the electricity they use. If that electricity comes from burning coal or gas, the cars are still responsible for some emissions.' Which heading fits best?", "opts": ["Electric cars: cleaner, but not perfect", "How to charge an electric car", "Why coal is cheaper than gas", "The history of the motor car"], "a": 0, "why": "The paragraph gives one good point and one problem, so the best heading shows both sides." },
+        { "kind": "collocation", "q": "Our school council decided to ___ action to save energy.", "opts": ["take", "make", "do", "give"], "a": 0, "why": "'Take action' is a fixed phrase that means do something to deal with a problem." }
       ]
     },
     {
@@ -69,7 +100,15 @@
         { "w": "accent", "def": "the way people from a particular place pronounce words", "ex": "My cousin from Glasgow has a strong Scottish ___.", "pos": "noun" },
         { "w": "translate", "def": "to change words from one language into another", "ex": "Can you ___ this menu from French into English?", "pos": "verb", "forms": { "noun": "translation", "verb": "translate" } },
         { "w": "audience", "def": "the people who watch or listen to a show, film or talk", "ex": "The ___ clapped loudly at the end of her speech.", "pos": "noun", "pic": "👏" },
-        { "w": "eye contact", "def": "looking straight into someone's eyes while you talk to them", "ex": "Good speakers make ___ with the people who are listening.", "pos": "noun", "pic": "👀" }
+        { "w": "eye contact", "def": "looking straight into someone's eyes while you talk to them", "ex": "Good speakers make ___ with the people who are listening.", "pos": "noun", "pic": "👀" },
+        { "w": "pronounce", "def": "to make the sound of a word or a letter in a particular way", "ex": "Many learners find it hard to ___ the 'th' sound in English.", "pos": "verb", "forms": { "noun": "pronunciation", "verb": "pronounce" } },
+        { "w": "bilingual", "def": "able to speak two languages equally well", "ex": "My cousin is ___: she speaks Welsh at school and English at home.", "pos": "adj" },
+        { "w": "native speaker", "def": "someone who has spoken a language since they were a baby", "ex": "Even a ___ of English sometimes needs to look up a word in a dictionary.", "pos": "noun" },
+        { "w": "tone", "def": "the way a voice sounds, which shows how the speaker feels", "ex": "I could tell from her ___ of voice that she was annoyed.", "pos": "noun" },
+        { "w": "summarise", "def": "to give only the most important points of something, in a few words", "ex": "Can you ___ the main ideas of the article in three sentences?", "pos": "verb", "forms": { "noun": "summary", "verb": "summarise" } },
+        { "w": "clarify", "def": "to make something easier to understand by explaining it in more detail", "ex": "Could you ___ what you mean by that, please?", "pos": "verb", "forms": { "noun": "clarification", "verb": "clarify" } },
+        { "w": "sign language", "def": "a way of talking that uses movements of the hands instead of spoken words", "ex": "Our teacher taught us how to say 'thank you' in ___.", "pos": "noun", "pic": "🤟" },
+        { "w": "nod", "def": "to move your head up and down, often to show that you agree", "ex": "If you agree with me, just ___ your head.", "pos": "verb" }
       ],
       "grammar": [
         { "q": "She asked me where ___.", "opts": ["I lived", "did I live", "do I live", "I do live"], "a": 0, "why": "In a reported question, use normal sentence order (I lived), not question order (did I live)." },
@@ -77,32 +116,55 @@
         { "q": "The teacher told us ___ our phones off during the talk.", "opts": ["to turn", "turn", "turning", "that turn"], "a": 0, "why": "To report an order, use tell + person + to + verb: told us to turn." },
         { "q": "My friend ___ me to practise speaking English every day.", "opts": ["advised", "suggested", "said", "explained"], "a": 0, "why": "'Advise' can be followed by a person + to + verb. We can't say 'suggested me to', 'said me to' or 'explained me to'." },
         { "q": "Samuel Morse, ___ gave his name to Morse code, was also a painter.", "opts": ["who", "that", "which", "whose"], "a": 0, "why": "For a person in a non-defining clause (between commas), use 'who'. 'That' can't be used after a comma like this." },
-        { "q": "The first text message ___ in 1992.", "opts": ["was sent", "has been sent", "sent", "is sent"], "a": 0, "why": "1992 is a finished time in the past, so use the past simple passive: was sent." }
+        { "q": "The first text message ___ in 1992.", "opts": ["was sent", "has been sent", "sent", "is sent"], "a": 0, "why": "1992 is a finished time in the past, so use the past simple passive: was sent." },
+        { "q": "'I met your teacher yesterday,' said Mum. Mum told me that she ___ my teacher the day before.", "opts": ["had met", "has met", "meets", "had meet"], "a": 0, "why": "In reported speech, the past simple (met) often moves back to the past perfect: had met." },
+        { "q": "I wish I ___ Japanese. Then I could chat to my pen friend in her own language.", "opts": ["spoke", "speak", "will speak", "have spoken"], "a": 0, "why": "To wish that the present were different, use a past form after 'wish': I wish I spoke." },
+        { "q": "You ___ told me you were coming! I would have made more food.", "opts": ["should have", "should", "can have", "would"], "a": 0, "why": "'Should have' + past participle means it was a good idea, but it didn't happen: you didn't tell me." },
+        { "q": "Louis Braille, ___ alphabet of raised dots is used by blind people around the world, was born in France.", "opts": ["whose", "who", "which", "that"], "a": 0, "why": "'Whose' shows that something belongs to someone: Braille's alphabet. It works in a clause between commas, too." }
       ],
       "sentences": [
         "She asked me whether I had ever been to Japan.",
         "The teacher told us not to interrupt each other.",
         "My message, which I sent to the wrong person, was very embarrassing.",
-        "Do you know how many languages are spoken in India?"
+        "Do you know how many languages are spoken in India?",
+        "You should have told me that you were coming.",
+        "Louis Braille invented an alphabet that blind people can read with their fingers."
       ],
-      "reading": {
-        "title": "The island where people whistle",
-        "text": "On La Gomera, one of Spain's Canary Islands, some people can hold a conversation without saying a single word. Instead, they whistle. Their language, Silbo Gomero, turns Spanish into whistled sounds that rise and fall in pitch.\n\nThe island is covered with deep valleys and steep hills, so walking from one farm to the next could take hours. A loud whistle, however, can cross a valley in seconds and be heard several kilometres away. For centuries, shepherds and farmers used Silbo to send messages, warn their neighbours and arrange to meet.\n\nIn the twentieth century, roads and telephones arrived, and fewer young people learnt to whistle. The language might have disappeared completely if the island had not decided to protect it. In 1999, Silbo became a compulsory subject in local schools, and today children on the island learn it in class. In 2009, UNESCO recognised it as an important part of the world's cultural heritage.\n\nScientists find Silbo fascinating, too. Studies have shown that skilled whistlers use the same parts of the brain that normally deal with speech. This suggests that the brain treats whistling as a real language, not just as music.",
-        "qs": [
-          { "type": "mc", "q": "What is the text mainly about?", "opts": ["a whistled language and how it was saved", "how to learn Spanish quickly", "the history of the telephone", "why farmers live in valleys"], "a": 0 },
-          { "type": "tfng", "q": "Silbo Gomero is based on the Spanish language.", "opts": ["True", "False", "Not Given"], "a": 0 },
-          { "type": "tfng", "q": "Children on La Gomera can choose whether or not to learn Silbo at school.", "opts": ["True", "False", "Not Given"], "a": 1 },
-          { "type": "tfng", "q": "It takes most people about a year to learn Silbo well.", "opts": ["True", "False", "Not Given"], "a": 2 },
-          { "type": "mc", "q": "What did the brain studies suggest?", "opts": ["The brain treats Silbo like a real language.", "Whistling is just a kind of music.", "Whistlers have bigger brains than other people.", "Silbo is harder to learn than Spanish."], "a": 0 }
-        ]
-      },
+      "reading": [
+        {
+          "title": "The island where people whistle",
+          "text": "On La Gomera, one of Spain's Canary Islands, some people can hold a conversation without saying a single word. Instead, they whistle. Their language, Silbo Gomero, turns Spanish into whistled sounds that rise and fall in pitch.\n\nThe island is covered with deep valleys and steep hills, so walking from one farm to the next could take hours. A loud whistle, however, can cross a valley in seconds and be heard several kilometres away. For centuries, shepherds and farmers used Silbo to send messages, warn their neighbours and arrange to meet.\n\nIn the twentieth century, roads and telephones arrived, and fewer young people learnt to whistle. The language might have disappeared completely if the island had not decided to protect it. In 1999, Silbo became a compulsory subject in local schools, and today children on the island learn it in class. In 2009, UNESCO recognised it as an important part of the world's cultural heritage.\n\nScientists find Silbo fascinating, too. Studies have shown that skilled whistlers use the same parts of the brain that normally deal with speech. This suggests that the brain treats whistling as a real language, not just as music.",
+          "qs": [
+            { "type": "mc", "q": "What is the text mainly about?", "opts": ["a whistled language and how it was saved", "how to learn Spanish quickly", "the history of the telephone", "why farmers live in valleys"], "a": 0 },
+            { "type": "tfng", "q": "Silbo Gomero is based on the Spanish language.", "opts": ["True", "False", "Not Given"], "a": 0 },
+            { "type": "tfng", "q": "Children on La Gomera can choose whether or not to learn Silbo at school.", "opts": ["True", "False", "Not Given"], "a": 1 },
+            { "type": "tfng", "q": "It takes most people about a year to learn Silbo well.", "opts": ["True", "False", "Not Given"], "a": 2 },
+            { "type": "mc", "q": "What did the brain studies suggest?", "opts": ["The brain treats Silbo like a real language.", "Whistling is just a kind of music.", "Whistlers have bigger brains than other people.", "Silbo is harder to learn than Spanish."], "a": 0 }
+          ]
+        },
+        {
+          "title": "Small pictures, big messages",
+          "text": "In 1999, a Japanese designer called Shigetaka Kurita was working for a mobile phone company. At that time, text messages had to be very short, and words alone could sound cold or unclear. Kurita's answer was a set of 176 tiny pictures, each one just 12 dots wide and 12 dots high. They became known as emoji.\n\nMany people assume that the word comes from 'emotion', but it does not. It combines two Japanese words: 'e', which means picture, and 'moji', which means character.\n\nAt first, emoji were only available in Japan. However, in 2010 they were added to the international system that computers use to display text, and soon smartphones everywhere had them. Today there are more than 3,000, from food and animals to flags and faces.\n\nEmoji do an important job. In a face-to-face conversation, our tone of voice and body language show how we feel. In a written message, these clues are missing, so a short reply such as 'OK' can easily be misunderstood. Adding a smiling face shows that the writer is friendly rather than annoyed.\n\nKurita's original designs are now so famous that in 2016 they became part of the collection of the Museum of Modern Art in New York.",
+          "qs": [
+            { "type": "mc", "q": "What is the main idea of the text?", "opts": ["Emoji began in Japan and help to make written messages clearer.", "Emoji are more popular in Japan than anywhere else.", "Text messages should always be very short.", "Museums should collect more mobile phones."], "a": 0 },
+            { "type": "tfng", "q": "The word 'emoji' comes from the English word 'emotion'.", "opts": ["True", "False", "Not Given"], "a": 1 },
+            { "type": "tfng", "q": "Kurita's first set contained fewer than 200 pictures.", "opts": ["True", "False", "Not Given"], "a": 0 },
+            { "type": "tfng", "q": "Older people use emoji less often than younger people.", "opts": ["True", "False", "Not Given"], "a": 2 },
+            { "type": "mc", "q": "According to the text, why can a reply such as 'OK' be misunderstood?", "opts": ["The reader cannot hear the writer's tone of voice.", "It is too long.", "It is written in Japanese.", "It contains too many emoji."], "a": 0 }
+          ]
+        }
+      ],
       "extra": [
         { "kind": "idiom", "q": "The party was meant to be a surprise, but my little brother ___.", "opts": ["let the cat out of the bag", "broke the ice", "hit the nail on the head", "was over the moon"], "a": 0, "why": "'Let the cat out of the bag' means tell a secret by mistake." },
         { "kind": "phrasal", "q": "The line was so bad that I couldn't ___ what she was saying.", "opts": ["make out", "make up", "break down", "put up"], "a": 0, "why": "'Make out' means manage to hear, see or understand something with difficulty." },
         { "kind": "register", "q": "Which is the most polite way to ask a teacher for help?", "opts": ["Could you possibly explain this again, please?", "Explain this again.", "What? Say that again.", "You need to explain this again."], "a": 0, "why": "'Could you possibly... please?' is polite and indirect. The others sound like orders or are rude." },
         { "kind": "collocation", "q": "Our head teacher ___ a speech at the end-of-year assembly.", "opts": ["gave", "did", "said", "told"], "a": 0, "why": "We 'give a speech' (or 'make a speech'). We don't 'do', 'say' or 'tell' a speech." },
         { "kind": "wordform", "q": "Her ___ in three languages helped her to get the job. (fluent)", "opts": ["fluency", "fluent", "fluently", "fluented"], "a": 0, "why": "After 'Her' we need a noun: fluency." },
-        { "kind": "cohesion", "q": "Which sentence best continues the text? 'Humans are not the only animals that communicate with sound. ___'", "opts": ["Whales, for example, make sounds that can travel hundreds of kilometres underwater.", "However, whales are mammals.", "In contrast, many people enjoy music.", "Therefore, sound is very loud."], "a": 0, "why": "'For example' introduces an example that supports the sentence before it." }
+        { "kind": "cohesion", "q": "Which sentence best continues the text? 'Humans are not the only animals that communicate with sound. ___'", "opts": ["Whales, for example, make sounds that can travel hundreds of kilometres underwater.", "However, whales are mammals.", "In contrast, many people enjoy music.", "Therefore, sound is very loud."], "a": 0, "why": "'For example' introduces an example that supports the sentence before it." },
+        { "kind": "paraphrase", "q": "Which sentence means the same as 'I couldn't get my message across'?", "opts": ["I couldn't make people understand what I meant.", "I couldn't send my message on time.", "I couldn't cross the road to talk to them.", "I didn't want to share my message."], "a": 0, "why": "'Get a message across' means make people understand it." },
+        { "kind": "linking", "q": "___ he had lived in France for years, he still found some French jokes hard to understand.", "opts": ["Although", "Despite", "Because", "So"], "a": 0, "why": "'Although' is followed by a full clause and shows a surprising contrast. 'Despite' would need a noun or an -ing form." },
+        { "kind": "preposition", "q": "He is very good ___ explaining difficult ideas in simple words.", "opts": ["at", "in", "for", "of"], "a": 0, "why": "We say 'good at' a skill or an activity. 'Good for' means healthy or useful." },
+        { "kind": "mainidea", "q": "Read the paragraph: 'Long before telephones, people found clever ways to send messages over long distances. Some lit fires on hilltops, while others used drums or smoke signals. Sailors raised coloured flags to talk to other ships. All of these methods let news travel faster than a person could walk.' Which heading fits best?", "opts": ["Early ways of sending messages far", "How to light a fire on a hill", "Life on a sailing ship", "The invention of the telephone"], "a": 0, "why": "Fires, drums and flags are all examples of one idea: old ways of sending messages over long distances." }
       ]
     },
     {
@@ -121,7 +183,15 @@
         { "w": "species", "def": "a group of animals or plants of the same type", "ex": "Scientists discover thousands of new ___ of insects every year.", "pos": "noun", "pic": "🐞" },
         { "w": "conclusion", "def": "what you decide is true after looking at all the facts", "ex": "After the experiment, we wrote our ___ at the bottom of the page.", "pos": "noun", "forms": { "noun": "conclusion", "verb": "conclude" } },
         { "w": "investigate", "def": "to try to find out all the facts about something", "ex": "The team will ___ how dolphins use sounds to find food.", "pos": "verb", "pic": "🐬", "forms": { "noun": "investigation", "verb": "investigate" } },
-        { "w": "curious", "def": "wanting to know or learn about something", "ex": "Young children are naturally ___ and ask lots of questions.", "pos": "adj", "pic": "🤔", "forms": { "noun": "curiosity", "adj": "curious", "adv": "curiously" } }
+        { "w": "curious", "def": "wanting to know or learn about something", "ex": "Young children are naturally ___ and ask lots of questions.", "pos": "adj", "pic": "🤔", "forms": { "noun": "curiosity", "adj": "curious", "adv": "curiously" } },
+        { "w": "data", "def": "facts and numbers that are collected so that they can be studied", "ex": "The weather station collects ___ on rain, wind and temperature every hour.", "pos": "noun", "pic": "📊" },
+        { "w": "method", "def": "a particular way of doing something", "ex": "Scientists must describe their ___ so that others can repeat the experiment.", "pos": "noun", "syn": ["way"] },
+        { "w": "sample", "def": "a small amount of something that is tested or examined", "ex": "The astronauts brought back a ___ of rock from the Moon.", "pos": "noun" },
+        { "w": "conduct", "def": "to organise and do something, such as an experiment or a survey", "ex": "Our class will ___ a survey about how pupils travel to school.", "pos": "verb" },
+        { "w": "prove", "def": "to show that something is true by giving facts", "ex": "On the Moon, an astronaut dropped a hammer and a feather to ___ that they fall at the same speed.", "pos": "verb", "forms": { "noun": "proof", "verb": "prove" } },
+        { "w": "reveal", "def": "to show something that was hidden or not known before", "ex": "Photos from the new telescope ___ galaxies that nobody has ever seen before.", "pos": "verb", "syn": ["show"], "ant": ["hide"] },
+        { "w": "pioneer", "def": "one of the first people to do something new or to develop a new area of knowledge", "ex": "Marie Curie was a ___ in the study of radioactivity.", "pos": "noun" },
+        { "w": "dissolve", "def": "to mix completely with a liquid and disappear into it", "ex": "If you stir the tea, the sugar will ___ more quickly.", "pos": "verb" }
       ],
       "grammar": [
         { "q": "If Fleming had cleaned his dishes before his holiday, he ___ penicillin.", "opts": ["might not have discovered", "might not discover", "would not discover", "had not discovered"], "a": 0, "why": "In the third conditional, the result uses would/might + have + past participle." },
@@ -129,32 +199,55 @@
         { "q": "You ___ your results before you wrote your conclusion. Now it is full of mistakes.", "opts": ["should have checked", "must have checked", "should check", "might checked"], "a": 0, "why": "'Should have' + past participle means it was a good idea, but you didn't do it." },
         { "q": "Penicillin, ___ was discovered in 1928, has saved millions of lives.", "opts": ["which", "that", "who", "what"], "a": 0, "why": "Use 'which' for a thing in a non-defining clause (between commas). 'That' is not used after a comma." },
         { "q": "Marie Curie, ___ work on radioactivity earned her two Nobel Prizes, was born in Poland.", "opts": ["whose", "who", "which", "that"], "a": 0, "why": "'Whose' shows that something belongs to someone: her work." },
-        { "q": "The rock samples ___ in the laboratory at the moment.", "opts": ["are being tested", "are testing", "are tested", "have tested"], "a": 0, "why": "Someone is testing the samples right now, so use the present continuous passive: are being tested." }
+        { "q": "The rock samples ___ in the laboratory at the moment.", "opts": ["are being tested", "are testing", "are tested", "have tested"], "a": 0, "why": "Someone is testing the samples right now, so use the present continuous passive: are being tested." },
+        { "q": "The results ___ checked more carefully before they were published.", "opts": ["should have been", "should have", "must be", "should been"], "a": 0, "why": "The results didn't check themselves, so use a modal perfect in the passive: should + have been + past participle." },
+        { "q": "The journalist asked the scientist what ___ next.", "opts": ["she would study", "would she study", "will she study", "she will to study"], "a": 0, "why": "In a reported question, use normal word order (she would study), not question order, and move 'will' back to 'would'." },
+        { "q": "Cambridge, ___ Isaac Newton studied, has one of the oldest universities in the world.", "opts": ["where", "which", "that", "when"], "a": 0, "why": "Use 'where' for a place in a non-defining clause when a full clause follows (Newton studied there)." },
+        { "q": "My little brother is so curious! I wish he ___ stop asking 'Why?' all the time.", "opts": ["would", "will", "can", "is going to"], "a": 0, "why": "Use 'wish' + would to complain about something annoying that someone keeps doing." }
       ],
       "sentences": [
         "Scientists must have made a mistake in their calculations.",
         "The results of the experiment have been checked by three scientists.",
         "Do you know who discovered the four largest moons of Jupiter?",
-        "I should have asked my teacher for help."
+        "I should have asked my teacher for help.",
+        "The results should have been checked more carefully.",
+        "Ada Lovelace was a pioneer of computer programming."
       ],
-      "reading": {
-        "title": "The mould that changed medicine",
-        "text": "In September 1928, the Scottish scientist Alexander Fleming returned to his laboratory in London after a summer holiday. Before leaving, he had stacked several dishes of bacteria on a bench. When he examined them, he noticed something unusual. A blue-green mould had grown on one dish, and around it there was a clear ring where the bacteria had been killed.\n\nFleming was curious rather than annoyed. He grew more of the mould and found that it produced a substance that could destroy many harmful bacteria. He named it penicillin. However, he struggled to produce it in large amounts, and for about ten years his discovery received little attention.\n\nThe breakthrough came at the University of Oxford, where a team led by Howard Florey and Ernst Chain found a way to purify penicillin. In 1941, they tested it on patients, and the results were remarkable. By the mid-1940s, penicillin was being produced in huge quantities, and in 1945 Fleming, Florey and Chain shared the Nobel Prize.\n\nFleming's story is often told as a lucky accident, and luck certainly played a part. But the mould only mattered because a scientist was paying attention. Many people might have thrown the dish away without a second thought.",
-        "qs": [
-          { "type": "mc", "q": "What is the main point of the last paragraph?", "opts": ["Luck alone does not explain the discovery.", "Fleming was the luckiest scientist in history.", "Scientists should never throw dishes away.", "The Oxford team deserved more credit than Fleming."], "a": 0 },
-          { "type": "tfng", "q": "Fleming noticed the mould while he was on holiday.", "opts": ["True", "False", "Not Given"], "a": 1 },
-          { "type": "tfng", "q": "Fleming found it difficult to make large quantities of penicillin.", "opts": ["True", "False", "Not Given"], "a": 0 },
-          { "type": "tfng", "q": "Florey and Chain had worked with Fleming before 1928.", "opts": ["True", "False", "Not Given"], "a": 2 },
-          { "type": "mc", "q": "What did the Oxford team achieve?", "opts": ["They found a way to purify penicillin.", "They discovered the blue-green mould.", "They won the Nobel Prize without Fleming.", "They proved that the mould was harmful."], "a": 0 }
-        ]
-      },
+      "reading": [
+        {
+          "title": "The mould that changed medicine",
+          "text": "In September 1928, the Scottish scientist Alexander Fleming returned to his laboratory in London after a summer holiday. Before leaving, he had stacked several dishes of bacteria on a bench. When he examined them, he noticed something unusual. A blue-green mould had grown on one dish, and around it there was a clear ring where the bacteria had been killed.\n\nFleming was curious rather than annoyed. He grew more of the mould and found that it produced a substance that could destroy many harmful bacteria. He named it penicillin. However, he struggled to produce it in large amounts, and for about ten years his discovery received little attention.\n\nThe breakthrough came at the University of Oxford, where a team led by Howard Florey and Ernst Chain found a way to purify penicillin. In 1941, they tested it on patients, and the results were remarkable. By the mid-1940s, penicillin was being produced in huge quantities, and in 1945 Fleming, Florey and Chain shared the Nobel Prize.\n\nFleming's story is often told as a lucky accident, and luck certainly played a part. But the mould only mattered because a scientist was paying attention. Many people might have thrown the dish away without a second thought.",
+          "qs": [
+            { "type": "mc", "q": "What is the main point of the last paragraph?", "opts": ["Luck alone does not explain the discovery.", "Fleming was the luckiest scientist in history.", "Scientists should never throw dishes away.", "The Oxford team deserved more credit than Fleming."], "a": 0 },
+            { "type": "tfng", "q": "Fleming noticed the mould while he was on holiday.", "opts": ["True", "False", "Not Given"], "a": 1 },
+            { "type": "tfng", "q": "Fleming found it difficult to make large quantities of penicillin.", "opts": ["True", "False", "Not Given"], "a": 0 },
+            { "type": "tfng", "q": "Florey and Chain had worked with Fleming before 1928.", "opts": ["True", "False", "Not Given"], "a": 2 },
+            { "type": "mc", "q": "What did the Oxford team achieve?", "opts": ["They found a way to purify penicillin.", "They discovered the blue-green mould.", "They won the Nobel Prize without Fleming.", "They proved that the mould was harmful."], "a": 0 }
+          ]
+        },
+        {
+          "title": "The fossil hunter of Lyme Regis",
+          "text": "Two hundred years ago, the cliffs near Lyme Regis, a small town on the south coast of England, were an exciting place for collectors. Every winter, storms washed away parts of the cliffs and uncovered the remains of creatures that had lived millions of years earlier.\n\nMary Anning, who was born in the town in 1799, spent much of her childhood searching these beaches. Her family was poor, and they sold the fossils they found to visitors. When Mary was about twelve, she and her brother discovered the skeleton of an ichthyosaur, a sea reptile that looked a little like a dolphin. Later, she found the first complete skeleton of a plesiosaur, an animal with a long neck and four large flippers.\n\nThese finds were important evidence that some species had died out long ago, an idea that many people at the time found hard to accept. Famous scientists travelled to Lyme Regis to ask Mary's opinion. However, because she was a woman, she was not allowed to join the Geological Society of London, and her discoveries were often described by men who took the credit.\n\nToday, Mary Anning is recognised as a pioneer of science. In 2022, a statue of her was unveiled in her home town.",
+          "qs": [
+            { "type": "mc", "q": "What is the writer's main purpose?", "opts": ["to tell the story of an important fossil hunter", "to warn readers about storms on the coast", "to explain how fossils are formed", "to describe the town of Lyme Regis today"], "a": 0 },
+            { "type": "tfng", "q": "Mary Anning's family earned money from fossils.", "opts": ["True", "False", "Not Given"], "a": 0 },
+            { "type": "tfng", "q": "Mary Anning was a member of the Geological Society of London.", "opts": ["True", "False", "Not Given"], "a": 1 },
+            { "type": "tfng", "q": "Mary Anning wrote several books about her discoveries.", "opts": ["True", "False", "Not Given"], "a": 2 },
+            { "type": "mc", "q": "Why were Mary's finds important?", "opts": ["They showed that some animals had died out long ago.", "They proved that dolphins are reptiles.", "They turned Lyme Regis into a big city.", "They were the first fossils ever found."], "a": 0 }
+          ]
+        }
+      ],
       "extra": [
         { "kind": "collocation", "q": "Before the trip, the class ___ some research on the island's birds.", "opts": ["did", "made", "took", "had"], "a": 0, "why": "We say 'do research' (or 'carry out research'), not 'make research'." },
         { "kind": "wordform", "q": "Her careful ___ of the data showed a clear pattern. (analyse)", "opts": ["analysis", "analyse", "analytical", "analysed"], "a": 0, "why": "After 'Her careful' we need a noun: analysis." },
         { "kind": "paraphrase", "q": "Which sentence means the same as 'The results were not what the team had expected'?", "opts": ["The team was surprised by the results.", "The team knew what the results would be.", "The experiment had no results.", "The team did not carry out the experiment."], "a": 0, "why": "If the results were not what they expected, the results surprised them." },
         { "kind": "linking", "q": "Some scientists work in laboratories, ___ others spend most of their time outdoors.", "opts": ["whereas", "despite", "because of", "so that"], "a": 0, "why": "'Whereas' compares two different facts or groups of people." },
         { "kind": "preposition", "q": "Marie Curie is famous ___ her research on radioactivity.", "opts": ["for", "of", "with", "about"], "a": 0, "why": "We say 'famous for' something." },
-        { "kind": "mainidea", "q": "Read the paragraph: 'Many great discoveries began with a simple question. Isaac Newton is said to have wondered why apples fall straight down. Charles Darwin asked why birds on different islands had different beaks. Their curiosity led to ideas that changed science.' Which heading fits best?", "opts": ["Curiosity drives discovery", "The life of Isaac Newton", "Birds of faraway islands", "Why apples fall from trees"], "a": 0, "why": "The paragraph uses two examples to make one point: asking questions leads to discoveries." }
+        { "kind": "mainidea", "q": "Read the paragraph: 'Many great discoveries began with a simple question. Isaac Newton is said to have wondered why apples fall straight down. Charles Darwin asked why birds on different islands had different beaks. Their curiosity led to ideas that changed science.' Which heading fits best?", "opts": ["Curiosity drives discovery", "The life of Isaac Newton", "Birds of faraway islands", "Why apples fall from trees"], "a": 0, "why": "The paragraph uses two examples to make one point: asking questions leads to discoveries." },
+        { "kind": "register", "q": "Which sentence is the most suitable for a science report?", "opts": ["The temperature of the water was measured every ten minutes.", "We checked how hot the water was loads of times.", "The water got really hot, which was so cool!", "Basically, we just kept looking at the water."], "a": 0, "why": "Science reports are formal and precise. They often use the passive and avoid chatty words like 'loads of' and 'basically'." },
+        { "kind": "cohesion", "q": "Which sentence best fills the gap? 'First, we filled three glasses with water at different temperatures. ___ Finally, we timed how long the sugar took to dissolve in each one.'", "opts": ["Next, we added a spoonful of sugar to each glass.", "Sugar is bad for your teeth.", "However, water is a liquid.", "In conclusion, the experiment was fun."], "a": 0, "why": "'First', 'Next' and 'Finally' show the order of the steps. The missing step comes between filling the glasses and timing the sugar." },
+        { "kind": "phrasal", "q": "The scientists ___ an experiment to test their hypothesis.", "opts": ["carried out", "carried away", "put out", "gave off"], "a": 0, "why": "'Carry out' an experiment means do it. 'Put out' a fire means stop it burning." },
+        { "kind": "collocation", "q": "Scientists have ___ great progress in understanding how the brain works.", "opts": ["made", "done", "taken", "had"], "a": 0, "why": "We say 'make progress', not 'do progress'." }
       ]
     },
     {
@@ -173,7 +266,15 @@
         { "w": "vertical", "def": "going straight up, not across", "ex": "A ___ farm grows vegetables on many floors inside a building.", "pos": "adj", "ant": ["horizontal"] },
         { "w": "overcrowded", "def": "with too many people in one place", "ex": "The train was so ___ that we had to stand all the way.", "pos": "adj", "syn": ["packed"] },
         { "w": "driverless", "def": "able to move without a person controlling it", "ex": "In some cities, ___ trains already carry passengers.", "pos": "adj", "pic": "🚝" },
-        { "w": "green space", "def": "an area of grass, trees or plants in a town, such as a park", "ex": "The new estate has plenty of ___ where children can play.", "pos": "noun", "pic": "🌳" }
+        { "w": "green space", "def": "an area of grass, trees or plants in a town, such as a park", "ex": "The new estate has plenty of ___ where children can play.", "pos": "noun", "pic": "🌳" },
+        { "w": "public transport", "def": "buses, trains and trams that everyone can pay to use", "ex": "Many teenagers use ___ to get to school because they are too young to drive.", "pos": "noun", "pic": "🚌" },
+        { "w": "population", "def": "the number of people who live in a place", "ex": "The ___ of the world is now more than eight billion.", "pos": "noun" },
+        { "w": "suburb", "def": "an area where people live on the edge of a city, away from the centre", "ex": "We live in a quiet ___ and take the train into the city centre.", "pos": "noun", "forms": { "noun": "suburb", "adj": "suburban" } },
+        { "w": "neighbourhood", "def": "the area around your home, and the people who live in it", "ex": "Our ___ has a library, a park and lots of small shops.", "pos": "noun" },
+        { "w": "housing", "def": "buildings for people to live in, such as homes and flats", "ex": "The city needs more affordable ___ for young families.", "pos": "noun" },
+        { "w": "demolish", "def": "to knock down a building completely", "ex": "They had to ___ the old factory because it was no longer safe.", "pos": "verb", "forms": { "noun": "demolition", "verb": "demolish" } },
+        { "w": "facilities", "def": "buildings, rooms or equipment that are provided for a particular use", "ex": "The new leisure centre has excellent ___, including two pools and a climbing wall.", "pos": "noun" },
+        { "w": "transform", "def": "to change something completely, usually to make it better", "ex": "Trees and flowers could ___ this grey street into a lovely place to walk.", "pos": "verb", "forms": { "noun": "transformation", "verb": "transform" } }
       ],
       "grammar": [
         { "q": "We're ___ solar panels fitted on our roof next week.", "opts": ["having", "making", "letting", "doing"], "a": 0, "why": "'Have something done' means another person does the job for you: we're having panels fitted." },
@@ -181,32 +282,55 @@
         { "q": "In the future, many cars ___ by computers instead of people.", "opts": ["will be driven", "will drive", "are driving", "drove"], "a": 0, "why": "Computers will do the driving, so use the future passive: will be + past participle (will be driven)." },
         { "q": "I wish there ___ less traffic outside my school.", "opts": ["were", "is", "will be", "has been"], "a": 0, "why": "After 'wish' about the present, use a past form: I wish there were." },
         { "q": "If only they ___ more parks when they built the city!", "opts": ["had planned", "plan", "will plan", "have planned"], "a": 0, "why": "For a regret about the past, use 'if only' + had + past participle." },
-        { "q": "___ the city is very crowded, it has lots of green spaces.", "opts": ["Although", "Despite", "However", "Because of"], "a": 0, "why": "'Although' is followed by a full clause (the city is crowded). 'Despite' and 'because of' need a noun." }
+        { "q": "___ the city is very crowded, it has lots of green spaces.", "opts": ["Although", "Despite", "However", "Because of"], "a": 0, "why": "'Although' is followed by a full clause (the city is crowded). 'Despite' and 'because of' need a noun." },
+        { "q": "We got our flat ___ before we moved in.", "opts": ["painted", "paint", "painting", "to paint"], "a": 0, "why": "'Get something done' is like 'have something done': someone else did the job. Use the past participle: painted." },
+        { "q": "The old car park ___ next year to make room for a playground.", "opts": ["is going to be demolished", "is going to demolish", "has been demolished", "was demolished"], "a": 0, "why": "It will happen in the future, and the car park doesn't demolish anything, so use the passive: is going to be demolished." },
+        { "q": "Many people now work from home, ___ means there is less traffic in the rush hour.", "opts": ["which", "that", "what", "who"], "a": 0, "why": "After a comma, 'which' can refer back to a whole idea. 'That' and 'what' cannot be used like this." },
+        { "q": "If the city ___ the new tram line, the traffic would have got even worse.", "opts": ["hadn't built", "didn't build", "wouldn't build", "hasn't built"], "a": 0, "why": "Third conditional: if + had (not) + past participle, then would have + past participle." }
       ],
       "sentences": [
         "We had our bikes checked at the shop.",
         "Vegetables can be grown on the roofs of buildings.",
         "I wish more people would cycle to work.",
-        "Do you think driverless cars will make our roads safer?"
+        "Do you think driverless cars will make our roads safer?",
+        "The old car park is going to be turned into a playground.",
+        "Good public transport means that fewer people need to drive."
       ],
-      "reading": {
-        "title": "A city in a garden",
-        "text": "Imagine a city where giant metal trees light up at night and tall buildings are covered in plants. This is not science fiction: it is Singapore, one of the most crowded places on Earth.\n\nSingapore is a small island with millions of residents, so there is very little room to spread out. Instead of losing its nature, however, the city decided to grow upwards. Many skyscrapers now have gardens on their roofs or plants climbing up their walls. These green walls do more than look attractive. They help to keep the buildings cool, which means less electricity is needed for air conditioning.\n\nThe most famous example is Gardens by the Bay, which opened in 2012. Its 18 'Supertrees' are between 25 and 50 metres tall and are covered in thousands of living plants. Some of them have solar panels on top, and they also collect rainwater for the gardens. In the evening, visitors can walk along a high bridge between some of the trees and enjoy a show of light and music.\n\nPlanners in other countries are studying Singapore's ideas carefully. Although every city is different, many of them face the same problem: how to make room for more people without losing the green spaces that keep residents healthy and happy.",
-        "qs": [
-          { "type": "mc", "q": "What is the main idea of the text?", "opts": ["Singapore has found ways to keep nature in a crowded city.", "Singapore has the tallest trees in the world.", "Skyscrapers are bad for the environment.", "Solar panels work best on trees."], "a": 0 },
-          { "type": "tfng", "q": "Singapore has plenty of empty land for new buildings.", "opts": ["True", "False", "Not Given"], "a": 1 },
-          { "type": "tfng", "q": "Plants on buildings can reduce the need for air conditioning.", "opts": ["True", "False", "Not Given"], "a": 0 },
-          { "type": "tfng", "q": "Most visitors to Gardens by the Bay come from other countries.", "opts": ["True", "False", "Not Given"], "a": 2 },
-          { "type": "mc", "q": "What do some of the Supertrees collect?", "opts": ["rainwater", "rubbish", "seeds", "heat from the sea"], "a": 0 }
-        ]
-      },
+      "reading": [
+        {
+          "title": "A city in a garden",
+          "text": "Imagine a city where giant metal trees light up at night and tall buildings are covered in plants. This is not science fiction: it is Singapore, one of the most crowded places on Earth.\n\nSingapore is a small island with millions of residents, so there is very little room to spread out. Instead of losing its nature, however, the city decided to grow upwards. Many skyscrapers now have gardens on their roofs or plants climbing up their walls. These green walls do more than look attractive. They help to keep the buildings cool, which means less electricity is needed for air conditioning.\n\nThe most famous example is Gardens by the Bay, which opened in 2012. Its 18 'Supertrees' are between 25 and 50 metres tall and are covered in thousands of living plants. Some of them have solar panels on top, and they also collect rainwater for the gardens. In the evening, visitors can walk along a high bridge between some of the trees and enjoy a show of light and music.\n\nPlanners in other countries are studying Singapore's ideas carefully. Although every city is different, many of them face the same problem: how to make room for more people without losing the green spaces that keep residents healthy and happy.",
+          "qs": [
+            { "type": "mc", "q": "What is the main idea of the text?", "opts": ["Singapore has found ways to keep nature in a crowded city.", "Singapore has the tallest trees in the world.", "Skyscrapers are bad for the environment.", "Solar panels work best on trees."], "a": 0 },
+            { "type": "tfng", "q": "Singapore has plenty of empty land for new buildings.", "opts": ["True", "False", "Not Given"], "a": 1 },
+            { "type": "tfng", "q": "Plants on buildings can reduce the need for air conditioning.", "opts": ["True", "False", "Not Given"], "a": 0 },
+            { "type": "tfng", "q": "Most visitors to Gardens by the Bay come from other countries.", "opts": ["True", "False", "Not Given"], "a": 2 },
+            { "type": "mc", "q": "What do some of the Supertrees collect?", "opts": ["rainwater", "rubbish", "seeds", "heat from the sea"], "a": 0 }
+          ]
+        },
+        {
+          "title": "The road that became a river",
+          "text": "For decades, a busy road ran right through the centre of Seoul, the capital of South Korea. Underneath it, hidden in the dark, was an old stream called Cheonggyecheon.\n\nIn 2003, the city started a surprising project: it would demolish the road and bring the stream back to life. Many residents were worried. If the road disappeared, where would all the cars go? Shop owners feared that they would lose customers.\n\nThe work took just over two years. When the stream reopened in 2005, the area had been transformed into a park almost six kilometres long, with footpaths, bridges, fountains and stepping stones. Because there is not always enough rain, extra water is pumped into the stream from a nearby river.\n\nThe results surprised many people. The traffic did not become much worse, partly because the city improved its bus services at the same time. Fish, birds and insects returned to the area. On hot summer days, the air beside the water is several degrees cooler than on streets nearby.\n\nToday, the stream is one of the most popular places in Seoul to relax. It has also inspired other cities to ask a new question: what might be hidden under our roads?",
+          "qs": [
+            { "type": "mc", "q": "What is the main idea of the text?", "opts": ["Replacing a road with a stream improved part of a city.", "Seoul has more traffic than any other city.", "Shop owners in Seoul lost many customers.", "Buses are faster than cars in big cities."], "a": 0 },
+            { "type": "tfng", "q": "Everyone in Seoul supported the plan from the start.", "opts": ["True", "False", "Not Given"], "a": 1 },
+            { "type": "tfng", "q": "Some of the water in the stream comes from another river.", "opts": ["True", "False", "Not Given"], "a": 0 },
+            { "type": "tfng", "q": "The project cost more money than the city had planned.", "opts": ["True", "False", "Not Given"], "a": 2 },
+            { "type": "mc", "q": "According to the text, why did the traffic not get much worse?", "opts": ["The city improved its bus services.", "Most people stopped driving at night.", "A new road was built over the stream.", "Many shops in the area closed."], "a": 0 }
+          ]
+        }
+      ],
       "extra": [
         { "kind": "collocation", "q": "The roads are busiest during ___ hour, when people travel to and from work.", "opts": ["rush", "fast", "hurry", "quick"], "a": 0, "why": "'Rush hour' is the fixed phrase for the busy time when people travel to and from work." },
         { "kind": "linking", "q": "Big cities offer many jobs. ___, housing there is often very expensive.", "opts": ["However", "Therefore", "Moreover", "For instance"], "a": 0, "why": "'However' introduces a contrast: a good point followed by a problem." },
         { "kind": "wordform", "q": "Thousands of ___ travel into London by train every morning. (commute)", "opts": ["commuters", "commute", "commuting", "commuted"], "a": 0, "why": "After 'Thousands of' we need a plural noun for people: commuters." },
         { "kind": "register", "q": "Which sentence is the most suitable for a report to the city council?", "opts": ["Traffic congestion in the city centre has increased considerably.", "The traffic in town is totally crazy these days.", "There are way too many cars around now.", "Honestly, driving in town is a nightmare!"], "a": 0, "why": "A formal report uses precise words like 'congestion' and 'considerably' and avoids chatty language." },
         { "kind": "cohesion", "q": "Which sentence best fills the gap? 'Cities are growing fast. ___ This means that planners must find new ways to provide homes and transport.'", "opts": ["By 2050, about two thirds of people may live in urban areas.", "Some cities are very old.", "My uncle lives in a city.", "Buses and trains are types of transport."], "a": 0, "why": "The missing sentence must give a fact about growth, so that 'This means...' follows logically." },
-        { "kind": "paraphrase", "q": "Which sentence means the same as 'The new park is within walking distance of most homes'?", "opts": ["Most people can easily walk to the new park.", "Most people need a car to reach the new park.", "The new park is inside most people's homes.", "Walking is not allowed in the new park."], "a": 0, "why": "'Within walking distance' means close enough to walk to." }
+        { "kind": "paraphrase", "q": "Which sentence means the same as 'The new park is within walking distance of most homes'?", "opts": ["Most people can easily walk to the new park.", "Most people need a car to reach the new park.", "The new park is inside most people's homes.", "Walking is not allowed in the new park."], "a": 0, "why": "'Within walking distance' means close enough to walk to." },
+        { "kind": "phrasal", "q": "The old cinema was ___ to make space for a new library.", "opts": ["pulled down", "pulled up", "put up", "turned up"], "a": 0, "why": "'Pull down' a building means destroy it. 'Put up' a building means build it." },
+        { "kind": "preposition", "q": "Our flat is close ___ the station, so I can walk there in five minutes.", "opts": ["to", "from", "at", "with"], "a": 0, "why": "We say 'close to' a place (or 'near' a place)." },
+        { "kind": "mainidea", "q": "Read the paragraph: 'In many cities, flat roofs are being turned into small farms. Residents grow tomatoes, herbs and salad leaves just metres above the busy streets. The plants also help to keep the buildings cool, and the gardens give neighbours a place to meet.' Which heading fits best?", "opts": ["Farming on city rooftops", "How to grow tomatoes", "The problem with flat roofs", "Busy streets in big cities"], "a": 0, "why": "Every sentence is about growing food on city roofs and the good things it brings." },
+        { "kind": "wordform", "q": "The council plans to ___ the city's old railway station. (modern)", "opts": ["modernise", "modern", "modernity", "modernly"], "a": 0, "why": "After 'plans to' we need a verb. 'Modernise' means make something more modern." }
       ]
     },
     {
@@ -225,7 +349,15 @@
         { "w": "motivate", "def": "to make someone want to do something and work hard at it", "ex": "A good captain knows how to ___ the team when they are losing.", "pos": "verb", "forms": { "noun": "motivation", "verb": "motivate" } },
         { "w": "spectator", "def": "a person who watches a sports event", "ex": "Every ___ in the stadium stood up and cheered.", "pos": "noun", "pic": "🏟️", "syn": ["viewer"] },
         { "w": "compete", "def": "to take part in a contest and try to win it", "ex": "Athletes from more than 200 countries ___ at the Olympic Games.", "pos": "verb", "pic": "🏅", "forms": { "noun": "competition", "verb": "compete", "adj": "competitive" } },
-        { "w": "sportsmanship", "def": "fair, kind and polite behaviour in sport, even when you lose", "ex": "Helping an opponent who has fallen is a great example of ___.", "pos": "noun" }
+        { "w": "sportsmanship", "def": "fair, kind and polite behaviour in sport, even when you lose", "ex": "Helping an opponent who has fallen is a great example of ___.", "pos": "noun" },
+        { "w": "athlete", "def": "a person who trains hard to take part in sports, especially running, jumping and throwing", "ex": "The ___ trained for four years to compete in the Olympic Games.", "pos": "noun", "forms": { "noun": "athlete", "adj": "athletic" } },
+        { "w": "tournament", "def": "a competition in which many players or teams play a series of games to find one winner", "ex": "Sixteen schools took part in the netball ___.", "pos": "noun" },
+        { "w": "victory", "def": "the act of winning a game or a competition", "ex": "The fans cheered loudly after the team's 2-0 ___.", "pos": "noun", "syn": ["win"], "ant": ["defeat"] },
+        { "w": "trophy", "def": "a cup or other prize that is given to the winner of a competition", "ex": "The captain lifted the ___ high above her head.", "pos": "noun", "pic": "🏆" },
+        { "w": "qualify", "def": "to win a place in the next stage of a competition by doing well", "ex": "She must run 100 metres in under 12 seconds to ___ for the national championships.", "pos": "verb", "forms": { "noun": "qualification", "verb": "qualify" } },
+        { "w": "amateur", "def": "doing a sport for fun, not as a paid job", "ex": "My uncle plays for an ___ football team on Sunday mornings.", "pos": "adj", "ant": ["professional"] },
+        { "w": "warm up", "def": "to do gentle exercise to get your body ready for sport", "ex": "Always ___ for ten minutes before you start running fast.", "pos": "verb" },
+        { "w": "physical", "def": "connected with the body rather than the mind", "ex": "Rugby is a very ___ sport, so players need to be strong.", "pos": "adj", "ant": ["mental"] }
       ],
       "grammar": [
         { "q": "If our goalkeeper ___ that penalty, we would have won the cup.", "opts": ["had saved", "saved", "would save", "has saved"], "a": 0, "why": "Third conditional: if + had + past participle, then would have + past participle." },
@@ -233,32 +365,55 @@
         { "q": "The coach ___ that we should drink more water during matches.", "opts": ["recommended", "told", "encouraged", "advised to"], "a": 0, "why": "'Recommend' can be followed by 'that'. 'Tell' and 'encourage' need a person first (told us, encouraged us)." },
         { "q": "The stadium ___ for the final, so it looks brand new.", "opts": ["has been repainted", "has repainted", "is repainting", "had repainted"], "a": 0, "why": "The stadium didn't paint anything, so use the passive. The result is clear now, so use the present perfect passive." },
         { "q": "Wembley Stadium, ___ the FA Cup Final is played, can hold 90,000 people.", "opts": ["where", "which", "that", "who"], "a": 0, "why": "Use 'where' for a place when a full clause follows (the final is played there)." },
-        { "q": "Despite ___ a goal down at half-time, the team won 3-1.", "opts": ["being", "they were", "be", "was"], "a": 0, "why": "'Despite' is followed by a noun or an -ing form, not by a full clause." }
+        { "q": "Despite ___ a goal down at half-time, the team won 3-1.", "opts": ["being", "they were", "be", "was"], "a": 0, "why": "'Despite' is followed by a noun or an -ing form, not by a full clause." },
+        { "q": "I wish I ___ my football boots. I had to play in my trainers!", "opts": ["had brought", "brought", "have brought", "would bring"], "a": 0, "why": "For a regret about the past, use 'wish' + had + past participle: I wish I had brought." },
+        { "q": "Our team ___ new shirts designed for the tournament.", "opts": ["had", "made", "let", "did"], "a": 0, "why": "'Have something done': the team didn't design the shirts themselves; someone else did it for them." },
+        { "q": "The coach promised that she ___ give us extra training before the final.", "opts": ["would", "is going", "has", "was"], "a": 0, "why": "In reported speech, 'will' usually becomes 'would': 'I will give you...' becomes 'she would give us...'." },
+        { "q": "They lost 10-0. Their defenders ___ practised very much this week.", "opts": ["can't have", "mustn't have", "shouldn't", "couldn't"], "a": 0, "why": "'Can't have' + past participle shows we are almost sure that something did not happen." }
       ],
       "sentences": [
         "The coach told us to pass the ball more quickly.",
         "Our goalkeeper, whose gloves were too big, kept dropping the ball.",
         "The stadium will be opened by the team captain.",
-        "Do you know how many players there are in a rugby team?"
+        "Do you know how many players there are in a rugby team?",
+        "I wish I had brought my football boots.",
+        "Only the best teams will qualify for the final."
       ],
-      "reading": {
-        "title": "Winning together",
-        "text": "The Tour de France is one of the toughest races in the world. Every July, about 170 cyclists ride more than 3,000 kilometres around France in three weeks. It may look like a contest between individuals, but no rider could win it alone.\n\nEach team has eight riders, and usually only one of them has a real chance of winning. Most of the others are known as 'domestiques', a French word meaning 'servants'. Their job is to help their leader. They fetch water bottles and food from the team car, ride in front of the leader to block the wind and, if the leader's bike breaks, they may even hand over their own.\n\nRiding just behind another cyclist takes much less effort than riding at the front, because the rider in front pushes through the air. Domestiques take turns at the front so that their leader can save energy for the hardest mountain climbs. By the final week, many of them are exhausted, having spent their strength on someone else's success.\n\nDespite this, domestiques are highly respected by fans and other riders, who know that the race is rarely won by one person. The winner wears the famous yellow jersey in Paris, but the whole team has earned it.",
-        "qs": [
-          { "type": "mc", "q": "Why did the writer write this text?", "opts": ["to show that winning a cycling race depends on a whole team", "to explain how to repair a racing bike", "to describe the mountains of France", "to persuade readers to become professional cyclists"], "a": 0 },
-          { "type": "tfng", "q": "Most riders in a team expect to win the Tour de France.", "opts": ["True", "False", "Not Given"], "a": 1 },
-          { "type": "tfng", "q": "Cycling just behind another rider is easier than cycling at the front.", "opts": ["True", "False", "Not Given"], "a": 0 },
-          { "type": "tfng", "q": "Domestiques often become team leaders later in their careers.", "opts": ["True", "False", "Not Given"], "a": 2 },
-          { "type": "mc", "q": "What does the French word 'domestique' mean?", "opts": ["servant", "leader", "cyclist", "winner"], "a": 0 }
-        ]
-      },
+      "reading": [
+        {
+          "title": "Winning together",
+          "text": "The Tour de France is one of the toughest races in the world. Every July, about 170 cyclists ride more than 3,000 kilometres around France in three weeks. It may look like a contest between individuals, but no rider could win it alone.\n\nEach team has eight riders, and usually only one of them has a real chance of winning. Most of the others are known as 'domestiques', a French word meaning 'servants'. Their job is to help their leader. They fetch water bottles and food from the team car, ride in front of the leader to block the wind and, if the leader's bike breaks, they may even hand over their own.\n\nRiding just behind another cyclist takes much less effort than riding at the front, because the rider in front pushes through the air. Domestiques take turns at the front so that their leader can save energy for the hardest mountain climbs. By the final week, many of them are exhausted, having spent their strength on someone else's success.\n\nDespite this, domestiques are highly respected by fans and other riders, who know that the race is rarely won by one person. The winner wears the famous yellow jersey in Paris, but the whole team has earned it.",
+          "qs": [
+            { "type": "mc", "q": "Why did the writer write this text?", "opts": ["to show that winning a cycling race depends on a whole team", "to explain how to repair a racing bike", "to describe the mountains of France", "to persuade readers to become professional cyclists"], "a": 0 },
+            { "type": "tfng", "q": "Most riders in a team expect to win the Tour de France.", "opts": ["True", "False", "Not Given"], "a": 1 },
+            { "type": "tfng", "q": "Cycling just behind another rider is easier than cycling at the front.", "opts": ["True", "False", "Not Given"], "a": 0 },
+            { "type": "tfng", "q": "Domestiques often become team leaders later in their careers.", "opts": ["True", "False", "Not Given"], "a": 2 },
+            { "type": "mc", "q": "What does the French word 'domestique' mean?", "opts": ["servant", "leader", "cyclist", "winner"], "a": 0 }
+          ]
+        },
+        {
+          "title": "Two seconds of teamwork",
+          "text": "In a Formula One race, drivers usually have to stop at least once to change their tyres. These stops take place in the pit lane, and every second counts: a slow stop can cost a driver several places, while a fast one can help them win.\n\nA modern pit stop is one of the most impressive examples of teamwork in sport. Around twenty mechanics surround the car the moment it stops, and each of them has just one job. Two of them lift the car at the front and back. At each wheel, three people work together: one removes the wheel nut, one pulls off the old wheel and one fits the new one. The best teams can change all four wheels in just over two seconds.\n\nSuch speed does not happen by chance. Teams practise pit stops hundreds of times during a season, and they study videos to see where they can save a fraction of a second. If one person makes even a tiny mistake, the whole stop is slowed down.\n\nDrivers receive the trophies and most of the attention. However, many of them say that a race is never won by one person alone, but by the whole team.",
+          "qs": [
+            { "type": "mc", "q": "Why did the writer write this text?", "opts": ["to show how teamwork makes very fast pit stops possible", "to explain all the rules of Formula One", "to persuade readers to become racing drivers", "to compare the fastest drivers in history"], "a": 0 },
+            { "type": "tfng", "q": "Each mechanic in a pit stop has several different jobs.", "opts": ["True", "False", "Not Given"], "a": 1 },
+            { "type": "tfng", "q": "Teams watch videos of their pit stops to find ways to be faster.", "opts": ["True", "False", "Not Given"], "a": 0 },
+            { "type": "tfng", "q": "Pit stop mechanics are paid more than other members of the team.", "opts": ["True", "False", "Not Given"], "a": 2 },
+            { "type": "mc", "q": "How many people work on each wheel during a pit stop?", "opts": ["three", "two", "four", "twenty"], "a": 0 }
+          ]
+        }
+      ],
       "extra": [
         { "kind": "idiom", "q": "We were losing 2-0, but we didn't ___, and in the end we drew 2-2.", "opts": ["throw in the towel", "hit the roof", "cost an arm and a leg", "spill the beans"], "a": 0, "why": "'Throw in the towel' means give up." },
         { "kind": "collocation", "q": "Our team ___ the match 3-1.", "opts": ["won", "beat", "gained", "earned"], "a": 0, "why": "You win a match or a game, but you beat a person or a team." },
         { "kind": "phrasal", "q": "The final was ___ until Sunday because of the storm.", "opts": ["put off", "put up", "taken off", "called up"], "a": 0, "why": "'Put off' means move an event to a later time." },
         { "kind": "wordform", "q": "Swimming is a very ___ sport at our school: everyone wants to win. (compete)", "opts": ["competitive", "competition", "competitor", "competing"], "a": 0, "why": "We need an adjective after 'very' to describe the sport: competitive." },
         { "kind": "linking", "q": "___ he had a sore ankle, Leo played the whole match.", "opts": ["Even though", "Despite", "In spite", "However"], "a": 0, "why": "'Even though' is followed by a full clause (he had a sore ankle). 'Despite' and 'in spite of' need a noun or an -ing form." },
-        { "kind": "cohesion", "q": "Which sentence best completes the paragraph? 'Team sports teach children many useful skills. They learn to communicate clearly and to trust others. ___'", "opts": ["They also learn how to deal with losing as well as winning.", "However, football was invented in England.", "Tennis players usually play alone.", "As a result, stadiums are very large."], "a": 0, "why": "The last sentence adds one more skill, so it continues the same idea with 'also'." }
+        { "kind": "cohesion", "q": "Which sentence best completes the paragraph? 'Team sports teach children many useful skills. They learn to communicate clearly and to trust others. ___'", "opts": ["They also learn how to deal with losing as well as winning.", "However, football was invented in England.", "Tennis players usually play alone.", "As a result, stadiums are very large."], "a": 0, "why": "The last sentence adds one more skill, so it continues the same idea with 'also'." },
+        { "kind": "paraphrase", "q": "Which sentence means the same as 'The match was called off because of the snow'?", "opts": ["The match was cancelled because of the snow.", "The match was played in the snow.", "The match started late because of the snow.", "The match was moved to a snowy place."], "a": 0, "why": "'Call off' means cancel, so the match did not happen." },
+        { "kind": "register", "q": "Which sentence is the most suitable for a formal email to a sports club?", "opts": ["I would like to enquire about joining your junior tennis team.", "Hey, can I join your tennis team?", "I wanna play tennis with you lot.", "Tennis team, here I come!"], "a": 0, "why": "'I would like to enquire about...' is polite and formal. 'Hey', 'wanna' and 'you lot' are informal." },
+        { "kind": "preposition", "q": "She was very proud ___ her team's performance in the final.", "opts": ["of", "for", "with", "about"], "a": 0, "why": "We say 'proud of' someone or something." },
+        { "kind": "mainidea", "q": "Read the paragraph: 'Team sports can help children in many ways. They learn to set goals, manage their time and keep going when things are difficult. Playing with others also helps them to make friends and feel part of a group.' Which heading fits best?", "opts": ["The benefits of team sports", "How to score more goals", "Why sport is so difficult", "The history of team sports"], "a": 0, "why": "The first sentence gives the main idea, and the rest lists ways in which team sports help children." }
       ]
     }
   ]

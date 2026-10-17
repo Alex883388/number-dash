@@ -1,7 +1,9 @@
 # English Quest content format
 
 English Quest walks a child from first words to IELTS band 8 in seven stages. Every stage is one
-file, `stage-<n>.json`, with exactly 5 units. The game builds lessons from these banks (it picks,
+file, `stage-<n>.json`, with exactly 5 units. Banks may grow: the counts below are the minimum
+set, and each bank may hold up to about double (see "Bank sizes"). Only ever add items after the
+existing ones (saved review progress points at items by position). The game builds lessons from these banks (it picks,
 shuffles and mixes question types itself), so write clean material, not lessons.
 
 Check a file with:
@@ -79,6 +81,16 @@ food, travel, the environment, technology). Nothing frightening, violent, politi
   ]
 }
 ```
+
+### Bank sizes (per unit)
+
+| Bank | First set | Allowed |
+| --- | --- | --- |
+| words | 12 | 12–24 (Starter and Mover: a pic on at least two thirds) |
+| grammar | 6 | 6–12 |
+| sentences | 4 | 4–8 |
+| reading | 1 | 1 or 2: `reading` may be one object or a list of two, each with its own title |
+| extra | per stage below | Starter–Flyer 0–5, Explorer 4–8, Achiever–Band 8 6–12 |
 
 ### Units (exactly 5 per stage)
 

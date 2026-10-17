@@ -1,10 +1,11 @@
 // Number Pop: a bot plays full rounds of every world (run from the repo root):
 //   node games/pop/build.js && ND_CDP=9351 ND_PROFILE=edge-profile-pop ND_URL=file:///D:/Github/number-dash/games/pop/dist/preview.html ND_READY='!!window.__pop' ND_BOT=none node games/dash/playtest/shoot.js games/pop/playtest/worlds.js
 // For every target the bot first checks, on its own, that the bubbles in the field can make it
-// (any 2-3 bubbles, or a times pair) and that the game's planted answer is real and still there.
-// Then it solves like a child would: a moment to read the target, a scan of the field, some
-// mental arithmetic per step (slower with a carry, a borrow or two-digit numbers, recall time for
-// times tables), and a finger move per tap. All delays are game seconds, so the game runs 8x fast.
+// (any 2-3 bubbles, a times pair or a sharing pair) and that the game's planted answer is real and
+// still there. Then it solves like a child would: a moment to read the target, a scan of the field,
+// some mental arithmetic per step (slower with a carry, a borrow or two-digit numbers, a little
+// more for pounds and pence, recall time for times tables and more for sharing), and a finger
+// move per tap. All delays are game seconds, so the game runs 8x fast.
 // "quick" is a quick, confident 10-year-old (the 3-star line); "relaxed" thinks 1.6x slower and
 // slips on one target in five (the 2-star line). The star thresholds in pop.html come from here.
 const BOT = `(() => {
@@ -14,14 +15,15 @@ const BOT = `(() => {
   const alive = (b) => b.st === 'live' || b.st === 'in';
   const digits = (v) => String(Math.abs(v)).length;
   const sum = (vs) => vs.reduce((a, b) => a + b, 0);
+  const quot = (vs) => { const big = Math.max(vs[0], vs[1]), small = Math.min(vs[0], vs[1]); return small > 0 && big % small === 0 ? big / small : NaN; };
   function solutions(s, bubs) {
     const live = bubs.filter((b) => alive(b) && !b.picked), out = [];
-    const sizes = s.kind === 'times' || s.world === 1 ? [2] : [2, 3];   // Make 10 is about pairs (number bonds)
+    const sizes = s.kind === 'times' || s.kind === 'div' || s.world === 1 ? [2] : [2, 3];   // Make 10 is about pairs (number bonds)
     for (const k of sizes) {
       (function go(start, ch) {
         if (ch.length === k) {
           const vs = ch.map((b) => b.v);
-          if (s.kind === 'times' ? vs[0] * vs[1] === s.target : sum(vs) === s.target) out.push(ch.map((b) => b.i));
+          if (s.kind === 'times' ? vs[0] * vs[1] === s.target : s.kind === 'div' ? quot(vs) === s.target : sum(vs) === s.target) out.push(ch.map((b) => b.i));
           return;
         }
         for (let j = start; j < live.length; j++) go(j + 1, ch.concat([live[j]]));
@@ -33,6 +35,7 @@ const BOT = `(() => {
   // sums are slower, a carry or a borrow slower still, and taking away costs a little extra
   function stepCost(tot, v, world) {
     if (world === 1) return 0.7;
+    if (world === 9) return stepCost(tot, v, 0) + 0.4;   // money: the same sums, plus pounds and pence
     const two = digits(tot) > 1 || digits(v) > 1, a = Math.abs(tot) % 10, b = Math.abs(v) % 10;
     let c = two ? 1.6 : 0.8;
     if (v < 0) c += 0.5 + (a < b ? (two ? 0.8 : 0.3) : 0);
@@ -47,7 +50,7 @@ const BOT = `(() => {
       B.slipTid = s.tid;
       if (Math.random() < prof.slip) {
         const used = new Set([].concat.apply([], sols));
-        const wrong = bubs.filter((b) => alive(b) && !b.picked && !used.has(b.i)).sort(() => Math.random() - 0.5).slice(0, s.kind === 'times' ? 2 : 4);
+        const wrong = bubs.filter((b) => alive(b) && !b.picked && !used.has(b.i)).sort(() => Math.random() - 0.5).slice(0, s.kind === 'times' || s.kind === 'div' ? 2 : 4);
         if (wrong.length >= 2) {
           wrong.forEach((b) => { t += k * (0.6 + scan * 0.5); steps.push({ at: t, i: b.i }); });
           B.replan = true;
@@ -57,8 +60,8 @@ const BOT = `(() => {
     }
     if (!sols.length) return steps;
     const sol = s.sol.length && Math.random() < 0.5 ? s.sol : sols[Math.floor(Math.random() * sols.length)];
-    if (s.kind === 'times') {
-      const recall = { starter: 1.0, explorer: 1.5, genius: 1.9 }[P.save.settings.mathLevel] || 1.5;
+    if (s.kind === 'times' || s.kind === 'div') {
+      const recall = (s.kind === 'div' ? { starter: 1.3, explorer: 1.9, genius: 2.3 } : { starter: 1.0, explorer: 1.5, genius: 1.9 })[P.save.settings.mathLevel] || 1.5;
       t += k * (scan + recall); steps.push({ at: t, i: sol[0] });
       t += k * (0.45 + scan * 0.5); steps.push({ at: t, i: sol[1] });
     } else {
@@ -80,7 +83,7 @@ const BOT = `(() => {
         B.targets.push(s.target);
         if (!solutions(s, bubs).length) B.unsolvable.push({ world: s.world, kind: s.kind, target: s.target, vals: bubs.map((b) => b.v) });
         const pv = s.sol.map((i) => bubs[i] && bubs[i].v);
-        const ok = s.sol.every((i) => bubs[i] && alive(bubs[i])) && (s.kind === 'times' ? pv.length === 2 && pv[0] * pv[1] === s.target
+        const ok = s.sol.every((i) => bubs[i] && alive(bubs[i])) && (s.kind === 'times' ? pv.length === 2 && pv[0] * pv[1] === s.target : s.kind === 'div' ? pv.length === 2 && quot(pv) === s.target
           : pv.length >= 2 && pv.length <= 3 && sum(pv) === s.target && (s.kind !== 'minus' || pv.some((v) => v < 0)));
         if (!ok) B.badPlanted.push({ world: s.world, target: s.target, sol: s.sol, vals: pv });
       }
@@ -115,7 +118,7 @@ const play = (world, profile, level) => [
 const SUMMARY = `window.__pbot.summary = () => {
   const B = window.__pbot, out = {};
   for (const r of B.runs) {
-    const k = 'w' + r.world + ' ' + r.profile + (r.world >= 5 ? ' ' + r.level : '');
+    const k = 'w' + r.world + ' ' + r.profile + ([5, 6, 8].indexOf(r.world) >= 0 ? ' ' + r.level : '');
     const o = out[k] || (out[k] = { runs: 0, mean: 0, max: 0, stars: [] });
     o.runs++; o.mean += r.time; o.max = Math.max(o.max, r.time); o.stars.push(r.stars);
   }
@@ -125,12 +128,14 @@ const SUMMARY = `window.__pbot.summary = () => {
 // POP_QUICK / POP_RELAXED: rounds per world for each profile (default 3 and 2); POP_SPEED: game speed (default 8)
 const QUICK = +process.env.POP_QUICK || 3, RELAXED = +process.env.POP_RELAXED || 2, SPEED = +process.env.POP_SPEED || 8;
 const steps = [{ viewport: [1180, 820, false, false, 1] }, { sleep: 500 }, { eval: BOT }, { eval: SUMMARY }, { eval: 'window.__pop.setSpeed(' + SPEED + '); "speed " + ' + SPEED }];
-for (const w of [1, 2, 3, 4, 5, 6]) {
+// POP_WORLDS: which worlds to play (default all nine), e.g. POP_WORLDS=7,8,9
+const WORLDS = (process.env.POP_WORLDS || '1,2,3,4,5,6,7,8,9').split(',').map(Number);
+for (const w of WORLDS) {
   for (let i = 0; i < QUICK; i++) steps.push(...play(w, 'quick'));
   for (let i = 0; i < RELAXED; i++) steps.push(...play(w, 'relaxed'));
 }
-// the times tables at the other two math levels, and the Mix world on Genius
-steps.push(...play(5, 'quick', 'starter'), ...play(5, 'quick', 'genius'), ...play(6, 'quick', 'starter'), ...play(6, 'quick', 'genius'));
+// the worlds that follow the tables, at the other two math levels
+for (const w of [5, 6, 8]) if (WORLDS.indexOf(w) >= 0) steps.push(...play(w, 'quick', 'starter'), ...play(w, 'quick', 'genius'));
 steps.push({ sleep: 2000 }, { shot: 'pop-w01-results' });
 steps.push({ log: 'JSON.stringify(window.__pbot.summary())' }, { log: 'JSON.stringify(window.__pbot.unsolvable.slice(0, 5))' }, { log: 'JSON.stringify(window.__pbot.badPlanted.slice(0, 5))' });
 steps.push({ log: 'JSON.stringify(window.__pop.rec)' }, { log: 'JSON.stringify(window.__pop.save.math)' });

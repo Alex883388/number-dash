@@ -20,6 +20,14 @@ module.exports = [
   { log: popCount }, { sleep: 60 }, { shot: 'pop-s04-pop-calm' },
   // calm off again, saved by one more solved target (mathRight writes the shared save)
   { eval: "(() => { const P = window.__pop; P.save.settings.calm = false; P.start(2); P.state().sol.forEach((i) => P.tap(i)); P.home(); return P.save.settings.calm; })()" },
+  // the new worlds: Money with one coin picked, Share it with a wrong pair (the strip says why)
+  { eval: "window.__pop.home(); window.__pop.start(9)" }, { sleep: 900 },
+  { eval: "(() => { const P = window.__pop, s = P.state(); P.tap(s.sol[0]); return [s.target, document.getElementById('targetNum').textContent, document.getElementById('strip').textContent]; })()" },
+  { sleep: 300 }, { shot: 'pop-s06-money' },
+  { eval: "window.__pop.home(); window.__pop.start(8)" }, { sleep: 900 },
+  { eval: "(() => { const P = window.__pop, s = P.state(), bs = P.bubbles(); for (const a of bs) for (const b of bs) { if (a.i === b.i) continue; const big = Math.max(a.v, b.v), small = Math.min(a.v, b.v); if (big % small !== 0) { P.tap(a.i); P.tap(b.i); return [s.target, a.v, b.v, document.getElementById('strip').textContent, P.state().phase]; } } return 'no pair'; })()" },
+  { sleep: 150 }, { shot: 'pop-s07-share-not-quite' },
+  { log: "JSON.stringify(window.__pop.save.math.tricky.slice(-1))" },
   // a whole Make 10 round by tapping the planted answers, for the results card (with "Next world")
   { eval: "(() => { const P = window.__pop; P.setSpeed(10); let next = 0; P.hook = () => { const s = P.state(); if (s.state !== 'play' || s.phase !== 'pick' || s.time < next) return; const i = s.sol.find((j) => !P.slots[j].picked); if (i !== undefined) { P.tap(i); next = s.time + 0.5; } }; return P.start(1); })()" },
   { waitFor: "window.__pop.state().state === 'done'", timeout: 30000 }, { sleep: 2200 },

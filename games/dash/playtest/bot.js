@@ -42,7 +42,7 @@
         // to test a wrong answer, plan as if the doors were swapped
         const saved = L.gates.map((g) => g.correct);
         if (window.__botWrong) L.gates.forEach((g) => { g.correct = g.correct === 1 ? 2 : 1; });
-        plan = solve(L, p, 100, 160) || [false];
+        plan = solve(L, p, window.__botH || 100, window.__botCap || 160) || [false];  // a test can look further ahead
         L.gates.forEach((g, i) => { g.correct = saved[i]; });
         since = 0;
       }
