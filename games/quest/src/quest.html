@@ -134,6 +134,17 @@
 .wl-row b { display: block; font: 700 1.15rem/1.2 var(--font-display); }
 .wl-row span { display: block; color: var(--ink-soft); font-size: .92rem; line-height: 1.35; }
 .wl-say { width: 48px; height: 48px; font: 1.3rem/1 var(--emoji); }
+.cue { background: var(--card-2); border-radius: 20px; padding: 14px 18px; text-align: left; display: grid; gap: 6px; }
+.cue h3 { margin: 0; font: 700 1.3rem/1.2 var(--font-display); }
+.cue p { margin: 0; color: var(--ink-soft); font-weight: 700; font-size: .9rem; }
+.cue ul { margin: 0; padding-left: 22px; display: grid; gap: 4px; line-height: 1.35; }
+.speak-clock { font: 700 clamp(3rem, 12vw, 5rem)/1 var(--font-display); font-variant-numeric: tabular-nums; text-align: center; }
+.speak-clock small { display: block; font: 700 1rem/1.3 var(--font-body); color: var(--ink-soft); }
+.speak-clock.low { color: #d9534a; }
+.model { text-align: left; display: grid; gap: 10px; }
+.model h3 { margin: 0; font: 700 1.1rem/1.2 var(--font-display); }
+.model p { margin: 0; line-height: 1.5; }
+.model ul { margin: 0; padding-left: 20px; display: grid; gap: 4px; line-height: 1.4; }
 .gn-unit { background: var(--card-2); border-radius: 16px; padding: 2px 14px; }
 .gn-unit summary { cursor: pointer; font: 700 1.1rem/1.2 var(--font-display); min-height: 48px; display: flex; align-items: center; gap: 8px; }
 .gn-unit summary small { color: var(--ink-soft); font-size: .85rem; }
@@ -180,6 +191,7 @@
         <button class="btn" id="placeBtn">🎯 Find my level</button>
         <button class="btn" id="wordsBtn">📒 My words</button>
         <button class="btn" id="notesBtn">📘 Grammar notes</button>
+        <button class="btn" id="speakBtnHome" hidden>🗣️ Speaking practice</button>
         <button class="btn" id="mockBtn" hidden>📝 IELTS reading test</button>
         <button class="btn" id="mockLBtn" hidden>🎧 IELTS listening test</button>
       </div>
@@ -207,6 +219,17 @@
       <p class="note" id="wordsNote"></p>
       <div class="row"><button class="btn sun" id="practiseWordsBtn">Practise 10 words</button><button class="btn" id="wordsHomeBtn">Home</button></div>
       <div class="wordlist" id="wordList"></div>
+    </div>
+  </section>
+  <section class="screen path-card" id="s-speak" hidden>
+    <div class="card">
+      <h2 class="words-title">🗣️ Speaking practice</h2>
+      <p class="note" id="speakNote">IELTS Speaking, Part 2: plan for 1 minute, then talk out loud for up to 2 minutes. Then compare with a model answer.</p>
+      <div class="cue" id="cue"></div>
+      <div class="speak-clock" id="speakClock" hidden></div>
+      <div class="row" id="speakBtns"></div>
+      <div class="model" id="speakModel" hidden></div>
+      <div class="row"><button class="btn" id="speakHomeBtn">Home</button></div>
     </div>
   </section>
   <section class="screen path-card" id="s-notes" hidden>
@@ -241,6 +264,7 @@
    CONTENT is filled in at build time from content/stage-*.json (null for a stage not written
    yet). See content/FORMAT.md for what a stage holds. */
 const CONTENT = /*__CONTENT__*/null;
+const SPEAKING = /*__SPEAKING__*/null;   // IELTS Part 2 cue cards (content/speaking.json)
 const STAGES = [
   { n: 1, id: 'starter', name: 'Starter', cefr: 'Pre-A1', ielts: '', icon: '🌱', about: 'First words: family, animals, food, home, colours and numbers.' },
   { n: 2, id: 'mover', name: 'Mover', cefr: 'A1', ielts: '', icon: '🚲', about: 'Everyday English: school, hobbies, town, weather and health.' },
@@ -740,6 +764,8 @@ function renderHome() {
   $('#reviewBtn').textContent = '🔁 Review' + (rec.review.length ? ' (' + rec.review.length + ')' : '');
   $('#wordsBtn').textContent = '📒 My words' + (rec.learned.length ? ' (' + rec.learned.length + ')' : '');
   $('#mockBtn').hidden = $('#mockLBtn').hidden = !mockStages().length;
+  $('#speakBtnHome').hidden = !(SPEAKING && SPEAKING.length && rec.unlocked >= 4);
+  $('#speakBtnHome').textContent = '🗣️ Speaking practice' + (rec.speak && rec.speak.n ? ' (' + rec.speak.n + ')' : '');
   const lastMock = (rec.mocks || []).filter((m) => !m.k).slice(-1)[0], lastL = (rec.mocks || []).filter((m) => m.k === 'L').slice(-1)[0];
   $('#mockBtn').textContent = '📝 IELTS reading test' + (lastMock ? ' (last: ' + lastMock.b + ')' : '');
   $('#mockLBtn').textContent = '🎧 IELTS listening test' + (lastL ? ' (last: ' + lastL.b + ')' : '');
@@ -748,6 +774,55 @@ function renderHome() {
   $('#skills').innerHTML = sk.map((k) => { const v = rec.skills[k], p = Math.round(v[0] / v[1] * 100); return '<div class="skill"><span>' + SKILL[k] + '</span><span class="bar"><i style="width:' + p + '%"></i></span><span>' + p + '%</span></div>'; }).join('');
   $('#soundBtn').textContent = save.settings.music > 0 ? 'Music on' : 'Music off';
   $('#speakBtn').textContent = save.settings.speak ? 'Read aloud on' : 'Read aloud off';
+}
+/* ================= speaking practice =================
+   A cue card from the child's stage (from Explorer up), 1 minute to plan, up to 2 minutes to talk out loud,
+   then a model answer (read aloud on request), useful phrases and Part 3 questions. Nothing is scored. */
+const PLAN_S = 60, TALK_S = 120;
+const SP = { card: null, phase: 'card', end: 0, timer: 0 };
+const speakCards = () => (SPEAKING || []).filter((c) => c.stage <= Math.max(4, Math.min(rec.unlocked, STAGES.length)));
+function nextCard() {
+  const all = speakCards(), done = (rec.speak && rec.speak.done) || {}, top = Math.min(rec.unlocked, STAGES.length);
+  const fresh = all.filter((c) => !done[c.id] && (!SP.card || c.id !== SP.card.id));
+  const here = fresh.filter((c) => c.stage === top);
+  return pick(here.length ? here : fresh.length ? fresh : all.filter((c) => !SP.card || c.id !== SP.card.id)) || all[0] || null;
+}
+function speakShow(phase) {
+  SP.phase = phase; clearInterval(SP.timer);
+  const c = SP.card;
+  $('#cue').innerHTML = '<p>' + STAGES[c.stage - 1].name + ' · ' + STAGES[c.stage - 1].cefr + ' · Part 2</p><h3>' + esc(c.topic) + '</h3><p>You should say:</p><ul>' + c.points.map((p) => '<li>' + esc(p) + '</li>').join('') + '</ul>';
+  $('#speakModel').hidden = phase !== 'done';
+  $('#speakClock').hidden = phase === 'card' || phase === 'done';
+  const btn = (id, label, cls) => '<button class="btn' + (cls ? ' ' + cls : '') + '" id="' + id + '">' + label + '</button>';
+  if (phase === 'card') { $('#speakBtns').innerHTML = btn('spPlan', 'Start: 1 minute to plan', 'sun') + btn('spOther', 'Another card'); Sound.muffle(false); }
+  if (phase === 'plan' || phase === 'talk') {
+    $('#speakBtns').innerHTML = phase === 'plan' ? btn('spTalk', 'Ready: start talking', 'sun') : btn('spDone', 'I have finished', 'sun');
+    Sound.muffle(true);
+    SP.end = performance.now() + (phase === 'plan' ? PLAN_S : TALK_S) * 1000;
+    const tick = () => {
+      const left = Math.max(0, Math.ceil((SP.end - performance.now()) / 1000));
+      $('#speakClock').innerHTML = fmtTime(left) + '<small>' + (phase === 'plan' ? 'Plan: think of something to say for each point' : 'Talk out loud about every point') + '</small>';
+      $('#speakClock').classList.toggle('low', left <= 10);
+      if (left <= 0) { Sound.sfx.click(); speakShow(phase === 'plan' ? 'talk' : 'done'); }
+    };
+    tick(); SP.timer = setInterval(tick, 250);
+    if (phase === 'talk') announce('Start talking now.');
+  }
+  if (phase === 'done') {
+    Sound.muffle(false);
+    rec.speak = rec.speak || { done: {}, n: 0 };
+    rec.speak.done[c.id] = (rec.speak.done[c.id] || 0) + 1; rec.speak.n++;
+    writeSave();
+    $('#speakBtns').innerHTML = btn('spHear', '🔊 Hear the model answer', 'sun') + btn('spOther', 'Another card');
+    $('#speakModel').innerHTML = '<h3>A model answer</h3>' + c.model.split(/\n+/).map((p) => '<p>' + esc(p) + '</p>').join('') +
+      '<h3>Useful phrases</h3><ul>' + c.phrases.map((p) => '<li>' + esc(p) + '</li>').join('') + '</ul>' +
+      '<h3>Part 3: talk about it more</h3><ul>' + c.part3.map((p) => '<li>' + esc(p) + '</li>').join('') + '</ul>';
+    toast('Well done for speaking!', 'good');
+  }
+}
+function openSpeaking() {
+  SP.card = nextCard(); if (!SP.card) { toast('Coming soon', 'hello'); return; }
+  Sound.init(); speakShow('card'); showScreen('speak');
 }
 // grammar notes: the rule behind each grammar item of the lessons open so far, with its example;
 // newest stage and lesson first, only the newest lesson unfolded
@@ -819,6 +894,16 @@ $('#reviewBtn').addEventListener('click', () => startLesson('review'));
 $('#placeBtn').addEventListener('click', () => startLesson('place'));
 $('#wordsBtn').addEventListener('click', () => { renderWords(); showScreen('words'); });
 $('#notesBtn').addEventListener('click', () => { renderNotes(); showScreen('notes'); });
+$('#speakBtnHome').addEventListener('click', openSpeaking);
+$('#speakHomeBtn').addEventListener('click', () => { clearInterval(SP.timer); Speech.stop(); Sound.muffle(false); goHome(); });
+$('#speakBtns').addEventListener('click', (e) => {
+  const t = e.target.closest('button'); if (!t) return;
+  if (t.id === 'spPlan') speakShow('plan');
+  else if (t.id === 'spTalk') speakShow('talk');
+  else if (t.id === 'spDone') speakShow('done');
+  else if (t.id === 'spOther') { Speech.stop(); SP.card = nextCard(); speakShow('card'); }
+  else if (t.id === 'spHear') Speech.say(SP.card.model.replace(/\n+/g, ' '), 0.95);
+});
 $('#notesHomeBtn').addEventListener('click', goHome);
 $('#wotd').addEventListener('click', (ev) => {
   const wd = rec.wotd, e = wd && indexWords().get(wd.w); if (!e) return;
@@ -856,7 +941,7 @@ window.addEventListener('keydown', (e) => {
 arcadeGuards(() => Speech.stop());
 arcadeLinks();
 
-window.__quest = { L, rec, save, STAGES, CONTENT, has, next, renderHome, renderNotes, startLesson, nextStep, unitOpen, testOpen, wordQ, unitLesson, stageTest, spotQ, writingQ, showQ, renderWords, mockBand, Speech,
+window.__quest = { L, rec, save, STAGES, CONTENT, SPEAKING, SP, speakShow, has, next, renderHome, renderNotes, startLesson, nextStep, unitOpen, testOpen, wordQ, unitLesson, stageTest, spotQ, writingQ, showQ, renderWords, mockBand, Speech,
   // answer the current question: right = true picks the right answer (or builds / spells it), false picks a wrong one
   answer(right) {
     const q = L.qs[L.i]; if (!q || L.answered) return false;

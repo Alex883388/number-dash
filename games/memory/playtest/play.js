@@ -1,5 +1,5 @@
 // Memory Lane: a bot plays a full round of every game at every level (run from the repo root):
-//   node games/memory/build.js && ND_CDP=9501 ND_PROFILE=edge-profile-memory-wt ND_URL=file:///D:/Github/number-dash-memory/games/memory/dist/preview.html ND_READY='!!window.__memory' ND_BOT=none node games/dash/playtest/shoot.js games/memory/playtest/play.js
+//   node games/memory/build.js && ND_CDP=9501 ND_PROFILE=edge-profile-memory ND_URL=file:///D:/Github/number-dash/games/memory/dist/preview.html ND_READY='!!window.__memory' ND_BOT=none node games/dash/playtest/shoot.js games/memory/playtest/play.js
 // Checks: opening the page writes nothing, and picking a game writes the records only (the day is not marked).
 // 3 games x 3 levels, every answer right: spans 3 3 4 4 5 5 6 6 7 7, the longest 7, 3 stars, the layout fits at every
 // answer, numbers and words read aloud, words from the level's list with look-alike cards, the grid 4 x 4 from its span,

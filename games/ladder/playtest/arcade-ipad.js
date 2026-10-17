@@ -41,7 +41,8 @@ module.exports = [
   ...[['pair', '!!window.__pair', '#playBtn', "window.__pair.game.state"],
       ['pop', '!!window.__pop', '#playBtn', "window.__pop.game.state"],
       ['spell', '!!window.__spell', '#startBtn', "window.__spell.state()"],
-      ['quest', '!!window.__quest', '#goBtn', "window.__quest.L.kind + ' ' + !document.getElementById('lesson').hidden"]].flatMap(([dir, ready, btn, st]) => [
+      ['quest', '!!window.__quest', '#goBtn', "window.__quest.L.kind + ' ' + !document.getElementById('lesson').hidden"],
+      ['memory', '!!window.__memory', '#playBtn', "window.__memory.state()"]].flatMap(([dir, ready, btn, st]) => [
     { eval: "location.href = '../'; 'home'" }, { waitFor: hubReady, timeout: 10000 }, { sleep: 400 },
     { touchEl: '.game[href="' + dir + '/"]' },
     { waitFor: ready + " && document.readyState === 'complete'", timeout: 10000 }, { eval: errs }, { sleep: 700 },

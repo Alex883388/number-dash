@@ -1,7 +1,7 @@
 {
   "name": "Number Arcade",
   "short_name": "Number Arcade",
-  "description": "Math, memory and English games for kids: Number Dash, Number Ladder, Pair Up, Number Pop, Spell It and English Quest.",
+  "description": "Math, memory and English games for kids: Number Dash, Number Ladder, Pair Up, Number Pop, Spell It, English Quest and Memory Lane.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

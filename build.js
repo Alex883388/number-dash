@@ -5,7 +5,7 @@
 const fs = require('fs'), path = require('path'), crypto = require('crypto');
 const root = (...p) => path.join(__dirname, ...p);
 
-const GAMES = ['dash', 'ladder', 'pair', 'pop', 'spell', 'quest'].map((dir) => ({ dir: dir, html: require('./games/' + dir + '/build.js')() }));
+const GAMES = ['dash', 'ladder', 'pair', 'pop', 'spell', 'quest', 'memory'].map((dir) => ({ dir: dir, html: require('./games/' + dir + '/build.js')() }));
 const hub = fs.readFileSync(root('web', 'hub.html'), 'utf8');
 
 // one page of the site: a real <head> for iPad home-screen use around a game's own head and body

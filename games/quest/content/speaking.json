@@ -1,0 +1,308 @@
+{
+  "cards": [
+    {
+      "id": "explorer-1",
+      "stage": 4,
+      "topic": "Describe a place you like to visit at the weekend",
+      "points": ["where it is", "who you go there with", "what you do there", "and explain why you like it"],
+      "phrases": [
+        "One place I really love going to is…",
+        "It only takes about twenty minutes to get there by…",
+        "I usually go there with…",
+        "My favourite part is…, where you can…",
+        "What I like most about it is that…"
+      ],
+      "model": "One place I really love going to at the weekend is the science museum in the centre of my city. It's a big old building next to the river, and it only takes about twenty minutes to get there by bus.\nI usually go there with my dad and my little brother. We always start on the top floor, because that's where the space exhibition is. You can see real meteorites, which are rocks that fell from space, and a huge model of a rocket. My favourite part is the area downstairs, where you can do simple experiments. I've tried most of them now, but I still love the one about electricity.\nWhat I like most about the museum is that I learn something new every time I go. Actually, it doesn't feel like school at all, because you can touch things and ask lots of questions. It's also free, so we can go as often as we want.",
+      "part3": [
+        "What kinds of places do families in your country like to visit at the weekend?",
+        "Do you think museums should be free for everyone? Why or why not?",
+        "Is it better to spend your free time indoors or outdoors? Why?"
+      ]
+    },
+    {
+      "id": "explorer-2",
+      "stage": 4,
+      "topic": "Describe a person in your family who you admire",
+      "points": ["who this person is", "what they are like", "what you do together", "and explain why you admire them"],
+      "phrases": [
+        "I'd like to talk about my…, who is…",
+        "She's a very kind and patient person, and…",
+        "When I visit her, we often…",
+        "The main reason I admire her is that…",
+        "I hope I'll be like her when I'm older."
+      ],
+      "model": "I'd like to talk about my grandmother, who is my mum's mother. She's seventy-two years old and she lives just ten minutes away from us, so I see her nearly every week.\nShe's a very kind and patient person, and she's always smiling. She's also really good at cooking. When I visit her, we often cook together, and she has taught me how to make her famous vegetable soup. In the summer, we work in her garden and grow tomatoes and beans. She also tells me stories about when she was a child, and they're usually very funny.\nThe main reason I admire her is that she never stops learning. Last year, she decided to learn how to use a tablet, and now she sends me a message every day. I think that's amazing. I hope I'll be like her when I'm older.",
+      "part3": [
+        "Who do children usually admire more, people in their family or famous people? Why?",
+        "What can young people learn from older people?",
+        "Do grandparents spend more time with their grandchildren now than in the past?"
+      ]
+    },
+    {
+      "id": "explorer-3",
+      "stage": 4,
+      "topic": "Describe a game or sport you enjoy playing with your friends",
+      "points": ["what the game is", "where and when you play it", "how you play it", "and explain why you enjoy it"],
+      "phrases": [
+        "A game I really enjoy playing with my friends is…",
+        "I've played it since I was…",
+        "The rules are simple. You have to…",
+        "I enjoy it for a few reasons. First of all,…",
+        "Even when we lose, it doesn't really matter, because…"
+      ],
+      "model": "A game I really enjoy playing with my friends is football. I've played it since I was about six, and it's still my favourite sport.\nWe usually play in the park near my school every Saturday morning. There are about ten of us, so we make two teams of five. We use our jackets as goalposts, because there aren't any real goals there. The rules are simple. You have to kick the ball into the other team's goal, and you can't touch it with your hands, unless you're the goalkeeper. We usually keep playing until somebody's mum calls them home for lunch!\nI enjoy it for a few reasons. First of all, it's great exercise, and I always feel full of energy afterwards. It's also a fun way to spend time with my friends. Even when my team loses, it doesn't really matter, because we laugh a lot.",
+      "part3": [
+        "Why do you think football is so popular all over the world?",
+        "Is it better for children to play team sports or sports they do on their own? Why?",
+        "Do children today play outside less than children did in the past? Why?"
+      ]
+    },
+    {
+      "id": "explorer-4",
+      "stage": 4,
+      "topic": "Describe a festival or celebration that is important in your country",
+      "points": ["what it is called", "when it happens", "what people do to celebrate it", "and explain why you enjoy it"],
+      "phrases": [
+        "The festival I'd like to describe is…",
+        "It usually happens in…, and it lasts for…",
+        "Before the festival, everyone…",
+        "People believe that it…",
+        "I enjoy it so much because…"
+      ],
+      "model": "The festival I'd like to describe is Lunar New Year, which is the most important celebration in my country. It usually happens in late January or February, and it lasts for several days.\nBefore the festival, everyone cleans their house from top to bottom, because people believe it sweeps away bad luck. We also buy flowers and decorate our home in red and gold, which are lucky colours. On the first morning of the new year, we put on new clothes and visit our grandparents and other relatives. The adults give the children red envelopes with a little money inside. In the evening, there are often fireworks in the city centre.\nI enjoy it so much because the whole family gets together. My cousins live quite far away, so this is the only time I can see them. And of course, there's lots of delicious food, which is my favourite part!",
+      "part3": [
+        "Why are festivals important for families?",
+        "Do you think traditional festivals will be less popular in the future? Why?",
+        "Is it a good idea for children to learn about festivals from other countries?"
+      ]
+    },
+    {
+      "id": "achiever-1",
+      "stage": 5,
+      "topic": "Describe a skill that took you a long time to learn",
+      "points": ["what the skill is", "when and how you learnt it", "what was difficult about it", "and explain how you felt when you could finally do it well"],
+      "phrases": [
+        "It took me much longer than I'd expected.",
+        "To be honest, the beginning was really frustrating.",
+        "The hardest part, though, was…",
+        "At one point I nearly gave up, but…",
+        "If I hadn't…, I would probably have…"
+      ],
+      "model": "I'd like to talk about learning to play the guitar, which took me much longer than I'd expected. I got my first guitar for my ninth birthday, and since then I've had a lesson with a teacher every Thursday after school. On top of that, I watch online videos to pick up new songs.\nTo be honest, the beginning was really frustrating. My fingers were sore for weeks, and I couldn't press the strings hard enough to make a clear sound. The hardest part, though, was changing quickly from one chord to another. Whenever I tried to play a whole song, I kept stopping in the middle, and it sounded awful. At one point I nearly gave up, but my teacher persuaded me to practise for fifteen minutes every day instead of for an hour once a week.\nThat advice made all the difference. About a year later, I played a complete song at a family party without a single mistake, and I felt incredibly proud. If I hadn't listened to her, I would probably have given up. It taught me that even something that seems impossible gradually gets easier if you keep going.",
+      "part3": [
+        "Which skills do you think are the most important for young people to learn today?",
+        "Is it better to learn a skill from a teacher or to teach yourself using online videos?",
+        "Why do some people give up when they are learning something new?"
+      ]
+    },
+    {
+      "id": "achiever-2",
+      "stage": 5,
+      "topic": "Describe a book you enjoyed reading",
+      "points": ["what the book is called and who wrote it", "when you read it", "what the story is about", "and explain why you enjoyed it"],
+      "phrases": [
+        "The book I'd like to talk about is…, which was written by…",
+        "I enjoyed it so much that…",
+        "The story is about…, who…",
+        "What I loved most about the book was…",
+        "Apart from that, I admired… because, although…"
+      ],
+      "model": "The book I'd like to talk about is Matilda, which was written by Roald Dahl. I first read it when I was ten, during the summer holidays, and I enjoyed it so much that I finished it in three days.\nThe story is about a brilliant little girl called Matilda, who teaches herself to read when she's only three. Unfortunately, her parents aren't interested in her at all, and they'd much rather watch television than talk to her. At school, she meets a kind teacher called Miss Honey, who soon realises how clever Matilda is. However, the headmistress, Miss Trunchbull, is incredibly strict and treats the children terribly. Eventually, Matilda discovers that she can move things just by looking at them, and she uses this power to stand up to the headmistress.\nWhat I loved most about the book was its humour. Roald Dahl describes the adults in such a ridiculous way that I couldn't stop laughing. Apart from that, I admired Matilda because, although she's small, she's brave enough to fight for what's right. I think that's an important message for anyone my age.",
+      "part3": [
+        "Do you think children read fewer books than they did in the past? Why?",
+        "What are the advantages of reading a book compared with watching a film of the same story?",
+        "Should parents choose the books their children read, or let them choose for themselves?"
+      ]
+    },
+    {
+      "id": "achiever-3",
+      "stage": 5,
+      "topic": "Describe a time when you helped someone",
+      "points": ["who you helped", "when and where it happened", "what you did to help", "and explain how you felt about helping this person"],
+      "phrases": [
+        "I'd like to describe a time when…",
+        "I noticed that he was looking rather…",
+        "So I went over and asked if…",
+        "Looking back, it was such a small thing to do, but…",
+        "It made a huge difference to…"
+      ],
+      "model": "I'd like to describe a time when I helped a new classmate called Lucas. He joined our school at the start of this year, after his family had moved here from Brazil.\nOn his first day, I noticed that he was sitting on his own at lunchtime and looking rather lost. His English was quite good, but he was obviously nervous, and he didn't know anyone. So I went over and asked if he wanted to join my friends and me. After that, I showed him around the school, explained how the timetable worked and introduced him to some of the teachers. For the first few weeks, I also helped him with some tricky words in our history lessons, while he taught me a few phrases in Portuguese in return.\nLooking back, it was such a small thing to do, but it made a huge difference to him. A few months later, he told me that if I hadn't spoken to him that day, he would have felt completely alone. Honestly, hearing that made me feel really proud. Now we're close friends, and I've realised that being kind doesn't have to be difficult.",
+      "part3": [
+        "In what ways can children help people in their local community?",
+        "Do you think people are less willing to help strangers than they used to be?",
+        "Should schools encourage children to do volunteer work? Why or why not?"
+      ]
+    },
+    {
+      "id": "achiever-4",
+      "stage": 5,
+      "topic": "Describe a change you would like to see in your town or city",
+      "points": ["what the change is", "why it is needed", "how it could be done", "and explain how it would improve people's lives"],
+      "phrases": [
+        "If I could change one thing about my town, I'd…",
+        "At the moment, there are hardly any…",
+        "The problem is that…",
+        "I'm convinced this would make a real difference.",
+        "Not only that, but…"
+      ],
+      "model": "If I could change one thing about my town, I'd build safe cycle paths, especially on the roads leading to schools. At the moment, there are hardly any, so most parents drive their children to school instead.\nThe problem is that the traffic gets really heavy in the mornings, and the air near the main roads isn't very clean. Lots of my friends would love to cycle, but their parents think it's too dangerous, and to be fair, they're probably right. In my opinion, the council could solve this by turning one lane of the busiest roads into a cycle path, with a low barrier to separate bikes from cars. They might also put bike racks outside schools and the library, so that people have somewhere secure to leave their bikes.\nI'm convinced this would make a real difference. For one thing, children would get more exercise and feel more independent. Not only that, but with fewer cars on the road, the town would be quieter and the air would be cleaner. I just wish the council had done this years ago, because I think everyone would benefit, not only cyclists.",
+      "part3": [
+        "What do you think is the biggest problem in towns and cities today?",
+        "Would it be a good idea to keep cars out of city centres? Why or why not?",
+        "How do you think cities might change over the next fifty years?"
+      ]
+    },
+    {
+      "id": "expert-1",
+      "stage": 6,
+      "topic": "Describe a teacher who has had a big influence on you",
+      "points": ["who the teacher is", "what subject they teach", "what is special about the way they teach", "and explain how they have influenced you"],
+      "phrases": [
+        "The teacher who springs to mind straight away is…",
+        "What made her lessons so special was the way she…",
+        "Rather than just…, she'd…",
+        "More often than not,…",
+        "If it hadn't been for her, I'd probably still…"
+      ],
+      "model": "The teacher who springs to mind straight away is Miss Clarke, who taught me maths for my last two years of primary school. She's retired now, but I still bump into her at the library from time to time.\nWhat made her lessons so special was the way she brought numbers to life. Rather than just giving us pages of sums, she'd set us real problems, like planning a class trip on a tight budget or working out how much paint we'd need to redecorate the classroom. She also had a habit of treating mistakes as something to celebrate. Whenever someone got an answer wrong, she'd ask them to talk us through their thinking, and more often than not, the whole class learnt something from it. As a result, nobody was afraid to put their hand up, which is fairly rare, if you ask me.\nBefore I was in her class, I was convinced I just wasn't a maths person. I used to dread tests, and my mind would go blank the moment I saw a fraction. If it hadn't been for her, I'd probably still feel that way. She showed me that being good at something is largely a matter of persistence rather than talent. These days, maths is one of my strongest subjects, and I'm even considering becoming an engineer. More importantly, though, she taught me to see setbacks as part of learning, and that's a lesson I'll carry with me whatever I end up doing.",
+      "part3": [
+        "What qualities do you think make someone an effective teacher?",
+        "Some people believe that technology will eventually replace teachers. To what extent do you agree?",
+        "How has the role of a teacher changed since your parents were at school?"
+      ]
+    },
+    {
+      "id": "expert-2",
+      "stage": 6,
+      "topic": "Describe a piece of technology that you find useful",
+      "points": ["what it is", "how you got it", "what you use it for", "and explain why you find it so useful"],
+      "phrases": [
+        "It might not sound particularly exciting, but…",
+        "You'd be amazed at what…",
+        "It turns out to be…",
+        "As for why it's so useful, I'd say…",
+        "Whereas before I'd…, now I…"
+      ],
+      "model": "The piece of technology I'd like to talk about is a digital microscope, which is a small device that plugs into a laptop and shows a magnified image on the screen. It might not sound particularly exciting, but I use it far more than I ever expected to.\nI was given it for my eleventh birthday by my aunt, who's a biologist, and I suspect she was hoping to pass on some of her enthusiasm. If so, it certainly worked. Most of the time, I use it to examine things I find around the house and garden. You'd be amazed at what's hiding in an ordinary drop of pond water, for instance. Under the lens, it turns out to be teeming with tiny creatures that are completely invisible to the naked eye. I've also looked at the scales on a butterfly's wing, which are arranged a bit like roof tiles. Best of all, it can take photos and short videos, so I've built up quite a collection, and I've even used some of the images in school projects.\nAs for why it's so useful, I'd say it's changed the way I look at the world. Whereas before I'd walk past a leaf or a stone without a second thought, now I'm constantly wondering what it would look like close up. What I appreciate most, though, is that it's made science feel less like a chapter in a textbook and more like something I can actually do myself.",
+      "part3": [
+        "How has technology changed the way children learn?",
+        "Do you think people rely too heavily on technology nowadays?",
+        "Which invention of the last hundred years has had the greatest impact on everyday life, in your view?"
+      ]
+    },
+    {
+      "id": "expert-3",
+      "stage": 6,
+      "topic": "Describe an object that is very important to you",
+      "points": ["what the object is", "where it came from", "how long you have had it", "and explain why it means so much to you"],
+      "phrases": [
+        "An object that means a great deal to me is…",
+        "It's roughly the size of…",
+        "It's funny how your perspective shifts as…",
+        "In terms of money, it's probably not worth much, but…",
+        "What makes it truly special, though, is that…"
+      ],
+      "model": "An object that means a great deal to me is a small wooden box that sits on the shelf above my bed. It's roughly the size of a shoebox, it's made of dark oak, and there's a pattern of leaves carved into the lid.\nIt was made by my grandfather, who was a carpenter for most of his working life. Apparently, he spent the best part of a winter on it, and he gave it to me on my eighth birthday, so I've had it for about four years now. To be honest, I remember being slightly disappointed at the time, because I'd been hoping for a games console. It's funny how your perspective shifts as you get older.\nThese days, I wouldn't swap it for anything. In terms of money, it's probably not worth much, but its sentimental value is impossible to measure. Over the years, I've filled it with little keepsakes, like tickets from family trips, a shell from the first beach I ever visited and notes from my friends, so it's become a kind of time capsule of my childhood. What makes it truly special, though, is that every time I run my fingers over the carving, I'm reminded of my grandad's patience and the care he puts into everything he makes. He's always telling me that anything worth doing is worth doing properly, and the box is a constant reminder of that. I'd like to think I'll pass it on to my own children one day.",
+      "part3": [
+        "Why do people often hold on to objects that have no practical use?",
+        "Do you think young people today value their possessions more or less than older generations did?",
+        "Is a handmade gift more meaningful than one bought in a shop? Why?"
+      ]
+    },
+    {
+      "id": "expert-4",
+      "stage": 6,
+      "topic": "Describe a film that made you think",
+      "points": ["what the film is", "when you watched it", "what it is about", "and explain why it made you think"],
+      "phrases": [
+        "The film that comes to mind is…",
+        "It's set…, at a time when…",
+        "The story really gets going when…",
+        "What struck me most was that…",
+        "It made me reflect on…"
+      ],
+      "model": "The film that comes to mind is Wall-E, an animated film made by Pixar. I first watched it at home with my family when I was about nine, and I've seen it a few times since, most recently in a science lesson, of all places.\nIt's set hundreds of years in the future, at a time when the Earth has been buried under so much rubbish that humans have had to leave. The main character is a little robot whose job is to tidy up the mess, and he's been doing it on his own for centuries. Meanwhile, people are living on an enormous spaceship, where machines do absolutely everything for them, so they hardly ever move or even look at each other. The story really gets going when Wall-E finds a tiny plant growing among the rubbish, which turns out to be proof that life on Earth is possible again.\nWhat struck me most was that a film with hardly any dialogue in its first half could say so much. It made me reflect on how much plastic my own family gets through in a week, and since then, I've been far more careful about recycling. It also raised a question that I still find myself thinking about, which is whether technology that makes life easier always makes it better. I suppose the film's answer is that it depends on whether we stay in control of it. It's quite a gentle film, admittedly, but that's partly why the message sticks with you.",
+      "part3": [
+        "To what extent can films influence the way people behave?",
+        "Why are animated films often enjoyed by adults as much as by children?",
+        "Some people say that films should educate as well as entertain. Do you agree?"
+      ]
+    },
+    {
+      "id": "band8-1",
+      "stage": 7,
+      "topic": "Describe an achievement you are proud of",
+      "points": ["what you achieved", "when it happened", "what difficulties you had to overcome", "and explain why you feel proud of it"],
+      "phrases": [
+        "The achievement I'm proudest of is…",
+        "For someone as shy as I was, it was no small feat.",
+        "I'd be lying if I said…",
+        "Not only did that…, but it also…",
+        "What makes me proudest isn't…, it's that…"
+      ],
+      "model": "The achievement I'm proudest of is giving a talk in front of the entire school last spring, which, for someone as shy as I was, was no small feat. Every year, one pupil from each class is chosen to speak at a special assembly, and, to my complete astonishment, my class voted for me.\nI'd be lying if I said I was thrilled. Public speaking had always filled me with dread, and the thought of four hundred faces looking up at me was, frankly, overwhelming. I chose to talk about why bees matter far more than most people realise, and for weeks beforehand, I rehearsed in front of the bathroom mirror and then in front of my long-suffering family, who must have heard it a dozen times. The real breakthrough came when my cousin pointed out that I was trying to memorise every single word. She suggested I learn just the key points and speak as if I were chatting to a friend. Not only did that make me sound more natural, but it also took a great deal of pressure off.\nOn the day itself, my hands were shaking, but once I'd got past the first minute, something clicked, and I actually started to enjoy it. What makes me proudest, though, isn't the applause. It's that I confronted something I'd been dreading for years and came out the other side. Ever since, I've been far more willing to step outside my comfort zone, and that's had a knock-on effect on almost every area of my life.",
+      "part3": [
+        "Why do so many people find public speaking daunting, and how might schools help them overcome this?",
+        "Should a pupil's achievements be judged mainly by their exam results?",
+        "To what extent does society place too much emphasis on winning rather than on effort?"
+      ]
+    },
+    {
+      "id": "band8-2",
+      "stage": 7,
+      "topic": "Describe a natural place that made a strong impression on you",
+      "points": ["where it is", "when you went there", "what you saw there", "and explain why it made such an impression on you"],
+      "phrases": [
+        "It turned out to be one of the most memorable…",
+        "It's thought that…",
+        "Rarely have I felt so…",
+        "It's one thing to…, but it's quite another to…",
+        "If anything, the visit sparked…"
+      ],
+      "model": "The place I'd like to describe is the Giant's Causeway, which is on the north coast of Northern Ireland. I went there two summers ago on a family holiday, and although it was a grey, blustery day, it turned out to be one of the most memorable trips I've ever been on.\nWhat greets you when you arrive is a stretch of coastline made up of around forty thousand stone columns, most of them six-sided and packed together so neatly that they look almost man-made. Some are no taller than a step, so you can hop from one to the next, while others rise into towering cliffs. It's thought that they were formed over fifty million years ago, when lava from volcanic eruptions cooled and cracked into these remarkably regular shapes. There's also a local legend which claims that a giant built the causeway so that he could cross the sea to Scotland, and, standing there, you can almost see why people believed it.\nRarely have I felt so small, and yet so utterly fascinated. It's one thing to read about geological time in a textbook, but it's quite another to stand on rock that's been shaped over millions of years. What struck me, too, was the sheer force of the waves crashing against the columns, which really brought home how brief a human lifetime is by comparison. If anything, the visit sparked a lasting interest in geology, and I've been reading about volcanoes ever since.",
+      "part3": [
+        "Why do you think people are so drawn to dramatic natural landscapes?",
+        "To what extent should the number of visitors to fragile natural sites be restricted?",
+        "Some argue that spending time in nature is essential to a child's development. How far do you agree?"
+      ]
+    },
+    {
+      "id": "band8-3",
+      "stage": 7,
+      "topic": "Describe a person from history you would like to meet",
+      "points": ["who the person is", "what they are famous for", "what you would like to ask them", "and explain why you would like to meet them"],
+      "phrases": [
+        "If I could meet anyone from history, I think I'd choose…",
+        "She's best known for…",
+        "First and foremost, I'd love to know…",
+        "I'd also be curious to hear what she'd make of…",
+        "Had she…, things might have turned out very differently."
+      ],
+      "model": "If I could meet anyone from history, I think I'd choose Marie Curie, the scientist whose pioneering research into radioactivity changed the course of modern science. She was born in Poland but spent most of her working life in France, at a time when women were rarely welcome in universities, let alone in laboratories. She's best known for discovering two new elements, polonium and radium, alongside her husband, Pierre, and polonium, incidentally, was named after her home country, which I find rather touching. She went on to become the first woman ever to be awarded a Nobel Prize, and, remarkably, she's still the only person to have won Nobel Prizes in two different sciences, physics and chemistry.\nThere's so much I'd want to ask her. First and foremost, I'd love to know how she kept going when so many people doubted her, and whether she ever imagined how profoundly her work would shape medicine. I'd also be curious to hear what she'd make of the way science is done today, with vast international teams and computers that can process data in seconds.\nAs for why I'd want to meet her, it's largely because she embodies a kind of quiet determination that I really admire. She didn't set out to become famous; she was driven, above all, by curiosity. Had she given up when the odds were stacked against her, things might have turned out very differently. Meeting her would, I imagine, be humbling and inspiring in equal measure.",
+      "part3": [
+        "Why is it important for young people to learn about figures from history?",
+        "Do you think people who become famous today deserve their fame as much as those in the past did?",
+        "How might our view of historical figures change as society's values evolve?"
+      ]
+    },
+    {
+      "id": "band8-4",
+      "stage": 7,
+      "topic": "Describe a time when you changed your mind about something",
+      "points": ["what you changed your mind about", "what you used to think", "what made you change your mind", "and explain how you feel about it now"],
+      "phrases": [
+        "…is something I've done a complete U-turn on.",
+        "For as long as I can remember, I was convinced that…",
+        "What changed everything was…",
+        "Much to my surprise,…",
+        "Looking back, my problem was never with…, but with…"
+      ],
+      "model": "I'd like to talk about poetry, which is something I've done a complete U-turn on over the past year. For as long as I can remember, I was convinced that poems were dull, old-fashioned and deliberately difficult. Whenever we had to study one at school, I'd groan inwardly, because it felt like solving a puzzle nobody had asked me to solve. To my mind, if a writer had something to say, they should simply say it, rather than hiding it behind rhymes and obscure metaphors.\nWhat changed everything was a workshop run by a visiting poet at our school last autumn. Instead of analysing a poem line by line, she simply read a few aloud, and it was a revelation. I suddenly realised that poetry is meant to be heard rather than dissected, and that the rhythm carried a feeling I'd completely missed when reading silently. She then asked us to write a short poem about an ordinary object in our bedroom, and, much to my surprise, I found it oddly absorbing. Searching for exactly the right word turned out to be far more satisfying than I'd ever anticipated.\nLooking back, my problem was never with poetry itself, but with the way I'd been approaching it. These days, I keep a notebook of my own poems, and I've even started reading collections for pleasure. More broadly, the experience has made me wary of dismissing things too quickly. Only when you give something a genuine chance can you judge it fairly.",
+      "part3": [
+        "Why do people often find it so difficult to change their opinions?",
+        "To what extent should young people's views be shaped by those of their parents?",
+        "Is changing your mind a sign of weakness or of maturity, in your opinion?"
+      ]
+    }
+  ]
+}

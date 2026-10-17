@@ -1,0 +1,1434 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#8fd1fb">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Number Arcade">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icon-180.png">
+<link rel="icon" type="image/png" href="../icon-192.png">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}body{margin:0;font:14px system-ui}img{max-width:100%}[hidden]{display:none!important}</style>
+<script>window.ARCADE_HOME = "../";</script>
+<title>Memory Lane</title>
+<meta name="description" content="Short, calm memory rounds: numbers, picture words and squares that light up one at a time. Remember them, then tap them back in order, or backwards.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap">
+<style>
+:root {
+  --sky: #e6f3fc; --sky-top: #8fd1fb; --sky-bot: #e8f6ff; --ink: #29345a; --ink-soft: #5d6890; --card: #fdfeff; --card-2: #eef5fc; --line: #d0dff0;
+  --sun: #ffc94d; --sun-deep: #e2a526; --sun-ink: #4a3500; --mint: #4fd1a5; --mint-deep: #2a9f78; --mint-soft: #d9f7ea; --lilac: #9d84ff; --lilac-soft: #ece6ff;
+  --coral: #ff7b86; --coral-deep: #d9505d; --coral-soft: #ffe1e4; --sky-blue: #5cb8ff; --pink: #ff9fcf;
+  --door: #fff3d6; --door-edge: #f0b544; --door-ink: #3a3f6b; --veil: rgba(230, 243, 252, .6);
+  --shadow: 0 12px 32px rgba(41, 52, 90, .16); --shadow-sm: 0 4px 14px rgba(41, 52, 90, .14);
+  --font-display: "Fredoka", "Arial Rounded MT Bold", ui-rounded, "Segoe UI", system-ui, sans-serif;
+  --font-body: "Nunito", ui-rounded, "Segoe UI", system-ui, -apple-system, sans-serif;
+  --emoji: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --sky: #1c2147; --sky-top: #1d2350; --sky-bot: #3b3a7e; --ink: #edf0ff; --ink-soft: #b4bbe3; --card: #283063; --card-2: #222955; --line: #3b437f;
+    --sun: #ffcd5a; --sun-deep: #d99f2c; --sun-ink: #3d2a00; --mint: #5adbb0; --mint-deep: #5adbb0; --mint-soft: #1f4a4a; --lilac: #ab95ff; --lilac-soft: #352f6e;
+    --coral: #ff8a94; --coral-deep: #ff8a94; --coral-soft: #4d2a45; --door: #fff1d2; --veil: rgba(28, 33, 71, .55);
+    --shadow: 0 14px 36px rgba(0, 0, 0, .42); --shadow-sm: 0 4px 14px rgba(0, 0, 0, .3); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --sky: #1c2147; --sky-top: #1d2350; --sky-bot: #3b3a7e; --ink: #edf0ff; --ink-soft: #b4bbe3; --card: #283063; --card-2: #222955; --line: #3b437f;
+  --sun: #ffcd5a; --sun-deep: #d99f2c; --sun-ink: #3d2a00; --mint: #5adbb0; --mint-deep: #5adbb0; --mint-soft: #1f4a4a; --lilac: #ab95ff; --lilac-soft: #352f6e;
+  --coral: #ff8a94; --coral-deep: #ff8a94; --coral-soft: #4d2a45; --door: #fff1d2; --veil: rgba(28, 33, 71, .55);
+  --shadow: 0 14px 36px rgba(0, 0, 0, .42); --shadow-sm: 0 4px 14px rgba(0, 0, 0, .3); color-scheme: dark;
+}
+html, body { height: 100%; overscroll-behavior: none; -webkit-touch-callout: none; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; color: var(--ink); font-family: var(--font-body); overflow: hidden; -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent;
+  background: linear-gradient(var(--sky-top), var(--sky-bot) 75%) fixed; background-color: var(--sky-bot);
+}
+button { font: inherit; color: inherit; }
+button, label, input, .btn, a { touch-action: manipulation; }
+[hidden] { display: none !important; }
+
+/* buttons */
+.btn {
+  font: 600 1.05rem/1.1 var(--font-display); color: var(--ink); background: var(--card-2); border: 2px solid var(--line); border-radius: 16px;
+  padding: .75em 1.15em; box-shadow: 0 4px 0 var(--line); cursor: pointer; text-decoration: none; display: inline-block;
+  transition: transform .08s ease, box-shadow .08s ease, background .15s;
+}
+.btn:hover { background: var(--card); }
+.btn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--line); }
+.btn:focus-visible, .seg input:focus-visible + span { outline: 3px solid var(--lilac); outline-offset: 3px; }
+.btn.sun { background: var(--sun); border-color: var(--sun-deep); color: var(--sun-ink); box-shadow: 0 4px 0 var(--sun-deep); }
+.btn.sun:active { box-shadow: 0 1px 0 var(--sun-deep); }
+.btn.big { font-size: 1.6rem; padding: .6em 2.2em; border-radius: 22px; }
+.btn:disabled { opacity: .5; cursor: default; transform: none; }
+.row { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+
+/* menu screens: cards over the game */
+#screens {
+  position: fixed; inset: 0; display: grid; place-items: center; overflow-y: auto; pointer-events: none; touch-action: pan-y; z-index: 20;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: calc(16px + env(safe-area-inset-top, 0px)) calc(16px + env(safe-area-inset-bottom, 0px));
+}
+#screens.dim { background: var(--veil); pointer-events: auto; }
+.screen { pointer-events: auto; width: min(100%, 600px); animation: rise .35s ease both; }
+.card { background: var(--card); border-radius: 28px; box-shadow: var(--shadow); padding: clamp(18px, 4vw, 34px); display: grid; gap: 18px; text-align: center; }
+.logo { margin: 0; font: 700 clamp(2.5rem, 9vw, 4rem)/.95 var(--font-display); text-wrap: balance; }
+.logo span { color: var(--mint-deep); }
+.tag { margin: 0 auto; max-width: 40ch; color: var(--ink-soft); font-size: 1.08rem; line-height: 1.5; text-wrap: balance; }
+.how { margin: 0; color: var(--ink-soft); font-weight: 700; }
+.small-card h2 { margin: 0; font: 700 clamp(1.9rem, 6vw, 2.6rem)/1.05 var(--font-display); text-wrap: balance; }
+.small-card p { margin: 0; color: var(--ink-soft); }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 10px; margin: 0; }
+.stats div { background: var(--card-2); border-radius: 16px; padding: 12px 6px; min-width: 0; }
+.stats dt { font-size: .74rem; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-soft); font-weight: 800; }
+.stats dd { margin: 4px 0 0; font: 700 1.6rem/1 var(--font-display); font-variant-numeric: tabular-nums; }
+.seg { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.seg label { cursor: pointer; }
+.seg input { position: absolute; opacity: 0; pointer-events: none; }
+.seg span { display: block; font: 600 .95rem/1.15 var(--font-display); padding: .55em .85em; border-radius: 14px; background: var(--card-2); border: 2px solid var(--line); }
+.seg input:checked + span { background: var(--sun); border-color: var(--sun-deep); color: var(--sun-ink); }
+@media (pointer: coarse) { .seg span { min-height: 48px; box-sizing: border-box; display: grid; place-items: center; } }
+.seg-title { margin: 0 0 8px; font: 600 .9rem/1 var(--font-display); color: var(--ink-soft); }
+.stars { font-size: 2.4rem; letter-spacing: .1em; line-height: 1; }
+.stars .off { opacity: .22; filter: grayscale(1); }
+
+/* the HUD along the top while playing */
+#hud { position: fixed; left: 0; right: 0; top: 0; pointer-events: none; z-index: 10; }
+.hud-top {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding-top: calc(10px + env(safe-area-inset-top, 0px));
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.chipbox { background: var(--card); border-radius: 99px; box-shadow: var(--shadow-sm); }
+.hud-chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.chip { font: 600 1.05rem/1 var(--font-display); padding: 8px 14px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.chip.soft { font-size: .9rem; padding: 7px 12px; color: var(--ink-soft); }
+.hud-btn { pointer-events: auto; width: 46px; height: 46px; border-radius: 50%; border: 0; background: var(--card); box-shadow: var(--shadow-sm); cursor: pointer; display: grid; place-items: center; flex: none; color: var(--ink); }
+.hud-btn:focus-visible { outline: 3px solid var(--lilac); outline-offset: 2px; }
+@media (pointer: coarse) { .hud-btn { width: 58px; height: 58px; } }
+
+/* toasts and screen-reader text */
+.toast {
+  position: fixed; left: 50%; top: var(--toast-top, 42%); translate: -50% 0; z-index: 30; pointer-events: none; font: 700 1.4rem/1.1 var(--font-display);
+  padding: 12px 20px; animation: pop .3s ease both; white-space: nowrap; background: var(--card); border-radius: 99px; box-shadow: var(--shadow-sm);
+}
+.toast.hello { top: calc(max(128px, 20%) + env(safe-area-inset-top, 0px)); border: 3px solid var(--lilac); }
+.toast.good { color: var(--mint-deep); border: 3px solid var(--mint); }
+.toast.oops { color: var(--coral-deep); border: 3px solid var(--coral); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+@keyframes rise { from { transform: translateY(14px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes pop { 0% { transform: scale(.85); } 70% { transform: scale(1.04); } 100% { transform: scale(1); } }
+@keyframes shake { 0%, 100% { translate: 0 0; } 20% { translate: -7px 0; } 40% { translate: 6px 0; } 60% { translate: -4px 0; } 80% { translate: 3px 0; } }
+@keyframes glow { 0% { box-shadow: 0 0 0 0 rgba(79, 209, 165, .7); } 100% { box-shadow: 0 0 0 18px rgba(79, 209, 165, 0); } }
+@media (prefers-reduced-motion: reduce) { .screen, .toast, .card { animation: none !important; } }
+/* Memory Lane: one calm column over the sky. A phase label, the show card where the items appear one
+   at a time (a big number, or a picture word), the answer boxes with Undo, then the pad: a number pad,
+   picture-word cards, or the squares of the grid game (they light up in place, so that game has no show
+   card). Sizes come from layout() so nothing ever scrolls. Number keys are gold-edged like the other
+   games' answer tiles. */
+:root { --stone: rgba(255, 255, 255, .5); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --stone: rgba(255, 255, 255, .08); } }
+:root[data-theme="dark"] { --stone: rgba(255, 255, 255, .08); }
+#bg { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+#bg i { position: absolute; border-radius: 32%; border: 2px solid var(--stone); animation: drift 16s ease-in-out infinite alternate; }
+#bg i:nth-child(2n) { border-radius: 50%; animation-duration: 21s; animation-delay: -8s; }
+@keyframes drift { from { transform: translateY(0) rotate(0deg); } to { transform: translateY(-22px) rotate(8deg); } }
+
+#play {
+  position: fixed; inset: 0; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--gap, 12px);
+  box-sizing: border-box; touch-action: manipulation;
+  padding: var(--top, 80px) max(16px, env(safe-area-inset-right, 0px)) calc(14px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+}
+#play.away { visibility: hidden; }
+.phase {
+  height: 38px; box-sizing: border-box; display: inline-flex; align-items: center; gap: 7px; flex: none; padding: 0 18px; border-radius: 99px; max-width: 100%;
+  font: 700 1.1rem/1 var(--font-display); background: var(--card); color: var(--ink); box-shadow: var(--shadow-sm); white-space: nowrap;
+}
+.phase i { font-style: normal; font-family: var(--emoji); }
+.phase.watch { background: var(--lilac-soft); }
+.phase.go { background: var(--sun); color: var(--sun-ink); }
+.phase.good { background: var(--mint-soft); }
+.phase.near { background: var(--card); box-shadow: inset 0 0 0 3px var(--lilac), var(--shadow-sm); }
+.show {
+  width: var(--show-w, 300px); height: var(--show-h, 150px); flex: none; box-sizing: border-box; position: relative; overflow: hidden;
+  background: var(--card); border: 4px solid var(--door-edge); border-radius: 28px; box-shadow: var(--shadow); display: grid; place-items: center;
+}
+.show .digit { font: 700 calc(var(--show-h, 150px) * .66)/1 var(--font-display); font-variant-numeric: tabular-nums; }
+.show .pw { display: grid; justify-items: center; gap: 2px; }
+.show .pw i { font: 400 calc(var(--show-h, 150px) * .44)/1.1 var(--emoji); font-style: normal; }
+.show .pw b { font: 700 var(--show-word, 30px)/1.1 var(--font-display); white-space: nowrap; }
+.show .fixrow { letter-spacing: .06em; }
+.show .q { font: 700 calc(var(--show-h, 150px) * .5)/1 var(--font-display); color: var(--line); }
+.show .in { animation: pop .3s ease both; }
+.answer { display: flex; align-items: center; gap: 12px; flex: none; height: 56px; max-width: 100%; }
+.slots { display: flex; gap: var(--sg, 6px); }
+.slot {
+  width: var(--bs, 48px); height: var(--bs, 48px); box-sizing: border-box; flex: none; display: grid; place-items: center;
+  border-radius: calc(var(--bs, 48px) * .28); background: var(--card); border: 3px solid var(--line); box-shadow: var(--shadow-sm);
+  font: 700 calc(var(--bs, 48px) * .58)/1 var(--font-display); color: var(--ink); font-variant-numeric: tabular-nums;
+}
+.slot i { font: 400 calc(var(--bs, 48px) * .58)/1 var(--emoji); font-style: normal; }
+.slot u { width: 36%; height: 36%; border-radius: 30%; background: var(--sun-deep); }
+.slot.seen { background: var(--lilac-soft); border-color: var(--lilac); }
+.slot.now { border-color: var(--lilac); box-shadow: 0 0 0 4px var(--lilac-soft); }
+.slot.good { background: var(--mint-soft); border-color: var(--mint); }
+.slot.fix { background: var(--lilac-soft); border-color: var(--lilac); }
+.undo { width: 56px; height: 56px; padding: 0; flex: none; display: grid; place-items: center; border-radius: 16px; box-shadow: 0 3px 0 var(--line); }
+.undo:disabled { opacity: .35; }
+.pad { display: grid; gap: var(--pg, 10px); flex: none; justify-content: center; }
+.pad button { margin: 0; padding: 0; box-sizing: border-box; cursor: pointer; touch-action: manipulation; color: inherit; }
+.pad button:focus { outline: none; }
+.pad button:focus-visible { outline: 3px solid var(--lilac); outline-offset: 3px; }
+/* the number pad: 1-9 in three rows, 0 under 8 */
+.pad.keys { grid-template-columns: repeat(3, var(--kw, 110px)); }
+.key {
+  width: var(--kw, 110px); height: var(--kh, 80px); border-radius: 20px; display: grid; place-items: center;
+  background: var(--door); border: 3px solid var(--door-edge); color: var(--door-ink); box-shadow: 0 4px 0 var(--door-edge);
+  font: 700 calc(var(--kh, 80px) * .5)/1 var(--font-display); transition: transform .08s ease, box-shadow .08s ease, opacity .2s;
+}
+.key.zero { grid-column: 2; }
+.key:active, .key.hit { transform: translateY(3px); box-shadow: 0 1px 0 var(--door-edge); }
+.key.hit { background: var(--sun); }
+.pad.off .key { opacity: .45; pointer-events: none; }
+/* picture-word cards */
+.pad.cards { display: flex; flex-wrap: wrap; justify-content: center; width: calc(var(--cols, 4) * var(--cw, 120px) + (var(--cols, 4) - 1) * var(--pg, 10px)); max-width: 100%; }
+.wcard {
+  width: var(--cw, 120px); height: var(--ch, 110px); border-radius: 20px; position: relative; display: grid; align-content: center; justify-items: center; gap: 2px;
+  background: var(--card); border: 3px solid var(--line); box-shadow: 0 4px 0 var(--line); transition: transform .08s ease, box-shadow .08s ease;
+}
+.wcard i { font: 400 calc(var(--ch, 110px) * .42)/1.1 var(--emoji); font-style: normal; }
+.wcard b { font: 700 var(--cf, 18px)/1.15 var(--font-display); white-space: nowrap; max-width: calc(100% - 8px); overflow: hidden; }
+.wcard:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--line); }
+.wcard.picked { background: var(--sun); border-color: var(--sun-deep); box-shadow: 0 4px 0 var(--sun-deep); color: var(--sun-ink); }
+.wcard .n, .cell .n {
+  position: absolute; top: 5px; left: 6px; min-width: 1.6em; padding: 3px 0; border-radius: 99px; text-align: center;
+  font: 700 .95rem/1 var(--font-display); background: var(--card); color: var(--ink); box-shadow: var(--shadow-sm);
+}
+.pad.wait .wcard { visibility: hidden; }
+.pad.off .wcard { pointer-events: none; }
+.wcard.good { background: var(--mint-soft); border-color: var(--mint); box-shadow: 0 4px 0 var(--mint); color: var(--ink); }
+/* the grid game's squares */
+.pad.grid { grid-template-columns: repeat(var(--gn, 3), var(--cs, 120px)); }
+.cell {
+  width: var(--cs, 120px); height: var(--cs, 120px); border-radius: calc(var(--cs, 120px) * .2); position: relative; display: grid; place-items: center;
+  background: var(--card); border: 3px solid var(--line); box-shadow: 0 4px 0 var(--line); font: 700 calc(var(--cs, 120px) * .34)/1 var(--font-display); color: var(--ink);
+  transition: background .12s, border-color .12s, box-shadow .12s;
+}
+.cell.lit { background: var(--sun); border-color: var(--sun-deep); box-shadow: 0 4px 0 var(--sun-deep), 0 0 0 9px rgba(255, 201, 77, .35); }
+.cell.picked { background: var(--lilac-soft); border-color: var(--lilac); box-shadow: 0 4px 0 var(--lilac); }
+.cell.good { background: var(--mint-soft); border-color: var(--mint); box-shadow: 0 4px 0 var(--mint); }
+.cell.fix { background: var(--lilac-soft); border-color: var(--lilac); box-shadow: 0 4px 0 var(--lilac); }
+.pad.off .cell { pointer-events: none; }
+.toast { top: var(--toast-top, 30%); }
+.toast.music { font-size: 1.1rem; padding: 9px 16px; }
+
+/* home and results */
+.screen { width: min(100%, 640px); }
+.modes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.mode { cursor: pointer; display: block; }
+.mode input { position: absolute; opacity: 0; pointer-events: none; }
+.mode > span {
+  display: grid; gap: 4px; justify-items: center; align-content: center; min-height: 104px; height: 100%; box-sizing: border-box; padding: 8px 4px;
+  border-radius: 20px; background: var(--card-2); border: 2px solid var(--line); box-shadow: 0 4px 0 var(--line);
+}
+.mode b { font: 700 1.2rem/1.2 var(--font-display); white-space: nowrap; }
+.mode small { font-weight: 800; font-size: .8rem; color: var(--ink-soft); white-space: nowrap; }
+.mode .ms { font-size: .85rem; letter-spacing: .06em; line-height: 1; background: var(--card); padding: 3px 9px; border-radius: 99px; }
+.mode .ms .off { opacity: .25; filter: grayscale(1); }
+.mode input:checked + span { background: var(--sun); border-color: var(--sun-deep); box-shadow: 0 4px 0 var(--sun-deep); color: var(--sun-ink); }
+.mode input:checked + span small { color: var(--sun-ink); }
+.mode input:focus-visible + span { outline: 3px solid var(--lilac); outline-offset: 3px; }
+.ic { height: 34px; display: grid; place-items: center; font-style: normal; }
+.ic.num { font: 700 1.6rem/1 var(--font-display); letter-spacing: .08em; color: var(--lilac); }
+.mode input:checked + span .ic.num { color: var(--sun-ink); }
+.ic.pic { font: 400 1.9rem/1 var(--emoji); }
+.ic.mini { grid-template-columns: repeat(3, 9px); gap: 3px; }
+.ic.mini u { width: 9px; height: 9px; border-radius: 3px; background: var(--line); }
+.ic.mini u.on { background: var(--sun-deep); }
+.mode input:checked + span .ic.mini u { background: rgba(255, 255, 255, .6); }
+.mode input:checked + span .ic.mini u.on { background: var(--sun-ink); }
+.levelrow { display: flex; flex-wrap: wrap; gap: 8px 14px; justify-content: center; align-items: center; }
+.toggle { font-size: .95rem; padding: 0 1em; min-height: 48px; display: inline-flex; align-items: center; gap: .4em; box-sizing: border-box; box-shadow: 0 3px 0 var(--line); }
+.toggle i { font-style: normal; font-family: var(--emoji); }
+.toggle[aria-pressed="true"] { background: var(--lilac-soft); border-color: var(--lilac); box-shadow: 0 3px 0 var(--lilac); }
+.seg span { min-width: 4.6em; }
+.note { margin: 0; color: var(--ink-soft); font-weight: 700; font-size: .98rem; line-height: 1.4; min-height: 2.8em; text-wrap: balance; }
+#doneStars span { display: inline-block; animation: pop .45s ease both; }
+#doneStars span:nth-child(2) { animation-delay: .2s; }
+#doneStars span:nth-child(3) { animation-delay: .4s; }
+#doneStats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.done-mode { margin: -8px 0 0; font: 700 1rem/1 var(--font-display); color: var(--ink-soft); }
+#doneNext { font-weight: 700; }
+@media (max-height: 900px) { #s-home .card { gap: 14px; } }
+/* every button a finger can press is 48 px tall or more */
+@media (pointer: coarse) { .screen .btn:not(.big) { min-height: 48px; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; } }
+@media (max-width: 560px) {
+  #s-home .card { gap: 12px; }
+  #s-home .tag { font-size: 1rem; line-height: 1.4; }
+  .mode > span { min-height: 96px; }
+  .mode b { font-size: 1.05rem; }
+  .mode small { font-size: .74rem; }
+  .note { font-size: .92rem; }
+  .seg span { min-width: 0; padding: .6em .8em; }
+  #homeBtns { gap: 8px; }
+  #homeBtns .btn { font-size: .9rem; padding: .65em .8em; }
+  #seqChip { padding: 8px 11px; }
+}
+@media (prefers-reduced-motion: reduce) { #bg i, .show .in, #doneStars span { animation: none !important; } }
+.calm #bg i, .calm .show .in, .calm #doneStars span, .calm .screen, .calm .toast { animation: none !important; }
+</style>
+</head>
+<body>
+<div id="bg" aria-hidden="true">
+  <i style="left:5%;top:14%;width:110px;height:110px"></i><i style="left:84%;top:10%;width:76px;height:76px"></i>
+  <i style="left:10%;top:70%;width:64px;height:64px"></i><i style="left:76%;top:62%;width:140px;height:140px"></i>
+  <i style="left:46%;top:86%;width:88px;height:88px"></i><i style="left:60%;top:30%;width:50px;height:50px"></i>
+</div>
+<div id="play" hidden>
+  <div class="phase watch" id="phase"><i aria-hidden="true">👀</i><span>Watch</span></div>
+  <div class="show" id="show"></div>
+  <div class="answer">
+    <div class="slots" id="slots" aria-hidden="true"></div>
+    <button class="btn undo" id="undoBtn" aria-label="Undo the last tap" disabled>
+      <svg width="30" height="22" viewBox="0 0 30 22" aria-hidden="true"><path d="M9 2h17a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H9L2 11z" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/><path d="M14 7l8 8M22 7l-8 8" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+  <div class="pad keys off" id="pad" role="group" aria-label="Answer"></div>
+</div>
+
+<div id="hud" hidden>
+  <div class="hud-top">
+    <div class="hud-chips">
+      <span class="chip chipbox" id="spanChip">Span 3</span>
+      <span class="chip chipbox" id="seqChip">1 / 10</span>
+      <span class="chip soft chipbox" id="timeChip">0:00</span>
+    </div>
+    <button class="hud-btn" id="pauseBtn" aria-label="Pause">
+      <svg width="18" height="20" viewBox="0 0 16 18" aria-hidden="true"><rect x="1" y="1" width="5" height="16" rx="2" fill="currentColor"/><rect x="10" y="1" width="5" height="16" rx="2" fill="currentColor"/></svg>
+    </button>
+  </div>
+</div>
+
+<main id="screens">
+  <section class="screen" id="s-home">
+    <div class="card">
+      <h1 class="logo">Memory <span>Lane</span></h1>
+      <p class="tag">Watch them appear one at a time, then tap them back in the same order. Short, calm rounds for a stronger memory.</p>
+      <div>
+        <p class="seg-title">Pick a game</p>
+        <div class="modes" id="modes" role="radiogroup" aria-label="Games"></div>
+      </div>
+      <p class="note" id="modeNote"></p>
+      <div class="levelrow">
+        <div class="seg" role="radiogroup" aria-label="Level">
+          <label><input type="radio" name="math" value="starter"><span>Starter</span></label>
+          <label><input type="radio" name="math" value="explorer"><span>Explorer</span></label>
+          <label><input type="radio" name="math" value="genius"><span>Genius</span></label>
+        </div>
+        <button class="btn toggle" id="backBtn" aria-pressed="false"><i aria-hidden="true">↩️</i><span>Backwards: off</span></button>
+      </div>
+      <div class="row"><button class="btn sun big" id="playBtn">Play</button></div>
+      <div class="row" id="homeBtns">
+        <button class="btn" id="speakBtn" aria-pressed="true">Read aloud: on</button>
+        <button class="btn" id="soundBtn">Music: on</button>
+        <a class="btn" data-hub hidden href="../">All games</a>
+      </div>
+    </div>
+  </section>
+  <section class="screen" id="s-pause" hidden>
+    <div class="card small-card">
+      <h2>Paused</h2>
+      <p id="pauseInfo"></p>
+      <div class="row"><button class="btn sun big" id="resumeBtn">Keep going</button></div>
+      <div class="row"><button class="btn" id="restartBtn">Start over</button><button class="btn" id="homeBtn">Home</button></div>
+    </div>
+  </section>
+  <section class="screen" id="s-done" hidden>
+    <div class="card small-card">
+      <h2 id="doneTitle">Round done!</h2>
+      <p class="done-mode" id="doneMode"></p>
+      <div class="stars" id="doneStars"></div>
+      <p id="doneNote"></p>
+      <dl class="stats" id="doneStats"></dl>
+      <p id="doneNext"></p>
+      <div class="row"><button class="btn sun big" id="againBtn">Play again</button></div>
+      <div class="row"><button class="btn" id="doneHomeBtn">Home</button><a class="btn" data-hub hidden href="../">All games</a></div>
+    </div>
+  </section>
+</main>
+<div class="toast" id="toast" hidden></div>
+<div class="sr" aria-live="polite" id="announce"></div>
+
+<script>
+(function () {
+'use strict';
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => Array.from(document.querySelectorAll(s));
+const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
+const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+const frac = (v) => ((v % 1) + 1) % 1;
+function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+const reduceMotion = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+const fmtTime = (s) => Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+const stat = (k, v) => '<div><dt>' + k + '</dt><dd>' + v + '</dd></div>';
+const starRow = (n, of) => Array.from({ length: of || 3 }, (_, i) => '<span' + (i < n ? '' : ' class="off"') + '>⭐</span>').join('');
+
+/* ================= saved progress (this device) =================
+   Settings (math level, music, read-aloud) and the math record are shared by every game in
+   number-dash.v1; each game keeps its own records under its own key via loadRecords(). */
+const SAVE_KEY = 'number-dash.v1';
+const save = {
+  levels: {},
+  math: { right: 0, wrong: 0, streak: 0, best: 0, tricky: [] },
+  settings: { mathLevel: 'explorer', think: 'normal', music: 0.7, sfx: 0.8, sky: 'auto', calm: reduceMotion, speak: true },
+  cube: { color: 0, face: 0 }
+};
+try {
+  const raw = localStorage.getItem(SAVE_KEY);
+  if (raw) { const d = JSON.parse(raw); for (const k of Object.keys(save)) if (d && d[k] && typeof d[k] === 'object') Object.assign(save[k], d[k]); }
+} catch (e) { /* storage blocked: play without saving */ }
+const records = { key: '', data: null };
+function loadRecords(key, defaults) {
+  records.key = key; records.data = defaults;
+  try { const raw = localStorage.getItem(key); if (raw) Object.assign(defaults, JSON.parse(raw)); } catch (e) { /* ignore */ }
+  return defaults;
+}
+function markPlayed() {
+  try {
+    const d = new Date(), k = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    const days = JSON.parse(localStorage.getItem('arcade-days.v1') || '{}') || {};
+    if (days[k]) return;
+    days[k] = 1;
+    const keys = Object.keys(days).sort();
+    while (keys.length > 400) delete days[keys.shift()];
+    localStorage.setItem('arcade-days.v1', JSON.stringify(days));
+  } catch (e) { /* storage blocked */ }
+}
+function writeSave() {
+  markPlayed();
+  try {
+    const cur = JSON.parse(localStorage.getItem(SAVE_KEY) || '{}');
+    cur.math = save.math; cur.settings = save.settings;
+    if (!cur.cube) cur.cube = save.cube;
+    if (!cur.levels) cur.levels = save.levels;
+    localStorage.setItem(SAVE_KEY, JSON.stringify(cur));
+    if (records.key) localStorage.setItem(records.key, JSON.stringify(records.data));
+  } catch (e) { /* ignore */ }
+}
+
+// the game's records only, for bookkeeping that is not play (the day is not marked as played)
+function writeRecords() { try { if (records.key) localStorage.setItem(records.key, JSON.stringify(records.data)); } catch (e) { /* ignore */ } }
+
+/* ================= math bookkeeping =================
+   q is a fact from KINDS (shared/math.js): t = its text, a = its answer. A missed fact is kept
+   (the last 12) and comes back now and then in every game until it is answered right. */
+function factFrom(kinds, avoid) {
+  const tricky = (save.math.tricky || []).filter((t) => !avoid || !avoid.has(t.t));
+  if (tricky.length && Math.random() < 0.25) return Object.assign({}, pick(tricky), { again: true });
+  let q = KINDS[pick(kinds)]();
+  for (let i = 0; i < 12 && avoid && avoid.has(q.t); i++) q = KINDS[pick(kinds)]();
+  return q;
+}
+function mathRight(q) {
+  const m = save.math;
+  m.right++; m.streak++; m.best = Math.max(m.best, m.streak);
+  if (q && q.again) m.tricky = m.tricky.filter((t) => t.t !== q.t);
+  writeSave();
+}
+function mathWrong(q) {
+  const m = save.math;
+  m.wrong++; m.streak = 0;
+  if (q && q.t) {
+    const r = { t: q.t, a: q.a };
+    if (q.f) r.f = q.f;
+    if (q.trap !== undefined) r.trap = q.trap;
+    m.tricky = (m.tricky || []).filter((t) => t.t !== r.t).concat([r]).slice(-12);
+  }
+  writeSave();
+}
+
+/* ================= screens, toasts, links ================= */
+// show one menu card (<section class="screen" id="s-NAME">) over the game, or none
+function showScreen(name, dim) {
+  $$('#screens > .screen').forEach((s) => { s.hidden = s.id !== 's-' + name; });
+  $('#screens').classList.toggle('dim', !!name && dim !== false);
+}
+let toastTimer = 0;
+// kind: 'hello' (sits higher, for something new), 'good', 'oops', or nothing
+function toast(msg, kind, ms) {
+  const t = $('#toast');
+  t.textContent = msg; t.className = 'toast' + (kind ? ' ' + kind : ''); t.hidden = false;
+  t.style.animation = 'none'; void t.offsetWidth; t.style.animation = '';
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, ms || (kind === 'hello' ? 2400 : 1500));
+}
+function announce(msg) { const a = $('#announce'); if (a) a.textContent = msg; }
+// links marked data-hub lead back to the arcade's home page when the game runs inside the site
+function arcadeLinks() { if (window.ARCADE_HOME) $$('[data-hub]').forEach((a) => { a.href = window.ARCADE_HOME; a.hidden = false; }); }
+function toggleMusic() { save.settings.music = save.settings.music > 0 ? 0 : 0.7; writeSave(); Sound.init(); Sound.setVolumes(); return save.settings.music > 0; }
+// the usual page guards: sound starts on the first touch, no pinch or double-tap zoom, onHide when the page goes away
+function arcadeGuards(onHide) {
+  document.addEventListener('pointerdown', () => Sound.init());
+  document.addEventListener('visibilitychange', () => { if (document.hidden) { if (onHide) onHide(); } else Sound.init(); });
+  window.addEventListener('blur', () => { if (onHide) onHide(); });
+  document.addEventListener('gesturestart', (e) => e.preventDefault());
+  document.addEventListener('dblclick', (e) => e.preventDefault());
+}
+
+/* ================= read-aloud =================
+   English words are spoken with the device's own voice (iPad has good offline ones). Off when
+   settings.speak is false. Speech.said keeps the last words asked for, for the playtests. */
+const Speech = (function () {
+  const ok = typeof window.speechSynthesis !== 'undefined' && typeof window.SpeechSynthesisUtterance !== 'undefined';
+  const said = [];
+  let voice = null;
+  function choose() {
+    if (!ok) return;
+    const en = speechSynthesis.getVoices().filter((v) => /^en[-_]/i.test(v.lang));
+    // British English first (the games teach British spelling and IELTS uses British voices), the clearest voices first
+    // (on-device voices before online ones, so read-aloud still works offline)
+    const gb = en.filter((v) => /^en[-_]GB/i.test(v.lang)).sort((x, y) => (y.localService ? 1 : 0) - (x.localService ? 1 : 0));
+    voice = gb.find((v) => /Serena|Kate|Arthur|Martha|Sonia|Libby|Ryan|Google UK English/i.test(v.name)) || gb.find((v) => /Daniel/i.test(v.name)) || gb[0] ||
+      en.find((v) => /Samantha|Karen|Moira|Aria|Jenny|Google US English/i.test(v.name)) || en.find((v) => /^en[-_]US/i.test(v.lang)) || en[0] || null;
+  }
+  if (ok) { choose(); try { speechSynthesis.addEventListener('voiceschanged', choose); } catch (e) { speechSynthesis.onvoiceschanged = choose; } }
+  function say(text, rate) {
+    said.push(text); if (said.length > 40) said.shift();
+    if (!ok || !save.settings.speak) return false;
+    try {
+      const u = new SpeechSynthesisUtterance(text);
+      if (voice) u.voice = voice;
+      u.lang = voice ? voice.lang : 'en-GB'; u.rate = rate || 0.9; u.pitch = 1.05;
+      // some iOS versions drop a word spoken straight after cancel(), so only cut in when something is
+      // still talking, and then give the voice a moment
+      if (speechSynthesis.speaking || speechSynthesis.pending) { speechSynthesis.cancel(); setTimeout(() => speechSynthesis.speak(u), 60); }
+      else speechSynthesis.speak(u);
+      return true;
+    } catch (e) { return false; }
+  }
+  return { ok: ok, say: say, said: said, stop() { if (ok) { try { speechSynthesis.cancel(); } catch (e) { /* ignore */ } } } };
+})();
+
+/* ================= music =================
+   The menu song is the arcade's; the memory song is the calmest one: slow, soft keys, one light kick
+   and few hats, so counting and listening stay easy. It is muffled while the items are on show. */
+const SONGS = {
+  menu: { bpm: 72, swing: 0.14, prog: [[52, 55, 59, 62], [55, 59, 60, 64], [57, 60, 64, 67], [55, 57, 62, 64]], bass: [36, 45, 41, 43],
+          keys: [[0, 1, 4, 15], [10, 0.45, 2, 4]], bassPat: [[0, 0.8, 0, 12]], drums: false,
+          hats: [[0, 0.22], [4, 0.12], [8, 0.22], [12, 0.12]], scale: [72, 74, 76, 79, 81, 84], density: 0.42, seed: 3 },
+  // D, Cmaj9, Am7, Bm7b5 voicings: open and unhurried
+  memory: { bpm: 62, swing: 0.1, prog: [[50, 57, 60, 64], [48, 55, 59, 62], [45, 52, 55, 60], [47, 53, 57, 62]], bass: [38, 36, 33, 35],
+            keys: [[0, 0.85, 4, 16], [8, 0.35, 2, 6]], bassPat: [[0, 0.7, 0, 12], [10, 0.35, 7, 4]], drums: true,
+            kick: [0], snare: [12], ghost: [],
+            hats: [[0, 0.22], [8, 0.16]], scale: [69, 72, 74, 76, 79, 81], density: 0.32, seed: 409 }
+};
+// Every new attempt plays the next remix of the level's song: a new key and chord
+// order, another groove and comping style, another lead sound, and a fresh melody.
+const HATS = {
+  eighths: [[0, 0.5], [2, 0.3], [4, 0.5], [6, 0.3], [8, 0.5], [10, 0.3], [12, 0.5], [14, 0.3]],
+  sixteenths: Array.from({ length: 16 }, (_, i) => [i, i % 4 === 0 ? 0.45 : i % 2 ? 0.14 : 0.3]),
+  swing: [[0, 0.45], [3, 0.25], [4, 0.45], [7, 0.25], [8, 0.45], [11, 0.25], [12, 0.45], [15, 0.25]],
+  soft: [[0, 0.3], [4, 0.2], [8, 0.3], [12, 0.2], [14, 0.15]]
+};
+const COMP = {
+  long: [[0, 1, 5, 16]],
+  stabs: [[0, 0.9, 4, 3], [6, 0.6, 3, 2], [10, 0.7, 3, 3], [14, 0.4, 2, 2]],
+  offbeat: [[2, 0.75, 4, 2], [6, 0.6, 3, 2], [10, 0.75, 4, 2], [14, 0.5, 3, 2]]
+};
+const REMIXES = [
+  { name: 'Bubble Beat', shift: 2, rot: 1, kick: [0, 3, 8, 10], hats: 'sixteenths', comp: 'stabs', lead: 'marimba', cutoff: 2900 },
+  { name: 'Sleepy Swing', shift: -3, rot: 2, kick: [0, 10], hats: 'swing', swing: 0.26, comp: 'long', lead: 'flute', cutoff: 1700 },
+  { name: 'Hop Step', shift: 5, rot: 3, kick: [0, 6, 8], hats: 'eighths', comp: 'offbeat', lead: 'bell', cutoff: 2500 },
+  { name: 'Moon Walk', shift: -2, rot: 1, kick: [0, 7, 10], ghost: [11, 15], hats: 'sixteenths', comp: 'arp', lead: 'pluck', cutoff: 2100 },
+  { name: 'Cloud Bounce', shift: 3, rot: 2, kick: [0, 2, 10], hats: 'eighths', comp: 'stabs', lead: 'flute', cutoff: 2600 },
+  { name: 'Starry Glide', shift: -5, rot: 3, kick: [0, 10, 14], hats: 'soft', comp: 'arp', lead: 'bell', cutoff: 2000 },
+  { name: 'Sunny Shuffle', shift: 1, rot: 0, kick: [0, 3, 7, 10], hats: 'swing', swing: 0.24, comp: 'offbeat', lead: 'marimba', cutoff: 2800 }
+];
+function remixOf(s, n) {
+  if (!n || !s.drums) return Object.assign({}, s, { name: '', lead: 'pluck', cutoff: 2300, arp: false });
+  const r = REMIXES[(n - 1) % REMIXES.length], round = Math.floor((n - 1) / REMIXES.length);
+  const len = s.prog.length, sh = r.shift;
+  return Object.assign({}, s, {
+    name: r.name + (round ? ' ' + (round + 1) : ''),
+    prog: s.prog.map((_, i) => s.prog[(i + r.rot) % len].map((m) => m + sh)),
+    bass: s.bass.map((_, i) => s.bass[(i + r.rot) % len] + sh),
+    scale: s.scale.map((m) => m + sh),
+    kick: r.kick, ghost: r.ghost || [], hats: HATS[r.hats],
+    keys: COMP[r.comp] || s.keys, arp: r.comp === 'arp',
+    bassPat: r.kick.map((k, i) => [k, i ? 0.7 : 1, i % 2 ? 7 : 0, i ? 2 : 5]),
+    swing: r.swing || s.swing, lead: r.lead, cutoff: r.cutoff,
+    seed: ((s.seed * 7919 + n * 104729) % 2147483646) + 1,
+    density: clamp(s.density + (((n * 37) % 5) - 2) * 0.04, 0.35, 0.7)
+  });
+}
+const Sound = (function () {
+  let ctx = null, out, musicBus, musicLP, sfxBus, verbSend, keysIn, keysLP, bassIn, drumIn, melIn, wowGain, noise, crackleGain;
+  let song = null, vari = null, songId = '', songStart = 0, step = 0, phrases = null, G = null;
+  const mtof = (m) => 440 * Math.pow(2, (m - 69) / 12);
+
+  function makeNoise(sec) {
+    const b = ctx.createBuffer(1, Math.floor(ctx.sampleRate * sec), ctx.sampleRate), d = b.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    return b;
+  }
+  function makeCrackle(sec) {
+    const b = ctx.createBuffer(1, Math.floor(ctx.sampleRate * sec), ctx.sampleRate), d = b.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = (Math.random() < 0.0007 ? (Math.random() * 2 - 1) * 0.7 : 0) + (Math.random() * 2 - 1) * 0.004;
+    return b;
+  }
+  function makeVerb(sec) {
+    const len = Math.floor(ctx.sampleRate * sec), b = ctx.createBuffer(2, len, ctx.sampleRate);
+    for (let c = 0; c < 2; c++) { const d = b.getChannelData(c); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2.8); }
+    return b;
+  }
+  function filter(type, f, q) { const n = ctx.createBiquadFilter(); n.type = type; n.frequency.value = f; if (q) n.Q.value = q; return n; }
+
+  function init() {
+    if (ctx) { if (ctx.state === 'suspended') ctx.resume(); return; }
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    // iPhone and iPad: play through the speaker even when the silent switch is on
+    try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) { /* older Safari */ }
+    try { ctx = new AC(); } catch (e) { ctx = null; return; }
+    const comp = ctx.createDynamicsCompressor();
+    comp.threshold.value = -16; comp.ratio.value = 3; comp.attack.value = 0.01; comp.release.value = 0.2;
+    out = ctx.createGain(); out.gain.value = 0.9; out.connect(comp); comp.connect(ctx.destination);
+    musicBus = ctx.createGain(); musicLP = filter('lowpass', 16000, 0.5); musicBus.connect(musicLP); musicLP.connect(out);
+    sfxBus = ctx.createGain(); sfxBus.connect(out);
+    const verb = ctx.createConvolver(); verb.buffer = makeVerb(2.4);
+    verbSend = ctx.createGain(); verbSend.gain.value = 0.26; verbSend.connect(verb); verb.connect(musicBus);
+    keysIn = ctx.createGain();
+    keysLP = filter('lowpass', 2300);
+    const trem = ctx.createGain(); trem.gain.value = 0.86;
+    const lfo = ctx.createOscillator(); lfo.frequency.value = 4.2; const lfoG = ctx.createGain(); lfoG.gain.value = 0.12;
+    lfo.connect(lfoG); lfoG.connect(trem.gain); lfo.start();
+    keysIn.connect(keysLP); keysLP.connect(trem); trem.connect(musicBus); trem.connect(verbSend);
+    const wow = ctx.createOscillator(); wow.frequency.value = 0.55; wowGain = ctx.createGain(); wowGain.gain.value = 7; wow.connect(wowGain); wow.start();
+    bassIn = ctx.createGain(); const bLP = filter('lowpass', 520); bassIn.connect(bLP); bLP.connect(musicBus);
+    drumIn = ctx.createGain(); const dLP = filter('lowpass', 6500); drumIn.connect(dLP); dLP.connect(musicBus);
+    melIn = ctx.createGain();
+    const delay = ctx.createDelay(1.5), fb = ctx.createGain(), delLP = filter('lowpass', 2600);
+    delay.delayTime.value = 0.42; fb.gain.value = 0.3;
+    melIn.connect(musicBus); melIn.connect(delay); delay.connect(delLP); delLP.connect(fb); fb.connect(delay); delLP.connect(musicBus); melIn.connect(verbSend);
+    noise = makeNoise(1);
+    crackleGain = ctx.createGain(); crackleGain.gain.value = 0;
+    const cr = ctx.createBufferSource(); cr.buffer = makeCrackle(3.3); cr.loop = true;
+    const cHP = filter('highpass', 1200); cr.connect(cHP); cHP.connect(crackleGain); crackleGain.connect(musicBus); cr.start();
+    newGen();
+    setVolumes();
+    setInterval(tick, 25);
+  }
+  // Notes enter through a per-song "generation" of gains, so a song or remix change
+  // can fade out the notes still ringing from the one before.
+  function newGen() {
+    const old = G;
+    G = { keys: ctx.createGain(), bass: ctx.createGain(), drum: ctx.createGain(), mel: ctx.createGain() };
+    G.keys.connect(keysIn); G.bass.connect(bassIn); G.drum.connect(drumIn); G.mel.connect(melIn);
+    if (!old) return;
+    for (const k in old) old[k].gain.setTargetAtTime(0, ctx.currentTime, 0.06);
+    setTimeout(() => { for (const k in old) { try { old[k].disconnect(); } catch (e) { /* gone */ } } }, 4000);
+  }
+  function setVolumes() {
+    if (!ctx) return;
+    musicBus.gain.setTargetAtTime(save.settings.music * 0.6, ctx.currentTime, 0.05);
+    sfxBus.gain.setTargetAtTime(save.settings.sfx * 0.6, ctx.currentTime, 0.05);
+  }
+
+  // ---- instruments ----
+  function keyNote(t, m, v, dur) {
+    const f = mtof(m), g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(v, t + 0.012);
+    g.gain.exponentialRampToValueAtTime(v * 0.32, t + 0.7);
+    g.gain.setTargetAtTime(0.0001, t + Math.max(0.75, dur), 0.25);
+    const o = ctx.createOscillator(); o.type = 'sine'; o.frequency.value = f;
+    const o2 = ctx.createOscillator(); o2.type = 'sine'; o2.frequency.value = f * 2;
+    const g2 = ctx.createGain(); g2.gain.setValueAtTime(0.5, t); g2.gain.exponentialRampToValueAtTime(0.0001, t + 0.45);
+    wowGain.connect(o.detune);
+    o.connect(g); o2.connect(g2); g2.connect(g); g.connect(G.keys);
+    o.start(t); o2.start(t); o.stop(t + dur + 1.4); o2.stop(t + 0.5);
+    o.onended = () => { try { wowGain.disconnect(o.detune); } catch (e) { /* already gone */ } };
+  }
+  function bassNote(t, m, v, dur) {
+    const f = mtof(m), g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.02);
+    g.gain.setTargetAtTime(v * 0.6, t + 0.05, 0.2); g.gain.setTargetAtTime(0.0001, t + dur, 0.07);
+    const o = ctx.createOscillator(); o.type = 'triangle'; o.frequency.value = f;
+    const o2 = ctx.createOscillator(); o2.type = 'sine'; o2.frequency.value = f;
+    o.connect(g); o2.connect(g); g.connect(G.bass);
+    o.start(t); o2.start(t); o.stop(t + dur + 0.5); o2.stop(t + dur + 0.5);
+  }
+  function kick(t, v) {
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.frequency.setValueAtTime(115, t); o.frequency.exponentialRampToValueAtTime(46, t + 0.12);
+    g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.38);
+    o.connect(g); g.connect(G.drum); o.start(t); o.stop(t + 0.4);
+  }
+  function snare(t, v) {
+    const s = ctx.createBufferSource(); s.buffer = noise;
+    const bp = filter('bandpass', 1700, 0.8), g = ctx.createGain();
+    g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.2);
+    s.connect(bp); bp.connect(g); g.connect(G.drum); g.connect(verbSend);
+    s.start(t, Math.random() * 0.5, 0.25);
+    const o = ctx.createOscillator(); o.type = 'triangle';
+    o.frequency.setValueAtTime(190, t); o.frequency.exponentialRampToValueAtTime(140, t + 0.08);
+    const g2 = ctx.createGain(); g2.gain.setValueAtTime(v * 0.6, t); g2.gain.exponentialRampToValueAtTime(0.0001, t + 0.1);
+    o.connect(g2); g2.connect(G.drum); o.start(t); o.stop(t + 0.12);
+  }
+  function hat(t, v, open) {
+    const s = ctx.createBufferSource(); s.buffer = noise;
+    const hp = filter('highpass', 7000), g = ctx.createGain();
+    g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(0.0001, t + (open ? 0.22 : 0.045));
+    s.connect(hp); hp.connect(g); g.connect(G.drum);
+    s.start(t, Math.random() * 0.5, 0.3);
+  }
+  function pluck(t, m, v, dur, dest) {
+    const f = mtof(m), g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.006);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + Math.max(0.35, dur));
+    const o = ctx.createOscillator(); o.type = 'sine'; o.frequency.value = f;
+    const o2 = ctx.createOscillator(); o2.type = 'sine'; o2.frequency.value = f * 3;
+    const g2 = ctx.createGain(); g2.gain.value = 0.12;
+    o.connect(g); o2.connect(g2); g2.connect(g); g.connect(dest || G.mel);
+    o.start(t); o2.start(t); o.stop(t + dur + 0.45); o2.stop(t + dur + 0.45);
+  }
+  // melody voices for the remixes: a short wooden marimba, a ringing bell, a soft flute
+  function lead(t, m, v, dur, kind) {
+    if (kind !== 'marimba' && kind !== 'bell' && kind !== 'flute') { pluck(t, m, v, dur); return; }
+    const f = mtof(m), g = ctx.createGain(), o = ctx.createOscillator();
+    g.gain.setValueAtTime(0.0001, t);
+    let end;
+    if (kind === 'flute') {
+      o.type = 'triangle'; o.frequency.value = f;
+      const vib = ctx.createOscillator(), vg = ctx.createGain();
+      vib.frequency.value = 5; vg.gain.value = 7; vib.connect(vg); vg.connect(o.detune);
+      g.gain.exponentialRampToValueAtTime(v * 0.75, t + 0.06);
+      g.gain.setTargetAtTime(0.0001, t + Math.max(0.2, dur * 0.9), 0.08);
+      end = t + dur + 0.5; vib.start(t); vib.stop(end);
+    } else {
+      o.type = 'sine'; o.frequency.value = f;
+      const o2 = ctx.createOscillator(), g2 = ctx.createGain();
+      o2.type = 'sine'; o2.frequency.value = f * (kind === 'bell' ? 2.76 : 4);
+      g2.gain.value = kind === 'bell' ? 0.2 : 0.08;
+      o2.connect(g2); g2.connect(g);
+      const decay = kind === 'bell' ? 1.3 : 0.24;
+      g.gain.exponentialRampToValueAtTime(v * (kind === 'bell' ? 0.8 : 1.1), t + 0.004);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + decay);
+      end = t + decay + 0.05; o2.start(t); o2.stop(end);
+    }
+    o.connect(g); g.connect(G.mel); o.start(t); o.stop(end);
+  }
+
+  // ---- scheduler: a 16-bar arrangement that loops its last 12 bars ----
+  function buildPhrases(s) {
+    let seed = s.seed;
+    const r = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+    const slots = [0, 3, 6, 8, 10, 12, 14, 16, 19, 22, 24, 26, 28, 30];
+    const make = () => {
+      const notes = [];
+      let d = 2 + Math.floor(r() * 3);
+      for (const st of slots) {
+        if (r() < s.density) {
+          d = clamp(d + [-2, -1, -1, 0, 1, 1, 2][Math.floor(r() * 7)], 0, s.scale.length - 1);
+          notes.push({ st: st, m: s.scale[d], len: [2, 3, 4][Math.floor(r() * 3)], v: 0.7 + r() * 0.3 });
+        }
+      }
+      return notes;
+    };
+    return [make(), make()];
+  }
+  function sectionOf(bar) { return bar < 16 ? bar : 4 + ((bar - 4) % 12); }
+  function playStep(i, t, d16) {
+    const s = vari, bar = Math.floor(i / 16), st = i % 16, sec = sectionOf(bar);
+    const ci = bar % s.prog.length, chord = s.prog[ci], root = s.bass[ci];
+    const intro = sec < 2, light = sec < 4, brk = sec === 15;
+    if (s.arp) {
+      if (st === 0) chord.forEach((m, k) => keyNote(t + k * 0.012, m, 0.03, d16 * 16));
+      if (!intro && st % 2 === 0) {
+        const order = chord.concat(chord.slice(1, -1).reverse());
+        keyNote(t, order[(st / 2) % order.length] + 12, 0.036, d16 * 3);
+      }
+    } else for (const h of s.keys) {
+      if (h[0] !== st || (intro && st !== 0)) continue;
+      const notes = h[2] >= chord.length ? chord : chord.slice(chord.length - h[2]);
+      notes.forEach((m, k) => keyNote(t + k * 0.012, m, 0.05 * h[1] * (intro ? 0.85 : 1), d16 * h[3]));
+    }
+    if (!intro && !brk) for (const b of s.bassPat) if (b[0] === st) bassNote(t, root + (b[2] || 0), 0.2 * b[1], d16 * b[3]);
+    if (s.drums && !light) {
+      if (s.kick.indexOf(st) >= 0 && !(brk && st > 6)) kick(t, 0.5);
+      if (s.snare.indexOf(st) >= 0 && !brk) snare(t, 0.11);
+      if (s.ghost.indexOf(st) >= 0 && !brk) snare(t, 0.035);
+    }
+    if (!intro) for (const hh of s.hats) if (hh[0] === st) hat(t, hh[1] * 0.07 * (light ? 0.6 : 1), hh[2]);
+    if (sec >= 6 && sec <= 13 && phrases) {
+      const ph = phrases[((sec - 6) >> 1) % 2], pi = (sec % 2) * 16 + st;
+      for (const n of ph) if (n.st === pi) lead(t, n.m, 0.065 * n.v, d16 * n.len, s.lead);
+    }
+  }
+  function tick() {
+    if (!ctx || !song || ctx.state !== 'running') return;
+    const d16 = 60 / song.bpm / 4, ahead = ctx.currentTime + 0.16;
+    for (;;) {
+      const t = songStart + step * d16 + (step % 2 ? vari.swing * d16 : 0);
+      if (t > ahead) break;
+      if (t > ctx.currentTime - 0.04) playStep(step, t, d16);
+      step++;
+    }
+  }
+  function play(id, restart) {
+    if (!ctx) return;
+    if (songId === id && song && !restart) return;
+    songId = id; song = SONGS[id] || SONGS.menu;
+    vari = remixOf(song, 0); phrases = buildPhrases(vari);
+    newGen();
+    keysLP.frequency.setTargetAtTime(vari.cutoff, ctx.currentTime, 0.05);
+    songStart = ctx.currentTime + 0.08; step = 0;
+    crackleGain.gain.setTargetAtTime(0.05, ctx.currentTime, 0.3);
+  }
+  // Attempt n gets remix n, started straight into the full groove (bar 4) and lined
+  // up so the beat falls where it would if the player had run from the start.
+  function remix(n, phaseBeats, id) {
+    const base = song && songId === id ? song : SONGS[id];
+    const v = base ? remixOf(base, n) : null;
+    if (!ctx || !song || songId !== id || !v) return v ? v.name : '';
+    vari = v; phrases = buildPhrases(vari);
+    newGen();
+    keysLP.frequency.setTargetAtTime(vari.cutoff, ctx.currentTime, 0.05);
+    const startBeat = 16 + frac(phaseBeats || 0);
+    songStart = ctx.currentTime + 0.03 - startBeat * 60 / song.bpm;
+    step = Math.floor(startBeat * 4);
+    return vari.name;
+  }
+  function beatAt(perfMs) {
+    if (!ctx || !song) return null;
+    return (ctx.currentTime + (perfMs - performance.now()) / 1000 - songStart) * song.bpm / 60;
+  }
+  function muffle(on) { if (ctx) musicLP.frequency.setTargetAtTime(on ? 700 : 16000, ctx.currentTime, on ? 0.04 : 0.25); }
+  // slow motion: the music goes soft and underwater for the second it lasts
+  function slow(on) {
+    if (!ctx) return;
+    musicLP.frequency.setTargetAtTime(on ? 1400 : 16000, ctx.currentTime, on ? 0.05 : 0.2);
+    blip('sine', on ? 700 : 330, on ? 330 : 700, 0.28, 0.1);
+  }
+
+  // ---- effects ----
+  function blip(type, f0, f1, dur, v, delay) {
+    if (!ctx) return;
+    const t = ctx.currentTime + (delay || 0), o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = type; o.frequency.setValueAtTime(f0, t);
+    if (f1 !== f0) o.frequency.exponentialRampToValueAtTime(f1, t + dur);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.012); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(sfxBus); o.start(t); o.stop(t + dur + 0.05);
+  }
+  function bell(m, v, delay) { if (ctx) pluck(ctx.currentTime + (delay || 0), m, v, 0.5, sfxBus); }
+  function whoosh() {
+    if (!ctx) return;
+    const t = ctx.currentTime, s = ctx.createBufferSource(); s.buffer = noise;
+    const bp = filter('bandpass', 500, 1.2), g = ctx.createGain();
+    bp.frequency.setValueAtTime(500, t); bp.frequency.exponentialRampToValueAtTime(2600, t + 0.3);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.12, t + 0.05); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.34);
+    s.connect(bp); bp.connect(g); g.connect(sfxBus); s.start(t, 0, 0.4);
+  }
+  const sfx = {
+    orb() { blip('sine', 520, 900, 0.14, 0.18); },
+    pad() { blip('triangle', 260, 760, 0.18, 0.16); },
+    portal: whoosh,
+    star() { [84, 88, 91].forEach((m, i) => bell(m, 0.15, i * 0.07)); },
+    right() { bell(76, 0.2, 0); bell(83, 0.2, 0.09); bell(88, 0.14, 0.18); },
+    wrong() { blip('sine', 330, 170, 0.32, 0.2, 0.05); },
+    die() { blip('sine', 240, 90, 0.22, 0.22); },
+    win() { [72, 76, 79, 84, 88, 91].forEach((m, i) => bell(m, 0.15, i * 0.09)); },
+    click() { blip('sine', 880, 880, 0.04, 0.05); },
+    check() { blip('sine', 660, 990, 0.09, 0.07); }
+  };
+  return { init, play, remix, beatAt, muffle, slow, setVolumes, sfx, bpm: () => (song ? song.bpm : 80), ready: () => !!ctx };
+})();
+
+/* ================= the three games =================
+   A round is ROUND sequences or ROUND_SEC seconds of play (the sequence under way is finished first).
+   Span: 2 right in a row adds one, 2 wrong in a row takes one off (never under 2). The first round of a
+   game starts at 3 (2 backwards); later rounds start two below the best, so a round always reaches new
+   ground and the climb from 3 never eats the whole round.
+   Stars by the longest span recalled right in the round (backwards: one less for each star), from
+   usual spans for ages 8 to 12: forward digit span is about 5 at 8 and 6 at 12; the Corsi blocks span
+   (the grid) is about 4.5 to 5.5; words in order, picked from look-alike pictures, about 4 to 5.
+     Numbers 3 stars at 6, 2 stars at 5 · Words 3 at 5, 2 at 4 · Grid 3 at 5, 2 at 4 · otherwise 1 star.
+   Pace: about 1 s per item (a picture word 1.4 s, as it is read aloud), a little faster at 5 and at 7,
+   x1.1 on Starter and x0.9 on Genius; each item is on for 75% of its time. */
+const ROUND = 10, ROUND_SEC = 120, MIN_SPAN = 2, READY_SEC = 0.8, WAIT_SEC = 0.5, ON = 0.75;
+const MODES = {
+  number: { name: 'Numbers', unit: 'numbers', max: 9, pace: 1.0, t3: 6, t2: 5 },
+  word: { name: 'Words', unit: 'words', max: 7, pace: 1.4, t3: 5, t2: 4 },
+  grid: { name: 'Grid', unit: 'squares', max: 9, pace: 1.0, t3: 5, t2: 4 }
+};
+const MODE_IDS = ['number', 'word', 'grid'];
+const LEVELS = ['starter', 'explorer', 'genius'];
+const LEVEL_NAME = { starter: 'Starter', explorer: 'Explorer', genius: 'Genius' };
+const LEVEL_PACE = { starter: 1.1, explorer: 1, genius: 0.9 };
+// the grid grows from 3 x 3 to 4 x 4 at this span
+const GRID4_AT = { starter: 6, explorer: 5, genius: 4 };
+const level = () => (LEVELS.indexOf(save.settings.mathLevel) >= 0 ? save.settings.mathLevel : 'explorer');
+const starsFor = (mode, back, longest) => { const m = MODES[mode], d = back ? 1 : 0; return longest >= m.t3 - d ? 3 : longest >= m.t2 - d ? 2 : 1; };
+const period = (mode, span, lv) => MODES[mode].pace * (span >= 7 ? 0.8 : span >= 5 ? 0.9 : 1) * LEVEL_PACE[lv];
+
+/* ================= picture words =================
+   Families of look-alikes: the shown words come from different families, and the cards to pick from add
+   their brothers and sisters (cat with tiger, apple with pear). Starter = simple nouns, Explorer = longer
+   words, Genius = harder vocabulary. Every emoji is from Emoji 11 (2018) or older, so an iPad draws it.
+   British words: biscuit, aeroplane, ladybird, doughnut, prawn. '+' marks an emoji that needs U+FE0F. */
+const VS = '️';
+const fam = (s) => s.split(',').map((x) => { const p = x.trim().split(' '); return { w: p[0], e: p[1].replace('+', VS) }; });
+const WORDS = {
+  starter: ['cat 🐱, dog 🐶, mouse 🐭, rabbit 🐰', 'pig 🐷, cow 🐮, sheep 🐑, horse 🐴', 'duck 🦆, hen 🐔, owl 🦉, bird 🐦',
+    'fish 🐟, crab 🦀, whale 🐳, shark 🦈', 'apple 🍎, pear 🍐, banana 🍌, grapes 🍇', 'sun ☀+, moon 🌙, star ⭐, cloud ☁+',
+    'ball ⚽, drum 🥁, teddy 🧸, gift 🎁', 'car 🚗, bus 🚌, train 🚆, boat ⛵', 'cake 🍰, egg 🥚, bread 🍞, cheese 🧀',
+    'hat 🎩, sock 🧦, shoe 👟, coat 🧥', 'key 🔑, bell 🔔, book 📖, clock ⏰'].map(fam),
+  explorer: ['tiger 🐯, lion 🦁, leopard 🐆, zebra 🦓', 'dolphin 🐬, octopus 🐙, turtle 🐢, penguin 🐧', 'carrot 🥕, potato 🥔, pumpkin 🎃, broccoli 🥦',
+    'guitar 🎸, trumpet 🎺, violin 🎻, piano 🎹', 'rainbow 🌈, snowman ⛄, lightning ⚡, tornado 🌪+', 'pencil ✏+, scissors ✂+, ruler 📏, crayon 🖍+',
+    'castle 🏰, house 🏠, school 🏫, tent ⛺', 'trophy 🏆, medal 🏅, tennis 🎾, basketball 🏀', 'lollipop 🍭, cupcake 🧁, biscuit 🍪, doughnut 🍩',
+    'butterfly 🦋, spider 🕷+, snail 🐌, ladybird 🐞', 'rocket 🚀, aeroplane ✈+, helicopter 🚁, bicycle 🚲'].map(fam),
+  genius: ['telescope 🔭, microscope 🔬, magnet 🧲, compass 🧭', 'thermometer 🌡+, hourglass ⌛, abacus 🧮, stopwatch ⏱+',
+    'volcano 🌋, desert 🏜+, island 🏝+, mountain 🏔+', 'comet ☄+, galaxy 🌌, satellite 🛰+, globe 🌍', 'kangaroo 🦘, hedgehog 🦔, raccoon 🦝, badger 🦡',
+    'peacock 🦚, parrot 🦜, eagle 🦅, swan 🦢', 'lobster 🦞, squid 🦑, prawn 🦐, pufferfish 🐡', 'saxophone 🎷, microphone 🎤, headphones 🎧, radio 📻',
+    'stadium 🏟+, fountain ⛲, bridge 🌉, factory 🏭', 'dinosaur 🦕, dragon 🐉, unicorn 🦄, crocodile 🐊', 'anchor ⚓, lantern 🏮, candle 🕯+, umbrella ☂+'].map(fam)
+};
+const wordInfo = (w) => { for (const lv of LEVELS) for (const f of WORDS[lv]) { const x = f.find((y) => y.w === w); if (x) return x; } return null; };
+
+/* ================= records =================
+   memory-lane.v1: mode and back (the home choices), rounds (finished, all games), seqs (sequences
+   answered), and per game key ('number', 'word', 'grid', or with '-back' for Backwards):
+   best (the longest span recalled right), stars (best stars) and plays (rounds finished). */
+const rec = loadRecords('memory-lane.v1', { mode: 'number', back: false, rounds: 0, seqs: 0, best: {}, stars: {}, plays: {} });
+if (MODE_IDS.indexOf(rec.mode) < 0) rec.mode = 'number';
+rec.back = !!rec.back;
+['best', 'stars', 'plays'].forEach((k) => { if (!rec[k] || typeof rec[k] !== 'object') rec[k] = {}; });
+const keyOf = (mode, back) => mode + (back ? '-back' : '');
+const startSpan = (mode, back) => { const base = back ? 2 : 3, best = rec.best[keyOf(mode, back)] || 0; return clamp(Math.max(base, best - 2), base, MODES[mode].max - 2); };
+
+/* ================= sequences ================= */
+// digits 0-9, none twice, no three in a row that count up or down (4 5 6)
+function digitSeq(n) {
+  let s = null;
+  for (let t = 0; t < 300; t++) {
+    s = shuffle([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]).slice(0, n);
+    let run = false;
+    for (let k = 2; k < n; k++) { const a = s[k - 2], b = s[k - 1], c = s[k]; if ((b - a === 1 && c - b === 1) || (a - b === 1 && b - c === 1)) run = true; }
+    if (!run) break;
+  }
+  return s.map(String);
+}
+// one word from each of n families, then cards: the shown words, their look-alikes, then any others
+function wordSeq(n, lv) {
+  const fams = shuffle(WORDS[lv].slice()), shown = fams.slice(0, n).map((f) => pick(f));
+  const total = clamp(n * 2, 6, 12), cards = shown.slice(), used = new Set(shown.map((x) => x.w));
+  const sibs = shuffle(fams.slice(0, n).map((f) => shuffle(f.filter((x) => !used.has(x.w)))));
+  for (let round = 0; cards.length < total && round < 3; round++) {
+    for (const s of sibs) { if (cards.length >= total) break; const x = s[round]; if (x && !used.has(x.w)) { cards.push(x); used.add(x.w); } }
+  }
+  for (const f of fams.slice(n)) { if (cards.length >= total) break; const x = pick(f); if (!used.has(x.w)) { cards.push(x); used.add(x.w); } }
+  return { seq: shown.map((x) => x.w), cards: shuffle(cards) };
+}
+// n different squares of the grid
+const gridSeq = (n, N) => shuffle(Array.from({ length: N * N }, (_, i) => i)).slice(0, n).map(String);
+
+/* ================= game state ================= */
+const game = {
+  state: 'menu', prev: '', mode: rec.mode, back: rec.back, lv: 'explorer', span: 3, seq: [], ans: [], cards: [], gridN: 3,
+  t: 0, speed: 1, time: 0, phaseEnd: 0, showStart: 0, shown: -1, lit: false, per: 1,
+  done: 0, right: 0, longest: 0, runR: 0, runW: 0, change: 0, bestBefore: 0, attempt: 0, log: [], result: null, replay: false
+};
+const PLAYING = new Set(['ready', 'show', 'wait', 'answer', 'feedback']);
+const calm = () => !!save.settings.calm || reduceMotion;
+const expected = () => (game.back ? game.seq.slice().reverse() : game.seq.slice());
+const playEl = $('#play'), showEl = $('#show'), slotsEl = $('#slots'), padEl = $('#pad'), phaseEl = $('#phase');
+
+/* ================= read aloud ================= */
+let muffled = false, muffleUntil = 0;
+function speak(text, rate) { if (Speech.say(text, rate)) { muffled = true; muffleUntil = performance.now() + 700 + text.length * 70; } }
+
+/* ================= drawing ================= */
+function setPhase(kind, icon, text) {
+  phaseEl.className = 'phase ' + kind;
+  phaseEl.innerHTML = '<i aria-hidden="true">' + icon + '</i><span></span>';
+  phaseEl.lastChild.textContent = text;
+}
+function slotHTML(v) {
+  if (game.mode === 'number') return v;
+  if (game.mode === 'word') { const x = wordInfo(v); return '<i>' + (x ? x.e : '') + '</i>'; }
+  return '<u></u>';
+}
+// the answer boxes: one per item. kind: 'seen' (on show, up to k), 'answer' (the taps so far), 'good', 'fix' (the right order)
+function renderSlots(kind, k) {
+  const n = game.seq.length, want = expected();
+  let html = '';
+  for (let i = 0; i < n; i++) {
+    let cls = 'slot', inner = '';
+    if (kind === 'seen') { if (i <= k) cls += ' seen'; }
+    else if (kind === 'answer') { if (i < game.ans.length) inner = slotHTML(game.ans[i]); else if (i === game.ans.length) cls += ' now'; }
+    else if (kind === 'good') { cls += ' good'; inner = slotHTML(game.ans[i]); }
+    else if (kind === 'fix') { cls += game.ans[i] === want[i] ? ' good' : ' fix'; inner = slotHTML(want[i]); }
+    html += '<div class="' + cls + '">' + inner + '</div>';
+  }
+  slotsEl.innerHTML = html;
+  $('#undoBtn').disabled = !(game.state === 'answer' && game.ans.length);
+}
+function buildPad() {
+  const m = game.mode;
+  let html = '';
+  if (m === 'number') html = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((d) => '<button type="button" class="key' + (d ? '' : ' zero') + '" data-v="' + d + '">' + d + '</button>').join('');
+  else if (m === 'word') html = game.cards.map((x) => '<button type="button" class="wcard" data-v="' + x.w + '" aria-label="' + x.w + '"><i aria-hidden="true">' + x.e + '</i><b>' + x.w + '</b></button>').join('');
+  else html = Array.from({ length: game.gridN * game.gridN }, (_, i) => '<button type="button" class="cell" data-v="' + i + '" aria-label="square ' + (i + 1) + '"></button>').join('');
+  padEl.innerHTML = html;
+  padEl.className = 'pad ' + (m === 'number' ? 'keys' : m === 'word' ? 'cards' : 'grid') + ' off' + (m === 'word' ? ' wait' : '');
+  playEl.classList.toggle('gridmode', m === 'grid');
+  showEl.hidden = m === 'grid';
+}
+const padItem = (v) => padEl.querySelector('[data-v="' + v + '"]');
+function showItem(i) {
+  const v = game.seq[i];
+  if (game.mode === 'grid') { $$('.cell.lit').forEach((c) => c.classList.remove('lit')); padItem(v).classList.add('lit'); return; }
+  if (game.mode === 'number') showEl.innerHTML = '<span class="digit' + (calm() ? '' : ' in') + '">' + v + '</span>';
+  else { const x = wordInfo(v); showEl.innerHTML = '<span class="pw' + (calm() ? '' : ' in') + '"><i role="img" aria-label="' + x.w + '">' + x.e + '</i><b>' + x.w + '</b></span>'; }
+}
+function hideItem() {
+  if (game.mode === 'grid') $$('.cell.lit').forEach((c) => c.classList.remove('lit'));
+  else showEl.innerHTML = '';
+}
+function updateHud() {
+  $('#spanChip').textContent = (game.back ? '↩ ' : '') + 'Span ' + game.span;
+  $('#seqChip').textContent = Math.min(ROUND, game.done + 1) + ' / ' + ROUND;
+  shownSec = -1; updateClock();
+}
+let shownSec = -1;
+function updateClock() { const s = Math.floor(game.time); if (s !== shownSec) { shownSec = s; $('#timeChip').textContent = fmtTime(game.time); } }
+
+/* Sizes so the phase, the show card, the answer boxes and the pad fit with no scrolling: the pad's
+   buttons as big as the room allows (never under 56 px), the show card a third of what is left. */
+function layout() {
+  if (playEl.hidden) return;
+  const vh = innerHeight, st = playEl.style;
+  const hb = $('#hud').hidden ? 0 : $('.hud-top').getBoundingClientRect().bottom;
+  const top = Math.round(hb + 8);
+  st.setProperty('--top', top + 'px');
+  const cs = getComputedStyle(playEl);
+  const W = Math.floor(playEl.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight));
+  const H = Math.floor(vh - top - parseFloat(cs.paddingBottom));
+  const gap = clamp(Math.round(vh * 0.018), 8, 16);
+  st.setProperty('--gap', gap + 'px');
+  const n = Math.max(1, game.seq.length || game.span), sg = n > 7 ? 4 : 6;
+  st.setProperty('--bs', clamp(Math.floor((Math.min(W, 640) - 56 - 12 - sg * (n - 1)) / n), 24, 52) + 'px');
+  st.setProperty('--sg', sg + 'px');
+  let rest = H - 38 - 56 - gap * (game.mode === 'grid' ? 2 : 3);
+  if (game.mode === 'grid') {
+    const N = game.gridN, g = N === 4 ? 10 : 12, side = Math.max(200, Math.min(W, rest, 540));
+    st.setProperty('--gn', N); st.setProperty('--pg', g + 'px'); st.setProperty('--cs', Math.floor((side - g * (N - 1)) / N) + 'px');
+    document.documentElement.style.setProperty('--toast-top', Math.round(top + 46) + 'px');
+    return;
+  }
+  const showH = game.mode === 'number' ? clamp(Math.round(rest * 0.3), 84, 180) : clamp(Math.round(rest * 0.27), 104, 190);
+  const showW = Math.min(W, 520, game.mode === 'number' ? Math.round(showH * 1.5) : Math.max(Math.round(showH * 2), 280));
+  st.setProperty('--show-h', showH + 'px'); st.setProperty('--show-w', showW + 'px');
+  rest -= showH;
+  if (game.mode === 'number') {
+    const g = clamp(Math.round(vh * 0.014), 8, 14);
+    const kh = Math.floor(clamp((rest - 3 * g) / 4, 56, 96)), kw = Math.floor(Math.min((Math.min(W, 480) - 2 * g) / 3, kh * 1.45));
+    st.setProperty('--pg', g + 'px'); st.setProperty('--kh', kh + 'px'); st.setProperty('--kw', kw + 'px');
+  } else {
+    // the cards: the column count that gives the biggest card (a little wider than tall)
+    const C = game.cards.length || 6, g = 10, maxW = Math.min(W, 900);
+    let best = { s: 0, c: 3, score: -1 };
+    for (let c = 2; c <= Math.min(6, C); c++) {
+      // a part-filled last row counts a little against (it sits in the middle)
+      const r = Math.ceil(C / c), s = Math.min((maxW - (c - 1) * g) / c / 1.12, (rest - (r - 1) * g) / r, 128), score = s - (C % c ? 6 : 0);
+      if (score > best.score + 0.5) best = { s: s, c: c, score: score };
+    }
+    const ch = Math.floor(best.s), cw = Math.floor(Math.min((maxW - (best.c - 1) * g) / best.c, ch * 1.25));
+    st.setProperty('--pg', g + 'px'); st.setProperty('--cols', best.c); st.setProperty('--ch', ch + 'px'); st.setProperty('--cw', cw + 'px');
+    // one word size for every card, as big as the longest word allows
+    const longW = Math.max.apply(null, game.cards.map((x) => x.w.length).concat([4]));
+    st.setProperty('--cf', Math.floor(clamp(Math.min(ch * 0.2, (cw - 14) / (longW * 0.58)), 12, 24)) + 'px');
+    const longS = Math.max.apply(null, game.seq.map((w) => w.length).concat([4]));
+    st.setProperty('--show-word', Math.floor(clamp(Math.min(showH * 0.22, (showW - 40) / (longS * 0.58)), 16, 44)) + 'px');
+  }
+  document.documentElement.style.setProperty('--toast-top', Math.round(top + 46) + 'px');
+  if (game.mode === 'word') requestAnimationFrame(fitWords);
+}
+// a word wider than its card (or the show card) shrinks until it fits
+function fitWords() {
+  let f = parseFloat(getComputedStyle(playEl).getPropertyValue('--cf')) || 18;
+  const bs = $$('.wcard b');
+  for (let k = 0; k < 12 && bs.some((b) => b.scrollWidth > b.clientWidth + 0.5); k++) { f -= 1; playEl.style.setProperty('--cf', f + 'px'); }
+}
+
+/* ================= a round ================= */
+function startRound(opts) {
+  opts = opts || {};
+  Sound.init();
+  game.mode = rec.mode; game.back = rec.back; game.lv = level();
+  game.span = opts.span || startSpan(game.mode, game.back);
+  game.done = 0; game.right = 0; game.longest = 0; game.runR = 0; game.runW = 0; game.change = 0; game.time = 0; game.t = 0; game.log = []; game.result = null;
+  game.bestBefore = rec.best[keyOf(game.mode, game.back)] || 0;
+  game.attempt++;
+  Sound.play('memory');
+  showScreen(null);
+  $('#hud').hidden = false; playEl.hidden = false; playEl.classList.remove('away');
+  document.body.classList.toggle('calm', calm());
+  if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+  // spoken from the tap, so iPad lets the voice speak later in the round too
+  if (game.mode !== 'grid') speak(game.back ? 'Backwards.' : 'Watch.', 0.95);
+  newSequence(true);
+  if (game.attempt > 1) { const name = Sound.remix(game.attempt - 1, 0, 'memory'); if (name) toast('♪ ' + name, 'music', 1300); }
+}
+// first: the round's first sequence (a longer "Watch", while the music toast shows)
+function newSequence(first) {
+  const m = game.mode, n = game.span;
+  game.cards = [];
+  if (m === 'number') game.seq = digitSeq(n);
+  else if (m === 'word') { const w = wordSeq(n, game.lv); game.seq = w.seq; game.cards = w.cards; }
+  else { game.gridN = n >= GRID4_AT[game.lv] ? 4 : 3; game.seq = gridSeq(n, game.gridN); }
+  game.ans = []; game.per = period(m, n, game.lv); game.replay = false;
+  buildPad();
+  layout();
+  // a toast about the span is gone before the first item shows
+  readySequence(game.change ? 1.8 : first ? 1.5 : READY_SEC);
+  if (game.change > 0) toast('Now ' + n + ' in a row! 🌟', 'good', 1500);
+  else if (game.change < 0) toast("Let's try " + n + ' for a bit 🙂', '', 1500);
+  game.change = 0;
+  updateHud();
+}
+// a short "Watch" before the first item (also after a pause, when the sequence is shown again)
+function readySequence(sec) {
+  game.state = 'ready'; game.phaseEnd = game.t + (sec || READY_SEC); game.shown = -1; game.lit = false;
+  setPhase('watch', '👀', game.back ? 'Watch, then go backwards' : 'Watch');
+  showEl.innerHTML = '';
+  padEl.classList.add('off');
+  if (game.mode === 'word') padEl.classList.add('wait');
+  $$('.cell').forEach((c) => { c.className = 'cell'; c.textContent = ''; });
+  $$('.wcard').forEach((c) => { c.classList.remove('picked', 'good'); const b = c.querySelector('.n'); if (b) b.remove(); });
+  game.ans = [];
+  renderSlots('seen', -1);
+  Sound.muffle(true);
+  announce('Watch. ' + game.seq.length + ' ' + MODES[game.mode].unit + '.');
+}
+function stepShow() {
+  const e = game.t - game.showStart, i = Math.floor(e / game.per), lit = e - i * game.per < game.per * ON;
+  if (i >= game.seq.length) { hideItem(); game.state = 'wait'; game.phaseEnd = game.t + WAIT_SEC; return; }
+  if (i !== game.shown) {
+    game.shown = i; game.lit = true; showItem(i); renderSlots('seen', i);
+    const v = game.seq[i];
+    const said = game.mode === 'number' ? speakItem(v, 1.0) : game.mode === 'word' ? speakItem(v, 0.95) : false;
+    if (!said) Sound.sfx.check();
+  } else if (game.lit && !lit) { game.lit = false; hideItem(); }
+}
+function speakItem(v, rate) { if (!save.settings.speak || !Speech.ok) return false; speak(v, rate); return true; }
+function beginAnswer() {
+  game.state = 'answer'; game.ans = [];
+  setPhase('go', game.back ? '↩️' : '👆', game.back ? 'Your turn: last one first' : 'Your turn');
+  if (game.mode !== 'grid') showEl.innerHTML = '<span class="q">?</span>';
+  padEl.classList.remove('off', 'wait');
+  renderSlots('answer');
+  Sound.muffle(false);
+  announce('Your turn. Tap ' + game.seq.length + ' ' + MODES[game.mode].unit + (game.back ? ', last one first.' : ' in order.'));
+}
+function tapEl(el) {
+  if (game.state !== 'answer' || !el || !el.dataset || el.dataset.v === undefined) return;
+  const v = el.dataset.v;
+  if (game.mode !== 'number' && el.classList.contains('picked')) return;
+  game.ans.push(v);
+  Sound.sfx.click();
+  if (game.mode === 'number') { el.classList.add('hit'); clearTimeout(el._hit); el._hit = setTimeout(() => el.classList.remove('hit'), 160); }
+  else { el.classList.add('picked'); const b = document.createElement('span'); b.className = 'n'; b.textContent = game.ans.length; el.appendChild(b); }
+  renderSlots('answer');
+  if (game.ans.length >= game.seq.length) check();
+}
+function undo() {
+  if (game.state !== 'answer' || !game.ans.length) return;
+  const v = game.ans.pop();
+  if (game.mode !== 'number') { const el = padItem(v); if (el) { el.classList.remove('picked'); const b = el.querySelector('.n'); if (b) b.remove(); } }
+  Sound.sfx.click();
+  renderSlots('answer');
+}
+const CHEERS = ['Spot on!', 'Brilliant!', 'Super memory!', 'Well remembered!', 'Perfect!'];
+const KIND = ['Nearly! Here is the order', 'Good try! Here is the order', 'So close! Here is the order'];
+function check() {
+  const want = expected(), ok = want.every((v, k) => game.ans[k] === v), n = game.seq.length, key = keyOf(game.mode, game.back);
+  game.state = 'feedback'; game.done++;
+  game.log.push({ span: n, back: game.back, ok: ok, seq: game.seq.slice(), ans: game.ans.slice() });
+  padEl.classList.add('off');
+  $('#undoBtn').disabled = true;
+  rec.seqs = (rec.seqs || 0) + 1;
+  if (ok) {
+    game.right++; game.runR++; game.runW = 0;
+    const newBest = n > (rec.best[key] || 0);
+    game.longest = Math.max(game.longest, n);
+    if (newBest) rec.best[key] = n;
+    setPhase('good', '⭐', pick(CHEERS));
+    renderSlots('good');
+    if (game.mode === 'grid') want.forEach((v) => { const c = padItem(v); c.className = 'cell good'; });
+    if (game.mode === 'word') want.forEach((v) => { const c = padItem(v); c.classList.remove('picked'); c.classList.add('good'); });
+    Sound.sfx.right(); if (newBest && game.bestBefore) Sound.sfx.star();
+    game.phaseEnd = game.t + 1.1;
+    announce(pick(CHEERS));
+  } else {
+    // gentle: no buzz, the boxes show the right order (the ones that were right stay green)
+    game.runW++; game.runR = 0;
+    setPhase('near', '💭', pick(KIND));
+    renderSlots('fix');
+    if (game.mode === 'grid') {
+      $$('.cell').forEach((c) => { c.className = 'cell'; c.textContent = ''; });
+      want.forEach((v, k) => { const c = padItem(v); c.className = 'cell fix'; c.textContent = k + 1; });
+    }
+    if (game.mode === 'word') {
+      $$('.wcard').forEach((c) => { c.classList.remove('picked'); const b = c.querySelector('.n'); if (b) b.remove(); });
+      want.forEach((v, k) => { const c = padItem(v); c.classList.add('good'); const b = document.createElement('span'); b.className = 'n'; b.textContent = k + 1; c.appendChild(b); });
+    }
+    if (game.mode === 'number') {
+      const f = Math.floor(Math.min(showEl.clientHeight * 0.5, (showEl.clientWidth - 28) / (n * 0.64)));
+      showEl.innerHTML = '<span class="digit fixrow" style="font-size:' + f + 'px">' + want.join('') + '</span>';
+    }
+    game.phaseEnd = game.t + 2.3;
+    announce('Nearly. It was ' + want.map((v) => (game.mode === 'grid' ? 'square ' + (+v + 1) : v)).join(', ') + '.');
+  }
+  writeSave();
+  // the next span: 2 right in a row adds one, 2 wrong in a row takes one off
+  if (game.runR >= 2) { game.runR = 0; if (game.span < MODES[game.mode].max) { game.span++; game.change = 1; } }
+  else if (game.runW >= 2) { game.runW = 0; if (game.span > MIN_SPAN) { game.span--; game.change = -1; } }
+  updateHud();
+}
+function afterFeedback() {
+  if (game.done >= ROUND || game.time >= ROUND_SEC) finishRound(); else newSequence();
+}
+function finishRound() {
+  const key = keyOf(game.mode, game.back), m = MODES[game.mode], stars = starsFor(game.mode, game.back, game.longest);
+  const better = game.longest > game.bestBefore, first = !rec.plays[key];
+  rec.rounds = (rec.rounds || 0) + 1; rec.plays[key] = (rec.plays[key] || 0) + 1; rec.stars[key] = Math.max(rec.stars[key] || 0, stars);
+  writeSave();
+  game.state = 'done';
+  game.result = { mode: game.mode, back: game.back, level: game.lv, longest: game.longest, stars: stars, right: game.right, seqs: game.done, time: game.time, better: better && !first, first: first };
+  Speech.stop(); Sound.muffle(false);
+  $('#doneTitle').textContent = stars === 3 ? 'Memory star!' : stars === 2 ? 'Great remembering!' : 'Good practice!';
+  $('#doneMode').textContent = m.name + (game.back ? ' · Backwards' : '') + ' · ' + LEVEL_NAME[game.lv];
+  $('#doneStars').innerHTML = starRow(stars);
+  $('#doneStars').setAttribute('aria-label', stars + ' of 3 stars');
+  $('#doneNote').textContent = game.longest ? 'Longest: ' + game.longest + ' ' + m.unit + ' in a row' + (game.result.better ? '. A new best!' : '.') : 'Every round makes your memory stronger.';
+  $('#doneStats').innerHTML = stat('Longest', game.longest || '–') + stat('Right', game.right + ' / ' + game.done) + stat('Time', fmtTime(game.time));
+  const d = game.back ? 1 : 0;
+  $('#doneNext').textContent = stars >= 3 ? 'Best ever: ' + (rec.best[key] || 0) + '. Can you beat it?' : (stars === 2 ? '3 stars: ' + (m.t3 - d) : '2 stars: ' + (m.t2 - d)) + ' ' + m.unit + ' in the right order';
+  $('#hud').hidden = true; playEl.hidden = true;
+  Sound.sfx.win();
+  showScreen('done');
+  arcadeLinks();
+  for (let k = 0; k < stars; k++) setTimeout(() => Sound.sfx.star(), 250 + k * 200);
+  announce('Round done. Longest ' + game.longest + '. ' + stars + ' stars.');
+}
+
+/* ================= menus ================= */
+const ICONS = { number: '<i class="ic num" aria-hidden="true">382</i>', word: '<i class="ic pic" aria-hidden="true">🐱</i>',
+  grid: '<i class="ic mini" aria-hidden="true">' + [0, 1, 0, 0, 0, 1, 1, 0, 0].map((on) => '<u' + (on ? ' class="on"' : '') + '></u>').join('') + '</i>' };
+$('#modes').innerHTML = MODE_IDS.map((id) => '<label class="mode" data-mode="' + id + '"><input type="radio" name="mode" value="' + id + '"><span>' + ICONS[id] +
+  '<b>' + MODES[id].name + '</b><small></small><span class="ms" aria-hidden="true"></span></span></label>').join('');
+function modeNote() {
+  const m = rec.mode, back = rec.back, lv = level(), order = back ? 'backwards, last one first' : 'in the same order';
+  const s = startSpan(m, back), best = rec.best[keyOf(m, back)] || 0;
+  const what = m === 'number' ? 'Numbers appear one at a time' + (save.settings.speak && Speech.ok ? ' and are read aloud' : '') + '. Tap them back ' + order + '.'
+    : m === 'word' ? 'Picture words appear (' + WORDS[lv].slice(0, 3).map((f) => f[0].w).join(', ') + '…). Find them ' + order + '.'
+    : 'Squares light up one by one. Tap them ' + order + '.';
+  return what + ' Starts at ' + s + (best ? ' · best ' + best : '') + '.';
+}
+function renderHome() {
+  MODE_IDS.forEach((id) => {
+    const lab = document.querySelector('.mode[data-mode="' + id + '"]'), key = keyOf(id, rec.back), best = rec.best[key] || 0, st = rec.stars[key] || 0;
+    lab.querySelector('input').checked = id === rec.mode;
+    lab.querySelector('small').textContent = best ? 'Best ' + best : 'New';
+    lab.querySelector('.ms').innerHTML = starRow(st);
+    lab.querySelector('input').setAttribute('aria-label', MODES[id].name + (best ? ', best ' + best + ', ' + st + ' of 3 stars' : ''));
+  });
+  const lv = document.querySelector('input[name="math"][value="' + level() + '"]');
+  if (lv) lv.checked = true;
+  $('#modeNote').textContent = modeNote();
+  const bb = $('#backBtn');
+  bb.lastChild.textContent = 'Backwards: ' + (rec.back ? 'on' : 'off');
+  bb.setAttribute('aria-pressed', String(rec.back));
+  const sp = $('#speakBtn');
+  sp.textContent = !Speech.ok ? 'Read aloud: not here' : save.settings.speak ? 'Read aloud: on' : 'Read aloud: off';
+  sp.disabled = !Speech.ok; sp.setAttribute('aria-pressed', String(!!save.settings.speak));
+  $('#soundBtn').textContent = save.settings.music > 0 ? 'Music: on' : 'Music: off';
+  arcadeLinks();
+}
+function goHome() {
+  game.state = 'menu'; Speech.stop();
+  $('#hud').hidden = true; playEl.hidden = true;
+  Sound.muffle(false); Sound.play('menu');
+  renderHome();
+  showScreen('home', false);
+}
+function pause() {
+  if (!PLAYING.has(game.state)) return;
+  game.prev = game.state; game.state = 'pause';
+  Speech.stop(); Sound.muffle(true);
+  playEl.classList.add('away');   // no peeking while paused
+  $('#pauseInfo').textContent = MODES[game.mode].name + (game.back ? ' backwards' : '') + ' · span ' + game.span + ' · ' + Math.min(ROUND, game.done + 1) + ' of ' + ROUND + ' · ' + fmtTime(game.time);
+  showScreen('pause');
+}
+function resume() {
+  if (game.state !== 'pause') return;
+  showScreen(null); playEl.classList.remove('away');
+  lastFrame = performance.now();
+  // paused while the items were on show: they are shown again from the first
+  if (game.prev === 'ready' || game.prev === 'show' || game.prev === 'wait') { game.replay = true; readySequence(1.2); }
+  else { game.state = game.prev; Sound.muffle(false); }
+}
+
+$('#playBtn').addEventListener('click', () => startRound());
+$('#againBtn').addEventListener('click', () => startRound());
+$('#resumeBtn').addEventListener('click', resume);
+$('#restartBtn').addEventListener('click', () => startRound());
+$('#homeBtn').addEventListener('click', goHome);
+$('#doneHomeBtn').addEventListener('click', goHome);
+$('#pauseBtn').addEventListener('click', (e) => { e.stopPropagation(); pause(); });
+$('#undoBtn').addEventListener('click', undo);
+$('#backBtn').addEventListener('click', () => { rec.back = !rec.back; writeRecords(); Sound.sfx.click(); renderHome(); });
+$('#speakBtn').addEventListener('click', () => {
+  save.settings.speak = !save.settings.speak;
+  writeSave(); renderHome();
+  if (save.settings.speak) Speech.say('Read aloud is on.');
+});
+$('#soundBtn').addEventListener('click', () => { if (toggleMusic() && game.state === 'menu') Sound.play('menu'); renderHome(); });
+document.addEventListener('change', (e) => {
+  // the game choice is kept with the records only (choosing is not playing); the level is a shared setting
+  if (e.target.name === 'mode' && MODES[e.target.value]) { rec.mode = e.target.value; writeRecords(); Sound.sfx.check(); renderHome(); }
+  else if (e.target.name === 'math' && LEVELS.indexOf(e.target.value) >= 0) { save.settings.mathLevel = e.target.value; writeSave(); renderHome(); }
+});
+
+/* ================= input ================= */
+// a finger press answers at once; a click with no press before it (keyboard, a mouse in a test) answers too
+let lastPointerTap = 0;
+padEl.addEventListener('pointerdown', (e) => {
+  const el = e.target.closest('[data-v]');
+  if (!el) return;
+  e.preventDefault();
+  lastPointerTap = performance.now();
+  tapEl(el);
+});
+padEl.addEventListener('click', (e) => {
+  const el = e.target.closest('[data-v]');
+  if (!el || performance.now() - lastPointerTap < 700) return;
+  tapEl(el);
+});
+padEl.addEventListener('contextmenu', (e) => e.preventDefault());
+window.addEventListener('keydown', (e) => {
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  if ((e.key === 'Escape' || e.key === 'p' || e.key === 'P') && !e.repeat) {
+    if (PLAYING.has(game.state)) { e.preventDefault(); pause(); } else if (game.state === 'pause') { e.preventDefault(); resume(); }
+    return;
+  }
+  if (game.state !== 'answer') { if ((e.key === 'm' || e.key === 'M') && !e.repeat && game.state === 'menu') { toggleMusic(); renderHome(); } return; }
+  if (e.key === 'Backspace' || e.key === 'Delete') { e.preventDefault(); undo(); return; }
+  // digits: the number pad, or the squares of a 3 x 3 grid in reading order (1 = top left)
+  if (/^[0-9]$/.test(e.key) && !e.repeat) {
+    e.preventDefault();
+    if (game.mode === 'number') tapEl(padItem(e.key));
+    else if (game.mode === 'grid' && game.gridN === 3 && e.key !== '0') tapEl(padItem(+e.key - 1));
+  }
+});
+arcadeGuards(pause);
+// the menu song starts with the first touch on the home screen (sound needs a tap on iPad)
+document.addEventListener('pointerdown', () => { if (game.state === 'menu' && save.settings.music > 0) Sound.play('menu'); });
+window.addEventListener('resize', layout);
+window.addEventListener('orientationchange', () => setTimeout(layout, 120));
+
+/* ================= loop ================= */
+let lastFrame = performance.now();
+function frame(now) {
+  requestAnimationFrame(frame);
+  const dt = Math.min(0.1, Math.max(0, (now - lastFrame) / 1000));
+  lastFrame = now;
+  if (muffled && now > muffleUntil) muffled = false;
+  if (!PLAYING.has(game.state)) return;
+  const d = dt * game.speed;
+  game.t += d; game.time += d;
+  updateClock();
+  if (game.state === 'ready') { if (game.t >= game.phaseEnd) { game.state = 'show'; game.showStart = game.t; game.shown = -1; stepShow(); } }
+  else if (game.state === 'show') stepShow();
+  else if (game.state === 'wait') { if (game.t >= game.phaseEnd) beginAnswer(); }
+  else if (game.state === 'feedback') { if (game.t >= game.phaseEnd) afterFeedback(); }
+}
+document.body.classList.toggle('calm', calm());
+renderHome();
+showScreen('home', false);
+requestAnimationFrame(frame);
+if (document.fonts && document.fonts.load) document.fonts.load('700 40px Fredoka').then(() => { if (!playEl.hidden) layout(); }).catch(() => {});
+
+/* ================= test hook ================= */
+// what a finished layout must hold: nothing scrolls, everything inside the screen, buttons 48 px or more,
+// no text cut off, and the parts in order (phase, show card, answer boxes, pad) without overlapping
+function fits() {
+  const bad = [], vw = innerWidth, vh = innerHeight, in1 = (r) => r.left >= -0.5 && r.right <= vw + 0.5 && r.top >= -0.5 && r.bottom <= vh + 0.5;
+  const R = (el) => el.getBoundingClientRect();
+  if (document.documentElement.scrollHeight > vh + 1 || document.documentElement.scrollWidth > vw + 1) bad.push('page scrolls');
+  const cut = (el, what) => { if (el && (el.scrollWidth > el.clientWidth + 1 || el.scrollHeight > el.clientHeight + 1)) bad.push(what + ' text cut: ' + el.textContent); };
+  if (!playEl.hidden) {
+    const hudB = R($('.hud-top')).bottom;
+    $$('#hud .chip').forEach((c) => { cut(c, 'chip'); if (!in1(R(c))) bad.push('chip outside'); });
+    // the shared pause button is 58 px with a finger (46 px for a mouse)
+    const pb = R($('#pauseBtn')), minB = matchMedia('(pointer: coarse)').matches ? 48 : 44;
+    if (!in1(pb) || pb.width < minB || pb.height < minB) bad.push('pause button ' + Math.round(pb.width));
+    const ph = R(phaseEl); if (ph.top < hudB - 1) bad.push('phase under the HUD'); if (!in1(ph)) bad.push('phase outside'); cut(phaseEl, 'phase');
+    const parts = [phaseEl, showEl.hidden ? null : showEl, $('.answer'), padEl].filter(Boolean).map(R);
+    for (let k = 1; k < parts.length; k++) if (parts[k].top < parts[k - 1].bottom - 0.5) bad.push('part ' + k + ' overlaps the one above');
+    parts.forEach((r, k) => { if (!in1(r)) bad.push('part ' + k + ' outside'); });
+    $$('.slot').forEach((s, i) => { if (!in1(R(s))) bad.push('slot ' + i + ' outside'); });
+    const ub = R($('#undoBtn')); if (!in1(ub) || ub.width < 48 || ub.height < 48) bad.push('undo button ' + Math.round(ub.width));
+    $$('#pad button').forEach((b, i) => {
+      const r = R(b);
+      if (getComputedStyle(b).visibility === 'hidden') return;
+      if (!in1(r)) bad.push('pad ' + i + ' outside');
+      if (r.width < 56 || r.height < 56) bad.push('pad ' + i + ' small ' + Math.round(r.width) + 'x' + Math.round(r.height));
+      const w = b.querySelector('b'); if (w) cut(w, 'card');
+    });
+    const sw = showEl.querySelector('b, .digit'); if (sw && !showEl.hidden && (R(sw).width > R(showEl).width + 1)) bad.push('show text cut');
+  } else {
+    const card = $$('#screens > .screen').find((s) => !s.hidden);
+    if (card) {
+      const r = R(card.querySelector('.card'));
+      if (r.bottom > vh + 1 || r.top < -1 || r.right > vw + 1 || r.left < -1) bad.push('menu card does not fit (' + Math.round(r.top) + '-' + Math.round(r.bottom) + ' of ' + vh + ')');
+      if ($('#screens').scrollHeight > vh + 1) bad.push('menu scrolls');
+      const finger = matchMedia('(pointer: coarse)').matches;
+      card.querySelectorAll('.btn, .mode > span, .seg span').forEach((b) => { const rb = R(b); if (rb.width && ((finger && rb.height < 48) || !in1(rb))) bad.push('button ' + b.textContent.trim().slice(0, 16) + ' ' + Math.round(rb.height)); cut(b, 'button'); });
+      card.querySelectorAll('.mode b, .mode small').forEach((b) => cut(b, 'mode'));
+    }
+  }
+  return bad;
+}
+// tag the pad button a finger should tap next (or a wrong one) with data-bot="tap"
+function mark(v) {
+  $$('[data-bot]').forEach((e) => e.removeAttribute('data-bot'));
+  const el = v === null ? null : padItem(v);
+  if (el) el.setAttribute('data-bot', 'tap');
+  return v;
+}
+const nextItem = () => (game.state === 'answer' ? expected()[game.ans.length] : null);
+function wrongItem() {
+  if (game.state !== 'answer') return null;
+  const want = nextItem(), all = $$('#pad [data-v]').map((b) => b.dataset.v).filter((v) => v !== want && !(game.mode !== 'number' && game.ans.indexOf(v) >= 0));
+  return all.length ? all[0] : null;
+}
+window.__memory = {
+  game, rec, save, MODES, WORDS, LEVELS, ROUND, ROUND_SEC, Speech, Sound,
+  state: () => game.state, span: () => game.span, seq: () => game.seq.slice(), ans: () => game.ans.slice(), expected, cards: () => game.cards.map((x) => x.w),
+  nextItem, wrongItem, tap: (v) => tapEl(padItem(v)), click: (v) => padItem(v).click(), undo,
+  markNext: () => mark(nextItem()), markWrong: () => mark(wrongItem()),
+  // start a round: mode, and options { level, back, span }
+  start(mode, o) { o = o || {}; rec.mode = mode; if (o.back !== undefined) rec.back = !!o.back; if (o.level) save.settings.mathLevel = o.level; renderHome(); startRound({ span: o.span }); return game.state; },
+  setSpeed: (k) => { game.speed = k; }, pause, resume, goHome, fits, layout, starsFor, startSpan, keyOf, wordInfo, digitSeq, wordSeq, period
+};
+})();
+</script>
+<script>if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('../sw.js').catch(function () {});</script>
+</body>
+</html>

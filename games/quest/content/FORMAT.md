@@ -157,3 +157,7 @@ two adjectives that could swap). Capital letter first, ending with `.`, `?` or `
   `cohesion` (which sentence comes next / best links two ideas?).
 - From Achiever up cover at least four different kinds per unit. Expert and Band 8 should feel like IELTS Academic
   reading and writing skills (paraphrase, cohesion, register, precise collocation).
+
+## speaking.json (Speaking practice)
+
+`{ "cards": [ { "id": "explorer-1", "stage": 4, "topic": "Describe …", "points": [4 points, the last "and explain …"], "phrases": [5], "model": "paragraphs joined by \n", "part3": [3 questions] } ] }`. Four cards per stage from Explorer (4) to Band 8 (7). The model answer is spoken English at that stage's level (Explorer about 130–170 words, Achiever 170–220, Expert and Band 8 220–280), British spelling, written so a speech voice reads it well: numbers as words, no brackets or abbreviations. build.js inlines the cards; without the file the button stays hidden.

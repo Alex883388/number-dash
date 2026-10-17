@@ -1,5 +1,5 @@
 // Memory Lane on an emulated iPad and a phone, by finger (run from the repo root):
-//   node games/memory/build.js && ND_CDP=9501 ND_PROFILE=edge-profile-memory-wt ND_URL=file:///D:/Github/number-dash-memory/games/memory/dist/preview.html ND_READY='!!window.__memory' ND_BOT=none node games/dash/playtest/shoot.js games/memory/playtest/ipad.js
+//   node games/memory/build.js && ND_CDP=9501 ND_PROFILE=edge-profile-memory ND_URL=file:///D:/Github/number-dash/games/memory/dist/preview.html ND_READY='!!window.__memory' ND_BOT=none node games/dash/playtest/shoot.js games/memory/playtest/ipad.js
 // Landscape iPad: the home card, Numbers picked and played by finger (a right answer, a wrong one with its kind
 // feedback, pause and resume), Words (picture cards tapped in order), Grid (a square lit on show, then tapped back,
 // Undo). Portrait iPad: the home card, the longest number span (9 boxes), Words on Genius with 12 cards and long

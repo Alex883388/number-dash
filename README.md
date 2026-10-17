@@ -14,6 +14,7 @@ The home page opens with **Today**: three suggestions from the child's own recor
 | 4 | Number Pop | [/pop/](https://alex883388.github.io/number-dash/pop/) | Tap the drifting bubbles whose numbers make the target ("Make 17"); 16 worlds from number bonds to times, division, money, fractions, decimals, numbers below zero, doubling and halving, place value, brackets and percentages. |
 | 5 | Spell It | [/spell/](https://alex883388.github.io/number-dash/spell/) | Look, cover, spell: a picture and its word, read aloud; the word hides and the child spells it from memory with letter tiles. |
 | 6 | English Quest | [/quest/](https://alex883388.github.io/number-dash/quest/) | Step by step from first words to IELTS band 8: seven CEFR stages of short lessons (words, grammar, listening, spelling, sentence building, reading, IELTS-style skills), a level test, stage tests and a review of mistakes. |
+| 7 | Memory Lane | [/memory/](https://alex883388.github.io/number-dash/memory/) | Short, calm working-memory rounds: numbers, picture words or lit squares show one at a time; the child taps them back in order, or backwards. Two right in a row adds one more, two wrong takes one off. |
 
 ## Number Ladder
 
@@ -68,11 +69,19 @@ The home page opens with **Today**: three suggestions from the child's own recor
 - **Practice**: every missed item goes to Review until it is answered right; My words lists every word learned with its meaning and a speaker button, and Practise 10 words quizzes them; home shows a daily streak, words learned and a bar per skill (words, grammar, listening, spelling, reading, writing skills).
 - **Writing builder** (Explorer up): a lesson may ask to put a paragraph back in order (4–5 sentences joined by reference words and linking, so only one order works), to pick the more precise academic wording, the best topic sentence or the clearest thesis statement for a Task 2 question; each stage test includes a paragraph.
 - **IELTS reading test** (from Achiever up): two passages from the highest stages reached, all ten questions, 18 minutes on the clock and no feedback until the end; the score is mapped to the band the same share of 40 questions would give (9/10 ≈ 8.0, 8/10 ≈ 7.0, 7/10 ≈ 6.5). Results are kept, and misses go to Review.
+- **Speaking practice** (from Explorer up): IELTS Speaking Part 2 with 16 cue cards (4 per stage from Explorer to Band 8, in `content/speaking.json`): 1 minute to plan, up to 2 minutes to talk out loud, then a model answer at that stage's level (read aloud on request), 5 useful phrases and 3 Part 3 questions. Nothing is scored; finished talks are counted.
 - **Grammar notes**: the rule behind every grammar question of the lessons opened so far (10 per lesson), each with its example sentence filled in; newest lesson first and unfolded.
 - **Word of the day** on the home screen: one word from the stage the child is on (a new one each day while unknown words are left), with its meaning, an example sentence and 🔊; Learn it adds it to My words. Opening the app does not count as a day played.
 - **IELTS listening test** (from Achiever up): the same two-talk format with the passages spoken and never shown, each talk heard at most twice (the real test plays it once), 20 minutes, no feedback until the end, scored on the listening band table (8/10 ≈ 7.5).
-- **Honest limits**: the IELTS bands are practice estimates from the CEFR level. Speaking and writing are only practised in parts (sentence building, linking, register); the real test scores them with an examiner.
+- **Honest limits**: the IELTS bands are practice estimates from the CEFR level. Speaking (no recording or marking) and writing are only practised in parts (sentence building, linking, register); the real test scores them with an examiner.
 - **Content**: `games/quest/content/stage-<n>.json`, format in `games/quest/content/FORMAT.md`, checked by `node games/quest/tools/check-content.js`.
+
+## Memory Lane
+
+- **Three games** (a choice on home, with the shared level, a Backwards switch, read-aloud and music): **Numbers** (digits shown one at a time and read aloud, tapped back on a 0–9 pad with Undo; no digit twice, no runs of three), **Words** (picture words, each from a different family of look-alikes, tapped back from 6 to 12 cards that include look-alike distractors such as cat and tiger; 44 words per level, British words like biscuit and ladybird) and **Grid** (squares light up one by one in a 3 × 3 grid, 4 × 4 from span 6 / 5 / 4 by level).
+- **Span**: two right in a row adds an item, two wrong take one off (never below 2); up to 9 for Numbers and Grid, 7 for Words. The first round starts at 3 (2 backwards), later ones two below the best. About 1 s per item (1.4 s for a picture word), a little faster at longer spans; a short "Watch" before each sequence and a pause before answering.
+- **Round**: 10 sequences or 2 minutes. A wrong answer gets kind words and the right order shown, never a fail sound. Stars by the longest span: Numbers 6 / 5, Words and Grid 5 / 4 (one lower backwards).
+- **Records** in `memory-lane.v1`: `best`, `stars` and `plays` per game (`number`, `word`, `grid`, plus `-back`), `rounds` and `seqs`. The hub shows the longest number span, a Sharp mind badge at 6, and the spans in Progress for parents.
 
 ## Layout
 
@@ -81,7 +90,7 @@ The home page opens with **Today**: three suggestions from the child's own recor
 | `games/dash/` | Number Dash: engine, page template, level checker, pack generator, playtests (see its README). |
 | `games/ladder/src/ladder.html` | Number Ladder: the whole game in one page (drawing, physics, questions, menus). |
 | `games/ladder/playtest/` | Ladder scenarios: `climb.js` (a bot climbs through every moving trick with a picture of each, falls once on purpose, then reaches the top), `fairness.js` (how often a tap lands right, wrong or on nothing, per rung) and `arcade-ipad.js` (finger taps through the whole site on an emulated iPad, portrait, phone and offline). |
-| `games/pair/`, `games/pop/`, `games/spell/`, `games/quest/` | Pair Up, Number Pop, Spell It and English Quest: one page each in `src/`, a `build.js`, and playtests in `playtest/`. English Quest also has `content/` (the seven stages) and `tools/check-content.js`. |
+| `games/pair/`, `games/pop/`, `games/spell/`, `games/quest/`, `games/memory/` | Pair Up, Number Pop, Spell It, English Quest and Memory Lane: one page each in `src/`, a `build.js`, and playtests in `playtest/`. English Quest also has `content/` (the seven stages) and `tools/check-content.js`. |
 | `shared/` | Code the games share: math questions, English word facts (`english-words.js`: opposites, past tenses, same-meaning words, plurals, common misspellings), general knowledge (`knowledge.js`: capitals, animal babies, science, geography and calendar facts), the music remix engine, sound effects, cube looks and drawing, `arcade-days.js` (`markPlayed()`: every game notes the day it saves, for the streak), and for the newer games `arcade-ui.css` (colours, buttons, menus, HUD, toasts) and `arcade-core.js` (helpers, the shared save, `writeSave()` which marks the day played and `writeRecords()` which does not, math bookkeeping, screens, read-aloud with a British voice where the device has one, on-device voices first). A page marks the spot with `/*__SHARED:name__*/` (or `/*__SHARED:arcade-ui.css__*/` inside its style) and the build fills it in; shared files can use markers too. |
 | `web/` | The arcade home page (`hub.html`: game cards, Today, stats, Badges, Progress for parents), the offline service worker, the app manifest and icons (`make-icons.js` redraws the icons). |
 | `build.js` | Builds every game into `games/*/dist/` and the website into `docs/`: the home page, one folder per game, the manifest, icons and an offline cache whose version changes with the content. |
@@ -145,7 +154,13 @@ ND_URL=file:///D:/Github/number-dash/games/pop/dist/preview.html ND_READY='!!win
 ND_URL=file:///D:/Github/number-dash/games/spell/dist/preview.html ND_READY='!!window.__spell' ND_BOT=none node games/dash/playtest/shoot.js games/spell/playtest/rounds.js
 ```
 
-Swap in `ipad.js` (both games), `smoke.js` (Pop) or `words.js` (Spell) for their other checks. `arcade-ipad.js` above opens every game from the home page by finger.
+Swap in `ipad.js` (both games), `smoke.js` (Pop) or `words.js` (Spell) for their other checks. Memory Lane: a bot plays every game at every level, forwards and backwards (`play.js`), and finger taps on iPad and phone (`ipad.js`):
+
+```bash
+ND_URL=file:///D:/Github/number-dash/games/memory/dist/preview.html ND_READY='!!window.__memory' ND_BOT=none node games/dash/playtest/shoot.js games/memory/playtest/play.js
+```
+
+ `arcade-ipad.js` above opens every game from the home page by finger.
 
 Check English Quest's content, then play its whole journey (level test, every question kind, stage test, review, iPad, phone, dark mode, every stage):
 
