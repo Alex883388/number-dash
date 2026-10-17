@@ -298,6 +298,9 @@ function writeSave() {
   } catch (e) { /* ignore */ }
 }
 
+// the game's records only, for bookkeeping that is not play (the day is not marked as played)
+function writeRecords() { try { if (records.key) localStorage.setItem(records.key, JSON.stringify(records.data)); } catch (e) { /* ignore */ } }
+
 /* ================= math bookkeeping =================
    q is a fact from KINDS (shared/math.js): t = its text, a = its answer. A missed fact is kept
    (the last 12) and comes back now and then in every game until it is answered right. */

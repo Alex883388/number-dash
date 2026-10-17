@@ -15,6 +15,15 @@
 .level-top .big { font-family: var(--emoji); font-size: 2.2rem; line-height: 1; }
 .level-top b { display: block; font: 700 1.25rem/1.15 var(--font-display); }
 .level-top span { color: var(--ink-soft); font-weight: 700; font-size: .92rem; }
+.wotd { background: var(--card-2); border-radius: 20px; padding: 12px 16px; display: grid; gap: 6px; text-align: left; }
+.wotd-tag { font: 800 .72rem/1 var(--font-body); text-transform: uppercase; letter-spacing: .08em; color: var(--ink-soft); }
+.wotd-main { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.wotd-main .pic { font: 2rem/1 var(--emoji); }
+.wotd-main b { font: 700 1.5rem/1.1 var(--font-display); }
+.wotd-main i { color: var(--ink-soft); font-weight: 700; }
+.wotd p { margin: 0; line-height: 1.4; }
+.wotd .ex { color: var(--ink-soft); font-style: italic; }
+.wotd .row { justify-content: flex-start; }
 .track { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
 .track i { height: 10px; border-radius: 99px; background: var(--line); }
 .track i.done { background: var(--mint); }
@@ -158,6 +167,7 @@
       <h1 class="logo">English <span>Quest</span></h1>
       <p class="tagline">Step by step to IELTS 8</p>
       <div class="level" id="level"></div>
+      <div class="wotd" id="wotd" aria-label="Word of the day"></div>
       <div class="row"><button class="btn sun big" id="goBtn">Start</button></div>
       <div class="row">
         <button class="btn" id="pathBtn">🗺️ Path</button>
@@ -683,7 +693,29 @@ function endLesson() {
 }
 
 /* ================= menus ================= */
+// one word a day from the stage the child is on, a new one each day while unknown words are left
+function wordOfDay() {
+  const d = today();
+  if (rec.wotd && rec.wotd.d === d && indexWords().get(rec.wotd.w)) return rec.wotd;
+  const s = levelNow(); if (!has(s)) return null;
+  const all = []; CONTENT[s - 1].units.forEach((un) => un.words.forEach((w) => all.push(w.w)));
+  const fresh = all.filter((w) => !rec.learned.includes(w)), pool = fresh.length ? fresh : all;
+  let h = 0; for (const ch of d + ':' + s) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+  rec.wotd = { d: d, w: pool[h % pool.length], done: false, n: (rec.wotd && rec.wotd.n) || 0 };
+  writeRecords();   // opening the app is not playing: the streak is not touched
+  return rec.wotd;
+}
+function renderWotd() {
+  const box = $('#wotd'), wd = wordOfDay(), e = wd && indexWords().get(wd.w);
+  box.hidden = !e; if (!e) return;
+  const W = e.w, ex = W.ex.replace('___', W.w), known = wd.done || rec.learned.includes(W.w);
+  box.innerHTML = '<span class="wotd-tag">🌞 Word of the day</span>' +
+    '<div class="wotd-main">' + (W.pic ? '<span class="pic" aria-hidden="true">' + W.pic + '</span>' : '') + '<b>' + esc(W.w) + '</b>' + (W.pos ? '<i>' + esc(W.pos) + '</i>' : '') + '</div>' +
+    '<p>' + esc(W.def) + '</p><p class="ex">“' + esc(ex) + '”</p>' +
+    '<div class="row"><button class="btn" id="wotdSay">🔊 Listen</button>' + (known ? '<span class="wotd-tag">✓ In My words</span>' : '<button class="btn sun" id="wotdLearn">Learn it</button>') + '</div>';
+}
 function renderHome() {
+  renderWotd();
   const s = levelNow(), st = STAGES[s - 1], done = STAGES.filter((x) => cleared(x.n)).length;
   $('#level').innerHTML =
     '<div class="level-top"><span class="big" aria-hidden="true">' + st.icon + '</span><div><b>' + st.name + ' · ' + st.cefr + (st.ielts ? ' · IELTS ' + st.ielts : '') + '</b><span>' + esc(st.about) + '</span></div></div>' +
@@ -753,6 +785,15 @@ $('#pathBtn').addEventListener('click', () => { renderPath(levelNow()); showScre
 $('#reviewBtn').addEventListener('click', () => startLesson('review'));
 $('#placeBtn').addEventListener('click', () => startLesson('place'));
 $('#wordsBtn').addEventListener('click', () => { renderWords(); showScreen('words'); });
+$('#wotd').addEventListener('click', (ev) => {
+  const wd = rec.wotd, e = wd && indexWords().get(wd.w); if (!e) return;
+  if (ev.target.closest('#wotdSay')) { Speech.say(e.w.w + '. ' + e.w.ex.replace('___', e.w.w), 0.85); return; }
+  if (ev.target.closest('#wotdLearn')) {
+    if (!rec.learned.includes(wd.w)) rec.learned.push(wd.w);
+    wd.done = true; wd.n = (wd.n || 0) + 1; writeSave(); Sound.sfx.right();
+    toast('Added to My words!', 'good'); renderHome();
+  }
+});
 $('#mockBtn').addEventListener('click', () => startLesson('mock'));
 $('#mockLBtn').addEventListener('click', () => startLesson('mockl'));
 $('#wordsHomeBtn').addEventListener('click', goHome);
@@ -780,7 +821,7 @@ window.addEventListener('keydown', (e) => {
 arcadeGuards(() => Speech.stop());
 arcadeLinks();
 
-window.__quest = { L, rec, save, STAGES, CONTENT, has, next, startLesson, nextStep, unitOpen, testOpen, wordQ, unitLesson, stageTest, spotQ, writingQ, showQ, renderWords, mockBand, Speech,
+window.__quest = { L, rec, save, STAGES, CONTENT, has, next, renderHome, startLesson, nextStep, unitOpen, testOpen, wordQ, unitLesson, stageTest, spotQ, writingQ, showQ, renderWords, mockBand, Speech,
   // answer the current question: right = true picks the right answer (or builds / spells it), false picks a wrong one
   answer(right) {
     const q = L.qs[L.i]; if (!q || L.answered) return false;

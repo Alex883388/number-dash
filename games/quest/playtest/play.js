@@ -137,5 +137,14 @@ module.exports = [
   { sleep: 300 }, { shot: 'quest-30-paragraph-done' },
   { log: "[document.getElementById('sheet').className, document.getElementById('sheetTitle').textContent]" },
   { eval: "(() => { const Q = window.__quest; let n = 0; for (let s = 4; s <= 7; s++) Q.CONTENT[s - 1].units.forEach((un, u) => (un.writing || []).forEach((x, i) => { if (Q.writingQ(s, u, i)) n++; })); return 'writing questions built: ' + n; })()" },
+  // the word of the day on the home screen: a word of the current stage, read aloud, Learn it adds it to My words,
+  // the same word all day, a new one the next day
+  { eval: "(() => { const Q = window.__quest; document.getElementById('doneHomeBtn') && !document.getElementById('s-done').hidden && document.getElementById('doneHomeBtn').click(); document.getElementById('quitBtn') && !document.getElementById('lesson').hidden && document.getElementById('quitBtn').click(); Q.rec.wotd = null; Q.renderHome(); return [Q.rec.wotd.w, Q.rec.learned.includes(Q.rec.wotd.w), document.querySelector('#wotd b').textContent]; })()" },
+  { viewport: [820, 1180, true, false, 2] }, { sleep: 400 }, { shot: 'quest-31-word-of-day' },
+  { touchEl: '#wotdSay' }, { log: "[window.__quest.rec.wotd.w, window.__quest.Speech.said.slice(-1)[0]]" },
+  { touchEl: '#wotdLearn' }, { sleep: 300 },
+  { log: "[window.__quest.rec.learned.includes(window.__quest.rec.wotd.w), window.__quest.rec.wotd.done, document.getElementById('wotd').textContent.indexOf('In My words') >= 0, document.getElementById('wordsBtn').textContent]" },
+  { log: "(() => { const Q = window.__quest, w = Q.rec.wotd.w; Q.renderHome(); const same = Q.rec.wotd.w === w; Q.rec.wotd.d = '2000-01-01'; Q.renderHome(); return ['same all day', same, 'next day new and unknown', Q.rec.wotd.w !== w && !Q.rec.learned.includes(Q.rec.wotd.w)]; })()" },
+  { viewport: [390, 844, true, true, 3] }, { sleep: 400 }, { eval: "document.getElementById('wotd').scrollIntoView(); [document.documentElement.scrollWidth <= innerWidth, Math.round(document.getElementById('wotd').getBoundingClientRect().width)]" }, { shot: 'quest-32-word-of-day-phone-dark' },
   { log: 'JSON.stringify(window.__errs)' }
 ];

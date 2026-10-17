@@ -15,7 +15,7 @@
 <script>window.ARCADE_HOME = "../";</script>
 <title>Spell It</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Look, cover, spell: see a word with its picture, hide it, then build it from letter tiles. Animals, food, things around us, number words and tricky words.">
+<meta name="description" content="Look, cover, spell: see a word with its picture, hide it, then build it from letter tiles. Animals, food, feelings and people, places, time and the calendar, number words, tricky words and more.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap">
@@ -211,7 +211,9 @@ button, label, input, .btn, a { touch-action: manipulation; }
   width: 44px; height: 44px; display: grid; place-items: center; border-radius: 12px; font: 700 1.6rem/1 var(--font-display);
   background: var(--door); border: 3px solid var(--door-edge); color: var(--door-ink); box-shadow: 0 3px 0 var(--door-edge); box-sizing: border-box;
 }
-.decks { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; }
+.decks { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+/* 14 decks: two rows of 7 on a wide screen (iPad landscape, a laptop), three rows of 5 on a portrait iPad, four rows of 4 on a phone */
+@media (min-width: 1000px) { #s-home { width: min(100%, 840px); } .decks { grid-template-columns: repeat(7, minmax(0, 1fr)); } }
 .deck em { font: 700 .66rem/1.1 var(--font-body); font-style: normal; color: var(--ink-soft); letter-spacing: .02em; }
 .deck input:checked + span em { color: var(--sun-ink); }
 .levelrow { display: flex; flex-wrap: wrap; gap: 8px 14px; justify-content: center; align-items: center; }
@@ -262,6 +264,19 @@ button, label, input, .btn, a { touch-action: manipulation; }
   #s-home .tag { font-size: 1rem; }
 }
 @media (max-height: 860px) { #s-home .card { gap: 13px; } }
+/* a phone shows the 14 decks in four rows: the home tightens a little so it still fits a 390 x 844 screen without scrolling */
+@media (max-width: 560px) {
+  #s-home .card { gap: 8px; }
+  #s-home .tag { font-size: .95rem; line-height: 1.4; }
+  .deck span { min-height: 52px; padding: 3px 1px; gap: 1px; }
+  .deck i { font-size: 1.15rem; }
+  #homeStats dd { font-size: 1.45rem; }
+  .levelrow { gap: 6px 10px; }
+  .seg-title { margin-bottom: 5px; }
+  .note { margin-top: 5px; line-height: 1.25; text-wrap: balance; }
+  #homeStats div { padding: 8px 4px; }
+  #homeStats dt { font-size: .6rem; letter-spacing: .02em; }
+}
 @media (prefers-reduced-motion: reduce) { .box, .tile, .tiles .tile, .cheer { animation: none !important; } }
 .calm .box, .calm .tile, .calm .tiles .tile, .calm .cheer, .calm .screen, .calm .toast { animation: none !important; }
 </style>
@@ -403,6 +418,9 @@ function writeSave() {
     if (records.key) localStorage.setItem(records.key, JSON.stringify(records.data));
   } catch (e) { /* ignore */ }
 }
+
+// the game's records only, for bookkeeping that is not play (the day is not marked as played)
+function writeRecords() { try { if (records.key) localStorage.setItem(records.key, JSON.stringify(records.data)); } catch (e) { /* ignore */ } }
 
 /* ================= math bookkeeping =================
    q is a fact from KINDS (shared/math.js): t = its text, a = its answer. A missed fact is kept
@@ -894,7 +912,9 @@ const Sound = (function () {
    iPadOS 15 and Windows 10), otherwise a short sentence clue with a gap. Tricky words and Homophones are
    sentence clues; Word endings show a base word and a rule ("stop + ed") with a sentence. No word or
    clue uses a spelling that differs between US and UK English (colour, grey, favourite, -ise/-ize...), except
-   in IELTS spelling, which teaches the British forms on purpose. A word may start with a capital (Wednesday). */
+   in IELTS spelling, which teaches the British forms on purpose, and in Feelings & people, Places & geography
+   and Time & calendar, which use the British forms only (mum, harbour, neighbourhood, autumn). A word may start
+   with a capital (Wednesday, London): its tile is the capital, and a keyboard's small letter still fills it. */
 const LEVELS = ['easy', 'medium', 'hard'];
 const LEVEL_NAME = { easy: 'Easy', medium: 'Medium', hard: 'Hard' };
 const LOOK_SEC = { easy: 4, medium: 3, hard: 2 };
@@ -1027,6 +1047,110 @@ const DECKS = {
       'carnivore|A lion is a ____ because it eats meat.', 'herbivore|A cow is a ____ because it eats plants.', 'chlorophyll|____ makes leaves green.',
       'pollination|Bees help with the ____ of flowers.', 'germination|____ is when a seed starts to grow.', 'renewable|Wind power is a ____ energy source.',
       'pollution|Smoke from cars causes air ____.', 'earthquake|An ____ makes the ground shake.', 'adaptation|A camel’s hump is an ____ to life in the desert.']))
+  } },
+  // Feelings & people, Places & geography, Time & calendar: Easy 3-6 letters, Medium 4-8, Hard 7+ (by difficulty, like
+  // Science). British English throughout (mum, harbour, autumn); place names, days and months start with a capital.
+  people: { name: 'Feelings & people', icon: '😊', words: {
+    easy: P('happy 😀, sad 😢, angry 😠, tired 😫, sleepy 😪, silly 🤪, cheeky 😜, frown 🙁, gran 👵, prince 🤴, family 👪, police 👮, angel 👼, artist 🎨, wizard 🧙, fairy 🧚').concat(S([
+      'mum|I made a card for my ____ on Mother’s Day.', 'dad|We gave ____ new socks on Father’s Day.', 'aunt|My mum’s sister is my ____.',
+      'uncle|My dad’s brother is my ____.', 'sister|Your ____ is a girl with the same mum and dad as you.', 'twin|My ____ and I were born on the same day.',
+      'king|The ____ sat on his golden throne.', 'queen|The ____ wore a sparkly crown at the palace.', 'proud|I felt so ____ when I won the spelling prize.',
+      'calm|Take a deep breath and try to stay ____.', 'shy|I was too ____ to sing in front of the class.', 'cross|Mum was ____ when I spilt juice on the sofa.',
+      'upset|She was ____ when her ice cream fell on the floor.', 'glad|I am so ____ you came to my party!', 'brave|The ____ firefighter climbed the tall ladder.',
+      'nurse|A ____ looks after you in hospital.', 'pilot|The ____ flew the plane safely over the sea.', 'baker|The ____ makes fresh bread every morning.',
+      'giant|In the story, the ____ was as tall as a house.'])),
+    medium: P('worried 😟, confused 😕, amazed 😲, excited 🤩, relieved 😌, grandad 👴, princess 👸, builder 👷, dancer 💃').concat(S([
+      'nervous|I felt ____ before my first swimming race.', 'jealous|He felt ____ when his friend got a new bike.', 'cousin|My aunt’s son is my ____.',
+      'lonely|I felt ____ when my best friend moved away.', 'grumpy|Grandad is ____ when he wakes up too early.', 'honest|An ____ person always tells the truth.',
+      'polite|It is ____ to say please and thank you.', 'pupil|Every ____ in the class got a gold star.', 'pirate|The ____ buried his treasure on an island.',
+      'teacher|Our ____ reads us a story every Friday.', 'doctor|Go to the ____ if you feel poorly.', 'dentist|The ____ checks your teeth.',
+      'farmer|The ____ milks the cows every morning.', 'parent|A mum or a dad is a ____.', 'nephew|I am my uncle’s ____ because I am his sister’s son.',
+      'niece|I am my aunt’s ____ because I am her brother’s daughter.', 'daughter|The king and queen had a son and a ____.', 'husband|The bride and her new ____ cut the cake.',
+      'visitor|We had a ____ from the fire station at school.', 'stranger|A ____ is someone you have never met.', 'captain|The ____ of the ship stood on deck.',
+      'cheerful|She is always ____ and smiling.', 'thankful|I am ____ for my kind friends.', 'gentle|Be ____ when you stroke the kitten.',
+      'curious|The ____ cat peeked inside the box.', 'furious|Dad was ____ when the dog ate his dinner.'])),
+    hard: P('detective 🕵' + VS + ', anxious 😰, superhero 🦸').concat(S([
+      'delighted|Gran was ____ with the flowers we gave her.', 'disappointed|I was ____ when it rained on sports day.', 'frustrated|I felt ____ when my tower kept falling down.',
+      'miserable|Wet socks make me feel ____.', 'confident|She felt ____ and sure she could win the race.', 'grateful|We are ____ for all your help.',
+      'generous|It was ____ of you to share your lunch.', 'determined|She was ____ to finish the race, even when tired.', 'exhausted|After the long walk, we were ____.',
+      'enthusiastic|The ____ crowd cheered loudly.', 'considerate|It is ____ to keep quiet when the baby is asleep.', 'thoughtful|What a ____ present, thank you!',
+      'courageous|The ____ lifeboat crew rescued the sailors.', 'happiness|Her face was full of ____ on her birthday.', 'loneliness|A new puppy helped Grandad with his ____.',
+      'excitement|We could hardly sleep with ____ before the trip.', 'patience|Waiting for your turn takes ____.', 'grandparents|My mum’s mum and dad are my ____.',
+      'granddaughter|Grandpa took his ____ to see the ducks.', 'relatives|Aunts, uncles and cousins are all my ____.', 'ancestor|An ____ is someone in your family from long ago.',
+      'volunteer|A ____ helps out without being paid.', 'audience|The ____ clapped at the end of the show.', 'champion|She is the school chess ____.',
+      'opponent|Shake hands with your ____ after the match.', 'referee|The ____ blew the whistle for half-time.', 'scientist|A ____ does experiments in a lab.',
+      'librarian|The ____ helped me find a book.', 'musician|The ____ played the violin at the concert.', 'plumber|A ____ fixed our leaking tap.',
+      'firefighter|A ____ climbed the ladder to rescue the cat.', 'astronaut|An ____ travels into space in a rocket.']))
+  } },
+  places: { name: 'Places & geography', icon: '🌍', words: {
+    easy: P('city 🏙' + VS + ', bank 🏦, hotel 🏨, forest 🌲, ocean 🌊, globe 🌐, valley 🏞' + VS + ', world 🌎, museum 🏛' + VS + ', office 🏢').concat(S([
+      'river|A ____ flows down to the sea.', 'lake|We rowed a boat across the ____.', 'hill|We rolled down the grassy ____.',
+      'pond|Ducks and frogs live in the ____.', 'cave|Bats sleep in a dark ____.', 'coast|We drove along the ____ to see the sea.',
+      'town|A ____ is bigger than a village but smaller than a city.', 'farm|Cows, sheep and pigs live on a ____.', 'zoo|We saw lions and zebras at the ____.',
+      'street|We live on a quiet ____ with lots of trees.', 'path|Follow the ____ through the woods.', 'cliff|Seabirds nest on the tall chalk ____.',
+      'field|The sheep are eating grass in the ____.', 'north|A compass needle points to the ____.', 'south|Penguins live near the ____ Pole.',
+      'east|The sun rises in the ____.', 'west|The sun sets in the ____.', 'Wales|Cardiff is the capital city of ____.',
+      'Spain|Madrid and Barcelona are cities in ____.', 'Italy|Pizza first came from ____.', 'China|The Great Wall is in ____.',
+      'India|The Taj Mahal is in ____.', 'Japan|Tokyo is the biggest city in ____.', 'Paris|The Eiffel Tower is in ____.',
+      'London|Big Ben is in ____, the capital of England.'])),
+    medium: P('village 🏘' + VS + ', stadium 🏟' + VS + ', station 🚉, factory 🏭, railway 🛤' + VS + ', motorway 🛣' + VS + ', funfair 🎡, airport 🛫, seaside 🏖' + VS).concat(S([
+      'country|France is a ____ in Europe.', 'county|Kent is a ____ in the south-east of England.', 'capital|London is the ____ city of England.',
+      'border|You cross the ____ to get from one country to another.', 'jungle|Monkeys and parrots live in the hot, wet ____.', 'canal|A narrowboat chugged along the ____.',
+      'harbour|The fishing boats sailed back into the ____.', 'cottage|Grandma lives in a little ____ in the countryside.', 'market|We bought apples and cheese at the ____.',
+      'stream|A little ____ ran down the hill.', 'meadow|Wild flowers grow in the sunny ____.', 'glacier|A ____ is a huge river of ice that moves very slowly.',
+      'abroad|We went ____ to France on holiday.', 'passport|You need a ____ to travel to another country.', 'Africa|Egypt and Kenya are countries in ____.',
+      'Europe|France, Spain and Italy are in ____.', 'Scotland|Edinburgh is the capital city of ____.', 'England|____, Scotland and Wales are all on one island.',
+      'Ireland|Dublin is the capital city of ____.', 'France|Paris is the capital city of ____.', 'Greece|The first Olympic Games were held in ____.',
+      'Egypt|The pyramids and the River Nile are in ____.', 'Vietnam|Hanoi is the capital city of ____.', 'Thames|The River ____ flows through London.',
+      'Sahara|The ____ is a huge, hot desert in Africa.', 'Everest|Mount ____ is the highest mountain in the world.'])),
+    hard: S(['continent|Africa is a ____, a huge area of land.', 'peninsula|A ____ is land with water on three sides.', 'archipelago|An ____ is a group of islands.',
+      'equator|The ____ is a line round the middle of the world.', 'hemisphere|The world is split into a northern and a southern ____.', 'latitude|Lines of ____ run east to west around the globe.',
+      'longitude|Lines of ____ run from the North Pole to the South Pole.', 'landscape|The ____ was full of green hills and fields.', 'coastline|Britain has a long, rocky ____.',
+      'waterfall|The river crashes down the cliff in a ____.', 'rainforest|The Amazon ____ is full of birds, frogs and monkeys.', 'lighthouse|The tall ____ by the sea flashes to guide ships.',
+      'skyscraper|A ____ is a very tall building in a city.', 'countryside|We went for a walk in the ____, far from the city.', 'neighbourhood|There are lots of parks in our ____.',
+      'roundabout|At the ____, the cars go in a circle.', 'population|The ____ of a town is how many people live there.', 'geography|In ____ we learn about maps, rivers and mountains.',
+      'tributary|A ____ is a small river that flows into a bigger one.', 'estuary|A river meets the sea at its ____.', 'reservoir|A ____ is a big lake that stores water for us to use.',
+      'plateau|A ____ is a high, flat area of land.', 'meander|A ____ is a big bend in a river.', 'erosion|Wind and waves wear rocks away by ____.',
+      'Antarctica|The South Pole is in icy ____.', 'Australia|Kangaroos and koalas live in ____.', 'Atlantic|The ____ Ocean lies between Europe and America.',
+      'Pacific|The ____ is the biggest ocean in the world.', 'Himalayas|Mount Everest is in the ____, in Asia.', 'Edinburgh|The capital city of Scotland is ____.',
+      'Switzerland|____ is famous for mountains, cheese and chocolate.', 'Netherlands|Amsterdam is the capital city of the ____.', 'Caribbean|Jamaica is an island in the ____ Sea.',
+      'Mississippi|The ____ is a long river in America.', 'Kilimanjaro|Mount ____ is the highest mountain in Africa.'])
+  } },
+  time: { name: 'Time & calendar', icon: '📅', words: {
+    easy: P('alarm ⏰, spring 🌱, summer 🌞, autumn 🍂, winter ⛄, sunset 🌇, diary 📔, timer ⏲' + VS).concat(S([
+      'day|There are twenty-four hours in a ____.', 'year|There are twelve months in a ____.', 'month|There are about four weeks in a ____.',
+      'May|The month after April is ____.', 'June|____ is the sixth month of the year.', 'July|____ comes after June and before August.',
+      'March|____ comes after February.', 'April|The month after March is ____.', 'Monday|____ is the first school day of the week.',
+      'Friday|____ comes after Thursday.', 'Sunday|____ is the day after Saturday.', 'today|Yesterday was Monday, so ____ is Tuesday.',
+      'date|What is the ____ today? It is the fifth of May.', 'noon|Twelve o’clock in the day is called ____.', 'dawn|The birds start singing at ____, when it gets light.',
+      'dusk|At ____, the sky gets dark and bats come out.', 'second|A ____ is a tiny bit of time, shorter than a minute.', 'soon|Hurry up, the bus will be here ____.',
+      'ago|The dinosaurs lived millions of years ____.', 'never|I have ____ seen snow, but I hope I will.', 'twice|I brush my teeth ____ a day.',
+      'daily|The milkman comes ____, every morning.', 'term|The summer ____ at school ends in July.', 'time|What ____ is it? It is three o’clock.',
+      'age|My little brother is four, and my ____ is nine.', 'moment|Wait a ____, I am nearly ready!', 'future|In the ____, I want to be a vet.'])),
+    medium: P('birthday 🎂, morning 🌅, evening 🌆, bedtime 🛌, snooze 💤').concat(S([
+      'Tuesday|____ comes after Monday.', 'Thursday|____ comes before Friday.', 'Saturday|____ is the first day of the weekend.',
+      'January|____ is the first month of the year.', 'August|____ is the eighth month of the year.', 'October|____ comes after September.',
+      'November|Bonfire Night is in ____.', 'December|Christmas Day is in ____.', 'weekend|Saturday and Sunday make the ____.',
+      'weekday|A ____ is any day from Monday to Friday.', 'tonight|We are going to watch a film ____.', 'midday|The sun is high in the sky at ____.',
+      'midnight|At ____ the clock strikes twelve in the dark.', 'decade|A ____ is ten years.', 'century|A ____ is one hundred years.',
+      'weekly|We have a ____ spelling test every Friday.', 'monthly|Gran’s magazine comes ____, twelve times a year.', 'holiday|We are going to the seaside for our summer ____.',
+      'Easter|We hunt for chocolate eggs at ____.', 'present|Yesterday is the past, and today is the ____.', 'ancient|The ____ Egyptians built the pyramids.',
+      'modern|Our new school is very ____, with big glass windows.', 'recent|Is this a ____ photo, or one from long ago?', 'forever|I will love my teddy ____.',
+      'usually|I ____ walk to school, but today I took the bus.', 'already|I have ____ finished my homework!', 'nowadays|____, most people have a phone.',
+      'quarter|A ____ of an hour is fifteen minutes.', 'schedule|The train is running late, behind ____.', 'annual|Sports day is an ____ event: it comes once a year.'])),
+    // Wednesday, February and millennium are in IELTS spelling too: a calendar deck needs its two hardest names
+    hard: P('Christmas 🎄, stopwatch ⏱' + VS).concat(S([
+      'Wednesday|____ is the middle day of the school week.', 'February|____ is the shortest month of the year.', 'millennium|A ____ is ten centuries, or a thousand years.',
+      'September|Children go back to school in ____.', 'yesterday|Today is Friday, so ____ was Thursday.', 'fortnight|A ____ is two weeks.',
+      'afternoon|School finishes at three o’clock in the ____.', 'sometimes|It ____ snows in winter, but not every year.', 'meanwhile|I tidied up; ____, my brother played.',
+      'timetable|Check the train ____ to see when it leaves.', 'anniversary|My mum and dad had a party for their wedding ____.', 'lifetime|Some tortoises have a ____ of over a hundred years.',
+      'daylight|In winter there are only a few hours of ____.', 'overnight|We stayed ____ at Gran’s house.', 'eventually|We got lost, but ____ we found the way home.',
+      'temporary|This tent is a ____ home for our holiday.', 'permanent|This ink is ____: it will not wash off.', 'previous|The ____ day was sunny, but today it rained.',
+      'frequently|Buses come ____, about every ten minutes.', 'punctual|Be ____ and arrive on time!', 'chronological|We put the events in ____ order, from first to last.',
+      'prehistoric|Dinosaurs lived in ____ times.', 'medieval|Knights lived in castles in ____ times.', 'Victorian|Many railways were built in ____ times.',
+      'solstice|The longest day of the year is the summer ____.', 'twilight|The soft light just after sunset is called ____.', 'afterwards|We played football, and ____ we had tea.',
+      'appointment|I have a dentist ____ at four o’clock.', 'festival|Diwali is a ____ of lights.', 'lunchtime|At ____ we eat our sandwiches in the hall.',
+      'playtime|At ____ we run around outside.', 'generation|My grandparents are from an older ____.', 'equinox|At the spring ____, day and night are about the same length.']))
   } },
   numbers: { name: 'Number words', icon: '🔢', kind: 'number' },
   tricky: { name: 'Tricky words', icon: '🧩', words: {
@@ -1343,7 +1467,7 @@ function clueEl(w, solved) {
    letters or more near the middle: at a common ending (occasion|ally), else between two consonants that do not belong together (photosyn|thesis,
    Mediter|ranean, question|naire), else after a vowel (perse|verance). 0 = never. */
 const ONSETS = new Set('bl br ch ck cl cr dr fl fr gh gl gr ng ph pl pr qu sc sh sk sl sm sn sp st sw th tr tw wh'.split(' '));
-const SUFFIXES = ['ally', 'tion', 'sion', 'ment', 'ness', 'able', 'ible', 'ence', 'ance', 'ology', 'ship', 'naire', 'ous', 'ive', 'ful'];
+const SUFFIXES = ['ally', 'tion', 'sion', 'ment', 'ness', 'able', 'ible', 'ence', 'ance', 'ology', 'ship', 'naire', 'astic', 'ous', 'ive', 'ful'];
 const isVowel = (c) => 'aeiouy'.indexOf(c.toLowerCase()) >= 0;
 function splitAt(w) {
   const hy = w.indexOf('-');
@@ -1631,6 +1755,9 @@ function deckNote() {
     numbers: { easy: 'Spell one to twenty' + look, medium: '21 to 99, with a hyphen: forty-two' + look, hard: 'Work out the sum, spell the answer · math level ' + (MATH[save.settings.mathLevel] || MATH.explorer).name },
     tricky: { easy: 'said, they, once… with a sentence clue', medium: 'because, friend, people… with a sentence clue', hard: 'believe, separate, necessary… with a sentence clue' },
     science: { easy: 'Nature and everyday science: moon, seed, magnet' + look, medium: 'School science: planet, oxygen, fossil' + look, hard: 'Science reading: atmosphere, ecosystem, photosynthesis' + look },
+    people: { easy: 'Feelings and family: happy, proud, aunt' + look, medium: 'nervous, jealous, cousin, teacher' + look, hard: 'disappointed, grandparents, astronaut' + look },
+    places: { easy: 'Places and maps: river, coast, London' + look, medium: 'harbour, glacier, Scotland' + look, hard: 'peninsula, neighbourhood, Mississippi' + look },
+    time: { easy: 'Days, months, seasons: Monday, July, autumn' + look, medium: 'Thursday, weekend, century' + look, hard: 'Wednesday, February, fortnight, millennium' + look },
     ielts: { easy: 'British spelling (IELTS): colour, centre, Wednesday · sentence clues', medium: 'British spelling (IELTS): environment, recommend, behaviour', hard: 'British spelling (IELTS): accommodation, questionnaire, millennium' },
     homophones: { easy: 'Same sound, different spelling: to · too · two, see · sea', medium: 'there · their · they’re, flour · flower', hard: 'weather · whether, aloud · allowed' },
     endings: { easy: 'Add -es, -ing, -ed, -er, -ly: foxes, jumping, taller', medium: 'Drop the e or double the last letter: making, stopped', hard: 'y turns to i, f turns to v, odd plurals: babies, leaves, mice' }
