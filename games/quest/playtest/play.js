@@ -89,5 +89,12 @@ module.exports = [
   { sleep: 600 }, { shot: 'quest-22-listening' },
   { eval: "(() => { const Q = window.__quest, said = Q.Speech.said.slice(-1)[0] || ''; Q.answer(false); return ['played the talk ' + (said === Q.L.qs[Q.L.i].passage.text), 'transcript hidden ' + document.getElementById('transcript').hidden, Q.L.qs[Q.L.i].skill]; })()" },
   { sleep: 300 }, { shot: 'quest-23-listening-answered' },
+  // find the mistake: how many grammar items make one, and a real one answered by finger
+  { eval: "(() => { const Q = window.__quest, out = []; for (let s = 1; s <= 7; s++) { let ok = 0, all = 0; Q.CONTENT[s - 1].units.forEach((un, u) => un.grammar.forEach((g, i) => { all++; if (Q.spotQ(s, u, i)) ok++; })); out.push(s + ':' + ok + '/' + all); } return 'spot-able ' + out.join(' '); })()" },
+  { eval: "(() => { const Q = window.__quest; Q.startLesson('unit', 3, 2); Q.L.qs[Q.L.i] = Q.spotQ(3, 2, 0) || Q.spotQ(3, 2, 1) || Q.spotQ(3, 2, 2); Q.showQ(); const q = Q.L.qs[Q.L.i]; document.querySelectorAll('[data-tap]').forEach((e) => e.removeAttribute('data-tap')); document.querySelectorAll('#spot .tile')[q.bad].setAttribute('data-tap', '1'); return q.tiles.join(' ') + '  (wrong: ' + q.tiles[q.bad] + ')'; })()" },
+  { sleep: 300 }, { shot: 'quest-24-spot' },
+  { touchEl: '[data-tap]' }, { sleep: 300 },
+  { log: "[document.getElementById('sheet').className, document.getElementById('sheetText').textContent]" },
+  { shot: 'quest-25-spot-answered' },
   { log: 'JSON.stringify(window.__errs)' }
 ];

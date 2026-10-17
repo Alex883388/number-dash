@@ -96,6 +96,9 @@
 .boxes i.cur { border-color: var(--lilac); }
 .boxes i.ok { border-color: var(--mint); }
 .check-row { display: flex; gap: 10px; justify-content: center; }
+.tiles.spot .tile { font-family: var(--font-body); font-weight: 800; font-size: 1.15rem; }
+.tile.wrongword { background: #ffe1e4; border-color: #d9505d; box-shadow: 0 4px 0 #d9505d; color: #5a1f27; text-decoration: line-through; }
+.fixword { align-self: center; font: 700 1.2rem/1 var(--font-display); color: #1d8a65; background: #dff8ec; border: 3px solid #4fd1a5; border-radius: 14px; padding: 10px 12px; }
 .sheet { padding: 14px max(16px, env(safe-area-inset-right, 0px)) calc(14px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); display: grid; grid-template-columns: 1fr auto; gap: 8px 16px; align-items: center; border-top: 3px solid transparent; animation: rise .25s ease both; }
 .sheet.good { background: #dff8ec; border-color: #4fd1a5; color: #1d4a3b; }
 .sheet.bad { background: #ffe8ea; border-color: #ff7b86; color: #5a1f27; }
@@ -293,6 +296,21 @@ function grammarQ(s, u, i) {
   const g = unitOf(s, u).grammar[i];
   return choice({ skill: 'grammar', label: 'Choose the right words', gap: g.q, opts: g.opts, a: g.a, why: g.why, fill: g.q.replace('___', g.opts[g.a]), ref: { s: s, u: u, t: 'grammar', i: i } });
 }
+// find the mistake: a grammar item with a wrong option in the gap; the words are tiles and the
+// child taps the wrong one (a wrong option of several words is one tile). Null when the wrong
+// words also appear elsewhere in the sentence, so the tap is never ambiguous.
+function spotQ(s, u, i) {
+  const g = unitOf(s, u).grammar[i], wrongs = g.opts.filter((_, k) => k !== g.a);
+  for (const w of shuffle(wrongs.slice())) {
+    const toks = g.q.replace('___', '\u0000').split(/\s+/), k = toks.findIndex((t) => t.indexOf('\u0000') >= 0);
+    if (k < 0) return null;
+    const clean = (t) => t.replace(/[^A-Za-z0-9']/g, '').toLowerCase();
+    toks[k] = toks[k].replace('\u0000', w);
+    if (toks.some((t, n) => n !== k && clean(t) === clean(toks[k]))) continue;
+    return { kind: 'spot', skill: 'grammar', label: 'Find the mistake', tiles: toks, bad: k, fix: g.opts[g.a], why: g.why, fill: g.q.replace('___', g.opts[g.a]), ref: { s: s, u: u, t: 'spot', i: i } };
+  }
+  return null;
+}
 const EXTRA_LABEL = { collocation: 'Words that go together', linking: 'Linking ideas', paraphrase: 'Same meaning', register: 'Formal or informal?', wordform: 'Word families',
   phrasal: 'Phrasal verbs', idiom: 'Idioms', preposition: 'Prepositions', mainidea: 'Main idea', cohesion: 'Joining ideas' };
 function extraQ(s, u, i) {
@@ -337,7 +355,7 @@ function unitLesson(s, u) {
   wi.slice(0, vocabN).forEach((i) => qs.push(wordQ(s, u, i)));
   const sp = un.words.map((w, i) => i).filter((i) => spellable(un.words[i].w) && !wi.slice(0, vocabN).includes(i));
   if (sp.length) qs.splice(2, 0, spellQ(s, u, pick(sp)));
-  gi.forEach((i, k) => qs.splice(1 + k * 3, 0, grammarQ(s, u, i)));
+  gi.forEach((i, k) => qs.splice(1 + k * 3, 0, (k === 1 && s >= 2 && Math.random() < 0.6 && spotQ(s, u, i)) || grammarQ(s, u, i)));
   qs.push(orderQ(s, u, si[0], false), orderQ(s, u, si[1], true));
   if (un.extra && un.extra.length) sample(un.extra.map((_, i) => i), s >= 4 ? 2 : 1).forEach((i) => qs.push(extraQ(s, u, i)));
   const ri = anyIdx(readingsOf(un)), rq = readingsOf(un)[ri].qs, hear = s >= 3 && Math.random() < 0.35;
@@ -348,7 +366,7 @@ function stageTest(s) {
   const qs = [], units = [0, 1, 2, 3, 4];
   const U = (u) => unitOf(s, u);
   units.forEach((u) => qs.push(wordQ(s, u, anyIdx(U(u).words)), grammarQ(s, u, anyIdx(U(u).grammar))));
-  sample(units, 2).forEach((u) => qs.push(grammarQ(s, u, anyIdx(U(u).grammar))));
+  sample(units, 2).forEach((u) => { const i = anyIdx(U(u).grammar); qs.push((s >= 2 && spotQ(s, u, i)) || grammarQ(s, u, i)); });
   sample(units, 2).forEach((u) => qs.push(orderQ(s, u, anyIdx(U(u).sentences), Math.random() < 0.5)));
   const ex = units.filter((u) => (unitOf(s, u).extra || []).length);
   if (ex.length) sample(ex, 2).forEach((u) => qs.push(extraQ(s, u, rnd(0, unitOf(s, u).extra.length - 1))));
@@ -367,6 +385,7 @@ function fromRef(r) {
     if (!has(r.s)) return null;
     if (r.t === 'word') return wordQ(r.s, r.u, r.i, r.qt);
     if (r.t === 'grammar') return grammarQ(r.s, r.u, r.i);
+    if (r.t === 'spot') return spotQ(r.s, r.u, r.i) || grammarQ(r.s, r.u, r.i);
     if (r.t === 'extra') return extraQ(r.s, r.u, r.i);
     if (r.t === 'read' || r.t === 'hear') return readingQs(r.s, r.u, [r.i], r.r || 0, r.t === 'hear')[0];
     if (r.t === 'order' || r.t === 'listen') return orderQ(r.s, r.u, r.i, r.t === 'listen');
@@ -423,6 +442,7 @@ function showQ() {
   if (q.text) h += '<div class="prompt">' + esc(q.text) + '</div>';
   if (q.gap) h += '<div class="prompt">' + gapHtml(q.gap) + '</div>';
   if (q.kind === 'choice') h += '<div class="opts' + (q.long ? ' long' : q.keep ? ' row' : '') + '">' + q.opts.map((o, k) => '<button class="opt" data-k="' + k + '"><span class="k">' + (k + 1) + '</span> ' + esc(o) + '</button>').join('') + '</div>';
+  if (q.kind === 'spot') h += '<div class="prompt">Tap the word that is wrong.</div><div class="tiles spot" id="spot">' + q.tiles.map((t, k) => '<button class="tile" data-k="' + k + '">' + esc(t) + '</button>').join('') + '</div>';
   if (q.kind === 'order') h += '<div class="build" id="build" aria-label="Your sentence"></div><div class="tiles" id="tiles">' + q.tiles.map((t, k) => '<button class="tile" data-k="' + k + '">' + esc(t) + '</button>').join('') + '</div><div class="check-row"><button class="btn sun" id="checkBtn" disabled>Check</button></div>';
   if (q.kind === 'spell') { h += '<div class="boxes" id="boxes">' + q.word.split('').map(() => '<i></i>').join('') + '</div><div class="tiles" id="tiles">' + q.tiles.map((t, k) => '<button class="tile" data-k="' + k + '">' + t + '</button>').join('') + '</div>'; q.pos = 0; q.slips = 0; }
   box.innerHTML = h;
@@ -450,6 +470,13 @@ function onTap(e) {
   const opt = e.target.closest('.opt');
   if (opt && q.kind === 'choice') { chooseOpt(q, +opt.dataset.k); return; }
   const tile = e.target.closest('.tile');
+  if (q.kind === 'spot' && tile) {
+    const k = +tile.dataset.k, ok = k === q.bad;
+    $$('#spot .tile').forEach((t, n) => { t.disabled = true; if (n === q.bad) t.classList.add('wrongword'); else if (n === k) t.classList.add('bad'); });
+    $$('#spot .tile')[q.bad].insertAdjacentHTML('afterend', '<span class="fixword">' + esc(q.fix) + '</span>');
+    finish(ok, (ok ? '' : 'The mistake was "' + q.tiles[q.bad] + '". ') + 'Right: ' + q.fill + ' ' + q.why);
+    return;
+  }
   if (q.kind === 'order') {
     if (tile && tile.classList.contains('placed')) { q.built.splice(+tile.dataset.n, 1); Sound.sfx.click(); renderBuild(q); return; }
     if (tile) { const k = +tile.dataset.k; if (!q.built.includes(k)) { q.built.push(k); Sound.sfx.click(); renderBuild(q); } return; }
@@ -471,7 +498,7 @@ function onTap(e) {
 function chooseOpt(q, k) {
   const ok = k === q.a, btns = $$('.opt');
   btns.forEach((b, n) => { b.disabled = true; if (n === q.a) b.classList.add('right'); else if (n === k) b.classList.add('wrong'); else b.classList.add('dim'); });
-  finish(ok, (ok ? '' : 'Answer: ' + q.opts[q.a] + '. ') + (q.why || (q.fill ? q.fill : '')));
+  finish(ok, (ok ? '' : 'Answer: ' + q.opts[q.a] + (/[.!?]$/.test(q.opts[q.a]) ? ' ' : '. ')) + (q.why || (q.fill ? q.fill : '')));
 }
 // after any answer: score it, remember a miss, show the sheet
 function finish(ok, text) {
@@ -627,11 +654,12 @@ window.addEventListener('keydown', (e) => {
 arcadeGuards(() => Speech.stop());
 arcadeLinks();
 
-window.__quest = { L, rec, save, STAGES, CONTENT, has, next, startLesson, nextStep, unitOpen, testOpen, wordQ, unitLesson, stageTest, Speech,
+window.__quest = { L, rec, save, STAGES, CONTENT, has, next, startLesson, nextStep, unitOpen, testOpen, wordQ, unitLesson, stageTest, spotQ, showQ, Speech,
   // answer the current question: right = true picks the right answer (or builds / spells it), false picks a wrong one
   answer(right) {
     const q = L.qs[L.i]; if (!q || L.answered) return false;
     if (q.kind === 'choice') chooseOpt(q, right ? q.a : (q.a + 1) % q.opts.length);
+    else if (q.kind === 'spot') $$('#spot .tile')[right ? q.bad : (q.bad + 1) % q.tiles.length].click();
     else if (q.kind === 'order') {
       const used = [];
       if (right) q.words.forEach((w) => used.push(q.tiles.findIndex((t, k) => t === w && !used.includes(k))));
