@@ -103,5 +103,14 @@ module.exports = [
   { sleep: 400 }, { shot: 'quest-26-my-words-portrait' },
   { touchEl: '.wl-say' }, { log: "window.__quest.Speech.said.slice(-1)[0]" },
   { eval: "(async () => { const Q = window.__quest; document.getElementById('practiseWordsBtn').click(); const kinds = Q.L.qs.map((q) => q.ref.t).join(','); const r = await window.__qbot(() => true); return [Q.L.kind, Q.L.qs.length, kinds, r.right + '/' + r.total, document.getElementById('doneTitle').textContent]; })()" },
+  // the IELTS reading test: ten questions, no feedback on the way, a band at the end, misses go to Review
+  { viewport: [1180, 820, true, false, 2] },
+  { eval: "(() => { const Q = window.__quest; Q.rec.unlocked = 8; document.getElementById('wordsHomeBtn').click(); return [document.getElementById('mockBtn').hidden, document.getElementById('mockBtn').textContent]; })()" },
+  { touchEl: '#mockBtn' }, { sleep: 600 },
+  { log: "[window.__quest.L.kind, window.__quest.L.qs.length, document.getElementById('lcount').textContent]" },
+  { shot: 'quest-27-mock' },
+  { eval: "(async () => { const Q = window.__quest, before = Q.rec.review.length, sleep = (ms) => new Promise((r) => setTimeout(r, ms)); for (let k = 0; k < 10 && !document.getElementById('lesson').hidden; k++) { const sheetShown = !document.getElementById('sheet').hidden; Q.answer(k % 4 !== 0); await sleep(700); if (sheetShown) return 'feedback showed during the test'; } await sleep(300); return [document.getElementById('doneTitle').textContent, document.getElementById('doneMsg').textContent, Q.rec.review.length - before, JSON.stringify(Q.rec.mocks.slice(-1))]; })()" },
+  { shot: 'quest-28-mock-result' },
+  { log: "[window.__quest.mockBand(10, 10), window.__quest.mockBand(9, 10), window.__quest.mockBand(8, 10), window.__quest.mockBand(7, 10), window.__quest.mockBand(5, 10), window.__quest.mockBand(2, 10)].join(' ')" },
   { log: 'JSON.stringify(window.__errs)' }
 ];

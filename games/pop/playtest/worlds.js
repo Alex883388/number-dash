@@ -4,7 +4,8 @@
 // (any 2-3 bubbles, a times pair or a sharing pair) and that the game's planted answer is real and
 // still there. Then it solves like a child would: a moment to read the target, a scan of the field,
 // some mental arithmetic per step (slower with a carry, a borrow or two-digit numbers, a little
-// more for pounds and pence, recall time for times tables and more for sharing), and a finger
+// more for pounds and pence or a decimal point, fractions slower when the denominators differ,
+// crossing zero a moment more, recall time for times tables and more for sharing), and a finger
 // move per tap. All delays are game seconds, so the game runs 8x fast.
 // "quick" is a quick, confident 10-year-old (the 3-star line); "relaxed" thinks 1.6x slower and
 // slips on one target in five (the 2-star line). The star thresholds in pop.html come from here.
@@ -33,9 +34,15 @@ const BOT = `(() => {
   }
   // working out the next bubble from the running total: a known bond to 10 is quick, two-digit
   // sums are slower, a carry or a borrow slower still, and taking away costs a little extra
-  function stepCost(tot, v, world) {
+  const gcd = (a, b) => (b ? gcd(b, a % b) : Math.abs(a));
+  function stepCost(tot, v, world, fd) {
     if (world === 1) return 0.7;
-    if (world === 9) return stepCost(tot, v, 0) + 0.4;   // money: the same sums, plus pounds and pence
+    if (world === 9 || world === 11) return stepCost(tot, v, 0) + 0.4;   // money and decimals: the same sums, plus the units or the point
+    if (world === 10) {   // fractions: quick with the same denominator, slower when one must be changed
+      const den = (u) => fd / gcd(u % fd, fd);
+      return 1.3 + (den(tot) !== den(v) ? 0.8 : 0);
+    }
+    if (world === 12) return stepCost(tot, v, 0) + ((tot >= 0) !== (tot + v >= 0) ? 0.5 : 0);   // crossing zero takes a moment more
     const two = digits(tot) > 1 || digits(v) > 1, a = Math.abs(tot) % 10, b = Math.abs(v) % 10;
     let c = two ? 1.6 : 0.8;
     if (v < 0) c += 0.5 + (a < b ? (two ? 0.8 : 0.3) : 0);
@@ -67,7 +74,7 @@ const BOT = `(() => {
     } else {
       t += k * (sol.length - 2) * 1.2;   // three bubbles take more planning
       let tot = 0;
-      sol.forEach((i, j) => { const v = bubs[i].v; t += k * (0.45 + scan * (j ? 0.6 : 1) + (j ? stepCost(tot, v, s.world) : 0.2)); tot += v; steps.push({ at: t, i: i }); });
+      sol.forEach((i, j) => { const v = bubs[i].v; t += k * (0.45 + scan * (j ? 0.6 : 1) + (j ? stepCost(tot, v, s.world, s.fd) : 0.2)); tot += v; steps.push({ at: t, i: i }); });
     }
     return steps;
   }
@@ -118,7 +125,7 @@ const play = (world, profile, level) => [
 const SUMMARY = `window.__pbot.summary = () => {
   const B = window.__pbot, out = {};
   for (const r of B.runs) {
-    const k = 'w' + r.world + ' ' + r.profile + ([5, 6, 8].indexOf(r.world) >= 0 ? ' ' + r.level : '');
+    const k = 'w' + r.world + ' ' + r.profile + ([5, 6, 8, 10].indexOf(r.world) >= 0 ? ' ' + r.level : '');
     const o = out[k] || (out[k] = { runs: 0, mean: 0, max: 0, stars: [] });
     o.runs++; o.mean += r.time; o.max = Math.max(o.max, r.time); o.stars.push(r.stars);
   }
@@ -129,13 +136,13 @@ const SUMMARY = `window.__pbot.summary = () => {
 const QUICK = +process.env.POP_QUICK || 3, RELAXED = +process.env.POP_RELAXED || 2, SPEED = +process.env.POP_SPEED || 8;
 const steps = [{ viewport: [1180, 820, false, false, 1] }, { sleep: 500 }, { eval: BOT }, { eval: SUMMARY }, { eval: 'window.__pop.setSpeed(' + SPEED + '); "speed " + ' + SPEED }];
 // POP_WORLDS: which worlds to play (default all nine), e.g. POP_WORLDS=7,8,9
-const WORLDS = (process.env.POP_WORLDS || '1,2,3,4,5,6,7,8,9').split(',').map(Number);
+const WORLDS = (process.env.POP_WORLDS || '1,2,3,4,5,6,7,8,9,10,11,12').split(',').map(Number);
 for (const w of WORLDS) {
   for (let i = 0; i < QUICK; i++) steps.push(...play(w, 'quick'));
   for (let i = 0; i < RELAXED; i++) steps.push(...play(w, 'relaxed'));
 }
-// the worlds that follow the tables, at the other two math levels
-for (const w of [5, 6, 8]) if (WORLDS.indexOf(w) >= 0) steps.push(...play(w, 'quick', 'starter'), ...play(w, 'quick', 'genius'));
+// the worlds that follow the math level, at the other two levels
+for (const w of [5, 6, 8, 10]) if (WORLDS.indexOf(w) >= 0) steps.push(...play(w, 'quick', 'starter'), ...play(w, 'quick', 'genius'));
 steps.push({ sleep: 2000 }, { shot: 'pop-w01-results' });
 steps.push({ log: 'JSON.stringify(window.__pbot.summary())' }, { log: 'JSON.stringify(window.__pbot.unsolvable.slice(0, 5))' }, { log: 'JSON.stringify(window.__pbot.badPlanted.slice(0, 5))' });
 steps.push({ log: 'JSON.stringify(window.__pop.rec)' }, { log: 'JSON.stringify(window.__pop.save.math)' });

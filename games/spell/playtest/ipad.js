@@ -99,6 +99,10 @@ module.exports = [
   { shot: 'spell-28-rule-look-ipad' }, fits,
   ...spellNow('actions', 'hard', 'investigate'),
   { shot: 'spell-29-actions-ipad' }, fits,
+  { eval: "__spell.start('ielts', 'hard', ['Mediterranean']); 'look'" }, { sleep: 500 },
+  { shot: 'spell-35-ielts-look-ipad' }, fits,
+  ...spellNow('science', 'hard', 'satellite'),
+  { shot: 'spell-36-science-ipad' }, fits,
   { eval: '__spell.goHome(); "home"' },
 
   // iPad portrait
@@ -132,6 +136,10 @@ module.exports = [
   { shot: 'spell-31-homophone-phone' }, fits,
   ...spellNow('body', 'hard', 'fingernail'),
   { shot: 'spell-32-body-phone' }, fits,
+  ...spellNow('science', 'hard', 'photosynthesis'),
+  { shot: 'spell-37-science-phone' }, fits,
+  { eval: "__spell.start('ielts', 'hard', ['questionnaire']); 'look'" }, { sleep: 500 },
+  { shot: 'spell-38-ielts-phone' }, fits,
 
   // dark
   { viewport: [1180, 820, true, true, 2] },
@@ -151,6 +159,11 @@ module.exports = [
   { shot: 'spell-33-rule-dark' }, fits,
   ...spellNow('body', 'medium', 'gloves'),
   { shot: 'spell-34-body-dark' }, fits,
+  ...spellNow('science', 'medium', 'volcano'),
+  { shot: 'spell-39-science-dark' }, fits,
+  { eval: '__spell.goHome(); "home"' }, { sleep: 400 },
+  { shot: 'spell-40-home-dark' },
+  { log: "['dark home fits', document.getElementById('screens').scrollHeight, innerHeight]" },
 
   // calm mode (the arcade's calm setting / reduced motion): no shakes, flips or sparkles
   { viewport: [1180, 820, true, false, 2] },

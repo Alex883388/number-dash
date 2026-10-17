@@ -184,6 +184,12 @@ body.menu .goal, body.menu .strip { visibility: hidden; }
 #field .bub.c1 { --fill: #d6f7e8; --fill2: #a3e6c8; --edge: #46bf92; }
 #field .bub.c2 { --fill: #e9e2ff; --fill2: #c8b9fb; --edge: #937cea; }
 #field .bub.long { font-size: calc(var(--d, 96px) * .32); }
+.fq { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; font-size: .62em; line-height: 1; margin: 0 .06em; }
+.fq span + span { border-top: .1em solid currentColor; margin-top: .08em; padding-top: .06em; min-width: 1.15em; text-align: center; }
+#field .bub.frac .fq { font-size: .82em; }
+.goal .make .fq { font-size: .56em; }
+.strip .hint .fq { font-size: .85em; }
+.strip .line > .eq .fq, .strip .line > .fq, .strip .tot .fq { font-size: .68em; }
 #field .bub.cu { --fill: #fdeee3; --fill2: #f2c9a8; --edge: #c0773f; }
 #field .bub.ag { --fill: #f6f8fb; --fill2: #d6dce6; --edge: #8e99ad; }
 #field .bub.au { --fill: #f3f5f9; --fill2: #dde2ea; --edge: #c9a227; border-width: calc(var(--d, 96px) * .08); }
@@ -204,7 +210,7 @@ body:not(.menu) .toast { top: var(--toast-top, 42%); }
 @media (min-width: 700px) { .hud-chips { flex-direction: column; align-items: flex-start; } }
 
 /* home: the worlds */
-.worlds { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.worlds { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
 .world {
   min-height: 74px; display: grid; align-content: center; justify-items: center; gap: 3px; padding: 7px 4px; border-radius: 18px; cursor: pointer; min-width: 0;
   background: var(--card-2); border: 2px solid var(--line); box-shadow: 0 4px 0 var(--line); color: var(--ink); transition: transform .08s ease, box-shadow .08s ease;
@@ -231,7 +237,7 @@ body:not(.menu) .toast { top: var(--toast-top, 42%); }
   .strip { width: 100%; }
 }
 @media (max-width: 520px) {
-  .worlds { gap: 6px; }
+  .worlds { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
   .world { min-height: 70px; padding: 6px 2px; border-radius: 14px; }
   .world b { font-size: .98rem; }
   .world small { font-size: .72rem; }
@@ -278,7 +284,7 @@ body.calm #bg i, body.calm .goal.pulse, body.calm .strip.shake { animation: none
       </div>
       <div class="row"><button class="btn sun big" id="playBtn">Play</button></div>
       <div>
-        <p class="seg-title">Tables for Times, Share it and Mix</p>
+        <p class="seg-title">Level for tables and fractions</p>
         <div class="seg">
           <label><input type="radio" name="math" value="starter"><span>2, 5, 10</span></label>
           <label><input type="radio" name="math" value="explorer"><span>To 10 × 10</span></label>
@@ -350,7 +356,19 @@ function loadRecords(key, defaults) {
   try { const raw = localStorage.getItem(key); if (raw) Object.assign(defaults, JSON.parse(raw)); } catch (e) { /* ignore */ }
   return defaults;
 }
+function markPlayed() {
+  try {
+    const d = new Date(), k = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    const days = JSON.parse(localStorage.getItem('arcade-days.v1') || '{}') || {};
+    if (days[k]) return;
+    days[k] = 1;
+    const keys = Object.keys(days).sort();
+    while (keys.length > 400) delete days[keys.shift()];
+    localStorage.setItem('arcade-days.v1', JSON.stringify(days));
+  } catch (e) { /* storage blocked */ }
+}
 function writeSave() {
+  markPlayed();
   try {
     const cur = JSON.parse(localStorage.getItem(SAVE_KEY) || '{}');
     cur.math = save.math; cur.settings = save.settings;
@@ -863,7 +881,16 @@ const WORLDS = [
   // division: the target is a quotient; any two bubbles where the bigger shared by the smaller makes it
   { id: 8, name: 'Share it', ex: '42 ' + DIV + ' 6', n: 10, kind: 'div', op: 'divide', t3: 55, t2: 95 },
   // British coins and a note, in pence inside; targets read 85p or £1.35
-  { id: 9, name: 'Money', ex: '50p + 20p', n: 10, kind: 'plus', money: true, gen: coin, dup: 3, tLo: 6, tHi: 800, parts: [2, 3, 3], op: 'money', t3: 105, t2: 160 }
+  { id: 9, name: 'Money', ex: '50p + 20p', n: 10, kind: 'plus', money: true, gen: coin, dup: 3, tLo: 6, tHi: 800, parts: [2, 3, 3], op: 'money', t3: 105, t2: 160 },
+  // fractions of one family per round (quarters, eighths, or sixths on Genius), in whole units of that family inside
+  { id: 10, name: 'Fractions', ex: '½ + ¼', n: 8, kind: 'plus', frac: true, dup: 3, parts: [2, 2, 3], op: 'fractions',
+    targets: () => FRAC_TARGETS[game.fd], split: (R, m) => splitBy(R, m, () => rnd(1, game.fd - 1), (v) => v >= 1 && v < game.fd), t3: 80, t2: 125 },
+  // decimals in hundredths inside, so nothing ever shows a floating-point slip
+  { id: 11, name: 'Decimals', ex: '0.5 + 1.25', n: 10, kind: 'plus', dec: true, parts: [2, 2, 3], op: 'decimals',
+    targets: () => DEC_TARGETS, split: (R, m) => splitBy(R, m, decVal, decOk), t3: 85, t2: 145 },
+  // below zero: targets mostly under zero; every answer mixes plus and minus bubbles
+  { id: 12, name: 'Below zero', ex: MINUS + '6 + 2', n: 10, kind: 'int', parts: [2, 2, 3], op: 'below zero',
+    targets: () => INT_TARGETS, split: (R, m) => splitBy(R, m, intVal, intOk), check: (vs) => vs.some((v) => v < 0) && vs.some((v) => v > 0), t3: 85, t2: 145 }
 ];
 const worldById = (id) => WORLDS.find((w) => w.id === +id) || WORLDS[0];
 const rec = loadRecords('number-pop.v1', { world: 1, rounds: 0, popped: 0, worlds: {} });
@@ -891,8 +918,13 @@ const coinText = (v) => (v >= 100 ? '£' + v / 100 : v + 'p');
 const moneyText = (v) => (v >= 100 ? '£' + (v / 100).toFixed(2) : v + 'p');
 const coinWords = (v) => (v >= 100 && v % 100 === 0 ? v / 100 + (v === 100 ? ' pound' : ' pounds') : v >= 100 ? Math.floor(v / 100) + ' pounds ' + (v % 100) + ' pence' : v + (v === 1 ? ' penny' : ' pence'));
 const moneyMode = () => game.state !== 'menu' && !!game.w.money;
-const valText = (v) => (moneyMode() ? coinText(v) : numText(v));
-const totText = (v) => (moneyMode() ? moneyText(v) : numText(v));
+const fracMode = () => game.state !== 'menu' && !!game.w.frac;
+const decMode = () => game.state !== 'menu' && !!game.w.dec;
+const valText = (v) => (moneyMode() ? coinText(v) : fracMode() ? fracText(v) : decMode() ? decText(v) : numText(v));
+const totText = (v) => (moneyMode() ? moneyText(v) : fracMode() ? fracText(v) : decMode() ? decText(v) : numText(v));
+// what is drawn: fractions stack (numerator over denominator), everything else is its text
+const valHTML = (v) => (fracMode() ? fracHTML(v) : valText(v));
+const totHTML = (v) => (fracMode() ? fracHTML(v) : totText(v));
 // a Make 100 bubble: often a multiple of five, often any two-digit number, now and then a single digit
 function val100() { const r = Math.random(); return r < 0.45 ? 5 * rnd(1, 19) : r < 0.85 ? rnd(11, 89) : rnd(1, 9); }
 // R cut into m Make 100 bubbles (1-95 each), or null
@@ -906,6 +938,28 @@ function split100(R, m) {
   }
   return null;
 }
+// R cut into m values that gen() makes and ok() accepts, or null
+function splitBy(R, m, gen, ok) {
+  if (m === 1) return ok(R) ? [R] : null;
+  for (let t = 0; t < 30; t++) { const a = gen(), rest = splitBy(R - a, m - 1, gen, ok); if (rest) return [a].concat(rest); }
+  return null;
+}
+// fractions: game.fd is the round's family (4, 8 or 6); a value u means u / fd
+const FRAC_TARGETS = { 4: [2, 3, 4, 4, 5, 6], 8: [4, 6, 7, 8, 8, 8, 10, 12], 6: [3, 4, 5, 6, 6, 6, 8, 9] };
+const gcd = (a, b) => (b ? gcd(b, a % b) : Math.abs(a));
+function fracFamily() { const lv = save.settings.mathLevel; return lv === 'starter' ? 4 : lv === 'genius' ? pick([6, 8]) : 8; }
+function fracParts(u) { const D = game.fd, whole = Math.floor(u / D), r = u % D, g = gcd(r, D); return { whole: whole, n: r / g, d: D / g }; }
+function fracText(u) { const f = fracParts(u); return !f.n ? String(f.whole) : (f.whole ? f.whole + ' ' : '') + f.n + '/' + f.d; }
+function fracHTML(u) { const f = fracParts(u); return !f.n ? String(f.whole) : (f.whole ? f.whole : '') + '<span class="fq"><span>' + f.n + '</span><span>' + f.d + '</span></span>'; }
+// decimals: tenths mostly, quarters now and then; targets are whole, half and quarter amounts
+const DEC_QUARTERS = [25, 75, 125, 175], DEC_TARGETS = [100, 100, 150, 200, 200, 250, 300, 125, 175, 225];
+const decVal = () => (Math.random() < 0.75 ? 10 * rnd(1, 19) : pick(DEC_QUARTERS));
+const decOk = (v) => (v % 10 === 0 && v >= 10 && v <= 190) || DEC_QUARTERS.indexOf(v) >= 0;
+function decText(v) { const a = Math.abs(v), w = Math.floor(a / 100), r = a % 100; return (v < 0 ? MINUS : '') + (!r ? String(w) : r % 10 === 0 ? w + '.' + r / 10 : w + '.' + String(r).padStart(2, '0')); }
+// below zero: bubbles -9 to 12 (never 0); about two targets in three are under zero
+const INT_TARGETS = [-10, -9, -8, -7, -6, -5, -4, -3, -2, -1, -8, -6, -5, -4, -3, -2, 0, 2, 3, 4, 5, 6, 7, 8];
+const intVal = () => (Math.random() < 0.5 ? -rnd(1, 9) : rnd(1, 12));
+const intOk = (v) => v !== 0 && v >= -9 && v <= 12;
 // the exact quotient of two bubbles (bigger by smaller), or NaN
 const divOf = (vs) => { const big = Math.max(vs[0], vs[1]), small = Math.min(vs[0], vs[1]); return small > 0 && big % small === 0 ? big / small : NaN; };
 
@@ -931,8 +985,8 @@ const COLS = ['#62afe9', '#46bf92', '#937cea'], NEG_COL = '#e05468';
 function setValue(b, v) {
   b.v = v; b.col = rnd(0, 2);
   const label = valText(v);
-  b.el.textContent = label;
-  b.el.className = 'bub ' + (v < 0 ? 'neg' : moneyMode() ? (v < 5 ? 'cu' : v < 100 ? 'ag' : v < 500 ? 'au' : 'note') : 'c' + b.col) + (label.length > 2 ? ' long' : '');
+  if (fracMode()) b.el.innerHTML = fracHTML(v); else b.el.textContent = label;
+  b.el.className = 'bub ' + (v < 0 ? 'neg' : moneyMode() ? (v < 5 ? 'cu' : v < 100 ? 'ag' : v < 500 ? 'au' : 'note') : 'c' + b.col) + (fracMode() ? ' frac' : label.length > 2 ? ' long' : '');
   b.el.setAttribute('aria-label', v < 0 ? 'minus ' + (-v) : moneyMode() ? coinWords(v) : String(v));
 }
 function setPicked(b, on) {
@@ -1047,6 +1101,9 @@ function valueRange() {
 function randomValue() {
   const w = game.w, tb = tables(), vr = valueRange();
   if (w.money) return coin();
+  if (w.frac) return rnd(1, game.fd - 1);
+  if (w.dec) return decVal();
+  if (w.kind === 'int') return intVal();
   if (w.split) return val100();
   if (w.kind === 'div') {   // half numbers to share (table products), half numbers to share by
     if (Math.random() < 0.5) { let a = rnd(tb.lo, tb.hi), b = rnd(tb.lo, tb.hi); for (let k = 0; k < 20 && !pairOk(a, b, tb); k++) { a = rnd(tb.lo, tb.hi); b = rnd(tb.lo, tb.hi); } return a * b; }
@@ -1069,7 +1126,7 @@ function planSplit(old, fresh, w, oldVals) {
   const okT = (T, loose) => targets.indexOf(T) >= 0 && !oldVals.has(T) && (loose || targets.length === 1 || T !== last);
   if (old.length >= 2 && Math.random() < 0.55) {
     const cands = [];
-    for (const k of new Set(w.parts)) eachCombo(old, k, (c) => { const T = sumOf(c.map((b) => b.v)); if (okT(T)) cands.push({ T: T, olds: c, vals: [] }); });
+    for (const k of new Set(w.parts)) eachCombo(old, k, (c) => { const vs = c.map((b) => b.v), T = sumOf(vs); if (okT(T) && (!w.check || w.check(vs))) cands.push({ T: T, olds: c, vals: [] }); });
     if (cands.length) return pick(cands);
   }
   for (let tries = 0; tries < 400; tries++) {
@@ -1078,7 +1135,7 @@ function planSplit(old, fresh, w, oldVals) {
     const k = pick(w.parts), m = rnd(1, Math.min(k, fresh.length)), olds = shuffle(old.slice()).slice(0, k - m);
     if (olds.length < k - m) continue;
     const vals = w.split(T - sumOf(olds.map((o) => o.v)), m);
-    if (!vals || vals.indexOf(T) >= 0) continue;
+    if (!vals || vals.indexOf(T) >= 0 || (w.check && !w.check(vals.concat(olds.map((o) => o.v))))) continue;
     return { T: T, olds: olds, vals: shuffle(vals) };
   }
   return null;
@@ -1159,6 +1216,9 @@ function planTarget(fresh) {
   }
   if (!plan) {   // never seen in tests; a plain answer made of new bubbles only
     if (kind === 'div') { const d = tb.key ? pick(tb.key) : rnd(tb.lo, tb.hi), q = rnd(tb.lo, tb.hi); plan = { T: q, olds: [], vals: [d * q, d] }; }
+    else if (w.frac) { plan = { T: game.fd, olds: [], vals: [game.fd / 2, game.fd / 2] }; }
+    else if (w.dec) { plan = { T: 150, olds: [], vals: [50, 100] }; }
+    else if (w.kind === 'int') { plan = { T: -3, olds: [], vals: [4, -7] }; }
     else if (w.split) { const T = pick(w.targets(game.done)), a = 5 * Math.floor(T / 10); plan = { T: T, olds: [], vals: [a, T - a] }; }
     else if (w.money) { plan = { T: 70, olds: [], vals: [50, 20] }; }
     else if (kind === 'times') { const a = tb.key ? pick(tb.key) : rnd(tb.lo, tb.hi), b = rnd(tb.lo, tb.hi); plan = { T: a * b, olds: [], vals: [a, b] }; }
@@ -1181,7 +1241,7 @@ function newTarget(fresh) {
   game.picks = []; game.phase = 'pick'; game.targetAt = game.time; game.tSlips = 0; game.hints = 0; game.wrongNoted = false;
   slots.forEach((b) => b.el.classList.remove('hint'));
   showTarget(); showStrip();
-  announce('Make ' + (moneyMode() ? coinWords(game.target) : game.target) + (game.kind === 'times' ? ' with two bubbles multiplied' : game.kind === 'div' ? ' by dividing one bubble by another' : '') +
+  announce('Make ' + (moneyMode() ? coinWords(game.target) : totText(game.target)) + (game.kind === 'times' ? ' with two bubbles multiplied' : game.kind === 'div' ? ' by dividing one bubble by another' : '') +
     '. Bubbles: ' + slots.filter(alive).map((b) => valText(b.v)).join(', '));
 }
 
@@ -1194,7 +1254,11 @@ function factOf(vals, kind, T) {
 function eqText(vals, kind) {
   if (kind === 'times') return vals.join(' ' + TIMES + ' ');
   if (kind === 'div') return Math.max(vals[0], vals[1]) + ' ' + DIV + ' ' + Math.min(vals[0], vals[1]);
-  return vals.map((v, j) => (j === 0 ? valText(v) : v < 0 ? ' ' + MINUS + ' ' + (-v) : ' + ' + valText(v))).join('');
+  return vals.map((v, j) => (j === 0 ? valText(v) : v < 0 ? ' ' + MINUS + ' ' + valText(-v) : ' + ' + valText(v))).join('');
+}
+function eqHTML(vals, kind) {
+  if (kind === 'times' || kind === 'div') return eqText(vals, kind);
+  return vals.map((v, j) => (j === 0 ? valHTML(v) : v < 0 ? ' ' + MINUS + ' ' + valHTML(-v) : ' + ' + valHTML(v))).join('');
 }
 let lastPointerTap = 0;
 function tap(i) {
@@ -1226,6 +1290,14 @@ function judge() {
   }
   const s = sumOf(vals);
   if (n >= 2 && s === T) { solve(); return; }
+  if (game.kind === 'int') {
+    const left = slots.filter((b) => alive(b) && !b.picked && b.i < game.n).map((b) => b.v);
+    if (s > T && s + sumOf(left.filter((v) => v < 0)) > T) { letGo('Too much!'); return; }
+    if (s < T && s + sumOf(left.filter((v) => v > 0)) < T) { letGo('Too little!'); return; }
+    if (n >= 4) { letGo('Not quite'); return; }
+    showStrip();
+    return;
+  }
   if (s > T) {
     if (game.kind === 'plus') { letGo('Too much!'); return; }
     // take away: going over is fine while the minus bubbles left could still bring it back
@@ -1279,17 +1351,19 @@ function solve() {
 /* ================= target badge and equation strip ================= */
 function showTarget() {
   const g = $('#goal'), w = game.w;
-  $('#targetNum').textContent = totText(game.target);
+  $('#targetNum').innerHTML = totHTML(game.target);
   $('#opLabel').textContent = game.kind === 'times' ? 'times' : w.kind === 'mix' ? 'add' : w.op;
   g.dataset.kind = game.kind;
   g.classList.remove('pulse'); void g.offsetWidth; g.classList.add('pulse');
 }
 function hintText() {
-  const T = '<b>' + totText(game.target) + '</b>';
+  const T = '<b>' + totHTML(game.target) + '</b>';
   if (game.kind === 'times') return 'Which two multiply to ' + T + '?';
   if (game.kind === 'div') return 'Which two divide to make ' + T + '?';
   if (game.w.money) return 'Add coins to make ' + T;
-  if (game.kind === 'minus') return 'Add and take away to make ' + T;
+  if (game.kind === 'minus' || game.kind === 'int') return 'Add and take away to make ' + T;
+  if (game.w.frac) return 'Add fractions to make ' + T;
+  if (game.w.dec) return 'Add decimals to make ' + T;
   if (game.w.parts.length === 1) return 'Find two bubbles that make ' + T;
   return 'Add bubbles to make ' + T;
 }
@@ -1302,19 +1376,26 @@ function showStrip(mode) {
     const v = vals[0];
     // division: a big first pick is the number to share, a small one the number to share by
     if (kind === 'div') html = v > game.target ? v + ' <span class="tot">' + DIV + ' ?</span>' : '<span class="tot">? ' + DIV + '</span> ' + v;
-    else html = valText(v) + ' <span class="tot">' + (kind === 'times' ? TIMES : '+') + ' ?</span>';
+    else html = valHTML(v) + ' <span class="tot">' + (kind === 'times' ? TIMES : '+') + ' ?</span>';
     chars = 7;
   } else {
     const q = kind === 'div' ? divOf(vals) : 0, tot = kind === 'times' ? vals[0] * vals[1] : kind === 'div' ? q : sumOf(vals), eq = eqText(vals, kind);
     const totS = kind === 'div' && !Number.isInteger(q) ? '≠ ' + game.target : '= ' + totText(tot);
-    html = '<span class="eq">' + eq + '</span> <span class="tot">' + totS + '</span>';
+    html = '<span class="eq">' + eqHTML(vals, kind) + '</span> <span class="tot">' + (fracMode() ? '= ' + totHTML(tot) : totS) + '</span>';
     chars = eq.length + 1 + totS.length;
     if (mode === 'good') s.classList.add('good');
-    else if (mode === 'over' || (kind !== 'times' && kind !== 'div' && tot > game.target)) s.classList.add('over');
+    else if (mode === 'over' || (kind !== 'times' && kind !== 'div' && kind !== 'int' && tot > game.target)) s.classList.add('over');
   }
   s.innerHTML = '<span class="line">' + html + '</span>';
   const fit = chars ? Math.min(s.clientHeight * 0.62, (s.clientWidth - 40) / (chars * 0.6)) : 0;
   s.style.fontSize = fit ? Math.max(14, fit).toFixed(1) + 'px' : '';
+  // stacked fractions are narrower than their text: fit by measuring instead
+  if (chars && fracMode()) {
+    const max = s.clientHeight * 0.6;
+    s.style.fontSize = max.toFixed(1) + 'px';
+    const wide = s.firstChild.scrollWidth, room = s.clientWidth - 40;
+    if (wide > room) s.style.fontSize = Math.max(14, max * room / wide).toFixed(1) + 'px';
+  }
 }
 
 /* ================= particles ================= */
@@ -1396,6 +1477,7 @@ function startRound(w) {
   game.w = w; game.n = w.n; game.state = 'play'; game.attempt++;
   game.done = 0; game.time = 0; game.endTime = 0; game.slips = 0; game.score = 0; game.streak = 0; game.bestStreak = 0;
   game.target = 0; game.picks = []; game.phase = 'pick'; game.result = null;
+  game.fd = w.frac ? fracFamily() : 0;
   document.body.classList.remove('menu');
   document.body.classList.toggle('calm', calm());
   $('#hud').hidden = false;
@@ -1552,7 +1634,7 @@ window.__pop = {
   game: game, slots: slots, WORLDS: WORLDS, rec: rec, save: save, ROUND: ROUND, SLIPS3: SLIPS3, tap: tap, stars: starsFor, home: goHome,
   state() {
     return { state: game.state, phase: game.phase, world: game.w.id, kind: game.kind, target: game.target, tid: game.tid, done: game.done,
-      time: game.time, slips: game.slips, tSlips: game.tSlips, score: game.score, streak: game.streak, picks: game.picks.slice(), sol: game.sol.slice(), result: game.result };
+      time: game.time, slips: game.slips, tSlips: game.tSlips, score: game.score, streak: game.streak, picks: game.picks.slice(), sol: game.sol.slice(), result: game.result, fd: game.fd || 0 };
   },
   bubbles() { return slots.slice(0, game.n).map((b) => ({ i: b.i, v: b.v, st: b.st, picked: b.picked, x: FL + b.x, y: FT + b.y, d: D })); },
   target() { return { value: game.target, kind: game.kind, tid: game.tid }; },

@@ -203,6 +203,7 @@ button, label, input, .btn, a { touch-action: manipulation; }
 
 /* home and results */
 .screen { width: min(100%, 640px); }
+#s-home { width: min(100%, 720px); }
 .head { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px 24px; }
 .demo { display: flex; justify-content: center; align-items: center; gap: 8px; }
 .demo i { font: 400 2.6rem/1 var(--emoji); margin-right: 6px; font-style: normal; }
@@ -210,7 +211,9 @@ button, label, input, .btn, a { touch-action: manipulation; }
   width: 44px; height: 44px; display: grid; place-items: center; border-radius: 12px; font: 700 1.6rem/1 var(--font-display);
   background: var(--door); border: 3px solid var(--door-edge); color: var(--door-ink); box-shadow: 0 3px 0 var(--door-edge); box-sizing: border-box;
 }
-.decks { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.decks { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; }
+.deck em { font: 700 .66rem/1.1 var(--font-body); font-style: normal; color: var(--ink-soft); letter-spacing: .02em; }
+.deck input:checked + span em { color: var(--sun-ink); }
 .levelrow { display: flex; flex-wrap: wrap; gap: 8px 14px; justify-content: center; align-items: center; }
 .toggle { font-size: .95rem; padding: 0 1em; min-height: 48px; display: inline-flex; align-items: center; gap: .4em; box-sizing: border-box; box-shadow: 0 3px 0 var(--line); }
 .toggle i { font-style: normal; font-family: var(--emoji); }
@@ -244,9 +247,10 @@ button, label, input, .btn, a { touch-action: manipulation; }
 @media (max-width: 560px) {
   #deckChip { display: none; }
   #s-home .card { gap: 14px; }
-  .decks { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .deck span { min-height: 64px; padding: 5px 2px; font-size: .86rem; }
-  .deck i { font-size: 1.45rem; }
+  .decks { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+  .deck span { min-height: 60px; padding: 4px 1px; font-size: .74rem; border-radius: 14px; }
+  .deck i { font-size: 1.35rem; }
+  .deck em { font-size: .58rem; }
   .demo { display: none; }
   #homeBtns { gap: 8px; }
   #homeBtns .btn { font-size: .88rem; padding: .65em .75em; }
@@ -377,7 +381,19 @@ function loadRecords(key, defaults) {
   try { const raw = localStorage.getItem(key); if (raw) Object.assign(defaults, JSON.parse(raw)); } catch (e) { /* ignore */ }
   return defaults;
 }
+function markPlayed() {
+  try {
+    const d = new Date(), k = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    const days = JSON.parse(localStorage.getItem('arcade-days.v1') || '{}') || {};
+    if (days[k]) return;
+    days[k] = 1;
+    const keys = Object.keys(days).sort();
+    while (keys.length > 400) delete days[keys.shift()];
+    localStorage.setItem('arcade-days.v1', JSON.stringify(days));
+  } catch (e) { /* storage blocked */ }
+}
 function writeSave() {
+  markPlayed();
   try {
     const cur = JSON.parse(localStorage.getItem(SAVE_KEY) || '{}');
     cur.math = save.math; cur.settings = save.settings;
@@ -877,7 +893,8 @@ const Sound = (function () {
    Hard = 7 or more. A word has an emoji when a clear, older one exists (Emoji 11 or before, drawn by
    iPadOS 15 and Windows 10), otherwise a short sentence clue with a gap. Tricky words and Homophones are
    sentence clues; Word endings show a base word and a rule ("stop + ed") with a sentence. No word or
-   clue uses a spelling that differs between US and UK English (colour, grey, favourite, -ise/-ize...). */
+   clue uses a spelling that differs between US and UK English (colour, grey, favourite, -ise/-ize...), except
+   in IELTS spelling, which teaches the British forms on purpose. A word may start with a capital (Wednesday). */
 const LEVELS = ['easy', 'medium', 'hard'];
 const LEVEL_NAME = { easy: 'Easy', medium: 'Medium', hard: 'Hard' };
 const LOOK_SEC = { easy: 4, medium: 3, hard: 2 };
@@ -983,6 +1000,33 @@ const DECKS = {
       'swimsuit|Pack your ____ for the pool.', 'costume|I dressed up in a pirate ____.', 'ponytail|She tied her hair in a ____.', 'hairbrush|Use a ____ to tidy your hair.',
       'toothpaste|Put a little ____ on your toothbrush.', 'shampoo|Wash your hair with ____.', 'headband|A ____ keeps your hair out of your eyes.', 'muscles|You need strong ____ to lift heavy things.',
       'shoelace|Tie your ____ so you don’t trip.', 'fingertip|Touch the screen with your ____.', 'toenail|Your big ____ needs cutting.']))
+  } },
+  science: { name: 'Science', icon: '🧪', words: {
+    easy: P('sun ☀' + VS + ', moon 🌙, star ⭐, fire 🔥, magnet 🧲, bone 🦴, egg 🥚, leaf 🍃, wind 🌬' + VS + ', rain 🌧' + VS + ', snow ❄' + VS + ', cloud ☁' + VS + ', wave 🌊, light 💡, sound 🔊, germ 🦠, plant 🌱, earth 🌍').concat(S([
+      'ice|When water freezes, it turns into ____.', 'rock|A mountain is made of ____.', 'seed|A plant grows from a tiny ____.', 'soil|Plants grow their roots in the ____.',
+      'root|A ____ takes up water from the ground.', 'stem|The ____ holds the flower up.', 'heat|The sun gives us light and ____.', 'gas|Air is a ____ that we cannot see.',
+      'melt|Ice will ____ in the warm sun.', 'float|Wood will ____ on water.', 'sink|A heavy stone will ____ in water.', 'metal|Iron is a strong ____.',
+      'glass|Windows are made of ____.', 'sand|A desert is covered in ____.', 'pole|Every magnet has a north and a south ____.', 'lens|A magnifying glass has a curved ____.',
+      'test|We did a fair ____ in our science lesson.'])),
+    medium: P('volcano 🌋, insect 🐞, liquid 💧, comet ☄' + VS + ', crystal 💎, battery 🔋, reptile 🦎, fungus 🍄, rocket 🚀, galaxy 🌌, atom ⚛' + VS).concat(S([
+      'planet|Mars is a red ____.', 'oxygen|We need to breathe ____ to stay alive.', 'gravity|____ makes things fall to the ground.', 'fossil|A ____ is the shape of an old animal kept in rock.',
+      'solid|Ice is a ____, and water is a liquid.', 'orbit|The moon travels in an ____ around the earth.', 'crater|A rock from space made a big ____ on the moon.', 'mineral|Salt is a ____ found in rocks.',
+      'habitat|A pond is the ____ of frogs and fish.', 'predator|An owl is a ____ that hunts mice.', 'prey|Mice are ____ for owls and foxes.', 'pollen|Bees carry yellow ____ from flower to flower.',
+      'nectar|Butterflies drink sweet ____ from flowers.', 'shadow|Your ____ is longest in the evening.', 'circuit|A bulb lights up in a complete ____.', 'current|An electric ____ flows through the wire.',
+      'mammal|A whale is a ____, not a fish.', 'eclipse|In a solar ____, the moon hides the sun.', 'season|Summer is the warmest ____.', 'force|A push or a pull is a ____.',
+      'steam|Boiling water turns into ____.', 'muscle|Your heart is a strong ____.', 'climate|The ____ near the equator is hot.', 'energy|Food gives your body ____.'])),
+    hard: P('satellite 🛰' + VS + ', bacteria 🧫, electricity ⚡').concat(S([
+      'atmosphere|The ____ is the layer of air around the earth.', 'temperature|Water boils at a ____ of 100 degrees.', 'experiment|Scientists do an ____ to test an idea.',
+      'organism|Any living thing is an ____.', 'ecosystem|A forest is an ____ full of living things.', 'photosynthesis|Plants make food from sunlight by ____.',
+      'evaporation|Puddles dry up because of ____.', 'condensation|Drops form on a cold window by ____.', 'precipitation|Rain, snow and hail are kinds of ____.',
+      'hypothesis|A ____ is an idea that you can test.', 'laboratory|Scientists work in a ____.', 'molecule|A ____ of water has three atoms.',
+      'nucleus|The ____ controls what a cell does.', 'chemical|Salt is a ____ made of sodium and chlorine.', 'evolution|Darwin wrote about the ____ of living things.',
+      'extinction|Dinosaurs died out in a mass ____.', 'hydrogen|Water is made of ____ and oxygen.', 'universe|The ____ holds billions of galaxies.',
+      'friction|____ slows a sliding box down.', 'vibration|Sound is made by a ____.', 'digestion|Your stomach helps with the ____ of food.',
+      'respiration|Breathing is part of ____.', 'vertebrate|An animal with a backbone is a ____.', 'amphibian|A frog is an ____ that lives on land and in water.',
+      'carnivore|A lion is a ____ because it eats meat.', 'herbivore|A cow is a ____ because it eats plants.', 'chlorophyll|____ makes leaves green.',
+      'pollination|Bees help with the ____ of flowers.', 'germination|____ is when a seed starts to grow.', 'renewable|Wind power is a ____ energy source.',
+      'pollution|Smoke from cars causes air ____.', 'earthquake|An ____ makes the ground shake.', 'adaptation|A camel’s hump is an ____ to life in the desert.']))
   } },
   numbers: { name: 'Number words', icon: '🔢', kind: 'number' },
   tricky: { name: 'Tricky words', icon: '🧩', words: {
@@ -1091,6 +1135,46 @@ const DECKS = {
       'one mouse, two …|mice|The cat chased two little ____.', 'one child, two …|children|The ____ played in the park.', 'one tooth, two …|teeth|Brush your ____ twice a day.',
       'one foot, two …|feet|My ____ are cold.', 'one goose, two …|geese|The ____ flew south for the winter.', 'one woman, two …|women|The ____ were walking their dogs.',
       'one man, two …|men|The ____ carried the piano.'])
+  } },
+  // IELTS spelling teaches the British forms the test expects (colour, centre, organise): the deck card says so,
+  // and only this deck may use spellings that differ between US and UK English
+  ielts: { name: 'IELTS spelling', sub: 'British spelling', icon: '🎓', words: {
+    easy: S(['address|Please write your home ____ on the form.', 'believe|I ____ that exercise is good for you.', 'business|She runs a small ____ in the town centre.',
+      'beginning|At the ____ of the course, we met the teacher.', 'February|The course starts on the third of ____.', 'Wednesday|The library is closed on ____ afternoons.',
+      'friend|I am going on holiday with a ____.', 'receive|You will ____ a letter next week.', 'tomorrow|The next lecture is ____ at ten.',
+      'until|The museum is open ____ five o’clock.', 'truly|I am ____ sorry for the mistake.', 'argument|Give one ____ for and one against.',
+      'colour|What ____ is your new car?', 'centre|We met at the shopping ____.', 'favourite|My ____ subject at school was maths.',
+      'neighbour|My ____ looks after my cat.', 'theatre|We booked tickets for the ____.', 'travelling|She enjoys ____ by train.',
+      'cancelled|The flight was ____ because of snow.', 'grey|He wore a ____ suit to the interview.', 'realise|I didn’t ____ the shop was closed.',
+      'organise|Who will ____ the meeting?', 'calendar|Write the date in your ____.', 'quiet|Please be ____ in the reading room.',
+      'quite|The test was ____ difficult.', 'their|The students handed in ____ essays.', 'which|____ form do I need to fill in?',
+      'weather|The ____ was cold and wet.', 'studying|I am ____ for a degree in biology.', 'clothes|Bring warm ____ for the field trip.',
+      'library|You can borrow books from the ____.', 'because|I was late ____ the bus broke down.', 'metre|A ____ is one hundred centimetres.',
+      'litre|The bottle holds one ____ of water.', 'programme|The ____ starts at eight tonight.']),
+    medium: S(['environment|We must protect the natural ____.', 'government|The ____ has announced new laws.', 'necessary|It is ____ to book in advance.',
+      'separate|Keep paper and plastic ____.', 'recommend|I would ____ this hotel to anyone.', 'definitely|I will ____ finish the essay today.',
+      'embarrass|Don’t ____ your friend in public.', 'guarantee|The watch has a two-year ____.', 'occasion|A wedding is a special ____.',
+      'restaurant|We had dinner at an Italian ____.', 'temperature|The ____ will drop to five degrees.', 'vegetable|Carrots are my favourite ____.',
+      'interesting|The lecture was very ____.', 'knowledge|Reading improves your general ____.', 'experience|She has ten years of teaching ____.',
+      'opportunity|This job is a great ____.', 'successful|The project was very ____.', 'unfortunately|____, the course is now full.',
+      'immediately|Please call me back ____.', 'especially|I like fruit, ____ apples.', 'independent|Students should become more ____.',
+      'appearance|He changed his ____ completely.', 'behaviour|The children’s ____ was excellent.', 'analyse|Scientists ____ the data carefully.',
+      'catalogue|Order a free ____ online.', 'jewellery|She sells handmade ____.', 'licence|You need a ____ to drive.',
+      'practise|I ____ the piano every evening.', 'apologise|I ____ for the delay.', 'recognise|I didn’t ____ you with glasses!',
+      'foreign|Learning a ____ language takes time.', 'describe|____ the graph in your own words.', 'disappear|Many species may ____ soon.',
+      'achieve|Work hard to ____ your goals.', 'equipment|The gym has modern ____.']),
+    hard: S(['accommodation|The university offers student ____.', 'occurrence|Floods are a common ____ here.', 'millennium|A ____ is a thousand years.',
+      'pronunciation|Her ____ of English is very clear.', 'questionnaire|Please fill in this short ____.', 'rhythm|Music has a strong ____.',
+      'committee|The ____ will meet on Monday.', 'maintenance|The lift is closed for ____.', 'conscientious|A ____ student always checks her work.',
+      'conscious|Are you ____ of the risks?', 'entrepreneur|An ____ starts new businesses.', 'exaggerate|Don’t ____; it wasn’t that bad!',
+      'harass|It is wrong to ____ other people.', 'manoeuvre|The driver made a difficult ____.', 'miniature|He collects ____ cars.',
+      'mischievous|The ____ puppy hid my shoe.', 'noticeable|The change was hardly ____.', 'parallel|Draw two ____ lines.',
+      'privilege|It is a ____ to study here.', 'receipt|Keep the ____ in case you need a refund.', 'sincerely|Yours ____, Anna Brown.',
+      'souvenir|I bought a ____ in Paris.', 'threshold|Mind the ____ as you walk in.', 'vacuum|____ the carpet once a week.',
+      'acquaintance|He is an old ____ of mine.', 'bureaucracy|There is too much ____ in the office.', 'colleague|My ____ helped me with the report.',
+      'convenient|Is Friday ____ for you?', 'existence|Scientists debate the ____ of life on Mars.', 'hierarchy|Every company has a ____ of managers.',
+      'leisure|What do you do in your ____ time?', 'perseverance|Learning a language takes ____.', 'unnecessary|Avoid ____ words in your essay.',
+      'occasionally|I ____ eat out with friends.', 'Mediterranean|We sailed across the ____ Sea.'])
   } }
 };
 const DECK_IDS = Object.keys(DECKS);
@@ -1141,7 +1225,7 @@ function factWord(usedWords, usedFacts) {
 const CONFUSE = { a: 'eou', b: 'dp', c: 'ks', d: 'bt', e: 'aiy', f: 'v', g: 'jk', h: 'n', i: 'ey', j: 'g', k: 'c', l: 'i', m: 'n', n: 'm', o: 'ua', p: 'bq', q: 'p', r: 'w', s: 'cz', t: 'd', u: 'o', v: 'fw', w: 'v', x: 'z', y: 'ie', z: 's' };
 const DOUBLERS = 'lstrmnpcfgbd';
 function makeTiles(word, level, alt) {
-  const letters = word.split(''), inWord = new Set(letters), decoys = [];
+  const letters = word.split(''), inWord = new Set(letters.concat(letters.map((c) => c.toLowerCase()))), decoys = [];
   const want = clamp(level === 'easy' ? 2 : level === 'medium' ? 3 : 4, 2, Math.max(2, 16 - letters.length));
   if (alt && alt.length) {
     const need = {};
@@ -1154,7 +1238,7 @@ function makeTiles(word, level, alt) {
     shuffle(decoys); decoys.length = Math.min(decoys.length, 4);
   }
   if (level !== 'easy' && decoys.length < want && Math.random() < 0.5) { const d = letters.filter((c) => DOUBLERS.indexOf(c) >= 0); if (d.length) decoys.push(pick(d)); }
-  const near = shuffle(Array.from(new Set(letters.map((c) => CONFUSE[c] || '').join('').split(''))).filter((c) => c && !inWord.has(c) && decoys.indexOf(c) < 0));
+  const near = shuffle(Array.from(new Set(letters.map((c) => CONFUSE[c.toLowerCase()] || '').join('').split(''))).filter((c) => c && !inWord.has(c) && decoys.indexOf(c) < 0));
   while (decoys.length < want && near.length) decoys.push(near.pop());
   const rest = shuffle('abcdefghijklmnoprstuvwy'.split('').filter((c) => !inWord.has(c) && decoys.indexOf(c) < 0));
   while (decoys.length < want && rest.length) decoys.push(rest.pop());
@@ -1255,11 +1339,30 @@ function clueEl(w, solved) {
   s.append(parts[0], gap, parts[1] || '');
   return s;
 }
+/* Where a long word's boxes may break onto two lines on a narrow screen: after a hyphen, or for words of 12
+   letters or more near the middle: at a common ending (occasion|ally), else between two consonants that do not belong together (photosyn|thesis,
+   Mediter|ranean, question|naire), else after a vowel (perse|verance). 0 = never. */
+const ONSETS = new Set('bl br ch ck cl cr dr fl fr gh gl gr ng ph pl pr qu sc sh sk sl sm sn sp st sw th tr tw wh'.split(' '));
+const SUFFIXES = ['ally', 'tion', 'sion', 'ment', 'ness', 'able', 'ible', 'ence', 'ance', 'ology', 'ship', 'naire', 'ous', 'ive', 'ful'];
+const isVowel = (c) => 'aeiouy'.indexOf(c.toLowerCase()) >= 0;
+function splitAt(w) {
+  const hy = w.indexOf('-');
+  if (hy > 0) return hy + 1;
+  if (w.length < 12 || w.indexOf("'") >= 0) return 0;
+  const half = w.length / 2, ks = [];
+  for (let k = Math.ceil(half) - 2; k <= Math.floor(half) + 2; k++) ks.push(k);
+  ks.sort((a, b) => Math.abs(a - half) - Math.abs(b - half));
+  // a common ending near the middle is the most natural place (occasion|ally, question|naire)
+  const bySuffix = ks.find((k) => k >= 4 && SUFFIXES.some((sf) => w.slice(k).toLowerCase() === sf || (w.slice(k).toLowerCase().startsWith(sf) && w.length - k <= sf.length + 2)));
+  if (bySuffix) return bySuffix;
+  return ks.find((k) => !isVowel(w[k - 1]) && !isVowel(w[k]) && !ONSETS.has((w[k - 1] + w[k]).toLowerCase())) ||
+    ks.find((k) => isVowel(w[k - 1]) && !isVowel(w[k])) || Math.round(half);
+}
 function renderBoxes() {
-  const w = game.word.w, hy = w.indexOf('-');
+  const w = game.word.w, cut = splitAt(w);
   wordEl.textContent = ''; boxes = [];
-  // a hyphenated number word is two parts, so a narrow screen can break it after the hyphen
-  const cuts = hy > 0 ? [w.slice(0, hy + 1), w.slice(hy + 1)] : [w];
+  // two parts side by side, so a narrow screen can stack them (see splitAt)
+  const cuts = cut > 0 ? [w.slice(0, cut), w.slice(cut)] : [w];
   let k = 0;
   for (const part of cuts) {
     const p = document.createElement('div'); p.className = 'part';
@@ -1289,7 +1392,7 @@ function setPhase(kind) {
 function updateHud() {
   $('#wordChip').textContent = 'Word ' + Math.min(ROUND, game.i + 1) + ' / ' + ROUND;
   $('#starChip').textContent = '⭐ ' + game.results.filter((r) => r.perfect).length;
-  $('#deckChip').textContent = DECKS[game.deck].name + ' · ' + LEVEL_NAME[game.level] + (game.listen ? ' · 👂' : '');
+  $('#deckChip').textContent = DECKS[game.deck].name + (DECKS[game.deck].sub ? ' (British)' : '') + ' · ' + LEVEL_NAME[game.level] + (game.listen ? ' · 👂' : '');
 }
 
 /* Sizes so a whole word, its tiles and the picture fit with no scrolling: the boxes as big as
@@ -1307,7 +1410,8 @@ function layout() {
   const w = game.word.w, n = w.length, hy = w.indexOf('-');
   const bmax = clamp(Math.round(vh * 0.085), 40, 76), bg = n > 9 ? 4 : 6;
   let bs = Math.min(bmax, Math.floor((availW - bg * (n - 1)) / n)), lines = 1;
-  if (bs < 38 && hy > 0) { const m = Math.max(hy + 1, n - hy - 1); bs = Math.min(bmax, Math.floor((availW - bg * (m - 1)) / m)); lines = 2; }
+  const cut = splitAt(w);
+  if (cut > 0 && bs < (hy > 0 ? 38 : 28)) { const m = Math.max(cut, n - cut); bs = Math.min(bmax, Math.floor((availW - bg * (m - 1)) / m)); lines = 2; }
   wordEl.classList.toggle('two', lines === 2);
   const wordH = lines * Math.round(bs * 1.18) + (lines - 1) * 8;
   let ts = clamp(Math.round(Math.min(vh * 0.09, vw * 0.11)), 56, 74), tg = vw < 500 ? 8 : 10;
@@ -1425,8 +1529,8 @@ function tapTile(i) {
 function typeLetter(ch) {
   if (game.state !== 'spell') return;
   const need = game.word.w[game.pos];
-  let i = ch === need ? game.tiles.findIndex((t) => !t.used && t.ch === ch) : -1;
-  if (i < 0) i = game.tiles.findIndex((t) => !t.used && t.ch === ch);
+  let i = ch === need.toLowerCase() ? game.tiles.findIndex((t) => !t.used && t.ch === need) : -1;
+  if (i < 0) i = game.tiles.findIndex((t) => !t.used && t.ch.toLowerCase() === ch);
   if (i >= 0) tapTile(i);
   else if (!calm()) { const b = boxes[game.pos]; b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump'); }
 }
@@ -1526,6 +1630,8 @@ function deckNote() {
   const notes = {
     numbers: { easy: 'Spell one to twenty' + look, medium: '21 to 99, with a hyphen: forty-two' + look, hard: 'Work out the sum, spell the answer · math level ' + (MATH[save.settings.mathLevel] || MATH.explorer).name },
     tricky: { easy: 'said, they, once… with a sentence clue', medium: 'because, friend, people… with a sentence clue', hard: 'believe, separate, necessary… with a sentence clue' },
+    science: { easy: 'Nature and everyday science: moon, seed, magnet' + look, medium: 'School science: planet, oxygen, fossil' + look, hard: 'Science reading: atmosphere, ecosystem, photosynthesis' + look },
+    ielts: { easy: 'British spelling (IELTS): colour, centre, Wednesday · sentence clues', medium: 'British spelling (IELTS): environment, recommend, behaviour', hard: 'British spelling (IELTS): accommodation, questionnaire, millennium' },
     homophones: { easy: 'Same sound, different spelling: to · too · two, see · sea', medium: 'there · their · they’re, flour · flower', hard: 'weather · whether, aloud · allowed' },
     endings: { easy: 'Add -es, -ing, -ed, -er, -ly: foxes, jumping, taller', medium: 'Drop the e or double the last letter: making, stopped', hard: 'y turns to i, f turns to v, odd plurals: babies, leaves, mice' }
   };
@@ -1533,7 +1639,7 @@ function deckNote() {
   return rec.listen ? base.replace(look, '') + ' · Listen only: the word is never shown' : base;
 }
 $('#decks').innerHTML = DECK_IDS.map((id) => '<label class="deck" data-deck="' + id + '"><input type="radio" name="deck" value="' + id + '"><span><i aria-hidden="true">' +
-  DECKS[id].icon + '</i>' + DECKS[id].name + '<small></small></span></label>').join('');
+  DECKS[id].icon + '</i>' + DECKS[id].name + (DECKS[id].sub ? '<em>' + DECKS[id].sub + '</em>' : '') + '<small></small></span></label>').join('');
 function renderHome() {
   DECK_IDS.forEach((id) => {
     const best = rec.best[bestKey(id, rec.level, rec.listen)] || 0, lab = document.querySelector('.deck[data-deck="' + id + '"]');
@@ -1677,7 +1783,7 @@ window.__spell = {
   forceNext: (list) => { forced = list; },
   start: (deck, level, force) => { rec.deck = deck; rec.level = level; renderHome(); startRound(force); },
   lookAgain: () => $('#lookBtn').click(), hear: () => $('#hearBtn').click(), pause, resume, goHome,
-  setSpeed: (k) => { game.speed = k; }, setListen: (on) => { rec.listen = !!on; renderHome(); }, bestKey, DECK_IDS, fits, layout, makeTiles, wordList, numWord, factWord, factSay, buildRound
+  splitAt, setSpeed: (k) => { game.speed = k; }, setListen: (on) => { rec.listen = !!on; renderHome(); }, bestKey, DECK_IDS, fits, layout, makeTiles, wordList, numWord, factWord, factSay, buildRound
 };
 })();
 </script>

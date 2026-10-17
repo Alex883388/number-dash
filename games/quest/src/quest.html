@@ -83,6 +83,9 @@
 .opt.right { background: #dff8ec; border-color: #2fae84; box-shadow: 0 5px 0 #2fae84; color: #1d4a3b; }
 .opt.wrong { background: #ffe1e4; border-color: #d9505d; box-shadow: 0 5px 0 #d9505d; color: #5a1f27; animation: shake .35s ease; }
 .opt.dim { opacity: .45; }
+.opt.picked { background: var(--lilac-soft); border-color: var(--lilac); box-shadow: 0 5px 0 var(--lilac); }
+.lcount.timer { min-width: 64px; color: var(--ink); }
+.lcount.timer.low { color: var(--coral-deep); }
 .opt:disabled { cursor: default; }
 .opt:focus-visible { outline: 3px solid var(--lilac); outline-offset: 3px; }
 .build { width: 100%; min-height: 64px; box-sizing: border-box; border-radius: 18px; border: 3px dashed var(--line); padding: 10px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-content: center; background: color-mix(in srgb, var(--card) 70%, transparent); }
@@ -157,6 +160,7 @@
         <button class="btn" id="reviewBtn">🔁 Review</button>
         <button class="btn" id="placeBtn">🎯 Find my level</button>
         <button class="btn" id="wordsBtn">📒 My words</button>
+        <button class="btn" id="mockBtn" hidden>📝 IELTS reading test</button>
       </div>
       <dl class="stats" id="homeStats"></dl>
       <div class="skills" id="skills" aria-label="Skills"></div>
@@ -396,6 +400,20 @@ function stageTest(s) {
   const rri = anyIdx(readingsOf(U(ru))), rrq = readingsOf(U(ru))[rri].qs;
   return shuffle(qs).concat(readingQs(s, ru, sample(rrq.map((_, j) => j), Math.min(3, rrq.length)).sort(), rri));
 }
+// IELTS reading practice: two passages from the highest stages reached, all their questions, against
+// the clock, no feedback until the end; the score maps to a rough band (a practice estimate only)
+const MOCK_MINUTES = 18;
+const mockStages = () => [7, 6, 5].filter((n) => has(n) && n <= rec.unlocked);
+function mockTest() {
+  const st = mockStages(); if (!st.length) return null;
+  const s1 = st[0], s2 = st[1] || st[0], u1 = rnd(0, 4); let u2 = rnd(0, 4); if (s2 === s1 && u2 === u1) u2 = (u1 + 1 + rnd(0, 3)) % 5;
+  const pick2 = (n, u) => { const rs = readingsOf(unitOf(n, u)); const ri = anyIdx(rs); return readingQs(n, u, null, ri); };
+  return pick2(s1, u1).concat(pick2(s2, u2));
+}
+function mockBand(right, total) {
+  const x = Math.round(right / total * 40);   // the real test has 40 questions
+  return x >= 39 ? '9.0' : x >= 37 ? '8.5' : x >= 35 ? '8.0' : x >= 33 ? '7.5' : x >= 30 ? '7.0' : x >= 27 ? '6.5' : x >= 23 ? '6.0' : x >= 19 ? '5.5' : x >= 15 ? '5.0' : x >= 13 ? '4.5' : 'below 4.5';
+}
 // review: the missed items, asked again (a right answer takes one off the list)
 function reviewLesson() {
   return sample(rec.review, 10).map((r) => fromRef(r)).filter(Boolean);
@@ -424,6 +442,7 @@ function startLesson(kind, s, u) {
   else if (kind === 'test') qs = stageTest(s);
   else if (kind === 'review') qs = reviewLesson();
   else if (kind === 'words') qs = sample(learnedWords(), 10).map((e) => wordQ(e.s, e.u, e.i));
+  else if (kind === 'mock') qs = mockTest();
   else if (kind === 'place') qs = [];
   if (kind !== 'place' && (!qs || !qs.length)) { toast(kind === 'review' ? 'Nothing to review yet!' : 'Coming soon', 'hello'); return; }
   Object.assign(L, { kind: kind, s: s || 0, u: u || 0, qs: qs, i: 0, right: 0, total: 0, answered: false, words: [], place: null, startedAt: performance.now() });
@@ -434,8 +453,16 @@ function startLesson(kind, s, u) {
   else { const name = Sound.remix(round - 1, 0, 'quest'); if (name) setTimeout(() => toast('♪ ' + name), 300); }
   showScreen(null);
   $('#lesson').hidden = false;
+  L.deadline = kind === 'mock' ? performance.now() + MOCK_MINUTES * 60000 : 0;
   showQ();
 }
+// the test's clock in the top bar; time up ends the test
+setInterval(() => {
+  if ($('#lesson').hidden || L.kind !== 'mock' || !L.deadline) return;
+  const left = Math.max(0, L.deadline - performance.now()) / 1000, c = $('#lcount');
+  c.textContent = fmtTime(left); c.classList.add('timer'); c.classList.toggle('low', left < 120);
+  if (left <= 0) { L.deadline = 0; endLesson(); }
+}, 500);
 // the level test: three questions per stage, climbing while at least two of three are right
 function placeNext() {
   const P = L.place;
@@ -518,6 +545,7 @@ function onTap(e) {
 }
 function chooseOpt(q, k) {
   const ok = k === q.a, btns = $$('.opt');
+  if (L.kind === 'mock') { btns.forEach((b, n) => { b.disabled = true; if (n === k) b.classList.add('picked'); }); finish(ok, ''); return; }
   btns.forEach((b, n) => { b.disabled = true; if (n === q.a) b.classList.add('right'); else if (n === k) b.classList.add('wrong'); else b.classList.add('dim'); });
   finish(ok, (ok ? '' : 'Answer: ' + q.opts[q.a] + (/[.!?]$/.test(q.opts[q.a]) ? ' ' : '. ')) + (q.why || (q.fill ? q.fill : '')));
 }
@@ -532,9 +560,10 @@ function finish(ok, text) {
   if (q.word && !L.words.includes(q.word)) L.words.push(q.word);
   if (L.kind === 'place') { L.place.asked++; if (ok) L.place.ok++; }
   writeSave();
-  ok ? Sound.sfx.right() : Sound.sfx.wrong();
+  if (L.kind === 'mock') Sound.sfx.click(); else if (ok) Sound.sfx.right(); else Sound.sfx.wrong();   // a test gives nothing away
   if (q.after && ok) setTimeout(() => Speech.say(q.after), 200);
   else if (q.fill && ok) setTimeout(() => Speech.say(q.fill), 200);
+  if (L.kind === 'mock') { setTimeout(next, 450); announce('Answer saved.'); return; }
   if (q.hear && $('#transcript')) { $('#transcript').hidden = false; }
   const sheet = $('#sheet');
   sheet.className = 'sheet ' + (ok ? 'good' : 'bad');
@@ -583,6 +612,13 @@ function endLesson() {
       msg = L.s < STAGES.length ? 'Next stage open: ' + STAGES[L.s].name + ' (' + STAGES[L.s].cefr + (STAGES[L.s].ielts ? ', IELTS ' + STAGES[L.s].ielts : '') + ').' : 'You finished the whole quest: IELTS 8 level!';
       Sound.sfx.win();
     } else { title = 'Almost there!'; msg = pct + '% right. The stage test needs 80%. Practise the lessons and try again.'; }
+  } else if (L.kind === 'mock') {
+    const band = mockBand(L.right, Math.max(1, L.qs.length));
+    stars = L.right >= 9 ? 3 : L.right >= 7 ? 2 : L.right >= 5 ? 1 : 0;
+    title = 'IELTS reading practice';
+    msg = L.right + ' of ' + L.qs.length + ' right' + (L.total < L.qs.length ? ' (' + (L.qs.length - L.total) + ' not answered in time)' : '') + ' · about band ' + band + '. A practice estimate from 10 questions; missed ones are in Review.';
+    rec.mocks = (rec.mocks || []).concat([{ d: today(), r: L.right, n: L.qs.length, b: band }]).slice(-20);
+    L.words = L.qs.map((q) => q.passage.title).filter((t, i, a) => a.indexOf(t) === i);
   } else if (L.kind === 'words') {
     stars = pct >= 90 ? 3 : pct >= 70 ? 2 : 1; title = 'Word practice done!'; msg = pct + '% right. Every word you know makes the next lesson easier.';
   } else if (L.kind === 'review') {
@@ -618,6 +654,9 @@ function renderHome() {
   $('#goBtn').textContent = !rec.lessons && !rec.placed ? 'Start' : nx && nx.kind === 'test' ? 'Stage test' : 'Continue';
   $('#reviewBtn').textContent = '🔁 Review' + (rec.review.length ? ' (' + rec.review.length + ')' : '');
   $('#wordsBtn').textContent = '📒 My words' + (rec.learned.length ? ' (' + rec.learned.length + ')' : '');
+  $('#mockBtn').hidden = !mockStages().length;
+  const lastMock = (rec.mocks || []).slice(-1)[0];
+  $('#mockBtn').textContent = '📝 IELTS reading test' + (lastMock ? ' (last: ' + lastMock.b + ')' : '');
   $('#homeStats').innerHTML = stat('Streak', '🔥 ' + streak()) + stat('Words', rec.learned.length) + stat('Stages passed', done + ' / 7');
   const sk = Object.keys(SKILL).filter((k) => rec.skills[k] && rec.skills[k][1]);
   $('#skills').innerHTML = sk.map((k) => { const v = rec.skills[k], p = Math.round(v[0] / v[1] * 100); return '<div class="skill"><span>' + SKILL[k] + '</span><span class="bar"><i style="width:' + p + '%"></i></span><span>' + p + '%</span></div>'; }).join('');
@@ -674,6 +713,7 @@ $('#pathBtn').addEventListener('click', () => { renderPath(levelNow()); showScre
 $('#reviewBtn').addEventListener('click', () => startLesson('review'));
 $('#placeBtn').addEventListener('click', () => startLesson('place'));
 $('#wordsBtn').addEventListener('click', () => { renderWords(); showScreen('words'); });
+$('#mockBtn').addEventListener('click', () => startLesson('mock'));
 $('#wordsHomeBtn').addEventListener('click', goHome);
 $('#practiseWordsBtn').addEventListener('click', () => startLesson('words'));
 $('#wordList').addEventListener('click', (e) => { const b = e.target.closest('[data-say]'); if (b) Speech.say(b.dataset.say); });
@@ -699,7 +739,7 @@ window.addEventListener('keydown', (e) => {
 arcadeGuards(() => Speech.stop());
 arcadeLinks();
 
-window.__quest = { L, rec, save, STAGES, CONTENT, has, next, startLesson, nextStep, unitOpen, testOpen, wordQ, unitLesson, stageTest, spotQ, showQ, renderWords, Speech,
+window.__quest = { L, rec, save, STAGES, CONTENT, has, next, startLesson, nextStep, unitOpen, testOpen, wordQ, unitLesson, stageTest, spotQ, showQ, renderWords, mockBand, Speech,
   // answer the current question: right = true picks the right answer (or builds / spells it), false picks a wrong one
   answer(right) {
     const q = L.qs[L.i]; if (!q || L.answered) return false;

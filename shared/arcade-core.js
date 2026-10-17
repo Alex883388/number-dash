@@ -33,7 +33,9 @@ function loadRecords(key, defaults) {
   try { const raw = localStorage.getItem(key); if (raw) Object.assign(defaults, JSON.parse(raw)); } catch (e) { /* ignore */ }
   return defaults;
 }
+/*__SHARED:arcade-days__*/
 function writeSave() {
+  markPlayed();
   try {
     const cur = JSON.parse(localStorage.getItem(SAVE_KEY) || '{}');
     cur.math = save.math; cur.settings = save.settings;

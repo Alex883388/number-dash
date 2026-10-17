@@ -3,7 +3,7 @@
 // Each round: word 3 gets one wrong tile first (refused, counted as a slip), word 5 uses Look again, every other
 // letter is right. Checks per word: the layout fits, the right tile is always there, the word was read aloud,
 // and per round: 8 perfect = 2 stars, the results lists, the "♪ remix" toast on every round after the first.
-// Then: a perfect round (3 stars), a slippy one (1 star), a Listen only round (no look, no look again, its own record),
+// Then: a perfect round (3 stars), a slippy one (1 star), a Listen only round on IELTS Hard (no look, no look again, its own record), a capital typed in small letters,
 // a homophone typed with the other spelling (refused), a rule card, missed words coming back, a keyboard, a pause, the records.
 const PLAY = `(async () => {
   const S = __spell, sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -80,15 +80,21 @@ const MORE = `(async () => {
   out.slippyRound = r.perfect + ' perfect, ' + r.stars + '★' + (r.problems.length ? ' ' + r.problems.join('/') : '');
   // Listen only: the word is never shown, Look again does nothing, the results say so, its own best
   S.setListen(true);
-  S.start('homophones', 'medium');
+  S.start('ielts', 'hard');
   S.setSpeed(30);
   while (S.state() !== 'spell') await sleep(10);
   S.lookAgain();
   const refused = S.state() === 'spell' && !S.game.looked && document.getElementById('lookBtn').disabled;
   r = await window.__playRound(2, -1);
-  out.listenRound = { firstState: r.firstState, lookAgainRefused: refused, perfect: r.perfect, stars: r.stars, note: document.getElementById('doneNote').textContent,
-    best: S.rec.best[S.bestKey('homophones', 'medium', true)], chip: document.getElementById('deckChip').textContent, problems: r.problems };
+  out.listenRound = { deck: 'ielts/hard', firstState: r.firstState, lookAgainRefused: refused, perfect: r.perfect, stars: r.stars, note: document.getElementById('doneNote').textContent,
+    best: S.rec.best[S.bestKey('ielts', 'hard', true)], chip: document.getElementById('deckChip').textContent, problems: r.problems };
   S.setListen(false);
+  // a capital: "Wednesday" typed on a keyboard in small letters still fills the capital W tile
+  S.start('ielts', 'easy', ['Wednesday']);
+  while (S.state() !== 'spell') await sleep(10);
+  const cap = S.tiles().map((t) => t.ch).join('');
+  'wednesday'.split('').forEach((c) => window.dispatchEvent(new KeyboardEvent('keydown', { key: c, bubbles: true })));
+  out.capital = { tiles: cap, state: S.state(), slips: S.game.results.length ? S.game.results[S.game.results.length - 1].slips : S.game.slips, card: document.querySelector('.deck[data-deck="ielts"]').innerText.replace(/\\n+/g, ' / ') };
   // a homophone: "there" with every sound-alike buildable, typed as "their" -> the i is refused
   S.start('homophones', 'medium', ['there']);
   while (S.state() !== 'spell') await sleep(10);

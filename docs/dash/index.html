@@ -2416,7 +2416,18 @@ try {
   const raw = localStorage.getItem(SAVE_KEY);
   if (raw) { const d = JSON.parse(raw); for (const k of Object.keys(save)) if (d && d[k] && typeof d[k] === 'object') Object.assign(save[k], d[k]); }
 } catch (e) { /* storage blocked: play without saving */ }
-function writeSave() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(save)); } catch (e) { /* ignore */ } }
+function markPlayed() {
+  try {
+    const d = new Date(), k = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    const days = JSON.parse(localStorage.getItem('arcade-days.v1') || '{}') || {};
+    if (days[k]) return;
+    days[k] = 1;
+    const keys = Object.keys(days).sort();
+    while (keys.length > 400) delete days[keys.shift()];
+    localStorage.setItem('arcade-days.v1', JSON.stringify(days));
+  } catch (e) { /* storage blocked */ }
+}
+function writeSave() { markPlayed(); try { localStorage.setItem(SAVE_KEY, JSON.stringify(save)); } catch (e) { /* ignore */ } }
 function lvlSave(id) { return save.levels[id] || (save.levels[id] = { best: 0, practice: 0, stars: [0, 0, 0], done: false }); }
 function totalStars() { let n = 0; for (const k in save.levels) n += (save.levels[k].stars || []).filter(Boolean).length; return n; }
 

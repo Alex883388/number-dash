@@ -217,7 +217,9 @@ try {
   const lr = localStorage.getItem(LADDER_KEY);
   if (lr) Object.assign(rec, JSON.parse(lr));
 } catch (e) { /* storage blocked: play without saving */ }
+/*__SHARED:arcade-days__*/
 function writeSave() {
+  markPlayed();
   try {
     const cur = JSON.parse(localStorage.getItem(SAVE_KEY) || '{}');
     cur.math = save.math; cur.settings = save.settings; cur.cube = save.cube;

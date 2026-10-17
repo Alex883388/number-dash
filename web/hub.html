@@ -100,6 +100,22 @@ h1 span { color: var(--sun-deep); }
 .skills { display: flex; flex-wrap: wrap; gap: 6px; }
 .skills span { font: 800 .7rem/1 var(--font-body); text-transform: uppercase; letter-spacing: .07em; padding: 6px 9px; border-radius: 99px; background: var(--card-2); color: var(--ink-soft); }
 :root { --emoji: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; }
+/* today: three suggestions for the day, from the games' own records */
+.today { background: var(--card); border-radius: 26px; box-shadow: var(--shadow); padding: 18px 20px; display: grid; gap: 12px; }
+.today-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.today h2 { margin: 0; font: 700 1.5rem/1.1 var(--font-display); }
+.streak { font: 700 1.05rem/1 var(--font-display); color: var(--ink-soft); }
+.streak b { color: var(--sun-deep); }
+.todo { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 10px; }
+.todo a { display: grid; grid-template-columns: 44px 1fr; gap: 10px; align-items: center; text-decoration: none; color: inherit; background: var(--card-2); border: 2px solid var(--line); border-radius: 18px; padding: 10px 12px; min-height: 64px; box-sizing: border-box; touch-action: manipulation; }
+.todo a:focus-visible { outline: 4px solid var(--lilac); outline-offset: 3px; }
+.todo .ic { font: 1.9rem/1 var(--emoji); text-align: center; }
+.todo b { display: block; font: 700 1.05rem/1.2 var(--font-display); }
+.todo span span { display: block; color: var(--ink-soft); font-size: .9rem; line-height: 1.3; }
+.parents { background: var(--card); border-radius: 18px; padding: 12px 16px; box-shadow: 0 4px 14px rgba(41, 52, 90, .1); }
+.parents summary { cursor: pointer; font: 700 1.05rem/1.2 var(--font-display); min-height: 32px; display: flex; align-items: center; }
+.parents ul { margin: 10px 0 0; padding-left: 20px; display: grid; gap: 6px; line-height: 1.45; }
+.parents p { margin: 8px 0 0; color: var(--ink-soft); font-size: .9rem; }
 .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin: 0; }
 .stats div { background: var(--card); border-radius: 18px; padding: 14px 8px; text-align: center; box-shadow: 0 4px 14px rgba(41, 52, 90, .1); min-width: 0; }
 .stats dt { font-size: .76rem; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-soft); font-weight: 800; }
@@ -114,6 +130,10 @@ h1 span { color: var(--sun-deep); }
     <h1>Number <span>Arcade</span></h1>
     <p class="lead">Math, memory and English games for curious kids. Pick one!</p>
   </header>
+  <section class="today" id="today" aria-label="Today">
+    <div class="today-head"><h2>Today</h2><span class="streak" id="streak"></span></div>
+    <div class="todo" id="todo"></div>
+  </section>
   <div class="games">
     <a class="game" href="dash/">
       <div class="art dash-art" aria-hidden="true"><i class="cube"></i><i class="spike" style="left:40%"></i><i class="spike" style="left:52%"></i><span class="door">63</span></div>
@@ -163,9 +183,9 @@ h1 span { color: var(--sun-deep); }
       <div class="body">
         <span class="num">Game 4</span>
         <h2>Number Pop</h2>
-        <p>Tap the floating bubbles that make the target number. Later worlds bring take-away, times, sharing and money.</p>
+        <p>Tap the floating bubbles that make the target number. Later worlds bring take-away, times, sharing, money, fractions and decimals.</p>
         <div class="skills"><span>Mental math</span></div>
-        <span class="meta" id="popMeta">9 worlds</span>
+        <span class="meta" id="popMeta">12 worlds</span>
         <span class="play">Play</span>
       </div>
     </a>
@@ -200,6 +220,7 @@ h1 span { color: var(--sun-deep); }
     </a>
   </div>
   <dl class="stats" id="stats"></dl>
+  <details class="parents" id="parents"><summary>Progress for parents</summary><ul id="parentList"></ul><p>Saved on this device only. IELTS bands are practice estimates from the CEFR stage.</p></details>
   <p class="tip" id="tip" hidden>On iPad: tap Share, then Add to Home Screen. Number Arcade then opens full screen from its own icon and works without internet.</p>
 </main>
 <script>
@@ -215,8 +236,41 @@ h1 span { color: var(--sun-deep); }
   document.getElementById('stats').innerHTML = cell('Answers right', right) + cell('Dash stars', stars + ' / 120') + cell('Ladder best', (l.best || 0) + ' / 30') + cell('Pairs found', pu.pairs || 0) + cell('Words learned', learned) + cell('English stage', EQ[eqStage - 1].split(' · ')[1]);
   if (done) document.getElementById('dashMeta').textContent = done + ' of 40 levels finished';
   if (pu.wins) document.getElementById('pairMeta').textContent = pu.wins + (pu.wins === 1 ? ' board' : ' boards') + ' cleared';
-  if (popStars) document.getElementById('popMeta').textContent = popStars + ' of 27 stars';
+  if (popStars) document.getElementById('popMeta').textContent = popStars + ' of 36 stars';
   if (eq.lessons) document.getElementById('questMeta').textContent = 'Now at ' + EQ[eqStage - 1];
+  // daily streak from the days every game marks when it saves
+  var days = read('arcade-days.v1'), key = function (d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+  var d0 = new Date(), streak = 0, played = !!days[key(d0)];
+  if (!played) d0.setDate(d0.getDate() - 1);
+  while (days[key(d0)]) { streak++; d0.setDate(d0.getDate() - 1); }
+  var week = 0, dw = new Date(); for (var i = 0; i < 7; i++) { if (days[key(dw)]) week++; dw.setDate(dw.getDate() - 1); }
+  document.getElementById('streak').innerHTML = streak ? '🔥 <b>' + streak + '</b> ' + (streak === 1 ? 'day' : 'days') + (played ? '' : ' · play today to keep it') : 'Play today to start a streak';
+  // three suggestions: English every day, then a math game and a memory or spelling game that change by the day
+  var dayNo = Math.floor(Date.now() / 864e5), esc = function (t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;'); };
+  var POP = ['Make 10', 'Up to 20', 'Up to 50', 'Take away', 'Times', 'Mix', 'Make 100', 'Share it', 'Money', 'Fractions', 'Decimals', 'Below zero'];
+  var popNext = 0; for (var w = 1; w <= 12; w++) { var r = (np.worlds || {})[w]; if (!r || (r.stars || 0) < 3) { popNext = w; break; } }
+  var missedSpell = Array.isArray(sp.missed) ? sp.missed.length : 0, reviewEq = Array.isArray(eq.review) ? eq.review.length : 0;
+  var todo = [
+    !eq.lessons ? { href: 'quest/', ic: '🎯', t: 'Find your English level', d: 'A short test, then lessons at the right stage' }
+      : { href: 'quest/', ic: '🧭', t: 'English Quest · ' + EQ[eqStage - 1], d: reviewEq ? reviewEq + ' to review, then the next lesson' : 'Next lesson on the path' },
+    [{ href: 'pop/', ic: '🫧', t: 'Number Pop', d: popNext ? 'Get 3 stars in ' + (POP[popNext - 1] || 'a new world') : 'Beat a best time' },
+     { href: 'ladder/', ic: '🪜', t: 'Number Ladder', d: l.best ? (l.best >= 30 ? 'Climb it again in English mode' : 'Beat your best: rung ' + l.best) : 'Climb to rung 10' },
+     { href: 'dash/', ic: '🏃', t: 'Number Dash', d: done ? 'Finish a new level (' + done + ' of 40 done)' : 'Start with Cloud Hop' }][dayNo % 3],
+    [{ href: 'spell/', ic: '✏️', t: 'Spell It', d: missedSpell ? 'Practise ' + missedSpell + ' tricky ' + (missedSpell === 1 ? 'word' : 'words') : 'Learn 10 new words' },
+     { href: 'pair/', ic: '🃏', t: 'Pair Up', d: pu.wins ? 'Try a new kind of cards' : 'Find 6 pairs' }][dayNo % 2]
+  ];
+  document.getElementById('todo').innerHTML = todo.map(function (x) { return '<a href="' + x.href + '"><span class="ic" aria-hidden="true">' + x.ic + '</span><span><b>' + esc(x.t) + '</b><span>' + esc(x.d) + '</span></span></a>'; }).join('');
+  // for parents: what each skill has added up to
+  var tricky = (d.math && d.math.tricky) ? d.math.tricky.length : 0, eqWords = Array.isArray(eq.learned) ? eq.learned.length : 0;
+  var EQIELTS = ['', '', '', ' · IELTS ≈ 4.0–5.0', ' · IELTS ≈ 5.5–6.5', ' · IELTS ≈ 7.0–7.5', ' · IELTS ≈ 8.0'];
+  document.getElementById('parentList').innerHTML = [
+    '<b>English:</b> ' + (eq.lessons ? 'working on ' + EQ[eqStage - 1] + EQIELTS[eqStage - 1] + ', ' + eq.lessons + ' lessons, ' + eqWords + ' words learned' + (reviewEq ? ', ' + reviewEq + ' items to review' : '') : 'English Quest not started yet'),
+    '<b>Spelling:</b> ' + learned + ' words spelled perfectly' + (sp.rounds ? ' in ' + sp.rounds + ' rounds' : '') + (missedSpell ? ', ' + missedSpell + ' still tricky' : ''),
+    '<b>Math:</b> ' + right + ' answers right' + (tricky ? ', ' + tricky + (tricky === 1 ? ' fact' : ' facts') + ' still being practised' : ''),
+    '<b>Memory:</b> ' + (pu.wins || 0) + ' Pair Up boards cleared, ' + (pu.pairs || 0) + ' pairs found',
+    '<b>Games:</b> Dash ' + stars + ' / 120 stars, Ladder best rung ' + (l.best || 0) + ' / 30, Pop ' + popStars + ' stars',
+    '<b>Days played:</b> ' + week + ' of the last 7' + (streak ? ', streak ' + streak : '')
+  ].map(function (t) { return '<li>' + t + '</li>'; }).join('');
   if (learned) document.getElementById('spellMeta').textContent = learned + (learned === 1 ? ' word' : ' words') + ' spelled perfectly';
   if (l.tops) document.getElementById('ladderMeta').textContent = 'Reached the top ' + l.tops + (l.tops === 1 ? ' time' : ' times');
   else if (l.best) document.getElementById('ladderMeta').textContent = 'Best so far: rung ' + l.best + ' of 30';

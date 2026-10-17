@@ -28,6 +28,11 @@ module.exports = [
   { eval: "(() => { const P = window.__pop, s = P.state(), bs = P.bubbles(); for (const a of bs) for (const b of bs) { if (a.i === b.i) continue; const big = Math.max(a.v, b.v), small = Math.min(a.v, b.v); if (big % small !== 0) { P.tap(a.i); P.tap(b.i); return [s.target, a.v, b.v, document.getElementById('strip').textContent, P.state().phase]; } } return 'no pair'; })()" },
   { sleep: 150 }, { shot: 'pop-s07-share-not-quite' },
   { log: "JSON.stringify(window.__pop.save.math.tricky.slice(-1))" },
+  // Fractions on Genius until the round's family is sixths (thirds and sixths), one fraction picked
+  { eval: "(() => { const P = window.__pop; P.save.settings.mathLevel = 'genius'; for (let i = 0; i < 20; i++) { P.home(); P.start(10); if (P.state().fd === 6) break; } P.tap(P.state().sol[0]); return [P.state().fd, P.state().target, document.getElementById('strip').textContent]; })()" },
+  { sleep: 400 }, { shot: 'pop-s08-fractions-sixths' },
+  // Below zero: going too far down with nothing left to bring it back says so
+  { eval: "(() => { const P = window.__pop; P.save.settings.mathLevel = 'explorer'; P.home(); P.start(12); const s = P.state(); return [s.kind, s.target, P.bubbles().map((b) => b.v).join(' ')]; })()" },
   // a whole Make 10 round by tapping the planted answers, for the results card (with "Next world")
   { eval: "(() => { const P = window.__pop; P.setSpeed(10); let next = 0; P.hook = () => { const s = P.state(); if (s.state !== 'play' || s.phase !== 'pick' || s.time < next) return; const i = s.sol.find((j) => !P.slots[j].picked); if (i !== undefined) { P.tap(i); next = s.time + 0.5; } }; return P.start(1); })()" },
   { waitFor: "window.__pop.state().state === 'done'", timeout: 30000 }, { sleep: 2200 },

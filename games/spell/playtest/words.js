@@ -1,12 +1,12 @@
 // Spell It: checks every word list (run from the repo root):
 //   node games/spell/build.js && ND_CDP=9361 ND_PROFILE=edge-profile-spell ND_URL=file:///D:/Github/number-dash/games/spell/dist/preview.html ND_READY='!!window.__spell' ND_BOT=none node games/dash/playtest/shoot.js games/spell/playtest/words.js
 // - lists: letters only (a hyphen in number words, an apostrophe in homophones like they're), picture decks
-//   (Animals, Food, Around us, Actions, Body & clothes) Easy 3-4 / Medium 5-6 / Hard 7+ letters, no repeats in a deck,
+//   (Animals, Food, Around us, Actions, Body & clothes) Easy 3-4 / Medium 5-6 / Hard 7+ letters, Science 3-6 / 4-8 / 7+, no repeats in a deck,
 //   no picture twice in a deck, no US/UK spelling in a word or a clue, one gap per sentence that never gives the word
 //   away, every homophone's sound-alikes are in the deck, every rule card changes its base word, 30+ words per level;
 // - tiles: 25 deals of every word (and every number word, and Hard sums at every math level) hold all its letters,
 //   2-4 decoys, no spare hyphen, a spare apostrophe only to tempt a homophone;
-// - emoji: drawn in colour by this machine's emoji font (contact sheet: shots/spell-w01-emoji.png and -w02);
+// - emoji: drawn in colour by this machine's emoji font (contact sheets: shots/spell-w01-emoji.png, -w02, -w03);
 // - layout: every word shown on an iPad (landscape and portrait), a phone and a small laptop, each checked with
 //   __spell.fits(), plus the clue decks once more in Listen only.
 const LISTS = `(() => {
@@ -32,17 +32,26 @@ const LISTS = `(() => {
       if (list.length < 30 && d !== 'numbers') bad(d + '/' + l + ' has only ' + list.length + ' words');
       for (const x of list) {
         const w = x.w;
-        const re = d === 'numbers' ? /^[a-z]+(-[a-z]+)?$/ : d === 'homophones' ? /^[a-z]+('[a-z]+)?$/ : /^[a-z]+$/;
+        // IELTS spelling teaches British forms on purpose (colour, organise), and a few words start with a capital
+        const british = d === 'ielts';
+        const re = d === 'numbers' ? /^[a-z]+(-[a-z]+)?$/ : d === 'homophones' ? /^[a-z]+('[a-z]+)?$/ : british ? /^[A-Z]?[a-z]+$/ : /^[a-z]+$/;
         if (!re.test(w)) bad('odd letters: ' + w);
         if (deckWords.has(w)) bad('repeat in ' + d + ': ' + w);
         deckWords.add(w);
         if (seen[w] && seen[w] !== d) out.dupAcross.push(w + ' (' + seen[w] + ', ' + d + ')');
         seen[w] = d;
-        if (hasUSUK(w).length) bad('US/UK word: ' + w);
+        if (british) out.british = (out.british || 0) + (hasUSUK(w).length ? 1 : 0);
+        else if (hasUSUK(w).length) bad('US/UK word: ' + w);
         if (PICTURE.indexOf(d) >= 0) {
           if (l === 'easy' && (w.length < 3 || w.length > 4)) bad('easy length: ' + d + '/' + w);
           if (l === 'medium' && (w.length < 5 || w.length > 6)) bad('medium length: ' + d + '/' + w);
           if (l === 'hard' && w.length < 7) bad('hard length: ' + d + '/' + w);
+        }
+        if (d === 'science') {
+          // by difficulty rather than strict length: everyday words, school words, reading words
+          if (l === 'easy' && (w.length < 3 || w.length > 6)) bad('science easy length: ' + w);
+          if (l === 'medium' && (w.length < 4 || w.length > 8)) bad('science medium length: ' + w);
+          if (l === 'hard' && w.length < 7) bad('science hard length: ' + w);
         }
         if (x.kind === 'emoji') {
           if (!x.pic) bad('no picture: ' + w);
@@ -53,7 +62,7 @@ const LISTS = `(() => {
           if (gaps !== 1) bad('gaps in clue for ' + w + ': ' + gaps);
           if (new RegExp('(^|[^a-z’\\'])' + w.replace("'", "['’]") + '($|[^a-z’\\'])', 'i').test(x.clue.replace('____', ''))) bad('clue gives away ' + w);
           const u = hasUSUK(x.clue + ' ' + (x.kind === 'rule' ? x.pic : ''));
-          if (u.length) bad('US/UK word in clue for ' + w + ': ' + u.join(','));
+          if (u.length && d !== 'ielts') bad('US/UK word in clue for ' + w + ': ' + u.join(','));
           if (x.clue.length > 64) bad('long clue for ' + w + ': ' + x.clue.length);
         }
         if (x.kind === 'homo') {
@@ -174,7 +183,7 @@ const FITS_ALL = `(() => {
   }
   S.save.settings.mathLevel = keep;
   S.setListen(true);
-  for (const d of ['tricky', 'homophones', 'endings']) for (const l of S.LEVELS) go(d, l, S.wordList(d, l).map((x) => x.w));
+  for (const d of ['tricky', 'homophones', 'endings', 'science', 'ielts']) for (const l of S.LEVELS) go(d, l, S.wordList(d, l).map((x) => x.w));
   S.setListen(false);
   S.goHome();
   return { size: innerWidth + 'x' + innerHeight, checked: n, problems: bad.length, first: bad.slice(0, 12) };
@@ -191,6 +200,9 @@ module.exports = [
   { eval: SHEET(220, 440) },
   { sleep: 600 },
   { shot: 'spell-w02-emoji' },
+  { eval: SHEET(440, 660) },
+  { sleep: 600 },
+  { shot: 'spell-w03-emoji' },
   { eval: "document.getElementById('sheet').remove(); 'ok'" },
   { viewport: [1180, 820, true, false, 1] },
   { eval: FITS_ALL },
