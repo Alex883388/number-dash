@@ -304,5 +304,205 @@
         "Is changing your mind a sign of weakness or of maturity, in your opinion?"
       ]
     }
+  ],
+  "part1": [
+    {
+      "id": "mover-p1-1",
+      "stage": 2,
+      "topic": "Your home",
+      "qs": [
+        { "q": "Do you live in a house or a flat?", "model": "I live in a flat. It's on the third floor, and from my bedroom window I can see the park." },
+        { "q": "What is your favourite room in your home?", "model": "My favourite room is my bedroom. It's small, but it's very bright and I've got lots of books there. I like reading on my bed after school." },
+        { "q": "Who do you live with?", "model": "I live with my mum, my dad and my little sister. We've also got a cat called Pepper. She likes sleeping on the sofa all day." },
+        { "q": "What do you like doing at home?", "model": "I like playing board games with my family. We usually play on Sunday evenings. My dad always wins, but it's still fun." }
+      ]
+    },
+    {
+      "id": "mover-p1-2",
+      "stage": 2,
+      "topic": "Food",
+      "qs": [
+        { "q": "What is your favourite food?", "model": "My favourite food is pizza. I like it with cheese and tomatoes. My mum and I sometimes make it at home on Fridays." },
+        { "q": "Do you like fruit?", "model": "Yes, I love fruit. I eat an apple or a banana every day, and strawberries are my favourite." },
+        { "q": "What do you usually eat for breakfast?", "model": "I usually eat cereal with milk. Sometimes I have toast and honey too. I always drink a glass of orange juice." },
+        { "q": "Can you cook?", "model": "Yes, I can make a sandwich and a fruit salad. I can't cook pasta yet, but my dad helps me. I like cooking with him in the kitchen." }
+      ]
+    },
+    {
+      "id": "mover-p1-3",
+      "stage": 2,
+      "topic": "Animals",
+      "qs": [
+        { "q": "Do you like animals?", "model": "Yes, I really like animals. Dogs are my favourite, and I like watching the birds in our garden too." },
+        { "q": "Have you got a pet?", "model": "Yes, I've got a rabbit called Snowy. She's white and very soft. I give her a carrot every morning before school." },
+        { "q": "Which animal would you like to see at the zoo?", "model": "I'd like to see a giraffe. Giraffes are very tall, and they can eat leaves from the top of the trees." },
+        { "q": "Which animals can you see near your home?", "model": "I can see lots of birds and squirrels in the park near my home. The squirrels can climb trees very fast. I like watching them from my window." }
+      ]
+    },
+    {
+      "id": "flyer-p1-1",
+      "stage": 3,
+      "topic": "School",
+      "qs": [
+        { "q": "What is your favourite subject at school?", "model": "My favourite subject is science, because we do lots of experiments. Last week we made a model volcano that really erupted, and it was brilliant." },
+        { "q": "How do you get to school?", "model": "I usually walk to school with my brother, because it's only ten minutes away. When it rains, my mum takes us by car." },
+        { "q": "What do you do at break time?", "model": "I play outside with my friends. Yesterday we played tag in the playground, and I was the fastest runner. Sometimes we just sit on a bench and talk." },
+        { "q": "Do you like your school?", "model": "Yes, I like it a lot, because the teachers are kind and friendly. We've also got a big library, so I can borrow a new book every week." }
+      ]
+    },
+    {
+      "id": "flyer-p1-2",
+      "stage": 3,
+      "topic": "The weekend",
+      "qs": [
+        { "q": "What do you usually do at the weekend?", "model": "On Saturdays, I go swimming in the morning. On Sundays, we usually visit my grandparents, so I see my cousins too." },
+        { "q": "What did you do last weekend?", "model": "Last weekend, I went to the beach with my family. We built a big sandcastle and ate ice cream. It was quite cold, but we had a great time." },
+        { "q": "Do you prefer Saturdays or Sundays?", "model": "I prefer Saturdays, because I don't have any homework and I can play football with my friends. On Sundays, I often have to tidy my room." },
+        { "q": "Who do you spend your weekends with?", "model": "I usually spend them with my family. Sometimes my best friend comes to my house, so we play computer games or ride our bikes in the park." }
+      ]
+    },
+    {
+      "id": "flyer-p1-3",
+      "stage": 3,
+      "topic": "Weather",
+      "qs": [
+        { "q": "What is the weather usually like where you live?", "model": "It's often cloudy and it rains quite a lot, so I always take an umbrella to school. In the summer it's warm and sunny, and that's my favourite time of year." },
+        { "q": "What kind of weather do you like best?", "model": "I like snowy weather best, because I love building snowmen. Last winter, it snowed for three days, so we didn't go to school." },
+        { "q": "What do you do when it rains?", "model": "When it rains, I usually stay inside and draw or read comics. Sometimes I put on my boots and jump in the puddles, because it's really fun." },
+        { "q": "Do you like hot weather?", "model": "Not really, because I get tired and thirsty very quickly. Last summer it was very hot, so we went to the swimming pool almost every day." }
+      ]
+    },
+    {
+      "id": "explorer-p1-1",
+      "stage": 4,
+      "topic": "Friends",
+      "qs": [
+        { "q": "Do you have a lot of friends?", "model": "I've got quite a lot of friends at school, but only two really close ones. I've known my best friend, Mia, since we were five, so we know everything about each other." },
+        { "q": "What do you like doing with your friends?", "model": "We usually ride our bikes in the park or play games at each other's houses. Recently, we've started making short funny videos, which we show to our families." },
+        { "q": "Is it easy for you to make new friends?", "model": "Not always, because I'm a bit shy at first. However, if I join a club or a team, I usually make friends quickly, since we already have something in common." },
+        { "q": "What makes someone a good friend?", "model": "I think a good friend is someone who listens to you and keeps your secrets. My best friend, for example, always helps me when I'm worried, and I try to do the same for her." }
+      ]
+    },
+    {
+      "id": "explorer-p1-2",
+      "stage": 4,
+      "topic": "Sport",
+      "qs": [
+        { "q": "Do you play any sports?", "model": "Yes, I play basketball for my school team. I've been in the team for two years now, and we train every Tuesday and Thursday after school." },
+        { "q": "Did you do more sport when you were younger?", "model": "Actually, I used to do more, because I went to swimming and gymnastics lessons every week. Now I've got more homework, so I only have time for basketball." },
+        { "q": "Do you prefer watching sport or playing it?", "model": "I definitely prefer playing it, because watching can get quite boring after a while. However, I do enjoy watching big tennis matches on television with my dad." },
+        { "q": "Is there a sport you would like to try?", "model": "I'd love to try rock climbing, because it looks exciting and it would make me stronger. If I had the chance, I'd start at an indoor climbing centre, where it's safer." }
+      ]
+    },
+    {
+      "id": "explorer-p1-3",
+      "stage": 4,
+      "topic": "Birthdays",
+      "qs": [
+        { "q": "How do you usually celebrate your birthday?", "model": "I usually have a small party at home with my family and a few friends. My mum always bakes a chocolate cake, and we play games in the garden if the weather's nice." },
+        { "q": "What did you do on your last birthday?", "model": "On my last birthday, I went bowling with four friends, and then we had pizza. It was the best birthday I've ever had, because I won both games." },
+        { "q": "Do you prefer giving or receiving presents?", "model": "To be honest, I enjoy both, but I think giving presents is more exciting. I love seeing my friends' faces when they open something I've chosen especially for them." },
+        { "q": "Are birthdays important in your country?", "model": "Yes, they're quite important, especially for children. Most families have a cake with candles, and everyone sings a birthday song before the candles are blown out." }
+      ]
+    },
+    {
+      "id": "achiever-p1-1",
+      "stage": 5,
+      "topic": "Hobbies",
+      "qs": [
+        { "q": "What do you enjoy doing in your free time?", "model": "I'm really into photography, especially taking pictures of wildlife. Although it requires a lot of patience, getting the perfect shot of a bird in flight is incredibly rewarding." },
+        { "q": "How did you become interested in it?", "model": "I got hooked when my uncle lent me his old camera on a camping trip. I'd never thought of myself as creative, but I was amazed at how much I enjoyed experimenting with light and angles." },
+        { "q": "Do you think hobbies are important for children?", "model": "Absolutely, because they give children a break from schoolwork and a chance to discover what they're good at. Whereas lessons often focus on getting the right answer, hobbies let you make mistakes without any pressure." },
+        { "q": "Is there a hobby you would like to take up in the future?", "model": "I'd quite like to take up astronomy, since I've always been fascinated by the night sky. The only drawback is that decent telescopes are fairly expensive, so I'll probably have to save up first." }
+      ]
+    },
+    {
+      "id": "achiever-p1-2",
+      "stage": 5,
+      "topic": "Music",
+      "qs": [
+        { "q": "What kind of music do you like?", "model": "I listen to all sorts, but I'm especially fond of film soundtracks. Unlike pop songs, they don't have any words, so I find them perfect for concentrating while I'm doing my homework." },
+        { "q": "Do you play a musical instrument?", "model": "Yes, I've been learning the violin for about three years. It was incredibly frustrating at first, because it sounded awful, but now I can play quite a few pieces without making mistakes." },
+        { "q": "Do you think music is an important subject at school?", "model": "I think it should be, although some people see it as less important than maths or science. In my experience, playing in the school orchestra has taught me teamwork and discipline, which are useful everywhere." },
+        { "q": "Do you prefer listening to music alone or with other people?", "model": "It depends on my mood, really. When I want to relax, I'd rather listen on my own with headphones, whereas going to a live concert with friends is far more exciting." }
+      ]
+    },
+    {
+      "id": "achiever-p1-3",
+      "stage": 5,
+      "topic": "Holidays",
+      "qs": [
+        { "q": "Where do you usually go on holiday?", "model": "We tend to go somewhere by the sea, usually in Spain or Portugal. My parents love lying on the beach, whereas my brother and I prefer exploring rock pools and going snorkelling." },
+        { "q": "What is the best holiday you have ever had?", "model": "The best one was probably a trip to Scotland two years ago. Despite the fact that it rained nearly every day, the scenery was breathtaking, and we even spotted dolphins from a boat." },
+        { "q": "Do you prefer holidays in your own country or abroad?", "model": "Although travelling abroad is exciting, I actually prefer holidays in my own country. They're far less tiring, and I've realised there are lots of beautiful places nearby that I've never visited." },
+        { "q": "Would you rather have a relaxing holiday or an active one?", "model": "I'd rather have an active one, to be honest. Lying on a beach all day makes me restless, whereas hiking or kayaking keeps me busy, and I feel as if I've really achieved something." }
+      ]
+    },
+    {
+      "id": "expert-p1-1",
+      "stage": 6,
+      "topic": "Reading",
+      "qs": [
+        { "q": "Do you enjoy reading?", "model": "Yes, I'm a real bookworm, if I'm honest. I tend to read every night before bed, and once I get into a good mystery, I find it almost impossible to put down." },
+        { "q": "What kind of books are you drawn to?", "model": "I'm drawn to science fiction, mainly because it makes me wonder what the future might hold. That said, I'll read pretty much anything with a gripping plot, even the odd biography." },
+        { "q": "Do you think children today read less than in the past?", "model": "They probably read fewer books, given how much time they spend on screens. Then again, they're arguably reading more than ever in other forms, like messages and articles online, so it's not entirely clear-cut." },
+        { "q": "Do you prefer paper books or e-books?", "model": "I much prefer paper books, as there's something satisfying about turning real pages. Admittedly, e-books are far more practical when you're travelling, since you can carry hundreds of them without any extra weight." }
+      ]
+    },
+    {
+      "id": "expert-p1-2",
+      "stage": 6,
+      "topic": "Technology",
+      "qs": [
+        { "q": "How often do you use a computer?", "model": "Pretty much every day, mostly for homework and research. Our school has gone almost entirely digital, so I'd struggle to get by without one these days." },
+        { "q": "Which piece of technology do you use most?", "model": "I'd have to say my tablet, largely because it's where I keep all my drawings. It's become a kind of portable sketchbook, and I'd be completely lost without it." },
+        { "q": "Do you think children spend too much time on screens?", "model": "On the whole, I'd say a lot of us do, myself included. It's all too easy to lose track of time, which is precisely why I've started leaving my tablet downstairs at night." },
+        { "q": "Would you like to work in technology in the future?", "model": "I'd jump at the chance, particularly in something like robotics. The idea of designing machines that help people with everyday tasks really appeals to me, though I know it'll take years of hard work to get there." }
+      ]
+    },
+    {
+      "id": "expert-p1-3",
+      "stage": 6,
+      "topic": "Clothes",
+      "qs": [
+        { "q": "Do you wear a uniform at school?", "model": "Yes, we do, and to be honest, I've come round to the idea. It saves a lot of time in the mornings, and it means nobody gets judged for what they're wearing." },
+        { "q": "What kind of clothes do you like wearing?", "model": "I'm far more into comfort than fashion, so you'll usually find me in jeans and a hoodie. On special occasions, though, I don't mind dressing up a bit." },
+        { "q": "Do you think clothes say a lot about a person?", "model": "To some extent, yes, since what people choose to wear often reflects their personality or mood. However, it would be a mistake to judge someone purely on their appearance, because first impressions can be misleading." },
+        { "q": "Do you think people buy too many clothes nowadays?", "model": "I suspect many people do, mainly because clothes have become so cheap. The trouble is that a lot of them end up being thrown away after only a few wears, which can't be good for the planet." }
+      ]
+    },
+    {
+      "id": "band8-p1-1",
+      "stage": 7,
+      "topic": "Transport",
+      "qs": [
+        { "q": "How do you usually get around your town?", "model": "Mostly by bike, which is quicker than you might think, given how congested the roads get at rush hour. On particularly wet days, though, I'm more than happy to take the bus." },
+        { "q": "Do you think public transport in your area could be improved?", "model": "Without a doubt. The buses are reasonably reliable, but they're few and far between in the evenings, which effectively leaves anyone without a car stranded after about eight o'clock." },
+        { "q": "Is there an unusual form of transport you would like to try?", "model": "I'd love to travel on a high-speed train, purely for the experience. Gliding across the countryside at three hundred kilometres an hour sounds genuinely thrilling, and it's far less damaging to the environment than flying." },
+        { "q": "How do you think transport will change in the future?", "model": "I imagine electric and self-driving vehicles will become the norm, which could dramatically cut pollution in cities. Whether people will be willing to hand over control to a computer, however, remains to be seen." }
+      ]
+    },
+    {
+      "id": "band8-p1-2",
+      "stage": 7,
+      "topic": "Shopping",
+      "qs": [
+        { "q": "Do you enjoy shopping?", "model": "It depends what I'm shopping for, to be honest. Browsing in a bookshop is one of my favourite ways to spend an afternoon, whereas trailing round clothes shops with my parents tests my patience to the limit." },
+        { "q": "Do you prefer shopping online or in shops?", "model": "On balance, I'd rather go to a real shop, because I like to see and touch things before I buy them. Online shopping is undeniably convenient, but it's all too easy to end up with something that looks nothing like the picture." },
+        { "q": "Do you think children should be given pocket money?", "model": "I'm firmly in favour, provided they have to manage it themselves. Learning to budget from an early age is invaluable, and there's no better lesson than blowing everything on sweets and realising you can't afford what you really wanted." },
+        { "q": "Do you think online shopping will replace shops in the future?", "model": "I doubt it will replace them altogether, although it's bound to reduce their numbers. Shops that offer something you simply can't get online, like expert advice or a welcoming atmosphere, are likely to survive and may even thrive." }
+      ]
+    },
+    {
+      "id": "band8-p1-3",
+      "stage": 7,
+      "topic": "Your neighbourhood",
+      "qs": [
+        { "q": "What do you like about your neighbourhood?", "model": "What I appreciate most is the strong sense of community. Neighbours genuinely look out for one another, and every summer there's a street party that brings together people of all ages who might otherwise never have met." },
+        { "q": "Has your neighbourhood changed much in recent years?", "model": "Quite considerably, actually. Several blocks of flats have sprung up where a disused factory used to stand, and while that's brought in lots of young families, it's also put a fair amount of pressure on the local school." },
+        { "q": "Is there anything you would change about where you live?", "model": "If I could change one thing, it would be the lack of green space. There's only one small park, which gets terribly overcrowded at weekends, so I'd love to see some empty land turned into a community garden." },
+        { "q": "Do you think it's important to know your neighbours?", "model": "I'd say it matters more than people tend to realise. Beyond the obvious practical benefits, like having someone to feed your cat while you're away, a friendly neighbourhood can make people feel far less isolated." }
+      ]
+    }
   ]
 }

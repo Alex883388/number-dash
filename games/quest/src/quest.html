@@ -138,6 +138,8 @@
 .cue h3 { margin: 0; font: 700 1.3rem/1.2 var(--font-display); }
 .cue p { margin: 0; color: var(--ink-soft); font-weight: 700; font-size: .9rem; }
 .cue ul { margin: 0; padding-left: 22px; display: grid; gap: 4px; line-height: 1.35; }
+.p1q { font: 700 clamp(1.3rem, 3.6vw, 1.7rem)/1.25 var(--font-display) !important; margin: 4px 0 2px !important; }
+#speakPart { margin-top: -6px; }
 .speak-clock { font: 700 clamp(3rem, 12vw, 5rem)/1 var(--font-display); font-variant-numeric: tabular-nums; text-align: center; }
 .speak-clock small { display: block; font: 700 1rem/1.3 var(--font-body); color: var(--ink-soft); }
 .speak-clock.low { color: #d9534a; }
@@ -224,7 +226,11 @@
   <section class="screen path-card" id="s-speak" hidden>
     <div class="card">
       <h2 class="words-title">🗣️ Speaking practice</h2>
-      <p class="note" id="speakNote">IELTS Speaking, Part 2: plan for 1 minute, then talk out loud for up to 2 minutes. Then compare with a model answer.</p>
+      <div class="seg" id="speakPart" role="radiogroup" aria-label="Which part">
+        <label><input type="radio" name="spart" value="1"><span>Part 1: quick questions</span></label>
+        <label><input type="radio" name="spart" value="2"><span>Part 2: a long talk</span></label>
+      </div>
+      <p class="note" id="speakNote"></p>
       <div class="cue" id="cue"></div>
       <div class="speak-clock" id="speakClock" hidden></div>
       <div class="row" id="speakBtns"></div>
@@ -264,7 +270,8 @@
    CONTENT is filled in at build time from content/stage-*.json (null for a stage not written
    yet). See content/FORMAT.md for what a stage holds. */
 const CONTENT = /*__CONTENT__*/null;
-const SPEAKING = /*__SPEAKING__*/null;   // IELTS Part 2 cue cards (content/speaking.json)
+const SPEAKING = /*__SPEAKING__*/null;   // content/speaking.json: { cards: Part 2 cue cards, part1: Part 1 question sets }
+const P2 = (SPEAKING && SPEAKING.cards) || [], P1 = (SPEAKING && SPEAKING.part1) || [];
 const STAGES = [
   { n: 1, id: 'starter', name: 'Starter', cefr: 'Pre-A1', ielts: '', icon: '🌱', about: 'First words: family, animals, food, home, colours and numbers.' },
   { n: 2, id: 'mover', name: 'Mover', cefr: 'A1', ielts: '', icon: '🚲', about: 'Everyday English: school, hobbies, town, weather and health.' },
@@ -764,7 +771,7 @@ function renderHome() {
   $('#reviewBtn').textContent = '🔁 Review' + (rec.review.length ? ' (' + rec.review.length + ')' : '');
   $('#wordsBtn').textContent = '📒 My words' + (rec.learned.length ? ' (' + rec.learned.length + ')' : '');
   $('#mockBtn').hidden = $('#mockLBtn').hidden = !mockStages().length;
-  $('#speakBtnHome').hidden = !(SPEAKING && SPEAKING.length && rec.unlocked >= 4);
+  $('#speakBtnHome').hidden = !((P2.length && rec.unlocked >= 4) || (P1.length && rec.unlocked >= 2));
   $('#speakBtnHome').textContent = '🗣️ Speaking practice' + (rec.speak && rec.speak.n ? ' (' + rec.speak.n + ')' : '');
   const lastMock = (rec.mocks || []).filter((m) => !m.k).slice(-1)[0], lastL = (rec.mocks || []).filter((m) => m.k === 'L').slice(-1)[0];
   $('#mockBtn').textContent = '📝 IELTS reading test' + (lastMock ? ' (last: ' + lastMock.b + ')' : '');
@@ -780,7 +787,7 @@ function renderHome() {
    then a model answer (read aloud on request), useful phrases and Part 3 questions. Nothing is scored. */
 const PLAN_S = 60, TALK_S = 120;
 const SP = { card: null, phase: 'card', end: 0, timer: 0 };
-const speakCards = () => (SPEAKING || []).filter((c) => c.stage <= Math.max(4, Math.min(rec.unlocked, STAGES.length)));
+const speakCards = () => P2.filter((c) => c.stage <= Math.max(4, Math.min(rec.unlocked, STAGES.length)));
 function nextCard() {
   const all = speakCards(), done = (rec.speak && rec.speak.done) || {}, top = Math.min(rec.unlocked, STAGES.length);
   const fresh = all.filter((c) => !done[c.id] && (!SP.card || c.id !== SP.card.id));
@@ -820,9 +827,69 @@ function speakShow(phase) {
     toast('Well done for speaking!', 'good');
   }
 }
+const P1_S = 20;
+const p1Sets = () => P1.filter((x) => x.stage <= Math.max(2, Math.min(rec.unlocked, STAGES.length)));
+function nextSet() {
+  const all = p1Sets(), done = (rec.speak && rec.speak.p1) || {}, top = Math.max(2, Math.min(rec.unlocked, STAGES.length));
+  const fresh = all.filter((x) => !done[x.id] && (!SP.set || x.id !== SP.set.id)), here = fresh.filter((x) => x.stage === top);
+  return pick(here.length ? here : fresh.length ? fresh : all.filter((x) => !SP.set || x.id !== SP.set.id)) || all[0] || null;
+}
+// Part 1: 'intro', then for each question 'q' (asked aloud, 20 s to answer) and 'm' (its model answer), then 'end'
+function p1Show(phase) {
+  SP.phase = phase; clearInterval(SP.timer);
+  const x = SP.set, k = SP.k, Q = x.qs[k] || x.qs[0];
+  const btn = (id, label, cls) => '<button class="btn' + (cls ? ' ' + cls : '') + '" id="' + id + '">' + label + '</button>';
+  const head = '<p>' + STAGES[x.stage - 1].name + ' · ' + STAGES[x.stage - 1].cefr + ' · Part 1</p><h3>' + esc(x.topic) + '</h3>';
+  $('#speakClock').hidden = phase !== 'q';
+  $('#speakModel').hidden = phase !== 'm' && phase !== 'end';
+  if (phase === 'intro') {
+    Sound.muffle(false);
+    $('#cue').innerHTML = head + '<p>' + x.qs.length + ' short questions. Answer each one out loud in two or three sentences: say why, or give an example.</p>';
+    $('#speakBtns').innerHTML = btn('p1Start', 'Start', 'sun') + btn('p1Other', 'Another topic');
+  }
+  if (phase === 'q') {
+    Sound.muffle(true);
+    $('#cue').innerHTML = head + '<p>Question ' + (k + 1) + ' of ' + x.qs.length + '</p><h3 class="p1q">' + esc(Q.q) + '</h3>';
+    $('#speakBtns').innerHTML = btn('p1Say', '🔊 Hear it again') + btn('p1Done', 'I have answered', 'sun');
+    setTimeout(() => Speech.say(Q.q, 0.9), 250);
+    SP.end = performance.now() + P1_S * 1000;
+    const tick = () => {
+      const left = Math.max(0, Math.ceil((SP.end - performance.now()) / 1000));
+      $('#speakClock').innerHTML = fmtTime(left) + '<small>Answer out loud</small>';
+      $('#speakClock').classList.toggle('low', left <= 5);
+      if (left <= 0) { Sound.sfx.click(); p1Show('m'); }
+    };
+    tick(); SP.timer = setInterval(tick, 250);
+  }
+  if (phase === 'm') {
+    Sound.muffle(false);
+    $('#cue').innerHTML = head + '<p>Question ' + (k + 1) + ' of ' + x.qs.length + '</p><h3 class="p1q">' + esc(Q.q) + '</h3>';
+    $('#speakModel').innerHTML = '<h3>A model answer</h3><p>' + esc(Q.model) + '</p>';
+    $('#speakBtns').innerHTML = btn('p1Hear', '🔊 Hear it') + btn('p1Next', k + 1 < x.qs.length ? 'Next question' : 'Finish', 'sun');
+  }
+  if (phase === 'end') {
+    rec.speak = rec.speak || { done: {}, n: 0 };
+    rec.speak.p1 = rec.speak.p1 || {};
+    rec.speak.p1[x.id] = (rec.speak.p1[x.id] || 0) + 1; rec.speak.n++;
+    writeSave();
+    $('#cue').innerHTML = head + '<p>All ' + x.qs.length + ' questions answered. Here they are with model answers to read again.</p>';
+    $('#speakModel').innerHTML = x.qs.map((y) => '<h3>' + esc(y.q) + '</h3><p>' + esc(y.model) + '</p>').join('');
+    $('#speakBtns').innerHTML = btn('p1Other', 'Another topic', 'sun');
+    toast('Well done for speaking!', 'good');
+  }
+}
+function setPart(p) {
+  SP.part = p; Speech.stop(); clearInterval(SP.timer);
+  $$('#speakPart input').forEach((i) => { i.checked = +i.value === p; });
+  $('#speakNote').textContent = p === 1 ? 'IELTS Speaking, Part 1: short questions about everyday life. Answer out loud, then compare with a model answer.' : 'IELTS Speaking, Part 2: plan for 1 minute, then talk out loud for up to 2 minutes. Then compare with a model answer.';
+  if (p === 1) { SP.set = nextSet(); SP.k = 0; if (SP.set) p1Show('intro'); }
+  else { SP.card = nextCard(); if (SP.card) speakShow('card'); }
+}
 function openSpeaking() {
-  SP.card = nextCard(); if (!SP.card) { toast('Coming soon', 'hello'); return; }
-  Sound.init(); speakShow('card'); showScreen('speak');
+  const can2 = P2.length && rec.unlocked >= 4, can1 = P1.length && rec.unlocked >= 2;
+  if (!can1 && !can2) { toast('Coming soon', 'hello'); return; }
+  $('#speakPart').hidden = !(can1 && can2);
+  Sound.init(); setPart(can2 ? 2 : 1); showScreen('speak');
 }
 // grammar notes: the rule behind each grammar item of the lessons open so far, with its example;
 // newest stage and lesson first, only the newest lesson unfolded
@@ -896,8 +963,15 @@ $('#wordsBtn').addEventListener('click', () => { renderWords(); showScreen('word
 $('#notesBtn').addEventListener('click', () => { renderNotes(); showScreen('notes'); });
 $('#speakBtnHome').addEventListener('click', openSpeaking);
 $('#speakHomeBtn').addEventListener('click', () => { clearInterval(SP.timer); Speech.stop(); Sound.muffle(false); goHome(); });
+$('#speakPart').addEventListener('change', (e) => { if (e.target.name === 'spart') setPart(+e.target.value); });
 $('#speakBtns').addEventListener('click', (e) => {
   const t = e.target.closest('button'); if (!t) return;
+  if (t.id === 'p1Start') { SP.k = 0; p1Show('q'); return; }
+  if (t.id === 'p1Say') { Speech.say(SP.set.qs[SP.k].q, 0.9); return; }
+  if (t.id === 'p1Done') { p1Show('m'); return; }
+  if (t.id === 'p1Hear') { Speech.say(SP.set.qs[SP.k].model, 0.95); return; }
+  if (t.id === 'p1Next') { Speech.stop(); if (SP.k + 1 < SP.set.qs.length) { SP.k++; p1Show('q'); } else p1Show('end'); return; }
+  if (t.id === 'p1Other') { Speech.stop(); SP.set = nextSet(); SP.k = 0; p1Show('intro'); return; }
   if (t.id === 'spPlan') speakShow('plan');
   else if (t.id === 'spTalk') speakShow('talk');
   else if (t.id === 'spDone') speakShow('done');
@@ -941,7 +1015,7 @@ window.addEventListener('keydown', (e) => {
 arcadeGuards(() => Speech.stop());
 arcadeLinks();
 
-window.__quest = { L, rec, save, STAGES, CONTENT, SPEAKING, SP, speakShow, has, next, renderHome, renderNotes, startLesson, nextStep, unitOpen, testOpen, wordQ, unitLesson, stageTest, spotQ, writingQ, showQ, renderWords, mockBand, Speech,
+window.__quest = { L, rec, save, STAGES, CONTENT, SPEAKING, P1, P2, SP, speakShow, p1Show, setPart, has, next, renderHome, renderNotes, startLesson, nextStep, unitOpen, testOpen, wordQ, unitLesson, stageTest, spotQ, writingQ, showQ, renderWords, mockBand, Speech,
   // answer the current question: right = true picks the right answer (or builds / spells it), false picks a wrong one
   answer(right) {
     const q = L.qs[L.i]; if (!q || L.answered) return false;

@@ -28,7 +28,7 @@ Play it: https://alex883388.github.io/number-dash/dash/ (on iPad: open in Safari
 - **Math levels**: Starter (ages 7–8), Explorer (9–10), Genius (11–12). Thinking time can be set to Extra (question shows about 2 s sooner).
 - **Music**: the first attempt plays the level's song from its intro. Each later attempt plays the next of 7 remixes (key, chord order, groove, piano style, lead sound and a new melody), cycling with fresh melodies.
 - **Kid-friendly look**: pastel palettes, a gentler dusk sky that follows dark mode, no flashing, a Calm visuals switch.
-- **Practice mode** drops checkpoints (never inside a math question), **stars** (3 per level, counted in normal runs) unlock cube colors, right answers unlock faces. Four more colors are earned in the other games (shared/cube-styles.js `cubeOpen()` reads their records): Coral for 5 Pair Up boards, Forest for 30 words in Spell It, Galaxy for 12 Number Pop stars, Scholar for an English Quest stage test.
+- **Practice mode** drops checkpoints (never inside a math question), **stars** (3 per level, counted in normal runs) unlock cube colors, right answers unlock faces. Five more colors are earned in the other games (shared/cube-styles.js `cubeOpen()` reads their records): Coral for 5 Pair Up boards, Forest for 30 words in Spell It, Galaxy for 12 Number Pop stars, Scholar for an English Quest stage test, Brainy for remembering 6 numbers in Memory Lane.
 - Progress lives in the browser's localStorage on each device.
 
 ## Playing on an iPad

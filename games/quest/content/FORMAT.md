@@ -161,3 +161,5 @@ two adjectives that could swap). Capital letter first, ending with `.`, `?` or `
 ## speaking.json (Speaking practice)
 
 `{ "cards": [ { "id": "explorer-1", "stage": 4, "topic": "Describe …", "points": [4 points, the last "and explain …"], "phrases": [5], "model": "paragraphs joined by \n", "part3": [3 questions] } ] }`. Four cards per stage from Explorer (4) to Band 8 (7). The model answer is spoken English at that stage's level (Explorer about 130–170 words, Achiever 170–220, Expert and Band 8 220–280), British spelling, written so a speech voice reads it well: numbers as words, no brackets or abbreviations. build.js inlines the cards; without the file the button stays hidden.
+
+Part 1 sets sit beside the cards: `"part1": [ { "id": "mover-p1-1", "stage": 2, "topic": "Your home", "qs": [ { "q": "Do you live in a house or a flat?", "model": "2–3 spoken sentences, at most 45 words" } × 4 ] } ]`, three sets per stage from Mover (2) to Band 8 (7), no topic twice.

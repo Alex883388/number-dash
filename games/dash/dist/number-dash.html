@@ -387,7 +387,7 @@ kbd { font: 700 .85em var(--font-body); background: var(--card); border: 2px sol
         <div>
           <h3>Color</h3>
           <div class="swatches" id="colorSwatches"></div>
-          <p class="cross-note">🃏 ✏️ 🫧 🎓 colours are earned in Pair Up (boards), Spell It (words), Number Pop (stars) and English Quest (a stage test).</p>
+          <p class="cross-note">🃏 ✏️ 🫧 🎓 🧠 colours are earned in Pair Up (boards), Spell It (words), Number Pop (stars), English Quest (a stage test) and Memory Lane (numbers).</p>
           <h3>Face</h3>
           <div class="swatches" id="faceSwatches"></div>
         </div>
@@ -3203,7 +3203,8 @@ const CUBES = [
   { name: 'Coral', fill: '#ff7a6b', edge: '#d9534a', need: 0, via: 'pair', n: 5, icon: '🃏', how: 'Clear 5 boards in Pair Up' },
   { name: 'Forest', fill: '#4caf50', edge: '#2e7d32', need: 0, via: 'spell', n: 30, icon: '✏️', how: 'Spell 30 words in Spell It' },
   { name: 'Galaxy', fill: '#4b3cb0', edge: '#2c2275', need: 0, via: 'pop', n: 12, icon: '🫧', how: 'Get 12 stars in Number Pop' },
-  { name: 'Scholar', fill: '#2b3a67', edge: '#ffc94d', need: 0, via: 'quest', n: 1, icon: '🎓', how: 'Pass a stage test in English Quest' }
+  { name: 'Scholar', fill: '#2b3a67', edge: '#ffc94d', need: 0, via: 'quest', n: 1, icon: '🎓', how: 'Pass a stage test in English Quest' },
+  { name: 'Brainy', fill: '#20b2aa', edge: '#178a84', need: 0, via: 'memory', n: 6, icon: '🧠', how: 'Remember 6 numbers in Memory Lane' }
 ];
 // progress in another game, read from its own records
 function crossProgress(via) {
@@ -3212,6 +3213,7 @@ function crossProgress(via) {
   if (via === 'pair') return read('pair-up.v1').wins || 0;
   if (via === 'spell') { const r = read('spell-it.v1'); return Array.isArray(r.learned) ? r.learned.length : 0; }
   if (via === 'pop') { const w = read('number-pop.v1').worlds || {}; for (const k in w) n += (w[k] && w[k].stars) || 0; return n; }
+  if (via === 'memory') return (read('memory-lane.v1').best || {}).number || 0;
   if (via === 'quest') { const t = read('english-quest.v1').tests || {}; for (const k in t) if (t[k] && t[k].passed) n++; return n; }
   return 0;
 }
