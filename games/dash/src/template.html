@@ -171,6 +171,7 @@ input[type="range"] { width: min(100%, 320px); accent-color: var(--sun-deep); he
 .cube-wrap { display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 1fr); gap: 22px; align-items: start; }
 .cube-wrap canvas { width: 100%; max-width: 220px; aspect-ratio: 1; border-radius: 24px; background: var(--card-2); }
 .swatches { display: flex; flex-wrap: wrap; gap: 10px; margin: 8px 0 18px; }
+.cross-note { margin: -8px 0 16px; color: var(--ink-soft); font-size: .85rem; line-height: 1.35; max-width: 34em; }
 .swatch { width: 64px; display: grid; justify-items: center; gap: 4px; padding: 6px 4px; border-radius: 16px; border: 2px solid transparent; background: var(--card-2); cursor: pointer; font: 700 .72rem/1.1 var(--font-body); color: var(--ink-soft); }
 .swatch canvas { width: 44px; height: 44px; background: transparent; border-radius: 0; }
 .swatch[aria-pressed="true"] { border-color: var(--sun-deep); background: var(--card); color: var(--ink); }
@@ -386,6 +387,7 @@ kbd { font: 700 .85em var(--font-body); background: var(--card); border: 2px sol
         <div>
           <h3>Color</h3>
           <div class="swatches" id="colorSwatches"></div>
+          <p class="cross-note">🃏 ✏️ 🫧 🎓 colours are earned in Pair Up (boards), Spell It (words), Number Pop (stars) and English Quest (a stage test).</p>
           <h3>Face</h3>
           <div class="swatches" id="faceSwatches"></div>
         </div>
@@ -1675,12 +1677,13 @@ function renderCube() {
   CUBES.forEach((c, i) => {
     const b = document.createElement('button');
     b.className = 'swatch'; b.type = 'button';
-    const locked = stars < c.need;
+    const locked = !cubeOpen(c, stars);
     b.disabled = locked;
     b.setAttribute('aria-pressed', String(save.cube.color === i));
-    b.setAttribute('aria-label', c.name + (locked ? ', unlocks with ' + c.need + ' stars' : ''));
+    b.setAttribute('aria-label', c.name + (locked ? (c.via ? ', unlocks: ' + c.how : ', unlocks with ' + c.need + ' stars') : ''));
+    if (locked && c.via) b.title = c.how;
     b.appendChild(swatchCanvas(i, 0));
-    b.appendChild(document.createTextNode(locked ? c.need + ' ★' : c.name));
+    b.appendChild(document.createTextNode(locked ? (c.via ? c.icon + ' ' + c.n : c.need + ' ★') : c.name));
     b.addEventListener('click', () => { save.cube.color = i; writeSave(); Sound.sfx.click(); renderCube(); });
     cs.appendChild(b);
   });
