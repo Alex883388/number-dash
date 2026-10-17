@@ -2,7 +2,7 @@
 
 A gentle Geometry Dash–style runner for kids aged 8–12. Jump the spikes, fly the rocket, and steer into the lane whose door shows the right answer. Only the correct door opens. Music is chill lo-fi made live in the browser, and every new attempt plays a different remix.
 
-Live page: https://claude.ai/artifact/C69nDbsdL31VaoMzYnpKw2 (private until you share it from the page's Share menu).
+Play it: https://alex883388.github.io/number-dash/ (on iPad: open in Safari, then Share > Add to Home Screen).
 
 ## What's in the game
 
