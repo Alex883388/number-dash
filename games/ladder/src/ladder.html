@@ -110,6 +110,7 @@ button, label, input, .btn { touch-action: manipulation; }
 #oops .fact b { color: var(--mint-deep); }
 #oops p { margin: 0; color: var(--ink-soft); font-weight: 700; }
 .toast { position: absolute; left: 50%; top: 42%; translate: -50% 0; font: 700 1.4rem/1 var(--font-display); padding: 12px 20px; animation: pop .3s ease both; white-space: nowrap; }
+.toast.hello { top: calc(max(128px, 20%) + env(safe-area-inset-top, 0px)); color: var(--ink); border: 3px solid var(--lilac); }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 @media (pointer: coarse) { .hud-btn { width: 58px; height: 58px; } }
 @media (max-width: 640px) { .q { max-width: calc(100% - 32px); top: calc(70px + env(safe-area-inset-top, 0px)); } #meter { height: 34vh; } }
@@ -311,21 +312,82 @@ function layout(n) {
   const w = n === 4 ? 2.0 : n === 3 ? 2.6 : 2.8;
   return Array.from({ length: n }, (_, i) => ({ bx: 0.6 + 10.8 * (i + 0.5) / n - w / 2, w: w }));
 }
+/* How the answer blocks move. The bottom of the tower is calm; higher up every few rungs bring
+   a new trick, said hello to (with the full jump guide) on its first rung: sliding, bobbing,
+   spinning (a spinning block only holds you while it is nearly flat), swapping places, a
+   merry-go-round, then mixes. Each rung of a stretch is a little faster than the one before.
+   A block's place is a pure function of time, so the guide and the test bot can look ahead. */
+const MOTIONS = [
+  { from: 1, n: 2, kind: 'still' },
+  { from: 6, n: 3, kind: 'still' },
+  { from: 10, n: 3, kind: 'sway', hello: 'Sliding answers!' },
+  { from: 13, n: 3, kind: 'bob', hello: 'Bouncy answers!' },
+  { from: 16, n: 3, kind: 'still', spin: true, hello: 'Spinning! Land when flat' },
+  { from: 19, n: 4, kind: 'swap', hello: 'Watch them swap!' },
+  { from: 22, n: 3, kind: 'orbit', hello: 'Merry-go-round!' },
+  { from: 25, n: 4, kind: 'sway', spin: true, hello: 'Slide and spin!' },
+  { from: 28, n: 3, kind: 'orbit', spin: true, hello: 'Spinning merry-go-round!' }
+];
+const motionOf = (r) => MOTIONS.reduce((m, x) => (r >= x.from ? x : m), MOTIONS[0]);
+const SPIN_HOLD = Math.cos(0.38), SWAP_WAIT = 1.2;   // spinning blocks hold within ~22° of flat; swaps start after a first look
+const ease = (u) => u * u * (3 - 2 * u);
+const hash = (v) => { v = Math.imul(v ^ (v >>> 16), 0x45d9f3b); v = Math.imul(v ^ (v >>> 16), 0x45d9f3b); return (v ^ (v >>> 16)) >>> 0; };
+
 function makeRow(r) {
-  const n = r <= 8 ? 2 : r <= 18 ? 3 : 4, q = ladderQuestion(r, n), lay = layout(n);
-  let amp = r >= 14 ? 0.5 + (r - 14) * 0.08 : 0;
+  const mo = motionOf(r), k = r - mo.from, q = ladderQuestion(r, mo.n), lay = layout(mo.n);
   const room = Math.min.apply(null, lay.map((p) => Math.min(p.bx - 0.15, SHAFT - 0.15 - (p.bx + p.w))));
-  amp = Math.max(0, Math.min(amp, room));
   return {
-    r: r, y: r * D, q: q, amp: amp, period: Math.max(2.6, 4.8 - (r - 14) * 0.12), phase: Math.random() * 6.283, dir: r % 2 ? 1 : -1, born: game.t,
-    plats: lay.map((p, i) => ({ bx: p.bx, w: p.w, val: q.choices[i], correct: i === q.correct, state: 'live', t: 0, dy: 0, vy: 0 }))
+    r: r, y: r * D, q: q, mo: mo, intro: !!mo.hello && k === 0, born: game.t, phase: Math.random() * 6.283, dir: r % 2 ? 1 : -1,
+    seed: rnd(1, 1e9), slots: lay.map((p) => p.bx), perms: null,
+    amp: Math.min(room, 0.6 + 0.15 * k), swayP: Math.max(2.4, 3.6 - 0.3 * k),
+    bobA: Math.min(0.55, 0.35 + 0.08 * k), bobP: Math.max(1.8, 2.4 - 0.2 * k),
+    spinP: Math.max(2.2, 2.8 - 0.2 * k), spinS: 0.7,
+    swapP: Math.max(2.4, 3.0 - 0.25 * k), swapS: 0.9,
+    orbitP: Math.max(6.4, 8 - 0.6 * k), rx: SHAFT / 2 - lay[0].w / 2 - 0.3,
+    plats: lay.map((p, i) => ({ i: i, bx: p.bx, w: p.w, val: q.choices[i], correct: i === q.correct, state: 'live', t: 0, dy: 0, vy: 0, at: null }))
   };
 }
-function platX(row, p, t) { return p.bx + (row.amp ? row.amp * Math.sin(row.dir * (t - row.born) * 6.2832 / row.period + row.phase) : 0); }
+// swaps: the slot block i sits in after `c` swaps; each swap trades two neighbouring slots, picked by a seeded roll
+function slotOf(row, i, c) {
+  const perms = row.perms || (row.perms = [row.plats.map((_, j) => j)]);
+  while (perms.length <= c) {
+    const next = perms[perms.length - 1].slice(), s = hash(row.seed + perms.length * 7919) % (row.plats.length - 1);
+    const a = next.indexOf(s), b = next.indexOf(s + 1);
+    next[a] = s + 1; next[b] = s;
+    perms.push(next);
+  }
+  return perms[c][i];
+}
+// where block p is at time t: left edge x, top y, tilt a, width w, and whether it can hold the cube right now
+function platAt(row, p, t) {
+  if (p.at) return p.at;   // frozen once answered
+  const mo = row.mo, s = t - row.born, n = row.plats.length;
+  let x = p.bx, y = row.y, a = 0, w = p.w;
+  if (mo.kind === 'sway') x += row.amp * Math.sin(row.dir * s * 6.2832 / row.swayP + row.phase);
+  else if (mo.kind === 'bob') y += row.bobA * Math.sin(s * 6.2832 / row.bobP + row.phase + p.i * 6.2832 / n);
+  else if (mo.kind === 'swap' && s > SWAP_WAIT) {
+    // the block moving right hops over the top, the one moving left ducks underneath
+    const c = Math.floor((s - SWAP_WAIT) / row.swapP) + 1, u = (s - SWAP_WAIT - (c - 1) * row.swapP) / row.swapS;
+    const from = row.slots[slotOf(row, p.i, c - 1)], to = row.slots[slotOf(row, p.i, c)];
+    if (u >= 1 || from === to) x = to;
+    else { const e = ease(u); x = from + (to - from) * e; y += (to > from ? 0.55 : -0.65) * Math.sin(Math.PI * e); }
+  } else if (mo.kind === 'orbit') {
+    // around a flat ring: blocks at the back ride higher and look smaller
+    const th = row.phase + row.dir * s * 6.2832 / row.orbitP + p.i * 6.2832 / n;
+    w = p.w * (0.925 - 0.075 * Math.sin(th)); x = SHAFT / 2 + row.rx * Math.cos(th) - w / 2; y += 0.6 * Math.sin(th);
+  }
+  if (mo.spin) {
+    // rest flat, then one quick full turn; the blocks take turns
+    const P = row.spinP, u = (((s + row.phase + p.i * P / n) % P) + P) % P, rest = P - row.spinS;
+    if (u > rest) a = 6.2832 * ease((u - rest) / row.spinS);
+  }
+  return { x: x, y: y, a: a, w: w, solid: Math.cos(a) > SPIN_HOLD };
+}
 
 function spawnRow(r) {
   game.row = makeRow(r);
   showQuestion(game.row.q);
+  if (game.row.intro) toast(game.row.mo.hello, 'hello');
   announce('Rung ' + r + '. ' + game.row.q.text.replace('?', 'what') + '. Answers: ' + game.row.q.choices.join(', '));
 }
 function startClimb(fresh) {
@@ -355,10 +417,12 @@ function press() {
 function land(p) {
   const row = game.row, c = game.cube;
   game.sq = 1;
+  // the block the cube lands on stops and settles flat
+  p.at = Object.assign({}, platAt(row, p, game.t), { a: 0, solid: true });
   if (p.correct) {
     p.state = 'right'; p.t = game.t;
-    row.plats.forEach((o) => { if (o !== p) { o.state = 'gone'; o.t = game.t; } });
-    game.floors.push({ y: row.y, cx: platX(row, p, game.t) + p.w / 2, born: game.t, band: bandOf(row.r) });
+    row.plats.forEach((o) => { if (o !== p) { o.at = platAt(row, o, game.t); o.state = 'gone'; o.t = game.t; } });
+    game.floors.push({ y: row.y, cx: p.at.x + p.at.w / 2, born: game.t, band: bandOf(row.r) });
     game.rung = row.r; game.climbRight++;
     if (game.rung > rec.best) { rec.best = game.rung; }
     mathRight(row.q);
@@ -433,6 +497,9 @@ function moveCube(dt) {
   if (c.ground) {
     c.x += c.dir * PH.WALK * dt;
     if (c.x <= 0) { c.x = 0; c.dir = 1; } else if (c.x >= SHAFT - 1) { c.x = SHAFT - 1; c.dir = -1; }
+    // landed on a block above or below its rung's line: settle onto the new floor
+    const fy = game.rung * D;
+    if (!game.ghost && c.y !== fy) c.y = Math.abs(fy - c.y) < 0.01 ? fy : c.y + (fy - c.y) * Math.min(1, dt * 14);
     return;
   }
   const oy = c.y;
@@ -441,13 +508,9 @@ function moveCube(dt) {
   if (c.x <= 0) { c.x = 0; c.vx = Math.abs(c.vx); c.dir = 1; } else if (c.x >= SHAFT - 1) { c.x = SHAFT - 1; c.vx = -Math.abs(c.vx); c.dir = -1; }
   if (c.vy > 0) return;
   const row = game.row;
-  if (game.state === 'play' && row && oy >= row.y - 1e-6 && c.y <= row.y) {
-    const mid = c.x + 0.5;
-    for (const p of row.plats) {
-      if (p.state !== 'live') continue;
-      const px = platX(row, p, game.t);
-      if (mid >= px - 0.1 && mid <= px + p.w + 0.1) { c.y = row.y; c.vy = 0; c.vx = 0; c.ground = true; land(p); return; }
-    }
+  if (game.state === 'play' && row) {
+    const hit = touchdown(row, c.x + 0.5, oy, c.y, game.t, dt);
+    if (hit) { c.y = hit.at.y; c.vy = 0; c.vx = 0; c.ground = true; land(hit.p); return; }
   }
   const floorY = game.ghost ? 0 : game.rung * D;
   if (oy >= floorY - 1e-6 && c.y <= floorY) {
@@ -466,25 +529,35 @@ function step(dt) {
   moveCube(dt);
   if (game.wrongPlat && game.wrongPlat.state === 'drop') { game.wrongPlat.vy -= PH.G * 0.6 * dt; game.wrongPlat.dy += game.wrongPlat.vy * dt; }
 }
-// where a jump made right now would land (the guide on the lower rungs, and the test bot)
-function predict() {
-  const c = game.cube, row = game.row;
-  let x = c.x, y = c.y, vx = c.dir * PH.JVX, vy = PH.JV, t = 0;
-  const pts = [], h = 1 / 120, floorY = game.rung * D;
+// the block (if any) a falling cube touches between two moments: above the block's top before,
+// at or below it after, over the block, and the block able to hold it. The highest one wins.
+function touchdown(row, mid, oy, y, t, dt) {
+  let best = null;
+  for (const p of row.plats) {
+    if (p.state !== 'live') continue;
+    const now = platAt(row, p, t);
+    if (!now.solid || y > now.y || mid < now.x - 0.1 || mid > now.x + now.w + 0.1) continue;
+    if (oy < platAt(row, p, t - dt).y - 1e-6) continue;
+    if (!best || now.y > best.at.y) best = { p: p, at: now };
+  }
+  return best;
+}
+// where a jump would land if made `delay` seconds from now (0 = right now): the guide and the test bot
+function predict(delay) {
+  const c = game.cube, row = game.row, h = 1 / 120;
+  let x = c.x, dir = c.dir;
+  for (let s = h; s <= (delay || 0) + 1e-9; s += h) { x += dir * PH.WALK * h; if (x <= 0) { x = 0; dir = 1; } else if (x >= SHAFT - 1) { x = SHAFT - 1; dir = -1; } }
+  const t0 = game.t + (delay || 0), pts = [], floorY = game.rung * D;
+  let y = c.y, vx = dir * PH.JVX, vy = PH.JV, t = 0;
   while (t < 1.8) {
     const oy = y;
     vy = Math.max(vy - PH.G * h, -PH.MAXFALL); x += vx * h; y += vy * h; t += h;
     if (x <= 0) { x = 0; vx = Math.abs(vx); } else if (x >= SHAFT - 1) { x = SHAFT - 1; vx = -Math.abs(vx); }
     pts.push([x + 0.5, y + 0.5]);
-    if (vy <= 0 && row && oy >= row.y && y <= row.y) {
-      for (let i = 0; i < row.plats.length; i++) {
-        const p = row.plats[i];
-        if (p.state !== 'live') continue;
-        const px = platX(row, p, game.t + t);
-        if (x + 0.5 >= px - 0.1 && x + 0.5 <= px + p.w + 0.1) return { pts: pts, plat: i, x: x, y: row.y, t: t, px: px };
-      }
-    }
-    if (vy <= 0 && oy >= floorY && y <= floorY) return { pts: pts, plat: -1, x: x, y: floorY };
+    if (vy > 0) continue;
+    const hit = row && touchdown(row, x + 0.5, oy, y, t0 + t, h);
+    if (hit) return { pts: pts, plat: row.plats.indexOf(hit.p), x: x, y: hit.at.y, t: t, px: hit.at.x, w: hit.at.w };
+    if (oy >= floorY && y <= floorY) return { pts: pts, plat: -1, x: x, y: floorY };
   }
   return { pts: pts, plat: -1, x: x, y: y };
 }
@@ -615,15 +688,27 @@ function fitText(text, maxW, maxH, weight) {
 function drawRow(row, now) {
   if (!row) return;
   const pop = clamp((game.t - row.born) / 0.25, 0, 1);
-  for (const p of row.plats) {
+  // blocks further back are drawn first, so a merry-go-round overlaps the right way
+  const list = row.plats.map((p) => ({ p: p, at: platAt(row, p, game.t) }));
+  if (row.mo.kind === 'orbit') {
+    list.sort((m, n) => n.at.y - m.at.y);
+    // the merry-go-round's track, so the ring reads as one ride
+    if (row === game.row) {
+      cx.save(); cx.globalAlpha = 0.45 * pop; cx.strokeStyle = '#ffffff'; cx.lineWidth = Math.max(2, U * 0.09); cx.setLineDash([U * 0.22, U * 0.2]);
+      cx.beginPath(); cx.ellipse(sxp(SHAFT / 2), syp(row.y) + U * 0.42, row.rx * U, U * 0.6, 0, 0, 6.283); cx.stroke();
+      cx.setLineDash([]); cx.restore();
+    }
+  }
+  for (const { p, at } of list) {
     let a = 1, sc = pop, fill = PANEL.fill, edge = PANEL.edge;
     if (p.state === 'gone') { const k = clamp((game.t - p.t) / 0.3, 0, 1); a = 1 - k; sc = 1 - k * 0.3; if (a <= 0) continue; }
     if (p.state === 'right') { fill = PANEL.right; edge = PANEL.rightEdge; a = clamp(1 - (game.t - p.t - 0.25) / 0.3, 0, 1); if (a <= 0) continue; }
     if (p.state === 'wrong' || p.state === 'drop') { fill = PANEL.wrong; edge = PANEL.wrongEdge; }
-    const x = platX(row, p, game.t), y = row.y + p.dy, w = p.w;
-    const cxm = sxp(x + w / 2), cym = syp(y) + U * 0.45;
+    const w = p.w, depth = at.w / p.w, y = at.y + p.dy;
+    const cxm = sxp(at.x + at.w / 2), cym = syp(y) + U * 0.45 * depth;
     const shake = p.state === 'wrong' && !calm() ? Math.sin((game.t - p.t) * 60) * U * 0.05 : 0;
-    cx.save(); cx.globalAlpha = a; cx.translate(cxm + shake, cym); cx.scale(sc, sc);
+    cx.save(); cx.globalAlpha = a; cx.translate(cxm + shake, cym); cx.scale(sc * depth, sc * depth);
+    if (at.a) cx.rotate(-at.a);
     if (p.state === 'drop') cx.rotate((game.t - p.t) * 1.5);
     rr(cx, -w * U / 2, -U * 0.45, w * U, U * 0.9, U * 0.28);
     cx.fillStyle = fill; cx.fill(); cx.lineWidth = Math.max(2, U * 0.08); cx.strokeStyle = edge; cx.stroke();
@@ -639,11 +724,13 @@ function drawRow(row, now) {
 }
 function drawGuide() {
   const row = game.row, c = game.cube;
-  if (!row || game.state !== 'play' || !c.ground || row.r > 20) return;
-  const pr = predict(), pts = pr.pts, show = row.r <= 10 ? pts.length : Math.floor(pts.length * 0.35);
+  // the whole arc low down and on the first rung of each new trick, the start of it up to rung 20
+  const full = !!row && (row.r <= 9 || row.intro);
+  if (!row || game.state !== 'play' || !c.ground || (!full && row.r > 20)) return;
+  const pr = predict(), pts = pr.pts, show = full ? pts.length : Math.floor(pts.length * 0.35);
   cx.fillStyle = 'rgba(255,255,255,.85)';
   for (let i = 3; i < show; i += 5) { cx.beginPath(); cx.arc(sxp(pts[i][0]), syp(pts[i][1]), U * 0.07, 0, 6.283); cx.fill(); }
-  if (row.r <= 10 && pr.plat >= 0) {
+  if (full && pr.plat >= 0) {
     cx.strokeStyle = 'rgba(255,255,255,.9)'; cx.lineWidth = U * 0.06;
     cx.beginPath(); cx.ellipse(sxp(pr.x + 0.5), syp(pr.y), U * 0.45, U * 0.14, 0, 0, 6.283); cx.stroke();
   }
@@ -729,10 +816,12 @@ function goodQuestion(q) {
 }
 function hideQuestion() { clearTimeout(qTimer); $('#question').hidden = true; }
 let toastTimer = 0;
-function toast(msg) {
+// kind 'hello' (a new trick) sits higher, under the question, so it never covers the blocks
+function toast(msg, kind) {
   const t = $('#toast'); t.textContent = msg; t.hidden = false;
+  t.classList.toggle('hello', kind === 'hello');
   t.style.animation = 'none'; void t.offsetWidth; t.style.animation = '';
-  clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, 1500);
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, kind === 'hello' ? 2400 : 1500);
 }
 function announce(msg) { $('#announce').textContent = msg; }
 
@@ -824,6 +913,6 @@ renderHome();
 showScreen('home');
 requestAnimationFrame(frame);
 if (document.fonts && document.fonts.load) document.fonts.load('700 40px Fredoka').catch(() => {});
-window.__ladder = { game, predict, press, rec, save, PH, D, TOP };
+window.__ladder = { game, predict, press, rec, save, PH, D, TOP, makeRow, platAt, MOTIONS };
 })();
 </script>
