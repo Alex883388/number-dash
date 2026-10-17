@@ -349,13 +349,32 @@ const PLURALS = [
    ['criterion', 'criteria', 'criterion'], ['thesis', 'theses', 'thesises'], ['ox', 'oxen', 'oxes'], ['medium', 'media', 'medium'], ['radius', 'radii', 'radius'],
    ['nucleus', 'nuclei', 'nucleus'], ['axis', 'axes', 'axises'], ['stimulus', 'stimuli', 'stimuluses'], ['hypothesis', 'hypotheses', 'hypothesises'], ['bacterium', 'bacteria', 'bacteriums']]
 ];
+// spelling: [right, three misspellings children really write]; no word here has an accepted US/UK twin
+const SPELLING = [
+  [['because', 'becuse', 'becos', 'beacause'], ['friend', 'freind', 'frend', 'friand'], ['said', 'sed', 'siad', 'saide'], ['they', 'thay', 'tey', 'tehy'],
+   ['people', 'peple', 'poeple', 'pepole'], ['school', 'shool', 'scool', 'skool'], ['many', 'meny', 'meney', 'mony'], ['could', 'cood', 'coud', 'culd'],
+   ['would', 'wud', 'woud', 'whould'], ['again', 'agen', 'agian', 'aggain'], ['where', 'whear', 'wher', 'wherre'], ['every', 'evry', 'evrey', 'everey'],
+   ['little', 'littel', 'litle', 'lettle'], ['pretty', 'pritty', 'prety', 'pretey'], ['house', 'hous', 'howse', 'huose'], ['water', 'watter', 'wotter', 'warter']],
+  [['different', 'diffrent', 'differant', 'diferent'], ['believe', 'beleive', 'belive', 'beleve'], ['separate', 'seperate', 'separete', 'seprate'],
+   ['February', 'Febuary', 'Feburary', 'Februry'], ['Wednesday', 'Wensday', 'Wednsday', 'Wendesday'], ['beautiful', 'beautifull', 'beatiful', 'beutiful'],
+   ['surprise', 'suprise', 'surprice', 'surpise'], ['library', 'libary', 'liberry', 'librery'], ['favourite', 'favourit', 'favourate', 'faverite'],
+   ['probably', 'probly', 'probaly', 'propably'], ['tomorrow', 'tommorow', 'tomorow', 'tommorrow'], ['interesting', 'intresting', 'interresting', 'intersting'],
+   ['thought', 'thougt', 'thort', 'thougth'], ['enough', 'enuff', 'enogh', 'enouf'], ['island', 'iland', 'ilsand', 'islend'], ['disappear', 'dissapear', 'disapear', 'dissappear']],
+  [['necessary', 'neccessary', 'necesary', 'neccesary'], ['accommodation', 'accomodation', 'acommodation', 'accomodasion'], ['embarrass', 'embarass', 'embaras', 'embarras'],
+   ['definitely', 'definately', 'definitly', 'defenitely'], ['occurred', 'occured', 'ocurred', 'ocured'], ['rhythm', 'rythm', 'rhythem', 'rhytm'],
+   ['conscience', 'concience', 'consience', 'conscence'], ['government', 'goverment', 'govermment', 'governmant'], ['environment', 'enviroment', 'environmant', 'envirnoment'],
+   ['independent', 'independant', 'indipendent', 'independint'], ['immediately', 'immediatly', 'imediately', 'immedietely'], ['pronunciation', 'pronounciation', 'pronunsiation', 'prenunciation'],
+   ['recommend', 'reccomend', 'recomend', 'reccommend'], ['restaurant', 'restaraunt', 'resturant', 'restaurent'], ['guarantee', 'guarentee', 'garantee', 'guarrantee'],
+   ['parliament', 'parliment', 'parlament', 'parlaiment'], ['questionnaire', 'questionaire', 'questionnair', 'quesionnaire'], ['millennium', 'millenium', 'milennium', 'millennim']]
+];
 // A quiz question from these lists: t has one "?" for the answer (so solved text can fill it in), wrong = n - 1
 // wrong answers that are real words of the same kind (plus, for plurals, the typical wrong ending).
 function englishQuestion(tier, n, kinds) {
-  const kind = pick(kinds || ['past', 'plural', 'opp', 'syn']), t3 = Math.max(0, Math.min(2, tier));
+  const kind = pick(kinds || ['past', 'plural', 'opp', 'syn', 'spell']), t3 = Math.max(0, Math.min(2, tier));
   let t, a, wrong = [];
   const others = (list, k) => shuffle(list.filter((x) => x[k] !== a).map((x) => x[k]));
-  if (kind === 'past') { const [v, p] = pick(PAST[t3]); t = 'Past of ' + v + ': ?'; a = p; wrong = others(PAST[t3], 1); }
+  if (kind === 'spell') { const [w, ...bad] = pick(SPELLING[t3]); t = 'Right spelling: ?'; a = w; wrong = shuffle(bad.slice()); }
+  else if (kind === 'past') { const [v, p] = pick(PAST[t3]); t = 'Past of ' + v + ': ?'; a = p; wrong = others(PAST[t3], 1); }
   else if (kind === 'plural') {
     const [s, p, bad] = pick(PLURALS[t3]); t = 'One ' + s + ', two ?'; a = p;
     wrong = (bad !== s && bad !== p ? [bad] : []).concat(others(PLURALS[t3], 1));

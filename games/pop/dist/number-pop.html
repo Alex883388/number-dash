@@ -1238,15 +1238,16 @@ function planDiv(old, fresh) {
 // a question in the badge with exactly one bubble its answer: mostly a bubble already floating, so the
 // newest bubble is not always the one (the new bubble is then now and then the slip answer, the trap)
 function planAsk(old, fresh, w) {
-  const last = game.target, counts = {}, pool = askPool(w);
+  const last = game.target, counts = {}, pool = askPool(w), asked = game.asked || (game.asked = new Set());
+  const fresh1 = (qs) => qs.filter((q) => !asked.has(q.text));   // no question twice in a round
   old.forEach((b) => { counts[b.v] = (counts[b.v] || 0) + 1; });
   if (Math.random() < 0.7) {
-    const cands = old.filter((b) => counts[b.v] === 1 && b.v !== last && pool[b.v]);
-    if (cands.length) { const b = pick(cands); return { T: b.v, q: pick(pool[b.v]), olds: [b], vals: [] }; }
+    const cands = old.filter((b) => counts[b.v] === 1 && b.v !== last && pool[b.v] && fresh1(pool[b.v]).length);
+    if (cands.length) { const b = pick(cands), q = pick(fresh1(pool[b.v])); asked.add(q.text); return { T: b.v, q: q, olds: [b], vals: [] }; }
   }
   for (let t = 0; t < 400; t++) {
     const q = w.ask();
-    if (!counts[q.a] && (q.a !== last || t > 300)) return { T: q.a, q: q, olds: [], vals: [q.a] };
+    if (!counts[q.a] && (q.a !== last || t > 300) && (!asked.has(q.text) || t > 350)) { asked.add(q.text); return { T: q.a, q: q, olds: [], vals: [q.a] }; }
   }
   return null;
 }
@@ -1666,7 +1667,7 @@ function updateClock() {
 function startRound(w) {
   game.w = w; game.n = w.n; game.state = 'play'; game.attempt++;
   game.done = 0; game.time = 0; game.endTime = 0; game.slips = 0; game.score = 0; game.streak = 0; game.bestStreak = 0;
-  game.target = 0; game.picks = []; game.phase = 'pick'; game.result = null;
+  game.target = 0; game.picks = []; game.phase = 'pick'; game.result = null; game.asked = new Set();
   game.fd = w.frac ? fracFamily() : 0;
   document.body.classList.remove('menu');
   document.body.classList.toggle('calm', calm());

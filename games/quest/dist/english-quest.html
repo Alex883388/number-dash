@@ -240,6 +240,11 @@ button, label, input, .btn, a { touch-action: manipulation; }
 .wl-row b { display: block; font: 700 1.15rem/1.2 var(--font-display); }
 .wl-row span { display: block; color: var(--ink-soft); font-size: .92rem; line-height: 1.35; }
 .wl-say { width: 48px; height: 48px; font: 1.3rem/1 var(--emoji); }
+.gn-unit { background: var(--card-2); border-radius: 16px; padding: 2px 14px; }
+.gn-unit summary { cursor: pointer; font: 700 1.1rem/1.2 var(--font-display); min-height: 48px; display: flex; align-items: center; gap: 8px; }
+.gn-unit summary small { color: var(--ink-soft); font-size: .85rem; }
+.gn-unit ul { margin: 2px 0 12px; padding-left: 20px; display: grid; gap: 10px; line-height: 1.4; }
+.gn-unit li i { display: block; color: var(--ink-soft); }
 .newwords { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin: 0; padding: 0; list-style: none; }
 .newwords li { background: var(--mint-soft); border-radius: 99px; padding: 6px 12px; font: 600 1rem/1.1 var(--font-display); }
 .big-msg { font: 700 1.2rem/1.3 var(--font-display); margin: 0; }
@@ -280,6 +285,7 @@ button, label, input, .btn, a { touch-action: manipulation; }
         <button class="btn" id="reviewBtn">🔁 Review</button>
         <button class="btn" id="placeBtn">🎯 Find my level</button>
         <button class="btn" id="wordsBtn">📒 My words</button>
+        <button class="btn" id="notesBtn">📘 Grammar notes</button>
         <button class="btn" id="mockBtn" hidden>📝 IELTS reading test</button>
         <button class="btn" id="mockLBtn" hidden>🎧 IELTS listening test</button>
       </div>
@@ -307,6 +313,14 @@ button, label, input, .btn, a { touch-action: manipulation; }
       <p class="note" id="wordsNote"></p>
       <div class="row"><button class="btn sun" id="practiseWordsBtn">Practise 10 words</button><button class="btn" id="wordsHomeBtn">Home</button></div>
       <div class="wordlist" id="wordList"></div>
+    </div>
+  </section>
+  <section class="screen path-card" id="s-notes" hidden>
+    <div class="card">
+      <h2 class="words-title">📘 Grammar notes</h2>
+      <p class="note" id="notesNote"></p>
+      <div class="row"><button class="btn" id="notesHomeBtn">Home</button></div>
+      <div class="wordlist" id="notesList"></div>
     </div>
   </section>
   <section class="screen" id="s-done" hidden>
@@ -1301,6 +1315,25 @@ function renderHome() {
   $('#soundBtn').textContent = save.settings.music > 0 ? 'Music on' : 'Music off';
   $('#speakBtn').textContent = save.settings.speak ? 'Read aloud on' : 'Read aloud off';
 }
+// grammar notes: the rule behind each grammar item of the lessons open so far, with its example;
+// newest stage and lesson first, only the newest lesson unfolded
+function renderNotes() {
+  const parts = []; let n = 0, first = true;
+  for (let s = Math.min(rec.unlocked, STAGES.length); s >= 1; s--) {
+    const units = has(s) ? unitList(s).filter((u) => unitOpen(s, u)).reverse() : [];
+    if (!units.length) continue;
+    parts.push('<div class="wl-stage"><h3>' + STAGES[s - 1].icon + ' ' + STAGES[s - 1].name + ' · ' + STAGES[s - 1].cefr + '</h3>' + units.map((u) => {
+      const un = unitOf(s, u), seen = new Set(), items = un.grammar.filter((g) => g.why && !seen.has(g.why) && seen.add(g.why));
+      n += items.length;
+      const h = '<details class="gn-unit"' + (first ? ' open' : '') + '><summary>' + (un.emoji ? '<span aria-hidden="true">' + un.emoji + '</span>' : '') + esc(un.title) + ' <small>' + items.length + '</small></summary><ul>' +
+        items.map((g) => '<li>' + esc(g.why) + '<i>' + esc(g.q.replace('___', g.opts[g.a])) + '</i></li>').join('') + '</ul></details>';
+      first = false;
+      return h;
+    }).join('') + '</div>');
+  }
+  $('#notesNote').textContent = n ? n + ' rules from your lessons so far, each with an example.' : 'Grammar rules from your lessons collect here.';
+  $('#notesList').innerHTML = parts.join('');
+}
 // the notebook: every learned word with its meaning, newest stage first
 let wordIndex = null;
 function indexWords() {
@@ -1351,6 +1384,8 @@ $('#pathBtn').addEventListener('click', () => { renderPath(levelNow()); showScre
 $('#reviewBtn').addEventListener('click', () => startLesson('review'));
 $('#placeBtn').addEventListener('click', () => startLesson('place'));
 $('#wordsBtn').addEventListener('click', () => { renderWords(); showScreen('words'); });
+$('#notesBtn').addEventListener('click', () => { renderNotes(); showScreen('notes'); });
+$('#notesHomeBtn').addEventListener('click', goHome);
 $('#wotd').addEventListener('click', (ev) => {
   const wd = rec.wotd, e = wd && indexWords().get(wd.w); if (!e) return;
   if (ev.target.closest('#wotdSay')) { Speech.say(e.w.w + '. ' + e.w.ex.replace('___', e.w.w), 0.85); return; }
@@ -1387,7 +1422,7 @@ window.addEventListener('keydown', (e) => {
 arcadeGuards(() => Speech.stop());
 arcadeLinks();
 
-window.__quest = { L, rec, save, STAGES, CONTENT, has, next, renderHome, startLesson, nextStep, unitOpen, testOpen, wordQ, unitLesson, stageTest, spotQ, writingQ, showQ, renderWords, mockBand, Speech,
+window.__quest = { L, rec, save, STAGES, CONTENT, has, next, renderHome, renderNotes, startLesson, nextStep, unitOpen, testOpen, wordQ, unitLesson, stageTest, spotQ, writingQ, showQ, renderWords, mockBand, Speech,
   // answer the current question: right = true picks the right answer (or builds / spells it), false picks a wrong one
   answer(right) {
     const q = L.qs[L.i]; if (!q || L.answered) return false;

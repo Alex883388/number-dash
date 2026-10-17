@@ -146,5 +146,12 @@ module.exports = [
   { log: "[window.__quest.rec.learned.includes(window.__quest.rec.wotd.w), window.__quest.rec.wotd.done, document.getElementById('wotd').textContent.indexOf('In My words') >= 0, document.getElementById('wordsBtn').textContent]" },
   { log: "(() => { const Q = window.__quest, w = Q.rec.wotd.w; Q.renderHome(); const same = Q.rec.wotd.w === w; Q.rec.wotd.d = '2000-01-01'; Q.renderHome(); return ['same all day', same, 'next day new and unknown', Q.rec.wotd.w !== w && !Q.rec.learned.includes(Q.rec.wotd.w)]; })()" },
   { viewport: [390, 844, true, true, 3] }, { sleep: 400 }, { eval: "document.getElementById('wotd').scrollIntoView(); [document.documentElement.scrollWidth <= innerWidth, Math.round(document.getElementById('wotd').getBoundingClientRect().width)]" }, { shot: 'quest-32-word-of-day-phone-dark' },
+  // grammar notes: every open lesson's rules with examples, newest first and unfolded
+  { viewport: [820, 1180, true, false, 2] }, { sleep: 300 },
+  { touchEl: '#notesBtn' }, { sleep: 400 },
+  { log: "(() => { const d = [...document.querySelectorAll('#notesList details')]; const open = d.filter((x) => x.open); return [document.getElementById('notesNote').textContent, d.length, open.length, open[0] && open[0].querySelector('summary').textContent, open[0] && open[0].querySelectorAll('li').length, document.querySelector('#notesList li') && document.querySelector('#notesList li').textContent.slice(0, 90)]; })()" },
+  { shot: 'quest-34-grammar-notes' },
+  { eval: "(() => { const Q = window.__quest, keep = Q.rec.unlocked; Q.rec.unlocked = 1; Q.renderNotes(); const r = [document.querySelectorAll('#notesList details').length, document.getElementById('notesNote').textContent]; Q.rec.unlocked = keep; Q.renderNotes(); return r; })()" },
+  { touchEl: '#notesHomeBtn' }, { sleep: 300 }, { log: "document.getElementById('s-home').hidden" },
   { log: 'JSON.stringify(window.__errs)' }
 ];

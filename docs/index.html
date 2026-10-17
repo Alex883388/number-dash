@@ -198,7 +198,7 @@ h1 span { color: var(--sun-deep); }
         <h2>Pair Up</h2>
         <p>Flip two cards and find pairs that belong together: 7 × 8 and 56, a picture and its English word, hot and cold.</p>
         <div class="skills"><span>Memory</span><span>Math</span><span>English</span></div>
-        <span class="meta" id="pairMeta">14 kinds of cards</span>
+        <span class="meta" id="pairMeta">15 kinds of cards</span>
         <span class="play">Play</span>
       </div>
     </a>
@@ -212,7 +212,7 @@ h1 span { color: var(--sun-deep); }
         <h2>Number Pop</h2>
         <p>Tap the floating bubbles that make the target number. Later worlds bring take-away, times, sharing, money, fractions and decimals.</p>
         <div class="skills"><span>Mental math</span></div>
-        <span class="meta" id="popMeta">12 worlds</span>
+        <span class="meta" id="popMeta">16 worlds</span>
         <span class="play">Play</span>
       </div>
     </a>
@@ -264,7 +264,7 @@ h1 span { color: var(--sun-deep); }
   document.getElementById('stats').innerHTML = cell('Answers right', right) + cell('Dash stars', stars + ' / 150') + cell('Ladder best', (l.best || 0) + ' / 30') + cell('Pairs found', pu.pairs || 0) + cell('Words learned', learned) + cell('English stage', EQ[eqStage - 1].split(' · ')[1]);
   if (done) document.getElementById('dashMeta').textContent = done + ' of 50 levels finished';
   if (pu.wins) document.getElementById('pairMeta').textContent = pu.wins + (pu.wins === 1 ? ' board' : ' boards') + ' cleared';
-  if (popStars) document.getElementById('popMeta').textContent = popStars + ' of 36 stars';
+  if (popStars) document.getElementById('popMeta').textContent = popStars + ' of 48 stars';
   if (eq.lessons) document.getElementById('questMeta').textContent = 'Now at ' + EQ[eqStage - 1];
   // daily streak from the days every game marks when it saves
   var days = read('arcade-days.v1'), key = function (d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
@@ -275,8 +275,8 @@ h1 span { color: var(--sun-deep); }
   document.getElementById('streak').innerHTML = streak ? '🔥 <b>' + streak + '</b> ' + (streak === 1 ? 'day' : 'days') + (played ? '' : ' · play today to keep it') : 'Play today to start a streak';
   // three suggestions: English every day, then a math game and a memory or spelling game that change by the day
   var dayNo = Math.floor(Date.now() / 864e5), esc = function (t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;'); };
-  var POP = ['Make 10', 'Up to 20', 'Up to 50', 'Take away', 'Times', 'Mix', 'Make 100', 'Share it', 'Money', 'Fractions', 'Decimals', 'Below zero'];
-  var popNext = 0; for (var w = 1; w <= 12; w++) { var r = (np.worlds || {})[w]; if (!r || (r.stars || 0) < 3) { popNext = w; break; } }
+  var POP = ['Make 10', 'Up to 20', 'Up to 50', 'Take away', 'Times', 'Mix', 'Make 100', 'Share it', 'Money', 'Fractions', 'Decimals', 'Below zero', 'Double & halve', 'Place value', 'Brackets', 'Percent'];
+  var popNext = 0; for (var w = 1; w <= POP.length; w++) { var r = (np.worlds || {})[w]; if (!r || (r.stars || 0) < 3) { popNext = w; break; } }
   var missedSpell = Array.isArray(sp.missed) ? sp.missed.length : 0, reviewEq = Array.isArray(eq.review) ? eq.review.length : 0;
   var todo = [
     !eq.lessons ? { href: 'quest/', ic: '🎯', t: 'Find your English level', d: 'A short test, then lessons at the right stage' }

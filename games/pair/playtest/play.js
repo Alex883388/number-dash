@@ -17,7 +17,7 @@ const deals = `(() => {
   P.save.math.tricky = keepTricky;
   for (const lv of ['starter', 'explorer', 'genius']) {
     P.save.settings.mathLevel = lv;
-    for (const deck of ['times', 'plus', 'pics', 'opp', 'numw', 'past', 'syn', 'time', 'frac', 'baby', 'cap', 'coll', 'shape', 'mix']) {
+    for (const deck of ['times', 'plus', 'pics', 'opp', 'numw', 'past', 'syn', 'time', 'frac', 'baby', 'cap', 'coll', 'shape', 'sci', 'mix']) {
       let bad = 0, short = 0;
       for (let k = 0; k < 40; k++) {
         const ps = P.dealPairs(deck, 12);
@@ -100,6 +100,9 @@ module.exports = [
   { eval: "document.querySelectorAll('.pc').forEach((c) => c.classList.add('up')); 'all face up'" }, { sleep: 500 }, { shot: 'pair-08d-phone-shapes' },
   { log: "(() => { const over = [...document.querySelectorAll('.pc .v')].filter((v) => { const r = v.getBoundingClientRect(), f = v.parentElement.getBoundingClientRect(); return r.left < f.left + 2 || r.right > f.right - 2 || r.top < f.top || r.bottom > f.bottom; }).map((v) => v.textContent); return over.length ? 'OVERFLOW ' + over.join(',') : 'shape cards fit (' + document.querySelectorAll('.pc').length + ' cards)'; })()" },
   { log: "[...document.querySelectorAll('.pc .v')].map((v) => v.innerHTML.split('<br>').length + ':' + parseFloat(v.style.fontSize).toFixed(0)).join(' ')" },
+  { eval: "window.__pair.rec.deck = 'sci'; window.__pair.start(); 'sci genius'" }, { sleep: 900 },
+  { eval: "document.querySelectorAll('.pc').forEach((c) => c.classList.add('up')); 'all face up'" }, { sleep: 500 }, { shot: 'pair-08e-phone-science' },
+  { log: "(() => { const over = [...document.querySelectorAll('.pc .v')].filter((v) => { const r = v.getBoundingClientRect(), f = v.parentElement.getBoundingClientRect(); return r.left < f.left + 2 || r.right > f.right - 2 || r.top < f.top || r.bottom > f.bottom; }).map((v) => v.textContent); return over.length ? 'OVERFLOW ' + over.join(',') : 'science cards fit (' + document.querySelectorAll('.pc').length + ' cards)'; })()" },
   { eval: "window.__pair.rec.deck = 'opp'; window.__pair.start(); 'opp genius'" },
   { viewport: [1180, 820, true, true, 2] }, { sleep: 900 }, { shot: 'pair-09-dark-opp' },
   { log: "(() => { const over = [...document.querySelectorAll('.pc .v')].filter((v) => v.scrollWidth > v.parentElement.clientWidth + 1 || v.scrollHeight > v.parentElement.clientHeight + 1).map((v) => v.textContent); return over.length ? 'OVERFLOW ' + over.join(',') : 'all card text fits'; })()" },

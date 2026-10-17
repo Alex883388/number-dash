@@ -160,6 +160,7 @@ const DECKS = [
   { id: 'cap', name: 'Capital cities', icon: '🗺️', note: 'Vietnam → Hanoi', words: true },
   { id: 'coll', name: 'Go together', icon: '🧩', note: 'make → a decision', words: true },
   { id: 'shape', name: 'Shapes', icon: '🔷', note: 'hexagon → 6 sides', words: true },
+  { id: 'sci', name: 'Body & science', icon: '🔬', note: 'heart → pumps blood', words: true },
   { id: 'mix', name: 'Mix', icon: '🎲', note: 'a bit of all', words: true }
 ];
 const SIZES = [{ id: 'small', name: '6 pairs', n: 6, peek: 3 }, { id: 'medium', name: '8 pairs', n: 8, peek: 4 }, { id: 'big', name: '12 pairs', n: 12, peek: 5 }];
@@ -213,6 +214,21 @@ const SHAPES = [
    ['diameter', 'across through the centre'], ['circumference', 'distance round a circle'], ['isosceles triangle', '2 equal sides'],
    ['equilateral triangle', '3 equal sides'], ['scalene triangle', 'no equal sides'], ['rhombus', '4 equal sides, slanted', 'para'], ['trapezium', '1 pair of parallel sides'],
    ['parallelogram', '2 pairs of parallel sides', 'para'], ['vertex', 'a corner of a shape']]
+];
+// body and science: [word, what it is or does, optional conflict group], same rules as SHAPES
+const SCI = [
+  [['heart', 'pumps blood'], ['lungs', 'breathe air in'], ['brain', 'thinks and remembers'], ['stomach', 'holds swallowed food'], ['teeth', 'bite and chew'],
+   ['eyes', 'see'], ['ears', 'hear'], ['nose', 'smell'], ['skin', 'covers your body'], ['bones', 'hold your body up'], ['roots', 'drink water from the soil'],
+   ['leaves', 'catch sunlight'], ['seeds', 'grow into new plants'], ['flower', 'bees visit it'], ['Sun', 'gives us light and heat'], ['Moon', 'goes round the Earth']],
+  [['skeleton', '206 bones'], ['muscles', 'move your bones'], ['kidneys', 'clean the blood'], ['lungs', 'take in oxygen'], ['heart', 'pumps blood'],
+   ['veins', 'carry blood to the heart'], ['arteries', 'take blood from the heart'], ['ribs', 'protect heart and lungs'], ['skull', 'protects the brain'],
+   ['gravity', 'pulls things down'], ['friction', 'slows moving things down'], ['magnet', 'pulls iron and steel'], ['evaporation', 'water turns to vapour'],
+   ['condensation', 'vapour turns to water'], ['melting', 'solid turns to liquid'], ['freezing', 'liquid turns to solid']],
+  [['photosynthesis', 'making food from sunlight', 'food'], ['respiration', 'cells release energy', 'energy'], ['chlorophyll', 'green pigment in leaves'],
+   ['mitochondria', 'where cells get energy', 'energy'], ['nucleus', 'the cell\'s control centre'], ['red blood cells', 'carry oxygen'], ['white blood cells', 'fight germs'],
+   ['platelets', 'help blood to clot'], ['herbivore', 'eats only plants'], ['carnivore', 'eats only meat'], ['omnivore', 'eats plants and meat'],
+   ['producer', 'makes its own food', 'food'], ['predator', 'hunts other animals'], ['prey', 'is hunted for food'], ['vertebrate', 'has a backbone'],
+   ['invertebrate', 'has no backbone'], ['conductor', 'lets electricity flow'], ['insulator', 'stops heat or electricity']]
 ];
 const FRACS = [
   [['½', 'one half'], ['⅓', 'one third'], ['⅔', 'two thirds'], ['¼', 'one quarter'], ['¾', 'three quarters'], ['⅕', 'one fifth'], ['⅖', 'two fifths'], ['⅗', 'three fifths'],
@@ -272,9 +288,9 @@ function wordsPair(deck, tier, used) {
       if (used.coll.alts.has(x) || alts.some((w) => used.coll.words.has(w))) continue;   // another card could match too
       p = { a: { kind: 'word', v: x, say: x + ' ' + y }, b: { kind: 'word', v: y, say: x + ' ' + y }, learned: x + ' ' + y, key: [x, y], coll: [x, alts] };
     }
-    else if (deck === 'shape') {
-      const [x, y, grp] = pick(SHAPES[tier]), sayY = y.replace(/°/g, ' degrees');
-      p = { a: { kind: 'word', v: x, say: x }, b: { kind: 'word', v: y, say: sayY }, learned: x + ': ' + y, key: grp ? [x, y, 'shape-' + grp] : [x, y] };
+    else if (deck === 'shape' || deck === 'sci') {
+      const [x, y, grp] = pick((deck === 'sci' ? SCI : SHAPES)[tier]), sayY = y.replace(/°/g, ' degrees');
+      p = { a: { kind: 'word', v: x, say: x }, b: { kind: 'word', v: y, say: sayY }, learned: x + ': ' + y, key: grp ? [x, y, deck + '-' + grp] : [x, y] };
     }
     else if (deck === 'cap') { const [c, t] = pick(CAPITALS[tier]); p = { a: { kind: 'word', v: c, say: c }, b: { kind: 'word', v: t, say: t }, learned: c + ' → ' + t, key: [c, t] }; }
     else if (deck === 'time') { const t = timePair(tier); p = Object.assign(t, { learned: t.a.v + ' = ' + t.b.v, key: [t.a.v, t.b.v] }); }
@@ -296,7 +312,7 @@ function dealPairs(deck, n) {
   const tier = tierOf(), used = { texts: new Set(), faces: new Set(), words: new Set() }, out = [];
   for (let i = 0; out.length < n && i < n * 4; i++) {
     let d = deck;
-    if (deck === 'mix') d = ['times', 'plus', 'pics', 'opp', 'numw', 'past', 'syn', 'time', 'frac', 'baby', 'cap', 'coll', 'shape'][out.length % 13];
+    if (deck === 'mix') d = ['times', 'plus', 'pics', 'opp', 'numw', 'past', 'syn', 'time', 'frac', 'baby', 'cap', 'coll', 'shape', 'sci'][out.length % 14];
     const p = MATH_KINDS[d] ? mathPair(MATH_KINDS[d][tier], used, DECK_OPS[d]) : wordsPair(d, tier, used);
     if (p) out.push(p);
   }
