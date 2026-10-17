@@ -1,0 +1,845 @@
+<title>Memory Lane</title>
+<meta name="description" content="Short, calm memory rounds: numbers, picture words and squares that light up one at a time. Remember them, then tap them back in order, or backwards.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap">
+<style>
+/*__SHARED:arcade-ui.css__*/
+/* Memory Lane: one calm column over the sky. A phase label, the show card where the items appear one
+   at a time (a big number, or a picture word), the answer boxes with Undo, then the pad: a number pad,
+   picture-word cards, or the squares of the grid game (they light up in place, so that game has no show
+   card). Sizes come from layout() so nothing ever scrolls. Number keys are gold-edged like the other
+   games' answer tiles. */
+:root { --stone: rgba(255, 255, 255, .5); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --stone: rgba(255, 255, 255, .08); } }
+:root[data-theme="dark"] { --stone: rgba(255, 255, 255, .08); }
+#bg { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+#bg i { position: absolute; border-radius: 32%; border: 2px solid var(--stone); animation: drift 16s ease-in-out infinite alternate; }
+#bg i:nth-child(2n) { border-radius: 50%; animation-duration: 21s; animation-delay: -8s; }
+@keyframes drift { from { transform: translateY(0) rotate(0deg); } to { transform: translateY(-22px) rotate(8deg); } }
+
+#play {
+  position: fixed; inset: 0; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--gap, 12px);
+  box-sizing: border-box; touch-action: manipulation;
+  padding: var(--top, 80px) max(16px, env(safe-area-inset-right, 0px)) calc(14px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+}
+#play.away { visibility: hidden; }
+.phase {
+  height: 38px; box-sizing: border-box; display: inline-flex; align-items: center; gap: 7px; flex: none; padding: 0 18px; border-radius: 99px; max-width: 100%;
+  font: 700 1.1rem/1 var(--font-display); background: var(--card); color: var(--ink); box-shadow: var(--shadow-sm); white-space: nowrap;
+}
+.phase i { font-style: normal; font-family: var(--emoji); }
+.phase.watch { background: var(--lilac-soft); }
+.phase.go { background: var(--sun); color: var(--sun-ink); }
+.phase.good { background: var(--mint-soft); }
+.phase.near { background: var(--card); box-shadow: inset 0 0 0 3px var(--lilac), var(--shadow-sm); }
+.show {
+  width: var(--show-w, 300px); height: var(--show-h, 150px); flex: none; box-sizing: border-box; position: relative; overflow: hidden;
+  background: var(--card); border: 4px solid var(--door-edge); border-radius: 28px; box-shadow: var(--shadow); display: grid; place-items: center;
+}
+.show .digit { font: 700 calc(var(--show-h, 150px) * .66)/1 var(--font-display); font-variant-numeric: tabular-nums; }
+.show .pw { display: grid; justify-items: center; gap: 2px; }
+.show .pw i { font: 400 calc(var(--show-h, 150px) * .44)/1.1 var(--emoji); font-style: normal; }
+.show .pw b { font: 700 var(--show-word, 30px)/1.1 var(--font-display); white-space: nowrap; }
+.show .fixrow { letter-spacing: .06em; }
+.show .q { font: 700 calc(var(--show-h, 150px) * .5)/1 var(--font-display); color: var(--line); }
+.show .in { animation: pop .3s ease both; }
+.answer { display: flex; align-items: center; gap: 12px; flex: none; height: 56px; max-width: 100%; }
+.slots { display: flex; gap: var(--sg, 6px); }
+.slot {
+  width: var(--bs, 48px); height: var(--bs, 48px); box-sizing: border-box; flex: none; display: grid; place-items: center;
+  border-radius: calc(var(--bs, 48px) * .28); background: var(--card); border: 3px solid var(--line); box-shadow: var(--shadow-sm);
+  font: 700 calc(var(--bs, 48px) * .58)/1 var(--font-display); color: var(--ink); font-variant-numeric: tabular-nums;
+}
+.slot i { font: 400 calc(var(--bs, 48px) * .58)/1 var(--emoji); font-style: normal; }
+.slot u { width: 36%; height: 36%; border-radius: 30%; background: var(--sun-deep); }
+.slot.seen { background: var(--lilac-soft); border-color: var(--lilac); }
+.slot.now { border-color: var(--lilac); box-shadow: 0 0 0 4px var(--lilac-soft); }
+.slot.good { background: var(--mint-soft); border-color: var(--mint); }
+.slot.fix { background: var(--lilac-soft); border-color: var(--lilac); }
+.undo { width: 56px; height: 56px; padding: 0; flex: none; display: grid; place-items: center; border-radius: 16px; box-shadow: 0 3px 0 var(--line); }
+.undo:disabled { opacity: .35; }
+.pad { display: grid; gap: var(--pg, 10px); flex: none; justify-content: center; }
+.pad button { margin: 0; padding: 0; box-sizing: border-box; cursor: pointer; touch-action: manipulation; color: inherit; }
+.pad button:focus { outline: none; }
+.pad button:focus-visible { outline: 3px solid var(--lilac); outline-offset: 3px; }
+/* the number pad: 1-9 in three rows, 0 under 8 */
+.pad.keys { grid-template-columns: repeat(3, var(--kw, 110px)); }
+.key {
+  width: var(--kw, 110px); height: var(--kh, 80px); border-radius: 20px; display: grid; place-items: center;
+  background: var(--door); border: 3px solid var(--door-edge); color: var(--door-ink); box-shadow: 0 4px 0 var(--door-edge);
+  font: 700 calc(var(--kh, 80px) * .5)/1 var(--font-display); transition: transform .08s ease, box-shadow .08s ease, opacity .2s;
+}
+.key.zero { grid-column: 2; }
+.key:active, .key.hit { transform: translateY(3px); box-shadow: 0 1px 0 var(--door-edge); }
+.key.hit { background: var(--sun); }
+.pad.off .key { opacity: .45; pointer-events: none; }
+/* picture-word cards */
+.pad.cards { display: flex; flex-wrap: wrap; justify-content: center; width: calc(var(--cols, 4) * var(--cw, 120px) + (var(--cols, 4) - 1) * var(--pg, 10px)); max-width: 100%; }
+.wcard {
+  width: var(--cw, 120px); height: var(--ch, 110px); border-radius: 20px; position: relative; display: grid; align-content: center; justify-items: center; gap: 2px;
+  background: var(--card); border: 3px solid var(--line); box-shadow: 0 4px 0 var(--line); transition: transform .08s ease, box-shadow .08s ease;
+}
+.wcard i { font: 400 calc(var(--ch, 110px) * .42)/1.1 var(--emoji); font-style: normal; }
+.wcard b { font: 700 var(--cf, 18px)/1.15 var(--font-display); white-space: nowrap; max-width: calc(100% - 8px); overflow: hidden; }
+.wcard:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--line); }
+.wcard.picked { background: var(--sun); border-color: var(--sun-deep); box-shadow: 0 4px 0 var(--sun-deep); color: var(--sun-ink); }
+.wcard .n, .cell .n {
+  position: absolute; top: 5px; left: 6px; min-width: 1.6em; padding: 3px 0; border-radius: 99px; text-align: center;
+  font: 700 .95rem/1 var(--font-display); background: var(--card); color: var(--ink); box-shadow: var(--shadow-sm);
+}
+.pad.wait .wcard { visibility: hidden; }
+.pad.off .wcard { pointer-events: none; }
+.wcard.good { background: var(--mint-soft); border-color: var(--mint); box-shadow: 0 4px 0 var(--mint); color: var(--ink); }
+/* the grid game's squares */
+.pad.grid { grid-template-columns: repeat(var(--gn, 3), var(--cs, 120px)); }
+.cell {
+  width: var(--cs, 120px); height: var(--cs, 120px); border-radius: calc(var(--cs, 120px) * .2); position: relative; display: grid; place-items: center;
+  background: var(--card); border: 3px solid var(--line); box-shadow: 0 4px 0 var(--line); font: 700 calc(var(--cs, 120px) * .34)/1 var(--font-display); color: var(--ink);
+  transition: background .12s, border-color .12s, box-shadow .12s;
+}
+.cell.lit { background: var(--sun); border-color: var(--sun-deep); box-shadow: 0 4px 0 var(--sun-deep), 0 0 0 9px rgba(255, 201, 77, .35); }
+.cell.picked { background: var(--lilac-soft); border-color: var(--lilac); box-shadow: 0 4px 0 var(--lilac); }
+.cell.good { background: var(--mint-soft); border-color: var(--mint); box-shadow: 0 4px 0 var(--mint); }
+.cell.fix { background: var(--lilac-soft); border-color: var(--lilac); box-shadow: 0 4px 0 var(--lilac); }
+.pad.off .cell { pointer-events: none; }
+.toast { top: var(--toast-top, 30%); }
+.toast.music { font-size: 1.1rem; padding: 9px 16px; }
+
+/* home and results */
+.screen { width: min(100%, 640px); }
+.modes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.mode { cursor: pointer; display: block; }
+.mode input { position: absolute; opacity: 0; pointer-events: none; }
+.mode > span {
+  display: grid; gap: 4px; justify-items: center; align-content: center; min-height: 104px; height: 100%; box-sizing: border-box; padding: 8px 4px;
+  border-radius: 20px; background: var(--card-2); border: 2px solid var(--line); box-shadow: 0 4px 0 var(--line);
+}
+.mode b { font: 700 1.2rem/1.2 var(--font-display); white-space: nowrap; }
+.mode small { font-weight: 800; font-size: .8rem; color: var(--ink-soft); white-space: nowrap; }
+.mode .ms { font-size: .85rem; letter-spacing: .06em; line-height: 1; background: var(--card); padding: 3px 9px; border-radius: 99px; }
+.mode .ms .off { opacity: .25; filter: grayscale(1); }
+.mode input:checked + span { background: var(--sun); border-color: var(--sun-deep); box-shadow: 0 4px 0 var(--sun-deep); color: var(--sun-ink); }
+.mode input:checked + span small { color: var(--sun-ink); }
+.mode input:focus-visible + span { outline: 3px solid var(--lilac); outline-offset: 3px; }
+.ic { height: 34px; display: grid; place-items: center; font-style: normal; }
+.ic.num { font: 700 1.6rem/1 var(--font-display); letter-spacing: .08em; color: var(--lilac); }
+.mode input:checked + span .ic.num { color: var(--sun-ink); }
+.ic.pic { font: 400 1.9rem/1 var(--emoji); }
+.ic.mini { grid-template-columns: repeat(3, 9px); gap: 3px; }
+.ic.mini u { width: 9px; height: 9px; border-radius: 3px; background: var(--line); }
+.ic.mini u.on { background: var(--sun-deep); }
+.mode input:checked + span .ic.mini u { background: rgba(255, 255, 255, .6); }
+.mode input:checked + span .ic.mini u.on { background: var(--sun-ink); }
+.levelrow { display: flex; flex-wrap: wrap; gap: 8px 14px; justify-content: center; align-items: center; }
+.toggle { font-size: .95rem; padding: 0 1em; min-height: 48px; display: inline-flex; align-items: center; gap: .4em; box-sizing: border-box; box-shadow: 0 3px 0 var(--line); }
+.toggle i { font-style: normal; font-family: var(--emoji); }
+.toggle[aria-pressed="true"] { background: var(--lilac-soft); border-color: var(--lilac); box-shadow: 0 3px 0 var(--lilac); }
+.seg span { min-width: 4.6em; }
+.note { margin: 0; color: var(--ink-soft); font-weight: 700; font-size: .98rem; line-height: 1.4; min-height: 2.8em; text-wrap: balance; }
+#doneStars span { display: inline-block; animation: pop .45s ease both; }
+#doneStars span:nth-child(2) { animation-delay: .2s; }
+#doneStars span:nth-child(3) { animation-delay: .4s; }
+#doneStats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.done-mode { margin: -8px 0 0; font: 700 1rem/1 var(--font-display); color: var(--ink-soft); }
+#doneNext { font-weight: 700; }
+@media (max-height: 900px) { #s-home .card { gap: 14px; } }
+/* every button a finger can press is 48 px tall or more */
+@media (pointer: coarse) { .screen .btn:not(.big) { min-height: 48px; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; } }
+@media (max-width: 560px) {
+  #s-home .card { gap: 12px; }
+  #s-home .tag { font-size: 1rem; line-height: 1.4; }
+  .mode > span { min-height: 96px; }
+  .mode b { font-size: 1.05rem; }
+  .mode small { font-size: .74rem; }
+  .note { font-size: .92rem; }
+  .seg span { min-width: 0; padding: .6em .8em; }
+  #homeBtns { gap: 8px; }
+  #homeBtns .btn { font-size: .9rem; padding: .65em .8em; }
+  #seqChip { padding: 8px 11px; }
+}
+@media (prefers-reduced-motion: reduce) { #bg i, .show .in, #doneStars span { animation: none !important; } }
+.calm #bg i, .calm .show .in, .calm #doneStars span, .calm .screen, .calm .toast { animation: none !important; }
+</style>
+<!--BODY-->
+<div id="bg" aria-hidden="true">
+  <i style="left:5%;top:14%;width:110px;height:110px"></i><i style="left:84%;top:10%;width:76px;height:76px"></i>
+  <i style="left:10%;top:70%;width:64px;height:64px"></i><i style="left:76%;top:62%;width:140px;height:140px"></i>
+  <i style="left:46%;top:86%;width:88px;height:88px"></i><i style="left:60%;top:30%;width:50px;height:50px"></i>
+</div>
+<div id="play" hidden>
+  <div class="phase watch" id="phase"><i aria-hidden="true">👀</i><span>Watch</span></div>
+  <div class="show" id="show"></div>
+  <div class="answer">
+    <div class="slots" id="slots" aria-hidden="true"></div>
+    <button class="btn undo" id="undoBtn" aria-label="Undo the last tap" disabled>
+      <svg width="30" height="22" viewBox="0 0 30 22" aria-hidden="true"><path d="M9 2h17a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H9L2 11z" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/><path d="M14 7l8 8M22 7l-8 8" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+  <div class="pad keys off" id="pad" role="group" aria-label="Answer"></div>
+</div>
+
+<div id="hud" hidden>
+  <div class="hud-top">
+    <div class="hud-chips">
+      <span class="chip chipbox" id="spanChip">Span 3</span>
+      <span class="chip chipbox" id="seqChip">1 / 10</span>
+      <span class="chip soft chipbox" id="timeChip">0:00</span>
+    </div>
+    <button class="hud-btn" id="pauseBtn" aria-label="Pause">
+      <svg width="18" height="20" viewBox="0 0 16 18" aria-hidden="true"><rect x="1" y="1" width="5" height="16" rx="2" fill="currentColor"/><rect x="10" y="1" width="5" height="16" rx="2" fill="currentColor"/></svg>
+    </button>
+  </div>
+</div>
+
+<main id="screens">
+  <section class="screen" id="s-home">
+    <div class="card">
+      <h1 class="logo">Memory <span>Lane</span></h1>
+      <p class="tag">Watch them appear one at a time, then tap them back in the same order. Short, calm rounds for a stronger memory.</p>
+      <div>
+        <p class="seg-title">Pick a game</p>
+        <div class="modes" id="modes" role="radiogroup" aria-label="Games"></div>
+      </div>
+      <p class="note" id="modeNote"></p>
+      <div class="levelrow">
+        <div class="seg" role="radiogroup" aria-label="Level">
+          <label><input type="radio" name="math" value="starter"><span>Starter</span></label>
+          <label><input type="radio" name="math" value="explorer"><span>Explorer</span></label>
+          <label><input type="radio" name="math" value="genius"><span>Genius</span></label>
+        </div>
+        <button class="btn toggle" id="backBtn" aria-pressed="false"><i aria-hidden="true">↩️</i><span>Backwards: off</span></button>
+      </div>
+      <div class="row"><button class="btn sun big" id="playBtn">Play</button></div>
+      <div class="row" id="homeBtns">
+        <button class="btn" id="speakBtn" aria-pressed="true">Read aloud: on</button>
+        <button class="btn" id="soundBtn">Music: on</button>
+        <a class="btn" data-hub hidden href="../">All games</a>
+      </div>
+    </div>
+  </section>
+  <section class="screen" id="s-pause" hidden>
+    <div class="card small-card">
+      <h2>Paused</h2>
+      <p id="pauseInfo"></p>
+      <div class="row"><button class="btn sun big" id="resumeBtn">Keep going</button></div>
+      <div class="row"><button class="btn" id="restartBtn">Start over</button><button class="btn" id="homeBtn">Home</button></div>
+    </div>
+  </section>
+  <section class="screen" id="s-done" hidden>
+    <div class="card small-card">
+      <h2 id="doneTitle">Round done!</h2>
+      <p class="done-mode" id="doneMode"></p>
+      <div class="stars" id="doneStars"></div>
+      <p id="doneNote"></p>
+      <dl class="stats" id="doneStats"></dl>
+      <p id="doneNext"></p>
+      <div class="row"><button class="btn sun big" id="againBtn">Play again</button></div>
+      <div class="row"><button class="btn" id="doneHomeBtn">Home</button><a class="btn" data-hub hidden href="../">All games</a></div>
+    </div>
+  </section>
+</main>
+<div class="toast" id="toast" hidden></div>
+<div class="sr" aria-live="polite" id="announce"></div>
+
+<script>
+(function () {
+'use strict';
+/*__SHARED:arcade-core__*/
+
+/* ================= music =================
+   The menu song is the arcade's; the memory song is the calmest one: slow, soft keys, one light kick
+   and few hats, so counting and listening stay easy. It is muffled while the items are on show. */
+const SONGS = {
+  menu: { bpm: 72, swing: 0.14, prog: [[52, 55, 59, 62], [55, 59, 60, 64], [57, 60, 64, 67], [55, 57, 62, 64]], bass: [36, 45, 41, 43],
+          keys: [[0, 1, 4, 15], [10, 0.45, 2, 4]], bassPat: [[0, 0.8, 0, 12]], drums: false,
+          hats: [[0, 0.22], [4, 0.12], [8, 0.22], [12, 0.12]], scale: [72, 74, 76, 79, 81, 84], density: 0.42, seed: 3 },
+  // D, Cmaj9, Am7, Bm7b5 voicings: open and unhurried
+  memory: { bpm: 62, swing: 0.1, prog: [[50, 57, 60, 64], [48, 55, 59, 62], [45, 52, 55, 60], [47, 53, 57, 62]], bass: [38, 36, 33, 35],
+            keys: [[0, 0.85, 4, 16], [8, 0.35, 2, 6]], bassPat: [[0, 0.7, 0, 12], [10, 0.35, 7, 4]], drums: true,
+            kick: [0], snare: [12], ghost: [],
+            hats: [[0, 0.22], [8, 0.16]], scale: [69, 72, 74, 76, 79, 81], density: 0.32, seed: 409 }
+};
+/*__SHARED:music-remix__*/
+/*__SHARED:sound__*/
+
+/* ================= the three games =================
+   A round is ROUND sequences or ROUND_SEC seconds of play (the sequence under way is finished first).
+   Span: 2 right in a row adds one, 2 wrong in a row takes one off (never under 2). The first round of a
+   game starts at 3 (2 backwards); later rounds start two below the best, so a round always reaches new
+   ground and the climb from 3 never eats the whole round.
+   Stars by the longest span recalled right in the round (backwards: one less for each star), from
+   usual spans for ages 8 to 12: forward digit span is about 5 at 8 and 6 at 12; the Corsi blocks span
+   (the grid) is about 4.5 to 5.5; words in order, picked from look-alike pictures, about 4 to 5.
+     Numbers 3 stars at 6, 2 stars at 5 · Words 3 at 5, 2 at 4 · Grid 3 at 5, 2 at 4 · otherwise 1 star.
+   Pace: about 1 s per item (a picture word 1.4 s, as it is read aloud), a little faster at 5 and at 7,
+   x1.1 on Starter and x0.9 on Genius; each item is on for 75% of its time. */
+const ROUND = 10, ROUND_SEC = 120, MIN_SPAN = 2, READY_SEC = 0.8, WAIT_SEC = 0.5, ON = 0.75;
+const MODES = {
+  number: { name: 'Numbers', unit: 'numbers', max: 9, pace: 1.0, t3: 6, t2: 5 },
+  word: { name: 'Words', unit: 'words', max: 7, pace: 1.4, t3: 5, t2: 4 },
+  grid: { name: 'Grid', unit: 'squares', max: 9, pace: 1.0, t3: 5, t2: 4 }
+};
+const MODE_IDS = ['number', 'word', 'grid'];
+const LEVELS = ['starter', 'explorer', 'genius'];
+const LEVEL_NAME = { starter: 'Starter', explorer: 'Explorer', genius: 'Genius' };
+const LEVEL_PACE = { starter: 1.1, explorer: 1, genius: 0.9 };
+// the grid grows from 3 x 3 to 4 x 4 at this span
+const GRID4_AT = { starter: 6, explorer: 5, genius: 4 };
+const level = () => (LEVELS.indexOf(save.settings.mathLevel) >= 0 ? save.settings.mathLevel : 'explorer');
+const starsFor = (mode, back, longest) => { const m = MODES[mode], d = back ? 1 : 0; return longest >= m.t3 - d ? 3 : longest >= m.t2 - d ? 2 : 1; };
+const period = (mode, span, lv) => MODES[mode].pace * (span >= 7 ? 0.8 : span >= 5 ? 0.9 : 1) * LEVEL_PACE[lv];
+
+/* ================= picture words =================
+   Families of look-alikes: the shown words come from different families, and the cards to pick from add
+   their brothers and sisters (cat with tiger, apple with pear). Starter = simple nouns, Explorer = longer
+   words, Genius = harder vocabulary. Every emoji is from Emoji 11 (2018) or older, so an iPad draws it.
+   British words: biscuit, aeroplane, ladybird, doughnut, prawn. '+' marks an emoji that needs U+FE0F. */
+const VS = '️';
+const fam = (s) => s.split(',').map((x) => { const p = x.trim().split(' '); return { w: p[0], e: p[1].replace('+', VS) }; });
+const WORDS = {
+  starter: ['cat 🐱, dog 🐶, mouse 🐭, rabbit 🐰', 'pig 🐷, cow 🐮, sheep 🐑, horse 🐴', 'duck 🦆, hen 🐔, owl 🦉, bird 🐦',
+    'fish 🐟, crab 🦀, whale 🐳, shark 🦈', 'apple 🍎, pear 🍐, banana 🍌, grapes 🍇', 'sun ☀+, moon 🌙, star ⭐, cloud ☁+',
+    'ball ⚽, drum 🥁, teddy 🧸, gift 🎁', 'car 🚗, bus 🚌, train 🚆, boat ⛵', 'cake 🍰, egg 🥚, bread 🍞, cheese 🧀',
+    'hat 🎩, sock 🧦, shoe 👟, coat 🧥', 'key 🔑, bell 🔔, book 📖, clock ⏰'].map(fam),
+  explorer: ['tiger 🐯, lion 🦁, leopard 🐆, zebra 🦓', 'dolphin 🐬, octopus 🐙, turtle 🐢, penguin 🐧', 'carrot 🥕, potato 🥔, pumpkin 🎃, broccoli 🥦',
+    'guitar 🎸, trumpet 🎺, violin 🎻, piano 🎹', 'rainbow 🌈, snowman ⛄, lightning ⚡, tornado 🌪+', 'pencil ✏+, scissors ✂+, ruler 📏, crayon 🖍+',
+    'castle 🏰, house 🏠, school 🏫, tent ⛺', 'trophy 🏆, medal 🏅, tennis 🎾, basketball 🏀', 'lollipop 🍭, cupcake 🧁, biscuit 🍪, doughnut 🍩',
+    'butterfly 🦋, spider 🕷+, snail 🐌, ladybird 🐞', 'rocket 🚀, aeroplane ✈+, helicopter 🚁, bicycle 🚲'].map(fam),
+  genius: ['telescope 🔭, microscope 🔬, magnet 🧲, compass 🧭', 'thermometer 🌡+, hourglass ⌛, abacus 🧮, stopwatch ⏱+',
+    'volcano 🌋, desert 🏜+, island 🏝+, mountain 🏔+', 'comet ☄+, galaxy 🌌, satellite 🛰+, globe 🌍', 'kangaroo 🦘, hedgehog 🦔, raccoon 🦝, badger 🦡',
+    'peacock 🦚, parrot 🦜, eagle 🦅, swan 🦢', 'lobster 🦞, squid 🦑, prawn 🦐, pufferfish 🐡', 'saxophone 🎷, microphone 🎤, headphones 🎧, radio 📻',
+    'stadium 🏟+, fountain ⛲, bridge 🌉, factory 🏭', 'dinosaur 🦕, dragon 🐉, unicorn 🦄, crocodile 🐊', 'anchor ⚓, lantern 🏮, candle 🕯+, umbrella ☂+'].map(fam)
+};
+const wordInfo = (w) => { for (const lv of LEVELS) for (const f of WORDS[lv]) { const x = f.find((y) => y.w === w); if (x) return x; } return null; };
+
+/* ================= records =================
+   memory-lane.v1: mode and back (the home choices), rounds (finished, all games), seqs (sequences
+   answered), and per game key ('number', 'word', 'grid', or with '-back' for Backwards):
+   best (the longest span recalled right), stars (best stars) and plays (rounds finished). */
+const rec = loadRecords('memory-lane.v1', { mode: 'number', back: false, rounds: 0, seqs: 0, best: {}, stars: {}, plays: {} });
+if (MODE_IDS.indexOf(rec.mode) < 0) rec.mode = 'number';
+rec.back = !!rec.back;
+['best', 'stars', 'plays'].forEach((k) => { if (!rec[k] || typeof rec[k] !== 'object') rec[k] = {}; });
+const keyOf = (mode, back) => mode + (back ? '-back' : '');
+const startSpan = (mode, back) => { const base = back ? 2 : 3, best = rec.best[keyOf(mode, back)] || 0; return clamp(Math.max(base, best - 2), base, MODES[mode].max - 2); };
+
+/* ================= sequences ================= */
+// digits 0-9, none twice, no three in a row that count up or down (4 5 6)
+function digitSeq(n) {
+  let s = null;
+  for (let t = 0; t < 300; t++) {
+    s = shuffle([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]).slice(0, n);
+    let run = false;
+    for (let k = 2; k < n; k++) { const a = s[k - 2], b = s[k - 1], c = s[k]; if ((b - a === 1 && c - b === 1) || (a - b === 1 && b - c === 1)) run = true; }
+    if (!run) break;
+  }
+  return s.map(String);
+}
+// one word from each of n families, then cards: the shown words, their look-alikes, then any others
+function wordSeq(n, lv) {
+  const fams = shuffle(WORDS[lv].slice()), shown = fams.slice(0, n).map((f) => pick(f));
+  const total = clamp(n * 2, 6, 12), cards = shown.slice(), used = new Set(shown.map((x) => x.w));
+  const sibs = shuffle(fams.slice(0, n).map((f) => shuffle(f.filter((x) => !used.has(x.w)))));
+  for (let round = 0; cards.length < total && round < 3; round++) {
+    for (const s of sibs) { if (cards.length >= total) break; const x = s[round]; if (x && !used.has(x.w)) { cards.push(x); used.add(x.w); } }
+  }
+  for (const f of fams.slice(n)) { if (cards.length >= total) break; const x = pick(f); if (!used.has(x.w)) { cards.push(x); used.add(x.w); } }
+  return { seq: shown.map((x) => x.w), cards: shuffle(cards) };
+}
+// n different squares of the grid
+const gridSeq = (n, N) => shuffle(Array.from({ length: N * N }, (_, i) => i)).slice(0, n).map(String);
+
+/* ================= game state ================= */
+const game = {
+  state: 'menu', prev: '', mode: rec.mode, back: rec.back, lv: 'explorer', span: 3, seq: [], ans: [], cards: [], gridN: 3,
+  t: 0, speed: 1, time: 0, phaseEnd: 0, showStart: 0, shown: -1, lit: false, per: 1,
+  done: 0, right: 0, longest: 0, runR: 0, runW: 0, change: 0, bestBefore: 0, attempt: 0, log: [], result: null, replay: false
+};
+const PLAYING = new Set(['ready', 'show', 'wait', 'answer', 'feedback']);
+const calm = () => !!save.settings.calm || reduceMotion;
+const expected = () => (game.back ? game.seq.slice().reverse() : game.seq.slice());
+const playEl = $('#play'), showEl = $('#show'), slotsEl = $('#slots'), padEl = $('#pad'), phaseEl = $('#phase');
+
+/* ================= read aloud ================= */
+let muffled = false, muffleUntil = 0;
+function speak(text, rate) { if (Speech.say(text, rate)) { muffled = true; muffleUntil = performance.now() + 700 + text.length * 70; } }
+
+/* ================= drawing ================= */
+function setPhase(kind, icon, text) {
+  phaseEl.className = 'phase ' + kind;
+  phaseEl.innerHTML = '<i aria-hidden="true">' + icon + '</i><span></span>';
+  phaseEl.lastChild.textContent = text;
+}
+function slotHTML(v) {
+  if (game.mode === 'number') return v;
+  if (game.mode === 'word') { const x = wordInfo(v); return '<i>' + (x ? x.e : '') + '</i>'; }
+  return '<u></u>';
+}
+// the answer boxes: one per item. kind: 'seen' (on show, up to k), 'answer' (the taps so far), 'good', 'fix' (the right order)
+function renderSlots(kind, k) {
+  const n = game.seq.length, want = expected();
+  let html = '';
+  for (let i = 0; i < n; i++) {
+    let cls = 'slot', inner = '';
+    if (kind === 'seen') { if (i <= k) cls += ' seen'; }
+    else if (kind === 'answer') { if (i < game.ans.length) inner = slotHTML(game.ans[i]); else if (i === game.ans.length) cls += ' now'; }
+    else if (kind === 'good') { cls += ' good'; inner = slotHTML(game.ans[i]); }
+    else if (kind === 'fix') { cls += game.ans[i] === want[i] ? ' good' : ' fix'; inner = slotHTML(want[i]); }
+    html += '<div class="' + cls + '">' + inner + '</div>';
+  }
+  slotsEl.innerHTML = html;
+  $('#undoBtn').disabled = !(game.state === 'answer' && game.ans.length);
+}
+function buildPad() {
+  const m = game.mode;
+  let html = '';
+  if (m === 'number') html = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((d) => '<button type="button" class="key' + (d ? '' : ' zero') + '" data-v="' + d + '">' + d + '</button>').join('');
+  else if (m === 'word') html = game.cards.map((x) => '<button type="button" class="wcard" data-v="' + x.w + '" aria-label="' + x.w + '"><i aria-hidden="true">' + x.e + '</i><b>' + x.w + '</b></button>').join('');
+  else html = Array.from({ length: game.gridN * game.gridN }, (_, i) => '<button type="button" class="cell" data-v="' + i + '" aria-label="square ' + (i + 1) + '"></button>').join('');
+  padEl.innerHTML = html;
+  padEl.className = 'pad ' + (m === 'number' ? 'keys' : m === 'word' ? 'cards' : 'grid') + ' off' + (m === 'word' ? ' wait' : '');
+  playEl.classList.toggle('gridmode', m === 'grid');
+  showEl.hidden = m === 'grid';
+}
+const padItem = (v) => padEl.querySelector('[data-v="' + v + '"]');
+function showItem(i) {
+  const v = game.seq[i];
+  if (game.mode === 'grid') { $$('.cell.lit').forEach((c) => c.classList.remove('lit')); padItem(v).classList.add('lit'); return; }
+  if (game.mode === 'number') showEl.innerHTML = '<span class="digit' + (calm() ? '' : ' in') + '">' + v + '</span>';
+  else { const x = wordInfo(v); showEl.innerHTML = '<span class="pw' + (calm() ? '' : ' in') + '"><i role="img" aria-label="' + x.w + '">' + x.e + '</i><b>' + x.w + '</b></span>'; }
+}
+function hideItem() {
+  if (game.mode === 'grid') $$('.cell.lit').forEach((c) => c.classList.remove('lit'));
+  else showEl.innerHTML = '';
+}
+function updateHud() {
+  $('#spanChip').textContent = (game.back ? '↩ ' : '') + 'Span ' + game.span;
+  $('#seqChip').textContent = Math.min(ROUND, game.done + 1) + ' / ' + ROUND;
+  shownSec = -1; updateClock();
+}
+let shownSec = -1;
+function updateClock() { const s = Math.floor(game.time); if (s !== shownSec) { shownSec = s; $('#timeChip').textContent = fmtTime(game.time); } }
+
+/* Sizes so the phase, the show card, the answer boxes and the pad fit with no scrolling: the pad's
+   buttons as big as the room allows (never under 56 px), the show card a third of what is left. */
+function layout() {
+  if (playEl.hidden) return;
+  const vh = innerHeight, st = playEl.style;
+  const hb = $('#hud').hidden ? 0 : $('.hud-top').getBoundingClientRect().bottom;
+  const top = Math.round(hb + 8);
+  st.setProperty('--top', top + 'px');
+  const cs = getComputedStyle(playEl);
+  const W = Math.floor(playEl.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight));
+  const H = Math.floor(vh - top - parseFloat(cs.paddingBottom));
+  const gap = clamp(Math.round(vh * 0.018), 8, 16);
+  st.setProperty('--gap', gap + 'px');
+  const n = Math.max(1, game.seq.length || game.span), sg = n > 7 ? 4 : 6;
+  st.setProperty('--bs', clamp(Math.floor((Math.min(W, 640) - 56 - 12 - sg * (n - 1)) / n), 24, 52) + 'px');
+  st.setProperty('--sg', sg + 'px');
+  let rest = H - 38 - 56 - gap * (game.mode === 'grid' ? 2 : 3);
+  if (game.mode === 'grid') {
+    const N = game.gridN, g = N === 4 ? 10 : 12, side = Math.max(200, Math.min(W, rest, 540));
+    st.setProperty('--gn', N); st.setProperty('--pg', g + 'px'); st.setProperty('--cs', Math.floor((side - g * (N - 1)) / N) + 'px');
+    document.documentElement.style.setProperty('--toast-top', Math.round(top + 46) + 'px');
+    return;
+  }
+  const showH = game.mode === 'number' ? clamp(Math.round(rest * 0.3), 84, 180) : clamp(Math.round(rest * 0.27), 104, 190);
+  const showW = Math.min(W, 520, game.mode === 'number' ? Math.round(showH * 1.5) : Math.max(Math.round(showH * 2), 280));
+  st.setProperty('--show-h', showH + 'px'); st.setProperty('--show-w', showW + 'px');
+  rest -= showH;
+  if (game.mode === 'number') {
+    const g = clamp(Math.round(vh * 0.014), 8, 14);
+    const kh = Math.floor(clamp((rest - 3 * g) / 4, 56, 96)), kw = Math.floor(Math.min((Math.min(W, 480) - 2 * g) / 3, kh * 1.45));
+    st.setProperty('--pg', g + 'px'); st.setProperty('--kh', kh + 'px'); st.setProperty('--kw', kw + 'px');
+  } else {
+    // the cards: the column count that gives the biggest card (a little wider than tall)
+    const C = game.cards.length || 6, g = 10, maxW = Math.min(W, 900);
+    let best = { s: 0, c: 3, score: -1 };
+    for (let c = 2; c <= Math.min(6, C); c++) {
+      // a part-filled last row counts a little against (it sits in the middle)
+      const r = Math.ceil(C / c), s = Math.min((maxW - (c - 1) * g) / c / 1.12, (rest - (r - 1) * g) / r, 128), score = s - (C % c ? 6 : 0);
+      if (score > best.score + 0.5) best = { s: s, c: c, score: score };
+    }
+    const ch = Math.floor(best.s), cw = Math.floor(Math.min((maxW - (best.c - 1) * g) / best.c, ch * 1.25));
+    st.setProperty('--pg', g + 'px'); st.setProperty('--cols', best.c); st.setProperty('--ch', ch + 'px'); st.setProperty('--cw', cw + 'px');
+    // one word size for every card, as big as the longest word allows
+    const longW = Math.max.apply(null, game.cards.map((x) => x.w.length).concat([4]));
+    st.setProperty('--cf', Math.floor(clamp(Math.min(ch * 0.2, (cw - 14) / (longW * 0.58)), 12, 24)) + 'px');
+    const longS = Math.max.apply(null, game.seq.map((w) => w.length).concat([4]));
+    st.setProperty('--show-word', Math.floor(clamp(Math.min(showH * 0.22, (showW - 40) / (longS * 0.58)), 16, 44)) + 'px');
+  }
+  document.documentElement.style.setProperty('--toast-top', Math.round(top + 46) + 'px');
+  if (game.mode === 'word') requestAnimationFrame(fitWords);
+}
+// a word wider than its card (or the show card) shrinks until it fits
+function fitWords() {
+  let f = parseFloat(getComputedStyle(playEl).getPropertyValue('--cf')) || 18;
+  const bs = $$('.wcard b');
+  for (let k = 0; k < 12 && bs.some((b) => b.scrollWidth > b.clientWidth + 0.5); k++) { f -= 1; playEl.style.setProperty('--cf', f + 'px'); }
+}
+
+/* ================= a round ================= */
+function startRound(opts) {
+  opts = opts || {};
+  Sound.init();
+  game.mode = rec.mode; game.back = rec.back; game.lv = level();
+  game.span = opts.span || startSpan(game.mode, game.back);
+  game.done = 0; game.right = 0; game.longest = 0; game.runR = 0; game.runW = 0; game.change = 0; game.time = 0; game.t = 0; game.log = []; game.result = null;
+  game.bestBefore = rec.best[keyOf(game.mode, game.back)] || 0;
+  game.attempt++;
+  Sound.play('memory');
+  showScreen(null);
+  $('#hud').hidden = false; playEl.hidden = false; playEl.classList.remove('away');
+  document.body.classList.toggle('calm', calm());
+  if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+  // spoken from the tap, so iPad lets the voice speak later in the round too
+  if (game.mode !== 'grid') speak(game.back ? 'Backwards.' : 'Watch.', 0.95);
+  newSequence(true);
+  if (game.attempt > 1) { const name = Sound.remix(game.attempt - 1, 0, 'memory'); if (name) toast('♪ ' + name, 'music', 1300); }
+}
+// first: the round's first sequence (a longer "Watch", while the music toast shows)
+function newSequence(first) {
+  const m = game.mode, n = game.span;
+  game.cards = [];
+  if (m === 'number') game.seq = digitSeq(n);
+  else if (m === 'word') { const w = wordSeq(n, game.lv); game.seq = w.seq; game.cards = w.cards; }
+  else { game.gridN = n >= GRID4_AT[game.lv] ? 4 : 3; game.seq = gridSeq(n, game.gridN); }
+  game.ans = []; game.per = period(m, n, game.lv); game.replay = false;
+  buildPad();
+  layout();
+  // a toast about the span is gone before the first item shows
+  readySequence(game.change ? 1.8 : first ? 1.5 : READY_SEC);
+  if (game.change > 0) toast('Now ' + n + ' in a row! 🌟', 'good', 1500);
+  else if (game.change < 0) toast("Let's try " + n + ' for a bit 🙂', '', 1500);
+  game.change = 0;
+  updateHud();
+}
+// a short "Watch" before the first item (also after a pause, when the sequence is shown again)
+function readySequence(sec) {
+  game.state = 'ready'; game.phaseEnd = game.t + (sec || READY_SEC); game.shown = -1; game.lit = false;
+  setPhase('watch', '👀', game.back ? 'Watch, then go backwards' : 'Watch');
+  showEl.innerHTML = '';
+  padEl.classList.add('off');
+  if (game.mode === 'word') padEl.classList.add('wait');
+  $$('.cell').forEach((c) => { c.className = 'cell'; c.textContent = ''; });
+  $$('.wcard').forEach((c) => { c.classList.remove('picked', 'good'); const b = c.querySelector('.n'); if (b) b.remove(); });
+  game.ans = [];
+  renderSlots('seen', -1);
+  Sound.muffle(true);
+  announce('Watch. ' + game.seq.length + ' ' + MODES[game.mode].unit + '.');
+}
+function stepShow() {
+  const e = game.t - game.showStart, i = Math.floor(e / game.per), lit = e - i * game.per < game.per * ON;
+  if (i >= game.seq.length) { hideItem(); game.state = 'wait'; game.phaseEnd = game.t + WAIT_SEC; return; }
+  if (i !== game.shown) {
+    game.shown = i; game.lit = true; showItem(i); renderSlots('seen', i);
+    const v = game.seq[i];
+    const said = game.mode === 'number' ? speakItem(v, 1.0) : game.mode === 'word' ? speakItem(v, 0.95) : false;
+    if (!said) Sound.sfx.check();
+  } else if (game.lit && !lit) { game.lit = false; hideItem(); }
+}
+function speakItem(v, rate) { if (!save.settings.speak || !Speech.ok) return false; speak(v, rate); return true; }
+function beginAnswer() {
+  game.state = 'answer'; game.ans = [];
+  setPhase('go', game.back ? '↩️' : '👆', game.back ? 'Your turn: last one first' : 'Your turn');
+  if (game.mode !== 'grid') showEl.innerHTML = '<span class="q">?</span>';
+  padEl.classList.remove('off', 'wait');
+  renderSlots('answer');
+  Sound.muffle(false);
+  announce('Your turn. Tap ' + game.seq.length + ' ' + MODES[game.mode].unit + (game.back ? ', last one first.' : ' in order.'));
+}
+function tapEl(el) {
+  if (game.state !== 'answer' || !el || !el.dataset || el.dataset.v === undefined) return;
+  const v = el.dataset.v;
+  if (game.mode !== 'number' && el.classList.contains('picked')) return;
+  game.ans.push(v);
+  Sound.sfx.click();
+  if (game.mode === 'number') { el.classList.add('hit'); clearTimeout(el._hit); el._hit = setTimeout(() => el.classList.remove('hit'), 160); }
+  else { el.classList.add('picked'); const b = document.createElement('span'); b.className = 'n'; b.textContent = game.ans.length; el.appendChild(b); }
+  renderSlots('answer');
+  if (game.ans.length >= game.seq.length) check();
+}
+function undo() {
+  if (game.state !== 'answer' || !game.ans.length) return;
+  const v = game.ans.pop();
+  if (game.mode !== 'number') { const el = padItem(v); if (el) { el.classList.remove('picked'); const b = el.querySelector('.n'); if (b) b.remove(); } }
+  Sound.sfx.click();
+  renderSlots('answer');
+}
+const CHEERS = ['Spot on!', 'Brilliant!', 'Super memory!', 'Well remembered!', 'Perfect!'];
+const KIND = ['Nearly! Here is the order', 'Good try! Here is the order', 'So close! Here is the order'];
+function check() {
+  const want = expected(), ok = want.every((v, k) => game.ans[k] === v), n = game.seq.length, key = keyOf(game.mode, game.back);
+  game.state = 'feedback'; game.done++;
+  game.log.push({ span: n, back: game.back, ok: ok, seq: game.seq.slice(), ans: game.ans.slice() });
+  padEl.classList.add('off');
+  $('#undoBtn').disabled = true;
+  rec.seqs = (rec.seqs || 0) + 1;
+  if (ok) {
+    game.right++; game.runR++; game.runW = 0;
+    const newBest = n > (rec.best[key] || 0);
+    game.longest = Math.max(game.longest, n);
+    if (newBest) rec.best[key] = n;
+    setPhase('good', '⭐', pick(CHEERS));
+    renderSlots('good');
+    if (game.mode === 'grid') want.forEach((v) => { const c = padItem(v); c.className = 'cell good'; });
+    if (game.mode === 'word') want.forEach((v) => { const c = padItem(v); c.classList.remove('picked'); c.classList.add('good'); });
+    Sound.sfx.right(); if (newBest && game.bestBefore) Sound.sfx.star();
+    game.phaseEnd = game.t + 1.1;
+    announce(pick(CHEERS));
+  } else {
+    // gentle: no buzz, the boxes show the right order (the ones that were right stay green)
+    game.runW++; game.runR = 0;
+    setPhase('near', '💭', pick(KIND));
+    renderSlots('fix');
+    if (game.mode === 'grid') {
+      $$('.cell').forEach((c) => { c.className = 'cell'; c.textContent = ''; });
+      want.forEach((v, k) => { const c = padItem(v); c.className = 'cell fix'; c.textContent = k + 1; });
+    }
+    if (game.mode === 'word') {
+      $$('.wcard').forEach((c) => { c.classList.remove('picked'); const b = c.querySelector('.n'); if (b) b.remove(); });
+      want.forEach((v, k) => { const c = padItem(v); c.classList.add('good'); const b = document.createElement('span'); b.className = 'n'; b.textContent = k + 1; c.appendChild(b); });
+    }
+    if (game.mode === 'number') {
+      const f = Math.floor(Math.min(showEl.clientHeight * 0.5, (showEl.clientWidth - 28) / (n * 0.64)));
+      showEl.innerHTML = '<span class="digit fixrow" style="font-size:' + f + 'px">' + want.join('') + '</span>';
+    }
+    game.phaseEnd = game.t + 2.3;
+    announce('Nearly. It was ' + want.map((v) => (game.mode === 'grid' ? 'square ' + (+v + 1) : v)).join(', ') + '.');
+  }
+  writeSave();
+  // the next span: 2 right in a row adds one, 2 wrong in a row takes one off
+  if (game.runR >= 2) { game.runR = 0; if (game.span < MODES[game.mode].max) { game.span++; game.change = 1; } }
+  else if (game.runW >= 2) { game.runW = 0; if (game.span > MIN_SPAN) { game.span--; game.change = -1; } }
+  updateHud();
+}
+function afterFeedback() {
+  if (game.done >= ROUND || game.time >= ROUND_SEC) finishRound(); else newSequence();
+}
+function finishRound() {
+  const key = keyOf(game.mode, game.back), m = MODES[game.mode], stars = starsFor(game.mode, game.back, game.longest);
+  const better = game.longest > game.bestBefore, first = !rec.plays[key];
+  rec.rounds = (rec.rounds || 0) + 1; rec.plays[key] = (rec.plays[key] || 0) + 1; rec.stars[key] = Math.max(rec.stars[key] || 0, stars);
+  writeSave();
+  game.state = 'done';
+  game.result = { mode: game.mode, back: game.back, level: game.lv, longest: game.longest, stars: stars, right: game.right, seqs: game.done, time: game.time, better: better && !first, first: first };
+  Speech.stop(); Sound.muffle(false);
+  $('#doneTitle').textContent = stars === 3 ? 'Memory star!' : stars === 2 ? 'Great remembering!' : 'Good practice!';
+  $('#doneMode').textContent = m.name + (game.back ? ' · Backwards' : '') + ' · ' + LEVEL_NAME[game.lv];
+  $('#doneStars').innerHTML = starRow(stars);
+  $('#doneStars').setAttribute('aria-label', stars + ' of 3 stars');
+  $('#doneNote').textContent = game.longest ? 'Longest: ' + game.longest + ' ' + m.unit + ' in a row' + (game.result.better ? '. A new best!' : '.') : 'Every round makes your memory stronger.';
+  $('#doneStats').innerHTML = stat('Longest', game.longest || '–') + stat('Right', game.right + ' / ' + game.done) + stat('Time', fmtTime(game.time));
+  const d = game.back ? 1 : 0;
+  $('#doneNext').textContent = stars >= 3 ? 'Best ever: ' + (rec.best[key] || 0) + '. Can you beat it?' : (stars === 2 ? '3 stars: ' + (m.t3 - d) : '2 stars: ' + (m.t2 - d)) + ' ' + m.unit + ' in the right order';
+  $('#hud').hidden = true; playEl.hidden = true;
+  Sound.sfx.win();
+  showScreen('done');
+  arcadeLinks();
+  for (let k = 0; k < stars; k++) setTimeout(() => Sound.sfx.star(), 250 + k * 200);
+  announce('Round done. Longest ' + game.longest + '. ' + stars + ' stars.');
+}
+
+/* ================= menus ================= */
+const ICONS = { number: '<i class="ic num" aria-hidden="true">382</i>', word: '<i class="ic pic" aria-hidden="true">🐱</i>',
+  grid: '<i class="ic mini" aria-hidden="true">' + [0, 1, 0, 0, 0, 1, 1, 0, 0].map((on) => '<u' + (on ? ' class="on"' : '') + '></u>').join('') + '</i>' };
+$('#modes').innerHTML = MODE_IDS.map((id) => '<label class="mode" data-mode="' + id + '"><input type="radio" name="mode" value="' + id + '"><span>' + ICONS[id] +
+  '<b>' + MODES[id].name + '</b><small></small><span class="ms" aria-hidden="true"></span></span></label>').join('');
+function modeNote() {
+  const m = rec.mode, back = rec.back, lv = level(), order = back ? 'backwards, last one first' : 'in the same order';
+  const s = startSpan(m, back), best = rec.best[keyOf(m, back)] || 0;
+  const what = m === 'number' ? 'Numbers appear one at a time' + (save.settings.speak && Speech.ok ? ' and are read aloud' : '') + '. Tap them back ' + order + '.'
+    : m === 'word' ? 'Picture words appear (' + WORDS[lv].slice(0, 3).map((f) => f[0].w).join(', ') + '…). Find them ' + order + '.'
+    : 'Squares light up one by one. Tap them ' + order + '.';
+  return what + ' Starts at ' + s + (best ? ' · best ' + best : '') + '.';
+}
+function renderHome() {
+  MODE_IDS.forEach((id) => {
+    const lab = document.querySelector('.mode[data-mode="' + id + '"]'), key = keyOf(id, rec.back), best = rec.best[key] || 0, st = rec.stars[key] || 0;
+    lab.querySelector('input').checked = id === rec.mode;
+    lab.querySelector('small').textContent = best ? 'Best ' + best : 'New';
+    lab.querySelector('.ms').innerHTML = starRow(st);
+    lab.querySelector('input').setAttribute('aria-label', MODES[id].name + (best ? ', best ' + best + ', ' + st + ' of 3 stars' : ''));
+  });
+  const lv = document.querySelector('input[name="math"][value="' + level() + '"]');
+  if (lv) lv.checked = true;
+  $('#modeNote').textContent = modeNote();
+  const bb = $('#backBtn');
+  bb.lastChild.textContent = 'Backwards: ' + (rec.back ? 'on' : 'off');
+  bb.setAttribute('aria-pressed', String(rec.back));
+  const sp = $('#speakBtn');
+  sp.textContent = !Speech.ok ? 'Read aloud: not here' : save.settings.speak ? 'Read aloud: on' : 'Read aloud: off';
+  sp.disabled = !Speech.ok; sp.setAttribute('aria-pressed', String(!!save.settings.speak));
+  $('#soundBtn').textContent = save.settings.music > 0 ? 'Music: on' : 'Music: off';
+  arcadeLinks();
+}
+function goHome() {
+  game.state = 'menu'; Speech.stop();
+  $('#hud').hidden = true; playEl.hidden = true;
+  Sound.muffle(false); Sound.play('menu');
+  renderHome();
+  showScreen('home', false);
+}
+function pause() {
+  if (!PLAYING.has(game.state)) return;
+  game.prev = game.state; game.state = 'pause';
+  Speech.stop(); Sound.muffle(true);
+  playEl.classList.add('away');   // no peeking while paused
+  $('#pauseInfo').textContent = MODES[game.mode].name + (game.back ? ' backwards' : '') + ' · span ' + game.span + ' · ' + Math.min(ROUND, game.done + 1) + ' of ' + ROUND + ' · ' + fmtTime(game.time);
+  showScreen('pause');
+}
+function resume() {
+  if (game.state !== 'pause') return;
+  showScreen(null); playEl.classList.remove('away');
+  lastFrame = performance.now();
+  // paused while the items were on show: they are shown again from the first
+  if (game.prev === 'ready' || game.prev === 'show' || game.prev === 'wait') { game.replay = true; readySequence(1.2); }
+  else { game.state = game.prev; Sound.muffle(false); }
+}
+
+$('#playBtn').addEventListener('click', () => startRound());
+$('#againBtn').addEventListener('click', () => startRound());
+$('#resumeBtn').addEventListener('click', resume);
+$('#restartBtn').addEventListener('click', () => startRound());
+$('#homeBtn').addEventListener('click', goHome);
+$('#doneHomeBtn').addEventListener('click', goHome);
+$('#pauseBtn').addEventListener('click', (e) => { e.stopPropagation(); pause(); });
+$('#undoBtn').addEventListener('click', undo);
+$('#backBtn').addEventListener('click', () => { rec.back = !rec.back; writeRecords(); Sound.sfx.click(); renderHome(); });
+$('#speakBtn').addEventListener('click', () => {
+  save.settings.speak = !save.settings.speak;
+  writeSave(); renderHome();
+  if (save.settings.speak) Speech.say('Read aloud is on.');
+});
+$('#soundBtn').addEventListener('click', () => { if (toggleMusic() && game.state === 'menu') Sound.play('menu'); renderHome(); });
+document.addEventListener('change', (e) => {
+  // the game choice is kept with the records only (choosing is not playing); the level is a shared setting
+  if (e.target.name === 'mode' && MODES[e.target.value]) { rec.mode = e.target.value; writeRecords(); Sound.sfx.check(); renderHome(); }
+  else if (e.target.name === 'math' && LEVELS.indexOf(e.target.value) >= 0) { save.settings.mathLevel = e.target.value; writeSave(); renderHome(); }
+});
+
+/* ================= input ================= */
+// a finger press answers at once; a click with no press before it (keyboard, a mouse in a test) answers too
+let lastPointerTap = 0;
+padEl.addEventListener('pointerdown', (e) => {
+  const el = e.target.closest('[data-v]');
+  if (!el) return;
+  e.preventDefault();
+  lastPointerTap = performance.now();
+  tapEl(el);
+});
+padEl.addEventListener('click', (e) => {
+  const el = e.target.closest('[data-v]');
+  if (!el || performance.now() - lastPointerTap < 700) return;
+  tapEl(el);
+});
+padEl.addEventListener('contextmenu', (e) => e.preventDefault());
+window.addEventListener('keydown', (e) => {
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  if ((e.key === 'Escape' || e.key === 'p' || e.key === 'P') && !e.repeat) {
+    if (PLAYING.has(game.state)) { e.preventDefault(); pause(); } else if (game.state === 'pause') { e.preventDefault(); resume(); }
+    return;
+  }
+  if (game.state !== 'answer') { if ((e.key === 'm' || e.key === 'M') && !e.repeat && game.state === 'menu') { toggleMusic(); renderHome(); } return; }
+  if (e.key === 'Backspace' || e.key === 'Delete') { e.preventDefault(); undo(); return; }
+  // digits: the number pad, or the squares of a 3 x 3 grid in reading order (1 = top left)
+  if (/^[0-9]$/.test(e.key) && !e.repeat) {
+    e.preventDefault();
+    if (game.mode === 'number') tapEl(padItem(e.key));
+    else if (game.mode === 'grid' && game.gridN === 3 && e.key !== '0') tapEl(padItem(+e.key - 1));
+  }
+});
+arcadeGuards(pause);
+// the menu song starts with the first touch on the home screen (sound needs a tap on iPad)
+document.addEventListener('pointerdown', () => { if (game.state === 'menu' && save.settings.music > 0) Sound.play('menu'); });
+window.addEventListener('resize', layout);
+window.addEventListener('orientationchange', () => setTimeout(layout, 120));
+
+/* ================= loop ================= */
+let lastFrame = performance.now();
+function frame(now) {
+  requestAnimationFrame(frame);
+  const dt = Math.min(0.1, Math.max(0, (now - lastFrame) / 1000));
+  lastFrame = now;
+  if (muffled && now > muffleUntil) muffled = false;
+  if (!PLAYING.has(game.state)) return;
+  const d = dt * game.speed;
+  game.t += d; game.time += d;
+  updateClock();
+  if (game.state === 'ready') { if (game.t >= game.phaseEnd) { game.state = 'show'; game.showStart = game.t; game.shown = -1; stepShow(); } }
+  else if (game.state === 'show') stepShow();
+  else if (game.state === 'wait') { if (game.t >= game.phaseEnd) beginAnswer(); }
+  else if (game.state === 'feedback') { if (game.t >= game.phaseEnd) afterFeedback(); }
+}
+document.body.classList.toggle('calm', calm());
+renderHome();
+showScreen('home', false);
+requestAnimationFrame(frame);
+if (document.fonts && document.fonts.load) document.fonts.load('700 40px Fredoka').then(() => { if (!playEl.hidden) layout(); }).catch(() => {});
+
+/* ================= test hook ================= */
+// what a finished layout must hold: nothing scrolls, everything inside the screen, buttons 48 px or more,
+// no text cut off, and the parts in order (phase, show card, answer boxes, pad) without overlapping
+function fits() {
+  const bad = [], vw = innerWidth, vh = innerHeight, in1 = (r) => r.left >= -0.5 && r.right <= vw + 0.5 && r.top >= -0.5 && r.bottom <= vh + 0.5;
+  const R = (el) => el.getBoundingClientRect();
+  if (document.documentElement.scrollHeight > vh + 1 || document.documentElement.scrollWidth > vw + 1) bad.push('page scrolls');
+  const cut = (el, what) => { if (el && (el.scrollWidth > el.clientWidth + 1 || el.scrollHeight > el.clientHeight + 1)) bad.push(what + ' text cut: ' + el.textContent); };
+  if (!playEl.hidden) {
+    const hudB = R($('.hud-top')).bottom;
+    $$('#hud .chip').forEach((c) => { cut(c, 'chip'); if (!in1(R(c))) bad.push('chip outside'); });
+    // the shared pause button is 58 px with a finger (46 px for a mouse)
+    const pb = R($('#pauseBtn')), minB = matchMedia('(pointer: coarse)').matches ? 48 : 44;
+    if (!in1(pb) || pb.width < minB || pb.height < minB) bad.push('pause button ' + Math.round(pb.width));
+    const ph = R(phaseEl); if (ph.top < hudB - 1) bad.push('phase under the HUD'); if (!in1(ph)) bad.push('phase outside'); cut(phaseEl, 'phase');
+    const parts = [phaseEl, showEl.hidden ? null : showEl, $('.answer'), padEl].filter(Boolean).map(R);
+    for (let k = 1; k < parts.length; k++) if (parts[k].top < parts[k - 1].bottom - 0.5) bad.push('part ' + k + ' overlaps the one above');
+    parts.forEach((r, k) => { if (!in1(r)) bad.push('part ' + k + ' outside'); });
+    $$('.slot').forEach((s, i) => { if (!in1(R(s))) bad.push('slot ' + i + ' outside'); });
+    const ub = R($('#undoBtn')); if (!in1(ub) || ub.width < 48 || ub.height < 48) bad.push('undo button ' + Math.round(ub.width));
+    $$('#pad button').forEach((b, i) => {
+      const r = R(b);
+      if (getComputedStyle(b).visibility === 'hidden') return;
+      if (!in1(r)) bad.push('pad ' + i + ' outside');
+      if (r.width < 56 || r.height < 56) bad.push('pad ' + i + ' small ' + Math.round(r.width) + 'x' + Math.round(r.height));
+      const w = b.querySelector('b'); if (w) cut(w, 'card');
+    });
+    const sw = showEl.querySelector('b, .digit'); if (sw && !showEl.hidden && (R(sw).width > R(showEl).width + 1)) bad.push('show text cut');
+  } else {
+    const card = $$('#screens > .screen').find((s) => !s.hidden);
+    if (card) {
+      const r = R(card.querySelector('.card'));
+      if (r.bottom > vh + 1 || r.top < -1 || r.right > vw + 1 || r.left < -1) bad.push('menu card does not fit (' + Math.round(r.top) + '-' + Math.round(r.bottom) + ' of ' + vh + ')');
+      if ($('#screens').scrollHeight > vh + 1) bad.push('menu scrolls');
+      const finger = matchMedia('(pointer: coarse)').matches;
+      card.querySelectorAll('.btn, .mode > span, .seg span').forEach((b) => { const rb = R(b); if (rb.width && ((finger && rb.height < 48) || !in1(rb))) bad.push('button ' + b.textContent.trim().slice(0, 16) + ' ' + Math.round(rb.height)); cut(b, 'button'); });
+      card.querySelectorAll('.mode b, .mode small').forEach((b) => cut(b, 'mode'));
+    }
+  }
+  return bad;
+}
+// tag the pad button a finger should tap next (or a wrong one) with data-bot="tap"
+function mark(v) {
+  $$('[data-bot]').forEach((e) => e.removeAttribute('data-bot'));
+  const el = v === null ? null : padItem(v);
+  if (el) el.setAttribute('data-bot', 'tap');
+  return v;
+}
+const nextItem = () => (game.state === 'answer' ? expected()[game.ans.length] : null);
+function wrongItem() {
+  if (game.state !== 'answer') return null;
+  const want = nextItem(), all = $$('#pad [data-v]').map((b) => b.dataset.v).filter((v) => v !== want && !(game.mode !== 'number' && game.ans.indexOf(v) >= 0));
+  return all.length ? all[0] : null;
+}
+window.__memory = {
+  game, rec, save, MODES, WORDS, LEVELS, ROUND, ROUND_SEC, Speech, Sound,
+  state: () => game.state, span: () => game.span, seq: () => game.seq.slice(), ans: () => game.ans.slice(), expected, cards: () => game.cards.map((x) => x.w),
+  nextItem, wrongItem, tap: (v) => tapEl(padItem(v)), click: (v) => padItem(v).click(), undo,
+  markNext: () => mark(nextItem()), markWrong: () => mark(wrongItem()),
+  // start a round: mode, and options { level, back, span }
+  start(mode, o) { o = o || {}; rec.mode = mode; if (o.back !== undefined) rec.back = !!o.back; if (o.level) save.settings.mathLevel = o.level; renderHome(); startRound({ span: o.span }); return game.state; },
+  setSpeed: (k) => { game.speed = k; }, pause, resume, goHome, fits, layout, starsFor, startSpan, keyOf, wordInfo, digitSeq, wordSeq, period
+};
+})();
+</script>
