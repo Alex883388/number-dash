@@ -1,0 +1,6 @@
+dist/preview.html
+playtest/shots/
+playtest/edge-profile/
+playtest/edge-profile-icons/
+tools/gen-out/logs/
+node_modules/

@@ -1,0 +1,21 @@
+module.exports = [
+  { viewport: [1280, 720, false, false] },
+  { eval: "window.__t.play('cloud'); window.__auto = true; window.__t.tp(250); 'go'" },
+  { waitFor: "window.__nd.game.p.mode === 1 && window.__nd.game.p.x > 297", timeout: 20000 }, { shot: '20-ship-lanes' },
+  { eval: "window.__t.tp(395); 'tp'" },
+  { waitFor: "window.__nd.game.state === 'done'", timeout: 30000 }, { sleep: 500 }, { shot: '21-finish' }, { sleep: 1600 }, { shot: '22-done' },
+  { reload: true },
+  { viewport: [1280, 720, false, true] },
+  { eval: "window.__t.play('moon'); window.__auto = true; window.__t.tp(80); 'go'" },
+  { waitFor: "window.__nd.game.p.grav < 0 && window.__nd.game.p.x > 96", timeout: 20000 }, { shot: '23-moon-gravity-dark' },
+  { eval: "window.__t.tp(226); 'tp'" },
+  { waitFor: "window.__nd.game.p.mode === 1 && window.__nd.game.p.x > 252", timeout: 20000 }, { shot: '24-moon-ship-dark' },
+  { reload: true },
+  { viewport: [1280, 720, false, true] },
+  { eval: "window.__t.play('star'); window.__auto = true; window.__t.tp(126); 'go'" },
+  { waitFor: "window.__nd.game.p.x > 138", timeout: 20000 }, { shot: '25-star-blue-orbs' },
+  { waitFor: "window.__nd.game.p.x > 150", timeout: 20000 }, { shot: '26-star-ceiling' },
+  { eval: "window.__t.tp(322); 'tp'" },
+  { waitFor: "window.__nd.game.p.x > 360", timeout: 20000 }, { shot: '27-star-gate-lemon-top' },
+  { log: "window.__t.state()" }
+];
