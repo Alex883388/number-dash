@@ -1,7 +1,9 @@
 // Number Pop smoke test (run from the repo root):
 //   node games/pop/build.js && ND_CDP=9351 ND_PROFILE=edge-profile-pop ND_URL=file:///D:/Github/number-dash/games/pop/dist/preview.html ND_READY='!!window.__pop' ND_BOT=none node games/dash/playtest/shoot.js games/pop/playtest/smoke.js
 // Desktop size: the home card, a round of Up to 20, then calm mode (the shared "calm" setting,
-// on by default with reduced motion): bubbles drift slower and a pop throws fewer particles.
+// on by default with reduced motion): bubbles drift slower and a pop throws fewer particles. Then the
+// newer worlds: Money, Share it, Fractions, Below zero, Double & halve (a wrong answer, then the tip),
+// Brackets (the right answer), Percent (two percent bubbles together) and Place value (its parts).
 const st = "JSON.stringify(window.__pop.state())";
 // average bubble speed in px/s over one second, and the particles one pop makes
 const speedCheck = (label) => "(async () => { const P = window.__pop, a = P.bubbles(); await new Promise((r) => setTimeout(r, 1000)); const b = P.bubbles(); let d = 0, n = 0; a.forEach((x, i) => { if (!x.picked && !b[i].picked && b[i].st === 'live') { d += Math.hypot(b[i].x - x.x, b[i].y - x.y); n++; } }); return " + JSON.stringify(label) + " + Math.round(d / n) + ' px/s over ' + n + ' bubbles'; })()";
@@ -33,6 +35,21 @@ module.exports = [
   { sleep: 400 }, { shot: 'pop-s08-fractions-sixths' },
   // Below zero: going too far down with nothing left to bring it back says so
   { eval: "(() => { const P = window.__pop; P.save.settings.mathLevel = 'explorer'; P.home(); P.start(12); const s = P.state(); return [s.kind, s.target, P.bubbles().map((b) => b.v).join(' ')]; })()" },
+  // Double & halve: a wrong answer (the strip says the question is not that, the fact is saved), then the tip
+  { eval: "(() => { const P = window.__pop; P.home(); P.start(13); const s = P.state(), b = P.bubbles().find((x) => x.v !== s.target); P.tap(b.i); return [s.q, s.target, b.v, document.getElementById('strip').textContent, P.state().phase, P.state().slips]; })()" },
+  { sleep: 200 }, { shot: 'pop-s09-double-wrong' },
+  { log: "JSON.stringify(window.__pop.save.math.tricky.slice(-1))" },
+  { eval: "window.__pop.setSpeed(20); 'fast'" }, { waitFor: "document.getElementById('strip').textContent.indexOf('Tip: ') === 0", timeout: 8000 },
+  { eval: "window.__pop.setSpeed(1); 'normal'" }, { log: "document.getElementById('strip').textContent" }, { shot: 'pop-s10-double-tip' },
+  // Brackets: the answer bubble pops on its own
+  { eval: "(() => { const P = window.__pop; P.home(); P.start(15); const s = P.state(); P.tap(s.sol[0]); return [s.q, s.target, document.getElementById('goal').innerText, document.getElementById('strip').textContent, P.state().done]; })()" },
+  { sleep: 100 }, { shot: 'pop-s11-brackets-right' },
+  // Percent: two percent bubbles cannot go together, and the toast says so
+  { eval: "(() => { const P = window.__pop; P.home(); P.start(16); const ps = P.bubbles().filter((b) => b.v >= P.PCT); P.tap(ps[0].i); P.tap(ps[1].i); return [P.state().target, ps.length, document.getElementById('strip').textContent, document.getElementById('toast').textContent, P.state().slips]; })()" },
+  { sleep: 150 }, { shot: 'pop-s12-percent-two' },
+  // Place value: the planted parts pop
+  { eval: "(() => { const P = window.__pop; P.home(); P.start(14); const s = P.state(), parts = s.sol.map((i) => P.slots[i].v); s.sol.forEach((i) => P.tap(i)); return [s.target, parts.join(' + '), document.getElementById('strip').textContent, P.state().done]; })()" },
+  { sleep: 100 }, { shot: 'pop-s13-placevalue' },
   // a whole Make 10 round by tapping the planted answers, for the results card (with "Next world")
   { eval: "(() => { const P = window.__pop; P.setSpeed(10); let next = 0; P.hook = () => { const s = P.state(); if (s.state !== 'play' || s.phase !== 'pick' || s.time < next) return; const i = s.sol.find((j) => !P.slots[j].picked); if (i !== undefined) { P.tap(i); next = s.time + 0.5; } }; return P.start(1); })()" },
   { waitFor: "window.__pop.state().state === 'done'", timeout: 30000 }, { sleep: 2200 },

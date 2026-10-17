@@ -1,10 +1,12 @@
 // Number Pop on an emulated iPad, by finger (run from the repo root):
 //   node games/pop/build.js && ND_CDP=9351 ND_PROFILE=edge-profile-pop ND_URL=file:///D:/Github/number-dash/games/pop/dist/preview.html ND_READY='!!window.__pop' ND_BOT=none node games/dash/playtest/shoot.js games/pop/playtest/ipad.js
-// Landscape iPad: the nine worlds on the home card, pick Make 10 and Play with taps, pick a bubble,
+// Landscape iPad: the sixteen worlds on the home card, pick Make 10 and Play with taps, pick a bubble,
 // un-pick it, pop a pair, go over on purpose ("Too much!"), pause and resume, then Money by finger.
-// Fractions by finger. Portrait iPad: the home card and Make 100; a phone in the same round; a dark
-// phone (home and Share it, a right pair by finger); a dark iPad (home and Below zero); a phone in
-// Decimals and its results card. Every stop logs
+// Fractions, Brackets (the answer bubble pops) and Place value by finger. Portrait iPad: the home card
+// and Make 100; a phone in the same round; a dark phone (home and Share it, a right pair by finger); a
+// dark iPad (home and Below zero); a phone in Decimals and its results card; a phone in Brackets with
+// the longest question in the badge; a portrait iPad in Double & halve (a wrong answer) and Percent
+// (a percent bubble picked). Every stop logs
 // the layout: bubble size, gaps between bubbles, bubbles inside the field, HUD clear of the badge
 // and strip, and no page scroll; every home card logs whether Play is on screen without scrolling.
 const ST = "window.__st = () => { const s = window.__pop.state(); return [s.state, s.phase, s.world, s.kind, s.target, 'done ' + s.done, 'slips ' + s.slips, 'picks ' + s.picks.map((i) => window.__pop.slots[i].v).join(',')]; }; 'ok'";
@@ -25,6 +27,8 @@ const LAYOUT = 'window.__lay()';
 const AUTO = "(() => { const P = window.__pop; P.setSpeed(10); let next = 0; P.hook = () => { const s = P.state(); if (s.state !== 'play' || s.phase !== 'pick' || s.time < next) return; const i = s.sol.find((j) => !P.slots[j].picked); if (i !== undefined) { P.tap(i); next = s.time + 0.5; } }; return 'auto'; })()";
 // is the Play button on screen without scrolling the home card?
 const PLAY = "(() => { const r = document.getElementById('playBtn').getBoundingClientRect(), c = document.querySelector('#s-home .card').getBoundingClientRect(); return { playBottom: Math.round(r.bottom), cardBottom: Math.round(c.bottom), screen: innerHeight, playVisible: r.bottom <= innerHeight, cardFits: c.bottom <= innerHeight + 1, worldCard: Math.round(document.querySelector('.world').getBoundingClientRect().height) + 'x' + Math.round(document.querySelector('.world').getBoundingClientRect().width) }; })()";
+// the badge: its text, font size, and whether it fits inside itself and the screen
+const GOAL = "(() => { const g = document.getElementById('goal'), m = g.querySelector('.make'), r = g.getBoundingClientRect(); return { text: m.innerText, font: getComputedStyle(m).fontSize, fits: g.scrollWidth <= g.clientWidth + 1 && r.left >= 0 && r.right <= innerWidth, goal: Math.round(r.width) }; })()";
 const toHome = [{ touchEl: '#pauseBtn' }, { sleep: 400 }, { touchEl: '#homeBtn' }, { sleep: 600 }];
 const pickAndPlay = (w) => [
   { touchEl: '.world[data-w="' + w + '"]' }, { sleep: 200 }, { touchEl: '#playBtn' },
@@ -64,6 +68,15 @@ module.exports = [
   ...toHome, ...pickAndPlay(10),
   { eval: MARK }, { touchEl: '.bub[data-sol="0"]' }, { sleep: 300 },
   { shot: 'pop-i16-fractions-ipad' }, { log: LAYOUT }, { log: st },
+  // Brackets by finger: the one answer bubble pops
+  ...toHome, { log: "document.querySelectorAll('.world').length" }, ...pickAndPlay(15),
+  { shot: 'pop-i19-brackets-ipad' }, { log: LAYOUT }, { log: GOAL }, { log: st },
+  { eval: MARK }, { touchEl: '.bub[data-sol="0"]' }, { sleep: 120 }, { log: st },
+  { shot: 'pop-i20-brackets-solved-ipad' },
+  // Place value by finger: two of its parts picked
+  ...toHome, ...pickAndPlay(14),
+  { eval: MARK }, { touchEl: '.bub[data-sol="0"]' }, { sleep: 200 }, { touchEl: '.bub[data-sol="1"]' }, { sleep: 300 },
+  { shot: 'pop-i21-placevalue-ipad' }, { log: LAYOUT }, { log: st },
   // portrait iPad: the home card, then Make 100
   { viewport: [820, 1180, true, false, 2] }, { sleep: 400 },
   ...toHome, { shot: 'pop-i08-home-portrait' }, { log: PLAY },
@@ -99,5 +112,18 @@ module.exports = [
   { log: "[document.getElementById('doneStats').innerText.split(String.fromCharCode(10)).filter(Boolean).join(' '), document.getElementById('doneNext').textContent, document.getElementById('nextBtn').hidden]" },
   { touchEl: '#againBtn' }, { sleep: 300 },
   { log: "[window.__pop.state().state, document.getElementById('toast').hidden ? '' : document.getElementById('toast').textContent]" },
+  // a phone in Brackets, then the longest question there is in the badge (it shrinks to fit)
+  ...toHome, ...pickAndPlay(15), { log: GOAL },
+  { eval: "document.querySelector('#goal .make').innerHTML = '<b class=\"q\">(37 + 13) ' + String.fromCharCode(247) + ' 5</b>'; window.dispatchEvent(new Event('resize')); 'longest'" }, { sleep: 200 },
+  { shot: 'pop-i22-brackets-long-phone' }, { log: GOAL }, { log: LAYOUT },
+  // portrait iPad: the home card, Double & halve with a wrong answer, then Percent with a percent picked
+  { viewport: [820, 1180, true, false, 2] }, { sleep: 400 },
+  ...toHome, ...pickAndPlay(13), { log: GOAL },
+  { eval: "(() => { const P = window.__pop, s = P.state(), b = P.bubbles().find((x) => x.v !== s.target); document.querySelector('.bub[data-i=\"' + b.i + '\"]').dataset.wrong = 1; return [s.q, s.target, b.v]; })()" },
+  { touchEl: '.bub[data-wrong="1"]' }, { sleep: 150 },
+  { shot: 'pop-i23-double-wrong-portrait' }, { log: LAYOUT }, { log: st }, { log: "document.getElementById('strip').textContent" },
+  ...toHome, ...pickAndPlay(16),
+  { eval: MARK }, { touchEl: '.bub[data-sol="0"]' }, { sleep: 300 },
+  { shot: 'pop-i24-percent-portrait' }, { log: LAYOUT }, { log: st }, { log: "document.getElementById('strip').textContent" },
   { log: 'JSON.stringify(window.__errs)' }
 ];

@@ -31,8 +31,11 @@ body.menu .goal, body.menu .strip { visibility: hidden; }
 }
 .goal .op { font: 800 .74rem/1 var(--font-body); text-transform: uppercase; letter-spacing: .12em; background: rgba(255, 255, 255, .55); padding: 4px 10px; border-radius: 99px; white-space: nowrap; }
 .goal[data-kind="times"] .op, .goal[data-kind="div"] .op { background: #ece6ff; color: #4b3a9e; }
+.goal[data-kind="ask"] .op { background: #dcf6e9; color: #1d6e4f; }
+.goal[data-kind="pct"] .op { background: #ffe4f2; color: #8a2160; }
 .goal .make { font: 700 clamp(30px, min(11vw, 5.6vh), 50px)/1 var(--font-display); white-space: nowrap; font-variant-numeric: tabular-nums; }
 .goal .make b { font-size: 1.18em; }
+.goal .make b.q { font-size: 1em; }
 .goal.pulse { animation: pop .35s ease both; }
 .strip {
   flex: none; height: clamp(46px, 7vh, 60px); width: min(620px, calc(100% - 300px)); padding: 0 18px; box-sizing: border-box;
@@ -74,6 +77,7 @@ body.menu .goal, body.menu .strip { visibility: hidden; }
 #field .bub.au { --fill: #f3f5f9; --fill2: #dde2ea; --edge: #c9a227; border-width: calc(var(--d, 96px) * .08); }
 #field .bub.note { --fill: #e3f6e9; --fill2: #b3e2c2; --edge: #3d9a60; border-radius: 30%; }
 #field .bub.neg { --fill: #ffe3e6; --fill2: #ffb4bd; --edge: #e05468; --txt: #9b2336; }
+#field .bub.pct { --fill: #ffe9f5; --fill2: #f7bfdf; --edge: #cf5aa0; --txt: #7a1d52; }
 #field .bub.on { --fill: #fff0ad; --fill2: #ffc94d; --edge: #d9961a; --txt: #4a3500; box-shadow: 0 0 0 7px rgba(255, 201, 77, .5), var(--bubble-shadow); }
 #field .bub.neg.on { --txt: #9b2336; }
 #field .bub.hint { animation: hint 2.6s ease-in-out infinite; }
@@ -90,19 +94,21 @@ body:not(.menu) .toast { top: var(--toast-top, 42%); }
 
 /* home: the worlds */
 .worlds { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+/* sixteen worlds: four rows of four on an iPad (six of three on a phone), compact enough that the whole home card fits a landscape iPad and a 390 x 844 phone */
 .world {
-  min-height: 74px; display: grid; align-content: center; justify-items: center; gap: 3px; padding: 7px 4px; border-radius: 18px; cursor: pointer; min-width: 0;
+  min-height: 68px; display: grid; align-content: center; justify-items: center; gap: 2px; padding: 4px; border-radius: 18px; cursor: pointer; min-width: 0;
   background: var(--card-2); border: 2px solid var(--line); box-shadow: 0 4px 0 var(--line); color: var(--ink); transition: transform .08s ease, box-shadow .08s ease;
 }
 .world:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--line); }
 .world:focus-visible { outline: 3px solid var(--lilac); outline-offset: 3px; }
 .world b { font: 700 1.12rem/1.05 var(--font-display); white-space: nowrap; }
-.world small { font-weight: 800; font-size: .82rem; color: var(--ink-soft); white-space: nowrap; }
-.world .ws { font-size: .88rem; letter-spacing: .06em; line-height: 1; background: var(--card); padding: 4px 9px; border-radius: 99px; }
+.world small { font-weight: 800; font-size: .82rem; line-height: 1.15; color: var(--ink-soft); white-space: nowrap; }
+.world .ws { font-size: .88rem; letter-spacing: .06em; line-height: 1; background: var(--card); padding: 3px 9px; border-radius: 99px; }
 .world .ws .off { opacity: .25; filter: grayscale(1); }
 .world[aria-checked="true"] { background: var(--sun); border-color: var(--sun-deep); box-shadow: 0 4px 0 var(--sun-deep); color: var(--sun-ink); }
 .world[aria-checked="true"] small { color: var(--sun-ink); }
 .world[aria-checked="true"] .ws .off { opacity: .35; }
+@media (max-height: 900px) { #s-home .card { gap: 12px; } }
 #doneStars span { display: inline-block; animation: pop .45s ease both; }
 #doneStars span:nth-child(2) { animation-delay: .2s; }
 #doneStars span:nth-child(3) { animation-delay: .4s; }
@@ -117,7 +123,8 @@ body:not(.menu) .toast { top: var(--toast-top, 42%); }
 }
 @media (max-width: 520px) {
   .worlds { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
-  .world { min-height: 70px; padding: 6px 2px; border-radius: 14px; }
+  .world { min-height: 64px; padding: 4px 2px; border-radius: 14px; }
+  .world:last-child:nth-child(3n + 1) { grid-column: 2; }   /* a lone last world sits in the middle */
   .world b { font-size: .98rem; }
   .world small { font-size: .72rem; }
   .world .ws { font-size: .74rem; padding: 3px 6px; }
@@ -247,7 +254,15 @@ const WORLDS = [
     targets: () => DEC_TARGETS, split: (R, m) => splitBy(R, m, decVal, decOk), t3: 85, t2: 145 },
   // below zero: targets mostly under zero; every answer mixes plus and minus bubbles
   { id: 12, name: 'Below zero', ex: MINUS + '6 + 2', n: 10, kind: 'int', parts: [2, 2, 3], op: 'below zero',
-    targets: () => INT_TARGETS, split: (R, m) => splitBy(R, m, intVal, intOk), check: (vs) => vs.some((v) => v < 0) && vs.some((v) => v > 0), t3: 85, t2: 145 }
+    targets: () => INT_TARGETS, split: (R, m) => splitBy(R, m, intVal, intOk), check: (vs) => vs.some((v) => v < 0) && vs.some((v) => v > 0), t3: 85, t2: 145 },
+  // doubles and halves: the badge asks (double 35, half of 48) and one bubble is the answer
+  { id: 13, name: 'Double & halve', ex: 'double 35', n: 8, kind: 'ask', ask: askDouble, val: () => askDouble().a, dup: 1, op: 'pop the answer', t3: 45, t2: 70 },
+  // place value: one bubble per place (300, 40, 7) builds the number; four digits with a zero late in the round
+  { id: 14, name: 'Place value', ex: '300 + 40 + 7', n: 10, kind: 'plus', pv: true, val: pvVal, dup: 1, parts: [2, 3], op: 'place value', t3: 85, t2: 145 },
+  // brackets: a two-step sum in the badge; brackets first, then times and divide, then add and take away
+  { id: 15, name: 'Brackets', ex: '(3 + 4) ' + TIMES + ' 2', n: 8, kind: 'ask', ask: askBrackets, val: bracketsVal, dup: 1, op: 'pop the answer', t3: 60, t2: 95 },
+  // percent: a percent bubble and a number bubble make the target (25% of 40 makes 10)
+  { id: 16, name: 'Percent', ex: '25% of 40', n: 10, kind: 'pct', val: pctVal, dup: 1, op: 'percent of', t3: 70, t2: 110 }
 ];
 const worldById = (id) => WORLDS.find((w) => w.id === +id) || WORLDS[0];
 const rec = loadRecords('number-pop.v1', { world: 1, rounds: 0, popped: 0, worlds: {} });
@@ -277,7 +292,8 @@ const coinWords = (v) => (v >= 100 && v % 100 === 0 ? v / 100 + (v === 100 ? ' p
 const moneyMode = () => game.state !== 'menu' && !!game.w.money;
 const fracMode = () => game.state !== 'menu' && !!game.w.frac;
 const decMode = () => game.state !== 'menu' && !!game.w.dec;
-const valText = (v) => (moneyMode() ? coinText(v) : fracMode() ? fracText(v) : decMode() ? decText(v) : numText(v));
+const pctMode = () => game.state !== 'menu' && game.w.kind === 'pct';
+const valText = (v) => (moneyMode() ? coinText(v) : fracMode() ? fracText(v) : decMode() ? decText(v) : pctMode() && isPct(v) ? (v - PCT) + '%' : numText(v));
 const totText = (v) => (moneyMode() ? moneyText(v) : fracMode() ? fracText(v) : decMode() ? decText(v) : numText(v));
 // what is drawn: fractions stack (numerator over denominator), everything else is its text
 const valHTML = (v) => (fracMode() ? fracHTML(v) : valText(v));
@@ -319,6 +335,71 @@ const intVal = () => (Math.random() < 0.5 ? -rnd(1, 9) : rnd(1, 12));
 const intOk = (v) => v !== 0 && v >= -9 && v <= 12;
 // the exact quotient of two bubbles (bigger by smaller), or NaN
 const divOf = (vs) => { const big = Math.max(vs[0], vs[1]), small = Math.min(vs[0], vs[1]); return small > 0 && big % small === 0 ? big / small : NaN; };
+// "pop the answer" worlds: a question { text (as a maths fact), show (in the strip), html (in the badge),
+// a (the answer), trap (the slip a child makes, or undefined), hint, tip (the first step, after a while) }
+// doubles and halves: double 6 to 50, half of an even number 12 to 100, round tens a little more often.
+// trap: forgetting the carry when doubling (double 35 = 60), halving each digit on its own (half of 56 = 23)
+function askDouble() {
+  if (Math.random() < 0.5) {
+    const x = Math.random() < 0.25 ? 5 * rnd(2, 10) : rnd(6, 50), t = x - x % 10, o = x % 10;
+    return { text: 'double ' + x, show: 'Double ' + x, html: 'Double <b>' + x + '</b>', a: 2 * x, trap: t && o >= 5 ? 2 * x - 10 : undefined,
+      hint: 'Double means two lots of ' + x, tip: t && o ? 'Double ' + t + ' is ' + 2 * t + ', double ' + o + ' is ' + 2 * o : x + ' + ' + x + ' = ?' };
+  }
+  const y = Math.random() < 0.25 ? 10 * rnd(2, 10) : 2 * rnd(6, 50), t = y > 20 && y % 20 ? y - y % 20 : 0;
+  return { text: 'half of ' + y, show: 'Half of ' + y, html: 'Half of <b>' + y + '</b>', a: y / 2, trap: y > 20 && Math.floor(y / 10) % 2 ? y / 2 - 5 : undefined,
+    hint: 'Half means two equal parts',
+    tip: t ? 'Half of ' + t + ' is ' + t / 2 + ', half of ' + (y - t) + ' is ' + (y - t) / 2 : y > 20 ? 'Half of ' + y / 10 + ' tens is ' + y / 20 + ' tens' : 'What + itself makes ' + y + '?' };
+}
+// brackets: two steps with small numbers and a whole answer. trap: the answer with the steps done in the
+// wrong order, kept only when that is a whole number from 1 to 100
+function bq(text, a, trap, tip) {
+  return { text: text, show: text, html: '<b class="q">' + text + '</b>', a: a, trap: Number.isInteger(trap) && trap > 0 && trap <= 100 && trap !== a ? trap : undefined,
+    hint: 'Brackets first, then ' + TIMES + ' and ' + DIV + ', then + and ' + MINUS, tip: tip };
+}
+const BRACKETS = [
+  () => { const a = rnd(1, 9), b = rnd(1, 9), c = rnd(2, 5); return bq('(' + a + ' + ' + b + ') ' + TIMES + ' ' + c, (a + b) * c, a + b * c, 'Brackets first: ' + a + ' + ' + b + ' = ' + (a + b)); },
+  () => { const a = rnd(1, 9), b = rnd(1, 9), c = rnd(2, 5); return bq(c + ' ' + TIMES + ' (' + a + ' + ' + b + ')', c * (a + b), c * a + b, 'Brackets first: ' + a + ' + ' + b + ' = ' + (a + b)); },
+  () => { const a = rnd(2, 20), b = rnd(2, 9), c = rnd(2, 5); return bq(a + ' + ' + b + ' ' + TIMES + ' ' + c, a + b * c, (a + b) * c, 'Times first: ' + b + ' ' + TIMES + ' ' + c + ' = ' + b * c); },
+  () => { const a = rnd(2, 9), b = rnd(2, 5), c = rnd(1, 20); return bq(a + ' ' + TIMES + ' ' + b + ' + ' + c, a * b + c, a * (b + c), 'Times first: ' + a + ' ' + TIMES + ' ' + b + ' = ' + a * b); },
+  () => { const b = rnd(1, 8), a = b + rnd(1, 9), c = rnd(2, 5); return bq('(' + a + ' ' + MINUS + ' ' + b + ') ' + TIMES + ' ' + c, (a - b) * c, a - b * c, 'Brackets first: ' + a + ' ' + MINUS + ' ' + b + ' = ' + (a - b)); },
+  () => { const b = rnd(2, 5), c = rnd(2, 5), a = b * c + rnd(1, 15); return bq(a + ' ' + MINUS + ' ' + b + ' ' + TIMES + ' ' + c, a - b * c, (a - b) * c, 'Times first: ' + b + ' ' + TIMES + ' ' + c + ' = ' + b * c); },
+  () => { const c = rnd(2, 5), s = c * rnd(2, 10), a = rnd(1, s - 1), b = s - a; return bq('(' + a + ' + ' + b + ') ' + DIV + ' ' + c, s / c, a + b / c, 'Brackets first: ' + a + ' + ' + b + ' = ' + s); },
+  () => { const c = rnd(2, 5), b = c * rnd(2, 10), a = rnd(1, 20); return bq(a + ' + ' + b + ' ' + DIV + ' ' + c, a + b / c, (a + b) / c, 'Divide first: ' + b + ' ' + DIV + ' ' + c + ' = ' + b / c); }
+];
+function askBrackets() { return pick(BRACKETS)(); }
+// the other bubbles: answers to other bracket sums, and now and then a wrong-order answer
+function bracketsVal() { const q = askBrackets(); return q.trap !== undefined && Math.random() < 0.3 ? q.trap : q.a; }
+// place value: a bubble is one digit in its place (7, 40, 300, 2000); a target uses each place once
+const pvPlace = (v) => (v >= 1000 ? 3 : v >= 100 ? 2 : v >= 10 ? 1 : 0);
+const pvDistinct = (vs) => new Set(vs.map(pvPlace)).size === vs.length;
+const PV_BIG = 5;   // from the sixth target of a round, some are four-digit numbers with a zero in them (2047)
+function pvVal() { return rnd(1, 9) * Math.pow(10, game.done >= PV_BIG && Math.random() < 0.2 ? 3 : rnd(0, 2)); }
+// the slip: a digit of the target in the wrong place (for 347: 30, 400 or 4)
+function pvTrap(T) {
+  const ds = String(T).split('').reverse(), top = ds.length - 1;
+  for (let t = 0; t < 12; t++) {
+    const p = rnd(0, top), q = rnd(0, top), d = +ds[p];
+    if (d && p !== q && +ds[q] !== d) return d * Math.pow(10, q);
+  }
+  return undefined;
+}
+// percent: a percent bubble (10%, 20%, 25%, 50%, 75%) and a number bubble. Inside, a percent bubble is
+// PCT + p, so it never equals a number. Answers are whole numbers from 2 to 60
+const PCT = 1000, PCTS = [10, 10, 25, 25, 50, 50, 20, 75];
+const isPct = (v) => v >= PCT;
+const pctOf = (vs) => {
+  if (vs.length !== 2 || isPct(vs[0]) === isPct(vs[1])) return NaN;
+  const p = Math.max(vs[0], vs[1]) - PCT, n = Math.min(vs[0], vs[1]);
+  return (p * n) % 100 === 0 ? p * n / 100 : NaN;
+};
+const pctOk = (T) => Number.isInteger(T) && T >= 2 && T <= 60;
+// numbers that take a percent well: tens, fours and even numbers up to 120
+function pctNum() { const r = Math.random(); return r < 0.4 ? 10 * rnd(1, 12) : r < 0.7 ? 4 * rnd(2, 25) : 2 * rnd(3, 30); }
+// the field keeps two or three percent bubbles, all different
+function pctVal() {
+  const have = slots.filter((b) => alive(b) && isPct(b.v)).map((b) => b.v - PCT), free = [10, 20, 25, 50, 75].filter((p) => have.indexOf(p) < 0);
+  return free.length && (have.length < 2 || (have.length < 3 && Math.random() < 0.3)) ? PCT + pick(free) : pctNum();
+}
 
 /* ================= the field and its bubbles ================= */
 const field = $('#field'), fx = $('#fx'), fctx = fx.getContext('2d');
@@ -327,7 +408,7 @@ const MAXB = 12;
 const game = {
   state: 'menu', w: WORLDS[0], n: 10, kind: 'plus', target: 0, tid: 0, sol: [], picks: [], phase: 'pick', phaseUntil: 0,
   t: 0, time: 0, endTime: 0, targetAt: 0, done: 0, slips: 0, tSlips: 0, score: 0, streak: 0, bestStreak: 0, attempt: -1,
-  hints: 0, wrongNoted: false, result: null
+  hints: 0, wrongNoted: false, result: null, q: null
 };
 const slots = [];
 for (let i = 0; i < MAXB; i++) {
@@ -343,8 +424,9 @@ function setValue(b, v) {
   b.v = v; b.col = rnd(0, 2);
   const label = valText(v);
   if (fracMode()) b.el.innerHTML = fracHTML(v); else b.el.textContent = label;
-  b.el.className = 'bub ' + (v < 0 ? 'neg' : moneyMode() ? (v < 5 ? 'cu' : v < 100 ? 'ag' : v < 500 ? 'au' : 'note') : 'c' + b.col) + (fracMode() ? ' frac' : label.length > 2 ? ' long' : '');
-  b.el.setAttribute('aria-label', v < 0 ? 'minus ' + (-v) : moneyMode() ? coinWords(v) : String(v));
+  const pc = pctMode() && isPct(v);
+  b.el.className = 'bub ' + (v < 0 ? 'neg' : pc ? 'pct' : moneyMode() ? (v < 5 ? 'cu' : v < 100 ? 'ag' : v < 500 ? 'au' : 'note') : 'c' + b.col) + (fracMode() ? ' frac' : label.length > 2 ? ' long' : '');
+  b.el.setAttribute('aria-label', v < 0 ? 'minus ' + (-v) : pc ? (v - PCT) + ' percent' : moneyMode() ? coinWords(v) : String(v));
 }
 function setPicked(b, on) {
   b.picked = on; b.el.classList.toggle('on', on); b.el.setAttribute('aria-pressed', String(on));
@@ -381,6 +463,8 @@ function resize() {
   field.style.setProperty('--d', D + 'px');
   for (const b of slots) { if (ow && oh) { b.x *= FW / ow; b.y *= FH / oh; } }
   keepInside();
+  fitGoal();
+  if (game.state === 'menu') fitNames();
   document.documentElement.style.setProperty('--toast-top', Math.round($('#strip').getBoundingClientRect().bottom + 12) + 'px');
   DPR = Math.min(window.devicePixelRatio || 1, 2);
   fx.width = Math.max(1, Math.round(innerWidth * DPR)); fx.height = Math.max(1, Math.round(innerHeight * DPR));
@@ -457,6 +541,7 @@ function valueRange() {
 }
 function randomValue() {
   const w = game.w, tb = tables(), vr = valueRange();
+  if (w.val) return w.val();
   if (w.money) return coin();
   if (w.frac) return rnd(1, game.fd - 1);
   if (w.dec) return decVal();
@@ -520,6 +605,80 @@ function planDiv(old, fresh) {
   }
   return null;
 }
+// a question in the badge with exactly one bubble its answer: mostly a bubble already floating, so the
+// newest bubble is not always the one (the new bubble is then now and then the slip answer, the trap)
+function planAsk(old, fresh, w) {
+  const last = game.target, counts = {}, pool = askPool(w);
+  old.forEach((b) => { counts[b.v] = (counts[b.v] || 0) + 1; });
+  if (Math.random() < 0.7) {
+    const cands = old.filter((b) => counts[b.v] === 1 && b.v !== last && pool[b.v]);
+    if (cands.length) { const b = pick(cands); return { T: b.v, q: pick(pool[b.v]), olds: [b], vals: [] }; }
+  }
+  for (let t = 0; t < 400; t++) {
+    const q = w.ask();
+    if (!counts[q.a] && (q.a !== last || t > 300)) return { T: q.a, q: q, olds: [], vals: [q.a] };
+  }
+  return null;
+}
+// every question a world asks, by answer (from many draws, made once), so a question can be found for a
+// bubble that is already floating
+function askPool(w) {
+  if (!w.pool) {
+    const p = {}, seen = new Set();
+    for (let k = 0; k < 12000; k++) { const q = w.ask(); if (!seen.has(q.text)) { seen.add(q.text); (p[q.a] || (p[q.a] = [])).push(q); } }
+    w.pool = p;
+  }
+  return w.pool;
+}
+// place value: two or three old bubbles in different places, or old and new bubbles for the places the
+// target needs (a new bubble never repeats one that is there)
+function planPV(old, fresh) {
+  const last = game.target, oldVals = new Set(old.map((b) => b.v)), bigOk = game.done >= PV_BIG;
+  const okT = (T, loose) => T >= 100 && (bigOk || T < 1000) && (loose || T !== last);
+  if (old.length >= 2 && Math.random() < 0.45) {
+    const cands = [];
+    for (const k of [2, 3]) eachCombo(old, k, (c) => { const vs = c.map((b) => b.v), T = sumOf(vs); if (pvDistinct(vs) && okT(T)) cands.push({ T: T, olds: c, vals: [] }); });
+    if (cands.length) return pick(cands);
+  }
+  for (let tries = 0; tries < 400; tries++) {
+    const big = bigOk && Math.random() < 0.45;
+    const places = [big ? 3 : 2].concat(shuffle(big ? [0, 1, 2] : [0, 1]).slice(0, big ? rnd(1, 2) : Math.random() < 0.8 ? 2 : 1));
+    const olds = [], vals = [];
+    for (const p of places) {
+      const have = old.filter((b) => pvPlace(b.v) === p);
+      if (have.length && Math.random() < 0.5) olds.push(pick(have)); else vals.push(rnd(1, 9) * Math.pow(10, p));
+    }
+    if (vals.length > fresh.length || vals.some((v) => oldVals.has(v))) continue;
+    const T = sumOf(olds.map((b) => b.v)) + sumOf(vals);
+    if (!okT(T, tries > 300)) continue;
+    return { T: T, olds: olds, vals: shuffle(vals) };
+  }
+  return null;
+}
+// percent: a pair of old bubbles, or an old percent with a new number, an old number with a new percent,
+// or both new
+function planPct(old, fresh) {
+  const last = game.target, oldVals = new Set(old.map((b) => b.v));
+  const okT = (T, loose) => pctOk(T) && !oldVals.has(T) && (loose || T !== last);
+  if (old.length >= 2 && Math.random() < 0.55) {
+    const cands = [];
+    eachCombo(old, 2, (c) => { const T = pctOf([c[0].v, c[1].v]); if (okT(T)) cands.push({ T: T, olds: c, vals: [] }); });
+    if (cands.length) return pick(cands);
+  }
+  const oldP = old.filter((b) => isPct(b.v)), oldN = old.filter((b) => !isPct(b.v));
+  for (let tries = 0; tries < 400; tries++) {
+    const r = Math.random();
+    let p, n, olds, vals;
+    if (oldP.length && r < 0.4) { const o = pick(oldP); p = o.v - PCT; n = pctNum(); olds = [o]; vals = [n]; }
+    else if (oldN.length && oldP.length < 3 && r < 0.7) { const o = pick(oldN); p = pick(PCTS); n = o.v; olds = [o]; vals = [PCT + p]; }
+    else if (fresh.length >= 2 && oldP.length < 3) { p = pick(PCTS); n = pctNum(); olds = []; vals = [PCT + p, n]; }
+    else continue;
+    const T = p * n / 100;
+    if (!okT(T, tries > 300) || vals.some((v) => oldVals.has(v))) continue;
+    return { T: T, olds: olds, vals: vals };
+  }
+  return null;
+}
 function planTarget(fresh) {
   const w = game.w, kind = kindNow(), tb = tables(), vr = valueRange();
   const old = slots.filter((b) => alive(b) && fresh.indexOf(b) < 0);
@@ -528,8 +687,9 @@ function planTarget(fresh) {
   // no single bubble may already be the answer, and the same target twice in a row is dull
   const fixedT = kind !== 'times' && w.tLo === w.tHi;
   const okT = (T, loose) => !oldVals.has(T) && (loose || fixedT || T !== last);
-  let plan = kind === 'div' ? planDiv(old, fresh) : w.split ? planSplit(old, fresh, w, oldVals) : null;
-  const generic = kind !== 'div' && !w.split;
+  let plan = kind === 'div' ? planDiv(old, fresh) : kind === 'ask' ? planAsk(old, fresh, w) : kind === 'pct' ? planPct(old, fresh) : w.pv ? planPV(old, fresh)
+    : w.split ? planSplit(old, fresh, w, oldVals) : null;
+  const generic = kind !== 'div' && kind !== 'ask' && kind !== 'pct' && !w.pv && !w.split;
   if (generic && old.length >= 2 && Math.random() < 0.55) {
     const cands = [];
     const sizes = kind === 'times' ? [2] : Array.from(new Set(w.parts));
@@ -573,6 +733,9 @@ function planTarget(fresh) {
   }
   if (!plan) {   // never seen in tests; a plain answer made of new bubbles only
     if (kind === 'div') { const d = tb.key ? pick(tb.key) : rnd(tb.lo, tb.hi), q = rnd(tb.lo, tb.hi); plan = { T: q, olds: [], vals: [d * q, d] }; }
+    else if (kind === 'ask') { let q = w.ask(); for (let k = 0; k < 2000 && oldVals.has(q.a); k++) q = w.ask(); plan = { T: q.a, q: q, olds: [], vals: [q.a] }; }
+    else if (kind === 'pct') { plan = { T: 5, olds: [], vals: [PCT + 10, 50] }; }
+    else if (w.pv) { plan = { T: 0, olds: [], vals: [rnd(1, 9) * 100, rnd(1, 9) * 10, rnd(1, 9)].slice(0, Math.max(2, Math.min(3, fresh.length))) }; plan.T = sumOf(plan.vals); }
     else if (w.frac) { plan = { T: game.fd, olds: [], vals: [game.fd / 2, game.fd / 2] }; }
     else if (w.dec) { plan = { T: 150, olds: [], vals: [50, 100] }; }
     else if (w.kind === 'int') { plan = { T: -3, olds: [], vals: [4, -7] }; }
@@ -586,19 +749,26 @@ function planTarget(fresh) {
   const count = (v) => { counts[v] = (counts[v] || 0) + 1; };
   old.forEach((b) => count(b.v));
   plan.vals.forEach((v, j) => { spawn(fr[j], v); sol.push(fr[j].i); count(v); });
+  // the first other bubble is now and then the slip a child makes (a question's trap, a digit in the wrong
+  // place). In a question world every bubble must be the answer to some question, or bubbles no question
+  // can use would pile up and the answer would always be the newest bubble.
+  const trap = plan.q ? plan.q.trap : w.pv ? pvTrap(plan.T) : undefined, pool = w.ask ? askPool(w) : null;
+  const keep = (v) => v !== plan.T && (counts[v] || 0) < (w.dup || 2) && (!pool || !!pool[v]);
   for (let j = plan.vals.length; j < fr.length; j++) {
-    let v = randomValue();
-    for (let k = 0; k < 60 && (v === plan.T || (counts[v] || 0) >= (w.dup || 2)); k++) v = randomValue();
+    let v = j === plan.vals.length && trap !== undefined && Math.random() < 0.6 ? trap : randomValue();
+    for (let k = 0; k < 60 && !keep(v); k++) v = randomValue();
+    for (let k = 0; k < 60 && v === plan.T; k++) v = randomValue();   // few values to choose from (quarters): a repeat, never the target
     spawn(fr[j], v); count(v);
   }
-  game.target = plan.T; game.kind = kind; game.sol = sol; game.tid++;
+  game.target = plan.T; game.q = plan.q || null; game.kind = kind; game.sol = sol; game.tid++;
 }
 function newTarget(fresh) {
   planTarget(fresh);
   game.picks = []; game.phase = 'pick'; game.targetAt = game.time; game.tSlips = 0; game.hints = 0; game.wrongNoted = false;
   slots.forEach((b) => b.el.classList.remove('hint'));
   showTarget(); showStrip();
-  announce('Make ' + (moneyMode() ? coinWords(game.target) : totText(game.target)) + (game.kind === 'times' ? ' with two bubbles multiplied' : game.kind === 'div' ? ' by dividing one bubble by another' : '') +
+  announce((game.q ? 'What is ' + game.q.text + '? Pop the answer' : 'Make ' + (moneyMode() ? coinWords(game.target) : totText(game.target))) +
+    (game.kind === 'times' ? ' with two bubbles multiplied' : game.kind === 'div' ? ' by dividing one bubble by another' : game.kind === 'pct' ? ' with a percent of a number' : '') +
     '. Bubbles: ' + slots.filter(alive).map((b) => valText(b.v)).join(', '));
 }
 
@@ -606,15 +776,21 @@ function newTarget(fresh) {
 function factOf(vals, kind, T) {
   if (kind === 'times') return { t: vals[0] + ' ' + TIMES + ' ' + vals[1], a: T, f: [vals[0], vals[1]] };
   if (kind === 'div') return { t: eqText(vals, kind), a: divOf(vals) };
+  if (kind === 'pct') return { t: eqText(vals, kind), a: pctOf(vals) };
+  if (kind === 'ask') return { t: game.q.text, a: T, trap: game.q.trap };
   return { t: eqText(vals, kind), a: T };
 }
 function eqText(vals, kind) {
   if (kind === 'times') return vals.join(' ' + TIMES + ' ');
   if (kind === 'div') return Math.max(vals[0], vals[1]) + ' ' + DIV + ' ' + Math.min(vals[0], vals[1]);
+  if (kind === 'pct') {   // the percent first, whichever was picked first
+    const p = vals.filter(isPct), n = vals.filter((v) => !isPct(v));
+    return p.length === 1 && n.length === 1 ? (p[0] - PCT) + '% of ' + n[0] : vals.map(valText).join(' & ');
+  }
   return vals.map((v, j) => (j === 0 ? valText(v) : v < 0 ? ' ' + MINUS + ' ' + valText(-v) : ' + ' + valText(v))).join('');
 }
 function eqHTML(vals, kind) {
-  if (kind === 'times' || kind === 'div') return eqText(vals, kind);
+  if (kind === 'times' || kind === 'div' || kind === 'pct') return eqText(vals, kind);
   return vals.map((v, j) => (j === 0 ? valHTML(v) : v < 0 ? ' ' + MINUS + ' ' + valHTML(-v) : ' + ' + valHTML(v))).join('');
 }
 let lastPointerTap = 0;
@@ -635,6 +811,15 @@ function tap(i) {
 }
 function judge() {
   const vals = game.picks.map((i) => slots[i].v), n = vals.length, T = game.target;
+  if (game.kind === 'ask') {   // one bubble: the answer to the question in the badge
+    if (vals[0] === T) solve(); else letGo('Not quite', true);
+    return;
+  }
+  if (game.kind === 'pct') {   // a percent and a number, either order
+    if (n < 2) { showStrip(); return; }
+    if (pctOf(vals) === T) solve(); else letGo(isPct(vals[0]) === isPct(vals[1]) ? 'One % and one number' : 'Not quite', true);
+    return;
+  }
   if (game.kind === 'times') {
     if (n < 2) { showStrip(); return; }
     if (vals[0] * vals[1] === T) solve(); else letGo('Not quite', true);
@@ -708,13 +893,23 @@ function solve() {
 /* ================= target badge and equation strip ================= */
 function showTarget() {
   const g = $('#goal'), w = game.w;
-  $('#targetNum').innerHTML = totHTML(game.target);
+  g.querySelector('.make').innerHTML = game.q ? game.q.html : 'Make <b id="targetNum">' + totHTML(game.target) + '</b>';
   $('#opLabel').textContent = game.kind === 'times' ? 'times' : w.kind === 'mix' ? 'add' : w.op;
   g.dataset.kind = game.kind;
+  fitGoal();
   g.classList.remove('pulse'); void g.offsetWidth; g.classList.add('pulse');
+}
+// a long question (brackets on a phone) shrinks to fit inside the badge
+function fitGoal() {
+  const g = $('#goal'), mk = g.querySelector('.make'), room = g.clientWidth - 60;
+  mk.style.fontSize = '';
+  if (game.q && room > 0 && mk.offsetWidth > room + 1) mk.style.fontSize = Math.max(16, parseFloat(getComputedStyle(mk).fontSize) * room / mk.offsetWidth).toFixed(1) + 'px';
 }
 function hintText() {
   const T = '<b>' + totHTML(game.target) + '</b>';
+  if (game.kind === 'ask') return game.hints ? 'Tip: ' + game.q.tip : game.q.hint;
+  if (game.kind === 'pct') return 'Which % of which number makes ' + T + '?';
+  if (game.w.pv) return (game.target >= 1000 ? 'Thousands, hundreds, tens, ones: make ' : 'Hundreds, tens and ones to make ') + T;
   if (game.kind === 'times') return 'Which two multiply to ' + T + '?';
   if (game.kind === 'div') return 'Which two divide to make ' + T + '?';
   if (game.w.money) return 'Add coins to make ' + T;
@@ -729,19 +924,26 @@ function showStrip(mode) {
   s.classList.remove('good', 'over');
   let html, chars = 0;
   if (!vals.length) html = '<span class="hint">' + hintText() + '</span>';
-  else if (vals.length < 2) {
+  else if (kind === 'ask') {   // the question with the picked answer: = when right, ≠ when not
+    const v = vals[0], eq = game.q.show, totS = (v === game.target ? '= ' : '≠ ') + v;
+    html = '<span class="eq">' + eq + '</span> <span class="tot">' + totS + '</span>';
+    chars = eq.length + 1 + totS.length;
+    if (mode === 'good') s.classList.add('good'); else if (mode === 'over') s.classList.add('over');
+  } else if (vals.length < 2) {
     const v = vals[0];
     // division: a big first pick is the number to share, a small one the number to share by
     if (kind === 'div') html = v > game.target ? v + ' <span class="tot">' + DIV + ' ?</span>' : '<span class="tot">? ' + DIV + '</span> ' + v;
+    else if (kind === 'pct') html = isPct(v) ? valText(v) + ' <span class="tot">of ?</span>' : '<span class="tot">?% of</span> ' + v;
     else html = valHTML(v) + ' <span class="tot">' + (kind === 'times' ? TIMES : '+') + ' ?</span>';
     chars = 7;
   } else {
-    const q = kind === 'div' ? divOf(vals) : 0, tot = kind === 'times' ? vals[0] * vals[1] : kind === 'div' ? q : sumOf(vals), eq = eqText(vals, kind);
-    const totS = kind === 'div' && !Number.isInteger(q) ? '≠ ' + game.target : '= ' + totText(tot);
+    const whole = kind === 'div' || kind === 'pct';   // these can miss a whole number: shown as ≠ the target
+    const q = kind === 'div' ? divOf(vals) : kind === 'pct' ? pctOf(vals) : 0, tot = kind === 'times' ? vals[0] * vals[1] : whole ? q : sumOf(vals), eq = eqText(vals, kind);
+    const totS = whole && !Number.isInteger(q) ? '≠ ' + game.target : '= ' + totText(tot);
     html = '<span class="eq">' + eqHTML(vals, kind) + '</span> <span class="tot">' + (fracMode() ? '= ' + totHTML(tot) : totS) + '</span>';
     chars = eq.length + 1 + totS.length;
     if (mode === 'good') s.classList.add('good');
-    else if (mode === 'over' || (kind !== 'times' && kind !== 'div' && kind !== 'int' && tot > game.target)) s.classList.add('over');
+    else if (mode === 'over' || (kind !== 'times' && !whole && kind !== 'int' && tot > game.target)) s.classList.add('over');
   }
   s.innerHTML = '<span class="line">' + html + '</span>';
   const fit = chars ? Math.min(s.clientHeight * 0.62, (s.clientWidth - 40) / (chars * 0.6)) : 0;
@@ -809,9 +1011,10 @@ function step(dt) {
       if (game.done >= ROUND) finishRound();
       else newTarget(slots.filter((b) => b.i < game.n && (b.st === 'pop' || b.st === 'gone')));
     } else if (game.phase === 'pick') {
-      // stuck for a while: one answer bubble glows softly (never the whole answer)
+      // stuck for a while: one answer bubble glows softly (never the whole answer); a question shows its first step
       const waited = game.time - game.targetAt;
-      if (game.hints < game.sol.length - 1 && waited > 15 + game.hints * 8) {
+      if (game.kind === 'ask') { if (!game.hints && waited > 12) { game.hints = 1; if (!game.picks.length) showStrip(); } }
+      else if (game.hints < game.sol.length - 1 && waited > 15 + game.hints * 8) {
         const b = slots[game.sol[game.hints]];
         if (b && !b.picked) b.el.classList.add('hint');
         game.hints++;
@@ -887,6 +1090,15 @@ function renderHome() {
   if (el) el.checked = true;
   $('#soundBtn').textContent = save.settings.music > 0 ? 'Music on' : 'Music off';
   arcadeLinks();
+  requestAnimationFrame(fitNames);
+}
+// a long world name shrinks a little to stay inside its card (Double & halve on a phone)
+function fitNames() {
+  $$('.world b').forEach((b) => {
+    b.style.fontSize = '';
+    const c = b.parentNode, cs = getComputedStyle(c), room = c.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    if (room > 0 && b.offsetWidth > room) b.style.fontSize = (parseFloat(getComputedStyle(b).fontSize) * room / b.offsetWidth).toFixed(1) + 'px';
+  });
 }
 function menuField() {
   game.n = 10; resize();
@@ -985,13 +1197,21 @@ menuField();
 renderHome();
 showScreen('home', false);
 requestAnimationFrame(frame);
-if (document.fonts && document.fonts.load) document.fonts.load('700 40px Fredoka').catch(() => {});
+if (document.fonts && document.fonts.load) document.fonts.load('700 40px Fredoka').then(() => { fitNames(); fitGoal(); }).catch(() => {});
 // test hook: what a bot needs to play (bubble x/y are page coordinates of the centres)
 window.__pop = {
-  game: game, slots: slots, WORLDS: WORLDS, rec: rec, save: save, ROUND: ROUND, SLIPS3: SLIPS3, tap: tap, stars: starsFor, home: goHome,
+  game: game, slots: slots, WORLDS: WORLDS, rec: rec, save: save, ROUND: ROUND, SLIPS3: SLIPS3, PCT: PCT, tap: tap, stars: starsFor, home: goHome,
   state() {
     return { state: game.state, phase: game.phase, world: game.w.id, kind: game.kind, target: game.target, tid: game.tid, done: game.done,
-      time: game.time, slips: game.slips, tSlips: game.tSlips, score: game.score, streak: game.streak, picks: game.picks.slice(), sol: game.sol.slice(), result: game.result, fd: game.fd || 0 };
+      time: game.time, slips: game.slips, tSlips: game.tSlips, score: game.score, streak: game.streak, picks: game.picks.slice(), sol: game.sol.slice(), result: game.result, fd: game.fd || 0,
+      q: game.q ? game.q.text : '' };
+  },
+  // generation checks: pop these bubbles (default: the planted answer) and plan the next target at once
+  next(idx) {
+    (idx || game.sol).forEach((i) => { setPicked(slots[i], false); slots[i].st = 'gone'; });
+    game.picks = []; game.phase = 'pick'; game.done = (game.done + 1) % ROUND;
+    newTarget(slots.filter((b) => b.i < game.n && (b.st === 'pop' || b.st === 'gone')));
+    return game.tid;
   },
   bubbles() { return slots.slice(0, game.n).map((b) => ({ i: b.i, v: b.v, st: b.st, picked: b.picked, x: FL + b.x, y: FT + b.y, d: D })); },
   target() { return { value: game.target, kind: game.kind, tid: game.tid }; },
