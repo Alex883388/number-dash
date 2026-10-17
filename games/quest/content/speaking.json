@@ -303,6 +303,158 @@
         "To what extent should young people's views be shaped by those of their parents?",
         "Is changing your mind a sign of weakness or of maturity, in your opinion?"
       ]
+    },
+    {
+      "id": "explorer-5",
+      "stage": 4,
+      "topic": "Describe a time when you had to wait for something",
+      "points": ["what you were waiting for", "where you were", "what you did while you were waiting", "and explain how you felt when the wait was over"],
+      "phrases": [
+        "I'd like to tell you about a time when I had to wait for…",
+        "The queue was so long that…",
+        "To pass the time, we…",
+        "It felt like…",
+        "In the end, it was definitely worth the wait."
+      ],
+      "model": "I'd like to tell you about a time when I had to wait for a ride at a theme park. It was on the first day of the summer holidays, and I went there with my uncle and my cousin, Sam.\nThe ride we really wanted to try was a log flume, which is a boat shaped like a big log that rushes down a water slide. The queue was so long that we had to wait for almost an hour and a half! It was a very hot day, so my uncle bought us some ice lollies. To pass the time, we played I spy and guessed what the clouds looked like. Sam also told me lots of terrible jokes.\nWhen we finally got into the boat, I couldn't stop smiling. The ride only lasted about three minutes, but it felt like ten seconds. We got completely soaked at the end, but we didn't mind at all. In the end, it was definitely worth the wait.",
+      "part3": [
+        "Why do some people find it hard to wait for things?",
+        "Do you think people are more patient or less patient than they were in the past?",
+        "What are some good ways to pass the time when you have to wait?"
+      ]
+    },
+    {
+      "id": "explorer-6",
+      "stage": 4,
+      "topic": "Describe a gift you gave to someone",
+      "points": ["what the gift was", "who you gave it to", "why you chose it", "and explain how the person felt when they got it"],
+      "phrases": [
+        "The gift I'd like to talk about is…",
+        "I gave it to…, for…",
+        "I chose it because…",
+        "I saved my pocket money for…",
+        "As soon as he opened it,…"
+      ],
+      "model": "The gift I'd like to talk about is a kite. It was bright red and yellow, and it was shaped like a dragon, with a long tail made of ribbons.\nI gave it to my little brother, Leo, for his sixth birthday. I chose it because he loves dragons, and he always watches the other children flying kites in the park near our house. I saved my pocket money for about two months to buy it, so it was quite a big thing for me. I also wrapped it myself, which wasn't easy, because it was such a strange shape!\nAs soon as he opened it, he jumped up and down and gave me a big hug. He wanted to fly it straight away, so we all went to the park that afternoon. Luckily, it was quite windy, which was perfect. Now we fly it together almost every weekend, and that makes me really happy too.",
+      "part3": [
+        "What kinds of presents do children in your country usually like to get?",
+        "Is it better to give someone money or a present you have chosen for them? Why?",
+        "Why do people give each other gifts on special occasions?"
+      ]
+    },
+    {
+      "id": "achiever-5",
+      "stage": 5,
+      "topic": "Describe a time when you were surprised",
+      "points": ["what happened", "when and where it happened", "who you were with", "and explain why it surprised you so much"],
+      "phrases": [
+        "I'll never forget the time when…",
+        "I had absolutely no idea that…",
+        "You can imagine how…",
+        "It turned out that…",
+        "What surprised me most was…"
+      ],
+      "model": "I'll never forget the time when my cousin Ellie turned up at our front door without any warning. She lives in Australia, so I'd only ever seen her on video calls. It happened one rainy Saturday afternoon last November, while I was at home doing my homework.\nAt the time, I was with my mum and my younger brother. When the doorbell rang, Mum asked me to answer it, which I thought was a bit strange, because she usually goes herself. I opened the door, and there was Ellie, standing on the doorstep with my aunt and a huge suitcase. You can imagine how loudly I screamed! It turned out that my parents had known about the visit for months, but they'd kept it a secret.\nWhat surprised me most was that nobody in my family had given anything away. My brother is terrible at keeping secrets, so I had absolutely no idea that anything was going on. Besides, Australia is so far away that I'd never imagined Ellie could just appear like that. In the end, she stayed with us for three weeks, and we've been much closer ever since.",
+      "part3": [
+        "Do you think most people enjoy surprises? Why or why not?",
+        "Why do some people find it so difficult to keep a secret?",
+        "How has technology made it easier for families who live far apart to stay in touch?"
+      ]
+    },
+    {
+      "id": "achiever-6",
+      "stage": 5,
+      "topic": "Describe a rule at your school that you agree or disagree with",
+      "points": ["what the rule is", "when it was introduced", "how pupils feel about it", "and explain why you agree or disagree with it"],
+      "phrases": [
+        "One rule at my school that people often talk about is…",
+        "At first, a lot of pupils were…",
+        "Some of my classmates still think…",
+        "On the other hand,…",
+        "All in all, I'm in favour of it, because…"
+      ],
+      "model": "One rule at my school that people often talk about is that we aren't allowed to use mobile phones during the school day. We have to switch them off when we arrive and leave them in our lockers until the last lesson finishes.\nThe rule was introduced about two years ago, after our headteacher noticed that lots of pupils were spending their break times staring at screens instead of talking to each other. At first, a lot of pupils were furious, and some of the older ones even complained to their form tutors. Some of my classmates still think it's unfair, because they'd like to listen to music at lunchtime. On the other hand, most of us have got used to it by now.\nPersonally, I agree with the rule. Since it started, the playground has become much livelier, and people play games or chat instead of scrolling. I also find it easier to concentrate in lessons, because I'm not wondering whether someone has sent me a message. All in all, I'm in favour of it, because school feels more like a place to be with friends.",
+      "part3": [
+        "Why do you think schools need rules?",
+        "Should pupils be allowed to help decide the rules at their school? Why or why not?",
+        "Do you think school rules are stricter or less strict than they were when your parents were at school?"
+      ]
+    },
+    {
+      "id": "expert-5",
+      "stage": 6,
+      "topic": "Describe a building in your town that you find interesting",
+      "points": ["where it is", "what it looks like", "what it is used for", "and explain why you find it so interesting"],
+      "phrases": [
+        "It's hard to miss, because…",
+        "From a distance, it looks…",
+        "These days, it's run by…",
+        "What fascinates me is that…",
+        "It's a reminder that…"
+      ],
+      "model": "The building I'd like to talk about is an old windmill that stands on a small hill just outside my town, next to the road that leads to the nearest village. It's hard to miss, because it's the tallest thing for miles around.\nFrom a distance, it looks a bit like a giant pepper pot with four enormous sails. The tower is made of dark brick, and the cap on top is painted white, so it stands out against the sky. Up close, though, you notice all sorts of details, like the tiny windows that spiral up the tower and the narrow balcony near the top, where the miller used to stand. It was built about two hundred years ago, and for most of that time it ground wheat into flour for the local bakers. These days, it's run by a group of volunteers, who open it to visitors at weekends. On windy days, they still let the sails turn, and they sell bags of flour that's been ground inside.\nWhat fascinates me is that it's powered entirely by the wind. The sails turn a long wooden shaft, which drives a set of gears, and those turn a pair of heavy millstones that crush the grain. There isn't a single electric motor anywhere, yet it still works perfectly. It's a reminder that people were solving clever engineering problems long before computers existed, and, if you ask me, that's genuinely inspiring.",
+      "part3": [
+        "Why is it important to protect old buildings?",
+        "Do you think modern buildings are as attractive as older ones? Why or why not?",
+        "When an old building is no longer needed, should it be given a new use or replaced with something new?"
+      ]
+    },
+    {
+      "id": "expert-6",
+      "stage": 6,
+      "topic": "Describe an outdoor activity you would recommend to other people",
+      "points": ["what the activity is", "how you got into it", "what you need to do it", "and explain why you would recommend it"],
+      "phrases": [
+        "It's a bit like a treasure hunt, except that…",
+        "I got into it more or less by accident.",
+        "All you really need is…",
+        "The beauty of it is that…",
+        "I'd recommend it to anyone who…"
+      ],
+      "model": "The outdoor activity I'd recommend is geocaching, which is a bit like a treasure hunt, except that you use a phone to find the treasure. People hide small waterproof boxes, called caches, in parks, woods and even city streets, and then share their exact location online so that others can look for them.\nI got into it more or less by accident. A couple of years ago, my dad and I were out walking when we noticed a family searching around the roots of an old tree. When we asked what they were doing, they explained the whole idea, and by the end of that afternoon, we'd found our first cache ourselves. All you really need is a phone that can show your location on a map, a pen and, ideally, a decent pair of walking boots. Inside most caches, there's a tiny notebook where you write your name and the date, and sometimes there are little trinkets, like badges or keyrings. The rule is that if you take something, you leave something of the same value or better, and you always put the cache back exactly where you found it.\nThe beauty of it is that it turns an ordinary walk into an adventure. I've discovered footpaths and viewpoints near my home that I'd never have known about otherwise. On top of that, it's free, and it gets you outside whatever the weather. I'd recommend it to anyone who loves exploring, or to families looking for something to do together.",
+      "part3": [
+        "What are the main benefits of outdoor activities for young people?",
+        "Should schools hold more lessons outside the classroom? Why or why not?",
+        "Can technology encourage people to spend more time outdoors rather than less?"
+      ]
+    },
+    {
+      "id": "band8-5",
+      "stage": 7,
+      "topic": "Describe a famous person from your country",
+      "points": ["who the person is", "what they are famous for", "how you first found out about them", "and explain why you think so many people admire them"],
+      "phrases": [
+        "Few people are as widely respected as…",
+        "He's perhaps best known for…",
+        "It was through… that I first came across…",
+        "What sets him apart, in my view, is…",
+        "It's no exaggeration to say that…"
+      ],
+      "model": "The famous person I'd like to talk about is the naturalist and broadcaster Sir David Attenborough. Few people are as widely respected as him in my country, and his voice is so recognisable that most people could identify it within seconds.\nHe's perhaps best known for his nature documentaries, which have taken viewers to almost every corner of the planet, from frozen polar seas to the depths of tropical rainforests. Over a career spanning more than seventy years, he introduced millions of people to creatures they would otherwise never have seen. One of his most famous moments came when he sat among a family of mountain gorillas, speaking softly to the camera while the young ones played around him. It was through a series about the oceans, which we watched at school, that I first came across him. I remember being mesmerised by the creatures of the deep sea, but also deeply troubled by the scenes showing how plastic was harming sea life.\nWhat sets him apart, in my view, is the way he combines wonder with honesty. Rather than lecturing people, his programmes simply show how extraordinary the natural world is, which makes the warnings about protecting it all the more powerful. It's no exaggeration to say that he has changed the way a whole generation thinks about the environment. There's even a polar research ship named after him, although, famously, a public vote had wanted to call it Boaty McBoatface.",
+      "part3": [
+        "What responsibilities, if any, do famous people have towards the public?",
+        "How effective are nature documentaries at persuading people to protect the environment?",
+        "Why do you think some famous people remain popular for decades while others are quickly forgotten?"
+      ]
+    },
+    {
+      "id": "band8-6",
+      "stage": 7,
+      "topic": "Describe a journey you remember well",
+      "points": ["where you went", "how you travelled", "what happened on the way", "and explain why this journey was so memorable"],
+      "phrases": [
+        "Of all the journeys I've been on, the one that stands out is…",
+        "We'd planned to…, but…",
+        "Little did we know that…",
+        "It was only when… that I realised…",
+        "There's something about… that…"
+      ],
+      "model": "Of all the journeys I've been on, the one that stands out is a two-day bike ride I did with my dad last summer, from our town to my grandparents' village, about seventy kilometres away. Rather than taking the main roads, we followed the towpath of an old canal almost the entire way, so the route was flat, peaceful and, crucially, free of traffic.\nWe set off at dawn with our bags strapped to our bikes, and for the first few hours, everything went smoothly. Dad kept pointing out things I'd never noticed, like the locks, which work like a watery staircase, lifting boats up and down hills. He explained that, a couple of hundred years ago, canals carried coal and other heavy goods, in boats pulled by horses walking along the very path we were cycling on. We'd planned to reach a campsite by six o'clock, but things didn't quite work out. Little did we know that a heavy shower was heading our way, and within minutes we were soaked to the skin. To make matters worse, my back tyre went flat. Fortunately, a man on a narrowboat moored nearby lent us a pump and even made us both a mug of hot chocolate.\nIt was only when we finally rolled into my grandparents' village the next afternoon, exhausted but triumphant, that I realised how much I'd enjoyed it, setbacks and all. There's something about travelling under your own steam that makes you notice far more. Above all, though, I treasured having my dad to myself for two whole days, with no screens and no distractions.",
+      "part3": [
+        "Why do some people prefer slow ways of travelling, such as cycling or walking, to faster ones?",
+        "How has the way people travel long distances changed over the last hundred years?",
+        "To what extent is the journey itself as important as the destination?"
+      ]
     }
   ],
   "part1": [
