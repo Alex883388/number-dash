@@ -1,0 +1,1715 @@
+{
+  "stage": 7,
+  "units": [
+    {
+      "id": "band8-1",
+      "title": "Language and culture",
+      "emoji": "🗣️",
+      "words": [
+        {
+          "w": "ubiquitous",
+          "def": "seeming to be everywhere at the same time",
+          "ex": "English words such as 'weekend' and 'email' have become ___ in languages around the world.",
+          "pos": "adj",
+          "syn": [
+            "widespread",
+            "universal"
+          ],
+          "ant": [
+            "rare"
+          ],
+          "forms": {
+            "adj": "ubiquitous",
+            "noun": "ubiquity"
+          }
+        },
+        {
+          "w": "nuance",
+          "def": "a very slight difference in meaning, feeling or tone",
+          "ex": "A skilled translator captures every ___ of the original poem, not just its basic meaning.",
+          "pos": "noun",
+          "syn": [
+            "subtlety"
+          ],
+          "forms": {
+            "noun": "nuance",
+            "adj": "nuanced"
+          }
+        },
+        {
+          "w": "idiomatic",
+          "def": "natural to native speakers, especially in its use of fixed expressions",
+          "ex": "Her English was not just correct but highly ___, full of expressions that native speakers use.",
+          "pos": "adj",
+          "forms": {
+            "adj": "idiomatic",
+            "noun": "idiom"
+          }
+        },
+        {
+          "w": "convey",
+          "def": "to communicate or express a feeling, idea or message",
+          "ex": "A single gesture can ___ respect in one culture and rudeness in another.",
+          "pos": "verb",
+          "syn": [
+            "communicate",
+            "express"
+          ]
+        },
+        {
+          "w": "assimilate",
+          "def": "to take in and absorb something so that it becomes part of you",
+          "ex": "Over the centuries, English has managed to ___ words from almost every language it has met.",
+          "pos": "verb",
+          "syn": [
+            "absorb"
+          ],
+          "forms": {
+            "verb": "assimilate",
+            "noun": "assimilation"
+          }
+        },
+        {
+          "w": "dialect",
+          "def": "a form of a language spoken in one area, with some of its own words and grammar",
+          "ex": "In the next valley, people spoke a ___ that visitors from the city struggled to follow.",
+          "pos": "noun"
+        },
+        {
+          "w": "proficiency",
+          "def": "a high level of skill or ability in something",
+          "ex": "The exam measures ___ in reading, writing, listening and speaking.",
+          "pos": "noun",
+          "syn": [
+            "skill",
+            "competence"
+          ],
+          "forms": {
+            "noun": "proficiency",
+            "adj": "proficient"
+          }
+        },
+        {
+          "w": "revitalise",
+          "def": "to give new life and energy to something that was becoming weaker",
+          "ex": "Schools that teach in Welsh have helped to ___ the language.",
+          "pos": "verb",
+          "syn": [
+            "revive"
+          ],
+          "forms": {
+            "verb": "revitalise",
+            "noun": "revitalisation"
+          }
+        },
+        {
+          "w": "coherent",
+          "def": "clear, logical and easy to follow",
+          "ex": "A ___ essay moves smoothly and logically from one idea to the next.",
+          "pos": "adj",
+          "ant": [
+            "incoherent",
+            "confused"
+          ],
+          "forms": {
+            "adj": "coherent",
+            "noun": "coherence"
+          }
+        },
+        {
+          "w": "inherent",
+          "def": "existing as a natural and permanent part of something",
+          "ex": "Some loss of meaning is ___ in translation, however skilled the translator.",
+          "pos": "adj",
+          "forms": {
+            "adj": "inherent",
+            "adv": "inherently"
+          }
+        },
+        {
+          "w": "lingua franca",
+          "def": "a shared language used between people whose first languages are different",
+          "ex": "English often serves as a ___ at international science conferences.",
+          "pos": "phrase"
+        },
+        {
+          "w": "etymology",
+          "def": "the origin and history of a word and its meaning",
+          "ex": "The ___ of 'breakfast' is simple: the first meal of the day breaks the night's fast.",
+          "pos": "noun",
+          "forms": {
+            "noun": "etymology",
+            "adj": "etymological"
+          }
+        }
+      ],
+      "grammar": [
+        {
+          "q": "Little ___ that his invented word would one day appear in dictionaries.",
+          "opts": [
+            "did he realise",
+            "he realised",
+            "he did realise",
+            "realised he"
+          ],
+          "a": 0,
+          "why": "When 'Little' starts the sentence with a negative meaning, use question order: Little did he realise."
+        },
+        {
+          "q": "___ I admire her novels, I find them very hard to translate.",
+          "opts": [
+            "Much as",
+            "As much",
+            "Despite",
+            "However much as"
+          ],
+          "a": 0,
+          "why": "'Much as + clause' is a formal way of saying 'Although': Much as I admire them..."
+        },
+        {
+          "q": "___ been for the printing press, English spelling might never have become standardised.",
+          "opts": [
+            "Had it not",
+            "Had not it",
+            "Were it not",
+            "Did it not"
+          ],
+          "a": 0,
+          "why": "'Had it not been for X' is the inverted form of 'If it had not been for X' about the past."
+        },
+        {
+          "q": "The two languages are related, ___ only distantly.",
+          "opts": [
+            "albeit",
+            "despite",
+            "whereas",
+            "even"
+          ],
+          "a": 0,
+          "why": "'Albeit' means 'although' and can be followed by a short phrase without a verb."
+        },
+        {
+          "q": "___ its many borrowings from French, English has a large number of formal words.",
+          "opts": [
+            "Owing to",
+            "Because",
+            "Due",
+            "Thanks for"
+          ],
+          "a": 0,
+          "why": "'Owing to' is followed by a noun phrase to give a cause; 'because' would need 'of'."
+        },
+        {
+          "q": "Such ___ the popularity of the books that they were translated into dozens of languages.",
+          "opts": [
+            "was",
+            "were",
+            "did",
+            "had"
+          ],
+          "a": 0,
+          "why": "In 'Such + be + subject + that...', the verb agrees with the singular subject 'the popularity'."
+        }
+      ],
+      "sentences": [
+        "English has assimilated words from almost every language it has encountered.",
+        "A skilled translator must capture every nuance of the original text.",
+        "Little did he realise that his invented word would become so popular.",
+        "English has become the lingua franca of international science."
+      ],
+      "reading": {
+        "title": "Does language shape thought?",
+        "text": "Does the language we speak influence the way we think? The question has fascinated thinkers for generations, and few ideas in linguistics have been as hotly contested.\n\nThe best-known version of the claim is associated with the American linguist Benjamin Lee Whorf, who argued in the 1930s that the structure of a language shapes how its speakers perceive the world. Whorf suggested, for instance, that the Hopi language of North America contained no words for time as Europeans understood it, and that its speakers therefore experienced time differently. Later researchers challenged his analysis, showing that Hopi does in fact have many ways of expressing time, and for several decades the whole idea fell out of favour.\n\nRecent studies, however, have revived interest in a more modest form of the theory. Speakers of Guugu Yimithirr, an Aboriginal language of northern Australia, describe locations using compass directions rather than words such as 'left' and 'right'. Instead of saying 'the cup is to your left', they might say 'the cup is to the north'. Remarkably, speakers appear to keep track of their orientation at all times, even in unfamiliar buildings, an ability that seems closely linked to the demands of their language.\n\nColour offers another intriguing example. Russian has two separate basic words for lighter and darker blue, and in laboratory experiments Russian speakers were slightly quicker than English speakers at telling apart shades that fall on either side of that boundary.\n\nCrucially, none of this suggests that language imprisons thought. English speakers can learn to use compass directions, and anyone can see the difference between two shades of blue. What the evidence implies is subtler: the habits of a language may gently steer attention towards certain features of experience, making some distinctions more automatic than others. In that sense, learning a new language may offer not only new words, but also new ways of noticing.",
+        "qs": [
+          {
+            "type": "tfng",
+            "q": "Whorf's claims about the Hopi language were later shown to be inaccurate.",
+            "opts": [
+              "True",
+              "False",
+              "Not Given"
+            ],
+            "a": 0
+          },
+          {
+            "type": "tfng",
+            "q": "Guugu Yimithirr is spoken by more people today than it was a century ago.",
+            "opts": [
+              "True",
+              "False",
+              "Not Given"
+            ],
+            "a": 2
+          },
+          {
+            "type": "tfng",
+            "q": "In the experiments, Russian speakers could see differences between shades of blue that English speakers were unable to see.",
+            "opts": [
+              "True",
+              "False",
+              "Not Given"
+            ],
+            "a": 1
+          },
+          {
+            "type": "mc",
+            "q": "What does the writer imply about the Guugu Yimithirr speakers' sense of direction?",
+            "opts": [
+              "It is probably sharpened by the constant need to use compass terms when speaking.",
+              "It is something they are born with, whichever language they learn.",
+              "It works less well inside unfamiliar buildings than outdoors.",
+              "It is less reliable than the sense of direction of English speakers."
+            ],
+            "a": 0
+          },
+          {
+            "type": "mc",
+            "q": "Which statement best expresses the writer's overall position?",
+            "opts": [
+              "Language may influence what we pay attention to, but it does not limit what we can think.",
+              "Language completely determines what its speakers are able to think.",
+              "Language has no effect at all on the way people think.",
+              "Whorf's original theory has now been fully confirmed."
+            ],
+            "a": 0
+          }
+        ]
+      },
+      "extra": [
+        {
+          "kind": "collocation",
+          "q": "The theory remains ___ contested among linguists.",
+          "opts": [
+            "hotly",
+            "warmly",
+            "burningly",
+            "boilingly"
+          ],
+          "a": 0,
+          "why": "'Hotly contested' (or 'hotly debated') is a fixed collocation meaning argued about strongly."
+        },
+        {
+          "kind": "paraphrase",
+          "q": "Which is the closest paraphrase of: 'Language may gently steer attention towards certain features of experience.'?",
+          "opts": [
+            "The language we speak may make us more likely to notice some things.",
+            "Language forces us to ignore most of what we experience.",
+            "Our experiences decide which language we will speak.",
+            "People who pay close attention learn languages more quickly."
+          ],
+          "a": 0,
+          "why": "'Steer attention towards' means guide what we notice, and 'may gently' keeps the claim cautious."
+        },
+        {
+          "kind": "register",
+          "q": "Which is the most appropriate way to begin the conclusion of an academic essay?",
+          "opts": [
+            "In conclusion, the evidence indicates that language influences, but does not determine, thought.",
+            "So yeah, language kind of changes how we think.",
+            "To wrap things up, I totally think language matters.",
+            "Anyway, that's basically it about language and thought."
+          ],
+          "a": 0,
+          "why": "A formal conclusion is impersonal and precise; 'so yeah', 'wrap things up' and 'basically' are conversational."
+        },
+        {
+          "kind": "cohesion",
+          "q": "Which sentence best fills the gap? 'Whorf claimed that Hopi had no words for time. ___ As a result, the theory fell out of favour for decades.'",
+          "opts": [
+            "Later research, however, showed that Hopi has many ways of expressing time.",
+            "Hopi is one of many languages spoken in North America.",
+            "Similarly, many other languages have words for time.",
+            "This claim was therefore accepted by every linguist."
+          ],
+          "a": 0,
+          "why": "Only the disproof of Whorf's claim explains why the theory 'fell out of favour' in the next sentence."
+        },
+        {
+          "kind": "wordform",
+          "q": "Many English words are ___ (etymology) related to Latin.",
+          "opts": [
+            "etymologically",
+            "etymological",
+            "etymology",
+            "etymologist"
+          ],
+          "a": 0,
+          "why": "We need an adverb to describe the adjective 'related': etymologically related."
+        },
+        {
+          "kind": "idiom",
+          "q": "Jokes are hard to translate because humour often gets ___ in translation.",
+          "opts": [
+            "lost",
+            "missed",
+            "dropped",
+            "forgotten"
+          ],
+          "a": 0,
+          "why": "The idiom is 'lost in translation': meaning or effect that disappears when words change language."
+        }
+      ]
+    },
+    {
+      "id": "band8-2",
+      "title": "Cities and change",
+      "emoji": "🏙️",
+      "words": [
+        {
+          "w": "exacerbate",
+          "def": "to make a problem or a bad situation worse",
+          "ex": "Cutting down street trees can ___ the heat in city centres during summer.",
+          "pos": "verb",
+          "syn": [
+            "worsen"
+          ],
+          "ant": [
+            "ease",
+            "relieve"
+          ],
+          "forms": {
+            "verb": "exacerbate",
+            "noun": "exacerbation"
+          }
+        },
+        {
+          "w": "mitigate",
+          "def": "to make something harmful or unpleasant less severe",
+          "ex": "Green roofs help to ___ flooding by soaking up rainwater.",
+          "pos": "verb",
+          "syn": [
+            "reduce",
+            "ease"
+          ],
+          "ant": [
+            "worsen"
+          ],
+          "forms": {
+            "verb": "mitigate",
+            "noun": "mitigation"
+          }
+        },
+        {
+          "w": "gridlock",
+          "def": "a situation in which traffic is so heavy that it cannot move at all",
+          "ex": "When the bridge closed, the city centre was brought to a standstill by hours of ___.",
+          "pos": "noun"
+        },
+        {
+          "w": "regeneration",
+          "def": "the process of improving a run-down area so that it becomes busy and attractive again",
+          "ex": "The ___ of the old docks turned empty warehouses into homes, offices and museums.",
+          "pos": "noun",
+          "forms": {
+            "noun": "regeneration",
+            "verb": "regenerate"
+          }
+        },
+        {
+          "w": "metropolis",
+          "def": "a very large, important and busy city",
+          "ex": "Within a few decades, the small fishing town had grown into a bustling ___ of millions.",
+          "pos": "noun",
+          "forms": {
+            "noun": "metropolis",
+            "adj": "metropolitan"
+          }
+        },
+        {
+          "w": "densely",
+          "def": "with a lot of people or things packed closely together",
+          "ex": "Hong Kong is one of the most ___ populated places on Earth.",
+          "pos": "adv",
+          "ant": [
+            "sparsely"
+          ],
+          "forms": {
+            "adv": "densely",
+            "adj": "dense",
+            "noun": "density"
+          }
+        },
+        {
+          "w": "sprawl",
+          "def": "the spread of a city into the countryside around it, often without careful planning",
+          "ex": "Urban ___ has swallowed farmland on the edges of many fast-growing cities.",
+          "pos": "noun"
+        },
+        {
+          "w": "unprecedented",
+          "def": "never having happened or existed before",
+          "ex": "The twentieth century saw cities grow at an ___ rate.",
+          "pos": "adj",
+          "syn": [
+            "unparalleled"
+          ]
+        },
+        {
+          "w": "pedestrianise",
+          "def": "to close a street to traffic so that only people on foot can use it",
+          "ex": "The council plans to ___ the high street, so cars will no longer be allowed there.",
+          "pos": "verb",
+          "forms": {
+            "verb": "pedestrianise",
+            "noun": "pedestrianisation"
+          }
+        },
+        {
+          "w": "resilient",
+          "def": "able to recover quickly after something difficult or damaging happens",
+          "ex": "A ___ city can recover quickly after floods, storms or power cuts.",
+          "pos": "adj",
+          "syn": [
+            "tough"
+          ],
+          "forms": {
+            "adj": "resilient",
+            "noun": "resilience"
+          }
+        },
+        {
+          "w": "amenity",
+          "def": "a useful or pleasant place or service, such as a park, a library or a pool",
+          "ex": "The new library is an ___ that the whole neighbourhood can enjoy.",
+          "pos": "noun"
+        },
+        {
+          "w": "dilapidated",
+          "def": "old, broken and in very poor condition",
+          "ex": "The ___ factory, with its broken windows and rotting roof, was finally restored.",
+          "pos": "adj",
+          "syn": [
+            "crumbling"
+          ]
+        }
+      ],
+      "grammar": [
+        {
+          "q": "Not until the Underground opened in 1863 ___ travel quickly beneath London's streets.",
+          "opts": [
+            "could Londoners",
+            "Londoners could",
+            "Londoners can",
+            "can Londoners"
+          ],
+          "a": 0,
+          "why": "After 'Not until + time' at the start, the main clause is inverted, and the past needs 'could'."
+        },
+        {
+          "q": "The city introduced a scheme ___ residents can hire bicycles cheaply from docking stations.",
+          "opts": [
+            "whereby",
+            "whereas",
+            "wherever",
+            "which"
+          ],
+          "a": 0,
+          "why": "'Whereby' means 'by which' or 'under which': a scheme whereby residents can hire bicycles."
+        },
+        {
+          "q": "The council planted thousands of trees, ___ lowering summer temperatures in the streets.",
+          "opts": [
+            "thereby",
+            "whereby",
+            "whereas",
+            "so that"
+          ],
+          "a": 0,
+          "why": "'Thereby + -ing' shows the result of the action just described: planted trees, thereby lowering temperatures."
+        },
+        {
+          "q": "___ the high cost, most residents supported the new bridge.",
+          "opts": [
+            "Notwithstanding",
+            "Although",
+            "Even though",
+            "Whereas"
+          ],
+          "a": 0,
+          "why": "'Notwithstanding' is a formal preposition meaning 'despite', so it can be followed by a noun phrase."
+        },
+        {
+          "q": "Were the city ___ more cycle lanes, fewer people would drive to work.",
+          "opts": [
+            "to build",
+            "build",
+            "building",
+            "built"
+          ],
+          "a": 0,
+          "why": "'Were + subject + to + verb' is a formal inverted way of saying 'If the city built...'."
+        },
+        {
+          "q": "By 2050, roughly two thirds of the world's people ___ in cities.",
+          "opts": [
+            "are expected to be living",
+            "are expecting to be lived",
+            "are expected living",
+            "have expected to live"
+          ],
+          "a": 0,
+          "why": "Use the passive reporting verb with a continuous infinitive for a predicted situation: are expected to be living."
+        }
+      ],
+      "sentences": [
+        "Green roofs help to mitigate flooding by soaking up rainwater.",
+        "The regeneration of the old docks created thousands of new homes.",
+        "Hong Kong is one of the most densely populated places on Earth.",
+        "Cutting down street trees can exacerbate the summer heat."
+      ],
+      "reading": {
+        "title": "A stream beneath the motorway",
+        "text": "For much of the late twentieth century, the Cheonggyecheon stream in central Seoul was invisible. It had been covered with concrete in the 1950s and 1960s, and an elevated motorway was later built above it, carrying vast numbers of vehicles through the heart of the South Korean capital.\n\nIn 2003, the city authorities took the unprecedented step of demolishing the motorway and uncovering the stream. Critics predicted that removing such a major road would exacerbate traffic problems and bring the centre to a standstill. In the event, the anticipated gridlock never materialised, partly because the project coincided with a major reorganisation of the city's bus network, which encouraged many commuters to leave their cars at home.\n\nWhen the restored stream opened in 2005, its success with the public was immediate. The banks, lined with walkways, bridges and planting, attracted large numbers of visitors, and the area quickly became one of the city's most popular amenities. Studies also indicated that temperatures along the stream on hot days were several degrees lower than on nearby roads, suggesting that urban waterways can help to mitigate the heat that builds up in dense city centres.\n\nNevertheless, the project has not escaped criticism. Since the original stream had largely dried up, much of the water that flows through it today has to be pumped in from the Han River and from underground sources, at considerable ongoing cost. Some ecologists argue that the result resembles a long, landscaped fountain more than a genuine natural habitat, while others point out that the design gave priority to appearance rather than to the needs of wildlife.\n\nEven so, Cheonggyecheon has inspired planners around the world. Its significance lies less in its precise design than in the question it raised: if a city can live without a motorway that once seemed essential, what other assumptions about urban life might be open to change?",
+        "qs": [
+          {
+            "type": "tfng",
+            "q": "Building the new stream cost less than building the original motorway had done.",
+            "opts": [
+              "True",
+              "False",
+              "Not Given"
+            ],
+            "a": 2
+          },
+          {
+            "type": "tfng",
+            "q": "Most of the water in today's stream reaches it naturally from the stream's original source.",
+            "opts": [
+              "True",
+              "False",
+              "Not Given"
+            ],
+            "a": 1
+          },
+          {
+            "type": "mc",
+            "q": "According to the passage, why did the predicted traffic problems not happen?",
+            "opts": [
+              "Changes to public transport at the same time persuaded many people not to drive.",
+              "Most drivers chose to move out of the city centre.",
+              "A new motorway was built alongside the stream.",
+              "The stream was used as a route for boats instead of cars."
+            ],
+            "a": 0
+          },
+          {
+            "type": "mc",
+            "q": "What can be inferred about the ecologists mentioned in the fourth paragraph?",
+            "opts": [
+              "They doubt that the stream has real value as a home for wildlife.",
+              "They want the stream to be covered with concrete again.",
+              "They believe the water should come only from underground.",
+              "They were responsible for designing the walkways and bridges."
+            ],
+            "a": 0
+          },
+          {
+            "type": "mc",
+            "q": "What is the writer's main purpose in the final paragraph?",
+            "opts": [
+              "to suggest that the project's wider importance lies in challenging fixed ideas about cities",
+              "to recommend that every city should demolish its motorways",
+              "to describe the exact design of the stream in detail",
+              "to argue that the critics of the project were completely wrong"
+            ],
+            "a": 0
+          }
+        ]
+      },
+      "extra": [
+        {
+          "kind": "collocation",
+          "q": "The plan to close the main road ___ fierce opposition from local drivers.",
+          "opts": [
+            "met with",
+            "came across",
+            "got into",
+            "fell over"
+          ],
+          "a": 0,
+          "why": "We say a plan 'meets with opposition' (or criticism, approval); the other verbs do not combine with 'opposition'."
+        },
+        {
+          "kind": "linking",
+          "q": "Car use in the centre fell sharply; ___, air quality improved.",
+          "opts": [
+            "consequently",
+            "nonetheless",
+            "conversely",
+            "in contrast"
+          ],
+          "a": 0,
+          "why": "Better air is the result of less car use, so we need a cause-and-effect link: consequently."
+        },
+        {
+          "kind": "paraphrase",
+          "q": "Which sentence means the same as: 'The anticipated gridlock never materialised.'?",
+          "opts": [
+            "The traffic jams that people expected did not happen.",
+            "The traffic jams happened earlier than expected.",
+            "Nobody had expected any traffic problems.",
+            "The traffic jams were even worse than people had feared."
+          ],
+          "a": 0,
+          "why": "'Anticipated' means expected, and 'never materialised' means it did not actually happen."
+        },
+        {
+          "kind": "register",
+          "q": "Which sentence is most suitable for an IELTS Writing Task 1 report?",
+          "opts": [
+            "The proportion of residents commuting by bus rose steadily between 2000 and 2020.",
+            "Loads more people started taking the bus, which is great.",
+            "Bus use went up a lot, as you can see.",
+            "Basically, buses got way more popular over time."
+          ],
+          "a": 0,
+          "why": "A Task 1 report describes data precisely and neutrally, without opinions ('great') or chatty words ('loads', 'basically')."
+        },
+        {
+          "kind": "cohesion",
+          "q": "Which order is most logical? A: As a result, a plan was made to clean it and bring wildlife back. B: The river had been polluted for decades. C: Within ten years, otters had returned to its banks.",
+          "opts": [
+            "B, A, C",
+            "A, B, C",
+            "C, B, A",
+            "B, C, A"
+          ],
+          "a": 0,
+          "why": "B gives the problem, A ('As a result') the response, and C ('Within ten years') the outcome."
+        },
+        {
+          "kind": "wordform",
+          "q": "Many residents were ___ (sceptic) about the plan at first.",
+          "opts": [
+            "sceptical",
+            "scepticism",
+            "sceptic",
+            "sceptically"
+          ],
+          "a": 0,
+          "why": "After 'were' and before 'about' we need an adjective: sceptical (British spelling)."
+        }
+      ]
+    },
+    {
+      "id": "band8-3",
+      "title": "Exploring space",
+      "emoji": "🚀",
+      "words": [
+        {
+          "w": "trajectory",
+          "def": "the curved path that a moving object follows through the air or through space",
+          "ex": "Engineers calculated the probe's ___ so that it would swing past Jupiter and gain speed.",
+          "pos": "noun",
+          "syn": [
+            "path",
+            "course"
+          ]
+        },
+        {
+          "w": "propulsion",
+          "def": "the force that pushes a vehicle forward, or the system that produces this force",
+          "ex": "Ion ___ pushes a spacecraft forward very gently, but for months or even years.",
+          "pos": "noun",
+          "forms": {
+            "noun": "propulsion",
+            "verb": "propel"
+          }
+        },
+        {
+          "w": "celestial",
+          "def": "relating to the sky or to outer space",
+          "ex": "Ancient sailors found their way by observing the Sun, the Moon and other ___ bodies.",
+          "pos": "adj",
+          "syn": [
+            "heavenly"
+          ]
+        },
+        {
+          "w": "habitable",
+          "def": "suitable or good enough for people or other living things to live in",
+          "ex": "Astronomers are searching for ___ planets where liquid water could exist on the surface.",
+          "pos": "adj",
+          "ant": [
+            "uninhabitable"
+          ]
+        },
+        {
+          "w": "speculate",
+          "def": "to form ideas or guesses about something without having firm evidence",
+          "ex": "Scientists can only ___ about what might lie beneath the thick ice of Europa.",
+          "pos": "verb",
+          "syn": [
+            "guess",
+            "wonder"
+          ],
+          "forms": {
+            "verb": "speculate",
+            "noun": "speculation",
+            "adj": "speculative"
+          }
+        },
+        {
+          "w": "anomaly",
+          "def": "something that is different from what is normal or expected",
+          "ex": "A strange ___ in the data turned out to be caused by a faulty instrument.",
+          "pos": "noun",
+          "syn": [
+            "irregularity"
+          ],
+          "forms": {
+            "noun": "anomaly",
+            "adj": "anomalous"
+          }
+        },
+        {
+          "w": "pristine",
+          "def": "in perfect condition, as clean and untouched as when new",
+          "ex": "Samples kept in a ___ state, untouched by Earth's air, are far more valuable to scientists.",
+          "pos": "adj",
+          "syn": [
+            "untouched",
+            "spotless"
+          ]
+        },
+        {
+          "w": "payload",
+          "def": "the cargo, such as a satellite or supplies, that a rocket or spacecraft carries",
+          "ex": "The rocket's ___ was a weather satellite that will help forecasters predict storms.",
+          "pos": "noun",
+          "syn": [
+            "cargo"
+          ]
+        },
+        {
+          "w": "rudimentary",
+          "def": "very basic and simple, often an early form of something",
+          "ex": "The earliest space probes carried ___ cameras compared with today's instruments.",
+          "pos": "adj",
+          "syn": [
+            "basic",
+            "primitive"
+          ],
+          "ant": [
+            "advanced"
+          ]
+        },
+        {
+          "w": "feasible",
+          "def": "possible and practical to do",
+          "ex": "Reusable rockets have made frequent launches financially ___.",
+          "pos": "adj",
+          "syn": [
+            "practical",
+            "possible"
+          ],
+          "ant": [
+            "impractical"
+          ],
+          "forms": {
+            "adj": "feasible",
+            "noun": "feasibility"
+          }
+        },
+        {
+          "w": "debris",
+          "def": "broken pieces of something that has been destroyed or thrown away",
+          "ex": "Space ___, such as old satellite parts, can damage working spacecraft.",
+          "pos": "noun"
+        },
+        {
+          "w": "deploy",
+          "def": "to move something into position or open it out so that it is ready to use",
+          "ex": "Once in space, the telescope had to ___ its huge sunshield.",
+          "pos": "verb",
+          "forms": {
+            "verb": "deploy",
+            "noun": "deployment"
+          }
+        }
+      ],
+      "grammar": [
+        {
+          "q": "No sooner ___ the rocket cleared the tower than the crowd began to cheer.",
+          "opts": [
+            "had",
+            "has",
+            "did",
+            "was"
+          ],
+          "a": 0,
+          "why": "'No sooner had + subject + past participle... than' shows that one past event followed the other at once."
+        },
+        {
+          "q": "Only by landing probes on Venus ___ its surface up close.",
+          "opts": [
+            "have scientists seen",
+            "scientists have seen",
+            "scientists saw",
+            "did scientists saw"
+          ],
+          "a": 0,
+          "why": "When 'Only by + -ing' starts the sentence, the main clause uses question order: have scientists seen."
+        },
+        {
+          "q": "The launch was postponed ___ a fault in the fuel system.",
+          "opts": [
+            "on account of",
+            "because",
+            "owing",
+            "so as"
+          ],
+          "a": 0,
+          "why": "'On account of' is followed by a noun phrase to give the cause; 'because' would need 'of'."
+        },
+        {
+          "q": "Had the crew not trained so thoroughly, they ___ the emergency so calmly.",
+          "opts": [
+            "could not have handled",
+            "could not handle",
+            "cannot have handled",
+            "will not have handled"
+          ],
+          "a": 0,
+          "why": "'Had... not' is an inverted past conditional, so the result needs 'could not have + past participle'."
+        },
+        {
+          "q": "___ fascinating it may be, Venus is far too hot for any human visit.",
+          "opts": [
+            "However",
+            "Although",
+            "Despite",
+            "Whatever"
+          ],
+          "a": 0,
+          "why": "'However + adjective + subject + may be' shows concession: no matter how fascinating it is."
+        },
+        {
+          "q": "The telescope, ___ sunshield is about the size of a tennis court, had to be folded to fit inside the rocket.",
+          "opts": [
+            "whose",
+            "which",
+            "its",
+            "that's"
+          ],
+          "a": 0,
+          "why": "'Whose' shows possession in a relative clause: the telescope's sunshield."
+        }
+      ],
+      "sentences": [
+        "No sooner had the rocket cleared the tower than the crowd cheered.",
+        "Astronomers are searching for habitable planets beyond our solar system.",
+        "Space debris poses a growing threat to working satellites.",
+        "Reusable rockets have made frequent launches financially feasible."
+      ],
+      "reading": {
+        "title": "Time capsules from the asteroids",
+        "text": "Meteorites have been falling to Earth for billions of years, and scientists have long studied them for clues about the early solar system. Yet these natural visitors have a serious drawback: by the time they are found, they have been heated while passing through the atmosphere and have often lain on the ground for years, absorbing water and microbes. Distinguishing what they originally contained from what they have picked up on Earth is notoriously difficult.\n\nTo obtain more reliable material, space agencies have attempted something far more ambitious: collecting rock and dust directly from asteroids and bringing it home. Japan's Hayabusa2 mission returned samples from the asteroid Ryugu in 2020, and NASA's OSIRIS-REx spacecraft delivered material from the asteroid Bennu in 2023. In both cases, the samples were sealed inside capsules, protected during their fiery descent and opened only in specially designed clean rooms.\n\nThe reason for such precautions is that asteroids like Ryugu and Bennu are thought to have changed relatively little since the solar system formed around four and a half billion years ago. They therefore act as time capsules, preserving the raw ingredients from which the planets were assembled. Analyses of both samples have revealed water-bearing minerals and a variety of carbon-based molecules, including some of the amino acids that living things use to build proteins.\n\nThese findings do not mean that life existed on the asteroids. They do, however, lend weight to the idea that some of the building blocks of life may have been delivered to the early Earth from space. Equally importantly, because the material has never been exposed to Earth's environment, researchers can be considerably more confident that what they detect was genuinely present in space.\n\nPerhaps the most far-sighted decision was to set aside a large part of the material, untouched, for future generations. Scientists recognise that instruments not yet invented may one day answer questions that nobody has yet thought to ask.",
+        "qs": [
+          {
+            "type": "tfng",
+            "q": "Meteorites can be altered by conditions on Earth after they land.",
+            "opts": [
+              "True",
+              "False",
+              "Not Given"
+            ],
+            "a": 0
+          },
+          {
+            "type": "tfng",
+            "q": "The Bennu samples contained a greater number of amino acids than the Ryugu samples.",
+            "opts": [
+              "True",
+              "False",
+              "Not Given"
+            ],
+            "a": 2
+          },
+          {
+            "type": "tfng",
+            "q": "The writer states that the samples prove life once existed on the asteroids.",
+            "opts": [
+              "True",
+              "False",
+              "Not Given"
+            ],
+            "a": 1
+          },
+          {
+            "type": "mc",
+            "q": "Why were the samples most likely opened only in special clean rooms?",
+            "opts": [
+              "to avoid mixing material from Earth with material from space",
+              "to protect scientists from dangerous chemicals",
+              "to keep the samples at a very high temperature",
+              "to allow members of the public to watch"
+            ],
+            "a": 0
+          },
+          {
+            "type": "mc",
+            "q": "Why does the writer mention instruments 'not yet invented'?",
+            "opts": [
+              "to explain why some of the material has deliberately been left unstudied",
+              "to criticise the quality of the equipment used today",
+              "to suggest that the missions were launched too early",
+              "to warn that the samples will soon be used up"
+            ],
+            "a": 0
+          }
+        ]
+      },
+      "extra": [
+        {
+          "kind": "collocation",
+          "q": "The new findings ___ weight to the idea that some of life's ingredients came from space.",
+          "opts": [
+            "lend",
+            "borrow",
+            "put",
+            "throw"
+          ],
+          "a": 0,
+          "why": "'Lend weight to an idea' is a fixed phrase meaning to make it seem more likely to be true."
+        },
+        {
+          "kind": "paraphrase",
+          "q": "Which sentence means the same as: 'Distinguishing what they originally contained from what they have picked up on Earth is notoriously difficult.'?",
+          "opts": [
+            "It is famously hard to tell which substances came from space and which were added on Earth.",
+            "Scientists can easily separate material from space and material from Earth.",
+            "Meteorites pick up very little material after they land on Earth.",
+            "It is extremely difficult to find meteorites once they have landed."
+          ],
+          "a": 0,
+          "why": "'Distinguishing X from Y' means telling them apart, and 'notoriously' means well known for being so."
+        },
+        {
+          "kind": "register",
+          "q": "Which sentence is most appropriate in a scientific report?",
+          "opts": [
+            "The samples were stored in a nitrogen-filled cabinet to prevent contamination.",
+            "We stuck the samples in a box so nothing got on them.",
+            "The samples went into a cabinet, which was pretty cool.",
+            "To keep them clean, the samples were, like, put away safely."
+          ],
+          "a": 0,
+          "why": "Scientific reports use the passive, precise terms (nitrogen-filled, contamination) and no chatty words."
+        },
+        {
+          "kind": "linking",
+          "q": "The capsule remained sealed throughout the journey; ___, the samples were never exposed to Earth's air.",
+          "opts": [
+            "as a result",
+            "in spite of this",
+            "by contrast",
+            "even so"
+          ],
+          "a": 0,
+          "why": "Never being exposed is the result of the sealing, so we need a cause-and-effect link: as a result."
+        },
+        {
+          "kind": "cohesion",
+          "q": "Which sentence best fills the gap? 'Meteorites are valuable to scientists. ___ This is why sample-return missions are so important.'",
+          "opts": [
+            "However, they are often changed by Earth's conditions before they are found.",
+            "Furthermore, they are completely free from contamination.",
+            "For example, they have been falling for billions of years.",
+            "Therefore, no further space missions are needed."
+          ],
+          "a": 0,
+          "why": "Only the limitation of meteorites explains why missions that collect clean samples matter."
+        },
+        {
+          "kind": "wordform",
+          "q": "Asteroids preserve material that has remained largely ___ (change) for billions of years.",
+          "opts": [
+            "unchanged",
+            "changing",
+            "changeable",
+            "unchangeable"
+          ],
+          "a": 0,
+          "why": "We need an adjective meaning 'not changed': unchanged. 'Unchangeable' means it cannot be changed."
+        }
+      ]
+    },
+    {
+      "id": "band8-4",
+      "title": "Medicine and health science",
+      "emoji": "🔬",
+      "words": [
+        {
+          "w": "immunity",
+          "def": "the body's ability to protect itself against a particular disease",
+          "ex": "Vaccines help the body build ___ without having to catch the illness first.",
+          "pos": "noun",
+          "forms": {
+            "noun": "immunity",
+            "adj": "immune"
+          }
+        },
+        {
+          "w": "pathogen",
+          "def": "a tiny living thing, such as a virus or bacterium, that causes disease",
+          "ex": "A virus is one kind of ___; certain bacteria and fungi are others.",
+          "pos": "noun",
+          "syn": [
+            "germ"
+          ]
+        },
+        {
+          "w": "diagnosis",
+          "def": "the act of identifying which illness a person has by examining them",
+          "ex": "Early ___ makes many conditions much easier to treat.",
+          "pos": "noun",
+          "forms": {
+            "noun": "diagnosis",
+            "verb": "diagnose"
+          }
+        },
+        {
+          "w": "efficacy",
+          "def": "the ability of something, such as a medicine, to produce the result it is meant to",
+          "ex": "Clinical trials test the ___ of a new medicine as well as its safety.",
+          "pos": "noun",
+          "syn": [
+            "effectiveness"
+          ]
+        },
+        {
+          "w": "placebo",
+          "def": "a pill or treatment with no active medicine in it, used in tests to compare results",
+          "ex": "Half the volunteers received the real drug and half received a ___ that looked identical.",
+          "pos": "noun"
+        },
+        {
+          "w": "contagious",
+          "def": "easily spread from one person to another by contact",
+          "ex": "Chickenpox is highly ___, so children who have it usually stay at home for a few days.",
+          "pos": "adj",
+          "syn": [
+            "infectious",
+            "catching"
+          ]
+        },
+        {
+          "w": "dormant",
+          "def": "not active now, but able to become active later",
+          "ex": "Some bacteria can remain ___ inside a tough protective coat until conditions improve.",
+          "pos": "adj",
+          "syn": [
+            "inactive"
+          ],
+          "ant": [
+            "active"
+          ]
+        },
+        {
+          "w": "prognosis",
+          "def": "a doctor's opinion about how an illness or injury is likely to develop",
+          "ex": "After the operation, the doctor said the ___ was excellent and she would make a full recovery.",
+          "pos": "noun"
+        },
+        {
+          "w": "adverse",
+          "def": "harmful or unpleasant; having a negative effect",
+          "ex": "Like all medicines, the drug can have ___ effects in a small number of people.",
+          "pos": "adj",
+          "syn": [
+            "harmful",
+            "negative"
+          ],
+          "ant": [
+            "beneficial"
+          ]
+        },
+        {
+          "w": "antibiotic",
+          "def": "a medicine that kills bacteria or stops them from growing",
+          "ex": "Penicillin, discovered by Alexander Fleming in 1928, became the first widely used ___.",
+          "pos": "noun"
+        },
+        {
+          "w": "alleviate",
+          "def": "to make pain or a problem less severe",
+          "ex": "Gentle stretching can help to ___ back pain.",
+          "pos": "verb",
+          "syn": [
+            "relieve",
+            "ease"
+          ],
+          "ant": [
+            "worsen"
+          ],
+          "forms": {
+            "verb": "alleviate",
+            "noun": "alleviation"
+          }
+        },
+        {
+          "w": "susceptible",
+          "def": "easily affected or harmed by something",
+          "ex": "Young children are more ___ to ear infections than adults are.",
+          "pos": "adj",
+          "syn": [
+            "vulnerable"
+          ],
+          "ant": [
+            "resistant"
+          ],
+          "forms": {
+            "adj": "susceptible",
+            "noun": "susceptibility"
+          }
+        }
+      ],
+      "grammar": [
+        {
+          "q": "Doctors recommend that every patient ___ the full course of treatment.",
+          "opts": [
+            "complete",
+            "completed",
+            "completing",
+            "to complete"
+          ],
+          "a": 0,
+          "why": "After 'recommend that', formal English uses the base form (the subjunctive): every patient complete."
+        },
+        {
+          "q": "It was not until the 1940s ___ penicillin was produced on a large scale.",
+          "opts": [
+            "that",
+            "when",
+            "which",
+            "so"
+          ],
+          "a": 0,
+          "why": "'It was not until + time + that...' is a fixed cleft pattern that stresses when something finally happened."
+        },
+        {
+          "q": "Effective ___ the treatment is, it is not suitable for very young children.",
+          "opts": [
+            "though",
+            "however",
+            "despite",
+            "even"
+          ],
+          "a": 0,
+          "why": "'Adjective + though + subject + verb' is a formal concession: Effective though it is = Although it is effective."
+        },
+        {
+          "q": "Hand-washing has become far more common, ___ has led to fewer stomach infections.",
+          "opts": [
+            "which",
+            "what",
+            "that",
+            "it"
+          ],
+          "a": 0,
+          "why": "After a comma, 'which' can refer to the whole previous idea; 'that' cannot follow a comma like this."
+        },
+        {
+          "q": "Vaccines are thought ___ millions of lives over the past century.",
+          "opts": [
+            "to have saved",
+            "to save",
+            "having saved",
+            "that they saved"
+          ],
+          "a": 0,
+          "why": "'Over the past century' refers to past time, so use the perfect infinitive: are thought to have saved."
+        },
+        {
+          "q": "Under no circumstances ___ antibiotics be shared with other people.",
+          "opts": [
+            "should",
+            "must not",
+            "should not",
+            "can't"
+          ],
+          "a": 0,
+          "why": "'Under no circumstances' is already negative and needs inversion, so use 'should' without 'not'."
+        }
+      ],
+      "sentences": [
+        "Vaccines help the body build immunity against a particular disease.",
+        "Early diagnosis makes many illnesses far easier to treat.",
+        "Doctors recommend that every patient complete the full course of antibiotics.",
+        "Gentle exercise can help to alleviate the symptoms of back pain."
+      ],
+      "reading": {
+        "title": "The power of expectation",
+        "text": "In clinical trials, new medicines are usually compared not with nothing at all but with a placebo: a pill or treatment that looks identical to the real one but contains no active ingredient. Strikingly, many volunteers who receive the placebo report that they feel better. Far from being a nuisance, this so-called placebo effect has become a fascinating subject of research in its own right.\n\nThe effect appears to depend heavily on expectation. Studies have found that, in some circumstances, two placebo pills tend to work better than one, injections better than pills, and pills described as expensive better than those described as cheap. Even colour may play a part. Such findings suggest that the brain, anticipating relief, can alter how the body experiences symptoms, particularly pain, which is strongly influenced by attention and mood.\n\nMore surprising still are studies of open-label placebos, in which patients are told quite openly that the pills they are taking contain no medicine. In several trials, a proportion of these patients nevertheless reported meaningful improvements in their symptoms. Researchers are still debating why: the ritual of taking a pill, the care and attention of a doctor, or simply the hope of getting better may all contribute.\n\nIt is important, however, not to exaggerate what placebos can do. Their effects are largely confined to symptoms that people feel and report, such as pain, tiredness or nausea. A placebo cannot destroy bacteria or mend a broken bone, and relying on one instead of proven treatment could be dangerous. The reverse phenomenon, known as the nocebo effect, also exists: people warned about possible side effects sometimes experience them even when they have been given no active drug.\n\nFor doctors, the lesson may not be to prescribe sugar pills, but to recognise that the way a treatment is explained and delivered can influence how well it works.",
+        "qs": [
+          {
+            "type": "tfng",
+            "q": "Blue placebo pills have been shown to work better than red ones.",
+            "opts": [
+              "True",
+              "False",
+              "Not Given"
+            ],
+            "a": 2
+          },
+          {
+            "type": "tfng",
+            "q": "According to the passage, a placebo can help a broken bone to heal.",
+            "opts": [
+              "True",
+              "False",
+              "Not Given"
+            ],
+            "a": 1
+          },
+          {
+            "type": "mc",
+            "q": "How does the writer explain the effect of placebos on pain?",
+            "opts": [
+              "The expectation of relief can change how the body experiences symptoms.",
+              "Placebo pills contain small amounts of real medicine.",
+              "Pain usually disappears on its own after a few days.",
+              "Patients who expect relief are given stronger medicines."
+            ],
+            "a": 0
+          },
+          {
+            "type": "mc",
+            "q": "What does the writer imply in the final paragraph?",
+            "opts": [
+              "The way doctors communicate with patients may form part of an effective treatment.",
+              "Doctors should give sugar pills instead of real medicines.",
+              "Placebos are more dangerous than most real medicines.",
+              "Patients should not be told how their treatment works."
+            ],
+            "a": 0
+          },
+          {
+            "type": "mc",
+            "q": "What is the main idea of the passage?",
+            "opts": [
+              "The placebo effect is real and intriguing, but its power is limited.",
+              "Placebos can cure most illnesses if patients believe in them.",
+              "Clinical trials no longer need to use placebos.",
+              "The nocebo effect is more important than the placebo effect."
+            ],
+            "a": 0
+          }
+        ]
+      },
+      "extra": [
+        {
+          "kind": "collocation",
+          "q": "The new treatment ___ promising results in early trials.",
+          "opts": [
+            "yielded",
+            "made",
+            "did",
+            "brought up"
+          ],
+          "a": 0,
+          "why": "'Yield results' means produce them; make, do and bring up do not combine with 'results' in this way."
+        },
+        {
+          "kind": "cohesion",
+          "q": "Which sentence best follows? 'Placebos can reduce pain and tiredness.'",
+          "opts": [
+            "They cannot, however, cure infections or mend broken bones.",
+            "As a result, real medicines are no longer needed.",
+            "For instance, they destroy harmful bacteria.",
+            "In addition, broken bones heal faster with placebos."
+          ],
+          "a": 0,
+          "why": "'However' adds the important limit. The other sentences make claims the passage rejects."
+        },
+        {
+          "kind": "register",
+          "q": "Which sentence is most suitable for an academic essay?",
+          "opts": [
+            "Excessive use of antibiotics may contribute to the development of resistant bacteria.",
+            "Taking loads of antibiotics is a really bad idea, honestly.",
+            "If you take antibiotics all the time, germs get tough.",
+            "Antibiotics? Don't overdo them, or bugs fight back."
+          ],
+          "a": 0,
+          "why": "Academic writing is impersonal and cautious (may contribute) and uses precise terms instead of 'loads', 'germs' or 'bugs'."
+        },
+        {
+          "kind": "paraphrase",
+          "q": "Which sentence means the same as: 'Their effects are largely confined to symptoms that people feel and report.'?",
+          "opts": [
+            "They mainly affect symptoms that patients notice and describe themselves.",
+            "Their effects can be measured only with special machines.",
+            "People rarely report how they feel during treatment.",
+            "Their effects are spread equally across all kinds of illness."
+          ],
+          "a": 0,
+          "why": "'Largely confined to' means mostly limited to, and 'feel and report' means notice and describe."
+        },
+        {
+          "kind": "preposition",
+          "q": "A small number of people are allergic ___ penicillin.",
+          "opts": [
+            "to",
+            "with",
+            "of",
+            "for"
+          ],
+          "a": 0,
+          "why": "The adjective 'allergic' is always followed by 'to'."
+        },
+        {
+          "kind": "wordform",
+          "q": "The researchers said the results were ___ (conclusion) and called for larger trials.",
+          "opts": [
+            "inconclusive",
+            "conclusive",
+            "concluding",
+            "conclusion"
+          ],
+          "a": 0,
+          "why": "Calling for larger trials shows the results did not settle the question, so we need the negative adjective: inconclusive."
+        }
+      ]
+    },
+    {
+      "id": "band8-5",
+      "title": "Art, music and creativity",
+      "emoji": "🎨",
+      "words": [
+        {
+          "w": "aesthetic",
+          "def": "connected with beauty and with how pleasing something looks",
+          "ex": "The architect cared about the ___ appeal of the bridge as much as its strength.",
+          "pos": "adj",
+          "forms": {
+            "adj": "aesthetic",
+            "noun": "aesthetics"
+          }
+        },
+        {
+          "w": "improvise",
+          "def": "to make up music, words or actions on the spot, without preparing them",
+          "ex": "Jazz musicians often ___ whole solos, inventing the melody as they play.",
+          "pos": "verb",
+          "forms": {
+            "verb": "improvise",
+            "noun": "improvisation"
+          }
+        },
+        {
+          "w": "virtuoso",
+          "def": "a performer with outstanding technical skill, especially in music",
+          "ex": "By the age of twelve, she was a piano ___ who performed with major orchestras.",
+          "pos": "noun"
+        },
+        {
+          "w": "eclectic",
+          "def": "including ideas or styles taken from many different sources",
+          "ex": "Her playlist is wonderfully ___, mixing folk, jazz, reggae and classical music.",
+          "pos": "adj",
+          "syn": [
+            "varied",
+            "diverse"
+          ]
+        },
+        {
+          "w": "evoke",
+          "def": "to bring a feeling, memory or image into someone's mind",
+          "ex": "The smell of oil paint seemed to ___ memories of her grandfather's studio.",
+          "pos": "verb",
+          "syn": [
+            "suggest",
+            "recall"
+          ],
+          "forms": {
+            "verb": "evoke",
+            "adj": "evocative"
+          }
+        },
+        {
+          "w": "juxtapose",
+          "def": "to put two different things side by side so that the contrast between them is noticed",
+          "ex": "The photographer likes to ___ ancient ruins and gleaming modern towers in the same frame.",
+          "pos": "verb",
+          "forms": {
+            "verb": "juxtapose",
+            "noun": "juxtaposition"
+          }
+        },
+        {
+          "w": "ingenuity",
+          "def": "skill and cleverness in inventing new things or solving problems",
+          "ex": "With great ___, the pupils built working instruments from recycled bottles and boxes.",
+          "pos": "noun",
+          "syn": [
+            "inventiveness",
+            "cleverness"
+          ],
+          "forms": {
+            "noun": "ingenuity",
+            "adj": "ingenious"
+          }
+        },
+        {
+          "w": "abstract",
+          "def": "showing shapes, colours and lines rather than real people or objects",
+          "ex": "In ___ art, colour and shape matter more than recognisable objects.",
+          "pos": "adj",
+          "ant": [
+            "realistic",
+            "figurative"
+          ]
+        },
+        {
+          "w": "medium",
+          "def": "the material or method an artist uses, such as oil paint, clay or film",
+          "ex": "Watercolour is a demanding ___ because mistakes are very hard to correct.",
+          "pos": "noun"
+        },
+        {
+          "w": "acclaim",
+          "def": "enthusiastic public praise",
+          "ex": "The film received widespread ___ from critics and audiences alike.",
+          "pos": "noun",
+          "syn": [
+            "praise"
+          ],
+          "ant": [
+            "criticism"
+          ],
+          "forms": {
+            "noun": "acclaim",
+            "adj": "acclaimed"
+          }
+        },
+        {
+          "w": "derivative",
+          "def": "copied from the work of others and lacking originality",
+          "ex": "Critics dismissed the song as ___, saying it borrowed too much from earlier hits.",
+          "pos": "adj",
+          "ant": [
+            "original"
+          ]
+        },
+        {
+          "w": "prolific",
+          "def": "producing a great many works or results",
+          "ex": "Picasso was extraordinarily ___, creating many thousands of paintings, drawings and sculptures.",
+          "pos": "adj",
+          "syn": [
+            "productive"
+          ]
+        }
+      ],
+      "grammar": [
+        {
+          "q": "So moving ___ that the audience stood and cheered for ten minutes.",
+          "opts": [
+            "was the performance",
+            "the performance was",
+            "did the performance",
+            "the performance had"
+          ],
+          "a": 0,
+          "why": "After 'So + adjective' at the start of a sentence, the verb comes before the subject: So moving was the performance."
+        },
+        {
+          "q": "___ Monet often painted outdoors to capture changing light, many earlier artists worked mainly in studios.",
+          "opts": [
+            "Whereas",
+            "Despite",
+            "Owing to",
+            "Notwithstanding"
+          ],
+          "a": 0,
+          "why": "'Whereas' joins two clauses to contrast them; despite, owing to and notwithstanding need a noun, not a clause."
+        },
+        {
+          "q": "It was the invention of the paint tube ___ made it easier for artists to paint outdoors.",
+          "opts": [
+            "that",
+            "what",
+            "where",
+            "whom"
+          ],
+          "a": 0,
+          "why": "A cleft sentence 'It was X that...' highlights X; 'what', 'where' and 'whom' do not fit this pattern."
+        },
+        {
+          "q": "Seldom ___ such a young composer received so much praise.",
+          "opts": [
+            "has",
+            "have",
+            "is",
+            "did"
+          ],
+          "a": 0,
+          "why": "After 'Seldom' at the start, invert: Seldom has + singular subject + past participle (received)."
+        },
+        {
+          "q": "___ in 1889, The Starry Night is one of Van Gogh's best-known works.",
+          "opts": [
+            "Painted",
+            "Painting",
+            "Having painted",
+            "To paint"
+          ],
+          "a": 0,
+          "why": "The picture was painted (passive meaning), so the participle clause begins with 'Painted'."
+        },
+        {
+          "q": "The more an artist practises, ___ their technique becomes.",
+          "opts": [
+            "the more reliable",
+            "more reliable",
+            "the most reliable",
+            "the reliable"
+          ],
+          "a": 0,
+          "why": "The pattern 'The more..., the more...' needs 'the + comparative' in both halves."
+        }
+      ],
+      "sentences": [
+        "Jazz musicians are famous for improvising solos on the spot.",
+        "Picasso was one of the most prolific artists of the twentieth century.",
+        "The invention of the paint tube allowed artists to work outdoors.",
+        "Critics dismissed the song as derivative of earlier hits."
+      ],
+      "reading": {
+        "title": "The improvising brain",
+        "text": "When a jazz pianist improvises, she is composing and performing at the same moment, producing music that has never existed before and will never be played in exactly the same way again. For centuries, such spontaneous creativity was regarded as something close to magic. Recently, however, neuroscientists have begun to investigate what actually happens in the brain when musicians invent music on the spot.\n\nIn a well-known study published in 2008, researchers in the United States asked professional jazz pianists to play a specially designed keyboard while lying inside a brain scanner. The musicians alternated between playing a memorised piece and improvising freely. During improvisation, the scans showed reduced activity in a region at the front of the brain associated with self-monitoring and conscious control, while an area linked to self-expression became more active. Later studies of freestyle rappers reported a broadly similar pattern.\n\nOne interpretation is that improvisation requires musicians to switch off, at least partially, the inner critic that constantly judges what they are doing. Rather than evaluating every note before playing it, the performer allows ideas to flow, trusting years of practice to keep them within the rules of the style.\n\nIt would be a mistake, though, to conclude that creativity is simply a matter of letting go. The musicians in these experiments were highly trained experts who had spent thousands of hours mastering scales, harmonies and patterns. Their apparent freedom rested on an extensive store of knowledge that had become automatic. A beginner who silenced their inner critic would be unlikely to produce anything comparable.\n\nMoreover, researchers caution that a scanner is a highly artificial setting, and that studies involving small numbers of participants cannot reveal the full complexity of artistic invention. What the research does suggest is that creativity may involve a delicate balance between discipline and spontaneity: the hard work of learning, followed by the courage to stop thinking and play.",
+        "qs": [
+          {
+            "type": "tfng",
+            "q": "The pianists who took part in the 2008 study had all played together in the same band.",
+            "opts": [
+              "True",
+              "False",
+              "Not Given"
+            ],
+            "a": 2
+          },
+          {
+            "type": "tfng",
+            "q": "The writer believes that beginners could improvise as well as experts if they simply stopped judging themselves.",
+            "opts": [
+              "True",
+              "False",
+              "Not Given"
+            ],
+            "a": 1
+          },
+          {
+            "type": "mc",
+            "q": "According to the passage, what happens to the 'inner critic' during improvisation?",
+            "opts": [
+              "It becomes less active, so ideas can flow more freely.",
+              "It becomes more active and checks every note.",
+              "It is replaced by pieces of music learnt by heart.",
+              "It stops the musician from following the rules of the style."
+            ],
+            "a": 0
+          },
+          {
+            "type": "mc",
+            "q": "What can be inferred about the experts' 'apparent freedom'?",
+            "opts": [
+              "It only looked effortless because of years of earlier training.",
+              "It was caused by the design of the special keyboard.",
+              "It was greater when they played memorised pieces.",
+              "It disappeared once they were lying inside the scanner."
+            ],
+            "a": 0
+          },
+          {
+            "type": "mc",
+            "q": "Why does the writer mention that a scanner is 'a highly artificial setting'?",
+            "opts": [
+              "to point out a limitation of the research",
+              "to explain why the musicians played badly",
+              "to argue that the studies should never have been carried out",
+              "to show that the results apply to every kind of artist"
+            ],
+            "a": 0
+          }
+        ]
+      },
+      "extra": [
+        {
+          "kind": "collocation",
+          "q": "The film ___ the imagination of audiences around the world.",
+          "opts": [
+            "captured",
+            "caught up",
+            "took over",
+            "held up"
+          ],
+          "a": 0,
+          "why": "We say a story or idea 'captures the imagination'; the phrasal verbs here have different meanings."
+        },
+        {
+          "kind": "register",
+          "q": "Which sentence would suit a formal review in an arts journal?",
+          "opts": [
+            "The composer's use of silence creates a sense of tension that persists throughout the work.",
+            "The bit with the silence is super tense, I loved it.",
+            "Honestly, the quiet parts are kind of awesome.",
+            "There's loads of silence and it's really dramatic, you know?"
+          ],
+          "a": 0,
+          "why": "A formal review uses precise, impersonal language; 'super', 'kind of awesome' and 'you know?' are informal."
+        },
+        {
+          "kind": "paraphrase",
+          "q": "Which sentence means the same as: 'Their apparent freedom rested on an extensive store of knowledge that had become automatic.'?",
+          "opts": [
+            "They seemed free only because a great deal of learning had become second nature to them.",
+            "They were free because they had forgotten everything they had learnt.",
+            "They had little knowledge, so they felt free to experiment.",
+            "Their knowledge prevented them from playing freely."
+          ],
+          "a": 0,
+          "why": "'Apparent' means seeming, 'rested on' means depended on, and 'automatic' knowledge is second nature."
+        },
+        {
+          "kind": "linking",
+          "q": "Which sentence best joins the ideas? 'Improvisation feels spontaneous.' + 'It depends on years of disciplined practice.'",
+          "opts": [
+            "Although improvisation feels spontaneous, it depends on years of disciplined practice.",
+            "Because improvisation feels spontaneous, it depends on years of disciplined practice.",
+            "Improvisation feels spontaneous, so it depends on years of disciplined practice.",
+            "Improvisation feels spontaneous; for example, it depends on years of disciplined practice."
+          ],
+          "a": 0,
+          "why": "The ideas contrast (spontaneous vs disciplined), so we need a concession: although. The others wrongly show cause or example."
+        },
+        {
+          "kind": "cohesion",
+          "q": "Which order is most logical? A: Over time, these patterns become automatic. B: Musicians first practise scales and patterns slowly. C: Only then can they combine them freely while performing.",
+          "opts": [
+            "B, A, C",
+            "A, B, C",
+            "C, A, B",
+            "B, C, A"
+          ],
+          "a": 0,
+          "why": "B starts the process ('first'), A follows ('Over time, these patterns'), and C ends it ('Only then')."
+        },
+        {
+          "kind": "wordform",
+          "q": "The painting is a striking ___ (juxtapose) of bright colours and deep shadows.",
+          "opts": [
+            "juxtaposition",
+            "juxtaposed",
+            "juxtaposing",
+            "juxtapose"
+          ],
+          "a": 0,
+          "why": "After 'a striking' and before 'of' we need a noun: juxtaposition."
+        }
+      ]
+    }
+  ]
+}

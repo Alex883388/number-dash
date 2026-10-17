@@ -1,0 +1,255 @@
+{
+  "stage": 4,
+  "units": [
+    {
+      "id": "explorer-1",
+      "title": "Amazing animal homes",
+      "emoji": "🦫",
+      "words": [
+        { "w": "burrow", "def": "a hole or tunnel in the ground that an animal digs to live in", "ex": "The rabbit ran into its ___ when it saw the fox.", "pos": "noun", "pic": "🐇" },
+        { "w": "shelter", "def": "a place that keeps you safe from bad weather or danger", "ex": "The cave gave the bats ___ from the wind and rain.", "pos": "noun" },
+        { "w": "colony", "def": "a large group of the same kind of animal that live together", "ex": "A ___ of ants can have millions of members.", "pos": "noun", "pic": "🐜" },
+        { "w": "hive", "def": "a home where bees live and make honey", "ex": "The bees flew back to their ___ with pollen on their legs.", "pos": "noun", "pic": "🐝" },
+        { "w": "dam", "def": "a wall built across a river to hold back the water", "ex": "Beavers build a ___ of sticks and mud across the stream.", "pos": "noun", "pic": "🦫" },
+        { "w": "predator", "def": "an animal that hunts and eats other animals", "ex": "The owl is a ___ that hunts mice at night.", "pos": "noun", "pic": "🦉", "syn": ["hunter"], "ant": ["prey"] },
+        { "w": "protect", "def": "to keep someone or something safe from harm", "ex": "Thick walls of mud ___ the chicks from the hot sun.", "pos": "verb", "syn": ["guard", "defend"], "forms": { "noun": "protection", "verb": "protect", "adj": "protective" } },
+        { "w": "survive", "def": "to stay alive, especially in a difficult situation", "ex": "Camels can ___ for many days without drinking water.", "pos": "verb", "pic": "🐪", "forms": { "noun": "survival", "verb": "survive" } },
+        { "w": "hollow", "def": "empty inside", "ex": "The woodpecker made its home in a ___ tree.", "pos": "adj", "ant": ["solid"] },
+        { "w": "underground", "def": "below the surface of the earth", "ex": "Moles spend most of their lives ___, digging tunnels in the dark.", "pos": "adv" },
+        { "w": "construct", "def": "to build something, such as a house, a bridge or a nest", "ex": "Weaver birds ___ their nests by tying knots in grass.", "pos": "verb", "syn": ["build"], "forms": { "noun": "construction", "verb": "construct" } },
+        { "w": "habitat", "def": "the natural place where an animal or plant usually lives", "ex": "The rainforest is the natural ___ of many colourful frogs.", "pos": "noun", "pic": "🌳", "syn": ["home"] }
+      ],
+      "grammar": [
+        { "q": "Scientists ___ a new kind of spider web last year.", "opts": ["found", "have found", "find", "were found"], "a": 0, "why": "'Last year' is a finished time, so use the past simple: found." },
+        { "q": "Owls ___ in that old barn since last winter.", "opts": ["have lived", "lived", "live", "are living"], "a": 0, "why": "With 'since', use the present perfect for something that started in the past and is still true now." },
+        { "q": "Most bird nests ___ from twigs, grass and mud.", "opts": ["are made", "make", "are making", "is made"], "a": 0, "why": "The nests don't make anything; birds make them. Use the passive: are + made (plural, because 'nests')." },
+        { "q": "This old wasp nest ___ in our garden last summer.", "opts": ["was found", "is found", "found", "were found"], "a": 0, "why": "Someone found the nest at a finished time, so use the past passive. 'Nest' is singular, so use 'was'." },
+        { "q": "A beaver is an animal ___ builds dams across rivers.", "opts": ["which", "where", "what", "whose"], "a": 0, "why": "Use 'which' (or 'that') to give more information about an animal or a thing." },
+        { "q": "This is the cave ___ thousands of bats sleep in winter.", "opts": ["where", "which", "who", "what"], "a": 0, "why": "Use 'where' after a place when a full sentence follows (bats sleep there)." }
+      ],
+      "sentences": [
+        "Beavers have built dams across the river.",
+        "Termite mounds are built by millions of insects.",
+        "Has the bee colony survived the winter?",
+        "This is the tree where the owls live."
+      ],
+      "reading": {
+        "title": "Animal builders",
+        "text": "Humans are not the only great builders. Many animals make amazing homes, and some of them work together in huge teams.\n\nBeavers are famous for their dams. They cut down small trees with their strong teeth and push sticks, stones and mud together across a stream. The water behind the dam becomes a quiet pond. In the middle of it, the beavers build a home called a lodge. Its door is under the water, so most predators cannot get in.\n\nThe male weaver bird uses his beak to tie knots in long pieces of grass. If a female does not like the nest he has made, he may pull it apart and start again.\n\nTermites are tiny insects, but their mounds can be taller than an adult. Inside, there are lots of tunnels. They let air move through the mound and help to keep the colony cool.",
+        "qs": [
+          { "type": "mc", "q": "Why is the door of a beaver lodge under the water?", "opts": ["to keep most predators out", "to let fresh air in", "to catch fish more easily", "to stop the pond from freezing"], "a": 0 },
+          { "type": "tfng", "q": "Beavers use only sticks to build their dams.", "opts": ["True", "False", "Not Given"], "a": 1 },
+          { "type": "tfng", "q": "Weaver birds build a new nest every year.", "opts": ["True", "False", "Not Given"], "a": 2 },
+          { "type": "tfng", "q": "Some termite homes are higher than a grown-up person.", "opts": ["True", "False", "Not Given"], "a": 0 },
+          { "type": "mc", "q": "What do the tunnels inside a termite mound do?", "opts": ["They help to keep the mound cool.", "They store food for the winter.", "They join it to other mounds.", "They let rainwater flow in."], "a": 0 }
+        ]
+      },
+      "extra": [
+        { "kind": "collocation", "q": "Birds ___ a nest in spring.", "opts": ["build", "do", "take", "put"], "a": 0, "why": "We say 'build a nest' (or 'make a nest'). We never 'do' or 'take' a nest." },
+        { "kind": "preposition", "q": "Many animals depend ___ their homes to stay safe.", "opts": ["on", "of", "at", "with"], "a": 0, "why": "'Depend on' is a fixed pair: the verb 'depend' is followed by 'on'." },
+        { "kind": "wordform", "q": "Thick fur gives the animal ___ from the cold. (protect)", "opts": ["protection", "protect", "protective", "protected"], "a": 0, "why": "After 'gives the animal' we need a noun (a thing it gets): protection." },
+        { "kind": "phrasal", "q": "Both parents ___ the eggs until the chicks hatch.", "opts": ["look after", "look up", "look forward", "look out"], "a": 0, "why": "'Look after' means take care of someone or something." }
+      ]
+    },
+    {
+      "id": "explorer-2",
+      "title": "Great inventions",
+      "emoji": "💡",
+      "words": [
+        { "w": "invent", "def": "to make or design something that has never existed before", "ex": "Do you think someone will ever ___ a car that can fly?", "pos": "verb", "forms": { "noun": "invention", "verb": "invent", "adj": "inventive" } },
+        { "w": "engineer", "def": "a person who plans and builds machines, roads or bridges", "ex": "The ___ checked every part of the bridge before it opened.", "pos": "noun", "pic": "👷" },
+        { "w": "device", "def": "a small machine or tool made for a special job", "ex": "A smartwatch is a tiny ___ that you wear on your wrist.", "pos": "noun", "pic": "⌚", "syn": ["gadget", "tool"] },
+        { "w": "electricity", "def": "a kind of energy that gives power to lights and machines", "ex": "Before ___, people used candles and oil lamps to light their homes.", "pos": "noun", "pic": "⚡" },
+        { "w": "engine", "def": "the part of a car, train or plane that makes it move", "ex": "The car's ___ was so quiet that I couldn't hear it.", "pos": "noun" },
+        { "w": "battery", "def": "a small object that stores power for things like torches and phones", "ex": "My torch stopped working because the ___ was flat.", "pos": "noun", "pic": "🔋" },
+        { "w": "microscope", "def": "a tool that makes very small things look much bigger", "ex": "Under the ___, a drop of pond water was full of tiny living things.", "pos": "noun", "pic": "🔬" },
+        { "w": "design", "def": "to plan and draw how something will look and work", "ex": "Engineers ___ new cars on computers before they build them.", "pos": "verb", "pic": "📐" },
+        { "w": "improve", "def": "to make something better", "ex": "Scientists keep trying to ___ batteries so that they last longer.", "pos": "verb", "forms": { "noun": "improvement", "verb": "improve" } },
+        { "w": "replace", "def": "to take the place of something, or to put something new in its place", "ex": "Will robots ___ waiters in restaurants one day?", "pos": "verb", "forms": { "noun": "replacement", "verb": "replace" } },
+        { "w": "experiment", "def": "a test that scientists do to find out or prove something", "ex": "Every failed ___ taught the inventor something new.", "pos": "noun", "pic": "🧪", "syn": ["test"] },
+        { "w": "practical", "def": "useful and sensible for real life", "ex": "Rubber boots are a ___ choice for a muddy walk.", "pos": "adj", "syn": ["useful"], "ant": ["impractical"] }
+      ],
+      "grammar": [
+        { "q": "The telephone ___ by Alexander Graham Bell in 1876.", "opts": ["was invented", "invented", "is invented", "has invented"], "a": 0, "why": "The telephone didn't invent anything; Bell invented it. Use the past passive: was + invented." },
+        { "q": "People ___ wash their clothes by hand before washing machines were invented.", "opts": ["used to", "use to", "were used", "using to"], "a": 0, "why": "'Used to' + verb talks about a past habit that is not true now." },
+        { "q": "My sister enjoys ___ robots out of old boxes.", "opts": ["building", "to build", "build", "built"], "a": 0, "why": "After 'enjoy', use the -ing form of the verb." },
+        { "q": "The inventor decided ___ a smaller, cheaper machine.", "opts": ["to make", "making", "make", "made"], "a": 0, "why": "After 'decide', use 'to' + verb." },
+        { "q": "Smartphones ___ the way we live since they first appeared.", "opts": ["have changed", "changed", "change", "are changing"], "a": 0, "why": "With 'since', use the present perfect: the change started in the past and is still true now." },
+        { "q": "Have you ever ___ a 3D printer?", "opts": ["used", "use", "using", "uses"], "a": 0, "why": "The present perfect is have + past participle: have you ever used...?" }
+      ],
+      "sentences": [
+        "Velcro was invented by a Swiss engineer.",
+        "My grandparents used to write letters to each other.",
+        "He decided to build a machine that cleans windows.",
+        "Have you ever used a microscope at school?"
+      ],
+      "reading": {
+        "title": "Happy accidents",
+        "text": "Some of the world's most useful inventions were not planned at all.\n\nIn 1941, a Swiss engineer called George de Mestral went for a walk in the mountains with his dog. When they got home, both of them were covered in tiny seeds from a plant. He looked at the seeds under a microscope and saw hundreds of little hooks. These hooks caught on the loops in cloth and fur. De Mestral decided to copy the idea. After years of experiments, he invented Velcro, which is now used on shoes, bags and even space suits.\n\nA few years later, an American engineer called Percy Spencer was working with a machine that made radio waves. He noticed that a chocolate bar in his pocket had melted. Next, he tried some popcorn, and it popped! This led to the first microwave oven. It was nearly as tall as a person, so it was not very practical for a kitchen.\n\nBoth inventors noticed something small and asked, 'Why did that happen?'",
+        "qs": [
+          { "type": "mc", "q": "What did de Mestral see under the microscope?", "opts": ["tiny hooks on the seeds", "loops in his dog's fur", "holes in his trousers", "insects on the seeds"], "a": 0 },
+          { "type": "tfng", "q": "De Mestral invented Velcro soon after his walk.", "opts": ["True", "False", "Not Given"], "a": 1 },
+          { "type": "tfng", "q": "Velcro is more popular today than buttons.", "opts": ["True", "False", "Not Given"], "a": 2 },
+          { "type": "tfng", "q": "The first microwave oven was too big to be useful in most homes.", "opts": ["True", "False", "Not Given"], "a": 0 },
+          { "type": "mc", "q": "What is the main idea of the text?", "opts": ["Some great inventions began with a lucky surprise.", "Engineers should always work in the mountains.", "Velcro is better than the microwave oven.", "Most inventions take only a few days to make."], "a": 0 }
+        ]
+      },
+      "extra": [
+        { "kind": "collocation", "q": "Inventors often ___ mistakes before they get things right.", "opts": ["make", "do", "take", "have"], "a": 0, "why": "We say 'make a mistake', not 'do a mistake'." },
+        { "kind": "linking", "q": "The first microwave oven was very big, ___ it was not practical for homes.", "opts": ["so", "because", "but", "although"], "a": 0, "why": "'So' shows a result: the oven was big, and the result was that it didn't suit homes." },
+        { "kind": "wordform", "q": "The telephone was an amazing ___. (invent)", "opts": ["invention", "inventor", "invented", "inventive"], "a": 0, "why": "We need a noun for a thing: invention. An 'inventor' is a person." },
+        { "kind": "phrasal", "q": "When the machine broke, the engineer tried to ___ what was wrong.", "opts": ["find out", "give up", "take off", "turn down"], "a": 0, "why": "'Find out' means discover a fact or learn something new." }
+      ]
+    },
+    {
+      "id": "explorer-3",
+      "title": "Healthy habits",
+      "emoji": "🥦",
+      "words": [
+        { "w": "diet", "def": "the kind of food that you usually eat", "ex": "A healthy ___ includes plenty of fruit and vegetables.", "pos": "noun", "pic": "🥗" },
+        { "w": "balanced", "def": "with the right amount of each different thing", "ex": "A ___ lunch has a bit of everything: bread, cheese, salad and fruit.", "pos": "adj", "pic": "⚖️" },
+        { "w": "vitamin", "def": "something in food that your body needs in small amounts to stay healthy", "ex": "Oranges and kiwis are full of ___ C.", "pos": "noun", "pic": "🍊" },
+        { "w": "fit", "def": "healthy and strong, especially because of exercise", "ex": "My aunt cycles to work every day to stay ___.", "pos": "adj", "pic": "🚴", "syn": ["healthy"], "ant": ["unfit"] },
+        { "w": "muscle", "def": "a part of the body that tightens and loosens to make you move", "ex": "Your heart is a ___ that works all day and all night.", "pos": "noun", "pic": "💪" },
+        { "w": "habit", "def": "something you do often, almost without thinking", "ex": "Brushing your teeth twice a day is a good ___.", "pos": "noun", "pic": "🪥" },
+        { "w": "avoid", "def": "to stay away from something, or to try not to do it", "ex": "Try to ___ sugary drinks between meals.", "pos": "verb" },
+        { "w": "breathe", "def": "to take air into your body and let it out again", "ex": "During a race, runners ___ faster and more deeply.", "pos": "verb", "pic": "🌬️", "forms": { "noun": "breath", "verb": "breathe" } },
+        { "w": "relax", "def": "to rest and become calm", "ex": "Reading a good book helps me ___ before bed.", "pos": "verb", "pic": "🛀", "syn": ["rest"], "forms": { "noun": "relaxation", "verb": "relax", "adj": "relaxed" } },
+        { "w": "stressed", "def": "worried and tense because of problems or too much work", "ex": "I felt ___ before the test, so I took some slow, deep breaths.", "pos": "adj", "ant": ["calm"] },
+        { "w": "skip", "def": "to not do something that you usually do", "ex": "It's not a good idea to ___ breakfast before a busy day at school.", "pos": "verb", "syn": ["miss"] },
+        { "w": "routine", "def": "the usual things you do each day, in the same order", "ex": "My bedtime ___ is a bath, a story and then lights out.", "pos": "noun" }
+      ],
+      "grammar": [
+        { "q": "If you ___ enough sleep, you will feel tired at school.", "opts": ["don't get", "won't get", "didn't get", "not get"], "a": 0, "why": "In the first conditional, use the present simple after 'if' (don't get), and 'will' in the other half." },
+        { "q": "If you drink more water, you ___ better.", "opts": ["will feel", "would felt", "felt", "feeling"], "a": 0, "why": "This is a real possibility in the future: if + present simple, then will + verb." },
+        { "q": "If I ___ a famous chef, I would cook healthy food for every school.", "opts": ["were", "am", "will be", "would be"], "a": 0, "why": "This is imaginary (second conditional), so use a past form after 'if'. 'If I were' is correct." },
+        { "q": "If we walked to school, we ___ fitter.", "opts": ["would be", "will be", "are", "would been"], "a": 0, "why": "Second conditional: if + past simple, then would + verb (would be)." },
+        { "q": "When I was little, I ___ hate vegetables, but now I love them.", "opts": ["used to", "use to", "am used to", "was use to"], "a": 0, "why": "'Used to' + verb is for something that was true in the past but is not true now." },
+        { "q": "Try to avoid ___ too many sweets.", "opts": ["eating", "to eat", "eat", "ate"], "a": 0, "why": "After 'avoid', use the -ing form of the verb." }
+      ],
+      "sentences": [
+        "My little brother used to hate green vegetables.",
+        "You should try to avoid sugary drinks.",
+        "Which fruit has the most vitamin C?",
+        "My doctor told me to drink more water."
+      ],
+      "reading": {
+        "title": "Sleep: your secret superpower",
+        "text": "Most children aged 6 to 12 need between nine and twelve hours of sleep a night. That sounds like a lot, but your body and brain are very busy while you sleep.\n\nDuring deep sleep, your body grows and repairs your muscles. Your brain is busy too. It sorts out what you have learnt during the day and stores the important parts, a bit like a librarian putting books on the right shelves. This is why a good night's sleep before a test can help you remember more.\n\nIf you don't get enough sleep, you may feel grumpy and find it hard to concentrate.\n\nSo how can you sleep better? Experts suggest going to bed at the same time every night. They also advise switching off phones and tablets an hour before bed, because the light from screens can make it harder to fall asleep. A calm routine, like reading a book or having a warm bath, helps your body relax.",
+        "qs": [
+          { "type": "mc", "q": "Why does the writer compare the brain to a librarian?", "opts": ["It puts new information in the right order.", "It reads books while you sleep.", "It keeps the body quiet at night.", "It only works during the day."], "a": 0 },
+          { "type": "tfng", "q": "Your brain stops working while you are asleep.", "opts": ["True", "False", "Not Given"], "a": 1 },
+          { "type": "tfng", "q": "The light from screens can make it difficult to get to sleep.", "opts": ["True", "False", "Not Given"], "a": 0 },
+          { "type": "tfng", "q": "A warm drink before bed is the best way to fall asleep.", "opts": ["True", "False", "Not Given"], "a": 2 },
+          { "type": "mc", "q": "What do experts suggest?", "opts": ["going to bed at the same time every night", "using a tablet in bed", "sleeping only at weekends", "having a big meal just before bed"], "a": 0 }
+        ]
+      },
+      "extra": [
+        { "kind": "collocation", "q": "It's important to ___ some exercise every day.", "opts": ["do", "make", "play", "go"], "a": 0, "why": "We say 'do exercise' (or 'take exercise'). We 'play' games and sports, and we 'go' swimming or running." },
+        { "kind": "phrasal", "q": "My dad is trying to ___ eating sweets after dinner.", "opts": ["give up", "give in", "give away", "give back"], "a": 0, "why": "'Give up' means stop doing something that you did often." },
+        { "kind": "linking", "q": "I drink lots of water ___ it helps me to concentrate.", "opts": ["because", "although", "but", "unless"], "a": 0, "why": "'Because' gives the reason: why do I drink lots of water? It helps me concentrate." },
+        { "kind": "idiom", "q": "I'm feeling a bit ___ today, so I'm staying at home in bed.", "opts": ["under the weather", "over the moon", "on cloud nine", "a piece of cake"], "a": 0, "why": "'Under the weather' means a little ill. 'Over the moon' and 'on cloud nine' mean very happy." }
+      ]
+    },
+    {
+      "id": "explorer-4",
+      "title": "Festivals around the world",
+      "emoji": "🏮",
+      "words": [
+        { "w": "celebrate", "def": "to do something special and enjoyable for an important day", "ex": "Families get together to ___ the new year.", "pos": "verb", "pic": "🥳", "forms": { "noun": "celebration", "verb": "celebrate" } },
+        { "w": "tradition", "def": "something people have done in the same way for a very long time", "ex": "Eating pancakes on Shrove Tuesday is a British ___.", "pos": "noun", "pic": "🥞", "forms": { "noun": "tradition", "adj": "traditional", "adv": "traditionally" } },
+        { "w": "costume", "def": "special clothes that make you look like a different person, animal or thing", "ex": "She wore a dragon ___ in the parade.", "pos": "noun" },
+        { "w": "parade", "def": "a line of people, bands or vehicles moving through the streets for a special day", "ex": "Thousands of people watched the ___ go through the city centre.", "pos": "noun" },
+        { "w": "firework", "def": "a small object that explodes in the sky with bright colours and loud bangs", "ex": "Each ___ lit up the night sky with red and gold.", "pos": "noun", "pic": "🎆" },
+        { "w": "lantern", "def": "a lamp with a cover around it, often made of paper or glass", "ex": "Each child carried a paper ___ through the dark streets.", "pos": "noun", "pic": "🏮" },
+        { "w": "decorate", "def": "to make something look nicer by adding pretty things to it", "ex": "Let's ___ the classroom with paper flowers.", "pos": "verb", "forms": { "noun": "decoration", "verb": "decorate", "adj": "decorative" } },
+        { "w": "crowd", "def": "a large group of people in one place", "ex": "A huge ___ cheered as the band marched past.", "pos": "noun" },
+        { "w": "ancient", "def": "very old; from thousands of years ago", "ex": "The first Olympic Games were held in ___ Greece.", "pos": "adj", "pic": "🏛️", "ant": ["modern"] },
+        { "w": "gather", "def": "to come together in one place as a group", "ex": "On New Year's Eve, people ___ in the square to watch the clock.", "pos": "verb", "syn": ["meet"] },
+        { "w": "feast", "def": "a large, special meal for many people", "ex": "After the parade, the whole village shared a ___ of rice, fruit and sweets.", "pos": "noun", "pic": "🍲" },
+        { "w": "occasion", "def": "a special event or time", "ex": "A wedding is a happy ___ for the whole family.", "pos": "noun", "syn": ["event"] }
+      ],
+      "grammar": [
+        { "q": "'I am tired,' said Mia. Mia said that she ___ tired.", "opts": ["was", "were", "be", "been"], "a": 0, "why": "In reported speech, the verb usually moves one step back in time: 'am' becomes 'was'." },
+        { "q": "My teacher ___ us that the festival starts at six.", "opts": ["told", "said", "spoke", "talked"], "a": 0, "why": "'Tell' needs a person after it (told us). 'Say' does not (she said that...)." },
+        { "q": "During Diwali, small oil lamps ___ in windows and doorways.", "opts": ["are lit", "lights", "are lighting", "is lit"], "a": 0, "why": "The lamps don't light themselves; people light them. Use the passive: are + lit (plural, because 'lamps')." },
+        { "q": "I ___ to a carnival, but I would love to go to one.", "opts": ["have never been", "have never go", "never been", "am never going"], "a": 0, "why": "For experiences in your life up to now, use the present perfect: have never been." },
+        { "q": "The first Notting Hill Carnival ___ place in the 1960s.", "opts": ["took", "has taken", "takes", "was taken"], "a": 0, "why": "The 1960s is a finished time, so use the past simple: took place." },
+        { "q": "The man ___ leads the parade plays the drums.", "opts": ["who", "which", "whose", "where"], "a": 0, "why": "Use 'who' (or 'that') to give more information about a person." }
+      ],
+      "sentences": [
+        "Thousands of people watched the parade.",
+        "My aunt told me that the festival was amazing.",
+        "Do you know who decorated the classroom?",
+        "We have decorated the house with paper lanterns."
+      ],
+      "reading": {
+        "title": "Festivals of colour and light",
+        "text": "All around the world, people gather to celebrate special days. Two of the biggest festivals are Diwali and Lunar New Year.\n\nDiwali, the festival of lights, is celebrated by millions of people in India and in many other countries. It usually takes place in October or November and lasts for five days. Families light small clay lamps called diyas and put them in windows and doorways. Many people also make rangoli, which are beautiful patterns on the floor made from coloured powder, rice or flower petals.\n\nLunar New Year usually falls in January or February. In China, it is also called the Spring Festival. Homes are decorated in red, because red is thought to be a lucky colour. Children often receive red envelopes with money inside. In the streets, crowds watch lion and dragon dances to the sound of loud drums. The celebrations end with the Lantern Festival, when thousands of lanterns light up the night.",
+        "qs": [
+          { "type": "tfng", "q": "Diwali lasts for less than a week.", "opts": ["True", "False", "Not Given"], "a": 0 },
+          { "type": "tfng", "q": "Rangoli patterns are always made from rice.", "opts": ["True", "False", "Not Given"], "a": 1 },
+          { "type": "tfng", "q": "Diwali is more popular than Lunar New Year.", "opts": ["True", "False", "Not Given"], "a": 2 },
+          { "type": "mc", "q": "Why are homes decorated in red at Lunar New Year?", "opts": ["Many people believe red brings good luck.", "Red decorations are the cheapest.", "Red is the colour of spring.", "Dragons are always red."], "a": 0 },
+          { "type": "mc", "q": "What is another name for Lunar New Year in China?", "opts": ["the Spring Festival", "the Lantern Festival", "the festival of lights", "the Dragon Festival"], "a": 0 }
+        ]
+      },
+      "extra": [
+        { "kind": "preposition", "q": "Diwali usually takes place ___ October or November.", "opts": ["in", "on", "at", "by"], "a": 0, "why": "Use 'in' with months, 'on' with days and dates, and 'at' with clock times." },
+        { "kind": "paraphrase", "q": "Which sentence means the same as 'The festival takes place every year'?", "opts": ["The festival happens once a year.", "The festival takes a year to plan.", "The festival is held every month.", "The festival finished last year."], "a": 0, "why": "'Takes place every year' means it happens once a year." },
+        { "kind": "wordform", "q": "The streets look beautiful with all the ___. (decorate)", "opts": ["decorations", "decorate", "decorative", "decorated"], "a": 0, "why": "After 'all the' we need a plural noun: decorations." },
+        { "kind": "phrasal", "q": "Before the parade, the children ___ their costumes to check that they fitted.", "opts": ["tried on", "gave up", "put off", "ran out"], "a": 0, "why": "'Try on' means put clothes on to see if they fit." }
+      ]
+    },
+    {
+      "id": "explorer-5",
+      "title": "Oceans and space",
+      "emoji": "🚀",
+      "words": [
+        { "w": "orbit", "def": "to travel around a planet, moon or star in a curved path", "ex": "The International Space Station takes about 90 minutes to ___ the Earth.", "pos": "verb", "pic": "🛰️" },
+        { "w": "astronaut", "def": "a person who is trained to travel into space", "ex": "The ___ floated around inside the space station.", "pos": "noun", "pic": "🧑‍🚀" },
+        { "w": "gravity", "def": "the force that pulls things towards the ground or towards each other", "ex": "Because of ___, an apple falls down from a tree, not up.", "pos": "noun", "pic": "🍎" },
+        { "w": "atmosphere", "def": "the layer of gases around a planet", "ex": "The Moon has no ___, so there is no air to breathe.", "pos": "noun" },
+        { "w": "surface", "def": "the top or outside part of something", "ex": "More than two thirds of the Earth's ___ is covered by water.", "pos": "noun" },
+        { "w": "explore", "def": "to travel around a place to learn about it", "ex": "One day, people may ___ the surface of Mars.", "pos": "verb", "forms": { "noun": "exploration", "verb": "explore" } },
+        { "w": "depth", "def": "how deep something is", "ex": "Sunlight cannot reach a ___ of more than 1,000 metres in the ocean.", "pos": "noun", "forms": { "noun": "depth", "adj": "deep", "verb": "deepen" } },
+        { "w": "pressure", "def": "the force of something pushing on something else", "ex": "Deep under the sea, the water ___ is very high, so submarines need thick walls.", "pos": "noun" },
+        { "w": "creature", "def": "any living animal, especially a strange or unusual one", "ex": "The anglerfish is a strange ___ with a light on its head.", "pos": "noun", "pic": "🐙" },
+        { "w": "telescope", "def": "a tool that makes things that are far away look nearer and bigger", "ex": "Through a ___, you can see craters on the Moon.", "pos": "noun", "pic": "🔭" },
+        { "w": "launch", "def": "to send a rocket or spacecraft up into the sky or into space", "ex": "Engineers will ___ the rocket when the weather is calm.", "pos": "verb", "pic": "🚀" },
+        { "w": "mission", "def": "an important journey or job, often into space", "ex": "The Apollo 11 ___ took the first people to the Moon in 1969.", "pos": "noun", "pic": "🌕" }
+      ],
+      "grammar": [
+        { "q": "If I ___ in space, I would look at the Earth every day.", "opts": ["lived", "live", "will live", "would live"], "a": 0, "why": "This is imaginary (second conditional), so use the past simple after 'if': lived." },
+        { "q": "If there were no gravity, everything ___ away.", "opts": ["would float", "will float", "floats", "floated"], "a": 0, "why": "Second conditional: if + past simple (were), then would + verb (would float)." },
+        { "q": "The first photo of the far side of the Moon ___ in 1959.", "opts": ["was taken", "took", "was took", "has taken"], "a": 0, "why": "The photo didn't take anything; a spacecraft took it. Use the past passive: was + taken." },
+        { "q": "Humans ___ on Mars yet.", "opts": ["haven't landed", "hasn't landed", "don't land", "weren't landed"], "a": 0, "why": "Use the present perfect with 'yet'. 'Humans' is plural, so use 'haven't'." },
+        { "q": "Astronauts have to practise ___ in a huge swimming pool.", "opts": ["moving", "to move", "move", "moved"], "a": 0, "why": "After 'practise', use the -ing form. ('Practise' with an 's' is the British spelling of the verb.)" },
+        { "q": "'I can see the whole of Africa,' said the astronaut. She said that she ___ see the whole of Africa.", "opts": ["could", "cans", "is able", "must"], "a": 0, "why": "In reported speech, 'can' usually becomes 'could'." }
+      ],
+      "sentences": [
+        "Rockets are launched from a base in Florida.",
+        "Robots can explore the deepest parts of the ocean.",
+        "The telescope that we used belongs to my uncle.",
+        "Have astronauts ever landed on Mars?"
+      ],
+      "reading": {
+        "title": "Exploring the deep",
+        "text": "Space is not the only place that is hard to explore. The ocean covers more than 70 per cent of the Earth's surface, but most of it has never been explored in detail.\n\nThe deepest part of the ocean is in the Mariana Trench in the Pacific. It is about 11,000 metres deep. If you put Mount Everest at the bottom, its top would still be more than two kilometres under the water. No sunlight reaches these depths, and the water pressure is enormous: more than 1,000 times greater than at the surface. Even so, strange creatures live in the deep ocean, and many of them make their own light.\n\nSpace and the deep sea have a lot in common. Both are dark, and humans cannot survive in either place without special equipment. Astronauts wear space suits, and deep-sea explorers travel in small, very strong submarines. Today, robots do much of the exploring in both places and send photos and information back to scientists.",
+        "qs": [
+          { "type": "mc", "q": "How deep is the deepest part of the ocean?", "opts": ["about 11,000 metres", "about 2,000 metres", "about 8,800 metres", "about 1,000 metres"], "a": 0 },
+          { "type": "tfng", "q": "Mount Everest would be completely covered by water in the Mariana Trench.", "opts": ["True", "False", "Not Given"], "a": 0 },
+          { "type": "tfng", "q": "Sunlight can reach the bottom of the Mariana Trench.", "opts": ["True", "False", "Not Given"], "a": 1 },
+          { "type": "tfng", "q": "Submarines cost more to build than rockets.", "opts": ["True", "False", "Not Given"], "a": 2 },
+          { "type": "mc", "q": "What does the writer say space and the deep sea have in common?", "opts": ["Humans need special equipment to survive in both.", "Both are full of plants.", "Both have been fully explored.", "Both are warm and bright."], "a": 0 }
+        ]
+      },
+      "extra": [
+        { "kind": "phrasal", "q": "Three, two, one... and the rocket ___!", "opts": ["took off", "took up", "got over", "ran out"], "a": 0, "why": "'Take off' means leave the ground and rise into the air." },
+        { "kind": "cohesion", "q": "Which sentence comes next? 'The Moon has no air. ___'", "opts": ["Because of this, astronauts must wear space suits there.", "The Moon is very beautiful.", "However, there is lots of air on the Moon.", "For example, the Earth is round."], "a": 0, "why": "'Because of this' links a cause (there is no air) to its result (astronauts need space suits)." },
+        { "kind": "linking", "q": "___ the Moon looks small, it is about a quarter as wide as the Earth.", "opts": ["Although", "Because", "So", "Unless"], "a": 0, "why": "'Although' joins two ideas that are surprising together: it looks small, but it is quite big." },
+        { "kind": "wordform", "q": "Space ___ costs a lot of money. (explore)", "opts": ["exploration", "explorer", "explore", "explored"], "a": 0, "why": "We need a noun for the activity: exploration. An 'explorer' is a person." }
+      ]
+    }
+  ]
+}

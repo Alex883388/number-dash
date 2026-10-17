@@ -1,8 +1,9 @@
 // Spell It on an emulated iPad, by finger (run from the repo root):
 //   node games/spell/build.js && ND_CDP=9361 ND_PROFILE=edge-profile-spell ND_URL=file:///D:/Github/number-dash/games/spell/dist/preview.html ND_READY='!!window.__spell' ND_BOT=none node games/dash/playtest/shoot.js games/spell/playtest/ipad.js
 // Landscape iPad: pick a deck and a level, Start, spell "butterfly" with finger taps (one wrong tile, one Look
-// again), pause, finish the round, play again (a new remix). Then iPad portrait, a phone, dark mode and calm mode,
-// with the longest words ("seventy-seven", "caterpillar", "temperature", a sentence clue, a sum).
+// again), pause, finish the round, play again (a new remix). Listen only switched on by finger and a homophone with
+// an apostrophe ("they're") spelled unseen; a rule card. Then iPad portrait, a phone, dark mode and calm mode,
+// with the longest words ("seventy-seven", "caterpillar", "temperature", "stationery", a sentence clue, a sum, rules).
 const tap = [{ eval: '__spell.markNext()' }, { touchEl: '[data-bot="tap"]' }];
 const FINISH = `(async () => {
   const S = __spell, sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -15,7 +16,7 @@ const FINISH = `(async () => {
   return [S.state(), S.game.results.filter((r) => r.perfect).length + ' perfect', S.game.lastStars + ' stars'];
 })()`;
 const spellNow = (deck, level, word) => [
-  { eval: `__spell.start('${deck}', '${level}', ['${word}']); 'start ${word}'` },
+  { eval: `__spell.start(${JSON.stringify(deck)}, ${JSON.stringify(level)}, [${JSON.stringify(word)}]); 'start ' + ${JSON.stringify(word)}` },
   { waitFor: "__spell.state() === 'spell'", timeout: 9000 }, { sleep: 450 }
 ];
 const fits = { log: '__spell.fits()' };
@@ -73,6 +74,33 @@ module.exports = [
   { log: "['home again', __spell.state(), document.getElementById('homeStats').innerText.replace(/\\n+/g, ' ')]" },
   { log: 'JSON.stringify(window.__errs)' },
 
+  // Listen only, by finger: the switch on home, then a homophone with an apostrophe tile (never shown, only heard)
+  { touchEl: '#listenBtn' }, { sleep: 300 },
+  { touchEl: '.deck[data-deck="homophones"] span' },
+  { touchEl: 'input[name="level"][value="medium"] + span' }, { sleep: 300 },
+  { log: "['listen', __spell.rec.listen, document.getElementById('listenBtn').textContent, document.getElementById('deckNote').textContent]" },
+  { shot: 'spell-24-home-listen-ipad' },
+  { eval: `__spell.forceNext(["they're"]); 'next round starts with they\\'re'` },
+  { touchEl: '#startBtn' },
+  { waitFor: "__spell.state() === 'spell'", timeout: 5000 }, { sleep: 500 },
+  { shot: 'spell-25-listen-ipad' }, fits,
+  { log: "[__spell.word(), 'look again disabled', document.getElementById('lookBtn').disabled, 'boxes', Array.from(document.querySelectorAll('#word .box')).map((b) => b.textContent || '_').join(''), __spell.Speech.said.slice(-1)[0]]" },
+  ...tap, ...tap, ...tap, ...tap, ...tap, ...tap, ...tap,
+  { sleep: 250 },
+  { shot: 'spell-26-listen-done-ipad' },
+  { log: "[__spell.state(), JSON.stringify(__spell.game.results[0])]" },
+  { eval: FINISH }, { sleep: 600 },
+  { shot: 'spell-27-results-listen-ipad' },
+  { log: "document.getElementById('doneNote').textContent" },
+  { touchEl: '#doneHomeBtn' }, { sleep: 300 }, { touchEl: '#listenBtn' }, { sleep: 200 },
+  { log: "['listen off again', __spell.rec.listen]" },
+  // the new decks on the iPad: a rule card while looking, a long action word
+  { eval: "__spell.start('endings', 'hard', ['babies']); 'look'" }, { sleep: 500 },
+  { shot: 'spell-28-rule-look-ipad' }, fits,
+  ...spellNow('actions', 'hard', 'investigate'),
+  { shot: 'spell-29-actions-ipad' }, fits,
+  { eval: '__spell.goHome(); "home"' },
+
   // iPad portrait
   { viewport: [820, 1180, true, false, 2] },
   { reload: true }, { sleep: 700 },
@@ -98,6 +126,12 @@ module.exports = [
   { eval: "__spell.save.settings.mathLevel = 'genius'; __spell.start('numbers', 'hard'); 'sum'" }, { sleep: 400 },
   { shot: 'spell-18-sum-phone' }, fits,
   { log: "[__spell.game.word.pic, __spell.word(), __spell.Speech.said.slice(-1)[0]]" },
+  ...spellNow('endings', 'hard', 'scarves'),
+  { shot: 'spell-30-rule-phone' }, fits,
+  ...spellNow('homophones', 'hard', 'stationery'),
+  { shot: 'spell-31-homophone-phone' }, fits,
+  ...spellNow('body', 'hard', 'fingernail'),
+  { shot: 'spell-32-body-phone' }, fits,
 
   // dark
   { viewport: [1180, 820, true, true, 2] },
@@ -112,6 +146,11 @@ module.exports = [
   { viewport: [390, 844, true, true, 3] },
   ...spellNow('tricky', 'medium', 'through'),
   { shot: 'spell-23-tricky-phone-dark' }, fits,
+  { viewport: [1180, 820, true, true, 2] },
+  ...spellNow('endings', 'medium', 'swimming'),
+  { shot: 'spell-33-rule-dark' }, fits,
+  ...spellNow('body', 'medium', 'gloves'),
+  { shot: 'spell-34-body-dark' }, fits,
 
   // calm mode (the arcade's calm setting / reduced motion): no shakes, flips or sparkles
   { viewport: [1180, 820, true, false, 2] },

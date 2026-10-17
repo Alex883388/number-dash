@@ -1,5 +1,5 @@
 <title>Number Arcade</title>
-<meta name="description" content="Math, memory and English games for kids: Number Dash, Number Ladder, Pair Up, Number Pop and Spell It.">
+<meta name="description" content="Math, memory and English games for kids: Number Dash, Number Ladder, Pair Up, Number Pop, Spell It and English Quest.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap">
@@ -93,10 +93,14 @@ h1 span { color: var(--sun-deep); }
 .spell-art i { font-style: normal; text-align: center; font-family: var(--font-display); font-weight: 700; color: #29345a; box-sizing: border-box; }
 .spell-art .boxes i { width: 26px; height: 34px; border-radius: 8px; background: #fff; border: 2px solid #f0b544; font-size: 1.15rem; line-height: 30px; }
 .spell-art .tiles i { width: 36px; height: 40px; border-radius: 10px; background: #fff3d6; border: 2px solid #f0b544; box-shadow: 0 3px 0 #f0b544; font-size: 1.25rem; line-height: 36px; }
+.quest-art { background: linear-gradient(#d9f2ff, #fff3d6); }
+.quest-art svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.quest-art .lv { position: absolute; padding: 6px 10px; border-radius: 12px; font: 700 .95rem/1 var(--font-display); background: #fff; color: #29345a; border: 3px solid var(--c); box-shadow: 0 3px 0 var(--c); white-space: nowrap; }
+.quest-art .cup { position: absolute; right: 7%; top: 14px; font: 2.6rem/1 var(--emoji); }
 .skills { display: flex; flex-wrap: wrap; gap: 6px; }
 .skills span { font: 800 .7rem/1 var(--font-body); text-transform: uppercase; letter-spacing: .07em; padding: 6px 9px; border-radius: 99px; background: var(--card-2); color: var(--ink-soft); }
 :root { --emoji: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; }
-.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 0; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin: 0; }
 .stats div { background: var(--card); border-radius: 18px; padding: 14px 8px; text-align: center; box-shadow: 0 4px 14px rgba(41, 52, 90, .1); min-width: 0; }
 .stats dt { font-size: .76rem; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-soft); font-weight: 800; }
 .stats dd { margin: 4px 0 0; font: 700 1.7rem/1 var(--font-display); font-variant-numeric: tabular-nums; }
@@ -147,7 +151,7 @@ h1 span { color: var(--sun-deep); }
         <h2>Pair Up</h2>
         <p>Flip two cards and find pairs that belong together: 7 × 8 and 56, a picture and its English word, hot and cold.</p>
         <div class="skills"><span>Memory</span><span>Math</span><span>English</span></div>
-        <span class="meta" id="pairMeta">6 kinds of cards</span>
+        <span class="meta" id="pairMeta">10 kinds of cards</span>
         <span class="play">Play</span>
       </div>
     </a>
@@ -180,6 +184,20 @@ h1 span { color: var(--sun-deep); }
         <span class="play">Play</span>
       </div>
     </a>
+    <a class="game" href="quest/">
+      <div class="art quest-art" aria-hidden="true">
+        <svg viewBox="0 0 300 170" preserveAspectRatio="none"><path d="M18 152 C 70 150, 80 118, 120 112 S 190 92, 205 70 S 245 40, 262 34" stroke="#9fb4dd" stroke-width="5" stroke-dasharray="1 12" stroke-linecap="round" fill="none"/></svg>
+        <span class="lv" style="--c:#4fd1a5;left:4%;bottom:12px">A1</span><span class="lv" style="--c:#5cb8ff;left:30%;bottom:46px">A2</span><span class="lv" style="--c:#9d84ff;left:52%;bottom:80px">B2</span><span class="lv" style="--c:#ff9fcf;left:62%;top:22px">C1</span><span class="cup">🏆</span>
+      </div>
+      <div class="body">
+        <span class="num">Game 6</span>
+        <h2>English Quest</h2>
+        <p>Step by step from first words to IELTS 8: short lessons with words, grammar, listening, spelling and reading.</p>
+        <div class="skills"><span>English</span><span>Reading</span><span>Listening</span></div>
+        <span class="meta" id="questMeta">7 stages · Pre-A1 to IELTS 8</span>
+        <span class="play">Play</span>
+      </div>
+    </a>
   </div>
   <dl class="stats" id="stats"></dl>
   <p class="tip" id="tip" hidden>On iPad: tap Share, then Add to Home Screen. Number Arcade then opens full screen from its own icon and works without internet.</p>
@@ -187,16 +205,18 @@ h1 span { color: var(--sun-deep); }
 <script>
 (function () {
   var read = function (key) { try { return JSON.parse(localStorage.getItem(key) || '{}') || {}; } catch (e) { return {}; } };
-  var d = read('number-dash.v1'), l = read('number-ladder.v1'), pu = read('pair-up.v1'), np = read('number-pop.v1'), sp = read('spell-it.v1');
+  var d = read('number-dash.v1'), l = read('number-ladder.v1'), pu = read('pair-up.v1'), np = read('number-pop.v1'), sp = read('spell-it.v1'), eq = read('english-quest.v1');
+  var EQ = ['Starter · Pre-A1', 'Mover · A1', 'Flyer · A2', 'Explorer · B1', 'Achiever · B2', 'Expert · C1', 'Band 8 · C1+'], eqStage = Math.min(7, eq.unlocked || 1);
   var popStars = 0; for (var w in (np.worlds || {})) popStars += np.worlds[w].stars || 0;
   var learned = Array.isArray(sp.learned) ? sp.learned.length : 0;
   var right = (d.math && d.math.right) || 0, stars = 0, done = 0;
   for (var k in (d.levels || {})) { var lv = d.levels[k]; stars += (lv.stars || []).filter(Boolean).length; if (lv.done) done++; }
   var cell = function (k, v) { return '<div><dt>' + k + '</dt><dd>' + v + '</dd></div>'; };
-  document.getElementById('stats').innerHTML = cell('Answers right', right) + cell('Dash stars', stars + ' / 90') + cell('Ladder best', (l.best || 0) + ' / 30') + cell('Pairs found', pu.pairs || 0) + cell('Words learned', learned);
+  document.getElementById('stats').innerHTML = cell('Answers right', right) + cell('Dash stars', stars + ' / 90') + cell('Ladder best', (l.best || 0) + ' / 30') + cell('Pairs found', pu.pairs || 0) + cell('Words learned', learned) + cell('English stage', EQ[eqStage - 1].split(' · ')[1]);
   if (done) document.getElementById('dashMeta').textContent = done + ' of 30 levels finished';
   if (pu.wins) document.getElementById('pairMeta').textContent = pu.wins + (pu.wins === 1 ? ' board' : ' boards') + ' cleared';
   if (popStars) document.getElementById('popMeta').textContent = popStars + ' of 18 stars';
+  if (eq.lessons) document.getElementById('questMeta').textContent = 'Now at ' + EQ[eqStage - 1];
   if (learned) document.getElementById('spellMeta').textContent = learned + (learned === 1 ? ' word' : ' words') + ' spelled perfectly';
   if (l.tops) document.getElementById('ladderMeta').textContent = 'Reached the top ' + l.tops + (l.tops === 1 ? ' time' : ' times');
   else if (l.best) document.getElementById('ladderMeta').textContent = 'Best so far: rung ' + l.best + ' of 30';

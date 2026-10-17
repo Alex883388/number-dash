@@ -151,6 +151,7 @@ button, label, input, .btn, a { touch-action: manipulation; }
 /* home: deck tiles */
 .decks { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .decks label { cursor: pointer; }
+.decks label:last-child { grid-column: 1 / -1; }
 .decks input { position: absolute; opacity: 0; pointer-events: none; }
 .decks span { display: grid; gap: 2px; justify-items: center; padding: 10px 6px; border-radius: 16px; background: var(--card-2); border: 2px solid var(--line); font: 600 .95rem/1.1 var(--font-display); height: 100%; box-sizing: border-box; }
 .decks span i { font-style: normal; font-family: var(--emoji); font-size: 1.6rem; line-height: 1.1; }
@@ -447,6 +448,10 @@ const DECKS = [
   { id: 'pics', name: 'Pictures', icon: '🍎', note: '🍎 → apple', words: true },
   { id: 'opp', name: 'Opposites', icon: '🌗', note: 'hot → cold', words: true },
   { id: 'numw', name: 'Number words', icon: '🔢', note: '42 → forty-two', words: true },
+  { id: 'past', name: 'Past tense', icon: '⏪', note: 'go → went', words: true },
+  { id: 'syn', name: 'Same meaning', icon: '🤝', note: 'big → large', words: true },
+  { id: 'time', name: 'Telling time', icon: '🕒', note: '3:15 → quarter past three', words: true },
+  { id: 'frac', name: 'Fractions', icon: '🍕', note: '½ → 0.5 → 50%', math: true },
   { id: 'mix', name: 'Mix', icon: '🎲', note: 'a bit of all', words: true }
 ];
 const SIZES = [{ id: 'small', name: '6 pairs', n: 6, peek: 3 }, { id: 'medium', name: '8 pairs', n: 8, peek: 4 }, { id: 'big', name: '12 pairs', n: 12, peek: 5 }];
@@ -476,6 +481,33 @@ const OPP = [
   [['ancient', 'modern'], ['deep', 'shallow'], ['wide', 'narrow'], ['rough', 'smooth'], ['arrive', 'depart'], ['increase', 'decrease'], ['include', 'exclude'], ['maximum', 'minimum'], ['accept', 'refuse'], ['victory', 'defeat'],
    ['frequent', 'rare'], ['temporary', 'permanent'], ['horizontal', 'vertical'], ['generous', 'selfish'], ['success', 'failure'], ['interior', 'exterior'], ['visible', 'invisible'], ['possible', 'impossible'], ['polite', 'rude'], ['ascend', 'descend']]
 ];
+// verbs and their past tense (only pairs spelled differently), easy to tricky
+const PAST = [
+  [['go', 'went'], ['eat', 'ate'], ['see', 'saw'], ['run', 'ran'], ['sit', 'sat'], ['have', 'had'], ['get', 'got'], ['swim', 'swam'], ['sing', 'sang'], ['drink', 'drank'],
+   ['come', 'came'], ['give', 'gave'], ['make', 'made'], ['say', 'said'], ['play', 'played'], ['jump', 'jumped'], ['look', 'looked'], ['help', 'helped'], ['walk', 'walked'], ['win', 'won']],
+  [['buy', 'bought'], ['bring', 'brought'], ['think', 'thought'], ['catch', 'caught'], ['teach', 'taught'], ['fly', 'flew'], ['draw', 'drew'], ['grow', 'grew'], ['know', 'knew'], ['throw', 'threw'],
+   ['write', 'wrote'], ['ride', 'rode'], ['drive', 'drove'], ['speak', 'spoke'], ['break', 'broke'], ['wake', 'woke'], ['choose', 'chose'], ['forget', 'forgot'], ['find', 'found'], ['hold', 'held'],
+   ['keep', 'kept'], ['sleep', 'slept'], ['feel', 'felt'], ['meet', 'met'], ['sell', 'sold'], ['tell', 'told'], ['build', 'built'], ['carry', 'carried'], ['stop', 'stopped'], ['try', 'tried']],
+  [['begin', 'began'], ['freeze', 'froze'], ['hide', 'hid'], ['bite', 'bit'], ['shake', 'shook'], ['swing', 'swung'], ['seek', 'sought'], ['bend', 'bent'], ['lend', 'lent'], ['spend', 'spent'],
+   ['dig', 'dug'], ['stick', 'stuck'], ['strike', 'struck'], ['kneel', 'knelt'], ['lead', 'led'], ['flee', 'fled'], ['forgive', 'forgave'], ['arise', 'arose'], ['tear', 'tore'], ['wear', 'wore'],
+   ['shine', 'shone'], ['slide', 'slid'], ['spin', 'spun'], ['sink', 'sank'], ['spring', 'sprang'], ['deal', 'dealt'], ['mean', 'meant'], ['forbid', 'forbade'], ['undertake', 'undertook'], ['overcome', 'overcame']]
+];
+// words that mean (almost) the same
+const SYN = [
+  [['big', 'large'], ['little', 'small'], ['glad', 'happy'], ['quick', 'fast'], ['start', 'begin'], ['close', 'shut'], ['gift', 'present'], ['finish', 'end'], ['ill', 'sick'], ['yell', 'shout'],
+   ['rock', 'stone'], ['chat', 'talk'], ['smart', 'clever'], ['easy', 'simple'], ['angry', 'cross'], ['scared', 'afraid'], ['nice', 'kind'], ['tired', 'sleepy'], ['grab', 'take'], ['look', 'watch']],
+  [['enormous', 'huge'], ['brave', 'courageous'], ['choose', 'select'], ['correct', 'right'], ['error', 'mistake'], ['journey', 'trip'], ['gather', 'collect'], ['wealthy', 'rich'], ['silent', 'quiet'], ['complete', 'finish'],
+   ['chilly', 'cold'], ['odd', 'strange'], ['reply', 'answer'], ['unhappy', 'sad'], ['shy', 'timid'], ['giggle', 'laugh'], ['mend', 'repair'], ['below', 'under'], ['almost', 'nearly'], ['shout', 'call']],
+  [['assist', 'help'], ['purchase', 'buy'], ['require', 'need'], ['obtain', 'get'], ['commence', 'begin'], ['conclude', 'end'], ['vast', 'immense'], ['fragile', 'delicate'], ['accurate', 'precise'], ['rapid', 'swift'],
+   ['abundant', 'plentiful'], ['cautious', 'careful'], ['eager', 'keen'], ['vanish', 'disappear'], ['demonstrate', 'show'], ['attempt', 'try'], ['sufficient', 'enough'], ['construct', 'build'], ['observe', 'watch'], ['prohibit', 'forbid']]
+];
+// fractions as words, decimals and percentages
+const FRACS = [
+  [['½', 'one half'], ['⅓', 'one third'], ['⅔', 'two thirds'], ['¼', 'one quarter'], ['¾', 'three quarters'], ['⅕', 'one fifth'], ['⅖', 'two fifths'], ['⅗', 'three fifths'],
+   ['⅘', 'four fifths'], ['⅙', 'one sixth'], ['⅚', 'five sixths'], ['⅛', 'one eighth'], ['⅜', 'three eighths'], ['⅝', 'five eighths'], ['⅞', 'seven eighths'], ['⅒', 'one tenth']],
+  [['½', '0.5'], ['¼', '0.25'], ['¾', '0.75'], ['⅕', '0.2'], ['⅖', '0.4'], ['⅗', '0.6'], ['⅘', '0.8'], ['⅒', '0.1'], ['⅛', '0.125'], ['⅜', '0.375'], ['1½', '1.5'], ['2¼', '2.25']],
+  [['50%', '½'], ['25%', '¼'], ['75%', '¾'], ['20%', '⅕'], ['10%', '⅒'], ['40%', '⅖'], ['60%', '⅗'], ['80%', '⅘'], ['12.5%', '⅛'], ['5%', '0.05'], ['1%', '0.01'], ['30%', '0.3'], ['90%', '0.9'], ['150%', '1.5']]
+];
 const ONES = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
 const TENS = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
 const ORD = { one: 'first', two: 'second', three: 'third', five: 'fifth', eight: 'eighth', nine: 'ninth', twelve: 'twelfth' };
@@ -484,6 +516,18 @@ function ordinalWord(n) {
   const w = numberWord(n), parts = w.split('-'), last = parts.pop();
   const o = ORD[last] || (last.endsWith('y') ? last.slice(0, -1) + 'ieth' : last + 'th');
   return parts.concat([o]).join('-');
+}
+const HOURS = ['twelve', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve'];
+const CLOCKS = ['🕐', '🕑', '🕒', '🕓', '🕔', '🕕', '🕖', '🕗', '🕘', '🕙', '🕚', '🕛'];
+// a time to read: tier 0 o'clock faces, tier 1 o'clock and half past, tier 2 every five minutes (past / to)
+function timePair(tier) {
+  const h = rnd(1, 12);
+  if (tier === 0) return { a: { kind: 'emoji', v: CLOCKS[h - 1], say: HOURS[h] + " o'clock" }, b: { kind: 'word', v: HOURS[h] + " o'clock", say: HOURS[h] + " o'clock" } };
+  const m = tier === 1 ? pick([0, 30, 30]) : pick([5, 10, 15, 20, 25, 35, 40, 45, 50, 55]);
+  const next = h === 12 ? 1 : h + 1, MIN = { 5: 'five', 10: 'ten', 15: 'quarter', 20: 'twenty', 25: 'twenty-five', 30: 'half' };
+  const w = m === 0 ? HOURS[h] + " o'clock" : m <= 30 ? MIN[m] + ' past ' + HOURS[h] : MIN[60 - m] + ' to ' + HOURS[next];
+  const d = h + ':' + String(m).padStart(2, '0');
+  return { a: { kind: 'num', v: d, say: w }, b: { kind: 'word', v: w, say: w } };
 }
 const ordinalDigits = (n) => n + ((n % 100 >= 11 && n % 100 <= 13) ? 'th' : ['th', 'st', 'nd', 'rd'][n % 10] || 'th');
 
@@ -507,6 +551,10 @@ function wordsPair(deck, tier, used) {
     let p;
     if (deck === 'pics') { const [e, w] = pick(PICS[tier]); p = { a: { kind: 'emoji', v: e, say: w }, b: { kind: 'word', v: w, say: w }, learned: e + ' ' + w, key: [w] }; }
     else if (deck === 'opp') { const [x, y] = pick(OPP[tier]); p = { a: { kind: 'word', v: x, say: x }, b: { kind: 'word', v: y, say: y }, learned: x + ' ↔ ' + y, key: [x, y] }; }
+    else if (deck === 'past') { const [x, y] = pick(PAST[tier]); p = { a: { kind: 'word', v: x, say: x }, b: { kind: 'word', v: y, say: y }, learned: x + ' → ' + y, key: [x, y] }; }
+    else if (deck === 'syn') { const [x, y] = pick(SYN[tier]); p = { a: { kind: 'word', v: x, say: x }, b: { kind: 'word', v: y, say: y }, learned: x + ' = ' + y, key: [x, y] }; }
+    else if (deck === 'time') { const t = timePair(tier); p = Object.assign(t, { learned: t.a.v + ' = ' + t.b.v, key: [t.a.v, t.b.v] }); }
+    else if (deck === 'frac') { const [x, y] = pick(FRACS[tier]); const w = /[a-z]/.test(y); p = { a: { kind: 'num', v: x }, b: { kind: w ? 'word' : 'num', v: y, say: w ? y : undefined }, learned: x + ' = ' + y, key: [x, y] }; }
     else {
       const ord = tier === 2 && Math.random() < 0.5, n = tier === 0 ? rnd(1, 20) : ord ? rnd(1, 31) : rnd(21, 99);
       const w = ord ? ordinalWord(n) : numberWord(n), d = ord ? ordinalDigits(n) : String(n);
@@ -523,7 +571,7 @@ function dealPairs(deck, n) {
   const tier = tierOf(), used = { texts: new Set(), faces: new Set(), words: new Set() }, out = [];
   for (let i = 0; out.length < n && i < n * 4; i++) {
     let d = deck;
-    if (deck === 'mix') d = ['times', 'plus', 'pics', 'opp', 'numw'][out.length % 5];
+    if (deck === 'mix') d = ['times', 'plus', 'pics', 'opp', 'numw', 'past', 'syn', 'time', 'frac'][out.length % 9];
     const p = MATH_KINDS[d] ? mathPair(MATH_KINDS[d][tier], used, DECK_OPS[d]) : wordsPair(d, tier, used);
     if (p) out.push(p);
   }
@@ -935,7 +983,12 @@ function layout() {
 function fitText(c, w, h) {
   const el = c.el.querySelector('.v'), inner = w * 0.84;
   if (c.kind === 'emoji') { el.style.fontSize = Math.min(w * 0.58, h * 0.5) + 'px'; return; }
-  const parts = c.kind === 'word' && c.v.length > 7 && c.v.indexOf('-') > 0 ? c.v.split('-').map((s, i, a) => s + (i < a.length - 1 ? '-' : '')) : [c.v];
+  let parts = c.kind === 'word' && c.v.length > 7 && c.v.indexOf('-') > 0 && c.v.indexOf(' ') < 0 ? c.v.split('-').map((s, i, a) => s + (i < a.length - 1 ? '-' : '')) : [c.v];
+  if (c.kind === 'word' && c.v.length > 10 && c.v.indexOf(' ') > 0) {
+    const sp = [...c.v].map((ch, k) => (ch === ' ' ? k : -1)).filter((k) => k > 0), mid = c.v.length / 2;
+    const cut = sp.reduce((b, k) => (Math.abs(k - mid) < Math.abs(b - mid) ? k : b), sp[0]);
+    parts = [c.v.slice(0, cut), c.v.slice(cut + 1)];
+  }
   const longest = Math.max.apply(null, parts.map((s) => s.length));
   const per = c.kind === 'expr' ? 0.56 : 0.58;
   let size = Math.max(11, Math.min(inner / (per * longest), (h * 0.72) / (parts.length * 1.08), c.kind === 'num' ? w * 0.42 : w * 0.3));

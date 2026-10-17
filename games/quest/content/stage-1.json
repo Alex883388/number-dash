@@ -1,0 +1,230 @@
+{
+  "stage": 1,
+  "units": [
+    {
+      "id": "starter-1",
+      "title": "Me and my family",
+      "emoji": "👨‍👩‍👧",
+      "words": [
+        { "w": "mother", "def": "your mum, a woman in your family", "ex": "My dad is my father, and my mum is my ___.", "pos": "noun", "pic": "👩" },
+        { "w": "father", "def": "your dad, a man in your family", "ex": "My mum is my mother, and my dad is my ___.", "pos": "noun", "pic": "👨" },
+        { "w": "brother", "def": "a boy who has got the same mum and dad as you", "ex": "My sister is a girl, and my ___ is a boy.", "pos": "noun", "pic": "👦" },
+        { "w": "sister", "def": "a girl who has got the same mum and dad as you", "ex": "Mum and Dad have got two girls: me and my little ___.", "pos": "noun", "pic": "👧" },
+        { "w": "grandmother", "def": "your mum's mum or your dad's mum", "ex": "I call my ___ 'Grandma'. She makes very nice cakes.", "pos": "noun", "pic": "👵" },
+        { "w": "grandfather", "def": "your mum's dad or your dad's dad", "ex": "I call my ___ 'Grandpa'. He has got white hair.", "pos": "noun", "pic": "👴" },
+        { "w": "baby", "def": "a very young child who can't walk or talk yet", "ex": "My ___ sister is only three months old. She can't walk or talk.", "pos": "noun", "pic": "👶" },
+        { "w": "family", "def": "your mum, dad, brothers, sisters and you", "ex": "I love my ___: Mum, Dad, my sister and me.", "pos": "noun", "pic": "👨‍👩‍👧" },
+        { "w": "friend", "def": "a person you like and play with", "ex": "Lucy is my best ___. We play in the park.", "pos": "noun" },
+        { "w": "birthday", "def": "the special day each year when you get one year older", "ex": "Happy ___! You are eight today!", "pos": "noun", "pic": "🎂" },
+        { "w": "happy", "def": "feeling good, with a big smile", "ex": "I'm ___ when I play with my friends.", "pos": "adj", "pic": "😀" },
+        { "w": "old", "def": "with a lot of years; not young", "ex": "How ___ are you? I'm seven.", "pos": "adj" }
+      ],
+      "grammar": [
+        { "q": "She ___ my big sister.", "opts": ["is", "are", "am"], "a": 0, "why": "Use 'is' with he, she and it." },
+        { "q": "My grandma and grandpa ___ very kind.", "opts": ["are", "is", "am"], "a": 0, "why": "Use 'are' for two or more people (they)." },
+        { "q": "I ___ got two brothers.", "opts": ["have", "has", "am"], "a": 0, "why": "Say 'I have got', but 'he has got' and 'she has got'." },
+        { "q": "My dad ___ got a big red car.", "opts": ["has", "have", "is"], "a": 0, "why": "My dad = he. Use 'has got' with he, she and it." },
+        { "q": "___ is that girl? She's my sister.", "opts": ["Who", "What", "Where"], "a": 0, "why": "Use 'who' to ask about a person." },
+        { "q": "___ old is your brother? He's ten.", "opts": ["How", "What", "Who"], "a": 0, "why": "Ask 'How old...?' to find out someone's age." }
+      ],
+      "sentences": [
+        "My grandmother has got white hair.",
+        "How old is your sister?",
+        "My baby sister is one year old.",
+        "Happy birthday to my mum!"
+      ],
+      "reading": {
+        "title": "Meet Lily's family",
+        "text": "Hello! My name is Lily and I am eight. This is my family. My mother is a teacher and my father is a doctor. I have got one brother. His name is Max and he is five. We have got a grandmother too. She lives with us and she makes great cakes. We are a happy family!",
+        "qs": [
+          { "type": "mc", "q": "How old is Lily?", "opts": ["five", "seven", "eight"], "a": 2 },
+          { "type": "mc", "q": "Who is Max?", "opts": ["Lily's brother", "Lily's father", "Lily's friend"], "a": 0 },
+          { "type": "mc", "q": "What is Lily's mother's job?", "opts": ["a doctor", "a teacher", "a cook"], "a": 1 },
+          { "type": "tf", "q": "Lily's grandmother makes cakes.", "opts": ["True", "False"], "a": 0 },
+          { "type": "tf", "q": "Lily has got two brothers.", "opts": ["True", "False"], "a": 1 }
+        ]
+      },
+      "extra": []
+    },
+    {
+      "id": "starter-2",
+      "title": "Animals I know",
+      "emoji": "🐾",
+      "words": [
+        { "w": "cat", "def": "a small pet with soft fur that likes to catch mice", "ex": "The ___ says 'miaow' and drinks milk.", "pos": "noun", "pic": "🐱" },
+        { "w": "dog", "def": "a pet that says 'woof' and likes to run and play", "ex": "My ___ says 'woof' and runs after the ball.", "pos": "noun", "pic": "🐶" },
+        { "w": "bird", "def": "a small animal that can fly and sing", "ex": "A little ___ is singing in the tree.", "pos": "noun", "pic": "🐦" },
+        { "w": "fish", "def": "an animal that lives and swims in water", "ex": "A ___ can swim, but it can't walk or fly.", "pos": "noun", "pic": "🐟" },
+        { "w": "horse", "def": "a big animal that people can ride", "ex": "I can ride a ___ on my grandpa's farm.", "pos": "noun", "pic": "🐴" },
+        { "w": "duck", "def": "a bird that swims on water and says 'quack'", "ex": "The ___ is swimming on the water. Quack, quack!", "pos": "noun", "pic": "🦆" },
+        { "w": "frog", "def": "a small green animal that jumps and lives near water", "ex": "A ___ is green and it can jump very well.", "pos": "noun", "pic": "🐸" },
+        { "w": "monkey", "def": "an animal with a long tail that lives in trees and likes bananas", "ex": "The ___ is eating a banana up in the tree.", "pos": "noun", "pic": "🐵" },
+        { "w": "elephant", "def": "a very big grey animal with big ears and a long nose", "ex": "An ___ is very big and grey.", "pos": "noun", "pic": "🐘" },
+        { "w": "giraffe", "def": "a very tall animal with a long neck and long legs", "ex": "A ___ is so tall that it can eat from the top of a tree.", "pos": "noun", "pic": "🦒" },
+        { "w": "snake", "def": "a long thin animal with no legs", "ex": "A ___ has got no legs, but it can move fast.", "pos": "noun", "pic": "🐍" },
+        { "w": "tail", "def": "the long thin part at the end of a cat or a dog", "ex": "A dog moves its ___ when it is happy.", "pos": "noun" }
+      ],
+      "grammar": [
+        { "q": "Can a bird fly? Yes, it ___.", "opts": ["can", "can't", "is"], "a": 0, "why": "Answer a 'Can...?' question with 'can': Yes, it can. Or: No, it can't." },
+        { "q": "A snake ___ walk. It has got no legs.", "opts": ["can't", "can", "cans"], "a": 0, "why": "'Can't' means it is not able to. A snake has no legs, so it can't walk." },
+        { "q": "I can see ___ elephant.", "opts": ["an", "a", "two"], "a": 0, "why": "Use 'an' before words that start with a, e, i, o or u: an elephant." },
+        { "q": "Look! There's ___ duck on the water.", "opts": ["a", "an", "two"], "a": 0, "why": "Use 'a' before most words, like 'a duck'. Use 'an' before a, e, i, o and u." },
+        { "q": "Grandma has got three ___.", "opts": ["cats", "cat", "a cat"], "a": 0, "why": "For more than one, add -s: one cat, three cats." },
+        { "q": "Look at those two ___!", "opts": ["mice", "mouse", "mouses"], "a": 0, "why": "Some words change: one mouse, two mice." }
+      ],
+      "sentences": [
+        "The elephant has got big ears.",
+        "A frog can jump very well.",
+        "My cat has got a long tail.",
+        "The giraffe is very tall."
+      ],
+      "reading": {
+        "title": "At the zoo",
+        "text": "Today Sam is at the zoo with his dad. He can see two elephants. They are big and grey. A monkey is eating a banana in a tree. Sam likes the giraffes. They are very tall! There is a snake too, but Sam doesn't like it. It is long and green.",
+        "qs": [
+          { "type": "mc", "q": "Where is Sam?", "opts": ["at school", "at the zoo", "at home"], "a": 1 },
+          { "type": "mc", "q": "How many elephants can Sam see?", "opts": ["one", "two", "three"], "a": 1 },
+          { "type": "mc", "q": "What is the monkey eating?", "opts": ["a banana", "an apple", "a cake"], "a": 0 },
+          { "type": "tf", "q": "Sam likes the giraffes.", "opts": ["True", "False"], "a": 0 },
+          { "type": "tf", "q": "Sam likes the snake.", "opts": ["True", "False"], "a": 1 }
+        ]
+      },
+      "extra": []
+    },
+    {
+      "id": "starter-3",
+      "title": "Food I like",
+      "emoji": "🍽️",
+      "words": [
+        { "w": "apple", "def": "a round fruit that is red or green", "ex": "I eat an ___ every day. It is red and sweet.", "pos": "noun", "pic": "🍎" },
+        { "w": "banana", "def": "a long yellow fruit that monkeys love", "ex": "This ___ is long and yellow.", "pos": "noun", "pic": "🍌" },
+        { "w": "bread", "def": "a food that you use to make toast and sandwiches", "ex": "I put cheese on my ___ to make a sandwich.", "pos": "noun", "pic": "🍞" },
+        { "w": "carrot", "def": "a long orange vegetable that rabbits love", "ex": "This ___ is long and orange. My rabbit loves it!", "pos": "noun", "pic": "🥕" },
+        { "w": "chips", "def": "long thin pieces of potato cooked in hot oil", "ex": "We have fish and ___ on Fridays.", "pos": "noun", "pic": "🍟" },
+        { "w": "egg", "def": "a round white or brown food that a chicken gives us", "ex": "Let's cook an ___ for breakfast.", "pos": "noun", "pic": "🥚" },
+        { "w": "ice cream", "def": "a sweet, very cold food that is nice on a hot day", "ex": "It is very hot. Let's eat a cold ___!", "pos": "noun", "pic": "🍦" },
+        { "w": "juice", "def": "a drink made from fruit, like oranges or apples", "ex": "Can I have a glass of orange ___, please?", "pos": "noun", "pic": "🧃" },
+        { "w": "milk", "def": "a white drink that comes from cows", "ex": "Cows give us white ___ to drink.", "pos": "noun", "pic": "🥛" },
+        { "w": "rice", "def": "very small white food that you cook in water", "ex": "Mum cooks the ___ in water. It is small and white.", "pos": "noun", "pic": "🍚" },
+        { "w": "tomato", "def": "a soft, round red food that you eat in salads and on pizza", "ex": "I put a red ___ on my pizza.", "pos": "noun", "pic": "🍅" },
+        { "w": "breakfast", "def": "the first food you eat in the morning", "ex": "I eat ___ at seven o'clock in the morning.", "pos": "noun", "pic": "🥣" }
+      ],
+      "grammar": [
+        { "q": "Can I have ___ apple, please?", "opts": ["an", "a", "two"], "a": 0, "why": "'Apple' starts with 'a', so use 'an': an apple." },
+        { "q": "There ___ two eggs on the table.", "opts": ["are", "is", "am"], "a": 0, "why": "Use 'there are' for more than one thing: there are two eggs." },
+        { "q": "There ___ a cake in the kitchen.", "opts": ["is", "are", "am"], "a": 0, "why": "Use 'there is' for one thing: there is a cake." },
+        { "q": "___ is your favourite food? Pizza!", "opts": ["What", "Who", "How"], "a": 0, "why": "Use 'what' to ask about a thing." },
+        { "q": "We ___ got three bananas.", "opts": ["have", "has", "is"], "a": 0, "why": "Use 'have got' with I, you, we and they." },
+        { "q": "___ your milk, please.", "opts": ["Drink", "Drinks", "Drinking"], "a": 0, "why": "To tell someone to do something, use the verb on its own: Drink your milk." }
+      ],
+      "sentences": [
+        "Can I have an apple, please?",
+        "My brother doesn't like carrots.",
+        "This ice cream is very cold.",
+        "What is your favourite food?"
+      ],
+      "reading": {
+        "title": "Ben loves food",
+        "text": "My name is Ben and I love food! For breakfast I eat bread and an egg, and I drink orange juice. At lunch I eat chicken and rice. My favourite food is pizza with tomatoes. I don't like carrots, but my sister loves them. After dinner we have ice cream. Yum!",
+        "qs": [
+          { "type": "mc", "q": "What does Ben drink for breakfast?", "opts": ["milk", "orange juice", "water"], "a": 1 },
+          { "type": "mc", "q": "What is Ben's favourite food?", "opts": ["pizza", "rice", "chips"], "a": 0 },
+          { "type": "tf", "q": "Ben likes carrots.", "opts": ["True", "False"], "a": 1 },
+          { "type": "tf", "q": "Ben's sister loves carrots.", "opts": ["True", "False"], "a": 0 },
+          { "type": "mc", "q": "When do they have ice cream?", "opts": ["after breakfast", "after lunch", "after dinner"], "a": 2 }
+        ]
+      },
+      "extra": []
+    },
+    {
+      "id": "starter-4",
+      "title": "My home",
+      "emoji": "🏠",
+      "words": [
+        { "w": "house", "def": "a building where a family lives", "ex": "We live in a big ___ with a red door.", "pos": "noun", "pic": "🏠" },
+        { "w": "kitchen", "def": "the room where you cook food", "ex": "Mum is cooking dinner in the ___.", "pos": "noun" },
+        { "w": "bathroom", "def": "the room where you wash and have a bath", "ex": "I brush my teeth in the ___.", "pos": "noun", "pic": "🛁" },
+        { "w": "bedroom", "def": "the room where you sleep", "ex": "I sleep in my ___. It has got a blue bed.", "pos": "noun" },
+        { "w": "garden", "def": "the place next to a house where flowers and trees grow", "ex": "We play football in the ___ behind our house.", "pos": "noun", "pic": "🏡" },
+        { "w": "door", "def": "you open it to go into a room or a house", "ex": "Please open the ___. I want to go into the garden.", "pos": "noun", "pic": "🚪" },
+        { "w": "window", "def": "a glass part in a wall that you can look out of", "ex": "I can see the garden from my bedroom ___.", "pos": "noun", "pic": "🪟" },
+        { "w": "bed", "def": "a thing you sleep on at night", "ex": "It's nine o'clock. Time for ___!", "pos": "noun", "pic": "🛏️" },
+        { "w": "chair", "def": "a seat for one person, with four legs and a back", "ex": "Sit on this ___ at the table, please.", "pos": "noun", "pic": "🪑" },
+        { "w": "table", "def": "it has got four legs and a flat top, and you eat your dinner at it", "ex": "Put the plates on the ___ for dinner.", "pos": "noun" },
+        { "w": "sofa", "def": "a long soft seat for two or three people", "ex": "We all sit on the big ___ and watch TV.", "pos": "noun", "pic": "🛋️" },
+        { "w": "mirror", "def": "a piece of glass where you can see your face", "ex": "I look in the ___ and brush my hair.", "pos": "noun", "pic": "🪞" }
+      ],
+      "grammar": [
+        { "q": "There are three pictures ___ the wall.", "opts": ["on", "in", "under"], "a": 0, "why": "Use 'on' when a thing touches the top or side of something: on the wall." },
+        { "q": "My shoes are ___ my bed, on the floor.", "opts": ["under", "on", "in"], "a": 0, "why": "'Under' means below something: the shoes are on the floor below the bed." },
+        { "q": "The sweets are ___ the box. Open it and take one!", "opts": ["in", "on", "under"], "a": 0, "why": "'In' means inside something. You open the box to get them." },
+        { "q": "There ___ three bedrooms in our house.", "opts": ["are", "is", "am"], "a": 0, "why": "Use 'there are' for more than one thing." },
+        { "q": "___ there a garden? Yes, there is.", "opts": ["Is", "Are", "Am"], "a": 0, "why": "Ask 'Is there...?' about one thing." },
+        { "q": "Please ___ the window. It's cold.", "opts": ["close", "closes", "closing"], "a": 0, "why": "To tell someone to do something, use the verb on its own: close." }
+      ],
+      "sentences": [
+        "Our kitchen has got a big table.",
+        "The cat is sleeping on the sofa.",
+        "Don't open the kitchen window.",
+        "How many rooms are there in your house?"
+      ],
+      "reading": {
+        "title": "My home",
+        "text": "This is my home. It is a small house with a big garden. There are two bedrooms. My bedroom is blue. My bed is next to the window. The kitchen is yellow and there is a big table in it. We have got a red sofa in the living room. My cat sleeps on it every day!",
+        "qs": [
+          { "type": "mc", "q": "How many bedrooms are there?", "opts": ["one", "two", "three"], "a": 1 },
+          { "type": "mc", "q": "What colour is the kitchen?", "opts": ["blue", "red", "yellow"], "a": 2 },
+          { "type": "tf", "q": "The house has got a small garden.", "opts": ["True", "False"], "a": 1 },
+          { "type": "tf", "q": "The bed is next to the window.", "opts": ["True", "False"], "a": 0 },
+          { "type": "mc", "q": "Where does the cat sleep?", "opts": ["on the bed", "on the sofa", "in the garden"], "a": 1 }
+        ]
+      },
+      "extra": []
+    },
+    {
+      "id": "starter-5",
+      "title": "Toys, colours and numbers",
+      "emoji": "🎨",
+      "words": [
+        { "w": "ball", "def": "a round toy that you kick or throw", "ex": "Kick the ___ into the goal!", "pos": "noun", "pic": "⚽" },
+        { "w": "doll", "def": "a toy that looks like a small person or a baby", "ex": "My sister's ___ has got long hair and a pink dress.", "pos": "noun" },
+        { "w": "kite", "def": "a toy that flies in the sky on a long string", "ex": "It's windy! Let's fly my ___ in the park.", "pos": "noun", "pic": "🪁" },
+        { "w": "robot", "def": "a machine that can move and do things like a person", "ex": "My toy ___ can walk and talk!", "pos": "noun", "pic": "🤖" },
+        { "w": "teddy bear", "def": "a soft toy animal that children love to hug", "ex": "My soft brown ___ has got small round ears.", "pos": "noun", "pic": "🧸" },
+        { "w": "train", "def": "it goes on a railway and carries lots of people", "ex": "The toy ___ goes 'choo choo' around my room.", "pos": "noun", "pic": "🚂" },
+        { "w": "red", "def": "the colour of a strawberry", "ex": "Tomatoes and strawberries are ___.", "pos": "adj", "pic": "🔴" },
+        { "w": "blue", "def": "the colour of the sky on a sunny day", "ex": "The sea is ___ and the grass is green.", "pos": "adj", "pic": "🔵" },
+        { "w": "green", "def": "the colour of grass and leaves", "ex": "Frogs and grass are ___.", "pos": "adj", "pic": "🟢" },
+        { "w": "yellow", "def": "the colour of bananas and the sun", "ex": "The sun is big, hot and ___.", "pos": "adj", "pic": "🟡" },
+        { "w": "pink", "def": "a light red colour, like a pig", "ex": "Mix red and white paint and you get ___.", "pos": "adj" },
+        { "w": "ten", "def": "the number after nine", "ex": "Five and five make ___.", "pos": "other", "pic": "🔟" }
+      ],
+      "grammar": [
+        { "q": "___ is my kite, here in my hand.", "opts": ["This", "That", "These"], "a": 0, "why": "Use 'this' for one thing near you." },
+        { "q": "___ is my ball, over there in the garden.", "opts": ["That", "This", "Those"], "a": 0, "why": "Use 'that' for one thing far from you." },
+        { "q": "How ___ balls have you got?", "opts": ["many", "old", "is"], "a": 0, "why": "Ask 'How many...?' to find out a number." },
+        { "q": "I have got two red ___.", "opts": ["trains", "train", "a train"], "a": 0, "why": "Two is more than one, so add -s: two trains." },
+        { "q": "___ is my teddy bear? It's under the bed.", "opts": ["Where", "What", "Who"], "a": 0, "why": "Use 'where' to ask about a place." },
+        { "q": "These ___ my new toys.", "opts": ["are", "is", "am"], "a": 0, "why": "'These' means more than one thing, so use 'are'." }
+      ],
+      "sentences": [
+        "I have got a blue kite.",
+        "How many balls have you got?",
+        "Look at my new teddy bear!",
+        "My sister has got a pink doll."
+      ],
+      "reading": {
+        "title": "Kim's toy box",
+        "text": "Hi! I'm Kim. I have got a big toy box in my bedroom. In my toy box there are ten balls. Three are red and seven are blue. There is a green robot and a yellow train. My favourite toy is my teddy bear. He is brown and his name is Bobby.",
+        "qs": [
+          { "type": "mc", "q": "How many balls are in the toy box?", "opts": ["three", "seven", "ten"], "a": 2 },
+          { "type": "mc", "q": "What colour is the robot?", "opts": ["green", "yellow", "blue"], "a": 0 },
+          { "type": "tf", "q": "Seven balls are red.", "opts": ["True", "False"], "a": 1 },
+          { "type": "mc", "q": "What is Kim's favourite toy?", "opts": ["the train", "the teddy bear", "the robot"], "a": 1 },
+          { "type": "tf", "q": "The teddy bear is brown.", "opts": ["True", "False"], "a": 0 }
+        ]
+      },
+      "extra": []
+    }
+  ]
+}

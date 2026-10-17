@@ -1,0 +1,1716 @@
+{
+  "stage": 6,
+  "units": [
+    {
+      "id": "expert-1",
+      "title": "How the brain learns",
+      "emoji": "🧠",
+      "words": [
+        {
+          "w": "cognitive",
+          "def": "connected with thinking, learning, understanding and remembering",
+          "ex": "Puzzles and chess can sharpen ___ skills such as memory and attention.",
+          "pos": "adj",
+          "forms": {
+            "noun": "cognition",
+            "adj": "cognitive"
+          }
+        },
+        {
+          "w": "retain",
+          "def": "to keep something, especially information in your memory",
+          "ex": "Without regular review, we ___ only a small part of what we hear in a lesson.",
+          "pos": "verb",
+          "syn": [
+            "keep",
+            "remember"
+          ],
+          "ant": [
+            "forget",
+            "lose"
+          ],
+          "forms": {
+            "verb": "retain",
+            "noun": "retention"
+          }
+        },
+        {
+          "w": "stimulus",
+          "def": "something that causes a reaction in a living thing",
+          "ex": "The brain reacts to a sudden ___, such as a loud bang, in a fraction of a second.",
+          "pos": "noun"
+        },
+        {
+          "w": "consolidate",
+          "def": "to make something, such as a memory, stronger and more lasting",
+          "ex": "During deep sleep, the brain replays the day's events to ___ them into long-term memories.",
+          "pos": "verb",
+          "syn": [
+            "strengthen"
+          ],
+          "ant": [
+            "weaken"
+          ],
+          "forms": {
+            "verb": "consolidate",
+            "noun": "consolidation"
+          }
+        },
+        {
+          "w": "neuron",
+          "def": "a nerve cell that carries electrical messages around the brain and body",
+          "ex": "Each ___ can link to thousands of other nerve cells through tiny branches.",
+          "pos": "noun"
+        },
+        {
+          "w": "plasticity",
+          "def": "the brain's ability to change and build new connections throughout life",
+          "ex": "Thanks to its ___, the brain can rewire itself when we learn a new skill.",
+          "pos": "noun"
+        },
+        {
+          "w": "acquire",
+          "def": "to gain knowledge or a skill through your own effort or experience",
+          "ex": "Young children ___ their first language without any formal lessons.",
+          "pos": "verb",
+          "syn": [
+            "gain",
+            "obtain"
+          ],
+          "ant": [
+            "lose"
+          ],
+          "forms": {
+            "verb": "acquire",
+            "noun": "acquisition"
+          }
+        },
+        {
+          "w": "perceive",
+          "def": "to notice or become aware of something through the senses or the mind",
+          "ex": "Our eyes send signals to the brain, which allows us to ___ colour, shape and movement.",
+          "pos": "verb",
+          "syn": [
+            "notice",
+            "sense"
+          ],
+          "forms": {
+            "verb": "perceive",
+            "noun": "perception",
+            "adj": "perceptive"
+          }
+        },
+        {
+          "w": "retrieval",
+          "def": "the act of finding and bringing back information stored in memory",
+          "ex": "Practice questions help because every act of ___ makes a memory easier to find again.",
+          "pos": "noun",
+          "forms": {
+            "noun": "retrieval",
+            "verb": "retrieve"
+          }
+        },
+        {
+          "w": "fatigue",
+          "def": "great tiredness after hard physical or mental effort",
+          "ex": "After four hours of revision without a break, mental ___ made it impossible to focus.",
+          "pos": "noun",
+          "syn": [
+            "tiredness",
+            "exhaustion"
+          ],
+          "ant": [
+            "energy"
+          ]
+        },
+        {
+          "w": "rote",
+          "def": "repeating something many times in order to remember it, without thinking about its meaning",
+          "ex": "Learning times tables by ___ can work, but understanding why the answers are right is even better.",
+          "pos": "noun"
+        },
+        {
+          "w": "innate",
+          "def": "present from birth rather than learnt",
+          "ex": "Some researchers argue that babies have an ___ ability to recognise human faces.",
+          "pos": "adj",
+          "syn": [
+            "inborn",
+            "natural"
+          ],
+          "ant": [
+            "learned"
+          ]
+        }
+      ],
+      "grammar": [
+        {
+          "q": "Never ___ so much about the brain as they do today.",
+          "opts": [
+            "have scientists known",
+            "scientists have known",
+            "had scientists know",
+            "scientists knew"
+          ],
+          "a": 0,
+          "why": "When 'Never' starts the sentence, the auxiliary comes before the subject: Never have scientists known."
+        },
+        {
+          "q": "___ helps memory most is testing yourself, not rereading your notes.",
+          "opts": [
+            "What",
+            "That",
+            "Which",
+            "It"
+          ],
+          "a": 0,
+          "why": "A 'What' cleft sentence puts the focus on the key idea: What helps most is..."
+        },
+        {
+          "q": "It is widely believed ___ we use only ten per cent of our brains, but this is a myth.",
+          "opts": [
+            "that",
+            "what",
+            "which",
+            "if"
+          ],
+          "a": 0,
+          "why": "The reporting pattern is 'It is believed that + clause'."
+        },
+        {
+          "q": "___ by the results, the researchers repeated the experiment to make sure.",
+          "opts": [
+            "Surprised",
+            "Surprising",
+            "Having surprised",
+            "To surprise"
+          ],
+          "a": 0,
+          "why": "The researchers were surprised (passive meaning), so use the past participle 'Surprised'."
+        },
+        {
+          "q": "If I had gone to bed earlier last night, I ___ so tired now.",
+          "opts": [
+            "wouldn't feel",
+            "wouldn't have felt",
+            "won't feel",
+            "didn't feel"
+          ],
+          "a": 0,
+          "why": "Mixed conditional: a past condition (had gone) with a present result (now) takes 'would + verb'."
+        },
+        {
+          "q": "Short breaks during study ___ improve concentration, although more research is needed.",
+          "opts": [
+            "appear to",
+            "appears to",
+            "are certain to",
+            "have been proved to"
+          ],
+          "a": 0,
+          "why": "'More research is needed' calls for cautious hedging, and the plural subject 'breaks' needs 'appear to'."
+        }
+      ],
+      "sentences": [
+        "Sleep plays a vital role in the consolidation of new memories.",
+        "The brain's remarkable plasticity allows it to adapt throughout life.",
+        "Mental fatigue makes it much harder for students to concentrate.",
+        "Babies appear to have an innate ability to recognise faces."
+      ],
+      "reading": {
+        "title": "Why testing beats rereading",
+        "text": "For generations, students have prepared for exams by rereading their notes and highlighting key passages. It feels productive: the material looks increasingly familiar, and familiarity is easily mistaken for understanding. Yet a large body of research in cognitive psychology suggests that this popular method is surprisingly inefficient.\n\nThe alternative, known as retrieval practice, involves deliberately recalling information without looking at it, for example by answering practice questions or explaining a topic from memory. In a well-known series of experiments, students who tested themselves after reading a passage remembered considerably more a week later than those who simply read it again, even though the rereaders had felt more confident. The effort of searching memory appears to strengthen the pathways that lead back to the information, making it easier to find next time.\n\nTiming matters too. Spreading study sessions over several days, rather than cramming them into a single evening, tends to produce more durable learning. Researchers believe that a small amount of forgetting between sessions is actually useful, because it forces the brain to work harder at each attempt to recall. Sleep also plays a part: during deep sleep, the brain seems to replay and consolidate what was learnt during the day.\n\nNone of this means that rereading is worthless; it can be a sensible first step when meeting a topic for the first time. However, the evidence suggests that learners who want knowledge to last should spend less time looking at their notes and more time trying to remember what is in them.",
+        "qs": [
+          {
+            "type": "tfng",
+            "q": "In the experiments described, the students who reread the passage felt less sure of themselves than those who tested themselves.",
+            "opts": [
+              "True",
+              "False",
+              "Not Given"
+            ],
+            "a": 1
+          },
+          {
+            "type": "tfng",
+            "q": "Retrieval practice was first developed by classroom teachers rather than by scientists.",
+            "opts": [
+              "True",
+              "False",
+              "Not Given"
+            ],
+            "a": 2
+          },
+          {
+            "type": "mc",
+            "q": "According to the first paragraph, why does rereading feel effective to many students?",
+            "opts": [
+              "They confuse recognising material with really understanding it.",
+              "It takes far less time than any other method.",
+              "Most teachers recommend it as the best way to revise.",
+              "It helps them to sleep better before an exam."
+            ],
+            "a": 0
+          },
+          {
+            "type": "mc",
+            "q": "The writer would most likely advise a student with a test in two weeks to",
+            "opts": [
+              "quiz themselves in short sessions spread across the two weeks.",
+              "reread all their notes several times on the evening before the test.",
+              "wait until they feel confident before they start to revise.",
+              "highlight every important sentence in their textbook."
+            ],
+            "a": 0
+          },
+          {
+            "type": "mc",
+            "q": "What is the writer's main purpose in the passage?",
+            "opts": [
+              "to argue that active recall is a more effective way to study than rereading",
+              "to explain in detail how nerve cells carry messages",
+              "to criticise students who never revise for their exams",
+              "to show that rereading is of no value at any stage of learning"
+            ],
+            "a": 0
+          }
+        ]
+      },
+      "extra": [
+        {
+          "kind": "collocation",
+          "q": "New brain scans may ___ light on how memories are stored.",
+          "opts": [
+            "shed",
+            "drop",
+            "give",
+            "make"
+          ],
+          "a": 0,
+          "why": "'Shed light on' is a fixed phrase meaning 'help to explain'."
+        },
+        {
+          "kind": "paraphrase",
+          "q": "Which sentence means the same as: 'Familiarity is easily mistaken for understanding.'?",
+          "opts": [
+            "People often think they understand something simply because it looks familiar.",
+            "People rarely recognise material that they understand well.",
+            "Understanding something well makes it look less familiar.",
+            "Material always becomes easy to understand once it is familiar."
+          ],
+          "a": 0,
+          "why": "'Mistaken for' means wrongly taken to be: familiar material is wrongly thought to be understood."
+        },
+        {
+          "kind": "register",
+          "q": "Which sentence is most suitable for an academic essay?",
+          "opts": [
+            "Evidence suggests that retrieval practice improves long-term retention.",
+            "Testing yourself is way better for remembering stuff.",
+            "Honestly, rereading your notes is a total waste of time.",
+            "Loads of studies say quizzes really help you remember things."
+          ],
+          "a": 0,
+          "why": "Academic style is cautious (suggests) and uses precise, formal words, not 'way better', 'stuff' or 'loads of'."
+        },
+        {
+          "kind": "wordform",
+          "q": "The ___ (retain) of new vocabulary improves when words are reviewed every few days.",
+          "opts": [
+            "retention",
+            "retainer",
+            "retained",
+            "retainable"
+          ],
+          "a": 0,
+          "why": "After 'The' and before 'of' we need a noun: retain becomes retention."
+        },
+        {
+          "kind": "linking",
+          "q": "Rereading can be useful at first; ___, it is less effective than self-testing for long-term learning.",
+          "opts": [
+            "nevertheless",
+            "therefore",
+            "similarly",
+            "for instance"
+          ],
+          "a": 0,
+          "why": "The second idea contrasts with the first, so we need a concession link: nevertheless."
+        },
+        {
+          "kind": "cohesion",
+          "q": "Which sentence best follows? 'Spreading study over several days produces more durable learning than cramming.'",
+          "opts": [
+            "This is partly because a little forgetting between sessions makes each recall more effortful.",
+            "Cramming, in other words, means spreading study over several days.",
+            "For example, many students enjoy listening to music.",
+            "As a result, sleep has no effect on memory at all."
+          ],
+          "a": 0,
+          "why": "'This is partly because' gives a reason for the claim. The others contradict it or change the topic."
+        }
+      ]
+    },
+    {
+      "id": "expert-2",
+      "title": "Biodiversity",
+      "emoji": "🦋",
+      "words": [
+        {
+          "w": "indigenous",
+          "def": "living or growing naturally in a place, not brought there from somewhere else",
+          "ex": "The kiwi is ___ to New Zealand and is found nowhere else in the wild.",
+          "pos": "adj",
+          "syn": [
+            "native"
+          ],
+          "ant": [
+            "introduced",
+            "foreign"
+          ]
+        },
+        {
+          "w": "decline",
+          "def": "a gradual fall in the number, amount or quality of something",
+          "ex": "Scientists have recorded a steady ___ in the number of wild bees in some regions.",
+          "pos": "noun",
+          "syn": [
+            "fall",
+            "drop"
+          ],
+          "ant": [
+            "increase",
+            "rise"
+          ]
+        },
+        {
+          "w": "deplete",
+          "def": "to reduce the amount of something so much that very little is left",
+          "ex": "Overfishing can ___ fish stocks faster than they are able to recover.",
+          "pos": "verb",
+          "forms": {
+            "verb": "deplete",
+            "noun": "depletion",
+            "adj": "depleted"
+          }
+        },
+        {
+          "w": "pollinator",
+          "def": "an animal, such as a bee or a bat, that carries pollen from flower to flower",
+          "ex": "The bee is the best-known ___, but moths, birds and bats do the same job.",
+          "pos": "noun"
+        },
+        {
+          "w": "invasive",
+          "def": "spreading into a new area and harming the plants or animals already living there",
+          "ex": "Gardeners are asked not to plant ___ species that could escape and crowd out wild flowers.",
+          "pos": "adj",
+          "ant": [
+            "native"
+          ]
+        },
+        {
+          "w": "interdependent",
+          "def": "relying on each other in order to survive or work well",
+          "ex": "In a rainforest, plants and animals are ___: when one species disappears, others suffer too.",
+          "pos": "adj"
+        },
+        {
+          "w": "restoration",
+          "def": "the work of returning something to its earlier, healthy condition",
+          "ex": "The ___ of the wetland brought back birds that had not been seen there for decades.",
+          "pos": "noun",
+          "forms": {
+            "noun": "restoration",
+            "verb": "restore"
+          }
+        },
+        {
+          "w": "fragmentation",
+          "def": "the breaking of something into small, separate parts",
+          "ex": "New roads cause habitat ___, leaving animals trapped in small patches of forest.",
+          "pos": "noun",
+          "forms": {
+            "noun": "fragmentation",
+            "verb": "fragment"
+          }
+        },
+        {
+          "w": "sustain",
+          "def": "to keep something alive, or to keep it going over a long time",
+          "ex": "A single old oak tree can ___ hundreds of different kinds of insects.",
+          "pos": "verb",
+          "syn": [
+            "support"
+          ],
+          "forms": {
+            "verb": "sustain",
+            "adj": "sustainable",
+            "noun": "sustainability"
+          }
+        },
+        {
+          "w": "abundant",
+          "def": "existing in very large numbers or amounts",
+          "ex": "Before the dam was built, salmon were so ___ that the river seemed to shine silver.",
+          "pos": "adj",
+          "syn": [
+            "plentiful"
+          ],
+          "ant": [
+            "scarce",
+            "rare"
+          ],
+          "forms": {
+            "adj": "abundant",
+            "noun": "abundance"
+          }
+        },
+        {
+          "w": "keystone species",
+          "def": "a plant or animal that many other living things in its area depend on",
+          "ex": "Sea otters are a ___ because they stop sea urchins from destroying kelp forests.",
+          "pos": "phrase"
+        },
+        {
+          "w": "evolve",
+          "def": "to develop gradually over many generations",
+          "ex": "Species slowly ___ as small changes are passed from one generation to the next.",
+          "pos": "verb",
+          "forms": {
+            "verb": "evolve",
+            "noun": "evolution",
+            "adj": "evolutionary"
+          }
+        }
+      ],
+      "grammar": [
+        {
+          "q": "Not only ___ wild flowers, but they also pollinate many of our crops.",
+          "opts": [
+            "do bees pollinate",
+            "bees pollinate",
+            "bees do pollinate",
+            "pollinate bees"
+          ],
+          "a": 0,
+          "why": "When 'Not only' starts a sentence, use question order: Not only do bees pollinate..."
+        },
+        {
+          "q": "The kakapo, a flightless parrot from New Zealand, ___ to be the heaviest parrot in the world.",
+          "opts": [
+            "is thought",
+            "thinks",
+            "is thinking",
+            "it is thought"
+          ],
+          "a": 0,
+          "why": "Use 'subject + is thought to be' when we report what people generally believe."
+        },
+        {
+          "q": "The rapid ___ of rainforests threatens thousands of species.",
+          "opts": [
+            "destruction",
+            "destroy",
+            "destroyed",
+            "destructive"
+          ],
+          "a": 0,
+          "why": "After 'The rapid' and before 'of' we need a noun: destroy becomes destruction (nominalisation)."
+        },
+        {
+          "q": "It is vital that every visitor ___ to the marked paths in the nature reserve.",
+          "opts": [
+            "keep",
+            "kept",
+            "keeping",
+            "to keep"
+          ],
+          "a": 0,
+          "why": "After 'It is vital that...', formal English uses the base form (the subjunctive): every visitor keep."
+        },
+        {
+          "q": "___ in only one small forest, the bird is at great risk if that forest is cleared.",
+          "opts": [
+            "Found",
+            "Finding",
+            "Having found",
+            "To find"
+          ],
+          "a": 0,
+          "why": "The bird is found there (passive meaning), so the participle clause starts with 'Found'."
+        },
+        {
+          "q": "It was the arrival of rats on the island ___ caused the decline of its native birds.",
+          "opts": [
+            "that",
+            "what",
+            "who",
+            "where"
+          ],
+          "a": 0,
+          "why": "In a cleft sentence 'It was X that...', use 'that'; 'who' is only for people."
+        }
+      ],
+      "sentences": [
+        "Bees pollinate many of the crops that we depend on for food.",
+        "Healthy soils sustain an enormous variety of tiny living creatures.",
+        "It is vital that every visitor keep to the marked paths.",
+        "Sea otters are a keystone species in the kelp forests of the Pacific."
+      ],
+      "reading": {
+        "title": "The wolves of Yellowstone",
+        "text": "In 1995, a small group of grey wolves was released into Yellowstone National Park in the United States, roughly seventy years after the animals had disappeared from the area. The decision was controversial, yet it has since become one of the most widely discussed experiments in modern conservation.\n\nWolves are often described as a keystone species, meaning that their influence on an ecosystem is far greater than their numbers would suggest. Before their return, large herds of elk grazed freely along the park's rivers, eating young willow and aspen trees before they could grow tall. Once wolves were back, the elk were not only reduced in number but also appeared to change their behaviour, spending less time in open valleys where they could easily be spotted.\n\nAccording to some researchers, this set off a chain of effects known as a trophic cascade. With less grazing, willows recovered along certain riverbanks, providing food and building material for beavers. Beaver dams, in turn, created ponds that suited fish, frogs and birds.\n\nHowever, the story may be less tidy than it is sometimes told. Other scientists point out that the recovery of plants has been patchy, and that several factors, including dry weather, a growing number of bears and the activities of people outside the park, also affected elk numbers. Separating the role of the wolves from these other influences has proved difficult.\n\nWhat few dispute is that the return of a single predator encouraged scientists to look far more closely at how the members of an ecosystem depend on one another. Whatever the precise explanation, Yellowstone has become a living laboratory for the study of nature's connections.",
+        "qs": [
+          {
+            "type": "tfng",
+            "q": "Wolves had been absent from Yellowstone for about seven decades before 1995.",
+            "opts": [
+              "True",
+              "False",
+              "Not Given"
+            ],
+            "a": 0
+          },
+          {
+            "type": "tfng",
+            "q": "The wolves released in 1995 had been brought from Canada.",
+            "opts": [
+              "True",
+              "False",
+              "Not Given"
+            ],
+            "a": 2
+          },
+          {
+            "type": "tfng",
+            "q": "Scientists all agree that the wolves were the main reason the willows recovered.",
+            "opts": [
+              "True",
+              "False",
+              "Not Given"
+            ],
+            "a": 1
+          },
+          {
+            "type": "mc",
+            "q": "What does the writer suggest by saying the story 'may be less tidy than it is sometimes told'?",
+            "opts": [
+              "The popular version may simplify a more complicated situation.",
+              "The park has become dirtier since the wolves arrived.",
+              "Scientists have decided to stop studying the wolves.",
+              "The wolves have caused more damage than anyone expected."
+            ],
+            "a": 0
+          },
+          {
+            "type": "mc",
+            "q": "Which title best summarises the passage?",
+            "opts": [
+              "Wolves and willows: a powerful but debated chain of effects",
+              "How beavers build their dams and ponds",
+              "Why wolves should be kept out of national parks",
+              "The history of Yellowstone's first human visitors"
+            ],
+            "a": 0
+          }
+        ]
+      },
+      "extra": [
+        {
+          "kind": "collocation",
+          "q": "Plastic waste ___ a serious threat to sea turtles.",
+          "opts": [
+            "poses",
+            "makes",
+            "does",
+            "takes"
+          ],
+          "a": 0,
+          "why": "We say 'pose a threat'; make, do and take do not go with 'threat'."
+        },
+        {
+          "kind": "wordform",
+          "q": "Bees play a vital role in the ___ (pollinate) of many fruit trees.",
+          "opts": [
+            "pollination",
+            "pollinator",
+            "pollinate",
+            "pollinated"
+          ],
+          "a": 0,
+          "why": "We need a noun for the process: pollination. A pollinator is the animal, not the process."
+        },
+        {
+          "kind": "paraphrase",
+          "q": "Which sentence means the same as: 'Their influence is far greater than their numbers would suggest.'?",
+          "opts": [
+            "Although there are few of them, they have a very large effect.",
+            "Because there are many of them, their effect is large.",
+            "Their numbers are growing faster than their influence.",
+            "Their effect is small because there are so few of them."
+          ],
+          "a": 0,
+          "why": "'Greater than their numbers would suggest' means a big effect from a small number."
+        },
+        {
+          "kind": "linking",
+          "q": "___ wolves reduced the number of elk, other factors such as dry weather also played a part.",
+          "opts": [
+            "While",
+            "Because",
+            "Unless",
+            "So that"
+          ],
+          "a": 0,
+          "why": "'While' here means 'although': it admits one point and then adds a contrasting one."
+        },
+        {
+          "kind": "mainidea",
+          "q": "Which heading best fits this paragraph? 'Bees, butterflies and bats move pollen between flowers, allowing plants to produce seeds and fruit. Without them, many crops would give far smaller harvests, and some wild plants could disappear.'",
+          "opts": [
+            "Why pollinators matter",
+            "How bats find their way in the dark",
+            "The life cycle of a butterfly",
+            "Farming without machines"
+          ],
+          "a": 0,
+          "why": "The whole paragraph explains how important pollinating animals are for plants and crops."
+        },
+        {
+          "kind": "preposition",
+          "q": "Many woodland birds depend ___ the shelter that old trees provide.",
+          "opts": [
+            "on",
+            "of",
+            "at",
+            "with"
+          ],
+          "a": 0,
+          "why": "The verb 'depend' is followed by 'on' (or 'upon')."
+        }
+      ]
+    },
+    {
+      "id": "expert-3",
+      "title": "Ancient civilisations",
+      "emoji": "🏛️",
+      "words": [
+        {
+          "w": "artefact",
+          "def": "an object made by people, especially one from the past that is of historical interest",
+          "ex": "Each ___ found in the tomb was photographed before it was carefully moved.",
+          "pos": "noun"
+        },
+        {
+          "w": "excavate",
+          "def": "to dig carefully in the ground to find objects or buildings from the past",
+          "ex": "Archaeologists spent ten years trying to ___ the buried city.",
+          "pos": "verb",
+          "forms": {
+            "verb": "excavate",
+            "noun": "excavation"
+          }
+        },
+        {
+          "w": "inscription",
+          "def": "words cut into stone, metal or another hard surface",
+          "ex": "The ___ on the Rosetta Stone appears in three different scripts.",
+          "pos": "noun",
+          "forms": {
+            "noun": "inscription",
+            "verb": "inscribe"
+          }
+        },
+        {
+          "w": "dynasty",
+          "def": "a series of rulers who all belong to the same family",
+          "ex": "The Ming ___ ruled China for nearly three hundred years.",
+          "pos": "noun"
+        },
+        {
+          "w": "hierarchy",
+          "def": "a system in which people or things are arranged in levels of importance",
+          "ex": "In ancient Egypt, the pharaoh stood at the top of a strict social ___.",
+          "pos": "noun",
+          "forms": {
+            "noun": "hierarchy",
+            "adj": "hierarchical"
+          }
+        },
+        {
+          "w": "irrigation",
+          "def": "supplying water to land through channels or pipes so that crops can grow",
+          "ex": "Without ___ canals, farmers in Mesopotamia could not have grown crops in such a dry land.",
+          "pos": "noun",
+          "forms": {
+            "noun": "irrigation",
+            "verb": "irrigate"
+          }
+        },
+        {
+          "w": "decipher",
+          "def": "to work out the meaning of writing that is very difficult to read or understand",
+          "ex": "It took scholars many years to ___ Egyptian hieroglyphs.",
+          "pos": "verb",
+          "syn": [
+            "decode"
+          ],
+          "forms": {
+            "verb": "decipher",
+            "noun": "decipherment"
+          }
+        },
+        {
+          "w": "prosperous",
+          "def": "rich and successful",
+          "ex": "Thanks to trade, once poor fishing villages became ___ towns full of wealthy merchants.",
+          "pos": "adj",
+          "syn": [
+            "wealthy",
+            "thriving"
+          ],
+          "ant": [
+            "poor"
+          ],
+          "forms": {
+            "adj": "prosperous",
+            "noun": "prosperity",
+            "verb": "prosper"
+          }
+        },
+        {
+          "w": "legacy",
+          "def": "something from the past that is handed down to the people who come later",
+          "ex": "The Romans left a lasting ___ of roads, bridges and thousands of Latin-based words.",
+          "pos": "noun",
+          "syn": [
+            "heritage"
+          ]
+        },
+        {
+          "w": "chronological",
+          "def": "arranged in the order in which events happened",
+          "ex": "The museum displays its objects in ___ order, from the oldest to the most recent.",
+          "pos": "adj",
+          "forms": {
+            "adj": "chronological",
+            "adv": "chronologically"
+          }
+        },
+        {
+          "w": "derive",
+          "def": "to come from, or develop from, something else",
+          "ex": "The word 'pharaoh' is thought to ___ from an Egyptian phrase meaning 'great house'.",
+          "pos": "verb",
+          "forms": {
+            "verb": "derive",
+            "noun": "derivation"
+          }
+        },
+        {
+          "w": "sophisticated",
+          "def": "advanced and complex, showing a lot of skill and knowledge",
+          "ex": "The Maya developed a ___ calendar based on careful observation of the sky.",
+          "pos": "adj",
+          "syn": [
+            "advanced"
+          ],
+          "ant": [
+            "simple",
+            "basic"
+          ]
+        }
+      ],
+      "grammar": [
+        {
+          "q": "The pyramids at Giza ___ built around 4,500 years ago.",
+          "opts": [
+            "are believed to have been",
+            "are believed to be",
+            "believe to have been",
+            "are believing to have been"
+          ],
+          "a": 0,
+          "why": "For a belief now about a past event, use 'is/are believed to have been + past participle'."
+        },
+        {
+          "q": "Only when the Rosetta Stone was studied closely ___ able to read hieroglyphs.",
+          "opts": [
+            "were scholars",
+            "scholars were",
+            "did scholars",
+            "scholars had"
+          ],
+          "a": 0,
+          "why": "After 'Only when + clause' at the start, the main clause uses question order: were scholars able."
+        },
+        {
+          "q": "Hardly ___ the door of the tomb when they saw the glint of gold.",
+          "opts": [
+            "had they opened",
+            "they had opened",
+            "did they opened",
+            "have they opened"
+          ],
+          "a": 0,
+          "why": "'Hardly had + subject + past participle... when' shows one past action followed at once by another."
+        },
+        {
+          "q": "If the Romans hadn't built such strong roads, some of them ___ still in use today.",
+          "opts": [
+            "wouldn't be",
+            "wouldn't have been",
+            "won't be",
+            "aren't"
+          ],
+          "a": 0,
+          "why": "Mixed conditional: a past condition (hadn't built) with a present result (today) takes 'would + verb'."
+        },
+        {
+          "q": "___ the hieroglyphs, Champollion could finally read the names of the pharaohs.",
+          "opts": [
+            "Having deciphered",
+            "Deciphered",
+            "Having been deciphered",
+            "To be deciphered"
+          ],
+          "a": 0,
+          "why": "Champollion did the deciphering first (active, earlier action), so use 'Having + past participle'."
+        },
+        {
+          "q": "It ___ that the city was abandoned after its river changed course.",
+          "opts": [
+            "is thought",
+            "thinks",
+            "is thinking",
+            "has thought"
+          ],
+          "a": 0,
+          "why": "'It is thought that...' reports a general belief without saying who holds it."
+        }
+      ],
+      "sentences": [
+        "Archaeologists use careful methods to excavate a site without damaging it.",
+        "Many English words are derived from the language of the ancient Romans.",
+        "Champollion is credited with the decipherment of Egyptian hieroglyphs.",
+        "The Great Pyramid is believed to have been built for the pharaoh Khufu."
+      ],
+      "reading": {
+        "title": "Reading the Rosetta Stone",
+        "text": "When a slab of dark stone was found near the town of Rashid, known in English as Rosetta, in 1799, few could have guessed how important it would become. The stone carries the same official message written three times: in hieroglyphs, in a later Egyptian script called Demotic, and in ancient Greek. Since scholars could already read Greek, the stone offered something extremely rare: a key to a writing system that nobody had understood for well over a thousand years.\n\nEven so, the task proved far harder than expected. Many early researchers assumed that each hieroglyph represented a whole idea, much like a small picture, and their attempts to match the signs to the Greek text led nowhere. The English scientist Thomas Young made important progress, showing that the oval shapes known as cartouches contained royal names written with signs for sounds.\n\nIt was the French scholar Jean-François Champollion who finally solved the puzzle in 1822. His great advantage was a deep knowledge of Coptic, a late form of the Egyptian language that was still used in church services. This allowed him to recognise that hieroglyphic writing was a mixture of signs: some stood for sounds, while others represented whole words or ideas.\n\nThe consequences were enormous. Thousands of inscriptions on temples, tombs and papyrus scrolls could now be read, opening a window onto Egyptian history, religion and daily life. Today the stone is one of the most visited objects in the British Museum, and its name has entered everyday English: a 'Rosetta Stone' is anything that unlocks a difficult problem.",
+        "qs": [
+          {
+            "type": "tfng",
+            "q": "When the stone was found, scholars were already able to read one of its three versions of the message.",
+            "opts": [
+              "True",
+              "False",
+              "Not Given"
+            ],
+            "a": 0
+          },
+          {
+            "type": "tfng",
+            "q": "Champollion travelled to Egypt before he solved the puzzle of the hieroglyphs.",
+            "opts": [
+              "True",
+              "False",
+              "Not Given"
+            ],
+            "a": 2
+          },
+          {
+            "type": "mc",
+            "q": "Why did many early attempts to read the hieroglyphs fail?",
+            "opts": [
+              "Researchers wrongly believed that every sign stood for a complete idea.",
+              "The Greek part of the stone was too damaged to read.",
+              "Nobody was allowed to study the stone closely.",
+              "The hieroglyphs on the stone were written in Coptic."
+            ],
+            "a": 0
+          },
+          {
+            "type": "mc",
+            "q": "What can be inferred from the passage?",
+            "opts": [
+              "Champollion built on earlier discoveries rather than working entirely alone.",
+              "Thomas Young understood hieroglyphs better than Champollion did.",
+              "Demotic was the oldest of the three scripts on the stone.",
+              "Hieroglyphs were still widely read when the stone was found."
+            ],
+            "a": 0
+          },
+          {
+            "type": "mc",
+            "q": "Why does the writer mention the everyday meaning of 'a Rosetta Stone'?",
+            "opts": [
+              "to show how deeply the discovery has influenced the way people speak",
+              "to explain how the stone was taken to the British Museum",
+              "to suggest that the stone is less important than people think",
+              "to compare the work of Champollion with that of Young"
+            ],
+            "a": 0
+          }
+        ]
+      },
+      "extra": [
+        {
+          "kind": "collocation",
+          "q": "The discovery of the tomb ___ a great deal of interest around the world.",
+          "opts": [
+            "attracted",
+            "collected",
+            "took",
+            "made"
+          ],
+          "a": 0,
+          "why": "We say 'attract interest' (or 'attract attention'); collect, take and make do not go with 'interest' here."
+        },
+        {
+          "kind": "wordform",
+          "q": "The ___ (prosperous) of the city depended on trade along the river.",
+          "opts": [
+            "prosperity",
+            "prosper",
+            "prosperously",
+            "prospered"
+          ],
+          "a": 0,
+          "why": "After 'The' and before 'of' we need a noun: prosperous becomes prosperity."
+        },
+        {
+          "kind": "paraphrase",
+          "q": "Which sentence means the same as: 'Nobody had understood the writing for well over a thousand years.'?",
+          "opts": [
+            "For more than ten centuries, no one had been able to read it.",
+            "It had been understood for just under a thousand years.",
+            "Only a few experts had read it during the previous thousand years.",
+            "The writing had been invented a little over a thousand years earlier."
+          ],
+          "a": 0,
+          "why": "'Well over a thousand years' means clearly more than ten centuries, and 'nobody' means no one at all."
+        },
+        {
+          "kind": "register",
+          "q": "Which sentence is most appropriate in a formal history essay?",
+          "opts": [
+            "The civilisation declined owing to a combination of environmental and economic factors.",
+            "The civilisation kind of fell apart because of loads of problems.",
+            "Basically, things went wrong and the civilisation was finished.",
+            "The civilisation went downhill big time for lots of reasons."
+          ],
+          "a": 0,
+          "why": "Formal writing uses precise words (declined, owing to, factors) and avoids 'kind of', 'loads of' and 'big time'."
+        },
+        {
+          "kind": "cohesion",
+          "q": "Which sentence best follows? 'Many early researchers assumed that each hieroglyph represented a whole idea.'",
+          "opts": [
+            "This belief, however, turned out to be only partly correct.",
+            "Hieroglyphs are therefore impossible to read today.",
+            "In addition, the stone was found in 1799 near Rosetta.",
+            "As a result, Greek was the only language the Egyptians wrote."
+          ],
+          "a": 0,
+          "why": "'This belief' points back to the assumption and 'however' prepares the correction. The others are false or off topic."
+        },
+        {
+          "kind": "linking",
+          "q": "The Indus script has been studied for over a century; ___, it has still not been deciphered.",
+          "opts": [
+            "even so",
+            "consequently",
+            "in addition",
+            "for example"
+          ],
+          "a": 0,
+          "why": "The result is the opposite of what we would expect, so we need a concession link: even so."
+        }
+      ]
+    },
+    {
+      "id": "expert-4",
+      "title": "Robots and AI",
+      "emoji": "🤖",
+      "words": [
+        {
+          "w": "algorithm",
+          "def": "a set of step-by-step rules that a computer follows to solve a problem",
+          "ex": "The music app uses an ___ to suggest songs you might enjoy.",
+          "pos": "noun",
+          "forms": {
+            "noun": "algorithm",
+            "adj": "algorithmic"
+          }
+        },
+        {
+          "w": "automate",
+          "def": "to make a process work by machine so that people do not have to do it",
+          "ex": "Many factories ___ dull, repetitive tasks so that workers can focus on skilled jobs.",
+          "pos": "verb",
+          "forms": {
+            "verb": "automate",
+            "noun": "automation",
+            "adj": "automated"
+          }
+        },
+        {
+          "w": "autonomous",
+          "def": "able to act and make decisions on its own, without human control",
+          "ex": "An ___ drone can fly a planned route without a human pilot.",
+          "pos": "adj",
+          "syn": [
+            "independent"
+          ],
+          "forms": {
+            "adj": "autonomous",
+            "noun": "autonomy",
+            "adv": "autonomously"
+          }
+        },
+        {
+          "w": "sensor",
+          "def": "a device that detects things such as light, heat, sound or movement",
+          "ex": "A ___ underneath the robot vacuum stops it falling down the stairs.",
+          "pos": "noun"
+        },
+        {
+          "w": "bias",
+          "def": "an unfair preference for or against a person, group or idea",
+          "ex": "If the training photos show mostly one group of people, the system may develop a ___.",
+          "pos": "noun",
+          "syn": [
+            "prejudice"
+          ],
+          "forms": {
+            "noun": "bias",
+            "adj": "biased"
+          }
+        },
+        {
+          "w": "interpret",
+          "def": "to work out and explain the meaning of something",
+          "ex": "Voice assistants must ___ what we mean, not just the words we say.",
+          "pos": "verb",
+          "forms": {
+            "verb": "interpret",
+            "noun": "interpretation"
+          }
+        },
+        {
+          "w": "precision",
+          "def": "the quality of being very exact and accurate",
+          "ex": "Surgical robots can make tiny cuts with a ___ that no human hand can match.",
+          "pos": "noun",
+          "syn": [
+            "accuracy"
+          ],
+          "forms": {
+            "noun": "precision",
+            "adj": "precise",
+            "adv": "precisely"
+          }
+        },
+        {
+          "w": "ethical",
+          "def": "connected with what is morally right or wrong",
+          "ex": "Scientists are debating the ___ questions raised by machines that make decisions about people.",
+          "pos": "adj",
+          "ant": [
+            "unethical"
+          ],
+          "forms": {
+            "adj": "ethical",
+            "noun": "ethics",
+            "adv": "ethically"
+          }
+        },
+        {
+          "w": "capability",
+          "def": "the ability or power to do something",
+          "ex": "The latest robot vacuum has the ___ to map every room in a house.",
+          "pos": "noun",
+          "forms": {
+            "noun": "capability",
+            "adj": "capable"
+          }
+        },
+        {
+          "w": "obsolete",
+          "def": "no longer used because something newer and better has been invented",
+          "ex": "Floppy disks became ___ once people began storing files on memory sticks.",
+          "pos": "adj",
+          "syn": [
+            "outdated"
+          ],
+          "ant": [
+            "modern",
+            "new"
+          ]
+        },
+        {
+          "w": "prototype",
+          "def": "the first model of something new, made in order to test the design",
+          "ex": "The engineers built a cardboard ___ before making the robot from metal.",
+          "pos": "noun"
+        },
+        {
+          "w": "replicate",
+          "def": "to copy something exactly, or to do it again in the same way",
+          "ex": "Engineers are trying to ___ the gentle way a human hand grips a ripe strawberry.",
+          "pos": "verb",
+          "syn": [
+            "copy",
+            "reproduce"
+          ],
+          "forms": {
+            "verb": "replicate",
+            "noun": "replication"
+          }
+        }
+      ],
+      "grammar": [
+        {
+          "q": "What makes this robot special ___ that it can learn from its own mistakes.",
+          "opts": [
+            "is",
+            "are",
+            "it is",
+            "being"
+          ],
+          "a": 0,
+          "why": "A 'What' clause acts as a singular subject, so it takes 'is': What makes it special is..."
+        },
+        {
+          "q": "The engineers insisted that the robot ___ tested again before the competition.",
+          "opts": [
+            "be",
+            "being",
+            "to be",
+            "been"
+          ],
+          "a": 0,
+          "why": "After 'insist that', formal English uses the base form (the subjunctive): the robot be tested."
+        },
+        {
+          "q": "___ the sensor detect an obstacle, the robot will stop immediately.",
+          "opts": [
+            "Should",
+            "If",
+            "Would",
+            "Were"
+          ],
+          "a": 0,
+          "why": "'Should + subject + verb' is a formal way to say 'If...': Should the sensor detect = If the sensor detects."
+        },
+        {
+          "q": "The first industrial robot is said ___ in a car factory in the early 1960s.",
+          "opts": [
+            "to have been used",
+            "to be used",
+            "to have used",
+            "that it was used"
+          ],
+          "a": 0,
+          "why": "The robot was used (passive) in the past, so use 'is said to have been + past participle'."
+        },
+        {
+          "q": "If our robot weren't so well designed, it ___ the competition last week.",
+          "opts": [
+            "wouldn't have won",
+            "wouldn't win",
+            "won't have won",
+            "didn't win"
+          ],
+          "a": 0,
+          "why": "Mixed conditional: a present fact (weren't so well designed) with a past result (last week) takes 'would have + past participle'."
+        },
+        {
+          "q": "Robots ___ in hospitals can carry medicines from one ward to another.",
+          "opts": [
+            "used",
+            "using",
+            "are used",
+            "use"
+          ],
+          "a": 0,
+          "why": "'Used in hospitals' is a shortened passive relative clause meaning 'that are used in hospitals'."
+        }
+      ],
+      "sentences": [
+        "Surgical robots can make cuts with remarkable precision.",
+        "The robot uses a sensor to detect obstacles in its path.",
+        "Voice assistants must interpret the meaning behind the words we say.",
+        "Training a system on biased data can lead to unfair decisions."
+      ],
+      "reading": {
+        "title": "Why easy is hard for robots",
+        "text": "In 1997, a computer called Deep Blue defeated the world chess champion Garry Kasparov, a moment many saw as proof that machines were about to overtake human intelligence. Yet decades later, robots still struggle with tasks such as folding a basket of laundry or picking up an unfamiliar object without dropping it. This puzzling contrast has a name: Moravec's paradox.\n\nIn the 1980s, the robotics researcher Hans Moravec and others observed that the tasks humans find difficult, such as advanced mathematics or chess, are often relatively easy for computers, whereas skills that a young child masters without effort, like recognising a face or walking across a cluttered room, are extremely hard to build into a machine.\n\nOne explanation lies in evolution. The abilities to see, balance and grasp objects have been refined over hundreds of millions of years, so they are deeply built into our nervous system and operate without our noticing. Abstract reasoning, by contrast, is a comparatively recent development, and we are aware of how much effort it requires precisely because our brains are not especially well suited to it. In other words, what feels easy to us is not necessarily simple; it may be the result of an enormous amount of hidden processing.\n\nRecent advances in machine learning have narrowed the gap. Robots trained on vast amounts of data are becoming better at recognising objects and adjusting their grip. Nevertheless, engineers still describe the messy, unpredictable real world as one of their greatest challenges. For the time being, a robot that can beat you at chess is far easier to build than one that can tidy your bedroom.",
+        "qs": [
+          {
+            "type": "tfng",
+            "q": "Deep Blue's victory persuaded some people that computers would soon be more intelligent than humans.",
+            "opts": [
+              "True",
+              "False",
+              "Not Given"
+            ],
+            "a": 0
+          },
+          {
+            "type": "tfng",
+            "q": "Hans Moravec built the first robot that was able to walk across a room.",
+            "opts": [
+              "True",
+              "False",
+              "Not Given"
+            ],
+            "a": 2
+          },
+          {
+            "type": "tfng",
+            "q": "According to the writer, humans find abstract reasoning effortless because it developed recently.",
+            "opts": [
+              "True",
+              "False",
+              "Not Given"
+            ],
+            "a": 1
+          },
+          {
+            "type": "mc",
+            "q": "What does the writer suggest about tasks that feel easy to people?",
+            "opts": [
+              "They may depend on a great deal of processing that we are not aware of.",
+              "They are always simple for machines to copy.",
+              "They have developed only in the last few thousand years.",
+              "They require more conscious effort than playing chess."
+            ],
+            "a": 0
+          },
+          {
+            "type": "mc",
+            "q": "What is the main purpose of the final paragraph?",
+            "opts": [
+              "to admit that progress has been made while stressing that a challenge remains",
+              "to argue that machine learning has completely solved the paradox",
+              "to explain in detail how chess computers are built",
+              "to suggest that robots should never be used in homes"
+            ],
+            "a": 0
+          }
+        ]
+      },
+      "extra": [
+        {
+          "kind": "collocation",
+          "q": "Self-driving cars have ___ a heated debate about road safety.",
+          "opts": [
+            "sparked",
+            "made",
+            "built",
+            "done"
+          ],
+          "a": 0,
+          "why": "We say 'spark a debate' (start it suddenly); make, build and do do not go with 'debate'."
+        },
+        {
+          "kind": "phrasal",
+          "q": "Engineers are trying to ___ a way to make robots grip soft objects safely.",
+          "opts": [
+            "come up with",
+            "come down with",
+            "put up with",
+            "get on with"
+          ],
+          "a": 0,
+          "why": "'Come up with' means to think of an idea or a plan."
+        },
+        {
+          "kind": "paraphrase",
+          "q": "Which sentence means the same as: 'What feels easy to us is not necessarily simple.'?",
+          "opts": [
+            "Something can seem effortless to people and still be very complex.",
+            "Simple tasks are always easy for people to do.",
+            "People never find complex tasks easy.",
+            "If a task feels difficult, it must be complicated."
+          ],
+          "a": 0,
+          "why": "'Not necessarily simple' means it might be complex, even though it feels easy."
+        },
+        {
+          "kind": "register",
+          "q": "Which sentence is most suitable for an IELTS Writing Task 2 essay?",
+          "opts": [
+            "It could be argued that automation will transform the job market.",
+            "Robots are gonna take over loads of jobs, no doubt.",
+            "I reckon robots will totally change work.",
+            "Automation? Huge deal for jobs, obviously."
+          ],
+          "a": 0,
+          "why": "An academic essay uses an impersonal, cautious structure ('It could be argued that') and no slang."
+        },
+        {
+          "kind": "wordform",
+          "q": "Some delivery robots can now operate ___ (autonomy) for several hours.",
+          "opts": [
+            "autonomously",
+            "autonomous",
+            "autonomy",
+            "autonomic"
+          ],
+          "a": 0,
+          "why": "We need an adverb to describe how they operate: autonomously."
+        },
+        {
+          "kind": "cohesion",
+          "q": "Which sentence best fills the gap? 'Robots are becoming better at recognising objects. ___ Even so, engineers say the real world remains a huge challenge.'",
+          "opts": [
+            "This is largely thanks to training on vast amounts of data.",
+            "Robots, however, cannot recognise any objects at all.",
+            "Chess was invented many centuries ago.",
+            "As a result, the real world is no longer a problem for engineers."
+          ],
+          "a": 0,
+          "why": "'This' refers back to the progress and explains it, and 'Even so' then adds the contrast. The others break the logic."
+        }
+      ]
+    },
+    {
+      "id": "expert-5",
+      "title": "Food and water for all",
+      "emoji": "🌾",
+      "words": [
+        {
+          "w": "scarcity",
+          "def": "a situation in which there is not enough of something that people need",
+          "ex": "Water ___ is a growing concern in many dry regions of the world.",
+          "pos": "noun",
+          "syn": [
+            "shortage"
+          ],
+          "ant": [
+            "plenty"
+          ],
+          "forms": {
+            "noun": "scarcity",
+            "adj": "scarce"
+          }
+        },
+        {
+          "w": "yield",
+          "def": "the amount of crops or food that a piece of land produces",
+          "ex": "Farmers measure the ___ of each field in tonnes of grain per hectare.",
+          "pos": "noun",
+          "syn": [
+            "harvest",
+            "crop"
+          ]
+        },
+        {
+          "w": "fertile",
+          "def": "able to produce plenty of good, healthy crops",
+          "ex": "Each year the river flooded, leaving behind a layer of ___ mud.",
+          "pos": "adj",
+          "ant": [
+            "barren"
+          ],
+          "forms": {
+            "adj": "fertile",
+            "noun": "fertility",
+            "verb": "fertilise"
+          }
+        },
+        {
+          "w": "nutrient",
+          "def": "a substance that plants, animals and people need in order to live and grow",
+          "ex": "Iron is a ___ that helps the blood carry oxygen around the body.",
+          "pos": "noun"
+        },
+        {
+          "w": "allocate",
+          "def": "to give a share of money, time or resources for a particular purpose",
+          "ex": "The council voted to ___ a quarter of its budget to fixing old water pipes.",
+          "pos": "verb",
+          "syn": [
+            "assign"
+          ],
+          "forms": {
+            "verb": "allocate",
+            "noun": "allocation"
+          }
+        },
+        {
+          "w": "desalination",
+          "def": "the process of removing salt from seawater so that people can drink or use it",
+          "ex": "Some dry coastal countries rely on ___ to turn seawater into drinking water.",
+          "pos": "noun"
+        },
+        {
+          "w": "sanitation",
+          "def": "systems such as toilets and drains that keep places clean and protect health",
+          "ex": "Clean water and good ___ prevent the spread of many illnesses.",
+          "pos": "noun"
+        },
+        {
+          "w": "distribute",
+          "def": "to share things out among a number of people or places",
+          "ex": "A network of pipes and pumps can ___ water from the reservoir to homes across the city.",
+          "pos": "verb",
+          "syn": [
+            "share"
+          ],
+          "forms": {
+            "verb": "distribute",
+            "noun": "distribution"
+          }
+        },
+        {
+          "w": "surplus",
+          "def": "an amount that is more than what is needed",
+          "ex": "In a good year, the farm grows more than the village needs and sells the ___ to nearby towns.",
+          "pos": "noun",
+          "ant": [
+            "shortage"
+          ]
+        },
+        {
+          "w": "staple",
+          "def": "a basic food that people eat regularly and in large amounts",
+          "ex": "Rice is a ___ for more than half of the world's population.",
+          "pos": "noun"
+        },
+        {
+          "w": "self-sufficient",
+          "def": "able to produce everything you need without help from others",
+          "ex": "The island grows all its own vegetables and is almost ___ in food.",
+          "pos": "adj",
+          "syn": [
+            "independent"
+          ]
+        },
+        {
+          "w": "contaminate",
+          "def": "to make something dirty, harmful or unsafe by adding a substance to it",
+          "ex": "Waste from factories can ___ rivers and the fish that live in them.",
+          "pos": "verb",
+          "syn": [
+            "pollute"
+          ],
+          "forms": {
+            "verb": "contaminate",
+            "noun": "contamination"
+          }
+        }
+      ],
+      "grammar": [
+        {
+          "q": "Rarely ___ such a severe shortage of rain in this region.",
+          "opts": [
+            "has there been",
+            "there has been",
+            "there was",
+            "it has been"
+          ],
+          "a": 0,
+          "why": "When 'Rarely' starts a sentence, the auxiliary comes before the subject: Rarely has there been..."
+        },
+        {
+          "q": "So scarce ___ that every drop was carefully saved.",
+          "opts": [
+            "was water",
+            "water was",
+            "did water",
+            "water had"
+          ],
+          "a": 0,
+          "why": "After 'So + adjective' at the start of a sentence, invert the verb and subject: So scarce was water that..."
+        },
+        {
+          "q": "The ___ of clean water to every home took decades to achieve.",
+          "opts": [
+            "provision",
+            "provide",
+            "provided",
+            "provident"
+          ],
+          "a": 0,
+          "why": "After 'The' and before 'of' we need a noun: provide becomes provision (nominalisation)."
+        },
+        {
+          "q": "It is essential that every school ___ access to safe drinking water.",
+          "opts": [
+            "have",
+            "having",
+            "to have",
+            "had had"
+          ],
+          "a": 0,
+          "why": "After 'It is essential that...', formal English uses the base form (the subjunctive): every school have."
+        },
+        {
+          "q": "If farmers hadn't adopted drip irrigation, they ___ able to grow crops here now.",
+          "opts": [
+            "wouldn't be",
+            "wouldn't have been",
+            "won't be",
+            "weren't"
+          ],
+          "a": 0,
+          "why": "Mixed conditional: a past condition (hadn't adopted) with a present result (now) takes 'would + verb'."
+        },
+        {
+          "q": "Global demand for food ___ to rise as the population grows.",
+          "opts": [
+            "is expected",
+            "expects",
+            "is expecting",
+            "has expected"
+          ],
+          "a": 0,
+          "why": "Demand cannot expect anything itself, so use the passive reporting verb: is expected to rise."
+        }
+      ],
+      "sentences": [
+        "Rice is a staple food for billions of people around the world.",
+        "It is essential that every child have access to safe drinking water.",
+        "Desalination plants turn seawater into water that is safe to drink.",
+        "The provision of clean water to every home took decades."
+      ],
+      "reading": {
+        "title": "Catching water from the air",
+        "text": "In some of the driest places on Earth, the air itself may hold part of the answer to water scarcity. Along the coasts of Chile and Morocco, communities have experimented with an unusual technique: catching fog.\n\nA fog collector is essentially a large panel of fine mesh stretched between two poles. As wind pushes fog through the mesh, tiny water droplets cling to the threads, merge into larger drops and run down into a gutter at the bottom. From there, the water flows through pipes into storage tanks, where it can be used for drinking, cooking or watering vegetable gardens. The system requires no electricity and has few moving parts, which makes it relatively cheap to build and maintain.\n\nThe idea is not entirely new. Desert plants and animals have long relied on fog, and researchers have studied a beetle in the Namib Desert that collects droplets on its bumpy back before tipping them towards its mouth. Engineers have borrowed ideas from such creatures in an attempt to design more efficient materials.\n\nFog harvesting is not, however, a solution for everyone. It works only where fog is frequent and a steady wind blows it inland, usually on hills or mountains near the sea. Even in suitable places, the amount collected varies greatly from one day to the next, and nets can be torn by strong winds. For these reasons, experts tend to see fog collection as a useful supplement to other water sources rather than a replacement for them.\n\nNevertheless, for a remote village where the nearest well is far away, a few nets on a hillside can make daily life noticeably easier.",
+        "qs": [
+          {
+            "type": "tfng",
+            "q": "Fog collectors need a supply of electricity in order to work.",
+            "opts": [
+              "True",
+              "False",
+              "Not Given"
+            ],
+            "a": 1
+          },
+          {
+            "type": "tfng",
+            "q": "The first fog collectors were built in Morocco.",
+            "opts": [
+              "True",
+              "False",
+              "Not Given"
+            ],
+            "a": 2
+          },
+          {
+            "type": "tfng",
+            "q": "The quantity of water that a fog net gathers can change considerably from day to day.",
+            "opts": [
+              "True",
+              "False",
+              "Not Given"
+            ],
+            "a": 0
+          },
+          {
+            "type": "mc",
+            "q": "Which place would probably be the most suitable for a fog collector?",
+            "opts": [
+              "a windy hillside close to the sea",
+              "a sheltered valley far from the coast",
+              "a flat inland desert with clear skies",
+              "a city centre surrounded by tall buildings"
+            ],
+            "a": 0
+          },
+          {
+            "type": "mc",
+            "q": "Which statement best summarises the writer's view of fog harvesting?",
+            "opts": [
+              "It is a helpful addition to other water sources in the right places.",
+              "It will soon replace wells and rivers as the main source of water.",
+              "It is too expensive for most villages to use.",
+              "It has failed in every place where it has been tried."
+            ],
+            "a": 0
+          }
+        ]
+      },
+      "extra": [
+        {
+          "kind": "collocation",
+          "q": "Governments must ___ steps to reduce food waste.",
+          "opts": [
+            "take",
+            "make",
+            "do",
+            "put"
+          ],
+          "a": 0,
+          "why": "The fixed phrase is 'take steps' (take action); make, do and put do not go with 'steps' here."
+        },
+        {
+          "kind": "preposition",
+          "q": "Many farmers have switched ___ crops that need less water.",
+          "opts": [
+            "to",
+            "at",
+            "on",
+            "for"
+          ],
+          "a": 0,
+          "why": "We 'switch to' something new (or 'switch from' the old thing)."
+        },
+        {
+          "kind": "paraphrase",
+          "q": "Which sentence means the same as: 'Fog collection is a supplement to other water sources rather than a replacement for them.'?",
+          "opts": [
+            "Fog collection adds to other water sources but cannot take their place.",
+            "Fog collection should be used instead of other water sources.",
+            "Other water sources are less useful than fog collection.",
+            "Fog collection is used only when other water sources have disappeared."
+          ],
+          "a": 0,
+          "why": "A supplement is something extra that is added; a replacement takes the place of something."
+        },
+        {
+          "kind": "linking",
+          "q": "The nets are cheap to build. ___, they produce very little water when there is no wind.",
+          "opts": [
+            "On the other hand",
+            "As a result",
+            "In the same way",
+            "For this reason"
+          ],
+          "a": 0,
+          "why": "The second sentence gives a disadvantage that contrasts with the first, so we need 'On the other hand'."
+        },
+        {
+          "kind": "mainidea",
+          "q": "Which heading best fits this paragraph? 'In many countries, a large share of the food that is grown is never eaten. Some is lost on farms or during transport, while some is thrown away by shops and households. Reducing this waste could feed more people without using any extra land.'",
+          "opts": [
+            "The potential of cutting food waste",
+            "How to grow vegetables at home",
+            "Why transport costs are rising",
+            "The early history of farming"
+          ],
+          "a": 0,
+          "why": "The paragraph describes where food is wasted and ends with the benefit of reducing that waste."
+        },
+        {
+          "kind": "wordform",
+          "q": "Farmers in dry areas need crops that are ___ (resist) to drought.",
+          "opts": [
+            "resistant",
+            "resistance",
+            "resisting",
+            "resistible"
+          ],
+          "a": 0,
+          "why": "After 'are' and before 'to' we need an adjective: resistant to something."
+        }
+      ]
+    }
+  ]
+}

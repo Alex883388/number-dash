@@ -152,6 +152,9 @@ button, label, input, .btn, a { touch-action: manipulation; }
 .pic .fact { font: 700 var(--fact, 60px)/1.1 var(--font-display); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .pic .fact b { color: var(--mint-deep); }
 .pic .clue { font: 600 var(--clue, 28px)/1.3 var(--font-display); text-align: center; text-wrap: balance; max-width: 30ch; }
+.pic .rulebox { display: grid; gap: 6px; justify-items: center; }
+.pic .prompt { font: 700 var(--rule, 56px)/1.15 var(--font-display); white-space: nowrap; }
+.pic .prompt b { color: var(--lilac); }
 .gap { display: inline-block; min-width: 2.6em; height: .9em; border-bottom: 4px solid var(--lilac); margin: 0 .12em; vertical-align: -.08em; }
 .gap.filled { min-width: 0; height: auto; border-color: var(--mint); color: var(--mint-deep); vertical-align: baseline; }
 .word { display: flex; flex-wrap: nowrap; justify-content: center; column-gap: var(--bg, 6px); flex: none; max-width: 100%; }
@@ -200,20 +203,25 @@ button, label, input, .btn, a { touch-action: manipulation; }
 
 /* home and results */
 .screen { width: min(100%, 640px); }
-.demo { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: -4px; }
+.head { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px 24px; }
+.demo { display: flex; justify-content: center; align-items: center; gap: 8px; }
 .demo i { font: 400 2.6rem/1 var(--emoji); margin-right: 6px; font-style: normal; }
 .demo b {
   width: 44px; height: 44px; display: grid; place-items: center; border-radius: 12px; font: 700 1.6rem/1 var(--font-display);
   background: var(--door); border: 3px solid var(--door-edge); color: var(--door-ink); box-shadow: 0 3px 0 var(--door-edge); box-sizing: border-box;
 }
 .decks { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.levelrow { display: flex; flex-wrap: wrap; gap: 8px 14px; justify-content: center; align-items: center; }
+.toggle { font-size: .95rem; padding: 0 1em; min-height: 48px; display: inline-flex; align-items: center; gap: .4em; box-sizing: border-box; box-shadow: 0 3px 0 var(--line); }
+.toggle i { font-style: normal; font-family: var(--emoji); }
+.toggle[aria-pressed="true"] { background: var(--lilac-soft); border-color: var(--lilac); box-shadow: 0 3px 0 var(--lilac); }
 .deck { cursor: pointer; display: block; }
 .deck input { position: absolute; opacity: 0; pointer-events: none; }
 .deck span {
-  display: grid; gap: 3px; justify-items: center; align-content: center; min-height: 92px; height: 100%; box-sizing: border-box; padding: 8px 4px;
+  display: grid; gap: 2px; justify-items: center; align-content: center; min-height: 78px; height: 100%; box-sizing: border-box; padding: 6px 4px;
   border-radius: 18px; background: var(--card-2); border: 2px solid var(--line); font: 600 .98rem/1.1 var(--font-display); text-wrap: balance;
 }
-.deck i { font: 400 2rem/1.1 var(--emoji); font-style: normal; }
+.deck i { font: 400 1.75rem/1.1 var(--emoji); font-style: normal; }
 .deck small { font-size: .78rem; letter-spacing: .12em; color: var(--sun-deep); min-height: 1em; }
 .deck input:checked + span { background: var(--sun); border-color: var(--sun-deep); color: var(--sun-ink); }
 .deck input:checked + span small { color: var(--sun-ink); }
@@ -237,7 +245,11 @@ button, label, input, .btn, a { touch-action: manipulation; }
   #deckChip { display: none; }
   #s-home .card { gap: 14px; }
   .decks { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .deck span { min-height: 76px; }
+  .deck span { min-height: 64px; padding: 5px 2px; font-size: .86rem; }
+  .deck i { font-size: 1.45rem; }
+  .demo { display: none; }
+  #homeBtns { gap: 8px; }
+  #homeBtns .btn { font-size: .88rem; padding: .65em .75em; }
   .seg span { min-width: 0; padding: .6em .9em; }
   #homeStats { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
   #homeStats dt { font-size: .66rem; letter-spacing: .04em; }
@@ -245,6 +257,7 @@ button, label, input, .btn, a { touch-action: manipulation; }
   .demo i { font-size: 2.2rem; }
   #s-home .tag { font-size: 1rem; }
 }
+@media (max-height: 860px) { #s-home .card { gap: 13px; } }
 @media (prefers-reduced-motion: reduce) { .box, .tile, .tiles .tile, .cheer { animation: none !important; } }
 .calm .box, .calm .tile, .calm .tiles .tile, .calm .cheer, .calm .screen, .calm .toast { animation: none !important; }
 </style>
@@ -278,8 +291,7 @@ button, label, input, .btn, a { touch-action: manipulation; }
 <main id="screens">
   <section class="screen" id="s-home">
     <div class="card">
-      <h1 class="logo">Spell <span>It</span></h1>
-      <div class="demo" aria-hidden="true"><i>🐱</i><b>c</b><b>a</b><b>t</b></div>
+      <div class="head"><h1 class="logo">Spell <span>It</span></h1><div class="demo" aria-hidden="true"><i>🐱</i><b>c</b><b>a</b><b>t</b></div></div>
       <p class="tag">Look at the word, it hides, then spell it from memory with the letter tiles.</p>
       <div>
         <p class="seg-title">Words</p>
@@ -287,16 +299,19 @@ button, label, input, .btn, a { touch-action: manipulation; }
       </div>
       <div>
         <p class="seg-title">Level</p>
-        <div class="seg">
-          <label><input type="radio" name="level" value="easy"><span>Easy</span></label>
-          <label><input type="radio" name="level" value="medium"><span>Medium</span></label>
-          <label><input type="radio" name="level" value="hard"><span>Hard</span></label>
+        <div class="levelrow">
+          <div class="seg">
+            <label><input type="radio" name="level" value="easy"><span>Easy</span></label>
+            <label><input type="radio" name="level" value="medium"><span>Medium</span></label>
+            <label><input type="radio" name="level" value="hard"><span>Hard</span></label>
+          </div>
+          <button class="btn toggle" id="listenBtn" aria-pressed="false"><i aria-hidden="true">👂</i><span>Listen only: off</span></button>
         </div>
         <p class="note" id="deckNote"></p>
       </div>
       <div class="row"><button class="btn sun big" id="startBtn">Start</button></div>
       <dl class="stats" id="homeStats"></dl>
-      <div class="row">
+      <div class="row" id="homeBtns">
         <button class="btn" id="speakBtn" aria-pressed="true">Read aloud: on</button>
         <button class="btn" id="soundBtn">Music: on</button>
         <a class="btn" data-hub hidden href="../">All games</a>
@@ -858,41 +873,129 @@ const Sound = (function () {
 })();
 
 /* ================= words =================
-   Picture decks: Easy = 3-4 letters, Medium = 5-6, Hard = 7 or more. Only older emoji that
-   iPadOS 15 and Windows 10 both draw; no word spelled differently in US and UK English. */
+   Picture decks (Animals, Food, Around us, Actions, Body & clothes): Easy = 3-4 letters, Medium = 5-6,
+   Hard = 7 or more. A word has an emoji when a clear, older one exists (Emoji 11 or before, drawn by
+   iPadOS 15 and Windows 10), otherwise a short sentence clue with a gap. Tricky words and Homophones are
+   sentence clues; Word endings show a base word and a rule ("stop + ed") with a sentence. No word or
+   clue uses a spelling that differs between US and UK English (colour, grey, favourite, -ise/-ize...). */
 const LEVELS = ['easy', 'medium', 'hard'];
 const LEVEL_NAME = { easy: 'Easy', medium: 'Medium', hard: 'Hard' };
 const LOOK_SEC = { easy: 4, medium: 3, hard: 2 };
 const ROUND = 10;
 const VS = '️';
-const P = (s) => s.split(',').map((x) => { const p = x.trim().split(' '); return { w: p[0], pic: p[1] }; });
-// tricky words: 'word|a sentence with ____ for the gap'
-const S = (list) => list.map((x) => { const p = x.split('|'); return { w: p[0], clue: p[1] }; });
+// 'word emoji, word emoji'
+const P = (s) => s.split(',').map((x) => { const p = x.trim().split(' '); return { w: p[0], pic: p[1], kind: 'emoji' }; });
+// 'word|a sentence with ____ for the gap'
+const S = (list) => list.map((x) => { const p = x.split('|'); return { w: p[0], clue: p[1], kind: 'sentence' }; });
+// homophones: groups of words that sound the same; each knows the others (its decoy tiles come from them)
+const H = (groups) => groups.reduce((out, g) => out.concat(g.map((x) => {
+  const p = x.split('|');
+  return { w: p[0], clue: p[1], kind: 'homo', alt: g.map((y) => y.split('|')[0]).filter((y) => y !== p[0]) };
+})), []);
+// word endings: 'prompt|word|a sentence with ____ for the gap'
+const R = (list) => list.map((x) => { const p = x.split('|'); return { pic: p[0], w: p[1], clue: p[2], kind: 'rule' }; });
 const DECKS = {
-  animals: { name: 'Animals', icon: '🐾', kind: 'emoji', words: {
-    easy: P('cat 🐱, dog 🐶, pig 🐷, cow 🐮, hen 🐔, fox 🦊, owl 🦉, bat 🦇, bee 🐝, ant 🐜, ram 🐏, fish 🐟, frog 🐸, duck 🦆, bear 🐻, lion 🦁, goat 🐐, crab 🦀, deer 🦌, wolf 🐺, bird 🐦, swan 🦢'),
-    medium: P('tiger 🐯, horse 🐴, zebra 🦓, mouse 🐭, sheep 🐑, whale 🐳, shark 🦈, camel 🐫, panda 🐼, koala 🐨, snail 🐌, eagle 🦅, rabbit 🐰, monkey 🐵, turtle 🐢, llama 🦙, hippo 🦛, chick 🐤, squid 🦑, lizard 🦎, badger 🦡, rhino 🦏, poodle 🐩'),
-    hard: P('elephant 🐘, butterfly 🦋, giraffe 🦒, penguin 🐧, dolphin 🐬, octopus 🐙, kangaroo 🦘, crocodile 🐊, gorilla 🦍, peacock 🦚, hedgehog 🦔, squirrel 🐿' + VS + ', dinosaur 🦕, hamster 🐹, rooster 🐓, caterpillar 🐛, raccoon 🦝, lobster 🦞, unicorn 🦄, leopard 🐆, buffalo 🐃')
+  animals: { name: 'Animals', icon: '🐾', words: {
+    easy: P('cat 🐱, dog 🐶, pig 🐷, cow 🐮, hen 🐔, fox 🦊, owl 🦉, bat 🦇, bee 🐝, ant 🐜, ram 🐏, fish 🐟, frog 🐸, duck 🦆, bear 🐻, lion 🦁, goat 🐐, crab 🦀, deer 🦌, wolf 🐺, bird 🐦, swan 🦢, dove 🕊' + VS + ', boar 🐗, bull 🐂, rat 🐀, pony 🐎, hog 🐖').concat(S([
+      'cub|A baby bear is called a ____.', 'pup|A baby seal is called a ____.', 'lamb|A baby sheep is called a ____.', 'calf|A baby cow is called a ____.',
+      'foal|A baby horse is called a ____.', 'joey|A baby kangaroo is called a ____.', 'yak|A ____ is a big, hairy cow that lives in the mountains.',
+      'emu|An ____ is a tall bird from Australia that cannot fly.', 'eel|An ____ is a long, slippery fish.', 'mole|A ____ digs tunnels under the ground.',
+      'toad|A ____ looks like a frog with bumpy skin.', 'hare|A ____ looks like a big rabbit with long ears.'])),
+    medium: P('tiger 🐯, horse 🐴, zebra 🦓, mouse 🐭, sheep 🐑, whale 🐳, shark 🦈, camel 🐫, panda 🐼, koala 🐨, snail 🐌, eagle 🦅, rabbit 🐰, monkey 🐵, turtle 🐢, llama 🦙, hippo 🦛, chick 🐤, squid 🦑, lizard 🦎, badger 🦡, rhino 🦏, poodle 🐩, parrot 🦜, turkey 🦃, bunny 🐇, dragon 🐉, shrimp 🦐, kitten 🐈, puppy 🐕').concat(S([
+      'beaver|A ____ builds dams with its strong teeth.', 'otter|An ____ floats on its back in the river.', 'moose|A ____ is a huge deer with wide antlers.',
+      'walrus|A ____ has two long tusks and lives in the icy sea.', 'jaguar|A ____ is a big spotted cat from the rainforest.', 'toucan|A ____ is a bird with a huge, bright beak.',
+      'donkey|A ____ looks like a small horse with long ears.', 'goose|A ____ is a big bird that honks.', 'robin|A ____ is a small bird with a red chest.',
+      'sloth|A ____ moves very slowly and hangs from trees.'])),
+    hard: P('elephant 🐘, butterfly 🦋, giraffe 🦒, penguin 🐧, dolphin 🐬, octopus 🐙, kangaroo 🦘, crocodile 🐊, gorilla 🦍, peacock 🦚, hedgehog 🦔, squirrel 🐿' + VS + ', dinosaur 🦕, hamster 🐹, rooster 🐓, caterpillar 🐛, raccoon 🦝, lobster 🦞, unicorn 🦄, leopard 🐆, buffalo 🐃, cricket 🦗, pufferfish 🐡').concat(S([
+      'cheetah|A ____ is the fastest runner of all the animals.', 'tortoise|A ____ is a slow animal that carries its shell on its back.', 'porcupine|A ____ is covered in long, sharp spines.',
+      'chimpanzee|A ____ is a clever ape that lives in the forest.', 'ostrich|An ____ is the biggest bird of all, and it cannot fly.', 'flamingo|A ____ is a pink bird that stands on one leg.',
+      'jellyfish|A ____ floats in the sea and has no bones.', 'seahorse|A ____ is a tiny fish that swims standing up.', 'starfish|A ____ has five arms and lives in the sea.',
+      'goldfish|A ____ is a small orange fish kept as a pet.', 'grasshopper|A ____ is a green insect that can jump very far.', 'woodpecker|A ____ taps holes in trees with its beak.',
+      'armadillo|An ____ can roll up into a hard ball.', 'platypus|A ____ has a beak like a duck and lays eggs.', 'dragonfly|A ____ has four shiny wings and zooms over ponds.',
+      'meerkat|A ____ stands up tall to keep watch.', 'hummingbird|A ____ is a tiny bird whose wings hum.']))
   } },
-  food: { name: 'Food', icon: '🍎', kind: 'emoji', words: {
-    easy: P('egg 🥚, pie 🥧, tea 🍵, nut 🌰, pan 🍳, corn 🌽, cake 🍰, milk 🥛, rice 🍚, pear 🍐, kiwi 🥝, taco 🌮, salt 🧂, soup 🍲, meat 🍖, bowl 🥣, fork 🍴, loaf 🥖, herb 🌿, dish 🍽' + VS + ''),
-    medium: P('apple 🍎, bread 🍞, pizza 🍕, lemon 🍋, grapes 🍇, melon 🍈, honey 🍯, salad 🥗, cheese 🧀, carrot 🥕, banana 🍌, cherry 🍒, potato 🥔, tomato 🍅, bacon 🥓, sushi 🍣, bagel 🥯, burger 🍔, spoon 🥄, coffee ☕, orange 🍊, drink 🥤, steak 🥩'),
-    hard: P('popcorn 🍿, noodles 🍜, cupcake 🧁, sandwich 🥪, pancakes 🥞, broccoli 🥦, pineapple 🍍, avocado 🥑, coconut 🥥, cucumber 🥒, lollipop 🍭, strawberry 🍓, watermelon 🍉, chocolate 🍫, spaghetti 🍝, peanuts 🥜, mushroom 🍄, pretzel 🥨, burrito 🌯, custard 🍮')
+  food: { name: 'Food', icon: '🍎', words: {
+    easy: P('egg 🥚, pie 🥧, tea 🍵, nut 🌰, pan 🍳, corn 🌽, cake 🍰, milk 🥛, rice 🍚, pear 🍐, kiwi 🥝, taco 🌮, salt 🧂, soup 🍲, meat 🍖, bowl 🥣, fork 🍴, loaf 🥖, herb 🌿, dish 🍽' + VS + ', cone 🍦').concat(S([
+      'jam|I spread strawberry ____ on my toast.', 'pea|A ____ is a small, round, green vegetable.', 'bean|A baked ____ is small and comes in tomato sauce.',
+      'fig|A ____ is a soft, sweet fruit full of tiny seeds.', 'plum|A ____ is a round purple fruit with a stone inside.', 'lime|A ____ is a small green fruit that tastes sour.',
+      'oats|We use ____ to make porridge.', 'ham|We had ____ and cheese sandwiches.', 'stew|A ____ is meat and vegetables cooked slowly in a pot.',
+      'mint|____ leaves make toothpaste taste fresh.', 'cup|Pour the milk into a ____.', 'mug|I drink hot chocolate from a big ____.', 'jug|Pour the water from the ____.',
+      'pot|Cook the pasta in a big ____.', 'lid|Put the ____ back on the jar.', 'yolk|The yellow part of an egg is the ____.', 'menu|Read the ____ to choose your food.',
+      'chef|The ____ cooks in the restaurant kitchen.', 'oven|Bake the cake in a hot ____.'])),
+    medium: P('apple 🍎, bread 🍞, pizza 🍕, lemon 🍋, grapes 🍇, melon 🍈, honey 🍯, salad 🥗, cheese 🧀, carrot 🥕, banana 🍌, cherry 🍒, potato 🥔, tomato 🍅, bacon 🥓, sushi 🍣, bagel 🥯, burger 🍔, spoon 🥄, coffee ☕, orange 🍊, drink 🥤, steak 🥩, curry 🍛, mango 🥭').concat(S([
+      'sugar|____ makes cakes taste sweet.', 'flour|We mix ____, eggs and butter to make a cake.', 'butter|Spread some ____ on your toast.',
+      'toast|I like jam on my ____ for breakfast.', 'juice|I drink a glass of apple ____.', 'pasta|____ comes in many shapes, like shells and tubes.',
+      'onion|Cutting an ____ can make your eyes water.', 'pepper|Add salt and ____ to the soup.', 'cereal|I eat a bowl of ____ for breakfast.',
+      'muffin|A ____ is like a small cake baked in a paper case.', 'lunch|We eat ____ at school at midday.', 'snack|An apple is a healthy ____.',
+      'plate|Put your food on a ____.', 'kettle|Boil the water in the ____.', 'fridge|Keep the milk cold in the ____.'])),
+    hard: P('popcorn 🍿, noodles 🍜, cupcake 🧁, sandwich 🥪, pancakes 🥞, broccoli 🥦, pineapple 🍍, avocado 🥑, coconut 🥥, cucumber 🥒, lollipop 🍭, strawberry 🍓, watermelon 🍉, chocolate 🍫, spaghetti 🍝, peanuts 🥜, mushroom 🍄, pretzel 🥨, burrito 🌯, custard 🍮, dumpling 🥟, chopsticks 🥢, croissant 🥐, chicken 🍗, lettuce 🥬').concat(S([
+      'sausage|We cooked a ____ on the barbecue.', 'pudding|Rice ____ is a sweet, creamy dessert.', 'porridge|Goldilocks ate the baby bear’s ____.',
+      'breakfast|We eat ____ in the morning.', 'blueberry|A ____ is a small, round, blue fruit.', 'raspberry|A ____ is a soft red berry.',
+      'cabbage|A ____ is a big, round, leafy vegetable.', 'pumpkin|A ____ is a big orange vegetable.', 'cauliflower|A ____ looks like white broccoli.',
+      'macaroni|____ and cheese is a yummy pasta dish.', 'lemonade|____ is a drink made from lemons.', 'milkshake|A ____ is a thick drink made with milk and ice cream.',
+      'ketchup|Tomato ____ is red and goes on burgers.', 'smoothie|A ____ is a drink made from blended fruit.', 'dessert|We had ice cream for ____.']))
   } },
-  around: { name: 'Around us', icon: '🏠', kind: 'emoji', words: {
-    easy: P('sun ☀' + VS + ', bus 🚌, car 🚗, bed 🛏' + VS + ', key 🔑, map 🗺' + VS + ', pen 🖊' + VS + ', hat 🎩, box 📦, sea 🌊, van 🚐, book 📖, door 🚪, ship 🚢, star ⭐, moon 🌙, tree 🌳, rain 🌧' + VS + ', snow ❄' + VS + ', leaf 🍁, bell 🔔, boat ⛵, sock 🧦, gift 🎁, drum 🥁, ball ⚽, taxi 🚕, tent ⛺'),
-    medium: P('house 🏠, clock ⏰, train 🚆, plane ✈' + VS + ', truck 🚚, pencil ✏' + VS + ', rocket 🚀, flower 🌸, school 🏫, castle 🏰, bridge 🌉, cloud ☁' + VS + ', ruler 📏, phone 📱, candle 🕯' + VS + ', guitar 🎸, piano 🎹, island 🏝' + VS + ', robot 🤖, camera 📷, crayon 🖍' + VS + ', magnet 🧲, crown 👑, shell 🐚'),
-    hard: P('umbrella ☔, rainbow 🌈, tractor 🚜, scissors ✂' + VS + ', computer 💻, backpack 🎒, bicycle 🚲, helicopter 🚁, telescope 🔭, mountain ⛰' + VS + ', volcano 🌋, snowman ⛄, sunflower 🌻, envelope ✉' + VS + ', notebook 📓, calendar 📅, fireworks 🎆, balloon 🎈, trumpet 🎺, scooter 🛴, skateboard 🛹, microscope 🔬, keyboard ⌨' + VS + ', battery 🔋, compass 🧭')
+  around: { name: 'Around us', icon: '🏠', words: {
+    easy: P('sun ☀' + VS + ', bus 🚌, car 🚗, bed 🛏' + VS + ', key 🔑, map 🗺' + VS + ', pen 🖊' + VS + ', hat 🎩, box 📦, sea 🌊, van 🚐, book 📖, door 🚪, ship 🚢, star ⭐, moon 🌙, tree 🌳, rain 🌧' + VS + ', snow ❄' + VS + ', leaf 🍁, bell 🔔, boat ⛵, sock 🧦, gift 🎁, drum 🥁, ball ⚽, taxi 🚕, tent ⛺, ' +
+      'dice 🎲, soap 🧼, bath 🛁, sofa 🛋' + VS + ', bulb 💡, lock 🔒, shop 🏪, park 🏞' + VS + ', palm 🌴, rose 🌹, wind 🌬' + VS + ', fire 🔥'),
+    medium: P('house 🏠, clock ⏰, train 🚆, plane ✈' + VS + ', truck 🚚, pencil ✏' + VS + ', rocket 🚀, flower 🌸, school 🏫, castle 🏰, bridge 🌉, cloud ☁' + VS + ', ruler 📏, phone 📱, candle 🕯' + VS + ', guitar 🎸, piano 🎹, island 🏝' + VS + ', robot 🤖, camera 📷, crayon 🖍' + VS + ', magnet 🧲, crown 👑, shell 🐚, ' +
+      'canoe 🛶, teddy 🧸, puzzle 🧩, basket 🧺, sponge 🧽, watch ⌚, radio 📻, hammer 🔨, anchor ⚓, ribbon 🎀, garden 🏡, tower 🗼, beach 🏖' + VS + ', desert 🏜' + VS + ', cactus 🌵, tulip 🌷'),
+    hard: P('umbrella ☔, rainbow 🌈, tractor 🚜, scissors ✂' + VS + ', computer 💻, backpack 🎒, bicycle 🚲, helicopter 🚁, telescope 🔭, mountain ⛰' + VS + ', volcano 🌋, snowman ⛄, sunflower 🌻, envelope ✉' + VS + ', notebook 📓, calendar 📅, fireworks 🎆, balloon 🎈, trumpet 🎺, scooter 🛴, skateboard 🛹, microscope 🔬, keyboard ⌨' + VS + ', battery 🔋, compass 🧭, ' +
+      'picture 🖼' + VS + ', television 📺, toolbox 🧰, hourglass ⌛, thermometer 🌡' + VS + ', sparkler 🎇, lantern 🏮, paintbrush 🖌' + VS + ', paperclip 📎, hospital 🏥, fountain ⛲, sunrise 🌄, ambulance 🚑, camping 🏕' + VS + ', lightning ⚡')
+  } },
+  actions: { name: 'Actions', icon: '🏃', words: {
+    easy: P('run 🏃, ski ⛷' + VS + ', row 🚣, cry 😢, hug 🤗, eat 😋, fly ✈' + VS + ', cut ✂' + VS + ', win 🏆, add ➕, swim 🏊, surf 🏄, ride 🚴, walk 🚶, read 📖, sing 🎤, wave 👋, clap 👏, wink 😉, lift 🏋' + VS + ', fish 🎣, bowl 🎳, race 🏁, hike 🥾, look 👀, talk 🗣' + VS + ', grow 🌱, kick ⚽, spin 🌀, wash 🧼').concat(S([
+      'jump|Frogs can ____ very high.', 'hop|Bunnies ____ across the grass.', 'dig|Dogs love to ____ holes.', 'sit|Please ____ on the mat.',
+      'draw|____ a picture of your house.', 'play|Let’s ____ in the park.', 'hide|Let’s play ____ and seek!', 'help|Can you ____ me carry this box?',
+      'tidy|____ your room, please!'])),
+    medium: P('dance 💃, sleep 😴, laugh 😂, smile 😊, think 🤔, write ✍' + VS + ', climb 🧗, juggle 🤹, sneeze 🤧, point 👉, shrug 🤷, skate ⛸' + VS + ', study 📚, shout 📣, listen 👂, smell 👃, taste 👅, dream 💭, freeze 🥶, giggle 🤭, cheer 🙌, shake 🤝, bounce 🏀, throw 🤾, score 🥅, sweep 🧹, drive 🚙, build 🏗' + VS + ', travel 🧳, relax 🧘, splash 💦, paddle 🛶, divide ➗').concat(S([
+      'catch|Can you ____ the ball?', 'brush|____ your teeth every night.', 'count|Can you ____ to one hundred?', 'share|Please ____ your toys.',
+      'learn|We ____ new things at school.', 'crawl|Babies ____ before they can walk.', 'tickle|Don’t ____ my feet!'])),
+    hard: P('celebrate 🎉, explore 🧭, discover 🔍, measure 📏, whisper 🤫, cartwheel 🤸, photograph 📸, investigate 🕵' + VS + ', recycle ♻' + VS + ', observe 🔭, perform 🎭, calculate 🧮, multiply ✖' + VS + ', subtract ➖').concat(S([
+      'breathe|____ in slowly through your nose.', 'whistle|Can you ____ a tune?', 'stretch|____ your arms up high.', 'explain|Can you ____ how you got the answer?',
+      'describe|____ what you can see in the picture.', 'pretend|Let’s ____ we are pirates!', 'complete|____ the puzzle before bedtime.', 'improve|Reading every day helps you ____.',
+      'forgive|It is kind to ____ your friends.', 'promise|I ____ to tidy my room.', 'collect|I like to ____ shiny stones.', 'scribble|The baby likes to ____ with crayons.',
+      'wriggle|Worms ____ in the mud.', 'squeeze|____ the lemon to get the juice.', 'sprinkle|____ some sugar on top.', 'decorate|Let’s ____ the cake with stars.',
+      'somersault|Can you do a ____ on the mat?', 'understand|Do you ____ the question?', 'encourage|Good friends ____ each other.', 'concentrate|It is hard to ____ when it is noisy.',
+      'interrupt|Please don’t ____ when someone is talking.', 'protect|A helmet will ____ your head.', 'prepare|Let’s ____ for the school trip.', 'balance|Can you ____ on one foot?',
+      'shuffle|____ the cards before we play.', 'rehearse|We ____ our play before the show.']))
+  } },
+  body: { name: 'Body & clothes', icon: '👕', words: {
+    easy: P('nose 👃, ear 👂, eye 👁' + VS + ', lips 👄, leg 🦵, foot 🦶, arm 💪, hand ✋, hair 💇, bone 🦴, baby 👶, girl 👧, boy 👦, shoe 👞, boot 👢, cap 🧢, tie 👔, ring 💍, coat 🧥, hat 👒, bow 🎀, nail 💅').concat(S([
+      'chin|Your ____ is at the bottom of your face.', 'knee|Your leg bends at the ____.', 'neck|A giraffe has a very long ____.', 'hip|Your ____ is where your leg joins your body.',
+      'toe|Wiggle your big ____!', 'heel|The back of your foot is your ____.', 'skin|Your ____ covers your whole body.', 'back|Lie on your ____ and look at the sky.',
+      'lap|The cat sat on my ____.', 'fist|Make a ____ with your hand.', 'palm|Hold the coin in the ____ of your hand.', 'wig|The clown wore a funny orange ____.',
+      'belt|A ____ holds up your jeans.', 'cape|The superhero wore a red ____.', 'suit|Grandpa wore a smart ____ to the party.', 'bib|The baby wears a ____ to keep clean.',
+      'body|Your ____ needs sleep to grow.', 'face|Wash your ____ in the morning.'])),
+    medium: P('tooth 🦷, tongue 👅, brain 🧠, heart ❤' + VS + ', thumb 👍, finger ☝' + VS + ', beard 🧔, child 🧒, shirt 👕, jeans 👖, dress 👗, kimono 👘, blouse 👚, sandal 👡, scarf 🧣, gloves 🧤, socks 🧦, helmet ⛑' + VS).concat(S([
+      'elbow|Your arm bends at the ____.', 'wrist|A watch goes on your ____.', 'ankle|Your foot joins your leg at the ____.', 'cheek|Grandma gave me a kiss on the ____.',
+      'chest|Your heart is inside your ____.', 'tummy|My ____ rumbles when I am hungry.', 'spine|Your ____ is the row of bones down your back.', 'lungs|You breathe air into your ____.',
+      'throat|I have a sore ____.', 'waist|Wear a belt around your ____.', 'mitten|A ____ keeps your hand warm but has no fingers.', 'jacket|Zip up your ____, it is cold.',
+      'hoodie|A ____ is a warm top with a hood.', 'shorts|In summer I wear ____ and a T-shirt.', 'pocket|Keep the coin in your ____.', 'button|A ____ fell off my coat.',
+      'collar|The ____ of my shirt is too tight.', 'sleeve|Roll up your ____ before you paint.', 'apron|Wear an ____ when you bake.', 'eyelid|Your ____ closes when you blink.',
+      'skirt|She wore a long ____ with flowers on it.', 'cloak|The wizard wore a long purple ____.'])),
+    hard: P('glasses 👓, sunglasses 🕶' + VS + ', goggles 🥽, handbag 👜, lipstick 💄, slipper 🥿, footprints 👣').concat(S([
+      'shoulder|Carry your bag on your ____.', 'eyebrow|Raise one ____ if you are surprised.', 'eyelash|An ____ fell onto my cheek.', 'forehead|Your ____ is above your eyes.',
+      'stomach|Food goes down into your ____.', 'skeleton|Your ____ is made of all your bones.', 'knuckle|Your ____ is the bump where your finger bends.', 'fingernail|Cut your ____ when it gets too long.',
+      'nostril|Air goes in through each ____.', 'earlobe|Your ____ is the soft bottom part of your ear.', 'kneecap|Your ____ is the round bone at the front of your knee.', 'heartbeat|The doctor listened to my ____.',
+      'eyesight|Glasses help people with poor ____.', 'freckles|She has ____ on her nose.', 'uniform|We wear a ____ to school.', 'raincoat|Wear a ____ when it rains.',
+      'cardigan|A ____ is a knitted top with buttons.', 'necklace|She wore a shiny ____ around her neck.', 'bracelet|A ____ goes around your wrist.', 'earrings|She wore sparkly ____.',
+      'swimsuit|Pack your ____ for the pool.', 'costume|I dressed up in a pirate ____.', 'ponytail|She tied her hair in a ____.', 'hairbrush|Use a ____ to tidy your hair.',
+      'toothpaste|Put a little ____ on your toothbrush.', 'shampoo|Wash your hair with ____.', 'headband|A ____ keeps your hair out of your eyes.', 'muscles|You need strong ____ to lift heavy things.',
+      'shoelace|Tie your ____ so you don’t trip.', 'fingertip|Touch the screen with your ____.', 'toenail|Your big ____ needs cutting.']))
   } },
   numbers: { name: 'Number words', icon: '🔢', kind: 'number' },
-  tricky: { name: 'Tricky words', icon: '🧩', kind: 'sentence', words: {
+  tricky: { name: 'Tricky words', icon: '🧩', words: {
     easy: S(['said|“Hello!” ____ the teacher.', 'they|The birds sing when ____ wake up.', 'was|The film ____ really funny.', 'were|We ____ late for the bus.',
       'what|____ is your name?', 'want|Do you ____ to play with me?', 'does|Where ____ your cat sleep?', 'come|Please ____ to my party.',
       'some|Can I have ____ water, please?', 'many|How ____ days are in a week?', 'any|Do you have ____ brothers or sisters?', 'have|I ____ a red kite.',
       'give|Please ____ me the ball.', 'your|Is this ____ hat?', 'who|____ is at the door?', 'where|____ are my shoes?',
       'there|Look over ____!', 'here|Come over ____ and sit with me.', 'once|____ upon a time, there was a king.', 'love|I ____ my little dog.',
       'done|I have ____ my homework.', 'eye|The pirate wore a patch over one ____.', 'both|I like ____ apples and pears.', 'only|There is ____ one cake left.',
-      'again|Let’s play that game ____!', 'water|Fish swim in the ____.']),
+      'again|Let’s play that game ____!', 'water|Fish swim in the ____.', 'one|I have ____ nose and two eyes.', 'two|A bike has ____ wheels.',
+      'four|A dog has ____ legs.', 'says|The teacher ____ it is time to go home.', 'goes|The bus ____ past my house.', 'put|____ your coat on the hook.',
+      'talk|We ____ to our friends at lunch.', 'walk|We ____ to school every day.', 'half|I ate ____ of the pizza.', 'move|Please ____ your chair closer.',
+      'door|Shut the ____, please.', 'kind|It is ____ to share your toys.', 'find|Can you ____ my lost sock?', 'climb|Monkeys can ____ trees.']),
     medium: S(['because|I wore my coat ____ it was cold.', 'friend|My best ____ lives next door.', 'people|There were lots of ____ at the park.', 'could|I wish I ____ fly like a bird.',
       'would|____ you like a drink?', 'should|You ____ brush your teeth every day.', 'their|The children hung up ____ coats.', 'laugh|Funny jokes make me ____.',
       'enough|Is there ____ cake for everyone?', 'through|The train went ____ the tunnel.', 'thought|I ____ it would rain today.', 'always|The sun ____ rises in the east.',
@@ -900,14 +1003,94 @@ const DECKS = {
       'great|We had a ____ time at the beach.', 'heard|I ____ a dog barking.', 'island|The pirates sailed to a small ____.', 'often|How ____ do you go swimming?',
       'quiet|Please be ____ in the library.', 'eight|An octopus has ____ arms.', 'early|I get up ____ on school days.', 'minute|Wait a ____, please.',
       'know|Do you ____ the way home?', 'write|Please ____ your name at the top.', 'listen|____ carefully to the story.', 'whole|He ate the ____ pizza by himself!',
-      'piece|Can I have a ____ of cake?', 'sure|Are you ____ you shut the gate?', 'caught|She ____ the ball with one hand.']),
+      'piece|Can I have a ____ of cake?', 'sure|Are you ____ you shut the gate?', 'caught|She ____ the ball with one hand.', 'brother|My big ____ is eleven.',
+      'money|I saved my ____ in a piggy bank.', 'clothes|Put your dirty ____ in the basket.', 'worry|Don’t ____, everything will be fine.', 'young|A puppy is a ____ dog.',
+      'touch|Do not ____ the hot oven!', 'earth|Worms live in the ____ in the garden.', 'fruit|An apple is a kind of ____.', 'breath|Take a deep ____ before you dive.']),
     hard: S(['believe|I ____ you can do it!', 'different|The twins wear ____ hats so we can tell them apart.', 'beautiful|What a ____ sunset!', 'separate|Keep the red and blue pens in ____ boxes.',
       'necessary|Is it ____ to bring a coat?', 'surprise|We planned a ____ party for Gran.', 'difficult|This puzzle is very ____.', 'probably|It will ____ rain later.',
       'remember|Did you ____ to bring your lunch?', 'straight|Draw a ____ line with a ruler.', 'strength|It takes a lot of ____ to lift that box.', 'knowledge|Reading books grows your ____.',
       'disappear|Watch the magician make the coin ____!', 'rhythm|Clap your hands to the ____ of the music.', 'vegetable|A carrot is a ____.', 'definitely|I will ____ come to your party.',
       'embarrass|Please don’t ____ me in front of my friends!', 'tomorrow|See you at school ____!', 'foreign|She can speak a ____ language.', 'receive|Did you ____ my letter?',
       'weird|That was a ____ dream!', 'restaurant|We ate dinner at a pizza ____.', 'temperature|What is the ____ outside today?', 'especially|I love fruit, ____ strawberries.',
-      'library|I borrowed a book from the ____.', 'exercise|Running is good ____.'])
+      'library|I borrowed a book from the ____.', 'exercise|Running is good ____.', 'accident|Sorry, I broke it by ____.', 'actually|I thought it was a dog, but it was ____ a fox.',
+      'address|Write your ____ on the envelope.', 'although|____ it was raining, we played outside.', 'business|My aunt runs her own ____.', 'experiment|We did a science ____ with magnets.',
+      'important|It is ____ to wash your hands.', 'imagine|Close your eyes and ____ a dragon.', 'naughty|The ____ puppy chewed my shoe!', 'ordinary|It was just an ____ day.',
+      'question|Can I ask you a ____?', 'sentence|Start every ____ with a capital letter.', 'special|Today is a very ____ day!', 'weight|What is the ____ of this parcel?'])
+  } },
+  homophones: { name: 'Homophones', icon: '🎧', words: {
+    easy: H([['to|I walk ____ school every day.', 'too|Can I come ____?', 'two|A bird has ____ wings.'], ['see|I can ____ a rainbow!', 'sea|Fish swim in the ____.'],
+      ['hear|I can ____ the birds singing.', 'here|Come over ____, please.'], ['no|____, thank you, I am full.', 'know|I ____ the way to school.'],
+      ['for|This present is ____ you.', 'four|A car has ____ wheels.'], ['one|I have ____ little sister.', 'won|Our team ____ the race!'],
+      ['be|I want to ____ an astronaut.', 'bee|A ____ makes honey.'], ['by|We had a picnic ____ the river.', 'buy|Let’s ____ some apples at the shop.', 'bye|Wave and say ____ to Grandpa.'],
+      ['sun|The ____ is shining today.', 'son|The king had a ____ and a daughter.'], ['ate|I ____ all my dinner.', 'eight|Six, seven, ____, nine, ten!'],
+      ['blue|The sky is ____.', 'blew|The wind ____ my hat away!'], ['new|I got ____ shoes for school.', 'knew|I ____ the answer!'],
+      ['red|Stop when the light is ____.', 'read|Yesterday I ____ a great book.'], ['road|Look both ways before you cross the ____.', 'rode|I ____ my bike to the park.'],
+      ['meat|Lions eat ____.', 'meet|Let’s ____ at the park after school.'], ['pair|I need a new ____ of socks.', 'pear|A ____ is a green fruit.'],
+      ['tail|My dog wags its ____.', 'tale|Grandma told us a fairy ____.'], ['week|There are seven days in a ____.', 'weak|The baby bird was too ____ to fly.'],
+      ['hole|The rabbit dug a ____.', 'whole|I ate the ____ apple.'], ['night|Owls hunt at ____.', 'knight|The ____ rode a white horse.']]),
+    medium: H([['there|Put your bag over ____.', 'their|The twins rode ____ bikes to school.', 'they\'re|Look at the puppies, ____ so cute!'],
+      ['your|Is this ____ pencil?', 'you\'re|____ my best friend!'], ['where|____ did you put my book?', 'wear|I ____ a coat when it is cold.'],
+      ['right|Turn ____ at the end of the road.', 'write|Please ____ your name here.'], ['flour|We need ____ to bake bread.', 'flower|A rose is a pretty ____.'],
+      ['piece|Can I have a ____ of cake?', 'peace|After the storm, there was ____ and quiet.'], ['hair|I brush my ____ every morning.', 'hare|A ____ looks like a big rabbit.'],
+      ['bear|A brown ____ loves honey.', 'bare|Don’t walk with ____ feet on the hot sand.'], ['mail|We got a letter in the ____ today.', 'male|A ____ lion has a big mane.'],
+      ['sail|The boat has a big white ____.', 'sale|The toy shop is having a ____.'], ['plane|We flew on a ____ to Spain.', 'plain|I like ____ toast with nothing on it.'],
+      ['wait|Please ____ for me!', 'weight|The ____ of the box is ten kilos.'], ['wood|The table is made of ____.', 'would|____ you like some juice?'],
+      ['stair|Don’t trip on the top ____!', 'stare|It is rude to ____ at people.'], ['break|Be careful not to ____ the glass.', 'brake|Press the ____ to stop the bike.'],
+      ['board|Write the answer on the ____.', 'bored|I was so ____ on the long car trip.'], ['knot|Tie a ____ in the rope.', 'not|I am ____ tired yet.'],
+      ['hour|An ____ has sixty minutes.', 'our|This is ____ classroom.'], ['it\'s|____ raining again!', 'its|The cat licked ____ paw.']]),
+    hard: H([['weather|The ____ is sunny today.', 'whether|I don’t know ____ it will rain.'], ['allowed|Dogs are not ____ in the shop.', 'aloud|Read the poem ____ to the class.'],
+      ['horse|I rode a ____ at the farm.', 'hoarse|My voice was ____ after singing all day.'], ['groan|He gave a big ____ when he saw the mess.', 'grown|My little brother has ____ so tall!'],
+      ['scene|The first ____ of the play was funny.', 'seen|Have you ____ my shoes?'], ['steal|The fox tried to ____ the eggs.', 'steel|The bridge is made of ____.'],
+      ['threw|She ____ the ball to me.', 'through|We walked ____ the forest.'], ['which|____ way is the beach?', 'witch|The ____ flew off on her broomstick.'],
+      ['great|We had a ____ time!', 'grate|____ the cheese for the pizza.'], ['passed|We ____ the school on our way home.', 'past|In the ____, people had no phones.'],
+      ['guessed|I ____ the answer right!', 'guest|We have a ____ staying for the weekend.'], ['whose|____ coat is this?', 'who\'s|____ coming to the party?'],
+      ['stationery|Pens, pencils and paper are called ____.', 'stationary|The car was ____ at the red light.'], ['course|Of ____ you can come!', 'coarse|The sand was ____ and rough.'],
+      ['berry|A raspberry is a kind of ____.', 'bury|Dogs like to ____ their bones.'], ['tide|The ____ comes in twice a day.', 'tied|I ____ my shoelaces.'],
+      ['warn|Signs ____ swimmers about big waves.', 'worn|My jeans are old and ____.'], ['pause|____ the film while I get a snack.', 'paws|My dog has muddy ____.'],
+      ['herd|A ____ of cows stood in the field.', 'heard|I ____ a funny noise.'], ['choose|____ a book from the shelf.', 'chews|My puppy ____ my slippers.']])
+  } },
+  endings: { name: 'Word endings', icon: '🧱', words: {
+    easy: R(['fox + s|foxes|Three ____ ran across the field.', 'box + s|boxes|We packed our toys in ____.', 'bus + s|buses|Two ____ stopped outside the school.',
+      'dish + s|dishes|I helped to wash the ____.', 'brush + s|brushes|The artist has lots of paint ____.', 'lunch + s|lunches|We pack our ____ in the morning.',
+      'watch + s|watches|Both of my grandads wear ____.', 'glass + s|glasses|Put the ____ on the table.', 'peach + s|peaches|The tree is full of ripe ____.',
+      'dress + s|dresses|The princess had lots of ____.', 'bench + s|benches|We sat on the park ____.', 'jump + ing|jumping|The frog is ____ into the pond.',
+      'play + ed|played|We ____ football after school.', 'help + ed|helped|I ____ Dad wash the car.', 'look + ing|looking|I am ____ for my shoes.',
+      'cook + ed|cooked|Grandma ____ a big dinner.', 'rain + ing|raining|Take a coat, it is ____.', 'sing + ing|singing|The birds are ____.',
+      'walk + ed|walked|We ____ to the park.', 'kick + ed|kicked|She ____ the ball into the goal.', 'fish + ing|fishing|We went ____ at the lake.',
+      'thank + ed|thanked|We ____ the bus driver.', 'paint + ing|painting|I am ____ a picture.', 'clean + ed|cleaned|I ____ my room.',
+      'tall + er|taller|My brother is ____ than me.', 'small + est|smallest|The mouse is the ____ animal here.', 'fast + er|faster|A cheetah runs ____ than a horse.',
+      'cold + er|colder|Winter is ____ than summer.', 'long + est|longest|This is the ____ day of the year.', 'old + est|oldest|Grandma is the ____ in our family.',
+      'short + er|shorter|My pencil is ____ than yours.', 'dark + er|darker|The sky gets ____ at night.', 'hard + er|harder|This puzzle is ____ than the last one.',
+      'sweet + est|sweetest|This is the ____ apple I have ever had.', 'quick + ly|quickly|The mouse ran ____ into its hole.', 'slow + ly|slowly|The snail moved ____.',
+      'loud + ly|loudly|The dog barked ____.', 'soft + ly|softly|She spoke ____ to the baby.', 'kind + ly|kindly|The teacher smiled ____.', 'bright + ly|brightly|The sun shone ____.']),
+    medium: R(['make + ing|making|We are ____ a sandcastle.', 'ride + ing|riding|I love ____ my bike.', 'smile + ing|smiling|The baby is ____ at me.',
+      'bake + ed|baked|We ____ a cake for Gran.', 'dance + ed|danced|We ____ all night at the party.', 'hope + ed|hoped|I ____ it would snow.',
+      'like + ed|liked|I ____ the film a lot.', 'write + ing|writing|I am ____ a story.', 'skate + ing|skating|We went ____ on the ice.',
+      'close + ed|closed|The shop is ____ on Sunday.', 'chase + ed|chased|The cat ____ the mouse.', 'save + ing|saving|I am ____ my money for a bike.',
+      'shine + ing|shining|The sun is ____.', 'use + ed|used|I ____ a pencil to draw.', 'wave + ed|waved|We ____ goodbye to the ship.',
+      'nice + er|nicer|Today is ____ than yesterday.', 'wide + est|widest|This is the ____ road in town.', 'large + est|largest|The whale is the ____ animal in the sea.',
+      'late + er|later|See you ____!', 'brave + est|bravest|The ____ knight saved the day.', 'stop + ed|stopped|The bus ____ at the corner.',
+      'run + ing|running|The dog is ____ in the park.', 'swim + ing|swimming|We go ____ on Saturdays.', 'hop + ing|hopping|The bunny is ____ across the grass.',
+      'clap + ed|clapped|Everyone ____ at the end of the show.', 'skip + ed|skipped|She ____ all the way home.', 'plan + ed|planned|We ____ a surprise party.',
+      'sit + ing|sitting|The cat is ____ on the mat.', 'shop + ing|shopping|We went ____ for new shoes.', 'drop + ed|dropped|I ____ my ice cream!',
+      'dig + ing|digging|The dog is ____ a hole.', 'grab + ed|grabbed|He ____ his coat and ran.', 'hug + ed|hugged|I ____ my grandma.',
+      'jog + ing|jogging|Dad goes ____ every morning.', 'tap + ing|tapping|Who is ____ on the window?', 'rub + ed|rubbed|I ____ my sleepy eyes.',
+      'big + er|bigger|An elephant is ____ than a mouse.', 'hot + est|hottest|Today is the ____ day of the summer.', 'wet + er|wetter|The grass is ____ after the rain.',
+      'thin + est|thinnest|This is the ____ book on the shelf.', 'win + er|winner|The ____ gets a gold medal.']),
+    hard: R(['baby + s|babies|The ____ were fast asleep.', 'puppy + s|puppies|Our dog had five ____.', 'party + s|parties|I love birthday ____.',
+      'berry + s|berries|We picked ____ in the woods.', 'city + s|cities|London and Paris are big ____.', 'story + s|stories|Grandpa tells the best ____.',
+      'fly + s|flies|Little ____ buzzed around the fruit.', 'cherry + s|cherries|____ grow on trees.', 'family + s|families|Lots of ____ came to the fair.',
+      'try + ed|tried|I ____ my best.', 'cry + ed|cried|The baby ____ all night.', 'carry + ed|carried|Dad ____ me on his shoulders.',
+      'hurry + ed|hurried|We ____ to catch the bus.', 'happy + er|happier|I feel ____ when the sun shines.', 'funny + est|funniest|That is the ____ joke ever!',
+      'easy + est|easiest|This is the ____ puzzle in the book.', 'busy + er|busier|The shop is ____ on Saturdays.', 'heavy + er|heavier|The big box is ____ than the small one.',
+      'tidy + est|tidiest|Jo has the ____ bedroom.', 'happy + ly|happily|The children played ____.', 'easy + ly|easily|She won the race ____.',
+      'lucky + ly|luckily|____, it stopped raining.', 'angry + ly|angrily|The goose honked ____.', 'beauty + ful|beautiful|What a ____ day!',
+      'leaf + s|leaves|The ____ turn orange and fall off the trees.', 'wolf + s|wolves|The ____ howled at the moon.', 'half + s|halves|Cut the apple into two ____.',
+      'shelf + s|shelves|The books are on the ____.', 'loaf + s|loaves|The baker made ten ____ of bread.', 'calf + s|calves|The cows and their ____ are in the field.',
+      'scarf + s|scarves|We wore warm ____ in the snow.', 'elf + s|elves|The ____ in the story were tiny and magic.', 'life + s|lives|Cats are said to have nine ____.',
+      'one mouse, two …|mice|The cat chased two little ____.', 'one child, two …|children|The ____ played in the park.', 'one tooth, two …|teeth|Brush your ____ twice a day.',
+      'one foot, two …|feet|My ____ are cold.', 'one goose, two …|geese|The ____ flew south for the winter.', 'one woman, two …|women|The ____ were walking their dogs.',
+      'one man, two …|men|The ____ carried the piano.'])
   } }
 };
 const DECK_IDS = Object.keys(DECKS);
@@ -924,7 +1107,7 @@ function wordList(deck, level) {
   const d = DECKS[deck];
   let list;
   if (deck === 'numbers') list = level === 'hard' ? [] : NUMBERS[level].map((n) => ({ w: numWord(n), pic: String(n), kind: 'number' }));
-  else list = d.words[level].map((x) => Object.assign({ kind: d.kind }, x));
+  else list = d.words[level].map((x) => Object.assign({ kind: 'sentence' }, x));
   return (cache[key] = list);
 }
 // a math fact from the shared math level whose answer is 1-99, turned into a number word to spell
@@ -951,14 +1134,27 @@ function factWord(usedWords, usedFacts) {
 /* ================= letter tiles =================
    The word's own letters plus 2-4 decoys (Easy 2, Medium 3, Hard 4, at most 16 tiles): letters
    that are easy to mix up with the word's (c/k/s, i/e/y, b/d...), from Medium up sometimes a
-   second copy of a letter that likes to be doubled (necessary, rabbit). Never a spare hyphen. */
+   second copy of a letter that likes to be doubled (necessary, rabbit). Never a spare hyphen.
+   A homophone's decoys are first the letters its sound-alikes need (there: i for their, y and ' for
+   they're), so every spelling can be built from the tiles and only the sentence tells which one is
+   right; the game accepts just that one. */
 const CONFUSE = { a: 'eou', b: 'dp', c: 'ks', d: 'bt', e: 'aiy', f: 'v', g: 'jk', h: 'n', i: 'ey', j: 'g', k: 'c', l: 'i', m: 'n', n: 'm', o: 'ua', p: 'bq', q: 'p', r: 'w', s: 'cz', t: 'd', u: 'o', v: 'fw', w: 'v', x: 'z', y: 'ie', z: 's' };
 const DOUBLERS = 'lstrmnpcfgbd';
-function makeTiles(word, level) {
+function makeTiles(word, level, alt) {
   const letters = word.split(''), inWord = new Set(letters), decoys = [];
   const want = clamp(level === 'easy' ? 2 : level === 'medium' ? 3 : 4, 2, Math.max(2, 16 - letters.length));
-  if (level !== 'easy' && Math.random() < 0.5) { const d = letters.filter((c) => DOUBLERS.indexOf(c) >= 0); if (d.length) decoys.push(pick(d)); }
-  const near = shuffle(Array.from(new Set(letters.map((c) => CONFUSE[c] || '').join('').split(''))).filter((c) => c && !inWord.has(c)));
+  if (alt && alt.length) {
+    const need = {};
+    alt.forEach((a) => {
+      const left = letters.slice(), cnt = {};
+      a.split('').forEach((c) => { const k = left.indexOf(c); if (k >= 0) left.splice(k, 1); else cnt[c] = (cnt[c] || 0) + 1; });
+      Object.keys(cnt).forEach((c) => { need[c] = Math.max(need[c] || 0, cnt[c]); });
+    });
+    Object.keys(need).forEach((c) => { for (let i = 0; i < need[c]; i++) decoys.push(c); });
+    shuffle(decoys); decoys.length = Math.min(decoys.length, 4);
+  }
+  if (level !== 'easy' && decoys.length < want && Math.random() < 0.5) { const d = letters.filter((c) => DOUBLERS.indexOf(c) >= 0); if (d.length) decoys.push(pick(d)); }
+  const near = shuffle(Array.from(new Set(letters.map((c) => CONFUSE[c] || '').join('').split(''))).filter((c) => c && !inWord.has(c) && decoys.indexOf(c) < 0));
   while (decoys.length < want && near.length) decoys.push(near.pop());
   const rest = shuffle('abcdefghijklmnoprstuvwy'.split('').filter((c) => !inWord.has(c) && decoys.indexOf(c) < 0));
   while (decoys.length < want && rest.length) decoys.push(rest.pop());
@@ -968,12 +1164,15 @@ function makeTiles(word, level) {
 }
 
 /* ================= records ================= */
-const rec = loadRecords('spell-it.v1', { deck: 'animals', level: 'medium', learned: [], missed: [], rounds: 0, perfect: 0, best: {} });
+const rec = loadRecords('spell-it.v1', { deck: 'animals', level: 'medium', listen: false, learned: [], missed: [], rounds: 0, perfect: 0, best: {} });
 if (!DECKS[rec.deck]) rec.deck = 'animals';
 if (LEVELS.indexOf(rec.level) < 0) rec.level = 'medium';
 if (!Array.isArray(rec.learned)) rec.learned = [];
 if (!Array.isArray(rec.missed)) rec.missed = [];
 if (!rec.best || typeof rec.best !== 'object') rec.best = {};
+rec.listen = !!rec.listen && Speech.ok;
+// best stars per deck, level and mode (Listen only is its own, harder record)
+const bestKey = (deck, level, listen) => deck + '-' + level + (listen ? '-listen' : '');
 
 /* ================= a round =================
    Ten words drawn from a shuffled bag per deck and level (every word comes up before one
@@ -1010,12 +1209,13 @@ function buildRound(deck, level, force) {
 const game = {
   state: 'menu', prev: 'spell', deck: rec.deck, level: rec.level, words: [], i: 0, word: null, tiles: [], pos: 0,
   slips: 0, looked: false, slipAt: [], results: [], t: 0, speed: 1, lookEnd: 0, lookDur: 1, peekEnd: 0, nextAt: 0,
-  sessionRounds: 0, lastStars: 0, remix: ''
+  sessionRounds: 0, lastStars: 0, remix: '', listen: false
 };
 const PLAYING = new Set(['look', 'spell', 'peek', 'done']);
 const calm = () => !!save.settings.calm || reduceMotion;
 const isFact = () => game.word && game.word.kind === 'fact';
-const lookTime = (w) => LOOK_SEC[game.level] + Math.max(0, w.w.length - 6) * 0.25 + (w.kind === 'sentence' ? 1 : 0);
+const CLUED = new Set(['sentence', 'homo', 'rule']);
+const lookTime = (w) => LOOK_SEC[game.level] + Math.max(0, w.w.length - 6) * 0.25 + (CLUED.has(w.kind) ? 1 : 0);
 
 /* ================= read aloud ================= */
 let muffled = false, muffleUntil = 0;
@@ -1024,7 +1224,8 @@ function speak(text) {
 }
 function sayWord(w, when) {
   if (w.kind === 'fact') speak(when === 'done' ? 'The answer is ' + w.w : factSay(w.pic));
-  else if (w.kind === 'sentence' && when !== 'done') speak(w.w + '. ' + w.clue.replace('____', w.w));
+  else if (w.kind === 'homo') speak(w.clue.replace('____', w.w));   // the sound alone is not enough: always the whole sentence
+  else if ((w.kind === 'sentence' || w.kind === 'rule') && when !== 'done') speak(w.w + '. ' + w.clue.replace('____', w.w));
   else speak(w.w);
 }
 
@@ -1037,13 +1238,22 @@ function renderPic(w, solved) {
   if (w.kind === 'emoji') { s.className = 'emoji'; s.textContent = w.pic; s.setAttribute('role', 'img'); s.setAttribute('aria-label', w.w); }
   else if (w.kind === 'number') { s.className = 'num'; s.textContent = w.pic; }
   else if (w.kind === 'fact') { s.className = 'fact'; if (solved) s.innerHTML = solvedText({ raw: w.q, answer: w.q.a }); else s.textContent = w.pic; }
-  else {
-    s.className = 'clue';
-    const parts = w.clue.split('____'), gap = document.createElement('span');
-    gap.className = 'gap' + (solved ? ' filled' : ''); if (solved) gap.textContent = w.w;
-    s.append(parts[0], gap, parts[1] || '');
-  }
+  else if (w.kind === 'rule') {
+    // "stop + ed" with the ending picked out, and the sentence under it
+    s.className = 'rulebox';
+    const pr = document.createElement('span'), cut = w.pic.indexOf(' + ');
+    pr.className = 'prompt';
+    if (cut > 0) { const b = document.createElement('b'); b.textContent = w.pic.slice(cut + 3); pr.append(w.pic.slice(0, cut) + ' + ', b); } else pr.textContent = w.pic;
+    s.append(pr, clueEl(w, solved));
+  } else { picEl.appendChild(clueEl(w, solved)); return; }
   picEl.appendChild(s);
+}
+function clueEl(w, solved) {
+  const s = document.createElement('span'), parts = w.clue.split('____'), gap = document.createElement('span');
+  s.className = 'clue';
+  gap.className = 'gap' + (solved ? ' filled' : ''); if (solved) gap.textContent = w.w;
+  s.append(parts[0], gap, parts[1] || '');
+  return s;
 }
 function renderBoxes() {
   const w = game.word.w, hy = w.indexOf('-');
@@ -1063,7 +1273,7 @@ function renderTiles() {
   tilesEl.textContent = '';
   game.tiles.forEach((t, i) => {
     const b = document.createElement('button');
-    b.className = 'tile'; b.type = 'button'; b.dataset.i = i; b.textContent = t.ch; b.setAttribute('aria-label', t.ch === '-' ? 'hyphen' : 'letter ' + t.ch);
+    b.className = 'tile'; b.type = 'button'; b.dataset.i = i; b.textContent = t.ch; b.setAttribute('aria-label', t.ch === '-' ? 'hyphen' : t.ch === "'" ? 'apostrophe' : 'letter ' + t.ch);
     t.el = b; tilesEl.appendChild(b);
   });
 }
@@ -1071,15 +1281,15 @@ function markNow() { boxes.forEach((b, i) => b.classList.toggle('now', game.stat
 function setPhase(kind) {
   const el = $('#phase'), w = game.word;
   el.className = 'phase ' + kind;
-  el.textContent = kind === 'look' ? '👀 Look' : kind === 'spell' ? '✏' + VS + ' Spell it' : kind === 'work' ? '🧮 Work it out, then spell it' : (w && game.results.length && game.results[game.results.length - 1].perfect ? '⭐ Perfect' : '✅ Done');
-  $('#lookBtn').disabled = !(kind === 'spell' || kind === 'work');
+  el.textContent = kind === 'look' ? '👀 Look' : kind === 'spell' ? '✏' + VS + ' Spell it' : kind === 'work' ? '🧮 Work it out, then spell it' : kind === 'listen' ? '👂 Listen, then spell it' : (w && game.results.length && game.results[game.results.length - 1].perfect ? '⭐ Perfect' : '✅ Done');
+  $('#lookBtn').disabled = !(kind === 'spell' || kind === 'work') || game.listen;
   $('#hearBtn').hidden = !Speech.ok || !save.settings.speak;
   $('#lookbar').classList.toggle('on', kind === 'look');
 }
 function updateHud() {
   $('#wordChip').textContent = 'Word ' + Math.min(ROUND, game.i + 1) + ' / ' + ROUND;
   $('#starChip').textContent = '⭐ ' + game.results.filter((r) => r.perfect).length;
-  $('#deckChip').textContent = DECKS[game.deck].name + ' · ' + LEVEL_NAME[game.level];
+  $('#deckChip').textContent = DECKS[game.deck].name + ' · ' + LEVEL_NAME[game.level] + (game.listen ? ' · 👂' : '');
 }
 
 /* Sizes so a whole word, its tiles and the picture fit with no scrolling: the boxes as big as
@@ -1118,11 +1328,16 @@ function layout() {
   // the sum and the sentence clue: as big as the card allows
   const cardW = Math.min(availW - 8, 760) - 60;
   if (game.word.kind === 'fact') st.setProperty('--fact', Math.floor(Math.min(pic * 0.56, cardW / (game.word.pic.length * 0.46))) + 'px');
-  if (game.word.kind === 'sentence') {
-    const len = game.word.clue.length + 3;
+  const kind = game.word.kind, len = (game.word.clue || '').length + 3;
+  const clueLines = (f) => Math.ceil(len / Math.max(1, Math.floor(Math.min(cardW, f * 15) / (f * 0.5))));
+  if (kind === 'sentence' || kind === 'homo') {
     let f = clamp(Math.round(pic * 0.19), 20, 46);
-    while (f > 16 && Math.ceil(len / Math.max(1, Math.floor(Math.min(cardW, f * 15) / (f * 0.5)))) * f * 1.3 > pic - 14) f--;
+    while (f > 16 && clueLines(f) * f * 1.3 > pic - 14) f--;
     st.setProperty('--clue', f + 'px');
+  } else if (kind === 'rule') {
+    let pf = Math.floor(Math.min(pic * 0.36, cardW / (game.word.pic.length * 0.5), 72)), f = clamp(Math.round(pic * 0.14), 16, 30);
+    for (let g = 0; g < 80 && pf * 1.15 + 6 + clueLines(f) * f * 1.3 > pic - 10; g++) { if (f > 18) f--; else if (pf > 26) pf -= 2; else if (f > 14) f--; else break; }
+    st.setProperty('--rule', pf + 'px'); st.setProperty('--clue', f + 'px');
   }
 }
 
@@ -1133,7 +1348,7 @@ function startRound(force) {
   Sound.init();
   game.deck = rec.deck; game.level = rec.level;
   game.words = buildRound(game.deck, game.level, force);
-  game.i = 0; game.results = []; game.t = 0; game.sessionRounds++;
+  game.i = 0; game.results = []; game.t = 0; game.sessionRounds++; game.listen = !!rec.listen;
   Sound.play('spell');
   showScreen(null);
   $('#hud').hidden = false; playEl.hidden = false; playEl.classList.remove('away');
@@ -1149,15 +1364,15 @@ function startRound(force) {
 function showWord() {
   const w = game.words[game.i];
   game.word = w; game.pos = 0; game.slips = 0; game.looked = false; game.slipAt = w.w.split('').map(() => 0);
-  game.tiles = makeTiles(w.w, game.level).map((ch) => ({ ch: ch, used: false, el: null }));
+  game.tiles = makeTiles(w.w, game.level, w.alt).map((ch) => ({ ch: ch, used: false, el: null }));
   cheerEl.hidden = true;
   renderPic(w, false); renderBoxes(); renderTiles();
   updateHud();
   layout();
-  if (w.kind === 'fact') {
-    // a sum to work out: no look first, the boxes start empty
-    game.state = 'spell'; setPhase('work'); showLetters(false); revealTiles();
-    announce('Word ' + (game.i + 1) + '. ' + factSay(w.pic) + '. Spell the answer, ' + w.w.length + ' letters.');
+  if (w.kind === 'fact' || game.listen) {
+    // a sum to work out, or Listen only: no look first, the boxes start empty
+    game.state = 'spell'; setPhase(w.kind === 'fact' ? 'work' : 'listen'); showLetters(false); revealTiles();
+    announce('Word ' + (game.i + 1) + '. ' + (w.kind === 'fact' ? factSay(w.pic) + '. Spell the answer, ' : 'Listen and spell, ') + w.w.length + ' letters.');
   } else {
     game.state = 'look'; setPhase('look'); showLetters(true);
     tilesEl.className = 'tiles wait';
@@ -1216,7 +1431,7 @@ function typeLetter(ch) {
   else if (!calm()) { const b = boxes[game.pos]; b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump'); }
 }
 function lookAgain() {
-  if (game.state !== 'spell') return;
+  if (game.state !== 'spell' || game.listen) return;
   game.looked = true; game.state = 'peek'; game.peekEnd = game.t + 1.5;
   boxes.forEach((b, i) => { if (i >= game.pos) { b.textContent = game.word.w[i]; b.classList.add('peek'); } b.classList.remove('now'); });
   tilesEl.classList.add('off');
@@ -1228,7 +1443,7 @@ function endPeek() {
   game.state = 'spell';
   boxes.forEach((b, i) => { if (i >= game.pos) b.textContent = ''; b.classList.remove('peek'); });
   tilesEl.classList.remove('off');
-  setPhase(isFact() ? 'work' : 'spell');
+  setPhase(isFact() ? 'work' : game.listen ? 'listen' : 'spell');
   markNow();
 }
 function wordDone() {
@@ -1238,7 +1453,7 @@ function wordDone() {
   markNow();
   boxes.forEach((b, i) => { b.classList.remove('fill', 'flip', 'now'); b.style.animationDelay = calm() ? '' : (i * 0.04) + 's'; b.classList.add('win'); });
   if (w.kind === 'fact') { if (perfect) mathRight(w.q); else mathWrong(w.q); }
-  if (w.kind === 'fact' || w.kind === 'sentence') renderPic(w, true);
+  if (w.kind !== 'emoji' && w.kind !== 'number') renderPic(w, true);
   remember(w, perfect);
   setPhase('done');
   tilesEl.className = 'tiles wait';
@@ -1257,7 +1472,10 @@ function remember(w, perfect) {
     if (rec.learned.indexOf(k) < 0) rec.learned.push(k);
     rec.missed = rec.missed.filter((m) => !(m.d === d && m.w === k));
   } else if (w.kind !== 'fact') {
-    rec.missed = rec.missed.filter((m) => !(m.d === d && m.w === k)).concat([{ d: d, l: game.level, w: k }]).slice(-20);
+    // the last 20 missed words of each deck (so one busy deck never pushes out another's)
+    rec.missed = rec.missed.filter((m) => !(m.d === d && m.w === k)).concat([{ d: d, l: game.level, w: k }]);
+    const mine = rec.missed.filter((m) => m.d === d);
+    if (mine.length > 20) rec.missed.splice(rec.missed.indexOf(mine[0]), 1);
   }
   writeSave();
 }
@@ -1278,12 +1496,13 @@ function nextWord() {
   if (game.i >= ROUND) finishRound(); else showWord();
 }
 function chipFor(r, miss) {
-  const tag = r.kind === 'emoji' ? '<i>' + r.pic + '</i>' : r.kind === 'number' || r.kind === 'fact' ? '<i class="n">' + r.pic.replace(' = ?', '') + '</i>' : '';
+  const tag = r.kind === 'emoji' ? '<i>' + r.pic + '</i>' : r.kind === 'number' || r.kind === 'fact' ? '<i class="n">' + r.pic.replace(' = ?', '') + '</i>'
+    : r.kind === 'rule' ? '<i class="n">' + (r.pic.indexOf(' + ') > 0 ? r.pic : r.pic.replace('one ', '').replace(', two …', ' →')) + '</i>' : '';
   return '<span class="wchip' + (miss ? ' miss' : '') + '">' + tag + r.w + '</span>';
 }
 function finishRound() {
   const perfect = game.results.filter((r) => r.perfect), miss = game.results.filter((r) => !r.perfect);
-  const stars = perfect.length >= 9 ? 3 : perfect.length >= 6 ? 2 : 1, key = game.deck + '-' + game.level;
+  const stars = perfect.length >= 9 ? 3 : perfect.length >= 6 ? 2 : 1, key = bestKey(game.deck, game.level, game.listen);
   const prevBest = rec.best[key] || 0, better = prevBest > 0 && stars > prevBest;
   rec.best[key] = Math.max(rec.best[key] || 0, stars); rec.rounds++; rec.perfect += perfect.length;
   writeSave();
@@ -1291,7 +1510,7 @@ function finishRound() {
   Speech.stop();
   $('#doneTitle').textContent = stars === 3 ? 'Super speller!' : stars === 2 ? 'Great spelling!' : 'Good practice!';
   $('#doneStars').innerHTML = starRow(stars);
-  $('#doneNote').textContent = perfect.length + ' of ' + ROUND + ' words perfect' + (better ? ' · a new best here!' : '');
+  $('#doneNote').textContent = perfect.length + ' of ' + ROUND + ' words perfect' + (game.listen ? ' · 👂 Listen only' : '') + (better ? ' · a new best here!' : '');
   $('#perfectBox').hidden = !perfect.length; $('#perfectList').innerHTML = perfect.map((r) => chipFor(r, false)).join('');
   $('#missBox').hidden = !miss.length; $('#missList').innerHTML = miss.map((r) => chipFor(r, true)).join('');
   $('#doneStats').innerHTML = stat('Words learned', rec.learned.length) + stat('Rounds played', rec.rounds);
@@ -1303,16 +1522,21 @@ function finishRound() {
 
 /* ================= menus ================= */
 function deckNote() {
-  const l = rec.level, d = rec.deck;
-  if (d === 'numbers') return l === 'easy' ? 'Spell one to twenty · ' + LOOK_SEC[l] + ' s to look' : l === 'medium' ? '21 to 99, with a hyphen: forty-two · ' + LOOK_SEC[l] + ' s to look' : 'Work out the sum, spell the answer · math level ' + (MATH[save.settings.mathLevel] || MATH.explorer).name;
-  if (d === 'tricky') return (l === 'easy' ? 'said, they, once…' : l === 'medium' ? 'because, friend, people…' : 'believe, separate, necessary…') + ' with a sentence clue';
-  return (l === 'easy' ? '3–4 letter words' : l === 'medium' ? '5–6 letter words' : 'Words of 7 letters or more') + ' · ' + LOOK_SEC[l] + ' s to look';
+  const l = rec.level, d = rec.deck, look = ' · ' + LOOK_SEC[l] + ' s to look';
+  const notes = {
+    numbers: { easy: 'Spell one to twenty' + look, medium: '21 to 99, with a hyphen: forty-two' + look, hard: 'Work out the sum, spell the answer · math level ' + (MATH[save.settings.mathLevel] || MATH.explorer).name },
+    tricky: { easy: 'said, they, once… with a sentence clue', medium: 'because, friend, people… with a sentence clue', hard: 'believe, separate, necessary… with a sentence clue' },
+    homophones: { easy: 'Same sound, different spelling: to · too · two, see · sea', medium: 'there · their · they’re, flour · flower', hard: 'weather · whether, aloud · allowed' },
+    endings: { easy: 'Add -es, -ing, -ed, -er, -ly: foxes, jumping, taller', medium: 'Drop the e or double the last letter: making, stopped', hard: 'y turns to i, f turns to v, odd plurals: babies, leaves, mice' }
+  };
+  const base = notes[d] ? notes[d][l] : (l === 'easy' ? '3–4 letter words' : l === 'medium' ? '5–6 letter words' : 'Words of 7 letters or more') + look;
+  return rec.listen ? base.replace(look, '') + ' · Listen only: the word is never shown' : base;
 }
 $('#decks').innerHTML = DECK_IDS.map((id) => '<label class="deck" data-deck="' + id + '"><input type="radio" name="deck" value="' + id + '"><span><i aria-hidden="true">' +
   DECKS[id].icon + '</i>' + DECKS[id].name + '<small></small></span></label>').join('');
 function renderHome() {
   DECK_IDS.forEach((id) => {
-    const best = rec.best[id + '-' + rec.level] || 0, lab = document.querySelector('.deck[data-deck="' + id + '"]');
+    const best = rec.best[bestKey(id, rec.level, rec.listen)] || 0, lab = document.querySelector('.deck[data-deck="' + id + '"]');
     lab.querySelector('input').checked = id === rec.deck;
     const sm = lab.querySelector('small');
     sm.textContent = best ? '★'.repeat(best) + '☆'.repeat(3 - best) : '';
@@ -1321,12 +1545,15 @@ function renderHome() {
   const lv = document.querySelector('input[name="level"][value="' + rec.level + '"]');
   if (lv) lv.checked = true;
   $('#deckNote').textContent = deckNote();
-  const best = rec.best[rec.deck + '-' + rec.level] || 0;
+  const best = rec.best[bestKey(rec.deck, rec.level, rec.listen)] || 0;
   $('#homeStats').innerHTML = stat('Words learned', rec.learned.length) + stat('Rounds played', rec.rounds) + stat('Best here', best ? '★'.repeat(best) : '–');
   const sp = $('#speakBtn');
   sp.textContent = !Speech.ok ? 'Read aloud: not here' : save.settings.speak ? 'Read aloud: on' : 'Read aloud: off';
   sp.disabled = !Speech.ok; sp.setAttribute('aria-pressed', String(!!save.settings.speak));
   $('#soundBtn').textContent = save.settings.music > 0 ? 'Music: on' : 'Music: off';
+  const lb = $('#listenBtn');
+  lb.lastChild.textContent = 'Listen only: ' + (rec.listen ? 'on' : 'off');
+  lb.setAttribute('aria-pressed', String(!!rec.listen)); lb.disabled = !Speech.ok;
 }
 function goHome() {
   game.state = 'menu'; game.word = null; Speech.stop();
@@ -1340,7 +1567,7 @@ function pause() {
   game.prev = game.state; game.state = 'pause';
   Speech.stop(); Sound.muffle(true);
   playEl.classList.add('away');   // no peeking at the word while paused
-  $('#pauseInfo').textContent = 'Word ' + (game.i + 1) + ' of ' + ROUND + ' · ' + DECKS[game.deck].name + ' · ' + LEVEL_NAME[game.level];
+  $('#pauseInfo').textContent = 'Word ' + (game.i + 1) + ' of ' + ROUND + ' · ' + DECKS[game.deck].name + ' · ' + LEVEL_NAME[game.level] + (game.listen ? ' · Listen only' : '');
   showScreen('pause');
 }
 function resume() {
@@ -1361,8 +1588,16 @@ $('#hearBtn').addEventListener('click', () => { if (game.word && PLAYING.has(gam
 $('#lookBtn').addEventListener('click', lookAgain);
 tilesEl.addEventListener('click', (e) => { const b = e.target.closest('.tile'); if (b) tapTile(+b.dataset.i); });
 $('#speakBtn').addEventListener('click', () => {
-  save.settings.speak = !save.settings.speak; writeSave(); renderHome();
+  save.settings.speak = !save.settings.speak;
+  if (!save.settings.speak) rec.listen = false;   // Listen only needs the voice
+  writeSave(); renderHome();
   if (save.settings.speak) Speech.say('Read aloud is on.');
+});
+$('#listenBtn').addEventListener('click', () => {
+  rec.listen = !rec.listen && Speech.ok;
+  if (rec.listen) save.settings.speak = true;
+  writeSave(); renderHome();
+  if (rec.listen) Speech.say('Listen only. You will hear each word, but not see it.');
 });
 $('#soundBtn').addEventListener('click', () => { if (toggleMusic() && game.state === 'menu') Sound.play('menu'); renderHome(); });
 document.addEventListener('change', (e) => {
@@ -1372,7 +1607,7 @@ document.addEventListener('change', (e) => {
 window.addEventListener('keydown', (e) => {
   if (e.ctrlKey || e.metaKey || e.altKey) return;
   if (e.key === 'Escape') { if (PLAYING.has(game.state)) { e.preventDefault(); pause(); } else if (game.state === 'pause') { e.preventDefault(); resume(); } return; }
-  if (game.state === 'spell' && e.key && e.key.length === 1 && /[a-z-]/i.test(e.key)) { e.preventDefault(); if (!e.repeat) typeLetter(e.key.toLowerCase()); }
+  if (game.state === 'spell' && e.key && e.key.length === 1 && /[a-z'’-]/i.test(e.key)) { e.preventDefault(); if (!e.repeat) typeLetter(e.key.toLowerCase().replace('’', "'")); }
 });
 arcadeGuards(pause);
 // the menu song starts with the first touch on the home screen (sound needs a tap on iPad)
@@ -1442,7 +1677,7 @@ window.__spell = {
   forceNext: (list) => { forced = list; },
   start: (deck, level, force) => { rec.deck = deck; rec.level = level; renderHome(); startRound(force); },
   lookAgain: () => $('#lookBtn').click(), hear: () => $('#hearBtn').click(), pause, resume, goHome,
-  setSpeed: (k) => { game.speed = k; }, fits, layout, makeTiles, wordList, numWord, factWord, factSay, buildRound
+  setSpeed: (k) => { game.speed = k; }, setListen: (on) => { rec.listen = !!on; renderHome(); }, bestKey, DECK_IDS, fits, layout, makeTiles, wordList, numWord, factWord, factSay, buildRound
 };
 })();
 </script>

@@ -1,0 +1,631 @@
+<title>English Quest</title>
+<meta name="description" content="Step by step from first English words to IELTS band 8: short lessons with words, grammar, listening, spelling, sentence building and reading.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap">
+<style>
+/*__SHARED:arcade-ui.css__*/
+/* Layout: menus are cards (home, path, results); a lesson fills the screen: a thin top bar with
+   the progress, the question in the middle, and a feedback sheet that slides up after an answer.
+   Each stage has its own colour on the path. */
+.home { gap: 14px; }
+.tagline { margin: -6px 0 0; font: 600 1.05rem/1.2 var(--font-display); color: var(--ink-soft); }
+.level { background: var(--card-2); border-radius: 20px; padding: 14px 16px; display: grid; gap: 10px; text-align: left; }
+.level-top { display: flex; align-items: center; gap: 12px; }
+.level-top .big { font-family: var(--emoji); font-size: 2.2rem; line-height: 1; }
+.level-top b { display: block; font: 700 1.25rem/1.15 var(--font-display); }
+.level-top span { color: var(--ink-soft); font-weight: 700; font-size: .92rem; }
+.track { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+.track i { height: 10px; border-radius: 99px; background: var(--line); }
+.track i.done { background: var(--mint); }
+.track i.now { background: var(--sun); }
+.track-labels { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; font: 700 .68rem/1.1 var(--font-body); color: var(--ink-soft); text-align: center; }
+.note { margin: 0; font-size: .82rem; color: var(--ink-soft); line-height: 1.4; }
+.skills { display: grid; gap: 6px; }
+.skill { display: grid; grid-template-columns: 82px 1fr 40px; align-items: center; gap: 8px; font: 700 .85rem/1 var(--font-body); color: var(--ink-soft); }
+.skill .bar { height: 10px; border-radius: 99px; background: var(--line); overflow: hidden; }
+.skill .bar i { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--sky-blue), var(--mint)); }
+.skill span:last-child { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* the path */
+.path-card { width: min(100%, 720px); }
+.stage-tabs { display: flex; gap: 6px; overflow-x: auto; padding: 2px 2px 6px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.stage-tabs::-webkit-scrollbar { display: none; }
+.stage-tabs button { flex: none; border: 2px solid var(--line); background: var(--card-2); border-radius: 14px; padding: 8px 12px; font: 600 .95rem/1.1 var(--font-display); color: var(--ink); cursor: pointer; min-height: 48px; }
+.stage-tabs button.on { background: var(--sun); border-color: var(--sun-deep); color: var(--sun-ink); }
+.stage-tabs button.locked { opacity: .55; }
+.stage-head { text-align: left; display: grid; gap: 4px; }
+.stage-head h2 { margin: 0; font: 700 1.6rem/1.1 var(--font-display); }
+.stage-head p { margin: 0; color: var(--ink-soft); }
+.nodes { display: grid; gap: 10px; }
+.node { display: grid; grid-template-columns: 56px 1fr auto; align-items: center; gap: 12px; width: min(100%, 520px); text-align: left; border: 2px solid var(--line); background: var(--card-2); border-radius: 20px; padding: 10px 14px; cursor: pointer; color: var(--ink); font: inherit; min-height: 72px; box-shadow: 0 4px 0 var(--line); }
+.node:nth-child(odd) { justify-self: start; } .node:nth-child(even) { justify-self: end; }
+.node .em { font-family: var(--emoji); font-size: 2rem; line-height: 1; text-align: center; }
+.node b { display: block; font: 600 1.1rem/1.15 var(--font-display); }
+.node small { color: var(--ink-soft); font-weight: 700; }
+.node .st { font-size: 1.05rem; letter-spacing: .05em; white-space: nowrap; }
+.node.next { border-color: var(--sun-deep); background: var(--door); box-shadow: 0 4px 0 var(--sun-deep); }
+.node.locked { opacity: .5; cursor: default; box-shadow: none; }
+.node.test { border-style: dashed; }
+.node:focus-visible { outline: 3px solid var(--lilac); outline-offset: 3px; }
+.soon { padding: 18px; border-radius: 18px; background: var(--card-2); color: var(--ink-soft); font-weight: 700; }
+
+/* a lesson */
+#lesson { position: fixed; inset: 0; display: grid; grid-template-rows: auto 1fr auto; z-index: 5; }
+.lbar { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px; padding: calc(10px + env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) 8px max(16px, env(safe-area-inset-left, 0px)); }
+.prog { height: 14px; border-radius: 99px; background: var(--card); box-shadow: var(--shadow-sm); overflow: hidden; }
+.prog i { display: block; height: 100%; width: 0; border-radius: 99px; background: linear-gradient(90deg, var(--mint), var(--sun)); transition: width .3s ease; }
+.lcount { font: 700 1rem/1 var(--font-display); color: var(--ink-soft); font-variant-numeric: tabular-nums; min-width: 48px; text-align: right; }
+.qwrap { overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 6px max(16px, env(safe-area-inset-right, 0px)) 16px max(16px, env(safe-area-inset-left, 0px)); display: grid; }
+.q { width: min(100%, 780px); margin: auto; display: grid; gap: 14px; justify-items: center; text-align: center; }
+.qlabel { font: 700 .82rem/1 var(--font-body); text-transform: uppercase; letter-spacing: .08em; color: var(--ink-soft); background: var(--card); border-radius: 99px; padding: 7px 12px; box-shadow: var(--shadow-sm); }
+.qlabel .sk { color: var(--lilac); }
+.prompt { font: 600 clamp(1.25rem, 3.6vw, 2rem)/1.3 var(--font-display); text-wrap: balance; white-space: pre-line; }
+.prompt .gap { display: inline-block; min-width: 3.2em; border-bottom: 4px solid var(--sun-deep); margin: 0 .15em; color: var(--mint-deep); }
+.bigword { font: 700 clamp(2.4rem, 8vw, 4rem)/1 var(--font-display); }
+.pic { font: clamp(4.5rem, 16vw, 7.5rem)/1 var(--emoji); }
+.say { display: inline-flex; align-items: center; gap: 8px; }
+.say .btn { font-size: 1.15rem; }
+.listen-big { width: 112px; height: 112px; border-radius: 50%; border: 0; background: var(--sun); color: var(--sun-ink); box-shadow: 0 6px 0 var(--sun-deep), var(--shadow-sm); font: 2.8rem/1 var(--emoji); cursor: pointer; }
+.listen-big:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--sun-deep); }
+.passage { width: 100%; box-sizing: border-box; text-align: left; background: var(--card); border-radius: 20px; box-shadow: var(--shadow-sm); padding: 14px 18px; max-height: 42vh; overflow-y: auto; border: 2px solid var(--line); }
+.passage h3 { margin: 0 0 6px; font: 700 1.15rem/1.2 var(--font-display); display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.passage p { margin: 0 0 .7em; line-height: 1.6; font-size: 1.05rem; }
+.passage .btn { font-size: .9rem; padding: .5em .8em; }
+.opts { width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 12px; }
+.opts.long { grid-template-columns: 1fr; }
+.opts.row { grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); }
+.opts.row .opt { padding: 10px 8px; font-size: 1.1rem; }
+.opt { min-height: 60px; padding: 12px 16px; border-radius: 18px; border: 3px solid var(--door-edge); background: var(--door); color: var(--door-ink); box-shadow: 0 5px 0 var(--door-edge); font: 600 1.2rem/1.25 var(--font-display); cursor: pointer; text-align: center; touch-action: manipulation; }
+.opts.long .opt { text-align: left; font-size: 1.08rem; font-family: var(--font-body); font-weight: 700; }
+.opt:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--door-edge); }
+.opt .k { display: inline-block; min-width: 1.4em; opacity: .5; font-size: .8em; }
+.opt.right { background: #dff8ec; border-color: #2fae84; box-shadow: 0 5px 0 #2fae84; color: #1d4a3b; }
+.opt.wrong { background: #ffe1e4; border-color: #d9505d; box-shadow: 0 5px 0 #d9505d; color: #5a1f27; animation: shake .35s ease; }
+.opt.dim { opacity: .45; }
+.opt:disabled { cursor: default; }
+.opt:focus-visible { outline: 3px solid var(--lilac); outline-offset: 3px; }
+.build { width: 100%; min-height: 64px; box-sizing: border-box; border-radius: 18px; border: 3px dashed var(--line); padding: 10px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-content: center; background: color-mix(in srgb, var(--card) 70%, transparent); }
+.tiles { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.tile { min-width: 52px; min-height: 52px; padding: 8px 14px; border-radius: 14px; border: 3px solid var(--door-edge); background: var(--door); color: var(--door-ink); box-shadow: 0 4px 0 var(--door-edge); font: 600 1.2rem/1.1 var(--font-display); cursor: pointer; touch-action: manipulation; }
+.tile.used { visibility: hidden; }
+.tile.placed { background: var(--card); border-color: var(--sky-blue); box-shadow: 0 4px 0 #3a8fd6; color: var(--ink); }
+.tile.bad { background: #ffe1e4; border-color: #d9505d; box-shadow: 0 4px 0 #d9505d; color: #5a1f27; animation: shake .35s ease; }
+.boxes { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+.boxes i { font-style: normal; width: clamp(34px, 7vw, 52px); height: clamp(42px, 8.5vw, 60px); border-radius: 12px; background: var(--card); border: 3px solid var(--line); display: grid; place-items: center; font: 700 clamp(1.3rem, 4vw, 2rem)/1 var(--font-display); }
+.boxes i.cur { border-color: var(--lilac); }
+.boxes i.ok { border-color: var(--mint); }
+.check-row { display: flex; gap: 10px; justify-content: center; }
+.sheet { padding: 14px max(16px, env(safe-area-inset-right, 0px)) calc(14px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); display: grid; grid-template-columns: 1fr auto; gap: 8px 16px; align-items: center; border-top: 3px solid transparent; animation: rise .25s ease both; }
+.sheet.good { background: #dff8ec; border-color: #4fd1a5; color: #1d4a3b; }
+.sheet.bad { background: #ffe8ea; border-color: #ff7b86; color: #5a1f27; }
+.sheet h3 { margin: 0; font: 700 1.3rem/1.1 var(--font-display); }
+.sheet p { margin: 4px 0 0; line-height: 1.4; font-weight: 700; }
+.sheet .btn { grid-row: span 2; }
+@media (max-width: 560px) { .sheet { grid-template-columns: 1fr; } .sheet .btn { grid-row: auto; width: 100%; } }
+.results .stars { font-size: 2.6rem; }
+.newwords { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin: 0; padding: 0; list-style: none; }
+.newwords li { background: var(--mint-soft); border-radius: 99px; padding: 6px 12px; font: 600 1rem/1.1 var(--font-display); }
+.big-msg { font: 700 1.2rem/1.3 var(--font-display); margin: 0; }
+.toast { --toast-top: calc(70px + env(safe-area-inset-top, 0px)); }
+@media (max-width: 560px) and (min-height: 700px) { .passage { max-height: 52vh; } }
+@media (max-height: 600px) { .pic { font-size: 3.6rem; } .bigword { font-size: 2.2rem; } .passage { max-height: 34vh; } }
+</style>
+<!--BODY-->
+<section id="lesson" hidden aria-label="Lesson">
+  <div class="lbar">
+    <button class="hud-btn" id="quitBtn" aria-label="Stop the lesson">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M3 3l12 12M15 3L3 15" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+    </button>
+    <div class="prog" aria-hidden="true"><i id="progFill"></i></div>
+    <span class="lcount" id="lcount">1/12</span>
+  </div>
+  <div class="qwrap"><div class="q" id="q"></div></div>
+  <div class="sheet" id="sheet" hidden>
+    <div><h3 id="sheetTitle"></h3><p id="sheetText"></p></div>
+    <button class="btn sun big" id="nextBtn">Continue</button>
+  </div>
+</section>
+
+<main id="screens">
+  <section class="screen" id="s-home">
+    <div class="card home">
+      <h1 class="logo">English <span>Quest</span></h1>
+      <p class="tagline">Step by step to IELTS 8</p>
+      <div class="level" id="level"></div>
+      <div class="row"><button class="btn sun big" id="goBtn">Start</button></div>
+      <div class="row">
+        <button class="btn" id="pathBtn">🗺️ Path</button>
+        <button class="btn" id="reviewBtn">🔁 Review</button>
+        <button class="btn" id="placeBtn">🎯 Find my level</button>
+      </div>
+      <dl class="stats" id="homeStats"></dl>
+      <div class="skills" id="skills" aria-label="Skills"></div>
+      <p class="note">Seven stages follow the CEFR levels (Pre-A1 to C1+). IELTS bands shown are practice estimates; the real test also scores speaking and writing with an examiner. British English.</p>
+      <div class="row">
+        <button class="btn" id="soundBtn">Music on</button>
+        <button class="btn" id="speakBtn">Read aloud on</button>
+        <a class="btn" data-hub hidden href="../">All games</a>
+      </div>
+    </div>
+  </section>
+  <section class="screen path-card" id="s-path" hidden>
+    <div class="card">
+      <div class="stage-tabs" id="tabs" role="tablist"></div>
+      <div class="stage-head" id="stageHead"></div>
+      <div class="nodes" id="nodes"></div>
+      <div class="row"><button class="btn" id="pathHomeBtn">Home</button></div>
+    </div>
+  </section>
+  <section class="screen" id="s-done" hidden>
+    <div class="card small-card results">
+      <h2 id="doneTitle">Lesson done!</h2>
+      <div class="stars" id="doneStars" aria-hidden="true"></div>
+      <p class="big-msg" id="doneMsg"></p>
+      <dl class="stats" id="doneStats"></dl>
+      <ul class="newwords" id="doneWords" aria-label="Words in this lesson"></ul>
+      <div class="row"><button class="btn sun big" id="doneNextBtn">Next lesson</button></div>
+      <div class="row"><button class="btn" id="donePathBtn">Path</button><button class="btn" id="doneHomeBtn">Home</button></div>
+    </div>
+  </section>
+</main>
+<div class="toast" id="toast" hidden></div>
+<div class="sr" aria-live="polite" id="announce"></div>
+
+<script>
+(function () {
+'use strict';
+/*__SHARED:arcade-core__*/
+
+/* ================= stages and content =================
+   CONTENT is filled in at build time from content/stage-*.json (null for a stage not written
+   yet). See content/FORMAT.md for what a stage holds. */
+const CONTENT = /*__CONTENT__*/null;
+const STAGES = [
+  { n: 1, id: 'starter', name: 'Starter', cefr: 'Pre-A1', ielts: '', icon: '🌱', about: 'First words: family, animals, food, home, colours and numbers.' },
+  { n: 2, id: 'mover', name: 'Mover', cefr: 'A1', ielts: '', icon: '🚲', about: 'Everyday English: school, hobbies, town, weather and health.' },
+  { n: 3, id: 'flyer', name: 'Flyer', cefr: 'A2', ielts: '', icon: '✈️', about: 'Telling stories, travel, nature and jobs; past and future.' },
+  { n: 4, id: 'explorer', name: 'Explorer', cefr: 'B1', ielts: '4.0–5.0', icon: '🧭', about: 'Real topics, longer texts, True / False / Not Given starts.' },
+  { n: 5, id: 'achiever', name: 'Achiever', cefr: 'B2', ielts: '5.5–6.5', icon: '🏔️', about: 'Opinions and ideas: collocations, linking, word families.' },
+  { n: 6, id: 'expert', name: 'Expert', cefr: 'C1', ielts: '7.0–7.5', icon: '🎓', about: 'Academic English: paraphrase, inference, advanced grammar.' },
+  { n: 7, id: 'band8', name: 'Band 8', cefr: 'C1+', ielts: '8.0', icon: '🏆', about: 'Precise, flexible English at IELTS band 8.' }
+];
+const has = (s) => !!(CONTENT && CONTENT[s - 1] && CONTENT[s - 1].units && CONTENT[s - 1].units.length);
+const unitOf = (s, u) => CONTENT[s - 1].units[u];
+const keyOf = (s, u) => STAGES[s - 1].id + '-' + (u + 1);
+const nOpts = (s) => (s <= 2 ? 3 : 4);
+
+const rec = loadRecords('english-quest.v1', { unlocked: 1, units: {}, tests: {}, skills: {}, review: [], days: {}, learned: [], lessons: 0, placed: 0 });
+const starsOf = (s, u) => (rec.units[keyOf(s, u)] || {}).stars || 0;
+// a stage below the one being worked on is fully open (passed, or skipped by the level test)
+function unitOpen(s, u) { if (!has(s) || s > rec.unlocked) return false; if (s < rec.unlocked || u === 0) return true; return starsOf(s, u - 1) > 0; }
+function testOpen(s) { if (!has(s) || s > rec.unlocked) return false; if (s < rec.unlocked) return true; return [0, 1, 2, 3, 4].every((u) => starsOf(s, u) > 0); }
+const passed = (s) => !!(rec.tests[s] && rec.tests[s].passed);
+const cleared = (s) => passed(s) || s < rec.unlocked;   // passed, or below the stage the level test placed you in
+const levelNow = () => Math.min(rec.unlocked, STAGES.length);
+// the next thing to do: the first unstarted unit of the current stage, then its stage test
+function nextStep() {
+  for (let s = levelNow(); s >= 1; s--) {
+    if (!has(s)) continue;
+    for (let u = 0; u < 5; u++) if (unitOpen(s, u) && !starsOf(s, u)) return { kind: 'unit', s: s, u: u };
+    if (testOpen(s) && !passed(s)) return { kind: 'test', s: s };
+    if (s === levelNow()) { let low = 0; for (let u = 1; u < 5; u++) if (starsOf(s, u) < starsOf(s, low)) low = u; return { kind: 'unit', s: s, u: low }; }
+  }
+  return null;
+}
+
+/* ================= music ================= */
+const SONGS = {
+  menu: { bpm: 72, swing: 0.14, prog: [[52, 55, 59, 62], [55, 59, 60, 64], [57, 60, 64, 67], [55, 57, 62, 64]], bass: [36, 45, 41, 43],
+          keys: [[0, 1, 4, 15], [10, 0.45, 2, 4]], bassPat: [[0, 0.8, 0, 12]], drums: false,
+          hats: [[0, 0.22], [4, 0.12], [8, 0.22], [12, 0.12]], scale: [72, 74, 76, 79, 81, 84], density: 0.42, seed: 3 },
+  quest: { bpm: 70, swing: 0.12, prog: [[48, 52, 55, 59], [53, 57, 60, 64], [50, 53, 57, 60], [55, 59, 62, 65]], bass: [36, 41, 38, 43],
+          keys: [[0, 0.8, 4, 14], [10, 0.4, 2, 4]], bassPat: [[0, 0.9, 0, 8], [10, 0.5, 7, 3]], drums: true,
+          kick: [0, 10], snare: [8], ghost: [],
+          hats: [[0, 0.22], [4, 0.14], [8, 0.22], [12, 0.14]], scale: [72, 74, 76, 79, 81, 84], density: 0.34, seed: 977 }
+};
+/*__SHARED:music-remix__*/
+/*__SHARED:sound__*/
+
+/* ================= questions =================
+   A question: { kind: 'choice' | 'order' | 'spell', skill, label, ... , ref }. ref points back at
+   the item ({ s, u, t, i, j }) so a missed one can come back in Review. */
+const sample = (arr, n) => shuffle(arr.slice()).slice(0, n);
+const esc = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const gapHtml = (t) => esc(t).replace('___', '<span class="gap">&nbsp;</span>');
+const SKILL = { vocab: 'Words', grammar: 'Grammar', listening: 'Listening', spelling: 'Spelling', reading: 'Reading', writing: 'Writing skills' };
+const POSNAME = { noun: 'noun', verb: 'verb', adj: 'adjective', adv: 'adverb' };
+let wordCache = {};
+function stageWords(s) {
+  if (!wordCache[s]) { wordCache[s] = []; unitOf(s, 0) && CONTENT[s - 1].units.forEach((un, u) => un.words.forEach((w, i) => wordCache[s].push(Object.assign({ s: s, u: u, i: i }, w)))); }
+  return wordCache[s];
+}
+// wrong options for a word question: same unit and part of speech first, then the stage. With
+// far, words from OTHER units come first: in a gap sentence a word from the same topic might fit too
+// ("I eat a ___ every morning": apple, banana and bread all would), one from another topic will not
+function otherWords(W, n, test, far) {
+  const all = stageWords(W.s).filter((x) => x.w !== W.w && (!test || test(x)) && !(W.syn || []).includes(x.w) && !(W.ant || []).includes(x.w) && !(x.syn || []).includes(W.w) && !(x.ant || []).includes(W.w));
+  const tiers = far ? [all.filter((x) => x.u !== W.u && x.pos === W.pos), all.filter((x) => x.u !== W.u), all]
+    : [all.filter((x) => x.u === W.u && x.pos === W.pos), all.filter((x) => x.pos === W.pos), all];
+  const out = [];
+  for (const t of tiers) for (const x of shuffle(t.slice())) { if (out.length >= n) break; if (!out.some((o) => o.w === x.w)) out.push(x); }
+  return out;
+}
+function choice(o) { // shuffles the options unless told not to, keeping track of the right one
+  const right = o.opts[o.a], opts = o.keep ? o.opts.slice() : shuffle(o.opts.slice());
+  return Object.assign({ kind: 'choice' }, o, { opts: opts, a: opts.indexOf(right) });
+}
+function wordQ(s, u, i, type) {
+  const W = Object.assign({ s: s, u: u, i: i }, unitOf(s, u).words[i]), n = nOpts(s), ref = { s: s, u: u, t: 'word', i: i };
+  const pick3 = (test, far) => otherWords(W, n - 1, test, far);
+  const types = [];
+  if (W.pic) types.push('pic2word');
+  types.push('def2word', 'gapword', 'listenword');
+  if (s >= 3) types.push('word2def');
+  if ((W.syn || []).length) types.push('syn');
+  if ((W.ant || []).length) types.push('ant');
+  if (W.forms && new Set(Object.values(W.forms)).size >= 3) types.push('wordform');
+  if (!type || !types.includes(type)) type = pick(types);
+  const base = { skill: 'vocab', ref: Object.assign(ref, { qt: type }), word: W.w, after: W.w };
+  if (type === 'pic2word') return choice(Object.assign(base, { label: 'Which word is it?', pic: W.pic, opts: [W.w].concat(pick3((x) => !!x.pic).map((x) => x.w)), a: 0 }));
+  if (type === 'listenword') return choice(Object.assign(base, { skill: 'listening', label: 'Listen. Which word is it?', listen: W.w, opts: [W.w].concat(pick3().map((x) => x.w)), a: 0 }));
+  if (type === 'def2word') return choice(Object.assign(base, { label: 'Which word means this?', text: W.def, opts: [W.w].concat(pick3().map((x) => x.w)), a: 0 }));
+  if (type === 'word2def') return choice(Object.assign(base, { label: 'What does it mean?', big: W.w, say: W.w, opts: [W.def].concat(pick3().map((x) => x.def)), a: 0, long: true }));
+  if (type === 'gapword') return choice(Object.assign(base, { label: 'Fill the gap', gap: W.ex, opts: [W.w].concat(pick3(null, true).map((x) => x.w)), a: 0, fill: W.ex.replace('___', W.w) }));
+  if (type === 'syn' || type === 'ant') {
+    const right = pick(type === 'syn' ? W.syn : W.ant);
+    const wrong = otherWords(W, 12, null, true).map((x) => x.w).filter((x) => x !== right).slice(0, n - 1);
+    return choice(Object.assign(base, { label: type === 'syn' ? 'Which word means almost the same?' : 'Which word means the opposite?', big: W.w, say: W.w, opts: [right].concat(wrong), a: 0 }));
+  }
+  // word families: ask for one form, the others are the wrong options
+  const forms = Object.entries(W.forms).filter(([p, v], k, all) => POSNAME[p] && all.findIndex((e) => e[1] === v) === k);
+  const [p, v] = pick(forms.filter((f) => f[1] !== W.w).length ? forms.filter((f) => f[1] !== W.w) : forms);
+  return choice(Object.assign(base, { skill: 'writing', label: 'Word families', text: 'Which word is the ' + POSNAME[p] + ' in the family of "' + W.w + '"?', opts: forms.map((f) => f[1]).slice(0, n), a: forms.map((f) => f[1]).slice(0, n).indexOf(v) }));
+}
+function grammarQ(s, u, i) {
+  const g = unitOf(s, u).grammar[i];
+  return choice({ skill: 'grammar', label: 'Choose the right words', gap: g.q, opts: g.opts, a: g.a, why: g.why, fill: g.q.replace('___', g.opts[g.a]), ref: { s: s, u: u, t: 'grammar', i: i } });
+}
+const EXTRA_LABEL = { collocation: 'Words that go together', linking: 'Linking ideas', paraphrase: 'Same meaning', register: 'Formal or informal?', wordform: 'Word families',
+  phrasal: 'Phrasal verbs', idiom: 'Idioms', preposition: 'Prepositions', mainidea: 'Main idea', cohesion: 'Joining ideas' };
+function extraQ(s, u, i) {
+  const x = unitOf(s, u).extra[i];
+  const o = { skill: x.kind === 'mainidea' ? 'reading' : 'writing', label: EXTRA_LABEL[x.kind] || 'Skills', opts: x.opts, a: x.a, why: x.why, long: x.opts.some((t) => t.length > 26), ref: { s: s, u: u, t: 'extra', i: i } };
+  if (x.q.indexOf('___') >= 0) { o.gap = x.q; o.fill = x.q.replace('___', x.opts[x.a]); } else o.text = x.q;
+  return choice(o);
+}
+function readingQs(s, u, which) {
+  const r = unitOf(s, u).reading;
+  const idx = which || r.qs.map((_, j) => j);
+  return idx.map((j) => {
+    const q = r.qs[j];
+    return choice({ skill: 'reading', label: q.type === 'tfng' ? 'True, False or Not Given?' : q.type === 'tf' ? 'True or False?' : 'Read and choose',
+      passage: r, text: q.q, opts: q.opts, a: q.a, keep: q.type !== 'mc', long: q.opts.some((t) => t.length > 26), ref: { s: s, u: u, t: 'read', i: j } });
+  });
+}
+// a sentence to rebuild from its words; with listen it is played first (a listening task)
+function orderQ(s, u, i, listen) {
+  const sent = unitOf(s, u).sentences[i], words = sent.split(/\s+/);
+  let tiles = shuffle(words.slice());
+  for (let k = 0; k < 8 && tiles.join(' ') === sent; k++) tiles = shuffle(words.slice());
+  return { kind: 'order', skill: listen ? 'listening' : 'writing', label: listen ? 'Listen and build the sentence' : 'Put the words in order', sentence: sent, words: words, tiles: tiles, listen: listen ? sent : '', ref: { s: s, u: u, t: listen ? 'listen' : 'order', i: i } };
+}
+// spell a word heard aloud, with its picture or meaning as the clue; wrong letters are refused
+function spellQ(s, u, i) {
+  const W = unitOf(s, u).words[i], letters = W.w.split('');
+  const pool = 'abcdefghijklmnopqrstuvwxyz'.split('').filter((c) => !letters.includes(c));
+  const decoys = sample(pool, s <= 2 ? 2 : 3);
+  return { kind: 'spell', skill: 'spelling', label: 'Listen and spell', word: W.w, pic: W.pic, text: W.pic ? '' : W.def, listen: W.w, tiles: shuffle(letters.concat(decoys)), ref: { s: s, u: u, t: 'spell', i: i } };
+}
+const spellable = (w) => /^[a-z]{3,11}$/.test(w);
+
+/* ================= lessons ================= */
+// a unit lesson: about 12 questions, words first, reading last
+function unitLesson(s, u) {
+  const un = unitOf(s, u), qs = [];
+  const wi = sample(un.words.map((_, i) => i), 5), gi = sample(un.grammar.map((_, i) => i), 2), si = sample(un.sentences.map((_, i) => i), 2);
+  const vocabN = s >= 4 ? 3 : 4;
+  wi.slice(0, vocabN).forEach((i) => qs.push(wordQ(s, u, i)));
+  const sp = un.words.map((w, i) => i).filter((i) => spellable(un.words[i].w) && !wi.slice(0, vocabN).includes(i));
+  if (sp.length) qs.splice(2, 0, spellQ(s, u, pick(sp)));
+  gi.forEach((i, k) => qs.splice(1 + k * 3, 0, grammarQ(s, u, i)));
+  qs.push(orderQ(s, u, si[0], false), orderQ(s, u, si[1], true));
+  if (un.extra && un.extra.length) sample(un.extra.map((_, i) => i), s >= 4 ? 2 : 1).forEach((i) => qs.push(extraQ(s, u, i)));
+  return qs.concat(readingQs(s, u, sample(un.reading.qs.map((_, j) => j), Math.min(3, un.reading.qs.length)).sort()));
+}
+// a stage test: 20 questions from all five units; 80% unlocks the next stage
+function stageTest(s) {
+  const qs = [], units = [0, 1, 2, 3, 4];
+  units.forEach((u) => qs.push(wordQ(s, u, rnd(0, 11)), grammarQ(s, u, rnd(0, 5))));
+  sample(units, 2).forEach((u) => qs.push(grammarQ(s, u, rnd(0, 5))));
+  sample(units, 2).forEach((u) => qs.push(orderQ(s, u, rnd(0, 3), Math.random() < 0.5)));
+  const ex = units.filter((u) => (unitOf(s, u).extra || []).length);
+  if (ex.length) sample(ex, 2).forEach((u) => qs.push(extraQ(s, u, rnd(0, unitOf(s, u).extra.length - 1))));
+  else sample(units, 2).forEach((u) => qs.push(wordQ(s, u, rnd(0, 11))));
+  qs.push(wordQ(s, pick(units), rnd(0, 11)));
+  const ru = pick(units);
+  return shuffle(qs).concat(readingQs(s, ru, sample(unitOf(s, ru).reading.qs.map((_, j) => j), 3).sort()));
+}
+// review: the missed items, asked again (a right answer takes one off the list)
+function reviewLesson() {
+  return sample(rec.review, 10).map((r) => fromRef(r)).filter(Boolean);
+}
+function fromRef(r) {
+  try {
+    if (!has(r.s)) return null;
+    if (r.t === 'word') return wordQ(r.s, r.u, r.i, r.qt);
+    if (r.t === 'grammar') return grammarQ(r.s, r.u, r.i);
+    if (r.t === 'extra') return extraQ(r.s, r.u, r.i);
+    if (r.t === 'read') return readingQs(r.s, r.u, [r.i])[0];
+    if (r.t === 'order' || r.t === 'listen') return orderQ(r.s, r.u, r.i, r.t === 'listen');
+    if (r.t === 'spell') return spellQ(r.s, r.u, r.i);
+  } catch (e) { /* content changed: drop it */ }
+  return null;
+}
+const refKey = (r) => [r.s, r.u, r.t, r.i].join(':');
+
+/* ================= playing a lesson ================= */
+const L = { kind: '', s: 0, u: 0, qs: [], i: 0, right: 0, total: 0, answered: false, words: [], place: null, startedAt: 0 };
+let round = 0;
+function startLesson(kind, s, u) {
+  let qs;
+  if (kind === 'unit') qs = unitLesson(s, u);
+  else if (kind === 'test') qs = stageTest(s);
+  else if (kind === 'review') qs = reviewLesson();
+  else if (kind === 'place') qs = [];
+  if (kind !== 'place' && (!qs || !qs.length)) { toast(kind === 'review' ? 'Nothing to review yet!' : 'Coming soon', 'hello'); return; }
+  Object.assign(L, { kind: kind, s: s || 0, u: u || 0, qs: qs, i: 0, right: 0, total: 0, answered: false, words: [], place: null, startedAt: performance.now() });
+  if (kind === 'place') { L.place = { s: 1, asked: 0, ok: 0, best: 0 }; placeNext(); if (!L.qs.length) { toast('Coming soon', 'hello'); return; } }
+  Sound.init();
+  round++;
+  if (round === 1) Sound.play('quest', true);
+  else { const name = Sound.remix(round - 1, 0, 'quest'); if (name) setTimeout(() => toast('♪ ' + name), 300); }
+  showScreen(null);
+  $('#lesson').hidden = false;
+  showQ();
+}
+// the level test: three questions per stage, climbing while at least two of three are right
+function placeNext() {
+  const P = L.place;
+  while (P.s <= STAGES.length && !has(P.s)) P.s++;
+  if (P.s > STAGES.length) return false;
+  const s = P.s, u = rnd(0, 4), u2 = (u + rnd(1, 4)) % 5;
+  L.qs.push(grammarQ(s, u, rnd(0, 5)), wordQ(s, u2, rnd(0, 11), s >= 3 ? 'def2word' : 'pic2word'), s >= 4 && unitOf(s, u).extra.length ? extraQ(s, u, rnd(0, unitOf(s, u).extra.length - 1)) : grammarQ(s, u2, rnd(0, 5)));
+  return true;
+}
+function showQ() {
+  const q = L.qs[L.i];
+  L.answered = false;
+  $('#sheet').hidden = true;
+  const total = L.kind === 'place' ? Math.max(L.qs.length, 3) : L.qs.length;
+  $('#progFill').style.width = (L.i / total * 100).toFixed(1) + '%';
+  $('#lcount').textContent = L.kind === 'place' ? STAGES[L.place.s - 1].cefr : (L.i + 1) + '/' + total;
+  const box = $('#q');
+  let h = '<span class="qlabel">' + esc(q.label) + ' · <span class="sk">' + SKILL[q.skill] + '</span></span>';
+  if (q.passage) h += '<div class="passage" id="passage"><h3><span>' + esc(q.passage.title) + '</span><button class="btn" id="readAloud">🔊 Listen</button></h3>' + q.passage.text.split(/\n+/).map((p) => '<p>' + esc(p) + '</p>').join('') + '</div>';
+  if (q.pic) h += '<div class="pic" aria-hidden="true">' + q.pic + '</div>';
+  if (q.listen) h += '<button class="listen-big" id="listenBtn" aria-label="Listen again">🔊</button>';
+  if (q.big) h += '<div class="say"><span class="bigword">' + esc(q.big) + '</span></div>';
+  if (q.text) h += '<div class="prompt">' + esc(q.text) + '</div>';
+  if (q.gap) h += '<div class="prompt">' + gapHtml(q.gap) + '</div>';
+  if (q.kind === 'choice') h += '<div class="opts' + (q.long ? ' long' : q.keep ? ' row' : '') + '">' + q.opts.map((o, k) => '<button class="opt" data-k="' + k + '"><span class="k">' + (k + 1) + '</span> ' + esc(o) + '</button>').join('') + '</div>';
+  if (q.kind === 'order') h += '<div class="build" id="build" aria-label="Your sentence"></div><div class="tiles" id="tiles">' + q.tiles.map((t, k) => '<button class="tile" data-k="' + k + '">' + esc(t) + '</button>').join('') + '</div><div class="check-row"><button class="btn sun" id="checkBtn" disabled>Check</button></div>';
+  if (q.kind === 'spell') { h += '<div class="boxes" id="boxes">' + q.word.split('').map(() => '<i></i>').join('') + '</div><div class="tiles" id="tiles">' + q.tiles.map((t, k) => '<button class="tile" data-k="' + k + '">' + t + '</button>').join('') + '</div>'; q.pos = 0; q.slips = 0; }
+  box.innerHTML = h;
+  box.parentElement.scrollTop = 0;
+  if (q.kind === 'order') { q.built = []; renderBuild(q); }
+  if (q.kind === 'spell') markBox(q);
+  if (q.listen) setTimeout(() => Speech.say(q.listen, 0.85), 250);
+  else if (q.say) setTimeout(() => Speech.say(q.say), 250);
+  announce(q.label + '. ' + (q.text || q.gap || q.big || ''));
+}
+function renderBuild(q) {
+  $('#build').innerHTML = q.built.map((k, n) => '<button class="tile placed" data-n="' + n + '">' + esc(q.tiles[k]) + '</button>').join('');
+  $$('#tiles .tile').forEach((t) => t.classList.toggle('used', q.built.includes(+t.dataset.k)));
+  $('#checkBtn').disabled = q.built.length !== q.tiles.length;
+}
+function markBox(q) { $$('#boxes i').forEach((b, k) => { b.classList.toggle('cur', k === q.pos); b.classList.toggle('ok', k < q.pos); }); }
+
+function onTap(e) {
+  const q = L.qs[L.i];
+  if (!q || $('#lesson').hidden) return;
+  if (e.target.closest('#listenBtn')) { Speech.say(q.listen, 0.8); return; }
+  if (e.target.closest('#readAloud')) { Speech.say(q.passage.text, 0.92); return; }
+  if (L.answered) return;
+  const opt = e.target.closest('.opt');
+  if (opt && q.kind === 'choice') { chooseOpt(q, +opt.dataset.k); return; }
+  const tile = e.target.closest('.tile');
+  if (q.kind === 'order') {
+    if (tile && tile.classList.contains('placed')) { q.built.splice(+tile.dataset.n, 1); Sound.sfx.click(); renderBuild(q); return; }
+    if (tile) { const k = +tile.dataset.k; if (!q.built.includes(k)) { q.built.push(k); Sound.sfx.click(); renderBuild(q); } return; }
+    if (e.target.closest('#checkBtn')) { const got = q.built.map((k) => q.tiles[k]).join(' '); finish(got === q.sentence, 'The sentence is: ' + q.sentence); }
+    return;
+  }
+  if (q.kind === 'spell' && tile && !tile.classList.contains('used')) {
+    const ch = q.tiles[+tile.dataset.k];
+    if (ch === q.word[q.pos]) {
+      tile.classList.add('used'); $$('#boxes i')[q.pos].textContent = ch; q.pos++; Sound.sfx.check(); markBox(q);
+      if (q.pos === q.word.length) finish(q.slips === 0, q.slips ? 'Spelled with ' + q.slips + (q.slips === 1 ? ' slip' : ' slips') + ': ' + q.word : q.word);
+    } else {
+      q.slips++; Sound.sfx.wrong(); tile.classList.remove('bad'); void tile.offsetWidth; tile.classList.add('bad');
+      setTimeout(() => tile.classList.remove('bad'), 400);
+      if (q.slips === 3) Speech.say(q.word, 0.75);
+    }
+  }
+}
+function chooseOpt(q, k) {
+  const ok = k === q.a, btns = $$('.opt');
+  btns.forEach((b, n) => { b.disabled = true; if (n === q.a) b.classList.add('right'); else if (n === k) b.classList.add('wrong'); else b.classList.add('dim'); });
+  finish(ok, (ok ? '' : 'Answer: ' + q.opts[q.a] + '. ') + (q.why || (q.fill ? q.fill : '')));
+}
+// after any answer: score it, remember a miss, show the sheet
+function finish(ok, text) {
+  const q = L.qs[L.i];
+  L.answered = true; L.total++; if (ok) L.right++;
+  const sk = rec.skills[q.skill] || (rec.skills[q.skill] = [0, 0]); sk[1]++; if (ok) sk[0]++;
+  const key = refKey(q.ref);
+  if (ok) { if (L.kind === 'review') rec.review = rec.review.filter((r) => refKey(r) !== key); if (q.skill === 'vocab' && q.word && !rec.learned.includes(q.word)) rec.learned.push(q.word); }
+  else if (L.kind !== 'place' && !rec.review.some((r) => refKey(r) === key)) rec.review = rec.review.concat([q.ref]).slice(-60);
+  if (q.word && !L.words.includes(q.word)) L.words.push(q.word);
+  if (L.kind === 'place') { L.place.asked++; if (ok) L.place.ok++; }
+  writeSave();
+  ok ? Sound.sfx.right() : Sound.sfx.wrong();
+  if (q.after && ok) setTimeout(() => Speech.say(q.after), 200);
+  else if (q.fill && ok) setTimeout(() => Speech.say(q.fill), 200);
+  const sheet = $('#sheet');
+  sheet.className = 'sheet ' + (ok ? 'good' : 'bad');
+  $('#sheetTitle').textContent = ok ? pick(['Great!', 'Correct!', 'Well done!', 'Yes!', 'Brilliant!']) : 'Not quite';
+  $('#sheetText').textContent = text || '';
+  sheet.hidden = false;
+  $('#nextBtn').focus({ preventScroll: true });
+  announce((ok ? 'Correct. ' : 'Not quite. ') + (text || ''));
+}
+function next() {
+  if (!L.answered) return;
+  L.i++;
+  if (L.kind === 'place' && L.i === L.qs.length) {
+    const P = L.place;
+    if (P.ok >= 2) { P.best = P.s; P.s++; P.asked = 0; P.ok = 0; if (!placeNext()) return endLesson(); }
+    else return endLesson();
+  }
+  if (L.i >= L.qs.length) return endLesson();
+  showQ();
+}
+const today = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+function streak() {
+  let n = 0; const d = new Date();
+  if (!rec.days[today()]) d.setDate(d.getDate() - 1);
+  for (;;) { const k = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); if (!rec.days[k]) break; n++; d.setDate(d.getDate() - 1); }
+  return n;
+}
+function endLesson() {
+  const pct = L.total ? Math.round(L.right / L.total * 100) : 0;
+  rec.days[today()] = (rec.days[today()] || 0) + 1; rec.lessons++;
+  let title = 'Lesson done!', msg = '', stars = 0, nextLabel = 'Next lesson';
+  if (L.kind === 'unit') {
+    stars = pct >= 90 ? 3 : pct >= 75 ? 2 : pct >= 60 ? 1 : 0;
+    const k = keyOf(L.s, L.u), r = rec.units[k] || (rec.units[k] = { stars: 0, best: 0, plays: 0 });
+    r.plays++; r.best = Math.max(r.best, pct); r.stars = Math.max(r.stars, stars);
+    title = stars === 3 ? 'Brilliant!' : stars ? 'Lesson done!' : 'Good try!';
+    msg = stars ? unitOf(L.s, L.u).title + ': ' + pct + '% right.' : 'Get 60% to open the next lesson. Try it again!';
+  } else if (L.kind === 'test') {
+    const t = rec.tests[L.s] || (rec.tests[L.s] = { best: 0, passed: false });
+    t.best = Math.max(t.best, pct);
+    stars = pct >= 95 ? 3 : pct >= 88 ? 2 : pct >= 80 ? 1 : 0;
+    if (stars) {
+      t.passed = true;
+      if (rec.unlocked <= L.s) rec.unlocked = L.s + 1;
+      title = STAGES[L.s - 1].name + ' passed!';
+      msg = L.s < STAGES.length ? 'Next stage open: ' + STAGES[L.s].name + ' (' + STAGES[L.s].cefr + (STAGES[L.s].ielts ? ', IELTS ' + STAGES[L.s].ielts : '') + ').' : 'You finished the whole quest: IELTS 8 level!';
+      Sound.sfx.win();
+    } else { title = 'Almost there!'; msg = pct + '% right. The stage test needs 80%. Practise the lessons and try again.'; }
+  } else if (L.kind === 'review') {
+    stars = pct >= 90 ? 3 : pct >= 70 ? 2 : 1; title = 'Review done!'; msg = rec.review.length ? rec.review.length + ' still to practise.' : 'Nothing left to review. Super!';
+  } else if (L.kind === 'place') {
+    const best = L.place.best, start = Math.min(STAGES.length, best + 1);
+    rec.placed = start; if (rec.unlocked < start) rec.unlocked = start;
+    title = 'Your starting stage'; nextLabel = 'Start ' + STAGES[start - 1].name;
+    msg = (best ? 'You already know ' + STAGES[best - 1].name + ' (' + STAGES[best - 1].cefr + ') English. ' : '') + 'Start at ' + STAGES[start - 1].name + ' · ' + STAGES[start - 1].cefr + (STAGES[start - 1].ielts ? ' · IELTS ' + STAGES[start - 1].ielts : '') + '.';
+    stars = -1;
+  }
+  writeSave();
+  if (stars > 0 && L.kind !== 'test') Sound.sfx.win();
+  $('#lesson').hidden = true; $('#toast').hidden = true;
+  $('#doneTitle').textContent = title;
+  $('#doneStars').innerHTML = stars >= 0 ? starRow(stars) : '';
+  $('#doneMsg').textContent = msg;
+  $('#doneStats').innerHTML = stat('Right', L.right + ' / ' + L.total) + stat('Streak', '🔥 ' + streak()) + stat('Words', rec.learned.length);
+  $('#doneWords').innerHTML = L.words.slice(0, 14).map((w) => '<li>' + esc(w) + '</li>').join('');
+  $('#doneNextBtn').textContent = nextLabel;
+  showScreen('done');
+  announce(title + '. ' + msg);
+}
+
+/* ================= menus ================= */
+function renderHome() {
+  const s = levelNow(), st = STAGES[s - 1], done = STAGES.filter((x) => cleared(x.n)).length;
+  $('#level').innerHTML =
+    '<div class="level-top"><span class="big" aria-hidden="true">' + st.icon + '</span><div><b>' + st.name + ' · ' + st.cefr + (st.ielts ? ' · IELTS ' + st.ielts : '') + '</b><span>' + esc(st.about) + '</span></div></div>' +
+    '<div class="track" aria-hidden="true">' + STAGES.map((x) => '<i class="' + (cleared(x.n) ? 'done' : x.n === s ? 'now' : '') + '"></i>').join('') + '</div>' +
+    '<div class="track-labels" aria-hidden="true">' + STAGES.map((x) => '<span>' + x.cefr + '</span>').join('') + '</div>';
+  const nx = nextStep();
+  $('#goBtn').textContent = !rec.lessons && !rec.placed ? 'Start' : nx && nx.kind === 'test' ? 'Stage test' : 'Continue';
+  $('#reviewBtn').textContent = '🔁 Review' + (rec.review.length ? ' (' + rec.review.length + ')' : '');
+  $('#homeStats').innerHTML = stat('Streak', '🔥 ' + streak()) + stat('Words', rec.learned.length) + stat('Stages passed', done + ' / 7');
+  const sk = Object.keys(SKILL).filter((k) => rec.skills[k] && rec.skills[k][1]);
+  $('#skills').innerHTML = sk.map((k) => { const v = rec.skills[k], p = Math.round(v[0] / v[1] * 100); return '<div class="skill"><span>' + SKILL[k] + '</span><span class="bar"><i style="width:' + p + '%"></i></span><span>' + p + '%</span></div>'; }).join('');
+  $('#soundBtn').textContent = save.settings.music > 0 ? 'Music on' : 'Music off';
+  $('#speakBtn').textContent = save.settings.speak ? 'Read aloud on' : 'Read aloud off';
+}
+let pathStage = 0;
+function renderPath(s) {
+  pathStage = s || pathStage || levelNow();
+  const st = STAGES[pathStage - 1];
+  $('#tabs').innerHTML = STAGES.map((x) => '<button role="tab" aria-selected="' + (x.n === pathStage) + '" class="' + (x.n === pathStage ? 'on' : '') + (x.n > rec.unlocked ? ' locked' : '') + '" data-s="' + x.n + '">' + x.icon + ' ' + x.cefr + '</button>').join('');
+  $('#stageHead').innerHTML = '<h2>' + st.icon + ' ' + st.name + '</h2><p>' + st.cefr + (st.ielts ? ' · IELTS ' + st.ielts + ' (practice estimate)' : '') + ' · ' + esc(st.about) + '</p>';
+  if (!has(pathStage)) { $('#nodes').innerHTML = '<div class="soon">This stage is coming soon.</div>'; return; }
+  const nx = nextStep();
+  let h = '';
+  CONTENT[pathStage - 1].units.forEach((un, u) => {
+    const open = unitOpen(pathStage, u), stars = starsOf(pathStage, u), isNext = nx && nx.kind === 'unit' && nx.s === pathStage && nx.u === u;
+    h += '<button class="node' + (open ? '' : ' locked') + (isNext ? ' next' : '') + '" data-u="' + u + '"' + (open ? '' : ' aria-disabled="true"') + '><span class="em" aria-hidden="true">' + (open ? un.emoji : '🔒') + '</span><span><b>' + esc(un.title) + '</b><small>Lesson ' + (u + 1) + '</small></span><span class="st">' + (open ? starRow(stars) : '') + '</span></button>';
+  });
+  const topen = testOpen(pathStage), t = rec.tests[pathStage];
+  h += '<button class="node test' + (topen ? '' : ' locked') + (nx && nx.kind === 'test' && nx.s === pathStage ? ' next' : '') + '" data-test="1"><span class="em" aria-hidden="true">' + (topen ? '🏁' : '🔒') + '</span><span><b>Stage test</b><small>' + (t && t.passed ? 'Passed · best ' + t.best + '%' : t ? 'Best ' + t.best + '% · needs 80%' : '20 questions · needs 80%') + '</small></span><span class="st">' + (t && t.passed ? '✅' : '') + '</span></button>';
+  $('#nodes').innerHTML = h;
+}
+function goNext() {
+  const nx = nextStep();
+  if (!rec.lessons && !rec.placed && has(2)) { startLesson('place'); return; }
+  if (!nx) { renderPath(); showScreen('path'); return; }
+  startLesson(nx.kind, nx.s, nx.u);
+}
+function goHome() { $('#lesson').hidden = true; $('#toast').hidden = true; Speech.stop(); Sound.play('menu'); renderHome(); showScreen('home'); }
+
+document.addEventListener('click', onTap);
+$('#nextBtn').addEventListener('click', next);
+$('#quitBtn').addEventListener('click', () => { if (L.kind === 'place' && L.place && L.place.best) endLesson(); else goHome(); });
+$('#goBtn').addEventListener('click', goNext);
+$('#pathBtn').addEventListener('click', () => { renderPath(levelNow()); showScreen('path'); });
+$('#reviewBtn').addEventListener('click', () => startLesson('review'));
+$('#placeBtn').addEventListener('click', () => startLesson('place'));
+$('#pathHomeBtn').addEventListener('click', goHome);
+$('#doneHomeBtn').addEventListener('click', goHome);
+$('#donePathBtn').addEventListener('click', () => { renderPath(L.kind === 'place' ? levelNow() : L.s || levelNow()); showScreen('path'); });
+$('#doneNextBtn').addEventListener('click', goNext);
+$('#tabs').addEventListener('click', (e) => { const b = e.target.closest('[data-s]'); if (b) renderPath(+b.dataset.s); });
+$('#nodes').addEventListener('click', (e) => {
+  const b = e.target.closest('.node'); if (!b || b.classList.contains('locked')) return;
+  if (b.dataset.test) startLesson('test', pathStage); else startLesson('unit', pathStage, +b.dataset.u);
+});
+$('#soundBtn').addEventListener('click', () => { toggleMusic(); renderHome(); });
+$('#speakBtn').addEventListener('click', () => { save.settings.speak = !save.settings.speak; writeSave(); renderHome(); if (save.settings.speak) Speech.say('Read aloud is on'); else Speech.stop(); });
+window.addEventListener('keydown', (e) => {
+  if ($('#lesson').hidden) return;
+  const q = L.qs[L.i];
+  if (e.key === 'Enter' && L.answered) { e.preventDefault(); next(); return; }
+  if (q && q.kind === 'choice' && !L.answered && /^[1-4]$/.test(e.key) && +e.key <= q.opts.length) chooseOpt(q, +e.key - 1);
+  if (q && q.kind === 'spell' && !L.answered && /^[a-z]$/i.test(e.key)) { const t = $$('#tiles .tile').find((x) => !x.classList.contains('used') && x.textContent === e.key.toLowerCase()); if (t) t.click(); }
+  if (e.key === 'Escape') goHome();
+});
+arcadeGuards(() => Speech.stop());
+arcadeLinks();
+
+window.__quest = { L, rec, save, STAGES, CONTENT, has, next, startLesson, nextStep, unitOpen, testOpen, wordQ, unitLesson, stageTest, Speech,
+  // answer the current question: right = true picks the right answer (or builds / spells it), false picks a wrong one
+  answer(right) {
+    const q = L.qs[L.i]; if (!q || L.answered) return false;
+    if (q.kind === 'choice') chooseOpt(q, right ? q.a : (q.a + 1) % q.opts.length);
+    else if (q.kind === 'order') {
+      const used = [];
+      if (right) q.words.forEach((w) => used.push(q.tiles.findIndex((t, k) => t === w && !used.includes(k))));
+      else { q.tiles.forEach((_, k) => used.unshift(k)); if (used.map((k) => q.tiles[k]).join(' ') === q.sentence) used.reverse(); }
+      q.built = used; renderBuild(q); $('#checkBtn').click();
+    }
+    else if (q.kind === 'spell') { if (!right) { const bad = $$('#tiles .tile').find((t) => t.textContent !== q.word[q.pos]); if (bad) bad.click(); } q.word.split('').slice(q.pos).forEach((ch) => { const t = $$('#tiles .tile').find((x) => !x.classList.contains('used') && x.textContent === ch); if (t) t.click(); }); }
+    return true;
+  } };
+renderHome();
+showScreen('home');
+})();
+</script>

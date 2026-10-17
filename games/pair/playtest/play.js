@@ -17,7 +17,7 @@ const deals = `(() => {
   P.save.math.tricky = keepTricky;
   for (const lv of ['starter', 'explorer', 'genius']) {
     P.save.settings.mathLevel = lv;
-    for (const deck of ['times', 'plus', 'pics', 'opp', 'numw', 'mix']) {
+    for (const deck of ['times', 'plus', 'pics', 'opp', 'numw', 'past', 'syn', 'time', 'frac', 'mix']) {
       let bad = 0, short = 0;
       for (let k = 0; k < 40; k++) {
         const ps = P.dealPairs(deck, 12);
@@ -92,6 +92,9 @@ module.exports = [
   { viewport: [820, 1180, true, false, 2] }, { sleep: 500 }, { shot: 'pair-07-ipad-portrait' },
   { eval: "window.__pair.save.settings.mathLevel = 'genius'; window.__pair.rec.deck = 'numw'; window.__pair.start(); 'numw genius'" },
   { viewport: [390, 844, true, false, 3] }, { sleep: 900 }, { shot: 'pair-08-phone-numw' },
+  { eval: "window.__pair.rec.deck = 'time'; window.__pair.start(); 'time genius'" }, { sleep: 900 }, { shot: 'pair-08b-phone-time' },
+  { log: "(() => { const over = [...document.querySelectorAll('.pc .v')].filter((v) => v.offsetWidth > v.parentElement.clientWidth || v.offsetHeight > v.parentElement.clientHeight).map((v) => v.textContent); return over.length ? 'OVERFLOW ' + over.join(',') : 'time cards fit'; })()" },
+  { eval: "window.__pair.rec.deck = 'frac'; window.__pair.start(); 'frac genius'" }, { sleep: 900 }, { shot: 'pair-08c-phone-frac' },
   { eval: "window.__pair.rec.deck = 'opp'; window.__pair.start(); 'opp genius'" },
   { viewport: [1180, 820, true, true, 2] }, { sleep: 900 }, { shot: 'pair-09-dark-opp' },
   { log: "(() => { const over = [...document.querySelectorAll('.pc .v')].filter((v) => v.scrollWidth > v.parentElement.clientWidth + 1 || v.scrollHeight > v.parentElement.clientHeight + 1).map((v) => v.textContent); return over.length ? 'OVERFLOW ' + over.join(',') : 'all card text fits'; })()" },

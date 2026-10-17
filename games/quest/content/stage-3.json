@@ -1,0 +1,245 @@
+{
+  "stage": 3,
+  "units": [
+    {
+      "id": "flyer-1",
+      "title": "Holidays and travel",
+      "emoji": "🧭",
+      "words": [
+        { "w": "airport", "def": "a place where planes take off and land", "ex": "We got to the ___ two hours before our plane left.", "pos": "noun", "pic": "🛫" },
+        { "w": "passport", "def": "a small book with your photo that you need to travel to another country", "ex": "The officer looked at the photo in my ___ and said, 'Welcome to Spain!'", "pos": "noun", "pic": "🛂" },
+        { "w": "suitcase", "def": "a big bag with a handle that you put your clothes in for a trip", "ex": "I can't close my ___ because there are too many clothes in it!", "pos": "noun", "pic": "🧳" },
+        { "w": "ticket", "def": "a piece of paper or a code that shows you have paid to travel or go in somewhere", "ex": "I bought a train ___ to London for twenty pounds.", "pos": "noun", "pic": "🎫" },
+        { "w": "journey", "def": "travelling from one place to another", "ex": "The ___ from our house to Grandma's takes three hours by car.", "pos": "noun" },
+        { "w": "flight", "def": "a trip in a plane", "ex": "Our ___ to Rome is late because there is a problem with the plane.", "pos": "noun", "pic": "✈️" },
+        { "w": "hotel", "def": "a building where you pay to sleep and eat when you are on holiday", "ex": "Our ___ had a big swimming pool and a restaurant.", "pos": "noun", "pic": "🏨" },
+        { "w": "tent", "def": "a small house made of cloth that you can carry and put up outside", "ex": "When we go camping, we sleep in a ___.", "pos": "noun", "pic": "⛺" },
+        { "w": "postcard", "def": "a card with a picture on one side that you send to people when you are on holiday", "ex": "I sent Grandma a ___ with a picture of the beach on it.", "pos": "noun" },
+        { "w": "luggage", "def": "all the bags and suitcases that you take on a trip", "ex": "How much ___ have you got? Only one bag.", "pos": "noun" },
+        { "w": "abroad", "def": "in or to another country", "ex": "This summer we're going ___ for the first time, to France!", "pos": "adv" },
+        { "w": "tourist", "def": "a person who visits a place on holiday", "ex": "The ___ took a photo of the castle with her camera.", "pos": "noun" }
+      ],
+      "grammar": [
+        { "q": "Take a coat. I think it ___ be cold in the mountains.", "opts": ["will", "is", "was"], "a": 0, "why": "Use 'will' + verb to say what you think will happen in the future." },
+        { "q": "Those bags look heavy. I ___ help you carry them.", "opts": ["will", "am", "was"], "a": 0, "why": "Use 'will' to offer to do something: I'll help you." },
+        { "q": "How ___ luggage have you got?", "opts": ["much", "many", "a"], "a": 0, "why": "'Luggage' is uncountable (you can't say 'two luggages'), so use 'how much'." },
+        { "q": "How ___ suitcases are you taking?", "opts": ["many", "much", "any"], "a": 0, "why": "'Suitcases' is countable (one, two, three...), so use 'how many'." },
+        { "q": "You ___ take a hat. It's very sunny in Egypt.", "opts": ["should", "shouldn't", "should to"], "a": 0, "why": "Use 'should' + verb to give good advice. Never put 'to' after 'should'." },
+        { "q": "There ___ a lot of luggage on the train.", "opts": ["was", "were", "are"], "a": 0, "why": "'Luggage' is uncountable, so the verb is singular: there was, not there were." }
+      ],
+      "sentences": [
+        "How much luggage are you taking on holiday?",
+        "I think you will love the hotel.",
+        "Don't forget to bring your passport!",
+        "We should get to the airport early."
+      ],
+      "reading": {
+        "title": "A trip to Scotland",
+        "text": "Last summer, Amy and her family went on holiday to Scotland. It was a long journey, so they took the train from London. The train left at eight o'clock in the morning and arrived in Edinburgh after four and a half hours. Amy read a book and looked out of the window at the hills and sheep.\n\nIn Edinburgh they stayed in a small hotel near the castle. Every day they visited a different place. Amy's favourite was a museum about dinosaurs. On the last day she bought a postcard for her best friend, Zara. On it she wrote: 'Scotland is beautiful, but it rains a lot! Next year I will come back with you!'",
+        "qs": [
+          { "type": "mc", "q": "How did Amy's family travel to Scotland?", "opts": ["by plane", "by train", "by car", "by bus"], "a": 1 },
+          { "type": "mc", "q": "How long was the train journey?", "opts": ["four hours", "four and a half hours", "eight hours", "two and a half hours"], "a": 1 },
+          { "type": "mc", "q": "Where was the hotel?", "opts": ["near the castle", "near the station", "next to the sea", "in the hills"], "a": 0 },
+          { "type": "tf", "q": "Amy's favourite place was a museum about dinosaurs.", "opts": ["True", "False"], "a": 0 },
+          { "type": "tf", "q": "Amy wrote that the weather in Scotland was always sunny.", "opts": ["True", "False"], "a": 1 }
+        ]
+      },
+      "extra": [
+        { "kind": "preposition", "q": "We arrived ___ the airport at six o'clock.", "opts": ["at", "to", "on", "of"], "a": 0, "why": "We say 'arrive at' a place like an airport or a station, and 'arrive in' a city or a country." },
+        { "kind": "collocation", "q": "We ___ lots of photos on holiday.", "opts": ["took", "made", "did", "played"], "a": 0, "why": "We say 'take a photo', not 'make' or 'do' a photo." }
+      ]
+    },
+    {
+      "id": "flyer-2",
+      "title": "Nature around us",
+      "emoji": "🌳",
+      "words": [
+        { "w": "insect", "def": "a very small animal with six legs, like an ant or a bee", "ex": "A beetle is an ___ with six legs and a hard back.", "pos": "noun", "pic": "🐞" },
+        { "w": "bee", "def": "a flying insect that makes honey", "ex": "The ___ flew from flower to flower to make honey.", "pos": "noun", "pic": "🐝" },
+        { "w": "wing", "def": "the part of a bird, an insect or a plane that helps it fly", "ex": "My toy plane has got a long ___ on each side.", "pos": "noun" },
+        { "w": "feather", "def": "one of the soft, light things that cover a bird's body", "ex": "I found a long blue ___ that fell from a bird.", "pos": "noun", "pic": "🪶" },
+        { "w": "desert", "def": "a very dry, hot place with lots of sand and very little rain", "ex": "Camels can walk for days in the hot, dry ___.", "pos": "noun", "pic": "🏜️" },
+        { "w": "forest", "def": "a large area of land covered with trees", "ex": "We walked under the tall trees in the ___ and saw a deer.", "pos": "noun", "pic": "🌲" },
+        { "w": "planet", "def": "a very big round thing in space that moves around the sun, like Earth or Mars", "ex": "Jupiter is the biggest ___ in our solar system.", "pos": "noun", "pic": "🪐" },
+        { "w": "storm", "def": "very bad weather with strong wind and heavy rain", "ex": "There was a big ___ last night, with strong wind and lots of rain.", "pos": "noun", "pic": "⛈️" },
+        { "w": "environment", "def": "the air, water and land around us, where people, animals and plants live", "ex": "We should protect the ___ and keep our rivers clean.", "pos": "noun", "pic": "🌍" },
+        { "w": "wild", "def": "living in nature, not kept by people", "ex": "Lions are ___ animals, so you can't keep one as a pet.", "pos": "adj" },
+        { "w": "recycle", "def": "to use old paper, glass or plastic again to make new things", "ex": "Don't throw that bottle away. We can ___ it!", "pos": "verb", "pic": "♻️" },
+        { "w": "plastic", "def": "a light material that people make; many bottles and bags are made of it", "ex": "This bottle isn't made of glass. It's made of ___.", "pos": "noun" }
+      ],
+      "grammar": [
+        { "q": "The cheetah is the ___ animal on land.", "opts": ["fastest", "faster", "most fast"], "a": 0, "why": "Use 'the' + -est to compare one thing with all the others: the fastest." },
+        { "q": "Mount Everest is the ___ mountain in the world.", "opts": ["highest", "higher", "most high"], "a": 0, "why": "Short adjectives add -est: high, the highest." },
+        { "q": "This is the ___ beautiful forest I know.", "opts": ["most", "more", "much"], "a": 0, "why": "Long adjectives use 'the most': the most beautiful." },
+        { "q": "The water is ___ cold to swim in.", "opts": ["too", "enough", "very much"], "a": 0, "why": "'Too' means more than is good: too cold to swim." },
+        { "q": "My brother isn't tall ___ to reach the bird's nest.", "opts": ["enough", "too", "very"], "a": 0, "why": "'Enough' means as much as you need. It comes after the adjective: tall enough." },
+        { "q": "A bee is an insect ___ makes honey.", "opts": ["which", "who", "where"], "a": 0, "why": "Use 'which' for animals and things, and 'who' for people." }
+      ],
+      "sentences": [
+        "Bees fly from flower to flower.",
+        "We should recycle our plastic bottles.",
+        "The water was too cold to swim in.",
+        "A bird uses its wings to fly."
+      ],
+      "reading": {
+        "title": "Busy bees",
+        "text": "Bees are small, but they are some of the most important insects in the world. A bee has got four wings and six legs. It flies from flower to flower and drinks a sweet juice called nectar. Back at its home, the hive, it turns the nectar into honey.\n\nBees also help plants. When a bee visits a flower, yellow powder from the flower sticks to its body. The bee carries it to the next flower, and this helps fruit like apples and strawberries grow.\n\nYou can help bees too. Plant some flowers in your garden or in a pot by the window. Bees love blue and purple flowers best!",
+        "qs": [
+          { "type": "mc", "q": "How many wings has a bee got?", "opts": ["two", "four", "six"], "a": 1 },
+          { "type": "mc", "q": "What is a hive?", "opts": ["a bee's home", "a kind of flower", "a sweet juice"], "a": 0 },
+          { "type": "tf", "q": "Bees help fruit like apples to grow.", "opts": ["True", "False"], "a": 0 },
+          { "type": "tf", "q": "Bees like red flowers best.", "opts": ["True", "False"], "a": 1 },
+          { "type": "mc", "q": "What does a bee make from nectar?", "opts": ["powder", "honey", "flowers"], "a": 1 }
+        ]
+      },
+      "extra": [
+        { "kind": "preposition", "q": "Bees fly ___ flower to flower.", "opts": ["from", "at", "in", "of"], "a": 0, "why": "We say 'from one place to another': from flower to flower." },
+        { "kind": "collocation", "q": "We must ___ care of our planet.", "opts": ["take", "make", "do", "have"], "a": 0, "why": "We say 'take care of' something. It means 'look after' it." }
+      ]
+    },
+    {
+      "id": "flyer-3",
+      "title": "Jobs people do",
+      "emoji": "💼",
+      "words": [
+        { "w": "vet", "def": "a doctor for animals", "ex": "The ___ looked at our cat's ear and gave her some medicine.", "pos": "noun" },
+        { "w": "dentist", "def": "a person whose job is to look after people's teeth", "ex": "I go to the ___ twice a year to check my teeth.", "pos": "noun", "pic": "🪥" },
+        { "w": "artist", "def": "a person who paints or draws pictures", "ex": "The ___ painted a beautiful picture of the sea.", "pos": "noun", "pic": "🖌️" },
+        { "w": "firefighter", "def": "a person whose job is to stop fires and help people", "ex": "The ___ climbed a long ladder to help the cat down from the tree.", "pos": "noun", "pic": "👨‍🚒" },
+        { "w": "journalist", "def": "a person who writes news stories for newspapers, TV or websites", "ex": "The ___ asked the football player lots of questions for the newspaper.", "pos": "noun", "pic": "📰" },
+        { "w": "mechanic", "def": "a person whose job is to repair cars and machines", "ex": "Our car broke down, so we took it to a ___.", "pos": "noun", "pic": "🔧" },
+        { "w": "photographer", "def": "a person who takes photos as a job", "ex": "The ___ said, 'Smile!' and took a picture of our class.", "pos": "noun", "pic": "📷" },
+        { "w": "pilot", "def": "a person who flies a plane", "ex": "The ___ said, 'Welcome on board! We will land in Paris in one hour.'", "pos": "noun", "pic": "👨‍✈️" },
+        { "w": "police officer", "def": "a person whose job is to keep people safe and make sure they follow the law", "ex": "If you get lost, ask a ___ for help.", "pos": "noun", "pic": "👮" },
+        { "w": "waiter", "def": "a person who brings food to your table in a restaurant", "ex": "The ___ brought us our pizzas and some water.", "pos": "noun" },
+        { "w": "factory", "def": "a big building where people and machines make things like cars or toys", "ex": "My uncle works in a chocolate ___ that makes 10,000 bars a day.", "pos": "noun", "pic": "🏭" },
+        { "w": "uniform", "def": "special clothes that everyone in a group or a job wears", "ex": "Nurses and police officers wear a ___ at work.", "pos": "noun" }
+      ],
+      "grammar": [
+        { "q": "A pilot is a person ___ flies planes.", "opts": ["who", "which", "where"], "a": 0, "why": "Use 'who' for people." },
+        { "q": "This is the camera ___ my dad uses at work.", "opts": ["which", "who", "where"], "a": 0, "why": "Use 'which' for things." },
+        { "q": "Have you ever ___ a real astronaut?", "opts": ["met", "meet", "meeting"], "a": 0, "why": "The present perfect is have + past participle: meet, met." },
+        { "q": "My mum ___ worked in three different countries.", "opts": ["has", "have", "is"], "a": 0, "why": "In the present perfect, use 'has' with he, she and it: she has worked." },
+        { "q": "I ___ never been to a TV studio.", "opts": ["have", "has", "am"], "a": 0, "why": "In the present perfect, use 'have' with I, you, we and they: I have never been." },
+        { "q": "You want to be a vet? You ___ study science at school.", "opts": ["should", "shouldn't", "are"], "a": 0, "why": "Use 'should' to give good advice. Vets need science, so you should study it." }
+      ],
+      "sentences": [
+        "I know a man who works in a chocolate factory.",
+        "Have you ever met a real pilot?",
+        "You should ask a police officer for help.",
+        "My mum has never worn a uniform."
+      ],
+      "reading": {
+        "title": "What do you want to be?",
+        "text": "Our teacher asked us, 'What do you want to be when you grow up?' Everyone had a different answer.\n\nJack wants to be a pilot because he loves planes. He has already flown to six countries with his family. Mia wants to be a dentist like her mum. She says it is an important job, and you should look after your teeth every day! Sam wants to be an astronaut. He has read lots of books about space, and he wants to be the first person on Mars.\n\nI want to be a journalist. I love asking people questions and writing stories. Last week I wrote a story about our school for the local newspaper!",
+        "qs": [
+          { "type": "mc", "q": "Why does Jack want to be a pilot?", "opts": ["He loves planes.", "His dad is a pilot.", "He wants to go to Mars."], "a": 0 },
+          { "type": "mc", "q": "What job does Mia's mum do?", "opts": ["She's a pilot.", "She's a dentist.", "She's a journalist.", "She's a teacher."], "a": 1 },
+          { "type": "tf", "q": "Sam has read lots of books about space.", "opts": ["True", "False"], "a": 0 },
+          { "type": "tf", "q": "The writer wants to be an astronaut.", "opts": ["True", "False"], "a": 1 },
+          { "type": "mc", "q": "What did the writer write about last week?", "opts": ["space", "planes", "their school"], "a": 2 }
+        ]
+      },
+      "extra": [
+        { "kind": "preposition", "q": "Firefighters often work ___ night.", "opts": ["at", "in", "on", "to"], "a": 0, "why": "We say 'at night', but 'in the morning' and 'in the afternoon'." },
+        { "kind": "collocation", "q": "A good journalist ___ lots of questions.", "opts": ["asks", "makes", "does", "says"], "a": 0, "why": "We say 'ask a question', not 'make', 'do' or 'say' a question." }
+      ]
+    },
+    {
+      "id": "flyer-4",
+      "title": "A story from the past",
+      "emoji": "📖",
+      "words": [
+        { "w": "castle", "def": "a big old building with thick walls and towers, where kings and queens lived", "ex": "The king and queen lived in a ___ on top of the hill.", "pos": "noun", "pic": "🏰" },
+        { "w": "king", "def": "the man who is the head of a country, often with a crown", "ex": "The ___ wore a gold crown and sat on his big chair.", "pos": "noun", "pic": "👑" },
+        { "w": "queen", "def": "the woman who is the head of a country, or the wife of a king", "ex": "The king and the ___ had a beautiful daughter.", "pos": "noun" },
+        { "w": "dragon", "def": "a big animal in stories that has wings and breathes fire", "ex": "The friendly ___ in the story had big wings and could breathe fire.", "pos": "noun", "pic": "🐉" },
+        { "w": "adventure", "def": "an exciting trip where unusual things happen", "ex": "The children went on an exciting ___ to find the lost treasure.", "pos": "noun" },
+        { "w": "gold", "def": "a yellow metal that costs a lot of money", "ex": "The pirates found a box full of ___ coins.", "pos": "noun", "pic": "🪙" },
+        { "w": "secret", "def": "something that only you or a few people know", "ex": "Can you keep a ___? Don't tell anyone!", "pos": "noun" },
+        { "w": "suddenly", "def": "very quickly, when you don't expect it", "ex": "We were walking in the forest when ___ it started to rain.", "pos": "adv" },
+        { "w": "midnight", "def": "twelve o'clock at night", "ex": "At ___, when everyone was asleep, the old clock started to talk!", "pos": "noun", "pic": "🕛" },
+        { "w": "museum", "def": "a building where you can look at old or interesting things", "ex": "We saw old dinosaur bones at the ___.", "pos": "noun", "pic": "🏛️" },
+        { "w": "history", "def": "the study of things that happened in the past", "ex": "In our ___ lesson, we learned about the kings and queens of England.", "pos": "noun", "pic": "📜" },
+        { "w": "century", "def": "a time of one hundred years", "ex": "This castle is very old. People built it in the twelfth ___.", "pos": "noun" }
+      ],
+      "grammar": [
+        { "q": "I ___ reading a book when the phone rang.", "opts": ["was", "were", "am"], "a": 0, "why": "Use was or were + -ing for something that was going on in the past. With I, use 'was'." },
+        { "q": "The children ___ playing in the garden when it started to rain.", "opts": ["were", "was", "are"], "a": 0, "why": "With we, you and they (the children), use 'were' + -ing." },
+        { "q": "What ___ you doing at eight o'clock last night?", "opts": ["were", "was", "did"], "a": 0, "why": "Ask about something that was going on in the past with 'What were you doing?'" },
+        { "q": "While the king was sleeping, the dragon ___ into the castle.", "opts": ["flew", "flying", "fly"], "a": 0, "why": "Use the past simple for the short action that happened in the middle: the dragon flew." },
+        { "q": "She was walking home ___ she found a gold coin.", "opts": ["when", "while", "during"], "a": 0, "why": "Use 'when' before the short action: She was walking home when she found a coin." },
+        { "q": "Long ago, people ___ in castles.", "opts": ["lived", "living", "live"], "a": 0, "why": "'Long ago' is in the past, so use the past simple: lived." }
+      ],
+      "sentences": [
+        "What were you doing at midnight?",
+        "Nobody knew the secret of the castle.",
+        "We visited a museum about the history of London.",
+        "The children were looking for the hidden treasure."
+      ],
+      "reading": {
+        "title": "The dragon who loved cake",
+        "text": "Long ago, a small green dragon called Pip lived in a cave near a big castle. Pip wasn't scary at all. He loved cake more than anything!\n\nOne night, at midnight, while the king and queen were sleeping, Pip flew to the castle kitchen. The cook was making a huge chocolate cake for the princess's birthday. Suddenly she saw Pip at the window. She was very surprised, but Pip smiled and said, 'Please may I have a small piece?'\n\nThe cook laughed and gave him some cake. The next day, the princess invited Pip to her party. From that day, the dragon and the princess were best friends.",
+        "qs": [
+          { "type": "mc", "q": "Where did Pip live?", "opts": ["in the castle", "in a cave", "in the forest", "in the kitchen"], "a": 1 },
+          { "type": "mc", "q": "What were the king and queen doing when Pip flew to the castle?", "opts": ["They were sleeping.", "They were eating cake.", "They were having a party.", "They were reading."], "a": 0 },
+          { "type": "mc", "q": "Who was making a cake?", "opts": ["the princess", "the queen", "the cook"], "a": 2 },
+          { "type": "tf", "q": "The cook was angry with Pip.", "opts": ["True", "False"], "a": 1 },
+          { "type": "tf", "q": "The princess invited Pip to her party.", "opts": ["True", "False"], "a": 0 }
+        ]
+      },
+      "extra": [
+        { "kind": "linking", "q": "Pip was hungry, ___ he flew to the kitchen.", "opts": ["so", "but", "because", "or"], "a": 0, "why": "Use 'so' to say what happened because of something: he was hungry, so he flew to the kitchen." },
+        { "kind": "preposition", "q": "The story happened ___ the twelfth century.", "opts": ["in", "on", "at", "to"], "a": 0, "why": "Use 'in' with centuries, years and months: in the twelfth century." }
+      ]
+    },
+    {
+      "id": "flyer-5",
+      "title": "Screens and gadgets",
+      "emoji": "📱",
+      "words": [
+        { "w": "screen", "def": "the flat glass part of a TV, computer or phone where you see pictures", "ex": "The ___ on my tablet is broken, so I can't see the pictures.", "pos": "noun", "pic": "🖥️" },
+        { "w": "keyboard", "def": "the part of a computer with keys for letters and numbers that you press to type", "ex": "I type my stories on the ___ with all ten fingers.", "pos": "noun", "pic": "⌨️" },
+        { "w": "laptop", "def": "a small computer that you can carry and use on your knees", "ex": "My dad takes his ___ on the train so he can work.", "pos": "noun", "pic": "💻" },
+        { "w": "mouse", "def": "a small thing you move with your hand to point and click on a computer", "ex": "Click on the picture with the ___.", "pos": "noun", "pic": "🖱️" },
+        { "w": "website", "def": "a place on the internet with pages of information about something", "ex": "You can find the times of all the films on the cinema's ___.", "pos": "noun", "pic": "🌐" },
+        { "w": "password", "def": "a secret word that you type to open your computer, phone or game", "ex": "Never tell anyone your ___, not even your best friend!", "pos": "noun", "pic": "🔑" },
+        { "w": "app", "def": "a small program that you put on a phone or tablet to do one job", "ex": "I use a free ___ on my phone to learn Spanish.", "pos": "noun" },
+        { "w": "download", "def": "to copy a game, song or file from the internet onto your computer or phone", "ex": "Ask your parents before you ___ a new game.", "pos": "verb", "pic": "📥" },
+        { "w": "online", "def": "using or connected to the internet", "ex": "My cousin and I play chess ___ every Sunday.", "pos": "adv" },
+        { "w": "information", "def": "facts about something", "ex": "This website has lots of useful ___ about dinosaurs.", "pos": "noun", "pic": "ℹ️" },
+        { "w": "headphones", "def": "a thing you wear over your ears to listen to music without other people hearing it", "ex": "Please put on your ___. Your music is too loud for me!", "pos": "noun", "pic": "🎧" },
+        { "w": "switch off", "def": "to stop a machine or a light working, often by pressing a button", "ex": "Please ___ the lights when you leave the room.", "pos": "phrase", "pic": "📴" }
+      ],
+      "grammar": [
+        { "q": "If you play games all night, you ___ be tired tomorrow.", "opts": ["will", "would", "are"], "a": 0, "why": "First conditional: if + present simple, then will + verb." },
+        { "q": "If the battery ___ flat, the phone will stop working.", "opts": ["is", "will be", "was"], "a": 0, "why": "After 'if' in the first conditional, use the present simple, not 'will'." },
+        { "q": "I have ___ downloaded the new game. Do you want to play?", "opts": ["just", "yet", "ever"], "a": 0, "why": "'Just' means a very short time ago. It goes between 'have' and the verb." },
+        { "q": "Have you finished your homework ___?", "opts": ["yet", "just", "ever"], "a": 0, "why": "Use 'yet' at the end of present perfect questions and negatives." },
+        { "q": "This laptop is ___ heavy. I can't carry it.", "opts": ["too", "enough", "very much"], "a": 0, "why": "'Too' means more than is good: too heavy to carry." },
+        { "q": "Can you give me some ___ about the new phone?", "opts": ["information", "informations", "an information"], "a": 0, "why": "'Information' is uncountable: no -s and no 'an'." }
+      ],
+      "sentences": [
+        "Have you downloaded the new game yet?",
+        "My brother is too young to play this game.",
+        "Don't tell anyone your password.",
+        "I need a new battery for my camera."
+      ],
+      "reading": {
+        "title": "Ella's screen time",
+        "text": "Ella is eleven and she loves gadgets. She has got a laptop, a tablet and some big blue headphones. Every evening she goes online to play games with her friends or watch videos.\n\nLast month, Ella started to get headaches, and she often felt tired at school. Her mum said, 'I think you are spending too much time in front of screens. If you switch off your tablet an hour before bed, you will sleep better.'\n\nElla wasn't happy at first, but she tried it. Now she reads a book before bed instead. She has already finished three books this month, and her headaches have stopped. 'I still love my games,' she says, 'but books are fun too!'",
+        "qs": [
+          { "type": "mc", "q": "What does Ella do online every evening?", "opts": ["She does her homework.", "She plays games and watches videos.", "She reads books.", "She writes stories."], "a": 1 },
+          { "type": "mc", "q": "What did Ella's mum tell her to do?", "opts": ["switch off her tablet an hour before bed", "buy some new headphones", "play more games with her friends"], "a": 0 },
+          { "type": "tf", "q": "Ella was very happy with her mum's idea at first.", "opts": ["True", "False"], "a": 1 },
+          { "type": "mc", "q": "How many books has Ella finished this month?", "opts": ["two", "three", "four"], "a": 1 },
+          { "type": "tf", "q": "Ella's headaches have stopped.", "opts": ["True", "False"], "a": 0 }
+        ]
+      },
+      "extra": [
+        { "kind": "phrasal", "q": "Can you ___ the music, please? It's too loud.", "opts": ["turn down", "turn up", "look for", "get on"], "a": 0, "why": "'Turn down' means make it quieter. 'Turn up' means make it louder." },
+        { "kind": "preposition", "q": "I found the information ___ the internet.", "opts": ["on", "in", "at", "by"], "a": 0, "why": "We say 'on the internet' and 'on a website'." }
+      ]
+    }
+  ]
+}

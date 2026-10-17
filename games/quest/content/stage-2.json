@@ -1,0 +1,245 @@
+{
+  "stage": 2,
+  "units": [
+    {
+      "id": "mover-1",
+      "title": "My school day",
+      "emoji": "🏫",
+      "words": [
+        { "w": "get up", "def": "to leave your bed after you wake up", "ex": "On Sundays I stay in bed and ___ at ten o'clock.", "pos": "phrase", "pic": "⏰" },
+        { "w": "get dressed", "def": "to put your clothes on", "ex": "After my shower I ___: shirt, trousers and shoes.", "pos": "phrase", "pic": "👕" },
+        { "w": "wash", "def": "to clean something with water and soap", "ex": "Please ___ your hands with soap before lunch.", "pos": "verb", "pic": "🧼" },
+        { "w": "homework", "def": "work your teacher gives you to do after school", "ex": "I do my maths ___ after school.", "pos": "noun", "pic": "📝" },
+        { "w": "break", "def": "a short time between lessons when you can rest or play", "ex": "We play football in the playground at ___.", "pos": "noun" },
+        { "w": "mistake", "def": "something that is wrong, like a wrong answer", "ex": "Two and two is five? That's a ___!", "pos": "noun", "pic": "❌" },
+        { "w": "clever", "def": "quick at learning and understanding things", "ex": "Ana knows all the answers. She's very ___.", "pos": "adj", "pic": "🧠" },
+        { "w": "quiet", "def": "making very little noise", "ex": "Please be ___ in the library. People are reading.", "pos": "adj", "pic": "🤫" },
+        { "w": "easy", "def": "not hard to do", "ex": "The test was ___. I got all the answers right!", "pos": "adj" },
+        { "w": "difficult", "def": "hard to do or to understand", "ex": "This sum is very ___. Can you help me, please?", "pos": "adj" },
+        { "w": "always", "def": "every time", "ex": "I ___ brush my teeth before bed. I never forget!", "pos": "adv" },
+        { "w": "asleep", "def": "sleeping; not awake", "ex": "At ten o'clock at night I'm fast ___ in bed.", "pos": "adj", "pic": "😴" }
+      ],
+      "grammar": [
+        { "q": "My sister ___ to school by bus.", "opts": ["goes", "go", "going"], "a": 0, "why": "With he, she and it, add -s or -es to the verb: she goes." },
+        { "q": "We ___ lunch at twelve o'clock.", "opts": ["have", "has", "having"], "a": 0, "why": "With I, you, we and they, use the verb with no -s: we have." },
+        { "q": "___ your brother walk to school?", "opts": ["Does", "Do", "Is"], "a": 0, "why": "Ask questions about he, she or it with 'Does': Does he walk?" },
+        { "q": "I ___ like tests.", "opts": ["don't", "doesn't", "not"], "a": 0, "why": "Use 'don't' with I, you, we and they: I don't like." },
+        { "q": "She ___ her homework after dinner.", "opts": ["always does", "does always", "always do"], "a": 0, "why": "'Always' goes before the verb, and with she the verb is 'does': she always does." },
+        { "q": "I get up early, so I am ___ late for school.", "opts": ["never", "always", "often"], "a": 0, "why": "'Never' means not at any time. I get up early, so I'm never late." }
+      ],
+      "sentences": [
+        "My little sister can't get dressed on her own.",
+        "What time do you get up?",
+        "Our teacher gives us lots of homework.",
+        "Does your brother walk to school?"
+      ],
+      "reading": {
+        "title": "Leo's school day",
+        "text": "Leo gets up at seven o'clock every day. He washes his face, gets dressed and has breakfast with his mum. Then he walks to school with his friend Ben. Lessons start at nine. Leo's favourite lesson is science because it is never boring. At break he plays football in the playground. After school he does his homework. It isn't difficult, but it takes a long time. At nine o'clock Leo is asleep in bed.",
+        "qs": [
+          { "type": "mc", "q": "What time does Leo get up?", "opts": ["at seven o'clock", "at eight o'clock", "at nine o'clock"], "a": 0 },
+          { "type": "mc", "q": "Who does Leo walk to school with?", "opts": ["his mum", "his friend Ben", "his sister"], "a": 1 },
+          { "type": "tf", "q": "Leo's favourite lesson is maths.", "opts": ["True", "False"], "a": 1 },
+          { "type": "tf", "q": "Leo plays football at break.", "opts": ["True", "False"], "a": 0 },
+          { "type": "mc", "q": "What does Leo do after school?", "opts": ["He plays tennis.", "He does his homework.", "He goes to the library."], "a": 1 }
+        ]
+      },
+      "extra": [
+        { "kind": "collocation", "q": "I ___ my homework after dinner.", "opts": ["do", "make", "play", "go"], "a": 0, "why": "We say 'do your homework', not 'make' it." },
+        { "kind": "preposition", "q": "School starts ___ nine o'clock.", "opts": ["at", "on", "in", "to"], "a": 0, "why": "Use 'at' with clock times: at nine o'clock." }
+      ]
+    },
+    {
+      "id": "mover-2",
+      "title": "Sports and hobbies",
+      "emoji": "⚽",
+      "words": [
+        { "w": "hockey", "def": "a team sport where you hit a ball with a long stick", "ex": "In ___, you use a stick to hit the ball into the goal.", "pos": "noun", "pic": "🏑" },
+        { "w": "ice skating", "def": "a sport where you move across ice in special boots", "ex": "When the lake turns to ice in winter, we go ___.", "pos": "noun", "pic": "⛸️" },
+        { "w": "climb", "def": "to go up something using your hands and feet", "ex": "Monkeys can ___ trees very quickly.", "pos": "verb", "pic": "🧗" },
+        { "w": "dance", "def": "to move your body to music", "ex": "When I hear music, I want to ___!", "pos": "verb", "pic": "💃" },
+        { "w": "fishing", "def": "trying to catch fish with a long stick and a line", "ex": "Grandpa and I go ___ at the river and catch big fish.", "pos": "noun", "pic": "🎣" },
+        { "w": "swimming pool", "def": "a big place full of water where you can swim", "ex": "We jump into the blue water at the ___ near our school.", "pos": "noun", "pic": "🏊" },
+        { "w": "goal", "def": "the net you kick or hit the ball into to win a point", "ex": "She kicked the ball into the ___ and her team won!", "pos": "noun", "pic": "🥅" },
+        { "w": "film", "def": "a story with moving pictures that you watch on a screen", "ex": "We are going to watch a funny ___ at the cinema.", "pos": "noun", "pic": "🎬" },
+        { "w": "kick", "def": "to hit something with your foot", "ex": "In football, you ___ the ball with your foot.", "pos": "verb" },
+        { "w": "catch", "def": "to take and hold something that is moving through the air", "ex": "Throw the ball to me. I can ___ it!", "pos": "verb" },
+        { "w": "hop", "def": "to jump on one foot", "ex": "Can you ___ on one foot to the end of the playground?", "pos": "verb" },
+        { "w": "comic", "def": "a magazine with stories told in pictures", "ex": "I'm reading a funny ___ with lots of pictures.", "pos": "noun" }
+      ],
+      "grammar": [
+        { "q": "Look! The children ___ football in the park.", "opts": ["are playing", "plays", "is playing"], "a": 0, "why": "Use am, is or are + -ing for what is happening now. The children = they, so 'are playing'." },
+        { "q": "My dad ___ a book right now. He's on the sofa.", "opts": ["is reading", "reads", "are reading"], "a": 0, "why": "'Right now' means at this moment, so use is + -ing: he is reading." },
+        { "q": "I love ___ with my friends.", "opts": ["dancing", "dances", "danced"], "a": 0, "why": "After 'love' or 'like', use the -ing form: I love dancing." },
+        { "q": "What ___ you doing? I'm climbing a tree.", "opts": ["are", "is", "do"], "a": 0, "why": "Ask about now with 'What are you doing?'" },
+        { "q": "A football is ___ than a tennis ball.", "opts": ["bigger", "big", "biggest"], "a": 0, "why": "To compare two things, use -er + than: bigger than." },
+        { "q": "Our team ___ the match last Saturday.", "opts": ["won", "wins", "winning"], "a": 0, "why": "'Last Saturday' is in the past. 'Win' is irregular: win, won." }
+      ],
+      "sentences": [
+        "My brother is climbing a tree.",
+        "Do you like ice skating?",
+        "She kicked the ball into the goal.",
+        "My grandpa loves going fishing."
+      ],
+      "reading": {
+        "title": "A busy Saturday",
+        "text": "It's Saturday and my family is very busy. My sister Emma is playing hockey with her school team. She is faster than the other players! Dad loves fishing, so he is at the river with Grandpa. I like dancing, and I have a dance class at ten o'clock. And Mum? She is sitting on the sofa and reading a comic. That's her favourite hobby!",
+        "qs": [
+          { "type": "mc", "q": "What is Emma playing?", "opts": ["football", "hockey", "tennis"], "a": 1 },
+          { "type": "mc", "q": "Where is Dad?", "opts": ["at the river", "at the swimming pool", "at home"], "a": 0 },
+          { "type": "tf", "q": "Emma is slower than the other players.", "opts": ["True", "False"], "a": 1 },
+          { "type": "mc", "q": "What time is the dance class?", "opts": ["at nine o'clock", "at ten o'clock", "at eleven o'clock"], "a": 1 },
+          { "type": "tf", "q": "Mum is reading a comic.", "opts": ["True", "False"], "a": 0 }
+        ]
+      },
+      "extra": [
+        { "kind": "collocation", "q": "My sister ___ hockey every Saturday.", "opts": ["plays", "goes", "does", "makes"], "a": 0, "why": "Use 'play' with sports and games: play hockey, play football." },
+        { "kind": "collocation", "q": "On Sundays, Grandpa and I ___ fishing.", "opts": ["go", "play", "do", "make"], "a": 0, "why": "Use 'go' with many -ing activities: go fishing, go swimming, go skating." }
+      ]
+    },
+    {
+      "id": "mover-3",
+      "title": "In the town",
+      "emoji": "🚌",
+      "words": [
+        { "w": "city", "def": "a very big town with lots of people and buildings", "ex": "London is a very big ___ with millions of people.", "pos": "noun", "pic": "🏙️" },
+        { "w": "village", "def": "a very small town in the countryside", "ex": "My grandma lives in a small ___ with only one shop.", "pos": "noun", "pic": "🏘️" },
+        { "w": "bus stop", "def": "the place by the road where you wait to get on a bus", "ex": "Wait at the ___ and the number 12 bus will come.", "pos": "noun", "pic": "🚏" },
+        { "w": "cafe", "def": "a small place where you can buy drinks and simple food", "ex": "Let's have a hot chocolate and a cake at the ___.", "pos": "noun", "pic": "☕" },
+        { "w": "cinema", "def": "a building where you watch films on a big screen", "ex": "We are going to the ___ to see a new film.", "pos": "noun", "pic": "🍿" },
+        { "w": "library", "def": "a building with lots of books that you can take home and bring back", "ex": "I get books from the ___ and take them back after two weeks.", "pos": "noun", "pic": "📚" },
+        { "w": "supermarket", "def": "a very big shop that sells food and lots of other things", "ex": "We push a trolley around the big ___ and buy milk, bread and soap.", "pos": "noun", "pic": "🛒" },
+        { "w": "market", "def": "a place outside with tables where people sell fruit, vegetables and other things", "ex": "On Saturdays, farmers sell fruit and vegetables at the ___ in the square.", "pos": "noun" },
+        { "w": "building", "def": "a house, school, shop or office: something with walls and a roof", "ex": "My dad works in a tall ___ with twenty floors.", "pos": "noun", "pic": "🏢" },
+        { "w": "map", "def": "a picture that shows where places and roads are", "ex": "We are lost! Let's look at the ___.", "pos": "noun", "pic": "🗺️" },
+        { "w": "road", "def": "a long hard way for cars, buses and bikes", "ex": "Look left and right before you cross the ___.", "pos": "noun", "pic": "🛣️" },
+        { "w": "go shopping", "def": "to visit shops and buy things", "ex": "On Saturdays, Mum and I ___ for new clothes.", "pos": "phrase", "pic": "🛍️" }
+      ],
+      "grammar": [
+        { "q": "There aren't ___ shops in my village.", "opts": ["any", "some", "a"], "a": 0, "why": "Use 'any' after 'not': there aren't any shops." },
+        { "q": "There are ___ new books in the library.", "opts": ["some", "any", "a"], "a": 0, "why": "Use 'some' in positive sentences about more than one thing." },
+        { "q": "A village is ___ than a city.", "opts": ["smaller", "small", "more small"], "a": 0, "why": "Short words add -er to compare: small, smaller than." },
+        { "q": "The new cafe is ___ than the old one.", "opts": ["better", "gooder", "more good"], "a": 0, "why": "'Good' is special: good, better." },
+        { "q": "Last Saturday we ___ to the cinema.", "opts": ["went", "go", "goed"], "a": 0, "why": "'Go' is irregular. In the past it is 'went'." },
+        { "q": "Yesterday we ___ around the market.", "opts": ["walked", "walk", "walks"], "a": 0, "why": "For the past, add -ed to most verbs: walk, walked." }
+      ],
+      "sentences": [
+        "Is there a library in your town?",
+        "My village hasn't got any shops.",
+        "Which bus goes to the city centre?",
+        "Where can I buy a map?"
+      ],
+      "reading": {
+        "title": "A day in the city",
+        "text": "Last Saturday Kate went to the city with her grandma. They took the bus from the bus stop near Kate's house. First they went to a big market in the square. Grandma bought some apples and flowers. Then they walked to the library, and Kate chose two books about animals. They were hungry, so they had lunch at a little cafe. Kate had a sandwich and a hot chocolate. It was a great day!",
+        "qs": [
+          { "type": "mc", "q": "Who did Kate go to the city with?", "opts": ["her mum", "her grandma", "her friend"], "a": 1 },
+          { "type": "mc", "q": "How did they go to the city?", "opts": ["by bus", "by car", "by train"], "a": 0 },
+          { "type": "tf", "q": "Kate chose two books about cars.", "opts": ["True", "False"], "a": 1 },
+          { "type": "mc", "q": "Where did they have lunch?", "opts": ["at the market", "at the library", "at a cafe"], "a": 2 },
+          { "type": "tf", "q": "Kate had a hot chocolate.", "opts": ["True", "False"], "a": 0 }
+        ]
+      },
+      "extra": [
+        { "kind": "preposition", "q": "The cafe is ___ the library and the bank.", "opts": ["between", "next", "under", "on"], "a": 0, "why": "Use 'between' for something in the middle of two places." },
+        { "kind": "preposition", "q": "Turn left, and the cinema is ___ your right.", "opts": ["on", "in", "at", "by"], "a": 0, "why": "We say 'on your right' and 'on your left'." }
+      ]
+    },
+    {
+      "id": "mover-4",
+      "title": "Weather and seasons",
+      "emoji": "⛅",
+      "words": [
+        { "w": "weather", "def": "how it is outside: sunny, rainy, windy, hot or cold", "ex": "What's the ___ like today? It's sunny and warm.", "pos": "noun", "pic": "🌦️" },
+        { "w": "sunny", "def": "bright, with lots of light from the sun", "ex": "Put on your sunglasses. It's very ___ today!", "pos": "adj", "pic": "☀️" },
+        { "w": "cloudy", "def": "when the sky is grey and you can't see the sun", "ex": "It's ___ today, so I can't see the sun or the blue sky.", "pos": "adj", "pic": "☁️" },
+        { "w": "rain", "def": "water that falls from the sky in drops", "ex": "I need my umbrella because of the ___.", "pos": "noun", "pic": "🌧️" },
+        { "w": "snow", "def": "soft white ice that falls from the sky when it's very cold", "ex": "The garden is all white because of the ___.", "pos": "noun", "pic": "❄️" },
+        { "w": "windy", "def": "with a lot of air moving fast outside", "ex": "It's ___ today. Let's fly a kite!", "pos": "adj", "pic": "🌬️" },
+        { "w": "rainbow", "def": "seven colours in a big curve across the sky", "ex": "After the rain, we saw a beautiful ___ in the sky.", "pos": "noun", "pic": "🌈" },
+        { "w": "wet", "def": "covered in water; not dry", "ex": "I didn't take my umbrella, so my hair is ___.", "pos": "adj", "pic": "💦" },
+        { "w": "spring", "def": "the time of year after winter, when flowers start to grow", "ex": "In ___, the trees get new green leaves.", "pos": "noun", "pic": "🌷" },
+        { "w": "summer", "def": "the hot time of the year, between spring and autumn", "ex": "We go to the beach in ___ because it's hot.", "pos": "noun", "pic": "🏖️" },
+        { "w": "autumn", "def": "the time of year after summer, when leaves fall from the trees", "ex": "In ___, the leaves turn red and brown and fall from the trees.", "pos": "noun", "pic": "🍂" },
+        { "w": "winter", "def": "the cold time of the year, after autumn", "ex": "In ___, it's very cold and sometimes it snows.", "pos": "noun", "pic": "⛄" }
+      ],
+      "grammar": [
+        { "q": "Look at those black clouds! It ___ rain.", "opts": ["is going to", "are going to", "going to"], "a": 0, "why": "Use 'is going to' when you can see that something will happen. With it, use 'is'." },
+        { "q": "We ___ visit Grandma in the summer.", "opts": ["are going to", "is going to", "going"], "a": 0, "why": "Use 'are going to' with we, you and they for plans." },
+        { "q": "Today is ___ than yesterday. I need a coat!", "opts": ["colder", "cold", "more cold"], "a": 0, "why": "To compare, add -er + than: cold, colder than." },
+        { "q": "Summer is ___ than winter.", "opts": ["hotter", "hoter", "more hot"], "a": 0, "why": "Hot, hotter: double the t, then add -er." },
+        { "q": "Take an umbrella. It ___ outside.", "opts": ["is raining", "rains", "rain"], "a": 0, "why": "Use is + -ing for things that are happening now." },
+        { "q": "It's very hot here in summer, so it ___ snows.", "opts": ["never", "always", "often"], "a": 0, "why": "'Never' means not at any time. It's hot, so it never snows." }
+      ],
+      "sentences": [
+        "What is the weather like?",
+        "My coat is wet from the rain.",
+        "We are going to build a snowman.",
+        "Look at that beautiful rainbow!"
+      ],
+      "reading": {
+        "title": "Four seasons",
+        "text": "There are four seasons in my country. In spring it often rains, and the flowers start to grow. Summer is hot and sunny, so we go swimming in the sea. In autumn it is windy, and the leaves fall from the trees. Winter is very cold. Sometimes it snows, and we make a snowman in the garden. My favourite season is summer because I love the beach!",
+        "qs": [
+          { "type": "mc", "q": "When do the flowers start to grow?", "opts": ["in spring", "in summer", "in autumn"], "a": 0 },
+          { "type": "mc", "q": "What do they do in summer?", "opts": ["They make a snowman.", "They go swimming in the sea.", "They fly kites."], "a": 1 },
+          { "type": "tf", "q": "It is windy in autumn.", "opts": ["True", "False"], "a": 0 },
+          { "type": "tf", "q": "The writer's favourite season is winter.", "opts": ["True", "False"], "a": 1 },
+          { "type": "mc", "q": "Where do they make a snowman?", "opts": ["in the garden", "in the park", "on the beach"], "a": 0 }
+        ]
+      },
+      "extra": [
+        { "kind": "preposition", "q": "My birthday is ___ summer.", "opts": ["in", "on", "at", "to"], "a": 0, "why": "Use 'in' with seasons and months: in summer, in July." },
+        { "kind": "idiom", "q": "What does 'It's boiling today!' mean?", "opts": ["It's very hot.", "It's very cold.", "It's very wet.", "It's very windy."], "a": 0, "why": "When people say 'It's boiling!' about the weather, they mean it's very, very hot." }
+      ]
+    },
+    {
+      "id": "mover-5",
+      "title": "My body and health",
+      "emoji": "🩺",
+      "words": [
+        { "w": "neck", "def": "the part of your body between your head and your shoulders", "ex": "A giraffe has got a very long ___.", "pos": "noun" },
+        { "w": "shoulder", "def": "the part of your body between your neck and your arm", "ex": "The parrot is sitting on the pirate's ___.", "pos": "noun" },
+        { "w": "back", "def": "the part of your body behind you, from your neck down to your legs", "ex": "Lie on your ___ and look up at the stars.", "pos": "noun" },
+        { "w": "stomach", "def": "the part inside your body where food goes after you eat it", "ex": "I ate too much cake and now my ___ hurts.", "pos": "noun" },
+        { "w": "teeth", "def": "the hard white things in your mouth that you bite with", "ex": "Brush your ___ twice a day.", "pos": "noun", "pic": "🦷" },
+        { "w": "headache", "def": "a pain in your head", "ex": "The music is very loud and now I've got a ___.", "pos": "noun", "pic": "🤕" },
+        { "w": "cold", "def": "a small illness that makes you sneeze and cough", "ex": "I've got a ___, so I need lots of tissues for my nose.", "pos": "noun", "pic": "🤧" },
+        { "w": "temperature", "def": "when your body is too hot because you are ill", "ex": "You're very hot. I think you've got a ___.", "pos": "noun", "pic": "🤒" },
+        { "w": "doctor", "def": "a person whose job is to help ill people get better", "ex": "I feel ill, so Mum is taking me to see the ___.", "pos": "noun", "pic": "👩‍⚕️" },
+        { "w": "hospital", "def": "a big building where doctors and nurses look after very ill people", "ex": "My baby brother was born in this ___.", "pos": "noun", "pic": "🏥" },
+        { "w": "medicine", "def": "something you take when you are ill, to help you get better", "ex": "Take this ___ three times a day and you will feel better.", "pos": "noun", "pic": "💊" },
+        { "w": "hurt", "def": "to have a pain somewhere in your body", "ex": "My legs ___ after the long walk.", "pos": "verb", "pic": "🩹" }
+      ],
+      "grammar": [
+        { "q": "You ___ brush your teeth every day.", "opts": ["must", "mustn't", "musts"], "a": 0, "why": "'Must' means it is very important to do it." },
+        { "q": "You ___ eat lots of sweets. They're bad for your teeth.", "opts": ["mustn't", "must", "musts"], "a": 0, "why": "'Mustn't' means don't do it." },
+        { "q": "What's the matter? My stomach ___.", "opts": ["hurts", "hurt", "hurting"], "a": 0, "why": "My stomach = it, so add -s: it hurts." },
+        { "q": "Yesterday I ___ over in the playground.", "opts": ["fell", "falled", "fall"], "a": 0, "why": "'Fall' is irregular. In the past it is 'fell'." },
+        { "q": "Last week Tom ___ a bad cold.", "opts": ["had", "has", "haved"], "a": 0, "why": "'Have' is irregular. In the past it is 'had'." },
+        { "q": "___ you go to the doctor yesterday?", "opts": ["Did", "Do", "Does"], "a": 0, "why": "Ask questions about the past with 'Did'." }
+      ],
+      "sentences": [
+        "You must drink lots of water.",
+        "Has your sister got a temperature?",
+        "The doctor gave me some medicine.",
+        "What's the matter with your back?"
+      ],
+      "reading": {
+        "title": "Max stays at home",
+        "text": "Last Monday Max didn't go to school. He woke up with a headache and a cough, and he had a temperature. His mum took him to the doctor. The doctor said, 'You've got a bad cold. You must stay in bed for two days and drink lots of water.' Max took his medicine and slept a lot. On Wednesday he felt better, and he went back to school.",
+        "qs": [
+          { "type": "mc", "q": "When did Max wake up with a headache?", "opts": ["last Monday", "last Wednesday", "last Friday"], "a": 0 },
+          { "type": "mc", "q": "Who took Max to the doctor?", "opts": ["his dad", "his mum", "his grandma"], "a": 1 },
+          { "type": "tf", "q": "The doctor said Max had a bad cold.", "opts": ["True", "False"], "a": 0 },
+          { "type": "tf", "q": "Max had to stay in bed for a week.", "opts": ["True", "False"], "a": 1 },
+          { "type": "mc", "q": "When did Max go back to school?", "opts": ["on Tuesday", "on Wednesday", "on Thursday"], "a": 1 }
+        ]
+      },
+      "extra": [
+        { "kind": "preposition", "q": "I've got a pain ___ my stomach.", "opts": ["in", "on", "at", "under"], "a": 0, "why": "Use 'in' for a pain inside your body: a pain in my stomach." },
+        { "kind": "collocation", "q": "I ___ a bad cough.", "opts": ["have got", "am", "do", "make"], "a": 0, "why": "We say 'have got' a cough, a cold or a headache." }
+      ]
+    }
+  ]
+}
