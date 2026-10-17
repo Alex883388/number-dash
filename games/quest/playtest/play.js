@@ -9,7 +9,7 @@ const bot = `window.__qbot = async function (rightFor, shotKinds) {
   for (let guard = 0; guard < 80 && !document.getElementById('lesson').hidden; guard++) {
     const q = Q.L.qs[Q.L.i];
     if (!q) { await sleep(50); continue; }
-    const kind = q.kind + ':' + (q.ref.qt || q.ref.t);
+    const kind = q.kind + ':' + (q.ref ? q.ref.qt || q.ref.t : 'chart');
     if (!seen.includes(kind)) seen.push(kind);
     Q.answer(rightFor(Q.L.i, q));
     await sleep(40);
@@ -203,5 +203,20 @@ module.exports = [
   { log: "[window.__quest.SP.part, window.__quest.SP.phase, window.__quest.SP.set.stage]" },
   { shot: 'quest-42-speaking-both-parts' },
   { touchEl: '#speakHomeBtn' }, { sleep: 300 },
+  // chart language (Writing Task 1): 2,000 charts, every step inside its band, one peak and one low point, a clear
+  // overall trend, four questions each with one right answer; then a lesson by finger
+  { eval: "(() => { const Q = window.__quest, bad = []; let n = 0, made = 0; for (let k = 0; k < 2000; k++) { const c = Q.makeChart(); if (!c) { bad.push('no chart'); continue; } made++; c.moves.forEach((m, i) => { if (Q.bandOf(c.vals[i + 1] / c.vals[i]) !== m) bad.push('band ' + c.vals.join(',')); }); if (c.vals.filter((v) => v === c.hi).length !== 1 || c.vals.filter((v) => v === c.lo).length !== 1) bad.push('peak ' + c.vals.join(',')); const qs = Q.chartQs(c); qs.forEach((q) => { n++; if (q.opts.filter((o) => o === q.opts[q.a]).length !== 1 || new Set(q.opts).size !== q.opts.length || !q.why) bad.push('q ' + q.text); }); } return { charts: made, questions: n, bad: bad.length, first: bad.slice(0, 3) }; })()" },
+  { viewport: [1180, 820, true, false, 2] },
+  { eval: "(() => { const Q = window.__quest; Q.rec.unlocked = 8; Q.renderHome(); return document.getElementById('chartBtn').hidden; })()" },
+  { touchEl: '#chartBtn' }, { sleep: 600 },
+  { log: "(() => { const Q = window.__quest; return [Q.L.kind, Q.L.qs.length, !!document.querySelector('#q .chart svg'), document.querySelectorAll('#q .chart circle').length, document.querySelector('#q .chart b').textContent]; })()" },
+  { shot: 'quest-43-chart-ipad' },
+  { eval: "(async () => { const Q = window.__quest, sleep = (ms) => new Promise((r) => setTimeout(r, ms)); const r = await window.__qbot(() => true); return [r.right + '/' + r.total, document.getElementById('doneTitle').textContent, document.getElementById('doneMsg').textContent.slice(0, 40), Q.rec.review.filter((x) => !x).length]; })()" },
+  { viewport: [390, 844, true, true, 3] }, { touchEl: '#doneHomeBtn' }, { sleep: 300 }, { touchEl: '#chartBtn' }, { sleep: 600 },
+  { shot: 'quest-44-chart-phone-dark' },
+  { log: "[document.documentElement.scrollWidth <= innerWidth, Math.round(document.querySelector('#q .chart svg').getBoundingClientRect().width)]" },
+  { eval: "(() => { const Q = window.__quest; Q.answer(false); return [document.getElementById('sheet').hidden, document.getElementById('sheetText').textContent.slice(0, 90)]; })()" }, { sleep: 400 },
+  { shot: 'quest-45-chart-wrong-phone-dark' },
+  { eval: "document.getElementById('quitBtn').click(); 'quit'" }, { sleep: 300 },
   { log: 'JSON.stringify(window.__errs)' }
 ];

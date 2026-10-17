@@ -253,6 +253,14 @@ button, label, input, .btn, a { touch-action: manipulation; }
 .model h3 { margin: 0; font: 700 1.1rem/1.2 var(--font-display); }
 .model p { margin: 0; line-height: 1.5; }
 .model ul { margin: 0; padding-left: 20px; display: grid; gap: 4px; line-height: 1.4; }
+.chart { background: var(--card-2); border-radius: 18px; padding: 10px 12px 6px; display: grid; gap: 4px; }
+.chart b { font: 700 1rem/1.2 var(--font-display); text-align: center; }
+.chart svg { width: 100%; max-width: 520px; height: auto; justify-self: center; overflow: visible; }
+.chart .ax { stroke: var(--line); stroke-width: 1; }
+.chart .ln { fill: none; stroke: var(--lilac); stroke-width: 3; stroke-linejoin: round; }
+.chart .pt { fill: var(--card); stroke: var(--lilac); stroke-width: 2.5; }
+.chart text { fill: var(--ink-soft); font: 700 10px var(--font-body); }
+.chart text.v { fill: var(--ink); font-size: 10.5px; }
 .gn-unit { background: var(--card-2); border-radius: 16px; padding: 2px 14px; }
 .gn-unit summary { cursor: pointer; font: 700 1.1rem/1.2 var(--font-display); min-height: 48px; display: flex; align-items: center; gap: 8px; }
 .gn-unit summary small { color: var(--ink-soft); font-size: .85rem; }
@@ -299,6 +307,7 @@ button, label, input, .btn, a { touch-action: manipulation; }
         <button class="btn" id="placeBtn">🎯 Find my level</button>
         <button class="btn" id="wordsBtn">📒 My words</button>
         <button class="btn" id="notesBtn">📘 Grammar notes</button>
+        <button class="btn" id="chartBtn" hidden>📈 Chart language</button>
         <button class="btn" id="speakBtnHome" hidden>🗣️ Speaking practice</button>
         <button class="btn" id="mockBtn" hidden>📝 IELTS reading test</button>
         <button class="btn" id="mockLBtn" hidden>🎧 IELTS listening test</button>
@@ -1095,6 +1104,7 @@ function startLesson(kind, s, u) {
   else if (kind === 'test') qs = stageTest(s);
   else if (kind === 'review') qs = reviewLesson();
   else if (kind === 'words') qs = sample(learnedWords(), 10).map((e) => wordQ(e.s, e.u, e.i));
+  else if (kind === 'chart') qs = chartLesson();
   else if (kind === 'mock' || kind === 'mockl') qs = mockTest(kind === 'mockl');
   else if (kind === 'place') qs = [];
   if (kind !== 'place' && (!qs || !qs.length)) { toast(kind === 'review' ? 'Nothing to review yet!' : 'Coming soon', 'hello'); return; }
@@ -1137,6 +1147,7 @@ function showQ() {
   let h = '<span class="qlabel">' + esc(q.label) + ' · <span class="sk">' + SKILL[q.skill] + '</span></span>';
   if (q.passage && q.hear) h += '<div class="passage hear" id="passage"><h3><span>🎧 ' + esc(q.passage.title) + '</span></h3><p class="hear-tip">' + (L.kind === 'mockl' ? 'Listen to the talk, then answer. You can hear it ' + MOCK_PLAYS + ' times.' : 'Listen to the talk, then answer. You can play it again.') + '</p><div class="row"><button class="btn sun" id="readAloud"' + (L.kind === 'mockl' && (L.plays[q.passage.title] || 0) >= MOCK_PLAYS ? ' disabled' : '') + '>🔊 Play the talk</button></div><div class="transcript" id="transcript" hidden>' + q.passage.text.split(/\n+/).map((p) => '<p>' + esc(p) + '</p>').join('') + '</div></div>';
   else if (q.passage) h += '<div class="passage" id="passage"><h3><span>' + esc(q.passage.title) + '</span><button class="btn" id="readAloud">🔊 Listen</button></h3>' + q.passage.text.split(/\n+/).map((p) => '<p>' + esc(p) + '</p>').join('') + '</div>';
+  if (q.chart) h += q.chart;
   if (q.pic) h += '<div class="pic" aria-hidden="true">' + q.pic + '</div>';
   if (q.listen) h += '<button class="listen-big" id="listenBtn" aria-label="Listen again">🔊</button>';
   if (q.big) h += '<div class="say"><span class="bigword">' + esc(q.big) + '</span></div>';
@@ -1218,9 +1229,9 @@ function finish(ok, text) {
   const q = L.qs[L.i];
   L.answered = true; L.total++; if (ok) L.right++;
   const sk = rec.skills[q.skill] || (rec.skills[q.skill] = [0, 0]); sk[1]++; if (ok) sk[0]++;
-  const key = refKey(q.ref);
+  const key = q.ref ? refKey(q.ref) : '';
   if (ok) { if (L.kind === 'review') rec.review = rec.review.filter((r) => refKey(r) !== key); if (q.skill === 'vocab' && q.word && !rec.learned.includes(q.word)) rec.learned.push(q.word); }
-  else if (L.kind !== 'place' && !rec.review.some((r) => refKey(r) === key)) rec.review = rec.review.concat([q.ref]).slice(-60);
+  else if (L.kind !== 'place' && q.ref && !rec.review.some((r) => refKey(r) === key)) rec.review = rec.review.concat([q.ref]).slice(-60);
   if (q.word && !L.words.includes(q.word)) L.words.push(q.word);
   if (L.kind === 'place') { L.place.asked++; if (ok) L.place.ok++; }
   writeSave();
@@ -1283,6 +1294,8 @@ function endLesson() {
     msg = L.right + ' of ' + L.qs.length + ' right' + (L.total < L.qs.length ? ' (' + (L.qs.length - L.total) + ' not answered in time)' : '') + ' · about band ' + band + '. A practice estimate from ' + L.qs.length + ' questions; missed ones are in Review.';
     rec.mocks = (rec.mocks || []).concat([Object.assign({ d: today(), r: L.right, n: L.qs.length, b: band }, lis ? { k: 'L' } : {})]).slice(-20);
     L.words = L.qs.map((q) => q.passage.title).filter((t, i, a) => a.indexOf(t) === i);
+  } else if (L.kind === 'chart') {
+    stars = pct >= 90 ? 3 : pct >= 70 ? 2 : 1; title = 'Chart practice done!'; msg = pct + '% right. Describing changes and giving an overview is the heart of IELTS Writing Task 1.';
   } else if (L.kind === 'words') {
     stars = pct >= 90 ? 3 : pct >= 70 ? 2 : 1; title = 'Word practice done!'; msg = pct + '% right. Every word you know makes the next lesson easier.';
   } else if (L.kind === 'review') {
@@ -1341,6 +1354,7 @@ function renderHome() {
   $('#reviewBtn').textContent = '🔁 Review' + (rec.review.length ? ' (' + rec.review.length + ')' : '');
   $('#wordsBtn').textContent = '📒 My words' + (rec.learned.length ? ' (' + rec.learned.length + ')' : '');
   $('#mockBtn').hidden = $('#mockLBtn').hidden = !mockStages().length;
+  $('#chartBtn').hidden = rec.unlocked < 5;
   $('#speakBtnHome').hidden = !((P2.length && rec.unlocked >= 4) || (P1.length && rec.unlocked >= 2));
   $('#speakBtnHome').textContent = '🗣️ Speaking practice' + (rec.speak && rec.speak.n ? ' (' + rec.speak.n + ')' : '');
   const lastMock = (rec.mocks || []).filter((m) => !m.k).slice(-1)[0], lastL = (rec.mocks || []).filter((m) => m.k === 'L').slice(-1)[0];
@@ -1461,6 +1475,60 @@ function openSpeaking() {
   $('#speakPart').hidden = !(can1 && can2);
   Sound.init(); setPart(can2 ? 2 : 1); showScreen('speak');
 }
+/* ================= chart language (IELTS Writing Task 1) =================
+   A made-up line chart over six years. Each step is drawn from one band (sharp rise, slight rise, stable,
+   slight fall, sharp fall) and the bands have gaps, checked after rounding, so the right phrase is never in doubt. */
+const CHART_TOPICS = [
+  ['Visitors to a city museum', 'thousand visitors', 'the number of visitors'], ['Bicycles sold by a local shop', 'bicycles', 'bicycle sales'],
+  ['Books borrowed from a school library', 'books', 'the number of books borrowed'], ['Tickets sold for a summer festival', 'thousand tickets', 'ticket sales'],
+  ['Trees planted in a town', 'hundred trees', 'the number of trees planted'], ['Electric cars in a city', 'thousand cars', 'the number of electric cars'],
+  ['Visitors to a national park', 'thousand visitors', 'the number of visitors'], ['Members of a swimming club', 'members', 'club membership']
+];
+const BANDS = { up2: [1.32, 1.6, 1.3, 9], up1: [1.08, 1.18, 1.06, 1.2], flat: [0.985, 1.015, 0.97, 1.03], down1: [0.84, 0.92, 0.8, 0.94], down2: [0.5, 0.66, 0, 0.7] };
+const BAND_WORDS = { up2: 'rose sharply', up1: 'rose slightly', flat: 'remained stable', down1: 'fell slightly', down2: 'fell sharply' };
+const bandOf = (r) => Object.keys(BANDS).find((k) => r >= BANDS[k][2] && r <= BANDS[k][3]) || null;
+function makeChart() {
+  for (let t = 0; t < 400; t++) {
+    const top = pick(CHART_TOPICS), y0 = pick([2017, 2018, 2019]), vals = [rnd(40, 90)], moves = [];
+    for (let k = 1; k < 6; k++) { const m = pick(Object.keys(BANDS)), [a, b] = BANDS[m]; moves.push(m); vals.push(Math.round(vals[k - 1] * (a + Math.random() * (b - a)))); }
+    if (!moves.every((m, k) => bandOf(vals[k + 1] / vals[k]) === m)) continue;          // rounding kept every step in its band
+    const hi = Math.max.apply(null, vals), lo = Math.min.apply(null, vals);
+    if (vals.filter((v) => v === hi).length > 1 || vals.filter((v) => v === lo).length > 1 || hi > 400 || lo < 8) continue;
+    const all = vals[5] / vals[0], overall = all >= 1.15 ? 'rose' : all <= 0.87 ? 'fell' : all >= 0.96 && all <= 1.04 ? 'same' : null;
+    if (!overall || new Set(moves).size < 3) continue;
+    return { title: top[0], unit: top[1], noun: top[2], years: vals.map((_, k) => y0 + k), vals: vals, moves: moves, hi: hi, lo: lo, overall: overall };
+  }
+  return null;
+}
+function chartSvg(c) {
+  const W = 320, H = 190, L = 34, R = 10, T = 14, B = 26, top = Math.ceil(c.hi * 1.15 / 40) * 40;   // gridlines at round numbers
+  const x = (k) => L + 16 + k * (W - L - R - 28) / 5, y = (v) => T + (H - T - B) * (1 - v / top);
+  let g = '';
+  for (let k = 0; k <= 4; k++) { const v = Math.round(top * k / 4), yy = y(v).toFixed(1); g += '<line class="ax" x1="' + L + '" x2="' + (W - R) + '" y1="' + yy + '" y2="' + yy + '"/><text x="' + (L - 6) + '" y="' + (+yy + 3.5) + '" text-anchor="end">' + v + '</text>'; }
+  c.years.forEach((yr, k) => { g += '<text x="' + x(k).toFixed(1) + '" y="' + (H - 8) + '" text-anchor="middle">' + yr + '</text>'; });
+  g += '<polyline class="ln" points="' + c.vals.map((v, k) => x(k).toFixed(1) + ',' + y(v).toFixed(1)).join(' ') + '"/>';
+  c.vals.forEach((v, k) => { g += '<circle class="pt" cx="' + x(k).toFixed(1) + '" cy="' + y(v).toFixed(1) + '" r="4"/><text class="v" x="' + x(k).toFixed(1) + '" y="' + (y(v) - 8).toFixed(1) + '" text-anchor="middle">' + v + '</text>'; });
+  return '<div class="chart"><b>' + esc(c.title) + ' (' + esc(c.unit) + ')</b><svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(c.title + ': ' + c.years.map((yr, k) => yr + ' ' + c.vals[k]).join(', ')) + '">' + g + '</svg></div>';
+}
+function chartQs(c) {
+  const svg = chartSvg(c), base = { skill: 'writing', label: '📈 Chart language · Writing Task 1', chart: svg, ref: null };
+  const k = rnd(0, 4), m = c.moves[k], pct = Math.round((c.vals[k + 1] / c.vals[k] - 1) * 100);
+  const words = Object.values(BAND_WORDS), right = BAND_WORDS[m];
+  const q1 = choice(Object.assign({}, base, { text: 'Between ' + c.years[k] + ' and ' + c.years[k + 1] + ', ' + c.noun + ' ___.', opts: [right].concat(sample(words.filter((w) => w !== right), 3)), a: 0,
+    why: 'From ' + c.vals[k] + ' to ' + c.vals[k + 1] + ' is a change of ' + (pct > 0 ? '+' : '') + pct + '%, so it ' + right + '.' }));
+  const pk = c.vals.indexOf(c.hi), yrs = c.years.map(String);
+  const q2 = choice(Object.assign({}, base, { text: 'In which year did ' + c.noun + ' reach a peak?', opts: [yrs[pk]].concat(sample(yrs.filter((_, i) => i !== pk), 3)), a: 0, keep: false,
+    why: 'The highest point is ' + c.hi + ' in ' + yrs[pk] + '.' }));
+  const cap = c.noun.charAt(0).toUpperCase() + c.noun.slice(1), span = c.years[0] + ' and ' + c.years[5];
+  const ov = { rose: 'Overall, ' + c.noun + ' rose between ' + span + '.', fell: 'Overall, ' + c.noun + ' fell between ' + span + '.', same: 'Overall, ' + c.noun + ' ended at about the same level as in ' + c.years[0] + '.' };
+  const q3 = choice(Object.assign({}, base, { text: 'Which sentence sums up the whole period best?', opts: [ov[c.overall]].concat(Object.keys(ov).filter((x) => x !== c.overall).map((x) => ov[x])), a: 0, long: true,
+    why: 'It went from ' + c.vals[0] + ' in ' + c.years[0] + ' to ' + c.vals[5] + ' in ' + c.years[5] + '. An overview sentence like this is what Task 1 examiners look for.' }));
+  const atLow = Math.random() < 0.5, v = atLow ? c.lo : c.hi, yr = c.years[c.vals.indexOf(v)];
+  const q4 = choice(Object.assign({}, base, { text: 'In ' + yr + ', ' + c.noun + ' reached a ___ of ' + v + '.', opts: [atLow ? 'low point' : 'peak', atLow ? 'peak' : 'low point', 'total'], a: 0,
+    why: (atLow ? c.lo + ' is the lowest point on the chart: a low point.' : c.hi + ' is the highest point on the chart: a peak.') + ' ' + cap + ' reached a ' + (atLow ? 'low point' : 'peak') + ' of ' + v + ' in ' + yr + '.' }));
+  return [q1, q2, q3, q4];
+}
+function chartLesson() { const a = makeChart(), b = makeChart(); return a && b ? chartQs(a).concat(chartQs(b)) : null; }
 // grammar notes: the rule behind each grammar item of the lessons open so far, with its example;
 // newest stage and lesson first, only the newest lesson unfolded
 function renderNotes() {
@@ -1531,6 +1599,7 @@ $('#reviewBtn').addEventListener('click', () => startLesson('review'));
 $('#placeBtn').addEventListener('click', () => startLesson('place'));
 $('#wordsBtn').addEventListener('click', () => { renderWords(); showScreen('words'); });
 $('#notesBtn').addEventListener('click', () => { renderNotes(); showScreen('notes'); });
+$('#chartBtn').addEventListener('click', () => startLesson('chart'));
 $('#speakBtnHome').addEventListener('click', openSpeaking);
 $('#speakHomeBtn').addEventListener('click', () => { clearInterval(SP.timer); Speech.stop(); Sound.muffle(false); goHome(); });
 $('#speakPart').addEventListener('change', (e) => { if (e.target.name === 'spart') setPart(+e.target.value); });
@@ -1585,7 +1654,7 @@ window.addEventListener('keydown', (e) => {
 arcadeGuards(() => Speech.stop());
 arcadeLinks();
 
-window.__quest = { L, rec, save, STAGES, CONTENT, SPEAKING, P1, P2, SP, speakShow, p1Show, setPart, has, next, renderHome, renderNotes, startLesson, nextStep, unitOpen, testOpen, wordQ, unitLesson, stageTest, spotQ, writingQ, showQ, renderWords, mockBand, Speech,
+window.__quest = { L, rec, save, STAGES, CONTENT, SPEAKING, P1, P2, SP, makeChart, chartQs, bandOf, speakShow, p1Show, setPart, has, next, renderHome, renderNotes, startLesson, nextStep, unitOpen, testOpen, wordQ, unitLesson, stageTest, spotQ, writingQ, showQ, renderWords, mockBand, Speech,
   // answer the current question: right = true picks the right answer (or builds / spells it), false picks a wrong one
   answer(right) {
     const q = L.qs[L.i]; if (!q || L.answered) return false;
