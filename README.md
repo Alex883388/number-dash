@@ -1,6 +1,6 @@
 # Number Arcade
 
-Math games for kids aged 8–12, made to be gentle on the eyes, with chill lo-fi music made live in the browser. Every game is one self-contained HTML page; together they make a small website that works offline and installs on an iPad home screen.
+Math, memory and English games for kids aged 8–12, made to be gentle on the eyes, with chill lo-fi music made live in the browser. Every game is one self-contained HTML page; together they make a small website that works offline and installs on an iPad home screen.
 
 Play: https://alex883388.github.io/number-dash/ (on iPad: open in Safari, then Share > Add to Home Screen).
 
@@ -8,6 +8,9 @@ Play: https://alex883388.github.io/number-dash/ (on iPad: open in Safari, then S
 | --- | --- | --- | --- |
 | 1 | Number Dash | [/dash/](https://alex883388.github.io/number-dash/dash/) | A Geometry Dash–style runner with 30 levels. Jump the spikes, fly the rocket, steer into the lane whose door shows the right answer. Details in [games/dash/README.md](games/dash/README.md). |
 | 2 | Number Ladder | [/ladder/](https://alex883388.github.io/number-dash/ladder/) | Climb a tower of 30 equations. The cube walks back and forth on its floor; tap to jump onto the answer platform with the right number. A right answer builds the next floor, a wrong one drops the cube all the way to the ground. |
+| 3 | Pair Up | [/pair/](https://alex883388.github.io/number-dash/pair/) | A memory card game whose pairs belong together without looking alike: 7 × 8 and 56, a picture and its English word, hot and cold, 42 and forty-two. |
+| 4 | Number Pop | [/pop/](https://alex883388.github.io/number-dash/pop/) | Tap the drifting bubbles whose numbers make the target ("Make 17"); later worlds bring minus bubbles and times. |
+| 5 | Spell It | [/spell/](https://alex883388.github.io/number-dash/spell/) | Look, cover, spell: a picture and its word, read aloud; the word hides and the child spells it from memory with letter tiles. |
 
 ## Number Ladder
 
@@ -32,6 +35,26 @@ Play: https://alex883388.github.io/number-dash/ (on iPad: open in Safari, then S
 - **Records**: best rung, best time to the top, times reached the top, total falls. A "Best" flag on the wall marks the rung to beat. The sky turns from morning to sunset to night on the way up.
 - **Controls**: tap anywhere (Space, ↑, W or Enter on a keyboard) to jump. Esc or P pauses, M mutes.
 
+## Pair Up
+
+- **Cards**: six kinds. Times (6 × 7 ↔ 42) and Plus & minus (13 + 8 ↔ 21) use the shared math facts; Pictures (🍎 ↔ apple), Opposites (hot ↔ cold) and Number words (42 ↔ forty-two; at 11–12 also ordinals, 21st ↔ twenty-first) are English; Mix deals a bit of each. The level (7–8, 9–10, 11–12, shared with the other games) picks harder facts and longer words.
+- **A board**: 6, 8 or 12 pairs. Every card shows itself for 3–5 seconds first ("Remember them!"), then turns over. No face appears twice on a board, and no two facts share an answer, so a match is never ambiguous.
+- **Turning cards**: two at a time; a pair stays up in green and the status line under the board shows what was learned (✓ 7 × 8 = 56). A wrong pair turns back after a second, or at once when a third card is tapped. Word cards are read aloud as they turn (switch on the home screen).
+- **Stars**: by moves (two cards turned = one move). 3 stars at 1.6 moves a pair or fewer (1.75 on the 12-pair board), 2 stars at 2.4 (3 on the 12-pair board). A simulated player who remembers every card it has turned (ignoring the first look) gets 3 stars on 96–100% of boards; one who forgets a tenth of what it saw each turn gets 3 stars on 11–60% and 2 or more on 99–100%.
+- **Records**: best moves per card kind and board size, boards cleared, pairs found. Matched math facts count as right answers, and missed facts from the other games come back here too.
+
+## Number Pop
+
+- **A round**: 10 targets. A sunny badge says "Make 17"; a strip under it shows the live sum ("8 + 9 = 17"). 8–10 bubbles drift slowly and bounce inside the field. Tap bubbles to build the sum, tap a picked one again to let it go. The exact target pops them (points, quick answers in a row make a streak); going over says "Too much!" and lets them go. After 15 s stuck, one bubble of an answer glows softly.
+- **Worlds**: Make 10 (number bonds), Up to 20, Up to 50, Take away (minus bubbles; going over is allowed while a minus bubble can still fix it), Times (two bubbles that multiply; tables follow the shared level), Mix. Every target is built from bubbles already in the field, so it can always be made.
+- **Stars**: by time (3 stars also needs 3 slips or fewer), set from a bot that thinks like a child (reading time, scanning, slower two-digit sums, carries, table recall): 3 stars at about 1.15× a quick 10-year-old's round, 2 stars at about 1.15× a relaxed one's. Solved targets count as right answers; a wrong times pair counts as a missed fact.
+
+## Spell It
+
+- **A word**: Look (a big picture and the word in boxes, read aloud, a 4 / 3 / 2 s bar for Easy / Medium / Hard), Cover (the letters hide), Spell (tap the letter tiles in order; the word's letters plus 2–4 decoys). A wrong letter is refused with a shake and counts a slip; after 3 slips on one letter the right tile gets a ring. "Hear it" is free; "Look again" shows the word for 1.5 s and the word no longer counts as perfect. A keyboard can type letters too.
+- **Decks**: Animals, Food, Around us (picture words, 20–28 per level), Number words (Easy 1–20, Medium 21–99 with a hyphen tile, Hard: a shared math fact to spell as its answer, 6 × 7 → forty-two), Tricky words (because, friend, believe… with a sentence clue that has a gap). Only words spelled the same in US and UK English.
+- **A round**: 10 words; 3 stars for 9 or more perfect, 2 for 6 or more. Misspelled words (the last 20) come back in later rounds now and then; words spelled perfectly count as "Words learned".
+
 ## Layout
 
 | Path | What it is |
@@ -39,12 +62,13 @@ Play: https://alex883388.github.io/number-dash/ (on iPad: open in Safari, then S
 | `games/dash/` | Number Dash: engine, page template, level checker, pack generator, playtests (see its README). |
 | `games/ladder/src/ladder.html` | Number Ladder: the whole game in one page (drawing, physics, questions, menus). |
 | `games/ladder/playtest/` | Ladder scenarios: `climb.js` (a bot climbs through every moving trick with a picture of each, falls once on purpose, then reaches the top), `fairness.js` (how often a tap lands right, wrong or on nothing, per rung) and `arcade-ipad.js` (finger taps through the whole site on an emulated iPad, portrait, phone and offline). |
-| `shared/` | Code both games use: math questions, the music remix engine, sound effects, cube looks, cube drawing. A game page marks the spot with `/*__SHARED:name__*/` and the build fills it in. |
+| `games/pair/`, `games/pop/`, `games/spell/` | Pair Up, Number Pop and Spell It: one page each in `src/`, a `build.js`, and playtests in `playtest/`. |
+| `shared/` | Code the games share: math questions, the music remix engine, sound effects, cube looks and drawing, and for the newer games `arcade-ui.css` (colours, buttons, menus, HUD, toasts) and `arcade-core.js` (helpers, the shared save, math bookkeeping, screens, read-aloud). A page marks the spot with `/*__SHARED:name__*/` (or `/*__SHARED:arcade-ui.css__*/` inside its style) and the build fills it in. |
 | `web/` | The arcade home page (`hub.html`), the offline service worker, the app manifest and icons (`make-icons.js` redraws the icons). |
 | `build.js` | Builds every game into `games/*/dist/` and the website into `docs/`: the home page, one folder per game, the manifest, icons and an offline cache whose version changes with the content. |
 | `docs/` | The built website. GitHub Pages serves it from the `main` branch. Do not edit by hand. |
 
-Progress is saved in each browser's localStorage: `number-dash.v1` holds Number Dash levels plus the settings and math record both games share, `number-ladder.v1` holds the ladder records. The home page reads both for its stats.
+Progress is saved in each browser's localStorage: `number-dash.v1` holds Number Dash levels plus the settings (level, music, read-aloud) and math record every game shares; each other game keeps its records under its own key (`number-ladder.v1`, `pair-up.v1`, `number-pop.v1`, `spell-it.v1`). The home page reads them for its stats.
 
 ## Commands
 
@@ -86,10 +110,30 @@ Play-test Number Dash on the built site:
 ND_SERVE=../../docs ND_PATH=dash/ node games/dash/playtest/shoot.js games/dash/playtest/scenarios/ipad.js
 ```
 
+Play-test Pair Up (deals for every card kind and level, a memory bot, finger taps on an emulated iPad, portrait, phone, dark mode):
+
+```bash
+ND_URL=file:///D:/Github/number-dash/games/pair/dist/preview.html ND_READY='!!window.__pair' ND_BOT=none node games/dash/playtest/shoot.js games/pair/playtest/play.js
+```
+
+Play-test Number Pop (every world played by a quick and a relaxed bot; set POP_QUICK / POP_RELAXED rounds) and its iPad view; then Spell It (every deck and level, word lists, iPad view):
+
+```bash
+ND_URL=file:///D:/Github/number-dash/games/pop/dist/preview.html ND_READY='!!window.__pop' ND_BOT=none node games/dash/playtest/shoot.js games/pop/playtest/worlds.js
+```
+
+```bash
+ND_URL=file:///D:/Github/number-dash/games/spell/dist/preview.html ND_READY='!!window.__spell' ND_BOT=none node games/dash/playtest/shoot.js games/spell/playtest/rounds.js
+```
+
+Swap in `ipad.js` (both games), `smoke.js` (Pop) or `words.js` (Spell) for their other checks. `arcade-ipad.js` above opens every game from the home page by finger.
+
+Several playtests can run at once when each gets its own browser port and profile: add `ND_CDP=9371 ND_PROFILE=edge-profile-pair` (any free port and folder name).
+
 To publish, build, commit `docs/` and push to `main`; GitHub Pages updates in about a minute.
 
 ## Adding a game
 
-1. Make `games/<name>/src/<name>.html`: styles, then a `<!--BODY-->` line, then the page. Use `/*__SHARED:name__*/` for shared code, and show an "All games" link when `window.ARCADE_HOME` is set.
+1. Make `games/<name>/src/<name>.html`: styles (start them with `/*__SHARED:arcade-ui.css__*/`), then a `<!--BODY-->` line, then the page; its script starts with `/*__SHARED:arcade-core__*/`. Add an `<a class="btn" data-hub hidden href="../">All games</a>` and call `arcadeLinks()`. `games/pair/src/pair.html` is the smallest example.
 2. Give it a `games/<name>/build.js` that exports a `build()` returning the page (copy the ladder's).
-3. Add it to `GAMES` in `build.js`, a card in `web/hub.html` and its folder to `CORE` in `web/sw.js`.
+3. Add its folder to the list in `build.js`, a card in `web/hub.html` and its folder to `CORE` in `web/sw.js`.

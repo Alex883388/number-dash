@@ -1,0 +1,817 @@
+<title>Spell It</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Look, cover, spell: see a word with its picture, hide it, then build it from letter tiles. Animals, food, things around us, number words and tricky words.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap">
+<style>
+/*__SHARED:arcade-ui.css__*/
+/* Spell It: one column over the sky. A phase label, the picture card (emoji, number, sum or a
+   sentence with a gap), the word's letter boxes, the help buttons, then gold-edged letter tiles
+   like the ladder's answer panels. Sizes come from layout() so nothing ever scrolls. */
+#play {
+  position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--gap, 14px);
+  box-sizing: border-box; touch-action: manipulation;
+  padding: var(--top, 80px) max(16px, env(safe-area-inset-left, 0px)) calc(14px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-right, 0px));
+}
+.phase {
+  height: 34px; box-sizing: border-box; display: inline-flex; align-items: center; gap: 6px; flex: none; padding: 0 16px; border-radius: 99px;
+  font: 700 1.05rem/1 var(--font-display); background: var(--card); color: var(--ink); box-shadow: var(--shadow-sm);
+}
+.phase.look { background: var(--lilac-soft); }
+.phase.spell, .phase.work { background: var(--sun); color: var(--sun-ink); }
+.phase.done { background: var(--mint-soft); }
+.pic {
+  height: calc(var(--pic, 140px) + 20px); min-width: min(calc(100% - 8px), 240px); max-width: min(calc(100% - 8px), 760px); flex: none;
+  background: var(--card); border: 4px solid var(--door-edge); border-radius: 28px; box-shadow: var(--shadow);
+  display: grid; place-items: center; padding: 0 26px; box-sizing: border-box; position: relative; overflow: hidden;
+}
+.pic .emoji { font: 400 calc(var(--pic, 140px) * .8)/1.1 var(--emoji); }
+.pic .num { font: 700 calc(var(--pic, 140px) * .78)/1 var(--font-display); font-variant-numeric: tabular-nums; }
+.pic .fact { font: 700 var(--fact, 60px)/1.1 var(--font-display); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.pic .fact b { color: var(--mint-deep); }
+.pic .clue { font: 600 var(--clue, 28px)/1.3 var(--font-display); text-align: center; text-wrap: balance; max-width: 30ch; }
+.gap { display: inline-block; min-width: 2.6em; height: .9em; border-bottom: 4px solid var(--lilac); margin: 0 .12em; vertical-align: -.08em; }
+.gap.filled { min-width: 0; height: auto; border-color: var(--mint); color: var(--mint-deep); vertical-align: baseline; }
+.word { display: flex; flex-wrap: nowrap; justify-content: center; column-gap: var(--bg, 6px); flex: none; max-width: 100%; }
+.word.two { flex-direction: column; align-items: center; row-gap: 8px; }
+.part { display: flex; gap: var(--bg, 6px); }
+.box {
+  width: var(--bs, 64px); height: calc(var(--bs, 64px) * 1.18); box-sizing: border-box; display: grid; place-items: center; flex: none;
+  border-radius: calc(var(--bs, 64px) * .24); background: var(--card); border: 3px solid var(--line); box-shadow: var(--shadow-sm);
+  font: 700 calc(var(--bs, 64px) * .72)/1 var(--font-display); color: var(--ink);
+}
+.box.now { border-color: var(--lilac); box-shadow: 0 0 0 4px var(--lilac-soft); }
+.box.peek { color: var(--ink-soft); }
+.box.fill { animation: drop .24s ease-out both; }
+.box.flip { animation: flip .36s ease both; }
+.box.win { background: var(--mint-soft); border-color: var(--mint); animation: pop .35s ease both; }
+.box.bump { animation: shake .35s ease; }
+.lookbar { width: min(60%, 340px); height: 8px; border-radius: 99px; background: var(--card-2); overflow: hidden; flex: none; visibility: hidden; }
+.lookbar.on { visibility: visible; }
+.lookbar i { display: block; height: 100%; background: var(--lilac); transform-origin: left center; border-radius: 99px; }
+.tools { display: flex; gap: 12px; justify-content: center; flex: none; height: 56px; }
+.tools .btn { min-height: 56px; padding: 0 1.1em; display: inline-flex; align-items: center; gap: .4em; }
+.tools .btn i { font-style: normal; font-family: var(--emoji); }
+.tilebox { position: relative; width: 100%; display: flex; justify-content: center; flex: none; min-height: var(--tiles-h, 160px); }
+.tiles { display: flex; flex-wrap: wrap; justify-content: center; align-content: flex-start; gap: var(--tg, 10px); max-width: var(--tiles-w, 920px); }
+.tile {
+  width: var(--ts, 68px); height: var(--ts, 68px); box-sizing: border-box; padding: 0; margin: 0 0 4px; display: grid; place-items: center; cursor: pointer;
+  border-radius: 18px; background: var(--door); border: 3px solid var(--door-edge); color: var(--door-ink); box-shadow: 0 4px 0 var(--door-edge);
+  font: 700 calc(var(--ts, 68px) * .58)/1 var(--font-display); transition: transform .08s ease, box-shadow .08s ease;
+}
+.tile:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--door-edge); }
+.tile:focus-visible { outline: 3px solid var(--lilac); outline-offset: 3px; }
+.tile.used { background: transparent; border: 3px dashed var(--line); box-shadow: none; color: transparent; pointer-events: none; }
+.tile.nope { background: var(--coral-soft); border-color: var(--coral); box-shadow: 0 4px 0 var(--coral); color: var(--coral-deep); animation: shake .4s ease; }
+.tile.hint { border-color: var(--lilac); box-shadow: 0 4px 0 var(--lilac), 0 0 0 5px var(--lilac-soft); }
+.tiles.wait .tile { visibility: hidden; }
+.tiles.show .tile { animation: rise .3s ease both; }
+.tiles.off .tile { opacity: .4; pointer-events: none; }
+.tiles .tile.nope, .tiles.show .tile.nope { animation: shake .4s ease; }
+.cheer {
+  position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none;
+  font: 700 clamp(1.7rem, 5vh, 2.8rem)/1.1 var(--font-display); color: var(--ink); text-align: center; animation: pop .35s ease both;
+}
+.spark { position: fixed; pointer-events: none; font: 400 30px/1 var(--emoji); z-index: 15; animation: float .9s ease-out both; }
+#play.away { visibility: hidden; }
+.toast.music { top: var(--music-y, var(--hud-b, 76px)); font-size: 1.1rem; padding: 9px 16px; }
+
+/* home and results */
+.screen { width: min(100%, 640px); }
+.demo { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: -4px; }
+.demo i { font: 400 2.6rem/1 var(--emoji); margin-right: 6px; font-style: normal; }
+.demo b {
+  width: 44px; height: 44px; display: grid; place-items: center; border-radius: 12px; font: 700 1.6rem/1 var(--font-display);
+  background: var(--door); border: 3px solid var(--door-edge); color: var(--door-ink); box-shadow: 0 3px 0 var(--door-edge); box-sizing: border-box;
+}
+.decks { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.deck { cursor: pointer; display: block; }
+.deck input { position: absolute; opacity: 0; pointer-events: none; }
+.deck span {
+  display: grid; gap: 3px; justify-items: center; align-content: center; min-height: 92px; height: 100%; box-sizing: border-box; padding: 8px 4px;
+  border-radius: 18px; background: var(--card-2); border: 2px solid var(--line); font: 600 .98rem/1.1 var(--font-display); text-wrap: balance;
+}
+.deck i { font: 400 2rem/1.1 var(--emoji); font-style: normal; }
+.deck small { font-size: .78rem; letter-spacing: .12em; color: var(--sun-deep); min-height: 1em; }
+.deck input:checked + span { background: var(--sun); border-color: var(--sun-deep); color: var(--sun-ink); }
+.deck input:checked + span small { color: var(--sun-ink); }
+.deck input:focus-visible + span { outline: 3px solid var(--lilac); outline-offset: 3px; }
+.seg span { min-width: 4.6em; padding: .7em 1em; }
+.note { margin: 8px 0 0; color: var(--ink-soft); font-weight: 700; font-size: .95rem; min-height: 1.3em; }
+.wlist { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+.wchip {
+  display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 99px; font: 600 1.05rem/1.2 var(--font-display);
+  background: var(--mint-soft); border: 2px solid var(--mint); color: var(--ink);
+}
+.wchip.miss { background: var(--coral-soft); border-color: var(--coral); }
+.wchip i { font-style: normal; font-family: var(--emoji); font-size: 1.1em; }
+.wchip i.n { font-family: var(--font-display); color: var(--ink-soft); font-size: .9em; }
+.small-card .list-title { margin: 0 0 6px; font: 600 .9rem/1 var(--font-display); color: var(--ink-soft); }
+
+@keyframes drop { from { transform: translateY(-45%) scale(1.15); opacity: .2; } to { transform: none; opacity: 1; } }
+@keyframes flip { 0% { transform: rotateX(90deg); } 100% { transform: none; } }
+@keyframes float { from { transform: translate(0, 0) scale(.6); opacity: 0; } 25% { opacity: 1; } to { transform: translate(var(--dx, 0), -70px) scale(1.1); opacity: 0; } }
+@media (max-width: 560px) {
+  #deckChip { display: none; }
+  #s-home .card { gap: 14px; }
+  .decks { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .deck span { min-height: 76px; }
+  .seg span { min-width: 0; padding: .6em .9em; }
+  #homeStats { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  #homeStats dt { font-size: .66rem; letter-spacing: .04em; }
+  .demo b { width: 38px; height: 38px; font-size: 1.4rem; }
+  .demo i { font-size: 2.2rem; }
+  #s-home .tag { font-size: 1rem; }
+}
+@media (prefers-reduced-motion: reduce) { .box, .tile, .tiles .tile, .cheer { animation: none !important; } }
+.calm .box, .calm .tile, .calm .tiles .tile, .calm .cheer, .calm .screen, .calm .toast { animation: none !important; }
+</style>
+<!--BODY-->
+<div id="play" hidden>
+  <div class="phase look" id="phase">Look</div>
+  <div class="pic" id="pic"></div>
+  <div class="word" id="word"></div>
+  <div class="lookbar" id="lookbar" aria-hidden="true"><i id="lookfill"></i></div>
+  <div class="tools">
+    <button class="btn" id="hearBtn"><i aria-hidden="true">🔊</i>Hear it</button>
+    <button class="btn" id="lookBtn"><i aria-hidden="true">👀</i>Look again</button>
+  </div>
+  <div class="tilebox"><div class="tiles wait" id="tiles"></div><div class="cheer" id="cheer" hidden></div></div>
+</div>
+
+<div id="hud" hidden>
+  <div class="hud-top">
+    <div class="hud-chips">
+      <span class="chip chipbox" id="wordChip">Word 1 / 10</span>
+      <span class="chip chipbox" id="starChip">⭐ 0</span>
+      <span class="chip soft chipbox" id="deckChip"></span>
+    </div>
+    <button class="hud-btn" id="pauseBtn" aria-label="Pause">
+      <svg width="18" height="20" viewBox="0 0 16 18" aria-hidden="true"><rect x="1" y="1" width="5" height="16" rx="2" fill="currentColor"/><rect x="10" y="1" width="5" height="16" rx="2" fill="currentColor"/></svg>
+    </button>
+  </div>
+</div>
+
+<main id="screens">
+  <section class="screen" id="s-home">
+    <div class="card">
+      <h1 class="logo">Spell <span>It</span></h1>
+      <div class="demo" aria-hidden="true"><i>🐱</i><b>c</b><b>a</b><b>t</b></div>
+      <p class="tag">Look at the word, it hides, then spell it from memory with the letter tiles.</p>
+      <div>
+        <p class="seg-title">Words</p>
+        <div class="decks" id="decks"></div>
+      </div>
+      <div>
+        <p class="seg-title">Level</p>
+        <div class="seg">
+          <label><input type="radio" name="level" value="easy"><span>Easy</span></label>
+          <label><input type="radio" name="level" value="medium"><span>Medium</span></label>
+          <label><input type="radio" name="level" value="hard"><span>Hard</span></label>
+        </div>
+        <p class="note" id="deckNote"></p>
+      </div>
+      <div class="row"><button class="btn sun big" id="startBtn">Start</button></div>
+      <dl class="stats" id="homeStats"></dl>
+      <div class="row">
+        <button class="btn" id="speakBtn" aria-pressed="true">Read aloud: on</button>
+        <button class="btn" id="soundBtn">Music: on</button>
+        <a class="btn" data-hub hidden href="../">All games</a>
+      </div>
+    </div>
+  </section>
+  <section class="screen" id="s-pause" hidden>
+    <div class="card small-card">
+      <h2>Paused</h2>
+      <p id="pauseInfo"></p>
+      <div class="row"><button class="btn sun big" id="resumeBtn">Keep going</button></div>
+      <div class="row"><button class="btn" id="restartBtn">Start over</button><button class="btn" id="homeBtn">Home</button></div>
+    </div>
+  </section>
+  <section class="screen" id="s-done" hidden>
+    <div class="card small-card">
+      <h2 id="doneTitle">Round done!</h2>
+      <div class="stars" id="doneStars"></div>
+      <p id="doneNote"></p>
+      <div id="perfectBox"><p class="list-title">Spelled perfectly</p><div class="wlist" id="perfectList"></div></div>
+      <div id="missBox"><p class="list-title">Try these again</p><div class="wlist" id="missList"></div></div>
+      <dl class="stats" id="doneStats"></dl>
+      <div class="row"><button class="btn sun big" id="againBtn">Play again</button></div>
+      <div class="row"><button class="btn" id="doneHomeBtn">Home</button><a class="btn" data-hub hidden href="../">All games</a></div>
+    </div>
+  </section>
+</main>
+<div class="toast" id="toast" hidden></div>
+<div class="sr" aria-live="polite" id="announce"></div>
+
+<script>
+(function () {
+'use strict';
+/*__SHARED:arcade-core__*/
+/*__SHARED:math__*/
+
+/* ================= music =================
+   The menu song is the ladder's; the spelling song is slower and softer (few drums, a light
+   snare on the last beat only) so the read-aloud voice stays clear. */
+const SONGS = {
+  menu: { bpm: 72, swing: 0.14, prog: [[52, 55, 59, 62], [55, 59, 60, 64], [57, 60, 64, 67], [55, 57, 62, 64]], bass: [36, 45, 41, 43],
+          keys: [[0, 1, 4, 15], [10, 0.45, 2, 4]], bassPat: [[0, 0.8, 0, 12]], drums: false,
+          hats: [[0, 0.22], [4, 0.12], [8, 0.22], [12, 0.12]], scale: [72, 74, 76, 79, 81, 84], density: 0.42, seed: 3 },
+  spell: { bpm: 66, swing: 0.12, prog: [[53, 57, 60, 64], [52, 55, 59, 62], [50, 53, 57, 60], [48, 52, 55, 62]], bass: [41, 40, 38, 36],
+          keys: [[0, 0.9, 4, 16], [8, 0.4, 2, 6]], bassPat: [[0, 0.8, 0, 10], [10, 0.45, 7, 4]], drums: true,
+          kick: [0, 10], snare: [12], ghost: [],
+          hats: [[0, 0.3], [4, 0.2], [8, 0.3], [12, 0.2]], scale: [72, 74, 76, 79, 81, 84], density: 0.36, seed: 271 }
+};
+/*__SHARED:music-remix__*/
+/*__SHARED:sound__*/
+
+/* ================= words =================
+   Picture decks: Easy = 3-4 letters, Medium = 5-6, Hard = 7 or more. Only older emoji that
+   iPadOS 15 and Windows 10 both draw; no word spelled differently in US and UK English. */
+const LEVELS = ['easy', 'medium', 'hard'];
+const LEVEL_NAME = { easy: 'Easy', medium: 'Medium', hard: 'Hard' };
+const LOOK_SEC = { easy: 4, medium: 3, hard: 2 };
+const ROUND = 10;
+const VS = '️';
+const P = (s) => s.split(',').map((x) => { const p = x.trim().split(' '); return { w: p[0], pic: p[1] }; });
+// tricky words: 'word|a sentence with ____ for the gap'
+const S = (list) => list.map((x) => { const p = x.split('|'); return { w: p[0], clue: p[1] }; });
+const DECKS = {
+  animals: { name: 'Animals', icon: '🐾', kind: 'emoji', words: {
+    easy: P('cat 🐱, dog 🐶, pig 🐷, cow 🐮, hen 🐔, fox 🦊, owl 🦉, bat 🦇, bee 🐝, ant 🐜, ram 🐏, fish 🐟, frog 🐸, duck 🦆, bear 🐻, lion 🦁, goat 🐐, crab 🦀, deer 🦌, wolf 🐺, bird 🐦, swan 🦢'),
+    medium: P('tiger 🐯, horse 🐴, zebra 🦓, mouse 🐭, sheep 🐑, whale 🐳, shark 🦈, camel 🐫, panda 🐼, koala 🐨, snail 🐌, eagle 🦅, rabbit 🐰, monkey 🐵, turtle 🐢, llama 🦙, hippo 🦛, chick 🐤, squid 🦑, lizard 🦎, badger 🦡, rhino 🦏, poodle 🐩'),
+    hard: P('elephant 🐘, butterfly 🦋, giraffe 🦒, penguin 🐧, dolphin 🐬, octopus 🐙, kangaroo 🦘, crocodile 🐊, gorilla 🦍, peacock 🦚, hedgehog 🦔, squirrel 🐿' + VS + ', dinosaur 🦕, hamster 🐹, rooster 🐓, caterpillar 🐛, raccoon 🦝, lobster 🦞, unicorn 🦄, leopard 🐆, buffalo 🐃')
+  } },
+  food: { name: 'Food', icon: '🍎', kind: 'emoji', words: {
+    easy: P('egg 🥚, pie 🥧, tea 🍵, nut 🌰, pan 🍳, corn 🌽, cake 🍰, milk 🥛, rice 🍚, pear 🍐, kiwi 🥝, taco 🌮, salt 🧂, soup 🍲, meat 🍖, bowl 🥣, fork 🍴, loaf 🥖, herb 🌿, dish 🍽' + VS + ''),
+    medium: P('apple 🍎, bread 🍞, pizza 🍕, lemon 🍋, grapes 🍇, melon 🍈, honey 🍯, salad 🥗, cheese 🧀, carrot 🥕, banana 🍌, cherry 🍒, potato 🥔, tomato 🍅, bacon 🥓, sushi 🍣, bagel 🥯, burger 🍔, spoon 🥄, coffee ☕, orange 🍊, drink 🥤, steak 🥩'),
+    hard: P('popcorn 🍿, noodles 🍜, cupcake 🧁, sandwich 🥪, pancakes 🥞, broccoli 🥦, pineapple 🍍, avocado 🥑, coconut 🥥, cucumber 🥒, lollipop 🍭, strawberry 🍓, watermelon 🍉, chocolate 🍫, spaghetti 🍝, peanuts 🥜, mushroom 🍄, pretzel 🥨, burrito 🌯, custard 🍮')
+  } },
+  around: { name: 'Around us', icon: '🏠', kind: 'emoji', words: {
+    easy: P('sun ☀' + VS + ', bus 🚌, car 🚗, bed 🛏' + VS + ', key 🔑, map 🗺' + VS + ', pen 🖊' + VS + ', hat 🎩, box 📦, sea 🌊, van 🚐, book 📖, door 🚪, ship 🚢, star ⭐, moon 🌙, tree 🌳, rain 🌧' + VS + ', snow ❄' + VS + ', leaf 🍁, bell 🔔, boat ⛵, sock 🧦, gift 🎁, drum 🥁, ball ⚽, taxi 🚕, tent ⛺'),
+    medium: P('house 🏠, clock ⏰, train 🚆, plane ✈' + VS + ', truck 🚚, pencil ✏' + VS + ', rocket 🚀, flower 🌸, school 🏫, castle 🏰, bridge 🌉, cloud ☁' + VS + ', ruler 📏, phone 📱, candle 🕯' + VS + ', guitar 🎸, piano 🎹, island 🏝' + VS + ', robot 🤖, camera 📷, crayon 🖍' + VS + ', magnet 🧲, crown 👑, shell 🐚'),
+    hard: P('umbrella ☔, rainbow 🌈, tractor 🚜, scissors ✂' + VS + ', computer 💻, backpack 🎒, bicycle 🚲, helicopter 🚁, telescope 🔭, mountain ⛰' + VS + ', volcano 🌋, snowman ⛄, sunflower 🌻, envelope ✉' + VS + ', notebook 📓, calendar 📅, fireworks 🎆, balloon 🎈, trumpet 🎺, scooter 🛴, skateboard 🛹, microscope 🔬, keyboard ⌨' + VS + ', battery 🔋, compass 🧭')
+  } },
+  numbers: { name: 'Number words', icon: '🔢', kind: 'number' },
+  tricky: { name: 'Tricky words', icon: '🧩', kind: 'sentence', words: {
+    easy: S(['said|“Hello!” ____ the teacher.', 'they|The birds sing when ____ wake up.', 'was|The film ____ really funny.', 'were|We ____ late for the bus.',
+      'what|____ is your name?', 'want|Do you ____ to play with me?', 'does|Where ____ your cat sleep?', 'come|Please ____ to my party.',
+      'some|Can I have ____ water, please?', 'many|How ____ days are in a week?', 'any|Do you have ____ brothers or sisters?', 'have|I ____ a red kite.',
+      'give|Please ____ me the ball.', 'your|Is this ____ hat?', 'who|____ is at the door?', 'where|____ are my shoes?',
+      'there|Look over ____!', 'here|Come over ____ and sit with me.', 'once|____ upon a time, there was a king.', 'love|I ____ my little dog.',
+      'done|I have ____ my homework.', 'eye|The pirate wore a patch over one ____.', 'both|I like ____ apples and pears.', 'only|There is ____ one cake left.',
+      'again|Let’s play that game ____!', 'water|Fish swim in the ____.']),
+    medium: S(['because|I wore my coat ____ it was cold.', 'friend|My best ____ lives next door.', 'people|There were lots of ____ at the park.', 'could|I wish I ____ fly like a bird.',
+      'would|____ you like a drink?', 'should|You ____ brush your teeth every day.', 'their|The children hung up ____ coats.', 'laugh|Funny jokes make me ____.',
+      'enough|Is there ____ cake for everyone?', 'through|The train went ____ the tunnel.', 'thought|I ____ it would rain today.', 'always|The sun ____ rises in the east.',
+      'answer|Put up your hand if you know the ____.', 'busy|The shop is very ____ today.', 'build|Let’s ____ a sandcastle.', 'every|I read a book ____ night.',
+      'great|We had a ____ time at the beach.', 'heard|I ____ a dog barking.', 'island|The pirates sailed to a small ____.', 'often|How ____ do you go swimming?',
+      'quiet|Please be ____ in the library.', 'eight|An octopus has ____ arms.', 'early|I get up ____ on school days.', 'minute|Wait a ____, please.',
+      'know|Do you ____ the way home?', 'write|Please ____ your name at the top.', 'listen|____ carefully to the story.', 'whole|He ate the ____ pizza by himself!',
+      'piece|Can I have a ____ of cake?', 'sure|Are you ____ you shut the gate?', 'caught|She ____ the ball with one hand.']),
+    hard: S(['believe|I ____ you can do it!', 'different|The twins wear ____ hats so we can tell them apart.', 'beautiful|What a ____ sunset!', 'separate|Keep the red and blue pens in ____ boxes.',
+      'necessary|Is it ____ to bring a coat?', 'surprise|We planned a ____ party for Gran.', 'difficult|This puzzle is very ____.', 'probably|It will ____ rain later.',
+      'remember|Did you ____ to bring your lunch?', 'straight|Draw a ____ line with a ruler.', 'strength|It takes a lot of ____ to lift that box.', 'knowledge|Reading books grows your ____.',
+      'disappear|Watch the magician make the coin ____!', 'rhythm|Clap your hands to the ____ of the music.', 'vegetable|A carrot is a ____.', 'definitely|I will ____ come to your party.',
+      'embarrass|Please don’t ____ me in front of my friends!', 'tomorrow|See you at school ____!', 'foreign|She can speak a ____ language.', 'receive|Did you ____ my letter?',
+      'weird|That was a ____ dream!', 'restaurant|We ate dinner at a pizza ____.', 'temperature|What is the ____ outside today?', 'especially|I love fruit, ____ strawberries.',
+      'library|I borrowed a book from the ____.', 'exercise|Running is good ____.'])
+  } }
+};
+const DECK_IDS = Object.keys(DECKS);
+const ONES = 'zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen'.split(' ');
+const TENS = ',,twenty,thirty,forty,fifty,sixty,seventy,eighty,ninety'.split(',');
+const numWord = (n) => (n < 20 ? ONES[n] : TENS[Math.floor(n / 10)] + (n % 10 ? '-' + ONES[n % 10] : ''));
+const range = (a, b) => Array.from({ length: b - a + 1 }, (_, i) => a + i);
+const NUMBERS = { easy: range(1, 20), medium: range(21, 99) };
+const cache = {};
+// every word of a deck at a level, as { w, pic, kind, clue? }; Hard number words are made per round from math facts
+function wordList(deck, level) {
+  const key = deck + '-' + level;
+  if (cache[key]) return cache[key];
+  const d = DECKS[deck];
+  let list;
+  if (deck === 'numbers') list = level === 'hard' ? [] : NUMBERS[level].map((n) => ({ w: numWord(n), pic: String(n), kind: 'number' }));
+  else list = d.words[level].map((x) => Object.assign({ kind: d.kind }, x));
+  return (cache[key] = list);
+}
+// a math fact from the shared math level whose answer is 1-99, turned into a number word to spell
+const factText = (q) => (q.t.indexOf('?') >= 0 ? q.t : q.t + ' = ?');
+function factSay(t) {
+  // "2 × (7 + 9)" is read "2 times the sum of 7 and 9", so the brackets are not lost aloud
+  return t.replace(/\((\d+) \+ (\d+)\)/g, 'the sum of $1 and $2').replace(/½ of/g, 'half of').replace(/⅓ of/g, 'a third of').replace(/¼ of/g, 'a quarter of').replace(/⅕ of/g, 'a fifth of').replace(/⅒ of/g, 'a tenth of')
+    .replace(/×/g, ' times ').replace(/÷/g, ' divided by ').replace(/−/g, ' minus ').replace(/\+/g, ' plus ').replace(/=/g, ' equals ')
+    .replace(/\?/g, ' what ').replace(/%/g, ' percent ').replace(/[()]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+function factWord(usedWords, usedFacts) {
+  const kinds = (MATH[save.settings.mathLevel] || MATH.explorer).kinds;
+  let q = null;
+  for (let i = 0; i < 60 && !q; i++) {
+    const c = factFrom(kinds, usedFacts);
+    if (Number.isInteger(c.a) && c.a >= 1 && c.a <= 99 && !usedWords.has(numWord(c.a))) q = c;
+  }
+  for (let i = 0; i < 30 && !q; i++) { const c = KINDS.table10(); if (!usedWords.has(numWord(c.a))) q = c; }
+  if (!q) q = KINDS.table10();
+  usedFacts.add(q.t);
+  return { w: numWord(q.a), pic: factText(q), kind: 'fact', q: q };
+}
+
+/* ================= letter tiles =================
+   The word's own letters plus 2-4 decoys (Easy 2, Medium 3, Hard 4, at most 16 tiles): letters
+   that are easy to mix up with the word's (c/k/s, i/e/y, b/d...), from Medium up sometimes a
+   second copy of a letter that likes to be doubled (necessary, rabbit). Never a spare hyphen. */
+const CONFUSE = { a: 'eou', b: 'dp', c: 'ks', d: 'bt', e: 'aiy', f: 'v', g: 'jk', h: 'n', i: 'ey', j: 'g', k: 'c', l: 'i', m: 'n', n: 'm', o: 'ua', p: 'bq', q: 'p', r: 'w', s: 'cz', t: 'd', u: 'o', v: 'fw', w: 'v', x: 'z', y: 'ie', z: 's' };
+const DOUBLERS = 'lstrmnpcfgbd';
+function makeTiles(word, level) {
+  const letters = word.split(''), inWord = new Set(letters), decoys = [];
+  const want = clamp(level === 'easy' ? 2 : level === 'medium' ? 3 : 4, 2, Math.max(2, 16 - letters.length));
+  if (level !== 'easy' && Math.random() < 0.5) { const d = letters.filter((c) => DOUBLERS.indexOf(c) >= 0); if (d.length) decoys.push(pick(d)); }
+  const near = shuffle(Array.from(new Set(letters.map((c) => CONFUSE[c] || '').join('').split(''))).filter((c) => c && !inWord.has(c)));
+  while (decoys.length < want && near.length) decoys.push(near.pop());
+  const rest = shuffle('abcdefghijklmnoprstuvwy'.split('').filter((c) => !inWord.has(c) && decoys.indexOf(c) < 0));
+  while (decoys.length < want && rest.length) decoys.push(rest.pop());
+  let tiles = [];
+  for (let i = 0; i < 12; i++) { tiles = shuffle(letters.concat(decoys)); if (tiles.join('').indexOf(word) < 0) break; }
+  return tiles;
+}
+
+/* ================= records ================= */
+const rec = loadRecords('spell-it.v1', { deck: 'animals', level: 'medium', learned: [], missed: [], rounds: 0, perfect: 0, best: {} });
+if (!DECKS[rec.deck]) rec.deck = 'animals';
+if (LEVELS.indexOf(rec.level) < 0) rec.level = 'medium';
+if (!Array.isArray(rec.learned)) rec.learned = [];
+if (!Array.isArray(rec.missed)) rec.missed = [];
+if (!rec.best || typeof rec.best !== 'object') rec.best = {};
+
+/* ================= a round =================
+   Ten words drawn from a shuffled bag per deck and level (every word comes up before one
+   repeats). A word missed before (a slip or a look again) comes back now and then: each one
+   has a 40% chance to be in a round, at most 3 per round, until it is spelled perfectly. */
+const bags = {};
+function drawFrom(key, list, used) {
+  for (let pass = 0; pass < 2; pass++) {
+    if (!bags[key] || !bags[key].length) bags[key] = shuffle(list.slice());
+    while (bags[key].length) { const it = bags[key].pop(); if (!used.has(it.w)) return it; }
+  }
+  return list.find((x) => !used.has(x.w)) || pick(list);
+}
+function findWord(deck, level, w) {
+  const all = deck === 'numbers' ? NUMBERS.easy.concat(NUMBERS.medium).map((n) => ({ w: numWord(n), pic: String(n), kind: 'number' })) : LEVELS.reduce((a, l) => a.concat(wordList(deck, l)), []);
+  return all.find((x) => x.w === w) || null;
+}
+function buildRound(deck, level, force) {
+  const used = new Set(), facts = new Set(), out = [];
+  (force || []).forEach((w) => { const it = findWord(deck, level, w); if (it && out.length < ROUND) { out.push(it); used.add(it.w); } });
+  if (deck === 'numbers' && level === 'hard') {
+    while (out.length < ROUND) { const it = factWord(used, facts); used.add(it.w); out.push(it); }
+    return out;
+  }
+  const list = wordList(deck, level);
+  const back = shuffle(rec.missed.filter((m) => m.d === deck && m.l === level && Math.random() < 0.4).map((m) => list.find((x) => x.w === m.w)).filter((x) => x && !used.has(x.w))).slice(0, 3);
+  back.forEach((x) => { used.add(x.w); out.push(Object.assign({}, x, { again: true })); });
+  while (out.length < ROUND) { const it = drawFrom(deck + '-' + level, list, used); used.add(it.w); out.push(it); }
+  // the words that come back sit among the new ones, not all at the start
+  const head = (force || []).length;
+  return out.slice(0, head).concat(shuffle(out.slice(head)));
+}
+
+const game = {
+  state: 'menu', prev: 'spell', deck: rec.deck, level: rec.level, words: [], i: 0, word: null, tiles: [], pos: 0,
+  slips: 0, looked: false, slipAt: [], results: [], t: 0, speed: 1, lookEnd: 0, lookDur: 1, peekEnd: 0, nextAt: 0,
+  sessionRounds: 0, lastStars: 0, remix: ''
+};
+const PLAYING = new Set(['look', 'spell', 'peek', 'done']);
+const calm = () => !!save.settings.calm || reduceMotion;
+const isFact = () => game.word && game.word.kind === 'fact';
+const lookTime = (w) => LOOK_SEC[game.level] + Math.max(0, w.w.length - 6) * 0.25 + (w.kind === 'sentence' ? 1 : 0);
+
+/* ================= read aloud ================= */
+let muffled = false, muffleUntil = 0;
+function speak(text) {
+  if (Speech.say(text)) { Sound.muffle(true); muffled = true; muffleUntil = performance.now() + 900 + text.length * 65; }
+}
+function sayWord(w, when) {
+  if (w.kind === 'fact') speak(when === 'done' ? 'The answer is ' + w.w : factSay(w.pic));
+  else if (w.kind === 'sentence' && when !== 'done') speak(w.w + '. ' + w.clue.replace('____', w.w));
+  else speak(w.w);
+}
+
+/* ================= drawing the word ================= */
+const playEl = $('#play'), picEl = $('#pic'), wordEl = $('#word'), tilesEl = $('#tiles'), cheerEl = $('#cheer');
+let boxes = [];
+function renderPic(w, solved) {
+  picEl.textContent = '';
+  const s = document.createElement('span');
+  if (w.kind === 'emoji') { s.className = 'emoji'; s.textContent = w.pic; s.setAttribute('role', 'img'); s.setAttribute('aria-label', w.w); }
+  else if (w.kind === 'number') { s.className = 'num'; s.textContent = w.pic; }
+  else if (w.kind === 'fact') { s.className = 'fact'; if (solved) s.innerHTML = solvedText({ raw: w.q, answer: w.q.a }); else s.textContent = w.pic; }
+  else {
+    s.className = 'clue';
+    const parts = w.clue.split('____'), gap = document.createElement('span');
+    gap.className = 'gap' + (solved ? ' filled' : ''); if (solved) gap.textContent = w.w;
+    s.append(parts[0], gap, parts[1] || '');
+  }
+  picEl.appendChild(s);
+}
+function renderBoxes() {
+  const w = game.word.w, hy = w.indexOf('-');
+  wordEl.textContent = ''; boxes = [];
+  // a hyphenated number word is two parts, so a narrow screen can break it after the hyphen
+  const cuts = hy > 0 ? [w.slice(0, hy + 1), w.slice(hy + 1)] : [w];
+  let k = 0;
+  for (const part of cuts) {
+    const p = document.createElement('div'); p.className = 'part';
+    for (let j = 0; j < part.length; j++, k++) { const b = document.createElement('div'); b.className = 'box'; b.dataset.i = k; p.appendChild(b); boxes.push(b); }
+    wordEl.appendChild(p);
+  }
+  wordEl.setAttribute('aria-label', w.length + ' letters');
+}
+function showLetters(on) { boxes.forEach((b, i) => { b.textContent = on || i < game.pos ? game.word.w[i] : ''; }); }
+function renderTiles() {
+  tilesEl.textContent = '';
+  game.tiles.forEach((t, i) => {
+    const b = document.createElement('button');
+    b.className = 'tile'; b.type = 'button'; b.dataset.i = i; b.textContent = t.ch; b.setAttribute('aria-label', t.ch === '-' ? 'hyphen' : 'letter ' + t.ch);
+    t.el = b; tilesEl.appendChild(b);
+  });
+}
+function markNow() { boxes.forEach((b, i) => b.classList.toggle('now', game.state === 'spell' && i === game.pos)); }
+function setPhase(kind) {
+  const el = $('#phase'), w = game.word;
+  el.className = 'phase ' + kind;
+  el.textContent = kind === 'look' ? '👀 Look' : kind === 'spell' ? '✏' + VS + ' Spell it' : kind === 'work' ? '🧮 Work it out, then spell it' : (w && game.results.length && game.results[game.results.length - 1].perfect ? '⭐ Perfect' : '✅ Done');
+  $('#lookBtn').disabled = !(kind === 'spell' || kind === 'work');
+  $('#hearBtn').hidden = !Speech.ok || !save.settings.speak;
+  $('#lookbar').classList.toggle('on', kind === 'look');
+}
+function updateHud() {
+  $('#wordChip').textContent = 'Word ' + Math.min(ROUND, game.i + 1) + ' / ' + ROUND;
+  $('#starChip').textContent = '⭐ ' + game.results.filter((r) => r.perfect).length;
+  $('#deckChip').textContent = DECKS[game.deck].name + ' · ' + LEVEL_NAME[game.level];
+}
+
+/* Sizes so a whole word, its tiles and the picture fit with no scrolling: the boxes as big as
+   one line allows (a long hyphenated word breaks after its hyphen), tiles 56-74 px, and the
+   picture takes what is left. */
+function layout() {
+  if (playEl.hidden || !game.word) return;
+  const vw = window.innerWidth, vh = window.innerHeight, root = document.documentElement.style;
+  const hb = $('#hud').hidden ? 0 : $('.hud-top').getBoundingClientRect().bottom;
+  root.setProperty('--hud-b', Math.round(hb + 6) + 'px');
+  playEl.style.setProperty('--top', Math.round(hb + 8) + 'px');
+  const cs = getComputedStyle(playEl);
+  const availW = playEl.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+  const availH = vh - (hb + 8) - parseFloat(cs.paddingBottom);
+  const w = game.word.w, n = w.length, hy = w.indexOf('-');
+  const bmax = clamp(Math.round(vh * 0.085), 40, 76), bg = n > 9 ? 4 : 6;
+  let bs = Math.min(bmax, Math.floor((availW - bg * (n - 1)) / n)), lines = 1;
+  if (bs < 38 && hy > 0) { const m = Math.max(hy + 1, n - hy - 1); bs = Math.min(bmax, Math.floor((availW - bg * (m - 1)) / m)); lines = 2; }
+  wordEl.classList.toggle('two', lines === 2);
+  const wordH = lines * Math.round(bs * 1.18) + (lines - 1) * 8;
+  let ts = clamp(Math.round(Math.min(vh * 0.09, vw * 0.11)), 56, 74), tg = vw < 500 ? 8 : 10;
+  const rowW = Math.min(availW, 920);
+  const rowsFor = (s, g) => Math.ceil(game.tiles.length / Math.max(1, Math.floor((rowW + g) / (s + g))));
+  const tilesHFor = (s, g) => { const r = rowsFor(s, g); return r * (s + 4) + (r - 1) * g; };
+  const gap = clamp(Math.round(vh * 0.02), 8, 20);
+  const fixed = 34 + wordH + 8 + 56 + gap * 5 + 28;
+  let tilesH = tilesHFor(ts, tg);
+  if (availH - fixed - tilesH < 90 && ts > 56) { ts = 56; tg = 8; tilesH = tilesHFor(ts, tg); }
+  const pic = clamp(Math.floor(availH - fixed - tilesH), 44, Math.min(280, Math.round(vh * 0.24)));
+  // rows of even length (7 + 6 rather than 11 + 2)
+  const rows = rowsFor(ts, tg), per = Math.ceil(game.tiles.length / rows);
+  const st = playEl.style;
+  st.setProperty('--tiles-w', (per * (ts + tg) - tg) + 'px');
+  st.setProperty('--bs', bs + 'px'); st.setProperty('--bg', bg + 'px'); st.setProperty('--ts', ts + 'px'); st.setProperty('--tg', tg + 'px');
+  st.setProperty('--gap', gap + 'px'); st.setProperty('--pic', pic + 'px'); st.setProperty('--tiles-h', tilesH + 'px');
+  // the sum and the sentence clue: as big as the card allows
+  const cardW = Math.min(availW - 8, 760) - 60;
+  if (game.word.kind === 'fact') st.setProperty('--fact', Math.floor(Math.min(pic * 0.56, cardW / (game.word.pic.length * 0.46))) + 'px');
+  if (game.word.kind === 'sentence') {
+    const len = game.word.clue.length + 3;
+    let f = clamp(Math.round(pic * 0.19), 20, 46);
+    while (f > 16 && Math.ceil(len / Math.max(1, Math.floor(Math.min(cardW, f * 15) / (f * 0.5)))) * f * 1.3 > pic - 14) f--;
+    st.setProperty('--clue', f + 'px');
+  }
+}
+
+/* ================= play ================= */
+let forced = null;
+function startRound(force) {
+  if (!force && forced) { force = forced; forced = null; }
+  Sound.init();
+  game.deck = rec.deck; game.level = rec.level;
+  game.words = buildRound(game.deck, game.level, force);
+  game.i = 0; game.results = []; game.t = 0; game.sessionRounds++;
+  Sound.play('spell');
+  showScreen(null);
+  $('#hud').hidden = false; playEl.hidden = false; playEl.classList.remove('away');
+  if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+  showWord();
+  // the music changes every attempt: each new round plays the next remix
+  game.remix = '';
+  // the remix name sits over the empty tile area while the first word is on show (under the HUD for a sum)
+  const tb = $('.tilebox').getBoundingClientRect();
+  document.documentElement.style.setProperty('--music-y', game.state === 'look' ? Math.round(tb.top + 12) + 'px' : 'var(--hud-b, 76px)');
+  if (game.sessionRounds > 1) { const name = Sound.remix(game.sessionRounds - 1, 0, 'spell'); game.remix = name; if (name) toast('♪ ' + name, 'music', 2200); }
+}
+function showWord() {
+  const w = game.words[game.i];
+  game.word = w; game.pos = 0; game.slips = 0; game.looked = false; game.slipAt = w.w.split('').map(() => 0);
+  game.tiles = makeTiles(w.w, game.level).map((ch) => ({ ch: ch, used: false, el: null }));
+  cheerEl.hidden = true;
+  renderPic(w, false); renderBoxes(); renderTiles();
+  updateHud();
+  layout();
+  if (w.kind === 'fact') {
+    // a sum to work out: no look first, the boxes start empty
+    game.state = 'spell'; setPhase('work'); showLetters(false); revealTiles();
+    announce('Word ' + (game.i + 1) + '. ' + factSay(w.pic) + '. Spell the answer, ' + w.w.length + ' letters.');
+  } else {
+    game.state = 'look'; setPhase('look'); showLetters(true);
+    tilesEl.className = 'tiles wait';
+    game.lookDur = lookTime(w); game.lookEnd = game.t + game.lookDur;
+    $('#lookfill').style.transform = 'scaleX(1)';
+    announce('Word ' + (game.i + 1) + '. Look: ' + w.w.split('').join(' ') + '.');
+  }
+  sayWord(w, 'show');
+  markNow();
+}
+function revealTiles() {
+  tilesEl.className = 'tiles' + (calm() ? '' : ' show');
+}
+// COVER: the letters flip over to empty boxes and the tiles come up
+function cover() {
+  game.state = 'spell'; setPhase('spell');
+  showLetters(false);
+  if (!calm()) boxes.forEach((b, i) => { b.classList.remove('flip'); void b.offsetWidth; b.style.animationDelay = (i * 0.035) + 's'; b.classList.add('flip'); });
+  revealTiles();
+  markNow();
+  announce('Now spell it. ' + game.word.w.length + ' letters.');
+}
+function tapTile(i) {
+  if (game.state !== 'spell') return;
+  const t = game.tiles[i];
+  if (!t || t.used) return;
+  const need = game.word.w[game.pos];
+  if (t.ch === need) {
+    t.used = true; t.el.classList.remove('nope', 'hint'); t.el.classList.add('used'); t.el.setAttribute('aria-hidden', 'true');
+    game.tiles.forEach((o) => o.el && o.el.classList.remove('hint'));
+    const b = boxes[game.pos];
+    b.textContent = need; b.classList.remove('flip', 'bump', 'peek'); b.style.animationDelay = '';
+    if (!calm()) { void b.offsetWidth; b.classList.add('fill'); }
+    game.pos++;
+    Sound.sfx.check();
+    if (game.pos >= game.word.w.length) wordDone(); else markNow();
+  } else {
+    // refused: the tile shakes and goes coral, it counts as a slip, and the child carries on
+    game.slips++; game.slipAt[game.pos]++;
+    const el = t.el;
+    el.classList.remove('nope'); void el.offsetWidth; el.classList.add('nope');
+    clearTimeout(el._nope); el._nope = setTimeout(() => el.classList.remove('nope'), 650);
+    Sound.sfx.wrong();
+    // three slips on one letter: the right tile gets a quiet lilac ring
+    if (game.slipAt[game.pos] >= 3) { const r = game.tiles.find((o) => !o.used && o.ch === need); if (r) r.el.classList.add('hint'); }
+    updateHud();
+  }
+}
+// a laptop keyboard types too: a letter goes to a matching tile (the right one when it is there)
+function typeLetter(ch) {
+  if (game.state !== 'spell') return;
+  const need = game.word.w[game.pos];
+  let i = ch === need ? game.tiles.findIndex((t) => !t.used && t.ch === ch) : -1;
+  if (i < 0) i = game.tiles.findIndex((t) => !t.used && t.ch === ch);
+  if (i >= 0) tapTile(i);
+  else if (!calm()) { const b = boxes[game.pos]; b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump'); }
+}
+function lookAgain() {
+  if (game.state !== 'spell') return;
+  game.looked = true; game.state = 'peek'; game.peekEnd = game.t + 1.5;
+  boxes.forEach((b, i) => { if (i >= game.pos) { b.textContent = game.word.w[i]; b.classList.add('peek'); } b.classList.remove('now'); });
+  tilesEl.classList.add('off');
+  $('#lookBtn').disabled = true;
+  Sound.sfx.click();
+  sayWord(game.word, 'hear');
+}
+function endPeek() {
+  game.state = 'spell';
+  boxes.forEach((b, i) => { if (i >= game.pos) b.textContent = ''; b.classList.remove('peek'); });
+  tilesEl.classList.remove('off');
+  setPhase(isFact() ? 'work' : 'spell');
+  markNow();
+}
+function wordDone() {
+  const w = game.word, perfect = game.slips === 0 && !game.looked;
+  game.state = 'done'; game.nextAt = game.t + 1.9;
+  game.results.push({ w: w.w, pic: w.pic, kind: w.kind, perfect: perfect, slips: game.slips, looked: game.looked });
+  markNow();
+  boxes.forEach((b, i) => { b.classList.remove('fill', 'flip', 'now'); b.style.animationDelay = calm() ? '' : (i * 0.04) + 's'; b.classList.add('win'); });
+  if (w.kind === 'fact') { if (perfect) mathRight(w.q); else mathWrong(w.q); }
+  if (w.kind === 'fact' || w.kind === 'sentence') renderPic(w, true);
+  remember(w, perfect);
+  setPhase('done');
+  tilesEl.className = 'tiles wait';
+  cheerEl.textContent = perfect ? pick(['Perfect!', 'Spot on!', 'Brilliant!', 'Super spelling!']) + ' ⭐' : pick(['You got it!', 'Well done!', 'Nice work!']) + ' 👍';
+  cheerEl.hidden = false; cheerEl.style.animation = 'none'; void cheerEl.offsetWidth; cheerEl.style.animation = '';
+  Sound.sfx.right(); if (perfect) Sound.sfx.star();
+  sayWord(w, 'done');
+  sparkles(perfect ? 7 : 4);
+  updateHud();
+  announce(w.w + '. ' + (perfect ? 'Perfect!' : 'Done.'));
+}
+// a word spelled with no slip and no look again is learned; any other goes on the list to come back
+function remember(w, perfect) {
+  const k = w.w, d = game.deck;
+  if (perfect) {
+    if (rec.learned.indexOf(k) < 0) rec.learned.push(k);
+    rec.missed = rec.missed.filter((m) => !(m.d === d && m.w === k));
+  } else if (w.kind !== 'fact') {
+    rec.missed = rec.missed.filter((m) => !(m.d === d && m.w === k)).concat([{ d: d, l: game.level, w: k }]).slice(-20);
+  }
+  writeSave();
+}
+function sparkles(n) {
+  if (calm()) return;
+  const r = wordEl.getBoundingClientRect();
+  for (let i = 0; i < n; i++) {
+    const s = document.createElement('span');
+    s.className = 'spark'; s.textContent = pick(['⭐', '✨', '🌟']);
+    s.style.left = (r.left + r.width * (i + 0.5) / n - 15) + 'px'; s.style.top = (r.top - 10) + 'px';
+    s.style.setProperty('--dx', ((i - n / 2) * 8) + 'px'); s.style.animationDelay = (i * 0.05) + 's';
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 1200);
+  }
+}
+function nextWord() {
+  game.i++;
+  if (game.i >= ROUND) finishRound(); else showWord();
+}
+function chipFor(r, miss) {
+  const tag = r.kind === 'emoji' ? '<i>' + r.pic + '</i>' : r.kind === 'number' || r.kind === 'fact' ? '<i class="n">' + r.pic.replace(' = ?', '') + '</i>' : '';
+  return '<span class="wchip' + (miss ? ' miss' : '') + '">' + tag + r.w + '</span>';
+}
+function finishRound() {
+  const perfect = game.results.filter((r) => r.perfect), miss = game.results.filter((r) => !r.perfect);
+  const stars = perfect.length >= 9 ? 3 : perfect.length >= 6 ? 2 : 1, key = game.deck + '-' + game.level;
+  const prevBest = rec.best[key] || 0, better = prevBest > 0 && stars > prevBest;
+  rec.best[key] = Math.max(rec.best[key] || 0, stars); rec.rounds++; rec.perfect += perfect.length;
+  writeSave();
+  game.state = 'results'; game.lastStars = stars; game.word = null;
+  Speech.stop();
+  $('#doneTitle').textContent = stars === 3 ? 'Super speller!' : stars === 2 ? 'Great spelling!' : 'Good practice!';
+  $('#doneStars').innerHTML = starRow(stars);
+  $('#doneNote').textContent = perfect.length + ' of ' + ROUND + ' words perfect' + (better ? ' · a new best here!' : '');
+  $('#perfectBox').hidden = !perfect.length; $('#perfectList').innerHTML = perfect.map((r) => chipFor(r, false)).join('');
+  $('#missBox').hidden = !miss.length; $('#missList').innerHTML = miss.map((r) => chipFor(r, true)).join('');
+  $('#doneStats').innerHTML = stat('Words learned', rec.learned.length) + stat('Rounds played', rec.rounds);
+  $('#hud').hidden = true; playEl.hidden = true;
+  Sound.sfx.win();
+  showScreen('done');
+  announce(perfect.length + ' of ' + ROUND + ' words perfect. ' + stars + ' stars.');
+}
+
+/* ================= menus ================= */
+function deckNote() {
+  const l = rec.level, d = rec.deck;
+  if (d === 'numbers') return l === 'easy' ? 'Spell one to twenty · ' + LOOK_SEC[l] + ' s to look' : l === 'medium' ? '21 to 99, with a hyphen: forty-two · ' + LOOK_SEC[l] + ' s to look' : 'Work out the sum, spell the answer · math level ' + (MATH[save.settings.mathLevel] || MATH.explorer).name;
+  if (d === 'tricky') return (l === 'easy' ? 'said, they, once…' : l === 'medium' ? 'because, friend, people…' : 'believe, separate, necessary…') + ' with a sentence clue';
+  return (l === 'easy' ? '3–4 letter words' : l === 'medium' ? '5–6 letter words' : 'Words of 7 letters or more') + ' · ' + LOOK_SEC[l] + ' s to look';
+}
+$('#decks').innerHTML = DECK_IDS.map((id) => '<label class="deck" data-deck="' + id + '"><input type="radio" name="deck" value="' + id + '"><span><i aria-hidden="true">' +
+  DECKS[id].icon + '</i>' + DECKS[id].name + '<small></small></span></label>').join('');
+function renderHome() {
+  DECK_IDS.forEach((id) => {
+    const best = rec.best[id + '-' + rec.level] || 0, lab = document.querySelector('.deck[data-deck="' + id + '"]');
+    lab.querySelector('input').checked = id === rec.deck;
+    const sm = lab.querySelector('small');
+    sm.textContent = best ? '★'.repeat(best) + '☆'.repeat(3 - best) : '';
+    sm.setAttribute('aria-label', best ? 'best ' + best + ' of 3 stars' : 'not played yet');
+  });
+  const lv = document.querySelector('input[name="level"][value="' + rec.level + '"]');
+  if (lv) lv.checked = true;
+  $('#deckNote').textContent = deckNote();
+  const best = rec.best[rec.deck + '-' + rec.level] || 0;
+  $('#homeStats').innerHTML = stat('Words learned', rec.learned.length) + stat('Rounds played', rec.rounds) + stat('Best here', best ? '★'.repeat(best) : '–');
+  const sp = $('#speakBtn');
+  sp.textContent = !Speech.ok ? 'Read aloud: not here' : save.settings.speak ? 'Read aloud: on' : 'Read aloud: off';
+  sp.disabled = !Speech.ok; sp.setAttribute('aria-pressed', String(!!save.settings.speak));
+  $('#soundBtn').textContent = save.settings.music > 0 ? 'Music: on' : 'Music: off';
+}
+function goHome() {
+  game.state = 'menu'; game.word = null; Speech.stop();
+  $('#hud').hidden = true; playEl.hidden = true;
+  Sound.muffle(false); Sound.play('menu');
+  renderHome();
+  showScreen('home', false);
+}
+function pause() {
+  if (!PLAYING.has(game.state)) return;
+  game.prev = game.state; game.state = 'pause';
+  Speech.stop(); Sound.muffle(true);
+  playEl.classList.add('away');   // no peeking at the word while paused
+  $('#pauseInfo').textContent = 'Word ' + (game.i + 1) + ' of ' + ROUND + ' · ' + DECKS[game.deck].name + ' · ' + LEVEL_NAME[game.level];
+  showScreen('pause');
+}
+function resume() {
+  if (game.state !== 'pause') return;
+  showScreen(null); playEl.classList.remove('away');
+  game.state = game.prev; lastFrame = performance.now();
+  Sound.muffle(false);
+}
+
+$('#startBtn').addEventListener('click', () => startRound());
+$('#againBtn').addEventListener('click', () => startRound());
+$('#resumeBtn').addEventListener('click', resume);
+$('#restartBtn').addEventListener('click', () => startRound());
+$('#homeBtn').addEventListener('click', goHome);
+$('#doneHomeBtn').addEventListener('click', goHome);
+$('#pauseBtn').addEventListener('click', pause);
+$('#hearBtn').addEventListener('click', () => { if (game.word && PLAYING.has(game.state)) sayWord(game.word, game.state === 'done' ? 'done' : 'hear'); });
+$('#lookBtn').addEventListener('click', lookAgain);
+tilesEl.addEventListener('click', (e) => { const b = e.target.closest('.tile'); if (b) tapTile(+b.dataset.i); });
+$('#speakBtn').addEventListener('click', () => {
+  save.settings.speak = !save.settings.speak; writeSave(); renderHome();
+  if (save.settings.speak) Speech.say('Read aloud is on.');
+});
+$('#soundBtn').addEventListener('click', () => { if (toggleMusic() && game.state === 'menu') Sound.play('menu'); renderHome(); });
+document.addEventListener('change', (e) => {
+  if (e.target.name === 'deck' && DECKS[e.target.value]) { rec.deck = e.target.value; writeSave(); renderHome(); }
+  else if (e.target.name === 'level' && LEVELS.indexOf(e.target.value) >= 0) { rec.level = e.target.value; writeSave(); renderHome(); }
+});
+window.addEventListener('keydown', (e) => {
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  if (e.key === 'Escape') { if (PLAYING.has(game.state)) { e.preventDefault(); pause(); } else if (game.state === 'pause') { e.preventDefault(); resume(); } return; }
+  if (game.state === 'spell' && e.key && e.key.length === 1 && /[a-z-]/i.test(e.key)) { e.preventDefault(); if (!e.repeat) typeLetter(e.key.toLowerCase()); }
+});
+arcadeGuards(pause);
+// the menu song starts with the first touch on the home screen (sound needs a tap on iPad)
+document.addEventListener('pointerdown', () => { if (game.state === 'menu' && save.settings.music > 0) Sound.play('menu'); });
+window.addEventListener('resize', layout);
+window.addEventListener('orientationchange', () => setTimeout(layout, 120));
+
+/* ================= loop: the look time, the peek and the pause after a word ================= */
+let lastFrame = performance.now();
+function frame(now) {
+  requestAnimationFrame(frame);
+  const dt = Math.min(0.1, Math.max(0, (now - lastFrame) / 1000));
+  lastFrame = now;
+  if (muffled && now > muffleUntil && game.state !== 'pause') { muffled = false; Sound.muffle(false); }
+  if (!PLAYING.has(game.state)) return;
+  game.t += dt * game.speed;
+  if (game.state === 'look') {
+    $('#lookfill').style.transform = 'scaleX(' + clamp((game.lookEnd - game.t) / game.lookDur, 0, 1).toFixed(3) + ')';
+    if (game.t >= game.lookEnd) cover();
+  } else if (game.state === 'peek') { if (game.t >= game.peekEnd) endPeek(); }
+  else if (game.state === 'done') { if (game.t >= game.nextAt) nextWord(); }
+}
+document.body.classList.toggle('calm', calm());
+renderHome();
+showScreen('home', false);
+arcadeLinks();
+requestAnimationFrame(frame);
+if (document.fonts && document.fonts.load) document.fonts.load('700 40px Fredoka').catch(() => {});
+
+/* ================= test hook ================= */
+const nextIndex = () => (game.state === 'spell' ? game.tiles.findIndex((t) => !t.used && t.ch === game.word.w[game.pos]) : -1);
+const wrongIndex = () => (game.state === 'spell' ? game.tiles.findIndex((t) => !t.used && t.ch !== game.word.w[game.pos]) : -1);
+function mark(i) {
+  $$('[data-bot]').forEach((e) => e.removeAttribute('data-bot'));
+  const el = i >= 0 ? game.tiles[i].el : $('#phase');
+  el.setAttribute('data-bot', 'tap');
+  return i;
+}
+// what a finished layout must hold: everything inside the screen, tiles 56 px or more, nothing scrolls
+function fits() {
+  const bad = [], vw = innerWidth, vh = innerHeight, in1 = (r) => r.left >= -0.5 && r.right <= vw + 0.5 && r.top >= -0.5 && r.bottom <= vh + 0.5;
+  if (document.documentElement.scrollHeight > vh + 1 || document.documentElement.scrollWidth > vw + 1) bad.push('page scrolls');
+  if (!playEl.hidden) {
+    const hudB = $('.hud-top').getBoundingClientRect().bottom;
+    boxes.forEach((b, i) => { const r = b.getBoundingClientRect(); if (!in1(r)) bad.push('box ' + i + ' outside'); });
+    game.tiles.forEach((t, i) => { const r = t.el.getBoundingClientRect(); if (!in1(r)) bad.push('tile ' + i + ' outside'); if (r.width < 56 || r.height < 56) bad.push('tile ' + i + ' small ' + Math.round(r.width)); });
+    const pr = picEl.getBoundingClientRect();
+    if (pr.top < hudB - 1) bad.push('picture under the HUD');
+    if (!in1(pr)) bad.push('picture outside');
+    const inner = picEl.firstChild && picEl.firstChild.getBoundingClientRect();
+    if (inner && (inner.width > pr.width + 1 || inner.height > pr.height + 1)) bad.push('picture content cut ' + Math.round(inner.width) + 'x' + Math.round(inner.height) + ' in ' + Math.round(pr.width) + 'x' + Math.round(pr.height));
+    const tb = tilesEl.getBoundingClientRect();
+    if (tb.bottom > vh + 0.5) bad.push('tiles below the screen');
+    const wr = wordEl.getBoundingClientRect();
+    if (wr.bottom > $('.tools').getBoundingClientRect().top + 0.5) bad.push('word overlaps the buttons');
+    if ($('.tools').getBoundingClientRect().bottom > tb.top + 0.5) bad.push('buttons overlap the tiles');
+    if (pr.bottom > wr.top + 0.5) bad.push('picture overlaps the word');
+  }
+  return bad;
+}
+window.__spell = {
+  game, rec, save, DECKS, LEVELS, Speech, Sound, KINDS, MATH,
+  state: () => game.state, word: () => (game.word ? game.word.w : null), pos: () => game.pos,
+  tiles: () => game.tiles.map((t) => ({ ch: t.ch, used: t.used })),
+  nextIndex, wrongIndex, tap: (i) => { game.tiles[i].el.click(); }, type: typeLetter,
+  markNext: () => mark(nextIndex()), markWrong: () => mark(wrongIndex()),
+  forceNext: (list) => { forced = list; },
+  start: (deck, level, force) => { rec.deck = deck; rec.level = level; renderHome(); startRound(force); },
+  lookAgain: () => $('#lookBtn').click(), hear: () => $('#hearBtn').click(), pause, resume, goHome,
+  setSpeed: (k) => { game.speed = k; }, fits, layout, makeTiles, wordList, numWord, factWord, factSay, buildRound
+};
+})();
+</script>

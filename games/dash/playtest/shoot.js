@@ -9,7 +9,8 @@ const fs = require('fs'), path = require('path'), http = require('http');
 const EDGE = 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe';
 const { pathToFileURL } = require('url');
 let URL0 = process.env.ND_URL || pathToFileURL(path.join(__dirname, '..', 'dist', 'preview.html')).href;
-const PORT = 9341;
+// ND_CDP / ND_HTTP / ND_PROFILE let several playtests run at once (each needs its own port and browser profile)
+const PORT = +process.env.ND_CDP || 9341, HTTP_PORT = +process.env.ND_HTTP || 5599;
 if (process.env.ND_SERVE) {
   const root = path.resolve(__dirname, '..', process.env.ND_SERVE);
   const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.png': 'image/png', '.webmanifest': 'application/manifest+json', '.json': 'application/json' };
@@ -22,8 +23,8 @@ if (process.env.ND_SERVE) {
       res.writeHead(200, { 'Content-Type': TYPES[path.extname(f)] || 'application/octet-stream', 'Cache-Control': 'no-cache' });
       res.end(buf);
     });
-  }).listen(5599, '127.0.0.1');
-  URL0 = 'http://localhost:5599/' + (process.env.ND_PATH || '');
+  }).listen(HTTP_PORT, '127.0.0.1');
+  URL0 = 'http://localhost:' + HTTP_PORT + '/' + (process.env.ND_PATH || '');
 }
 const dir = __dirname, shots = path.join(dir, 'shots');
 fs.mkdirSync(shots, { recursive: true });
@@ -34,7 +35,7 @@ const BOT = process.env.ND_BOT === 'none' ? '' : fs.readFileSync(path.join(dir, 
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 (async () => {
-  const prof = path.join(dir, 'edge-profile');
+  const prof = path.join(dir, process.env.ND_PROFILE || 'edge-profile');
   const edge = spawn(EDGE, ['--headless=new', '--disable-gpu', '--hide-scrollbars', '--mute-audio', '--autoplay-policy=no-user-gesture-required',
     '--remote-debugging-port=' + PORT, '--user-data-dir=' + prof, '--window-size=1280,720', 'about:blank'], { stdio: 'ignore' });
   let ws, id = 0;
@@ -80,7 +81,8 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
       } else if (s.touch || s.touchEl) {
         let [x, y, hold] = s.touch || [0, 0, 60];
         if (s.touchEl) {
-          const c = await evaluate('(() => { const e = document.querySelector(' + JSON.stringify(s.touchEl) + '); if (!e) return null; const r = e.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; })()');
+          // scroll it into view first, as a finger would (a card below the fold cannot be tapped)
+          const c = await evaluate('(() => { const e = document.querySelector(' + JSON.stringify(s.touchEl) + '); if (!e) return null; e.scrollIntoView({ block: "nearest" }); const r = e.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; })()');
           if (!c) throw new Error('touchEl not found: ' + s.touchEl);
           [x, y] = c;
           console.log('  finger on ' + s.touchEl + ' at ' + c.map(Math.round).join(','));

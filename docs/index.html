@@ -13,7 +13,7 @@
 <link rel="icon" type="image/png" href="./icon-192.png">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}body{margin:0;font:14px system-ui}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>Number Arcade</title>
-<meta name="description" content="Math games for kids: Number Dash and Number Ladder.">
+<meta name="description" content="Math, memory and English games for kids: Number Dash, Number Ladder, Pair Up, Number Pop and Spell It.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap">
@@ -58,7 +58,10 @@ header { text-align: center; display: grid; gap: 10px; }
 h1 { margin: 0; font: 700 clamp(2.6rem, 9vw, 4.4rem)/.95 var(--font-display); text-wrap: balance; }
 h1 span { color: var(--sun-deep); }
 .lead { margin: 0; color: var(--ink-soft); font-size: 1.15rem; }
-.games { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+/* rows of up to three cards; a shorter last row sits in the middle */
+.games { display: flex; flex-wrap: wrap; justify-content: center; gap: 18px; }
+.games > .game { flex: 1 1 280px; max-width: 312px; }
+@media (max-width: 660px) { .games > .game { max-width: 560px; } }
 .game {
   display: grid; grid-template-rows: auto 1fr; background: var(--card); border-radius: 26px; overflow: hidden; box-shadow: var(--shadow);
   color: inherit; text-decoration: none; transition: transform .12s ease; touch-action: manipulation;
@@ -87,7 +90,27 @@ h1 span { color: var(--sun-deep); }
 .ladder-art .wall { position: absolute; top: 0; bottom: 0; width: 9%; background: repeating-linear-gradient(#c9d3f0 0 14px, #b5c1e6 14px 16px); }
 .ladder-art .chip { position: absolute; top: 26px; width: 64px; height: 34px; border-radius: 12px; background: var(--door); border: 3px solid var(--door-edge); display: grid; place-items: center; font: 700 1.2rem/1 var(--font-display); color: var(--door-ink); }
 .ladder-art .cube { position: absolute; left: 44%; bottom: 82px; width: 34px; height: 34px; border-radius: 9px; background: #5cb8ff; border: 4px solid #3a8fd6; }
-.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 0; }
+.pair-art { background: linear-gradient(#cfe6ff, #efe6ff); }
+.pair-art .pc { position: absolute; top: 34px; width: 22%; height: 104px; border-radius: 14px; display: grid; place-items: center; font: 700 1.3rem/1 var(--font-display); box-sizing: border-box; box-shadow: 0 5px 0 rgba(41, 52, 90, .1); }
+.pair-art .down { background: radial-gradient(circle at 25% 22%, rgba(255, 255, 255, .35) 0 8%, transparent 9%), linear-gradient(145deg, #7fb6ff, #a98bff); color: #fff; font-size: 2.3rem; border: 3px solid rgba(255, 255, 255, .8); }
+.pair-art .ok { background: #dff8ec; border: 3px solid #4fd1a5; color: #29345a; }
+.pair-art .word { background: radial-gradient(circle at 25% 22%, rgba(255, 255, 255, .35) 0 8%, transparent 9%), linear-gradient(145deg, #ffb48a, #ff8fbf); color: #fff; font-size: 2.3rem; border: 3px solid rgba(255, 255, 255, .8); }
+.pop-art { background: linear-gradient(#bfe9ff, #e6faf1); }
+.pop-art .badge { position: absolute; top: 16px; left: 50%; translate: -50% 0; background: #ffc94d; border: 3px solid #e2a526; color: #4a3500; border-radius: 99px; padding: 7px 18px; font: 700 1.2rem/1 var(--font-display); white-space: nowrap; }
+.pop-art .b { position: absolute; width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; font: 700 1.35rem/1 var(--font-display); color: #29345a; background: radial-gradient(circle at 32% 28%, rgba(255, 255, 255, .95) 0 12%, transparent 13%), var(--c); border: 3px solid rgba(255, 255, 255, .9); box-shadow: 0 6px 14px rgba(41, 52, 90, .14); box-sizing: border-box; }
+.pop-art .b.on { outline: 4px solid #4fd1a5; outline-offset: 2px; }
+.spell-art { background: linear-gradient(#ffe2ec, #fff4dc); }
+.spell-art .pic { position: absolute; left: 9%; top: 30px; font: 4.6rem/1 var(--emoji); }
+.spell-art .boxes, .spell-art .tiles { position: absolute; right: 7%; display: flex; gap: 4px; }
+.spell-art .boxes { top: 40px; }
+.spell-art .tiles { bottom: 26px; gap: 7px; }
+.spell-art i { font-style: normal; text-align: center; font-family: var(--font-display); font-weight: 700; color: #29345a; box-sizing: border-box; }
+.spell-art .boxes i { width: 26px; height: 34px; border-radius: 8px; background: #fff; border: 2px solid #f0b544; font-size: 1.15rem; line-height: 30px; }
+.spell-art .tiles i { width: 36px; height: 40px; border-radius: 10px; background: #fff3d6; border: 2px solid #f0b544; box-shadow: 0 3px 0 #f0b544; font-size: 1.25rem; line-height: 36px; }
+.skills { display: flex; flex-wrap: wrap; gap: 6px; }
+.skills span { font: 800 .7rem/1 var(--font-body); text-transform: uppercase; letter-spacing: .07em; padding: 6px 9px; border-radius: 99px; background: var(--card-2); color: var(--ink-soft); }
+:root { --emoji: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 0; }
 .stats div { background: var(--card); border-radius: 18px; padding: 14px 8px; text-align: center; box-shadow: 0 4px 14px rgba(41, 52, 90, .1); min-width: 0; }
 .stats dt { font-size: .76rem; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-soft); font-weight: 800; }
 .stats dd { margin: 4px 0 0; font: 700 1.7rem/1 var(--font-display); font-variant-numeric: tabular-nums; }
@@ -100,7 +123,7 @@ h1 span { color: var(--sun-deep); }
   <header>
     <div class="glyphs" aria-hidden="true"><span>+</span><span>&minus;</span><span>&times;</span><span>&divide;</span></div>
     <h1>Number <span>Arcade</span></h1>
-    <p class="lead">Math games for curious kids. Pick one!</p>
+    <p class="lead">Math, memory and English games for curious kids. Pick one!</p>
   </header>
   <div class="games">
     <a class="game" href="dash/">
@@ -109,6 +132,7 @@ h1 span { color: var(--sun-deep); }
         <span class="num">Game 1</span>
         <h2>Number Dash</h2>
         <p>Run, jump and fly to the beat. Steer into the lane whose door shows the right answer.</p>
+        <div class="skills"><span>Math</span><span>Quick thinking</span></div>
         <span class="meta" id="dashMeta">30 levels</span>
         <span class="play">Play</span>
       </div>
@@ -124,7 +148,50 @@ h1 span { color: var(--sun-deep); }
         <span class="num">Game 2</span>
         <h2>Number Ladder</h2>
         <p>Climb a tower of 30 equations. Land on the right answer to go up, a wrong one drops you to the ground.</p>
+        <div class="skills"><span>Math</span><span>Timing</span></div>
         <span class="meta" id="ladderMeta">30 rungs to the top</span>
+        <span class="play">Play</span>
+      </div>
+    </a>
+    <a class="game" href="pair/">
+      <div class="art pair-art" aria-hidden="true">
+        <i class="pc down" style="left:5%;rotate:-7deg">?</i><i class="pc ok" style="left:28%;rotate:-2deg">7 × 8</i><i class="pc ok" style="left:51%;rotate:3deg">56</i><i class="pc word" style="left:74%;rotate:7deg">?</i>
+      </div>
+      <div class="body">
+        <span class="num">Game 3</span>
+        <h2>Pair Up</h2>
+        <p>Flip two cards and find pairs that belong together: 7 × 8 and 56, a picture and its English word, hot and cold.</p>
+        <div class="skills"><span>Memory</span><span>Math</span><span>English</span></div>
+        <span class="meta" id="pairMeta">6 kinds of cards</span>
+        <span class="play">Play</span>
+      </div>
+    </a>
+    <a class="game" href="pop/">
+      <div class="art pop-art" aria-hidden="true">
+        <span class="badge">Make 17</span>
+        <i class="b on" style="--c:#ffd1a6;left:12%;top:70px">8</i><i class="b" style="--c:#cdbaf5;left:31%;top:104px">5</i><i class="b on" style="--c:#9fe3c8;left:50%;top:66px">9</i><i class="b" style="--c:#ffc2d6;left:69%;top:102px">12</i><i class="b" style="--c:#b8dcff;left:77%;top:58px">3</i>
+      </div>
+      <div class="body">
+        <span class="num">Game 4</span>
+        <h2>Number Pop</h2>
+        <p>Tap the floating bubbles that make the target number. Later worlds bring take-away and times.</p>
+        <div class="skills"><span>Mental math</span></div>
+        <span class="meta" id="popMeta">6 worlds</span>
+        <span class="play">Play</span>
+      </div>
+    </a>
+    <a class="game" href="spell/">
+      <div class="art spell-art" aria-hidden="true">
+        <span class="pic">🐢</span>
+        <span class="boxes"><i>t</i><i>u</i><i>r</i><i></i><i></i><i></i></span>
+        <span class="tiles"><i>l</i><i>e</i><i>s</i><i>t</i></span>
+      </div>
+      <div class="body">
+        <span class="num">Game 5</span>
+        <h2>Spell It</h2>
+        <p>Look at a word, it hides, then spell it from memory. Every word is read aloud.</p>
+        <div class="skills"><span>English</span><span>Memory</span></div>
+        <span class="meta" id="spellMeta">Look, cover, spell</span>
         <span class="play">Play</span>
       </div>
     </a>
@@ -134,13 +201,18 @@ h1 span { color: var(--sun-deep); }
 </main>
 <script>
 (function () {
-  var d = {}, l = {};
-  try { d = JSON.parse(localStorage.getItem('number-dash.v1') || '{}') || {}; l = JSON.parse(localStorage.getItem('number-ladder.v1') || '{}') || {}; } catch (e) { /* storage blocked */ }
+  var read = function (key) { try { return JSON.parse(localStorage.getItem(key) || '{}') || {}; } catch (e) { return {}; } };
+  var d = read('number-dash.v1'), l = read('number-ladder.v1'), pu = read('pair-up.v1'), np = read('number-pop.v1'), sp = read('spell-it.v1');
+  var popStars = 0; for (var w in (np.worlds || {})) popStars += np.worlds[w].stars || 0;
+  var learned = Array.isArray(sp.learned) ? sp.learned.length : 0;
   var right = (d.math && d.math.right) || 0, stars = 0, done = 0;
   for (var k in (d.levels || {})) { var lv = d.levels[k]; stars += (lv.stars || []).filter(Boolean).length; if (lv.done) done++; }
   var cell = function (k, v) { return '<div><dt>' + k + '</dt><dd>' + v + '</dd></div>'; };
-  document.getElementById('stats').innerHTML = cell('Answers right', right) + cell('Dash stars', stars + ' / 90') + cell('Ladder best', (l.best || 0) + ' / 30');
+  document.getElementById('stats').innerHTML = cell('Answers right', right) + cell('Dash stars', stars + ' / 90') + cell('Ladder best', (l.best || 0) + ' / 30') + cell('Pairs found', pu.pairs || 0) + cell('Words learned', learned);
   if (done) document.getElementById('dashMeta').textContent = done + ' of 30 levels finished';
+  if (pu.wins) document.getElementById('pairMeta').textContent = pu.wins + (pu.wins === 1 ? ' board' : ' boards') + ' cleared';
+  if (popStars) document.getElementById('popMeta').textContent = popStars + ' of 18 stars';
+  if (learned) document.getElementById('spellMeta').textContent = learned + (learned === 1 ? ' word' : ' words') + ' spelled perfectly';
   if (l.tops) document.getElementById('ladderMeta').textContent = 'Reached the top ' + l.tops + (l.tops === 1 ? ' time' : ' times');
   else if (l.best) document.getElementById('ladderMeta').textContent = 'Best so far: rung ' + l.best + ' of 30';
   var ios = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);

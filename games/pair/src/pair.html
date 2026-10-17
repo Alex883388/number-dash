@@ -1,0 +1,470 @@
+<title>Pair Up</title>
+<meta name="description" content="A memory card game: flip two cards and find the pairs that belong together, a sum and its answer, a picture and its English word.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap">
+<style>
+/*__SHARED:arcade-ui.css__*/
+/* Layout: the board fills the screen under the HUD; cards are sized by script so a board of
+   12, 16 or 24 fits any iPad or phone without scrolling. Card backs: blue-lilac for number
+   decks, peach-pink for word decks. */
+#play {
+  position: fixed; inset: 0; display: grid; place-items: center;
+  padding: calc(76px + env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) calc(66px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+}
+#board { display: grid; gap: var(--gap, 10px); justify-content: center; align-content: center; --cw: 120px; --ch: 140px; }
+.pc { width: var(--cw); height: var(--ch); padding: 0; border: 0; background: none; cursor: pointer; perspective: 900px; border-radius: 18px; }
+.pc:focus-visible { outline: 4px solid var(--lilac); outline-offset: 3px; }
+.pc .inner { position: relative; display: block; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform .32s ease; }
+.pc.up .inner, .pc.matched .inner { transform: rotateY(180deg); }
+.face { position: absolute; inset: 0; border-radius: clamp(10px, calc(var(--cw) * .14), 18px); -webkit-backface-visibility: hidden; backface-visibility: hidden; display: grid; place-items: center; overflow: hidden; }
+.back {
+  background:
+    radial-gradient(circle at 22% 20%, rgba(255, 255, 255, .35) 0 7%, transparent 8%),
+    radial-gradient(circle at 78% 80%, rgba(255, 255, 255, .3) 0 9%, transparent 10%),
+    radial-gradient(circle at 80% 22%, rgba(255, 255, 255, .22) 0 5%, transparent 6%),
+    linear-gradient(145deg, #7fb6ff, #a98bff);
+  border: 3px solid rgba(255, 255, 255, .75); box-shadow: 0 5px 0 #7a68d6, var(--shadow-sm);
+}
+.words .back { background:
+    radial-gradient(circle at 22% 20%, rgba(255, 255, 255, .35) 0 7%, transparent 8%),
+    radial-gradient(circle at 78% 80%, rgba(255, 255, 255, .3) 0 9%, transparent 10%),
+    radial-gradient(circle at 80% 22%, rgba(255, 255, 255, .22) 0 5%, transparent 6%),
+    linear-gradient(145deg, #ffb48a, #ff8fbf); box-shadow: 0 5px 0 #d9709c, var(--shadow-sm); }
+.back::after { content: "?"; font: 700 calc(var(--cw) * .42)/1 var(--font-display); color: rgba(255, 255, 255, .92); text-shadow: 0 3px 0 rgba(60, 40, 140, .18); }
+.front { transform: rotateY(180deg); background: var(--door); border: 3px solid var(--door-edge); box-shadow: 0 5px 0 var(--door-edge), var(--shadow-sm); color: var(--door-ink); padding: 6%; text-align: center; }
+.front .v { display: inline-block; font: 700 1em/1.05 var(--font-display); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.front .v.emoji { font-family: var(--emoji); line-height: 1; }
+.front .v.word { font-weight: 600; }
+.pc.matched .front { background: #dff8ec; border-color: var(--mint); box-shadow: 0 5px 0 #2fae84, var(--shadow-sm); animation: glow .6s ease-out; }
+.pc.matched .front::after { content: "✓"; position: absolute; top: 4%; right: 7%; font: 700 calc(var(--cw) * .16)/1 var(--font-display); color: #2a9f78; }
+.pc.miss .front { border-color: var(--coral); box-shadow: 0 5px 0 var(--coral-deep), var(--shadow-sm); }
+.pc.matched { cursor: default; }
+@media (prefers-reduced-motion: reduce) { .pc .inner { transition: none; } .pc.matched .front { animation: none; } }
+
+/* home: deck tiles */
+.decks { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.decks label { cursor: pointer; }
+.decks input { position: absolute; opacity: 0; pointer-events: none; }
+.decks span { display: grid; gap: 2px; justify-items: center; padding: 10px 6px; border-radius: 16px; background: var(--card-2); border: 2px solid var(--line); font: 600 .95rem/1.1 var(--font-display); height: 100%; box-sizing: border-box; }
+.decks span i { font-style: normal; font-family: var(--emoji); font-size: 1.6rem; line-height: 1.1; }
+.decks span small { font: 700 .72rem/1.2 var(--font-body); color: var(--ink-soft); }
+.decks input:checked + span { background: var(--sun); border-color: var(--sun-deep); color: var(--sun-ink); }
+.decks input:checked + span small { color: var(--sun-ink); }
+.decks input:focus-visible + span { outline: 3px solid var(--lilac); outline-offset: 3px; }
+@media (max-width: 420px) { .decks { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.found { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin: 0; padding: 0; list-style: none; }
+.found li { background: var(--mint-soft); color: var(--ink); border-radius: 99px; padding: 6px 12px; font: 600 1rem/1.1 var(--font-display); }
+.found li .e { font-family: var(--emoji); }
+/* the status line under the board: the look-first countdown, then each pair found */
+.status { position: fixed; left: 50%; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); translate: -50% 0; z-index: 12; font: 700 1.15rem/1 var(--font-display); padding: 11px 18px; white-space: nowrap; max-width: calc(100% - 32px); overflow: hidden; text-overflow: ellipsis; box-sizing: border-box; }
+.status.good { color: var(--mint-deep); }
+.card.home { gap: 16px; }
+</style>
+<!--BODY-->
+<div id="play" aria-label="Pair Up board"><div id="board"></div></div>
+
+<div id="hud" hidden>
+  <div class="hud-top">
+    <div class="hud-chips">
+      <span class="chip chipbox" id="pairChip">Pairs 0 / 8</span>
+      <span class="chip soft chipbox" id="moveChip">Moves 0</span>
+      <span class="chip soft chipbox" id="timeChip">0:00</span>
+    </div>
+    <button class="hud-btn" id="pauseBtn" aria-label="Pause">
+      <svg width="18" height="20" viewBox="0 0 16 18" aria-hidden="true"><rect x="1" y="1" width="5" height="16" rx="2" fill="currentColor"/><rect x="10" y="1" width="5" height="16" rx="2" fill="currentColor"/></svg>
+    </button>
+  </div>
+</div>
+<div class="status chipbox" id="status" hidden></div>
+
+<main id="screens">
+  <section class="screen" id="s-home">
+    <div class="card home">
+      <h1 class="logo">Pair <span>Up</span></h1>
+      <p class="tag">Flip two cards. Find the pairs that belong together: a sum and its answer, a picture and its word.</p>
+      <div>
+        <p class="seg-title">Cards</p>
+        <div class="decks" id="decks"></div>
+      </div>
+      <div class="row" style="gap:18px">
+        <div>
+          <p class="seg-title">Board</p>
+          <div class="seg" id="sizes"></div>
+        </div>
+        <div>
+          <p class="seg-title">Level</p>
+          <div class="seg">
+            <label><input type="radio" name="math" value="starter"><span>7–8</span></label>
+            <label><input type="radio" name="math" value="explorer"><span>9–10</span></label>
+            <label><input type="radio" name="math" value="genius"><span>11–12</span></label>
+          </div>
+        </div>
+      </div>
+      <div class="row"><button class="btn sun big" id="playBtn">Play</button></div>
+      <dl class="stats" id="homeStats"></dl>
+      <div class="row">
+        <button class="btn" id="soundBtn">Music on</button>
+        <button class="btn" id="speakBtn">Read aloud on</button>
+        <a class="btn" data-hub hidden href="../">All games</a>
+      </div>
+    </div>
+  </section>
+  <section class="screen" id="s-pause" hidden>
+    <div class="card small-card">
+      <h2>Paused</h2>
+      <p id="pauseInfo"></p>
+      <div class="row"><button class="btn sun big" id="resumeBtn">Keep playing</button></div>
+      <div class="row"><button class="btn" id="newBtn">New cards</button><button class="btn" id="homeBtn">Home</button></div>
+    </div>
+  </section>
+  <section class="screen" id="s-done" hidden>
+    <div class="card small-card">
+      <h2 id="doneTitle">All pairs found!</h2>
+      <div class="stars" id="doneStars" aria-hidden="true"></div>
+      <p id="doneNote"></p>
+      <dl class="stats" id="doneStats"></dl>
+      <ul class="found" id="doneFound" aria-label="Pairs you found"></ul>
+      <div class="row"><button class="btn sun big" id="againBtn">Play again</button></div>
+      <div class="row"><button class="btn" id="doneHomeBtn">Home</button><a class="btn" data-hub hidden href="../">All games</a></div>
+    </div>
+  </section>
+</main>
+<div class="toast" id="toast" hidden></div>
+<div class="sr" aria-live="polite" id="announce"></div>
+
+<script>
+(function () {
+'use strict';
+/*__SHARED:arcade-core__*/
+/*__SHARED:math__*/
+
+const rec = loadRecords('pair-up.v1', { deck: 'times', size: 'medium', best: {}, stars: {}, wins: 0, pairs: 0 });
+
+/* ================= the decks =================
+   Every card pair belongs together without looking the same, so a match needs memory AND
+   knowing the fact or the word. Each deck has three levels (ages 7–8, 9–10, 11–12, the
+   arcade's shared level). Word cards are read aloud when they turn over. */
+const DECKS = [
+  { id: 'times', name: 'Times', icon: '✖️', note: '6 × 7 → 42', math: true },
+  { id: 'plus', name: 'Plus & minus', icon: '➕', note: '13 + 8 → 21', math: true },
+  { id: 'pics', name: 'Pictures', icon: '🍎', note: '🍎 → apple', words: true },
+  { id: 'opp', name: 'Opposites', icon: '🌗', note: 'hot → cold', words: true },
+  { id: 'numw', name: 'Number words', icon: '🔢', note: '42 → forty-two', words: true },
+  { id: 'mix', name: 'Mix', icon: '🎲', note: 'a bit of all', words: true }
+];
+const SIZES = [{ id: 'small', name: '6 pairs', n: 6, peek: 3 }, { id: 'medium', name: '8 pairs', n: 8, peek: 4 }, { id: 'big', name: '12 pairs', n: 12, peek: 5 }];
+const LEVELS = ['starter', 'explorer', 'genius'];
+const tierOf = () => Math.max(0, LEVELS.indexOf(save.settings.mathLevel));
+const MATH_KINDS = {
+  times: [['table2510'], ['table10', 'table10', 'div10'], ['table12', 'table12', 'div12', 'missingMul']],
+  plus: [['add20', 'sub20', 'double', 'make10'], ['add100', 'sub100', 'missing'], ['big', 'order', 'missing']]
+};
+// picture words, grouped by length for the three levels
+const PICS = [
+  [['🐶', 'dog'], ['🐱', 'cat'], ['🐟', 'fish'], ['🐸', 'frog'], ['🌳', 'tree'], ['🚗', 'car'], ['🚌', 'bus'], ['🥚', 'egg'], ['🔑', 'key'], ['🐝', 'bee'],
+   ['🦉', 'owl'], ['🐄', 'cow'], ['🐷', 'pig'], ['🎂', 'cake'], ['⭐', 'star'], ['🌙', 'moon'], ['🦆', 'duck'], ['🐻', 'bear'], ['🦁', 'lion'], ['🦊', 'fox'],
+   ['🐜', 'ant'], ['🎩', 'hat'], ['🦀', 'crab'], ['👟', 'shoe'], ['🌽', 'corn'], ['🍐', 'pear'], ['🌹', 'rose'], ['🐐', 'goat']],
+  [['🍎', 'apple'], ['🍌', 'banana'], ['🍕', 'pizza'], ['🏠', 'house'], ['🐯', 'tiger'], ['🐼', 'panda'], ['🚀', 'rocket'], ['✏️', 'pencil'], ['🚂', 'train'], ['🐭', 'mouse'],
+   ['🐢', 'turtle'], ['🥕', 'carrot'], ['🧀', 'cheese'], ['🍇', 'grapes'], ['🍋', 'lemon'], ['🐒', 'monkey'], ['🐰', 'rabbit'], ['🐍', 'snake'], ['🐳', 'whale'], ['🌸', 'flower'],
+   ['⏰', 'clock'], ['🎸', 'guitar'], ['🍪', 'cookie'], ['🍞', 'bread'], ['🐴', 'horse'], ['🦓', 'zebra'], ['🐑', 'sheep'], ['🐌', 'snail'], ['🦜', 'parrot'], ['🧲', 'magnet']],
+  [['🐘', 'elephant'], ['🦋', 'butterfly'], ['🐧', 'penguin'], ['🦒', 'giraffe'], ['🐙', 'octopus'], ['🐬', 'dolphin'], ['🌈', 'rainbow'], ['🍓', 'strawberry'], ['🌻', 'sunflower'], ['☂️', 'umbrella'],
+   ['🦖', 'dinosaur'], ['🍉', 'watermelon'], ['🚲', 'bicycle'], ['🥦', 'broccoli'], ['🍍', 'pineapple'], ['🥪', 'sandwich'], ['🎈', 'balloon'], ['🦘', 'kangaroo'], ['🐊', 'crocodile'], ['🦔', 'hedgehog'],
+   ['🚁', 'helicopter'], ['💻', 'computer'], ['🔭', 'telescope'], ['🌋', 'volcano'], ['🎃', 'pumpkin'], ['🐿️', 'squirrel']]
+];
+const OPP = [
+  [['hot', 'cold'], ['big', 'small'], ['up', 'down'], ['happy', 'sad'], ['fast', 'slow'], ['day', 'night'], ['open', 'closed'], ['in', 'out'], ['wet', 'dry'], ['yes', 'no'],
+   ['old', 'new'], ['top', 'bottom'], ['full', 'empty'], ['light', 'dark'], ['high', 'low'], ['left', 'right'], ['on', 'off'], ['push', 'pull'], ['hard', 'soft'], ['loud', 'quiet']],
+  [['tall', 'short'], ['thick', 'thin'], ['heavy', 'light'], ['early', 'late'], ['first', 'last'], ['win', 'lose'], ['clean', 'dirty'], ['strong', 'weak'], ['near', 'far'], ['start', 'finish'],
+   ['buy', 'sell'], ['laugh', 'cry'], ['sweet', 'sour'], ['brave', 'scared'], ['awake', 'asleep'], ['before', 'after'], ['always', 'never'], ['inside', 'outside'], ['question', 'answer'], ['remember', 'forget']],
+  [['ancient', 'modern'], ['deep', 'shallow'], ['wide', 'narrow'], ['rough', 'smooth'], ['arrive', 'depart'], ['increase', 'decrease'], ['include', 'exclude'], ['maximum', 'minimum'], ['accept', 'refuse'], ['victory', 'defeat'],
+   ['frequent', 'rare'], ['temporary', 'permanent'], ['horizontal', 'vertical'], ['generous', 'selfish'], ['success', 'failure'], ['interior', 'exterior'], ['visible', 'invisible'], ['possible', 'impossible'], ['polite', 'rude'], ['ascend', 'descend']]
+];
+const ONES = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+const TENS = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+const ORD = { one: 'first', two: 'second', three: 'third', five: 'fifth', eight: 'eighth', nine: 'ninth', twelve: 'twelfth' };
+function numberWord(n) { return n < 20 ? ONES[n] : TENS[Math.floor(n / 10)] + (n % 10 ? '-' + ONES[n % 10] : ''); }
+function ordinalWord(n) {
+  const w = numberWord(n), parts = w.split('-'), last = parts.pop();
+  const o = ORD[last] || (last.endsWith('y') ? last.slice(0, -1) + 'ieth' : last + 'th');
+  return parts.concat([o]).join('-');
+}
+const ordinalDigits = (n) => n + ((n % 100 >= 11 && n % 100 <= 13) ? 'th' : ['th', 'st', 'nd', 'rd'][n % 10] || 'th');
+
+// one pair: two faces (kind = expr | num | emoji | word), what to say for word faces, and a short "learned" line
+// every face on a board is different (a times answer and a number card can both be "20" in Mix)
+const fresh = (used, faces) => faces.every((f) => !used.faces.has(f));
+// a missed fact from another game comes back only on a board of its kind (no 48 + 16 among the times)
+const DECK_OPS = { times: /[×÷]/, plus: /[+−]/ };
+function mathPair(kinds, used, ops) {
+  for (let i = 0; i < 40; i++) {
+    const q = factFrom(kinds, used.texts);
+    if (q.again && ops && !ops.test(q.t)) continue;
+    if (!fresh(used, [q.t, String(q.a)])) continue;
+    used.texts.add(q.t); used.faces.add(q.t); used.faces.add(String(q.a));
+    return { a: { kind: 'expr', v: q.t }, b: { kind: 'num', v: String(q.a) }, learned: q.t.indexOf('?') >= 0 ? q.t.replace('?', q.a) : q.t + ' = ' + q.a, fact: q };
+  }
+  return null;
+}
+function wordsPair(deck, tier, used) {
+  for (let i = 0; i < 60; i++) {
+    let p;
+    if (deck === 'pics') { const [e, w] = pick(PICS[tier]); p = { a: { kind: 'emoji', v: e, say: w }, b: { kind: 'word', v: w, say: w }, learned: e + ' ' + w, key: [w] }; }
+    else if (deck === 'opp') { const [x, y] = pick(OPP[tier]); p = { a: { kind: 'word', v: x, say: x }, b: { kind: 'word', v: y, say: y }, learned: x + ' ↔ ' + y, key: [x, y] }; }
+    else {
+      const ord = tier === 2 && Math.random() < 0.5, n = tier === 0 ? rnd(1, 20) : ord ? rnd(1, 31) : rnd(21, 99);
+      const w = ord ? ordinalWord(n) : numberWord(n), d = ord ? ordinalDigits(n) : String(n);
+      p = { a: { kind: 'num', v: d, say: w }, b: { kind: 'word', v: w, say: w }, learned: d + ' = ' + w, key: [d, w] };
+    }
+    // also no word twice (light is the opposite of dark AND of heavy)
+    if (p.key.some((k) => used.words.has(k)) || !fresh(used, [p.a.v, p.b.v])) continue;
+    p.key.forEach((k) => used.words.add(k)); used.faces.add(p.a.v); used.faces.add(p.b.v);
+    return p;
+  }
+  return null;
+}
+function dealPairs(deck, n) {
+  const tier = tierOf(), used = { texts: new Set(), faces: new Set(), words: new Set() }, out = [];
+  for (let i = 0; out.length < n && i < n * 4; i++) {
+    let d = deck;
+    if (deck === 'mix') d = ['times', 'plus', 'pics', 'opp', 'numw'][out.length % 5];
+    const p = MATH_KINDS[d] ? mathPair(MATH_KINDS[d][tier], used, DECK_OPS[d]) : wordsPair(d, tier, used);
+    if (p) out.push(p);
+  }
+  return out;
+}
+
+/* ================= music ================= */
+const SONGS = {
+  menu: { bpm: 72, swing: 0.14, prog: [[52, 55, 59, 62], [55, 59, 60, 64], [57, 60, 64, 67], [55, 57, 62, 64]], bass: [36, 45, 41, 43],
+          keys: [[0, 1, 4, 15], [10, 0.45, 2, 4]], bassPat: [[0, 0.8, 0, 12]], drums: false,
+          hats: [[0, 0.22], [4, 0.12], [8, 0.22], [12, 0.12]], scale: [72, 74, 76, 79, 81, 84], density: 0.42, seed: 3 },
+  pair: { bpm: 76, swing: 0.18, prog: [[50, 53, 57, 60], [55, 59, 62, 65], [52, 55, 59, 64], [57, 60, 64, 67]], bass: [38, 43, 40, 45],
+          keys: [[0, 0.9, 4, 12], [8, 0.45, 2, 4], [14, 0.35, 2, 2]], bassPat: [[0, 1, 0, 6], [8, 0.6, 7, 3]], drums: true,
+          kick: [0, 8], snare: [4, 12], ghost: [],
+          hats: [[0, 0.3], [4, 0.2], [8, 0.3], [12, 0.2], [14, 0.15]], scale: [72, 74, 76, 79, 81, 84], density: 0.4, seed: 271 }
+};
+/*__SHARED:music-remix__*/
+/*__SHARED:sound__*/
+
+/* ================= the game ================= */
+const game = { state: 'menu', cards: [], open: [], moves: 0, found: 0, pairs: [], deck: 'times', size: SIZES[1], t0: 0, elapsed: 0, started: false, round: 0, waitTimer: 0, peekTimer: 0, prev: 'play', remixName: '' };
+const board = $('#board');
+const deckOf = (id) => DECKS.find((d) => d.id === id) || DECKS[0];
+const sizeOf = (id) => SIZES.find((s) => s.id === id) || SIZES[1];
+const keyOf = () => game.deck + '-' + game.size.id;
+// stars by moves (one move = two cards turned). A player who remembers every card turned needs
+// about 1.6 moves a pair; the 12-pair board gives a little more room (measured by simulation)
+const starLine = (n) => [Math.round(n * (n >= 12 ? 1.75 : 1.6)), Math.round(n * (n >= 12 ? 3 : 2.4))];
+const starsFor = (moves, n) => (moves <= starLine(n)[0] ? 3 : moves <= starLine(n)[1] ? 2 : 1);
+
+function newBoard() {
+  clearTimeout(game.waitTimer); clearInterval(game.peekTimer);
+  game.deck = rec.deck; game.size = sizeOf(rec.size);
+  game.pairs = dealPairs(game.deck, game.size.n);
+  const cards = [];
+  game.pairs.forEach((p, i) => { cards.push(Object.assign({ pair: i, up: false, matched: false }, p.a)); cards.push(Object.assign({ pair: i, up: false, matched: false }, p.b)); });
+  game.cards = shuffle(cards);
+  game.open = []; game.moves = 0; game.found = 0; game.started = false; game.elapsed = 0;
+  $('#play').classList.toggle('words', !!deckOf(game.deck).words && game.deck !== 'mix');
+  board.innerHTML = game.cards.map((c, i) =>
+    '<button class="pc" data-i="' + i + '" aria-label="Card ' + (i + 1) + ', face down"><span class="inner"><span class="face back"></span><span class="face front"><span class="v ' + c.kind + '"></span></span></span></button>').join('');
+  game.cards.forEach((c, i) => { c.el = board.children[i]; c.el.querySelector('.v').textContent = c.v; });
+  layout();
+  updateHud();
+  // a short look at every card first, then they turn over
+  game.state = 'peek';
+  game.cards.forEach((c) => setUp(c, true, true));
+  let left = game.size.peek;
+  status('Remember them! ' + left);
+  game.peekTimer = setInterval(() => {
+    if (game.state === 'pause') return;
+    left--;
+    if (left > 0) { status('Remember them! ' + left); return; }
+    clearInterval(game.peekTimer);
+    game.cards.forEach((c, i) => setTimeout(() => setUp(c, false, true), reduceMotion ? 0 : i * 18));
+    game.state = 'play';
+    status(game.remixName ? '♪ ' + game.remixName : 'Find the pairs!');
+    announce('Cards turned over. Find the pairs.');
+  }, 1000);
+  announce('Remember the cards. ' + game.size.n + ' pairs.');
+}
+function status(text, kind) { const s = $('#status'); s.textContent = text; s.className = 'status chipbox' + (kind ? ' ' + kind : ''); s.hidden = !text; }
+function setUp(c, up, quiet) {
+  c.up = up;
+  c.el.classList.toggle('up', up);
+  c.el.setAttribute('aria-label', up || c.matched ? c.v : 'Card ' + (game.cards.indexOf(c) + 1) + ', face down');
+  if (up && !quiet && c.say) Speech.say(c.say);
+}
+
+// size the cards so the whole board fits: try every column count, keep the biggest card
+function layout() {
+  const play = $('#play'), cs = getComputedStyle(play), n = game.cards.length || 16;
+  const W = play.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+  const H = play.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+  const gap = clamp(Math.round(Math.min(W, H) * 0.02), 6, 14);
+  let best = null;
+  for (let cols = 2; cols <= n; cols++) {
+    if (n % cols) continue;   // full rows only: 3×4, 4×4, 6×4 …
+    const rows = n / cols;
+    const cw = (W - gap * (cols - 1)) / cols, ch = (H - gap * (rows - 1)) / rows;
+    const w = Math.min(cw, ch / 1.05, 200);
+    if (!best || w > best.w + 0.5) best = { cols: cols, w: w, h: Math.min(ch, w * 1.3) };
+  }
+  const w = Math.floor(best.w), h = Math.floor(best.h);
+  board.style.setProperty('--cw', w + 'px'); board.style.setProperty('--ch', h + 'px'); board.style.setProperty('--gap', gap + 'px');
+  board.style.gridTemplateColumns = 'repeat(' + best.cols + ', ' + w + 'px)';
+  game.cards.forEach((c) => fitText(c, w, h));
+}
+// the biggest font that keeps the card's text inside it (hyphenated words may break onto two lines)
+function fitText(c, w, h) {
+  const el = c.el.querySelector('.v'), inner = w * 0.84;
+  if (c.kind === 'emoji') { el.style.fontSize = Math.min(w * 0.58, h * 0.5) + 'px'; return; }
+  const parts = c.kind === 'word' && c.v.length > 7 && c.v.indexOf('-') > 0 ? c.v.split('-').map((s, i, a) => s + (i < a.length - 1 ? '-' : '')) : [c.v];
+  const longest = Math.max.apply(null, parts.map((s) => s.length));
+  const per = c.kind === 'expr' ? 0.56 : 0.58;
+  let size = Math.max(11, Math.min(inner / (per * longest), (h * 0.72) / (parts.length * 1.08), c.kind === 'num' ? w * 0.42 : w * 0.3));
+  el.style.fontSize = size + 'px';
+  el.innerHTML = parts.length > 1 ? parts.map((s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;')).join('<br>') : '';
+  if (parts.length === 1) el.textContent = c.v;
+  // the estimate is close; a word with wide letters (maximum) is measured and trimmed to fit
+  for (let k = 0; k < 4 && el.offsetWidth > inner && size > 11; k++) { size = Math.max(11, size * inner / el.offsetWidth * 0.97); el.style.fontSize = size + 'px'; }
+}
+
+function tapCard(i) {
+  if (game.state === 'wait') closeOpen();
+  if (game.state !== 'play') return;
+  const c = game.cards[i];
+  if (!c || c.up || c.matched) return;
+  if (!game.started) { game.started = true; game.t0 = performance.now(); }
+  setUp(c, true);
+  Sound.sfx.click();
+  game.open.push(c);
+  if (game.open.length < 2) return;
+  game.moves++;
+  const [a, b] = game.open;
+  if (a.pair === b.pair) {
+    a.matched = b.matched = true; game.open = []; game.found++;
+    [a, b].forEach((x) => { x.el.classList.add('matched'); x.el.setAttribute('aria-disabled', 'true'); });
+    const p = game.pairs[a.pair];
+    if (p.fact) mathRight(p.fact);
+    Sound.sfx.right();
+    status('✓ ' + p.learned, 'good');
+    announce('Pair! ' + p.learned);
+    if (game.found === game.pairs.length) { game.elapsed = elapsed(); game.state = 'won'; setTimeout(finish, 650); }
+  } else {
+    [a, b].forEach((x) => x.el.classList.add('miss'));
+    Sound.sfx.check();
+    game.state = 'wait';
+    game.waitTimer = setTimeout(closeOpen, 1100);
+  }
+  updateHud();
+}
+// turn the two unmatched cards back over (also when a third card is tapped before they turn)
+function closeOpen() {
+  clearTimeout(game.waitTimer);
+  game.open.forEach((x) => { x.el.classList.remove('miss'); setUp(x, false); });
+  game.open = [];
+  if (game.state === 'wait') game.state = 'play';
+}
+
+function elapsed() { return game.elapsed + (game.started && (game.state === 'play' || game.state === 'wait') ? (performance.now() - game.t0) / 1000 : 0); }
+function updateHud() {
+  $('#pairChip').textContent = 'Pairs ' + game.found + ' / ' + game.pairs.length;
+  $('#moveChip').textContent = 'Moves ' + game.moves;
+  $('#timeChip').textContent = fmtTime(elapsed());
+}
+setInterval(() => { if (game.state === 'play' || game.state === 'wait') $('#timeChip').textContent = fmtTime(elapsed()); }, 250);
+
+function finish() {
+  if (game.state !== 'won') return;
+  const time = game.elapsed, n = game.pairs.length, stars = starsFor(game.moves, n), key = keyOf();
+  game.state = 'done';
+  const prevBest = rec.best[key], better = !prevBest || game.moves < prevBest;
+  if (better) rec.best[key] = game.moves;
+  rec.stars[key] = Math.max(rec.stars[key] || 0, stars);
+  rec.wins++; rec.pairs += n;
+  writeSave();
+  Sound.sfx.win();
+  $('#doneTitle').textContent = stars === 3 ? 'Super memory!' : stars === 2 ? 'All pairs found!' : 'You found them all!';
+  $('#doneStars').innerHTML = starRow(stars);
+  $('#doneNote').textContent = better && prevBest ? 'New best: fewer moves than ever!' : stars < 3 ? 'Three stars at ' + starLine(n)[0] + ' moves or fewer.' : 'Three stars!';
+  $('#doneStats').innerHTML = stat('Moves', game.moves) + stat('Time', fmtTime(time)) + stat('Best', rec.best[key]);
+  $('#doneFound').innerHTML = game.pairs.map((p) => '<li>' + p.learned.replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</li>').join('');
+  announce('All pairs found in ' + game.moves + ' moves. ' + stars + ' stars.');
+  setTimeout(() => { if (game.state === 'done') { $('#hud').hidden = true; status(''); showScreen('done'); } }, 500);
+}
+
+/* ================= menus ================= */
+function renderHome() {
+  $('#decks').innerHTML = DECKS.map((d) => '<label><input type="radio" name="deck" value="' + d.id + '"' + (d.id === rec.deck ? ' checked' : '') + '><span><i aria-hidden="true">' + d.icon + '</i>' + d.name + '<small>' + d.note + (rec.stars[d.id + '-' + rec.size] ? ' · ' + '⭐'.repeat(rec.stars[d.id + '-' + rec.size]) : '') + '</small></span></label>').join('');
+  $('#sizes').innerHTML = SIZES.map((s) => '<label><input type="radio" name="size" value="' + s.id + '"' + (s.id === rec.size ? ' checked' : '') + '><span>' + s.name + '</span></label>').join('');
+  const lv = document.querySelector('input[name="math"][value="' + save.settings.mathLevel + '"]');
+  if (lv) lv.checked = true;
+  const key = rec.deck + '-' + rec.size;
+  $('#homeStats').innerHTML = stat('Best moves', rec.best[key] || '–') + stat('Boards cleared', rec.wins) + stat('Pairs found', rec.pairs);
+  $('#soundBtn').textContent = save.settings.music > 0 ? 'Music on' : 'Music off';
+  $('#speakBtn').textContent = save.settings.speak ? 'Read aloud on' : 'Read aloud off';
+}
+function start() {
+  Sound.init();
+  game.round++;
+  // a new remix for every new board after the first, named in the status line once the cards turn over
+  if (game.round === 1) { Sound.play('pair', true); game.remixName = ''; }
+  else game.remixName = Sound.remix(game.round - 1, 0, 'pair');
+  showScreen(null);
+  $('#hud').hidden = false;
+  if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+  newBoard();
+}
+function goHome() {
+  clearTimeout(game.waitTimer); clearInterval(game.peekTimer);
+  game.state = 'menu'; game.round = 0; $('#hud').hidden = true; status('');
+  board.innerHTML = ''; game.cards = [];
+  Sound.play('menu'); Sound.muffle(false);
+  renderHome(); showScreen('home');
+}
+function pause() {
+  if (!(game.state === 'play' || game.state === 'wait' || game.state === 'peek')) return;
+  if (game.state === 'wait') closeOpen();
+  if (game.started) game.elapsed = elapsed();
+  game.prev = game.state; game.state = 'pause';
+  Sound.muffle(true);
+  $('#pauseInfo').textContent = 'Pairs ' + game.found + ' of ' + game.pairs.length + ' · ' + game.moves + ' moves';
+  showScreen('pause');
+}
+function resume() {
+  if (game.state !== 'pause') return;
+  showScreen(null);
+  game.state = game.prev; game.t0 = performance.now();
+  Sound.muffle(false);
+}
+
+board.addEventListener('click', (e) => { const b = e.target.closest('.pc'); if (b) tapCard(+b.dataset.i); });
+$('#playBtn').addEventListener('click', start);
+$('#againBtn').addEventListener('click', start);
+$('#newBtn').addEventListener('click', () => { showScreen(null); start(); });
+$('#resumeBtn').addEventListener('click', resume);
+$('#homeBtn').addEventListener('click', goHome);
+$('#doneHomeBtn').addEventListener('click', goHome);
+$('#pauseBtn').addEventListener('click', pause);
+$('#soundBtn').addEventListener('click', () => { toggleMusic(); renderHome(); });
+$('#speakBtn').addEventListener('click', () => { save.settings.speak = !save.settings.speak; writeSave(); renderHome(); if (save.settings.speak) Speech.say('Read aloud is on'); else Speech.stop(); });
+document.addEventListener('change', (e) => {
+  if (e.target.name === 'math') { save.settings.mathLevel = e.target.value; writeSave(); }
+  else if (e.target.name === 'deck') { rec.deck = e.target.value; writeSave(); renderHome(); }
+  else if (e.target.name === 'size') { rec.size = e.target.value; writeSave(); renderHome(); }
+});
+window.addEventListener('keydown', (e) => {
+  if ((e.code === 'Escape' || e.code === 'KeyP') && !e.repeat) { if (game.state === 'pause') resume(); else pause(); }
+});
+window.addEventListener('resize', () => { if (game.cards.length) layout(); });
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (game.cards.length) layout(); });
+arcadeGuards(pause);
+arcadeLinks();
+
+window.__pair = { game, rec, save, tap: tapCard, start, starsFor, dealPairs, numberWord, ordinalWord, Speech };
+renderHome();
+showScreen('home');
+})();
+</script>

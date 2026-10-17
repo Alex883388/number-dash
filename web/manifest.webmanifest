@@ -1,11 +1,11 @@
 {
   "name": "Number Arcade",
   "short_name": "Number Arcade",
-  "description": "Math games for kids: Number Dash and Number Ladder.",
+  "description": "Math, memory and English games for kids: Number Dash, Number Ladder, Pair Up, Number Pop and Spell It.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "orientation": "landscape",
+  "orientation": "any",
   "background_color": "#e6f3fc",
   "theme_color": "#8fd1fb",
   "icons": [

@@ -3,7 +3,7 @@
 // Finger taps only: home -> Number Ladder -> a jump -> pause -> back home -> Number Dash, then
 // portrait iPad, a dark phone, and the ladder opening with no network.
 const errs = "window.__errs = window.__errs || []; window.addEventListener('error', (e) => window.__errs.push(String(e.message))); 'listening'";
-const hubReady = "!!document.getElementById('stats') && document.getElementById('stats').children.length === 3";
+const hubReady = "!!document.getElementById('stats') && document.getElementById('stats').children.length === 5";
 const ladderReady = "!!window.__ladder && document.readyState === 'complete'";
 module.exports = [
   { ipad: true },
@@ -37,6 +37,20 @@ module.exports = [
   { shot: 'a05-dash-home-ipad' },
   { log: "[document.getElementById('hubLink').hidden, document.getElementById('hubLink').getAttribute('href')]" },
   { log: 'JSON.stringify(window.__errs)' },
+  // the three newer games: open each from the home page by finger, start it, check its way back
+  ...[['pair', '!!window.__pair', '#playBtn', "window.__pair.game.state"],
+      ['pop', '!!window.__pop', '#playBtn', "window.__pop.game.state"],
+      ['spell', '!!window.__spell', '#startBtn', "window.__spell.state()"]].flatMap(([dir, ready, btn, st]) => [
+    { eval: "location.href = '../'; 'home'" }, { waitFor: hubReady, timeout: 10000 }, { sleep: 400 },
+    { touchEl: '.game[href="' + dir + '/"]' },
+    { waitFor: ready + " && document.readyState === 'complete'", timeout: 10000 }, { eval: errs }, { sleep: 700 },
+    { log: "['" + dir + "', document.querySelector('[data-hub]').hidden, document.querySelector('[data-hub]').getAttribute('href')]" },
+    { touchEl: btn }, { sleep: 1200 },
+    { log: "['" + dir + " after tap', " + st + "]" },
+    { shot: 'a05-' + dir + '-ipad' },
+    { log: 'JSON.stringify(window.__errs)' }
+  ]),
+  { eval: "location.href = '../dash/'; 'dash'" }, { waitFor: '!!(window.ND && window.__nd)', timeout: 10000 },
   // portrait iPad
   { viewport: [820, 1180, true, false, 2] },
   { eval: "location.href = '../ladder/'; 'go'" },

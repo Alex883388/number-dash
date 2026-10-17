@@ -1,0 +1,109 @@
+/* shared/arcade-ui.css — The look the newer arcade games share: colour tokens (light and dark), buttons,
+   menu cards, the top HUD, stats, the level picker and toasts. Inlined at build time (see build.js). */
+:root {
+  --sky: #e6f3fc; --sky-top: #8fd1fb; --sky-bot: #e8f6ff; --ink: #29345a; --ink-soft: #5d6890; --card: #fdfeff; --card-2: #eef5fc; --line: #d0dff0;
+  --sun: #ffc94d; --sun-deep: #e2a526; --sun-ink: #4a3500; --mint: #4fd1a5; --mint-deep: #2a9f78; --mint-soft: #d9f7ea; --lilac: #9d84ff; --lilac-soft: #ece6ff;
+  --coral: #ff7b86; --coral-deep: #d9505d; --coral-soft: #ffe1e4; --sky-blue: #5cb8ff; --pink: #ff9fcf;
+  --door: #fff3d6; --door-edge: #f0b544; --door-ink: #3a3f6b; --veil: rgba(230, 243, 252, .6);
+  --shadow: 0 12px 32px rgba(41, 52, 90, .16); --shadow-sm: 0 4px 14px rgba(41, 52, 90, .14);
+  --font-display: "Fredoka", "Arial Rounded MT Bold", ui-rounded, "Segoe UI", system-ui, sans-serif;
+  --font-body: "Nunito", ui-rounded, "Segoe UI", system-ui, -apple-system, sans-serif;
+  --emoji: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --sky: #1c2147; --sky-top: #1d2350; --sky-bot: #3b3a7e; --ink: #edf0ff; --ink-soft: #b4bbe3; --card: #283063; --card-2: #222955; --line: #3b437f;
+    --sun: #ffcd5a; --sun-deep: #d99f2c; --sun-ink: #3d2a00; --mint: #5adbb0; --mint-deep: #5adbb0; --mint-soft: #1f4a4a; --lilac: #ab95ff; --lilac-soft: #352f6e;
+    --coral: #ff8a94; --coral-deep: #ff8a94; --coral-soft: #4d2a45; --door: #fff1d2; --veil: rgba(28, 33, 71, .55);
+    --shadow: 0 14px 36px rgba(0, 0, 0, .42); --shadow-sm: 0 4px 14px rgba(0, 0, 0, .3); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --sky: #1c2147; --sky-top: #1d2350; --sky-bot: #3b3a7e; --ink: #edf0ff; --ink-soft: #b4bbe3; --card: #283063; --card-2: #222955; --line: #3b437f;
+  --sun: #ffcd5a; --sun-deep: #d99f2c; --sun-ink: #3d2a00; --mint: #5adbb0; --mint-deep: #5adbb0; --mint-soft: #1f4a4a; --lilac: #ab95ff; --lilac-soft: #352f6e;
+  --coral: #ff8a94; --coral-deep: #ff8a94; --coral-soft: #4d2a45; --door: #fff1d2; --veil: rgba(28, 33, 71, .55);
+  --shadow: 0 14px 36px rgba(0, 0, 0, .42); --shadow-sm: 0 4px 14px rgba(0, 0, 0, .3); color-scheme: dark;
+}
+html, body { height: 100%; overscroll-behavior: none; -webkit-touch-callout: none; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; color: var(--ink); font-family: var(--font-body); overflow: hidden; -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent;
+  background: linear-gradient(var(--sky-top), var(--sky-bot) 75%) fixed; background-color: var(--sky-bot);
+}
+button { font: inherit; color: inherit; }
+button, label, input, .btn, a { touch-action: manipulation; }
+[hidden] { display: none !important; }
+
+/* buttons */
+.btn {
+  font: 600 1.05rem/1.1 var(--font-display); color: var(--ink); background: var(--card-2); border: 2px solid var(--line); border-radius: 16px;
+  padding: .75em 1.15em; box-shadow: 0 4px 0 var(--line); cursor: pointer; text-decoration: none; display: inline-block;
+  transition: transform .08s ease, box-shadow .08s ease, background .15s;
+}
+.btn:hover { background: var(--card); }
+.btn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--line); }
+.btn:focus-visible, .seg input:focus-visible + span { outline: 3px solid var(--lilac); outline-offset: 3px; }
+.btn.sun { background: var(--sun); border-color: var(--sun-deep); color: var(--sun-ink); box-shadow: 0 4px 0 var(--sun-deep); }
+.btn.sun:active { box-shadow: 0 1px 0 var(--sun-deep); }
+.btn.big { font-size: 1.6rem; padding: .6em 2.2em; border-radius: 22px; }
+.btn:disabled { opacity: .5; cursor: default; transform: none; }
+.row { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+
+/* menu screens: cards over the game */
+#screens {
+  position: fixed; inset: 0; display: grid; place-items: center; overflow-y: auto; pointer-events: none; touch-action: pan-y; z-index: 20;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: calc(16px + env(safe-area-inset-top, 0px)) calc(16px + env(safe-area-inset-bottom, 0px));
+}
+#screens.dim { background: var(--veil); pointer-events: auto; }
+.screen { pointer-events: auto; width: min(100%, 600px); animation: rise .35s ease both; }
+.card { background: var(--card); border-radius: 28px; box-shadow: var(--shadow); padding: clamp(18px, 4vw, 34px); display: grid; gap: 18px; text-align: center; }
+.logo { margin: 0; font: 700 clamp(2.5rem, 9vw, 4rem)/.95 var(--font-display); text-wrap: balance; }
+.logo span { color: var(--mint-deep); }
+.tag { margin: 0 auto; max-width: 40ch; color: var(--ink-soft); font-size: 1.08rem; line-height: 1.5; text-wrap: balance; }
+.how { margin: 0; color: var(--ink-soft); font-weight: 700; }
+.small-card h2 { margin: 0; font: 700 clamp(1.9rem, 6vw, 2.6rem)/1.05 var(--font-display); text-wrap: balance; }
+.small-card p { margin: 0; color: var(--ink-soft); }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 10px; margin: 0; }
+.stats div { background: var(--card-2); border-radius: 16px; padding: 12px 6px; min-width: 0; }
+.stats dt { font-size: .74rem; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-soft); font-weight: 800; }
+.stats dd { margin: 4px 0 0; font: 700 1.6rem/1 var(--font-display); font-variant-numeric: tabular-nums; }
+.seg { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.seg label { cursor: pointer; }
+.seg input { position: absolute; opacity: 0; pointer-events: none; }
+.seg span { display: block; font: 600 .95rem/1.15 var(--font-display); padding: .55em .85em; border-radius: 14px; background: var(--card-2); border: 2px solid var(--line); }
+.seg input:checked + span { background: var(--sun); border-color: var(--sun-deep); color: var(--sun-ink); }
+@media (pointer: coarse) { .seg span { min-height: 48px; box-sizing: border-box; display: grid; place-items: center; } }
+.seg-title { margin: 0 0 8px; font: 600 .9rem/1 var(--font-display); color: var(--ink-soft); }
+.stars { font-size: 2.4rem; letter-spacing: .1em; line-height: 1; }
+.stars .off { opacity: .22; filter: grayscale(1); }
+
+/* the HUD along the top while playing */
+#hud { position: fixed; left: 0; right: 0; top: 0; pointer-events: none; z-index: 10; }
+.hud-top {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding-top: calc(10px + env(safe-area-inset-top, 0px));
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.chipbox { background: var(--card); border-radius: 99px; box-shadow: var(--shadow-sm); }
+.hud-chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.chip { font: 600 1.05rem/1 var(--font-display); padding: 8px 14px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.chip.soft { font-size: .9rem; padding: 7px 12px; color: var(--ink-soft); }
+.hud-btn { pointer-events: auto; width: 46px; height: 46px; border-radius: 50%; border: 0; background: var(--card); box-shadow: var(--shadow-sm); cursor: pointer; display: grid; place-items: center; flex: none; color: var(--ink); }
+.hud-btn:focus-visible { outline: 3px solid var(--lilac); outline-offset: 2px; }
+@media (pointer: coarse) { .hud-btn { width: 58px; height: 58px; } }
+
+/* toasts and screen-reader text */
+.toast {
+  position: fixed; left: 50%; top: var(--toast-top, 42%); translate: -50% 0; z-index: 30; pointer-events: none; font: 700 1.4rem/1.1 var(--font-display);
+  padding: 12px 20px; animation: pop .3s ease both; white-space: nowrap; background: var(--card); border-radius: 99px; box-shadow: var(--shadow-sm);
+}
+.toast.hello { top: calc(max(128px, 20%) + env(safe-area-inset-top, 0px)); border: 3px solid var(--lilac); }
+.toast.good { color: var(--mint-deep); border: 3px solid var(--mint); }
+.toast.oops { color: var(--coral-deep); border: 3px solid var(--coral); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+@keyframes rise { from { transform: translateY(14px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes pop { 0% { transform: scale(.85); } 70% { transform: scale(1.04); } 100% { transform: scale(1); } }
+@keyframes shake { 0%, 100% { translate: 0 0; } 20% { translate: -7px 0; } 40% { translate: 6px 0; } 60% { translate: -4px 0; } 80% { translate: 3px 0; } }
+@keyframes glow { 0% { box-shadow: 0 0 0 0 rgba(79, 209, 165, .7); } 100% { box-shadow: 0 0 0 18px rgba(79, 209, 165, 0); } }
+@media (prefers-reduced-motion: reduce) { .screen, .toast, .card { animation: none !important; } }

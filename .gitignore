@@ -1,6 +1,6 @@
 games/*/dist/preview.html
 games/dash/playtest/shots/
-games/dash/playtest/edge-profile/
+games/dash/playtest/edge-profile*/
 games/dash/playtest/edge-profile-icons/
 games/dash/tools/gen-out/logs/
 web/.edge-profile/
