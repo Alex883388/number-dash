@@ -325,8 +325,9 @@ h1 span { color: var(--sun-deep); }
   // for parents: what each skill has added up to
   var tricky = (d.math && d.math.tricky) ? d.math.tricky.length : 0, eqWords = Array.isArray(eq.learned) ? eq.learned.length : 0;
   var EQIELTS = ['', '', '', ' · IELTS ≈ 4.0–5.0', ' · IELTS ≈ 5.5–6.5', ' · IELTS ≈ 7.0–7.5', ' · IELTS ≈ 8.0'];
+  var eqMocks = Array.isArray(eq.mocks) ? eq.mocks : [], lastR = eqMocks.filter(function (m) { return !m.k; }).slice(-1)[0], lastLi = eqMocks.filter(function (m) { return m.k === 'L'; }).slice(-1)[0];
   document.getElementById('parentList').innerHTML = [
-    '<b>English:</b> ' + (eq.lessons ? 'working on ' + EQ[eqStage - 1] + EQIELTS[eqStage - 1] + ', ' + eq.lessons + ' lessons, ' + eqWords + ' words learned' + (reviewEq ? ', ' + reviewEq + ' items to review' : '') : 'English Quest not started yet'),
+    '<b>English:</b> ' + (eq.lessons ? 'working on ' + EQ[eqStage - 1] + EQIELTS[eqStage - 1] + ', ' + eq.lessons + ' lessons, ' + eqWords + ' words learned' + (reviewEq ? ', ' + reviewEq + ' items to review' : '') + (eq.speak && eq.speak.n ? ', ' + eq.speak.n + ' speaking ' + (eq.speak.n === 1 ? 'practice' : 'practices') : '') + (lastR ? ', last IELTS reading practice ≈ ' + lastR.b : '') + (lastLi ? ', listening ≈ ' + lastLi.b : '') : 'English Quest not started yet'),
     '<b>Spelling:</b> ' + learned + ' words spelled perfectly' + (sp.rounds ? ' in ' + sp.rounds + ' rounds' : '') + (missedSpell ? ', ' + missedSpell + ' still tricky' : ''),
     '<b>Math:</b> ' + right + ' answers right' + (tricky ? ', ' + tricky + (tricky === 1 ? ' fact' : ' facts') + ' still being practised' : ''),
     '<b>Memory:</b> ' + (pu.wins || 0) + ' Pair Up boards cleared, ' + (pu.pairs || 0) + ' pairs found' + (ml.rounds ? ', Memory Lane longest spans: numbers ' + (mlBest.number || 0) + ', words ' + (mlBest.word || 0) + ', grid ' + (mlBest.grid || 0) + ' (' + ml.rounds + (ml.rounds === 1 ? ' round' : ' rounds') + ')' : ''),
