@@ -447,7 +447,7 @@
         { "w": "deliver", "def": "to take things such as letters or shopping to someone's home", "ex": "The shop will ___ our new sofa on Friday.", "pos": "verb", "pic": "📦", "forms": { "noun": "delivery", "verb": "deliver" } },
         { "w": "worth", "def": "having a particular value in money", "ex": "This old comic is now ___ more than £100.", "pos": "adj" },
         { "w": "charity", "def": "an organisation that collects money to help people or animals in need", "ex": "Our class raised £200 for a ___ that protects wild birds.", "pos": "noun" },
-        { "w": "donate", "def": "to give money or things to help others, often through an organisation", "ex": "Every summer, we ___ our old books to the school library.", "pos": "verb", "forms": { "noun": "donation", "verb": "donate" } },
+        { "w": "donate", "def": "to give money or things to help others, often through an organisation", "ex": "Every month, I ___ a little of my pocket money to an animal charity.", "pos": "verb", "forms": { "noun": "donation", "verb": "donate" } },
         { "w": "salary", "def": "the money that you get every month for doing your job", "ex": "My aunt's ___ is paid into her bank account at the end of each month.", "pos": "noun", "syn": ["pay"] },
         { "w": "value", "def": "how much something is worth", "ex": "The ___ of an old coin depends on how rare it is.", "pos": "noun", "forms": { "noun": "value", "adj": "valuable" } },
         { "w": "essential", "def": "completely necessary; something you must have", "ex": "Bread and milk are ___ items that most families buy every week.", "pos": "adj", "ant": ["unnecessary"] }
@@ -456,7 +456,7 @@
         { "q": "I ___ enough money for a new bike yet.", "opts": ["haven't saved", "didn't save", "don't save", "hasn't saved"], "a": 0, "why": "Use the present perfect with 'yet' for something that hasn't happened up to now. 'I' goes with 'haven't'." },
         { "q": "Last Saturday, we ___ a second-hand bike at the market.", "opts": ["bought", "have bought", "buy", "were bought"], "a": 0, "why": "'Last Saturday' is a finished time, so use the past simple: bought." },
         { "q": "If I ___ a lot of money, I would buy a house by the sea for my parents.", "opts": ["won", "win", "will win", "would win"], "a": 0, "why": "This is imaginary (second conditional), so use the past simple after 'if' (won), then would + verb." },
-        { "q": "If you ___ your receipt, the shop will give you a refund.", "opts": ["keep", "will keep", "kept", "keeping"], "a": 0, "why": "First conditional: if + present simple (keep), then will + verb. Don't use 'will' after 'if'." },
+        { "q": "If you ___ your receipt, the shop will give you a refund.", "opts": ["keep", "will keep", "keeps", "keeping"], "a": 0, "why": "First conditional: if + present simple (keep), then will + verb. Don't use 'will' after 'if'." },
         { "q": "In the UK, coins ___ by the Royal Mint in Wales.", "opts": ["are made", "make", "is made", "are making"], "a": 0, "why": "The coins don't make anything; the Royal Mint makes them. Use the present passive: are + made (plural, because 'coins')." },
         { "q": "The first paper money ___ in China about 1,000 years ago.", "opts": ["was used", "used", "is used", "were used"], "a": 0, "why": "Use the past passive for a finished time. 'Money' is uncountable, so use 'was', not 'were'." },
         { "q": "People ___ pay for everything with coins and notes, but now many use cards or phones.", "opts": ["used to", "use to", "were used to", "are used to"], "a": 0, "why": "'Used to' + verb describes a past habit that is not true now." },
@@ -466,11 +466,11 @@
       ],
       "sentences": [
         "This jumper was a bargain in the sales.",
-        "Coins are made by the Royal Mint in Wales.",
+        "British coins are made by the Royal Mint.",
         "My sister is saving up to buy a new phone.",
         "A charity shop sells things that people have donated.",
         "Have you ever bought anything second-hand?",
-        "The queue at the till was very long."
+        "The supermarket queue was very long."
       ],
       "reading": [
         {

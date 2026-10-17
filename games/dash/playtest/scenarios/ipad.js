@@ -6,7 +6,7 @@ module.exports = [
   { reload: true },
   { sleep: 800 }, { shot: 'i01-ipad-home' },
   { log: "[document.getElementById('homeTip').hidden, document.getElementById('fullBtn').hidden, navigator.maxTouchPoints, matchMedia('(pointer: coarse)').matches]" },
-  { touch: [590, 500, 80] }, { sleep: 200 },
+  { touch: [110, 300, 80] }, { sleep: 200 },   // a tap on empty sky (the middle of home is the All games button)
   { eval: "document.querySelector('[data-go=\"levels\"]').click(); 'levels'" }, { sleep: 600 },
   { eval: "document.querySelector('[data-play=\"cloud\"]').click(); 'play'" }, { sleep: 700 },
   { log: "[window.__nd.game.state, window.__nd.game.p.y]" },

@@ -365,7 +365,7 @@
       "title": "At the park",
       "emoji": "🌳",
       "words": [
-        { "w": "park", "def": "a big green place in a town where people walk and play", "ex": "On Sundays we walk to the ___ and play on the swings.", "pos": "noun", "pic": "🏞️" },
+        { "w": "park", "def": "a big green place in a town where people walk and play", "ex": "Our town has got a big ___ with trees, a lake and a playground.", "pos": "noun" },
         { "w": "tree", "def": "a very big plant with a lot of green leaves", "ex": "I'm sitting under a big ___. It's nice and cool here.", "pos": "noun", "pic": "🌳" },
         { "w": "flower", "def": "the pretty, coloured part of a plant", "ex": "This ___ is red and yellow, and it smells very nice.", "pos": "noun", "pic": "🌸" },
         { "w": "playground", "def": "a place outside where children play, often with swings and slides", "ex": "We play in the school ___ at break time.", "pos": "noun" },
@@ -374,7 +374,7 @@
         { "w": "water", "def": "you drink it, and it is in rivers and the sea", "ex": "The ducks are swimming on the ___ in the park.", "pos": "noun", "pic": "💧" },
         { "w": "boat", "def": "it carries people on water", "ex": "We sit in a little ___ on the lake.", "pos": "noun", "pic": "🛶" },
         { "w": "picnic", "def": "a meal that you eat outside, for example in a park", "ex": "Let's take some sandwiches and have a ___ in the park!", "pos": "noun", "pic": "🧺" },
-        { "w": "run", "def": "to move your legs very fast", "ex": "Can you ___ fast? Let's have a race!", "pos": "verb", "pic": "🏃" },
+        { "w": "run", "def": "to move your legs very fast", "ex": "Can you ___ fast? Let's have a race to that tree!", "pos": "verb", "pic": "🏃" },
         { "w": "jump", "def": "to go up into the air with your feet off the ground", "ex": "Kangaroos can ___ very high.", "pos": "verb" },
         { "w": "walk", "def": "to move on your feet, not fast", "ex": "Grandma can't run, so we ___ slowly with her.", "pos": "verb", "pic": "🚶" },
         { "w": "swim", "def": "to move in water using your arms and legs", "ex": "Let's ___ in the sea. The water is warm!", "pos": "verb", "pic": "🏊" },

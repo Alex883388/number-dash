@@ -473,7 +473,7 @@
         { "w": "scenery", "def": "the natural things you can see in a place, such as mountains, lakes and forests", "ex": "The ___ in the Scottish Highlands is wild and beautiful.", "pos": "noun" },
         { "w": "culture shock", "def": "a confused or upset feeling when you visit a place where life is very different", "ex": "Many students feel ___ when they first move to a new country.", "pos": "noun" },
         { "w": "picturesque", "def": "pretty, especially in an old-fashioned way, like a scene in a painting", "ex": "We stayed in a ___ village with stone cottages and a little harbour.", "pos": "adj" },
-        { "w": "breathtaking", "def": "extremely beautiful or amazing", "ex": "From the top of the hill, the view was ___.", "pos": "adj", "syn": ["stunning"] },
+        { "w": "breathtaking", "def": "extremely beautiful or amazing", "ex": "From the top of the hill, the view was absolutely ___.", "pos": "adj", "syn": ["stunning"] },
         { "w": "unspoilt", "def": "still beautiful and natural, without many new buildings or visitors", "ex": "The island has long, ___ beaches with hardly any hotels.", "pos": "adj" },
         { "w": "wander", "def": "to walk slowly around a place without a clear plan", "ex": "It's fun to ___ through the narrow streets of an old town.", "pos": "verb" }
       ],
