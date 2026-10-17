@@ -327,6 +327,7 @@ h1 span { color: var(--sun-deep); }
   var missedSpell = Array.isArray(sp.missed) ? sp.missed.length : 0, reviewEq = Array.isArray(eq.review) ? eq.review.length : 0;
   var todo = [
     !eq.lessons ? { href: 'quest/', ic: '🎯', t: 'Find your English level', d: 'A short test, then lessons at the right stage' }
+      : eqStage >= 2 && dayNo % 3 === 2 ? { href: 'quest/', ic: '🗣️', t: 'English Quest · speaking', d: 'Speaking practice: answer out loud, then hear a model' }
       : { href: 'quest/', ic: '🧭', t: 'English Quest · ' + EQ[eqStage - 1], d: reviewEq ? reviewEq + ' to review, then the next lesson' : 'Next lesson on the path' },
     [{ href: 'pop/', ic: '🫧', t: 'Number Pop', d: popNext ? 'Get 3 stars in ' + (POP[popNext - 1] || 'a new world') : 'Beat a best time' },
      { href: 'ladder/', ic: '🪜', t: 'Number Ladder', d: l.best ? (l.best >= 30 ? 'Climb it again in English mode' : 'Beat your best: rung ' + l.best) : 'Climb to rung 10' },
@@ -369,6 +370,7 @@ h1 span { color: var(--sun-deep); }
     ['📅', 'Full week', 'Play every day for a week', streak >= 7],
     ['📚', 'Bookworm', 'Spell 200 words perfectly', learned >= 200],
     ['📝', 'Test ready', 'Try both IELTS practice tests', tookL && tookR],
+    ['🗣️', 'Brave speaker', 'Finish 3 speaking practices in English Quest', ((eq.speak && eq.speak.n) || 0) >= 3],
     ['🏆', 'Dash champion', 'Get 100 Dash stars', stars >= 100]
   ];
   var seenB = read('arcade-badges.v1'), gotB = 0, freshB = [];
