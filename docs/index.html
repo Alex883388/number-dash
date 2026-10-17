@@ -130,14 +130,14 @@ h1 span { color: var(--sun-deep); }
 .badges { background: var(--card); border-radius: 26px; box-shadow: var(--shadow); padding: 18px 20px; display: grid; gap: 12px; }
 .badges h2 { margin: 0; font: 700 1.5rem/1.1 var(--font-display); }
 .shelf { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
-.badge { display: grid; grid-template-columns: 40px 1fr; gap: 8px; align-items: center; background: var(--card-2); border: 2px solid var(--line); border-radius: 16px; padding: 8px 10px; min-height: 58px; box-sizing: border-box; min-width: 0; }
-.badge i { font: normal 1.75rem/1 var(--emoji); text-align: center; }
-.badge b { display: block; font: 700 .95rem/1.2 var(--font-display); }
-.badge small { display: block; color: var(--ink-soft); font-size: .8rem; line-height: 1.25; }
-.badge.locked i { filter: grayscale(1); opacity: .35; }
-.badge.locked b { color: var(--ink-soft); }
-.badge.new { border-color: var(--sun-deep); box-shadow: 0 0 0 3px rgba(240, 181, 68, .35); }
-.badge.new small { color: var(--sun-deep); font-weight: 800; }
+.award { display: grid; grid-template-columns: 40px 1fr; gap: 8px; align-items: center; background: var(--card-2); border: 2px solid var(--line); border-radius: 16px; padding: 8px 10px; min-height: 58px; box-sizing: border-box; min-width: 0; }
+.award i { font: normal 1.75rem/1 var(--emoji); text-align: center; }
+.award b { display: block; font: 700 .95rem/1.2 var(--font-display); }
+.award small { display: block; color: var(--ink-soft); font-size: .8rem; line-height: 1.25; }
+.award.locked i { filter: grayscale(1); opacity: .35; }
+.award.locked b { color: var(--ink-soft); }
+.award.new { border-color: var(--sun-deep); box-shadow: 0 0 0 3px rgba(240, 181, 68, .35); }
+.award.new small { color: var(--sun-deep); font-weight: 800; }
 .parents { background: var(--card); border-radius: 18px; padding: 12px 16px; box-shadow: 0 4px 14px rgba(41, 52, 90, .1); }
 .parents summary { cursor: pointer; font: 700 1.05rem/1.2 var(--font-display); min-height: 32px; display: flex; align-items: center; }
 .parents ul { margin: 10px 0 0; padding-left: 20px; display: grid; gap: 6px; line-height: 1.45; }
@@ -210,7 +210,7 @@ h1 span { color: var(--sun-deep); }
       <div class="body">
         <span class="num">Game 4</span>
         <h2>Number Pop</h2>
-        <p>Tap the floating bubbles that make the target number. Later worlds bring take-away, times, sharing, money, fractions and decimals.</p>
+        <p>Tap the floating bubbles that make the target number. Later worlds bring take-away, times, sharing, money, fractions, decimals, brackets and percentages.</p>
         <div class="skills"><span>Mental math</span></div>
         <span class="meta" id="popMeta">16 worlds</span>
         <span class="play">Play</span>
@@ -327,7 +327,7 @@ h1 span { color: var(--sun-deep); }
   document.getElementById('badgeCount').textContent = gotB + ' of ' + BADGES.length;
   document.getElementById('shelf').innerHTML = BADGES.map(function (b) {
     var isNew = freshB.indexOf(b[1]) >= 0;
-    return '<div class="badge' + (b[3] ? '' : ' locked') + (isNew ? ' new' : '') + '" role="listitem" aria-label="' + esc(b[1]) + (b[3] ? ', earned' : ', not yet: ' + esc(b[2])) + '"><i aria-hidden="true">' + b[0] + '</i><span><b>' + esc(b[1]) + '</b><small>' + (b[3] ? (isNew ? 'New!' : 'Earned') : esc(b[2])) + '</small></span></div>';
+    return '<div class="award' + (b[3] ? '' : ' locked') + (isNew ? ' new' : '') + '" role="listitem" aria-label="' + esc(b[1]) + (b[3] ? ', earned' : ', not yet: ' + esc(b[2])) + '"><i aria-hidden="true">' + b[0] + '</i><span><b>' + esc(b[1]) + '</b><small>' + (b[3] ? (isNew ? 'New!' : 'Earned') : esc(b[2])) + '</small></span></div>';
   }).join('');
   if (freshB.length) { freshB.forEach(function (n) { seenB[n] = Date.now(); }); try { localStorage.setItem('arcade-badges.v1', JSON.stringify(seenB)); } catch (e) { /* private mode: it glows again next time */ } }
   if (learned) document.getElementById('spellMeta').textContent = learned + (learned === 1 ? ' word' : ' words') + ' spelled perfectly';
