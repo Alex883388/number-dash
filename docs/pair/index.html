@@ -470,6 +470,7 @@ const DECKS = [
   { id: 'frac', name: 'Fractions', icon: '🍕', note: '½ → 0.5 → 50%', math: true },
   { id: 'baby', name: 'Animal babies', icon: '🐣', note: 'cow → calf', words: true },
   { id: 'cap', name: 'Capital cities', icon: '🗺️', note: 'Vietnam → Hanoi', words: true },
+  { id: 'coll', name: 'Go together', icon: '🧩', note: 'make → a decision', words: true },
   { id: 'mix', name: 'Mix', icon: '🎲', note: 'a bit of all', words: true }
 ];
 const SIZES = [{ id: 'small', name: '6 pairs', n: 6, peek: 3 }, { id: 'medium', name: '8 pairs', n: 8, peek: 4 }, { id: 'big', name: '12 pairs', n: 12, peek: 5 }];
@@ -564,6 +565,20 @@ const BABIES = [
   [['🐨', 'koala', 'joey'], ['🦭', 'seal', 'pup'], ['🐟', 'fish', 'fry'], ['🦇', 'bat', 'pup'], ['🐦', 'pigeon', 'squab'], ['🦒', 'giraffe', 'calf'], ['🦓', 'zebra', 'foal'], ['🐊', 'crocodile', 'hatchling'],
    ['🦔', 'hedgehog', 'hoglet'], ['🐍', 'snake', 'snakelet'], ['🦫', 'beaver', 'kit'], ['🐧', 'penguin', 'chick'], ['🐝', 'bee', 'larva'], ['🦗', 'cricket', 'nymph']]
 ];
+// words that go together (collocations): [word, partner, other words the partner also goes with...].
+// A board never holds a pair whose partner would also fit another card's word, so every match is unique.
+const COLLOC = [
+  [['make', 'a wish'], ['do', 'homework'], ['take', 'a photo'], ['brush', 'your teeth', 'clean'], ['ride', 'a bike'], ['play', 'the piano'], ['watch', 'TV'], ['go', 'swimming'],
+   ['tell', 'a story', 'read', 'write'], ['say', 'hello'], ['ask', 'a question', 'answer'], ['wash', 'your hands'], ['fly', 'a kite', 'make'], ['catch', 'a ball', 'throw', 'kick', 'play'],
+   ['climb', 'a tree'], ['have', 'breakfast', 'make', 'eat']],
+  [['make', 'a mistake'], ['do', 'the shopping'], ['take', 'a break', 'have'], ['catch', 'a cold', 'have'], ['keep', 'a secret', 'tell'], ['pay', 'attention'], ['save', 'time', 'spend', 'waste'],
+   ['tell', 'the truth'], ['heavy', 'rain'], ['strong', 'wind'], ['fast', 'food'], ['raise', 'your hand'], ['brush', 'your hair', 'comb'], ['set', 'the table', 'lay'], ['wear', 'a uniform'],
+   ['lose', 'weight', 'gain'], ['win', 'a prize'], ['solve', 'a problem'], ['have', 'a rest', 'take'], ['give', 'advice', 'take'], ['miss', 'the bus', 'catch', 'take'], ['break', 'a promise', 'keep', 'make']],
+  [['make', 'a decision', 'take'], ['do', 'research', 'conduct'], ['take', 'responsibility', 'accept', 'bear'], ['pose', 'a threat'], ['reach', 'a consensus', 'achieve'], ['draw', 'a conclusion', 'reach'],
+   ['meet', 'a deadline', 'miss'], ['bear', 'in mind', 'keep'], ['raise', 'awareness'], ['gain', 'experience'], ['conduct', 'an experiment', 'do'], ['heated', 'debate'], ['vital', 'role', 'key'],
+   ['widespread', 'support'], ['address', 'a problem', 'solve', 'tackle'], ['strike', 'a balance'], ['launch', 'a campaign'], ['shed', 'light on'], ['run', 'the risk'], ['fulfil', 'an ambition', 'achieve', 'realise'],
+   ['exert', 'pressure', 'put', 'apply']]
+];
 // countries and their capital cities, well-known first
 const CAPITALS = [
   [['Vietnam', 'Hanoi'], ['Japan', 'Tokyo'], ['France', 'Paris'], ['England', 'London'], ['China', 'Beijing'], ['Italy', 'Rome'], ['Spain', 'Madrid'], ['Germany', 'Berlin'],
@@ -626,6 +641,12 @@ function wordsPair(deck, tier, used) {
     else if (deck === 'past') { const [x, y] = pick(PAST[tier]); p = { a: { kind: 'word', v: x, say: x }, b: { kind: 'word', v: y, say: y }, learned: x + ' → ' + y, key: [x, y] }; }
     else if (deck === 'syn') { const [x, y] = pick(SYN[tier]); p = { a: { kind: 'word', v: x, say: x }, b: { kind: 'word', v: y, say: y }, learned: x + ' = ' + y, key: [x, y] }; }
     else if (deck === 'baby') { const [e, an, b] = pick(BABIES[tier]); p = { a: { kind: 'word', v: e + ' ' + an, say: an }, b: { kind: 'word', v: b, say: b }, learned: an + ' → ' + b, key: [an, b] }; }
+    else if (deck === 'coll') {
+      const [x, y, ...alts] = pick(COLLOC[tier]);
+      used.coll = used.coll || { words: new Set(), alts: new Set() };
+      if (used.coll.alts.has(x) || alts.some((w) => used.coll.words.has(w))) continue;   // another card could match too
+      p = { a: { kind: 'word', v: x, say: x + ' ' + y }, b: { kind: 'word', v: y, say: x + ' ' + y }, learned: x + ' ' + y, key: [x, y], coll: [x, alts] };
+    }
     else if (deck === 'cap') { const [c, t] = pick(CAPITALS[tier]); p = { a: { kind: 'word', v: c, say: c }, b: { kind: 'word', v: t, say: t }, learned: c + ' → ' + t, key: [c, t] }; }
     else if (deck === 'time') { const t = timePair(tier); p = Object.assign(t, { learned: t.a.v + ' = ' + t.b.v, key: [t.a.v, t.b.v] }); }
     else if (deck === 'frac') { const [x, y] = pick(FRACS[tier]); const w = /[a-z]/.test(y); p = { a: { kind: 'num', v: x }, b: { kind: w ? 'word' : 'num', v: y, say: w ? y : undefined }, learned: x + ' = ' + y, key: [x, y] }; }
@@ -637,6 +658,7 @@ function wordsPair(deck, tier, used) {
     // also no word twice (light is the opposite of dark AND of heavy)
     if (p.key.some((k) => used.words.has(k)) || !fresh(used, [p.a.v, p.b.v])) continue;
     p.key.forEach((k) => used.words.add(k)); used.faces.add(p.a.v); used.faces.add(p.b.v);
+    if (p.coll) { used.coll.words.add(p.coll[0]); p.coll[1].forEach((w) => used.coll.alts.add(w)); }
     return p;
   }
   return null;
@@ -645,7 +667,7 @@ function dealPairs(deck, n) {
   const tier = tierOf(), used = { texts: new Set(), faces: new Set(), words: new Set() }, out = [];
   for (let i = 0; out.length < n && i < n * 4; i++) {
     let d = deck;
-    if (deck === 'mix') d = ['times', 'plus', 'pics', 'opp', 'numw', 'past', 'syn', 'time', 'frac', 'baby', 'cap'][out.length % 11];
+    if (deck === 'mix') d = ['times', 'plus', 'pics', 'opp', 'numw', 'past', 'syn', 'time', 'frac', 'baby', 'cap', 'coll'][out.length % 12];
     const p = MATH_KINDS[d] ? mathPair(MATH_KINDS[d][tier], used, DECK_OPS[d]) : wordsPair(d, tier, used);
     if (p) out.push(p);
   }

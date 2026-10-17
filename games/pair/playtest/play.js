@@ -17,7 +17,7 @@ const deals = `(() => {
   P.save.math.tricky = keepTricky;
   for (const lv of ['starter', 'explorer', 'genius']) {
     P.save.settings.mathLevel = lv;
-    for (const deck of ['times', 'plus', 'pics', 'opp', 'numw', 'past', 'syn', 'time', 'frac', 'baby', 'cap', 'mix']) {
+    for (const deck of ['times', 'plus', 'pics', 'opp', 'numw', 'past', 'syn', 'time', 'frac', 'baby', 'cap', 'coll', 'mix']) {
       let bad = 0, short = 0;
       for (let k = 0; k < 40; k++) {
         const ps = P.dealPairs(deck, 12);

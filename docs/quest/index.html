@@ -228,6 +228,17 @@ button, label, input, .btn, a { touch-action: manipulation; }
 .sheet .btn { grid-row: span 2; }
 @media (max-width: 560px) { .sheet { grid-template-columns: 1fr; } .sheet .btn { grid-row: auto; width: 100%; } }
 .results .stars { font-size: 2.6rem; }
+.words-title { margin: 0; font: 700 1.8rem/1.1 var(--font-display); }
+.wordlist { display: grid; gap: 16px; text-align: left; }
+.wl-stage { display: grid; gap: 8px; }
+.wl-stage h3 { margin: 0; font: 700 1.15rem/1.2 var(--font-display); }
+.wl-stage h3 small { color: var(--ink-soft); font-size: .85rem; }
+.wl-row { display: grid; grid-template-columns: 44px 1fr auto; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 16px; background: var(--card-2); }
+.wl-pic { font: 1.8rem/1 var(--emoji); text-align: center; }
+.wl-row.nopic { grid-template-columns: 1fr auto; padding-left: 16px; }
+.wl-row b { display: block; font: 700 1.15rem/1.2 var(--font-display); }
+.wl-row span { display: block; color: var(--ink-soft); font-size: .92rem; line-height: 1.35; }
+.wl-say { width: 48px; height: 48px; font: 1.3rem/1 var(--emoji); }
 .newwords { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin: 0; padding: 0; list-style: none; }
 .newwords li { background: var(--mint-soft); border-radius: 99px; padding: 6px 12px; font: 600 1rem/1.1 var(--font-display); }
 .big-msg { font: 700 1.2rem/1.3 var(--font-display); margin: 0; }
@@ -267,6 +278,7 @@ button, label, input, .btn, a { touch-action: manipulation; }
         <button class="btn" id="pathBtn">🗺️ Path</button>
         <button class="btn" id="reviewBtn">🔁 Review</button>
         <button class="btn" id="placeBtn">🎯 Find my level</button>
+        <button class="btn" id="wordsBtn">📒 My words</button>
       </div>
       <dl class="stats" id="homeStats"></dl>
       <div class="skills" id="skills" aria-label="Skills"></div>
@@ -284,6 +296,14 @@ button, label, input, .btn, a { touch-action: manipulation; }
       <div class="stage-head" id="stageHead"></div>
       <div class="nodes" id="nodes"></div>
       <div class="row"><button class="btn" id="pathHomeBtn">Home</button></div>
+    </div>
+  </section>
+  <section class="screen path-card" id="s-words" hidden>
+    <div class="card">
+      <h2 class="words-title">📒 My words</h2>
+      <p class="note" id="wordsNote"></p>
+      <div class="row"><button class="btn sun" id="practiseWordsBtn">Practise 10 words</button><button class="btn" id="wordsHomeBtn">Home</button></div>
+      <div class="wordlist" id="wordList"></div>
     </div>
   </section>
   <section class="screen" id="s-done" hidden>
@@ -970,6 +990,7 @@ function startLesson(kind, s, u) {
   if (kind === 'unit') qs = unitLesson(s, u);
   else if (kind === 'test') qs = stageTest(s);
   else if (kind === 'review') qs = reviewLesson();
+  else if (kind === 'words') qs = sample(learnedWords(), 10).map((e) => wordQ(e.s, e.u, e.i));
   else if (kind === 'place') qs = [];
   if (kind !== 'place' && (!qs || !qs.length)) { toast(kind === 'review' ? 'Nothing to review yet!' : 'Coming soon', 'hello'); return; }
   Object.assign(L, { kind: kind, s: s || 0, u: u || 0, qs: qs, i: 0, right: 0, total: 0, answered: false, words: [], place: null, startedAt: performance.now() });
@@ -1129,6 +1150,8 @@ function endLesson() {
       msg = L.s < STAGES.length ? 'Next stage open: ' + STAGES[L.s].name + ' (' + STAGES[L.s].cefr + (STAGES[L.s].ielts ? ', IELTS ' + STAGES[L.s].ielts : '') + ').' : 'You finished the whole quest: IELTS 8 level!';
       Sound.sfx.win();
     } else { title = 'Almost there!'; msg = pct + '% right. The stage test needs 80%. Practise the lessons and try again.'; }
+  } else if (L.kind === 'words') {
+    stars = pct >= 90 ? 3 : pct >= 70 ? 2 : 1; title = 'Word practice done!'; msg = pct + '% right. Every word you know makes the next lesson easier.';
   } else if (L.kind === 'review') {
     stars = pct >= 90 ? 3 : pct >= 70 ? 2 : 1; title = 'Review done!'; msg = rec.review.length ? rec.review.length + ' still to practise.' : 'Nothing left to review. Super!';
   } else if (L.kind === 'place') {
@@ -1161,11 +1184,29 @@ function renderHome() {
   const nx = nextStep();
   $('#goBtn').textContent = !rec.lessons && !rec.placed ? 'Start' : nx && nx.kind === 'test' ? 'Stage test' : 'Continue';
   $('#reviewBtn').textContent = '🔁 Review' + (rec.review.length ? ' (' + rec.review.length + ')' : '');
+  $('#wordsBtn').textContent = '📒 My words' + (rec.learned.length ? ' (' + rec.learned.length + ')' : '');
   $('#homeStats').innerHTML = stat('Streak', '🔥 ' + streak()) + stat('Words', rec.learned.length) + stat('Stages passed', done + ' / 7');
   const sk = Object.keys(SKILL).filter((k) => rec.skills[k] && rec.skills[k][1]);
   $('#skills').innerHTML = sk.map((k) => { const v = rec.skills[k], p = Math.round(v[0] / v[1] * 100); return '<div class="skill"><span>' + SKILL[k] + '</span><span class="bar"><i style="width:' + p + '%"></i></span><span>' + p + '%</span></div>'; }).join('');
   $('#soundBtn').textContent = save.settings.music > 0 ? 'Music on' : 'Music off';
   $('#speakBtn').textContent = save.settings.speak ? 'Read aloud on' : 'Read aloud off';
+}
+// the notebook: every learned word with its meaning, newest stage first
+let wordIndex = null;
+function indexWords() {
+  if (wordIndex) return wordIndex;
+  wordIndex = new Map();
+  for (let s = 1; s <= STAGES.length; s++) if (has(s)) CONTENT[s - 1].units.forEach((un, u) => un.words.forEach((w, i) => { if (!wordIndex.has(w.w)) wordIndex.set(w.w, { s: s, u: u, i: i, w: w }); }));
+  return wordIndex;
+}
+const learnedWords = () => rec.learned.map((w) => indexWords().get(w)).filter(Boolean);
+function renderWords() {
+  const list = learnedWords(), by = {};
+  $('#wordsNote').textContent = list.length ? list.length + (list.length === 1 ? ' word' : ' words') + ' learned. Tap 🔊 to hear one.' : 'Words you get right in lessons collect here.';
+  $('#practiseWordsBtn').disabled = list.length < 4;
+  list.forEach((e) => (by[e.s] = by[e.s] || []).push(e));
+  $('#wordList').innerHTML = Object.keys(by).sort((a, b) => b - a).map((st) => '<div class="wl-stage"><h3>' + STAGES[st - 1].icon + ' ' + STAGES[st - 1].name + ' · ' + STAGES[st - 1].cefr + ' <small>' + by[st].length + '</small></h3>' +
+    by[st].sort((a, b) => a.w.w.localeCompare(b.w.w)).map((e) => '<div class="wl-row' + (e.w.pic ? '' : ' nopic') + '">' + (e.w.pic ? '<span class="wl-pic" aria-hidden="true">' + e.w.pic + '</span>' : '') + '<div><b>' + esc(e.w.w) + '</b><span>' + esc(e.w.def) + '</span></div><button class="hud-btn wl-say" data-say="' + esc(e.w.w) + '" aria-label="Hear ' + esc(e.w.w) + '">🔊</button></div>').join('') + '</div>').join('');
 }
 let pathStage = 0;
 function renderPath(s) {
@@ -1199,6 +1240,10 @@ $('#goBtn').addEventListener('click', goNext);
 $('#pathBtn').addEventListener('click', () => { renderPath(levelNow()); showScreen('path'); });
 $('#reviewBtn').addEventListener('click', () => startLesson('review'));
 $('#placeBtn').addEventListener('click', () => startLesson('place'));
+$('#wordsBtn').addEventListener('click', () => { renderWords(); showScreen('words'); });
+$('#wordsHomeBtn').addEventListener('click', goHome);
+$('#practiseWordsBtn').addEventListener('click', () => startLesson('words'));
+$('#wordList').addEventListener('click', (e) => { const b = e.target.closest('[data-say]'); if (b) Speech.say(b.dataset.say); });
 $('#pathHomeBtn').addEventListener('click', goHome);
 $('#doneHomeBtn').addEventListener('click', goHome);
 $('#donePathBtn').addEventListener('click', () => { renderPath(L.kind === 'place' ? levelNow() : L.s || levelNow()); showScreen('path'); });
@@ -1221,7 +1266,7 @@ window.addEventListener('keydown', (e) => {
 arcadeGuards(() => Speech.stop());
 arcadeLinks();
 
-window.__quest = { L, rec, save, STAGES, CONTENT, has, next, startLesson, nextStep, unitOpen, testOpen, wordQ, unitLesson, stageTest, spotQ, showQ, Speech,
+window.__quest = { L, rec, save, STAGES, CONTENT, has, next, startLesson, nextStep, unitOpen, testOpen, wordQ, unitLesson, stageTest, spotQ, showQ, renderWords, Speech,
   // answer the current question: right = true picks the right answer (or builds / spells it), false picks a wrong one
   answer(right) {
     const q = L.qs[L.i]; if (!q || L.answered) return false;

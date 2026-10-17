@@ -96,5 +96,12 @@ module.exports = [
   { touchEl: '[data-tap]' }, { sleep: 300 },
   { log: "[document.getElementById('sheet').className, document.getElementById('sheetText').textContent]" },
   { shot: 'quest-25-spot-answered' },
+  // My words: the notebook lists learned words with meanings; practice draws from them
+  { eval: bot },
+  { viewport: [820, 1180, true, false, 2] },
+  { eval: "(() => { const Q = window.__quest; document.getElementById('quitBtn').click(); document.getElementById('wordsBtn').click(); return [document.getElementById('wordsNote').textContent, document.querySelectorAll('.wl-row').length, document.querySelectorAll('.wl-stage').length]; })()" },
+  { sleep: 400 }, { shot: 'quest-26-my-words-portrait' },
+  { touchEl: '.wl-say' }, { log: "window.__quest.Speech.said.slice(-1)[0]" },
+  { eval: "(async () => { const Q = window.__quest; document.getElementById('practiseWordsBtn').click(); const kinds = Q.L.qs.map((q) => q.ref.t).join(','); const r = await window.__qbot(() => true); return [Q.L.kind, Q.L.qs.length, kinds, r.right + '/' + r.total, document.getElementById('doneTitle').textContent]; })()" },
   { log: 'JSON.stringify(window.__errs)' }
 ];
