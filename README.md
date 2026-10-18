@@ -1,10 +1,10 @@
 # Number Arcade
 
-Math, memory and English games for kids aged 8–12, made to be gentle on the eyes, with chill lo-fi music made live in the browser. Every game is one self-contained HTML page; together they make a small website that works offline and installs on an iPad home screen.
+Math, memory, English, coding and business games for kids aged 8–12, made to be gentle on the eyes, with chill lo-fi music made live in the browser. Every game is one self-contained HTML page; together they make a small website that works offline and installs on an iPad home screen.
 
 Play: https://alex883388.github.io/number-dash/ (on iPad: open in Safari, then Share > Add to Home Screen).
 
-Above it, a **New in the arcade** card lists the latest additions (each a link) until the child taps Got it (`arcade-news.v1` remembers which batch was seen). The home page opens with **Today**: three suggestions from the child's own records (English Quest every day, plus a math game and a memory or spelling game that change by the day) and the daily streak across all games. Under the stats, **Badges**: 18 awards earned from the games' own records (First star, Halfway up, Word wizard, On fire, Sharp mind, Brave speaker, All-rounder… up to Dash champion); one earned since the last visit says New! once (remembered in `arcade-badges.v1`). **Progress for parents** (folded under the stats) sums up English stage and IELTS estimate, speaking practices and the last IELTS reading and listening practice bands, words learned and spelled, math answers and facts still being practised, memory boards, game stars and days played in the last week.
+Above it, a **New in the arcade** card lists the latest additions (each a link) until the child taps Got it (`arcade-news.v1` remembers which batch was seen). The home page opens with **Today**: three suggestions from the child's own records (English Quest every day, plus a math or coding game and a memory, spelling or business game that change by the day) and the daily streak across all games. Under the stats, **Badges**: 21 awards earned from the games' own records (First star, Halfway up, Word wizard, On fire, Sharp mind, Brave speaker, Young coder, Street smart, Tycoon, All-rounder… up to Dash champion); one earned since the last visit says New! once (remembered in `arcade-badges.v1`). **Progress for parents** (folded under the stats) sums up English stage and IELTS estimate, speaking practices and the last IELTS reading and listening practice bands, words learned and spelled, math answers and facts still being practised, memory boards, Code Robot levels and stars, the best Tycoon Town company (worth, month, CEO title, traps avoided), game stars and days played in the last week.
 
 | # | Game | Link | How it plays |
 | --- | --- | --- | --- |
@@ -15,6 +15,8 @@ Above it, a **New in the arcade** card lists the latest additions (each a link) 
 | 5 | Spell It | [/spell/](https://alex883388.github.io/number-dash/spell/) | Look, cover, spell: a picture and its word, read aloud; the word hides and the child spells it from memory with letter tiles. |
 | 6 | English Quest | [/quest/](https://alex883388.github.io/number-dash/quest/) | Step by step from first words to IELTS band 8: seven CEFR stages of short lessons (words, grammar, listening, spelling, sentence building, reading, IELTS-style skills), a level test, stage tests and a review of mistakes. |
 | 7 | Memory Lane | [/memory/](https://alex883388.github.io/number-dash/memory/) | Short, calm working-memory rounds: numbers, picture words or lit squares show one at a time; the child taps them back in order, or backwards. Two right in a row adds one more, two wrong takes one off. |
+| 8 | Code Robot | [/robot/](https://alex883388.github.io/number-dash/robot/) | Program a robot with blocks and watch it run: 40 levels from first steps to loops, functions, if-then and fixing buggy programs. Fewer blocks, more stars. |
+| 9 | Tycoon Town | [/tycoon/](https://alex883388.github.io/number-dash/tycoon/) | Grow a company from a $500 lemonade stand to a $100 million city empire: 40 businesses to open in 4 districts, land to buy, 120 business cases to solve like a CEO, and scams to spot. |
 
 ## Number Ladder
 
@@ -84,6 +86,28 @@ Above it, a **New in the arcade** card lists the latest additions (each a link) 
 - **Round**: 10 sequences or 2 minutes. A wrong answer gets kind words and the right order shown, never a fail sound. Stars by the longest span: Numbers 6 / 5, Words and Grid 5 / 4 (one lower backwards).
 - **Records** in `memory-lane.v1`: `best`, `stars` and `plays` per game (`number`, `word`, `grid`, plus `-back`), `rounds` and `seqs`. The hub shows the longest number span, a Sharp mind badge at 6, and the spans in Progress for parents.
 
+## Code Robot
+
+- **The idea**: a first programming game. The child builds a program from blocks, presses Run and watches a friendly robot follow it block by block (the running block lights up) to the flag, collecting every gem on the way. A program that misses tells him kindly what happened, and Step runs it one block at a time to find the bug.
+- **40 levels in 5 worlds** of 8 (`src/levels.js`), each world opening with a one-line idea card and each level with a hint: **Sequences** (Forward, Turn left, Turn right), **Loops** (Repeat 2–9, nested), **Functions** (F1, his own block, built once in its own row and used as often as he likes), **Conditions** (If path ahead / else, If gem here, Repeat until flag; a program that runs 300 steps makes the robot dizzy and stops) and **Debugging** (programs that come with bugs to fix in few changes).
+- **Touch first, no dragging**: tapping a gap moves the insertion cursor (inside loops, Ifs and the F1 row too); a tapped block gets a bar with Move left, Delete, Move right and Done; Undo, Clear, Run, Step, a speed switch and Reset.
+- **Stars** by blocks used: 3 at par or fewer, 2 up to two over, 1 for any working program; each level has a block limit. Levels open in order, and the next world at 6 levels done.
+- **Saving**: automatic, in `code-robot.v1` (stars and fewest blocks per level, levels done, total stars, the last level, every level's unfinished draft, the speed). A save code (`CR1-` then base64 JSON) moves progress to another device.
+- **Proof** (`node games/robot/tools/check.js`, using the game's own interpreter `src/engine.js`): every reference solution finishes within par and the limit, par is the shortest, and each world's idea is really needed (no plain list fits a loop level, no program without F1 fits a function level even with Repeat).
+
+## Tycoon Town
+
+- **The idea**: a business and city-building game about thinking like a CEO with street smarts. A company starts with $500 on Market Street; it opens businesses, buys land, solves business cases, avoids scams and grows its net worth to open High Street ($4,000), Downtown ($100,000) and Skyline & Harbour ($2 million), on the way to Tycoon of the Year ($100 million).
+- **40 businesses**, 10 per district, from a $150 lemonade stand to $35 million space tourism (roster in `content/roster.json`, where all the numbers live): each has a price, a usual monthly profit range, a risk level (low / medium / high / very high: how much the profit jumps up and down, sometimes into a loss), an industry and a season. Within a district, riskier businesses earn more on average; four are properties (flats, offices, a shopping centre, a skyscraper) that earn steady rent and grow with the city. Each business can be owned once.
+- **Business cases**: every business brings three (`content/biz-1..4.json`): an opening case the moment it opens, then a problem and an opportunity or tricky offer later. Each has 4–5 choices; several can work, one is the smartest, and at least one per business is a trap (a scam, an unsafe shortcut, a dishonest trick). On Market Street he picks one choice; from High Street up, up to two (two good ideas together score as well as the best one). Choices change the business for good (sales, running costs, steadiness, reputation, insurance, online, eco, loyal customers), for three months only, or build up slowly; traps bring fines and lost trust. Afterwards he sees his stars, the lesson, and what every other choice would have done. A case left for three months costs reputation and sales.
+- **Offers** (`content/offers.json`, 18): texts, calls, emails, strangers, a pyramid scheme, invoice fraud, ransomware, an insider tip, a bribe dressed as a fee — and real chances (a fair pitch, a council grant, a wholesaler, a chef, a bank loan) where the right answer is to check, then accept.
+- **The city**: four districts of 4 × 4 plots. Land has a value that grows with time, with neighbours (the city fills in by itself) and with events such as a new metro line. A business pays monthly rent for its plot unless the company buys the land. Properties come with their land.
+- **Each month** (Next month): profits with seasons and luck, city news (heatwave, rain, festival, tourists, back to school, cup final, a recession that loyal customers soften, a tech boom, green and online booms, a storm that insurance halves, going viral, a rival, interest rates up), 10% city tax on profit, interest on loans, and a report.
+- **Money tools**: the bank lends up to half of the company's net worth at 1.5% a month; a business sells for what it really earns (its value follows its first six months of profit), minus a 10% fee; overdraft costs 4% a month, and a deep overdraft makes the bank sell the smallest business.
+- **Learning**: CEO stars and titles (Trainee to Tycoon), eight skills (pricing, marketing, people, money sense, running things, street smarts, honesty, strategy), traps avoided, 30 goals with prizes that scale with the company, a CEO handbook of words learned on the way (profit, rent, interest, diversify, scam…) and Coach Owl's tip for the month.
+- **Saving**: automatic after every move, in three slots on the device (`tycoon-town.v1`); a month played marks the day for the streak, opening the page does not. A save code (copy and paste) or a save file moves a company to another device or keeps a backup. The game's chance comes from its own seeded generator, so a resumed game continues exactly.
+- **Balance** (`node games/tycoon/tools/sim.js`, 60 games per player type): a careful CEO reaches High Street in about 8 months, Downtown in about 33, Skyline in about 68 and $100 million in about 124; a random clicker gets much less far, and a player who falls for every trap never reaches Skyline.
+
 ## Layout
 
 | Path | What it is |
@@ -92,12 +116,14 @@ Above it, a **New in the arcade** card lists the latest additions (each a link) 
 | `games/ladder/src/ladder.html` | Number Ladder: the whole game in one page (drawing, physics, questions, menus). |
 | `games/ladder/playtest/` | Ladder scenarios: `climb.js` (a bot climbs through every moving trick with a picture of each, falls once on purpose, then reaches the top), `fairness.js` (how often a tap lands right, wrong or on nothing, per rung) and `arcade-ipad.js` (finger taps through the whole site on an emulated iPad, portrait, phone and offline). |
 | `games/pair/`, `games/pop/`, `games/spell/`, `games/quest/`, `games/memory/` | Pair Up, Number Pop, Spell It, English Quest and Memory Lane: one page each in `src/`, a `build.js`, and playtests in `playtest/`. English Quest also has `content/` (the seven stages) and `tools/check-content.js`. |
+| `games/robot/` | Code Robot: the page (`src/robot.html`), the interpreter (`src/engine.js`) and the 40 levels (`src/levels.js`), both shared with `tools/check.js` which proves every level; `build.js`; playtests in `playtest/`. |
+| `games/tycoon/` | Tycoon Town: the screens (`src/tycoon.html`), the economy (`src/engine.js`: pure, seeded, the whole game state is plain JSON), the content (`content/`: `roster.json` with every number, `biz-1..4.json` with the cases, `offers.json`, and `FORMAT.md` for writing more), `tools/check-content.js` (content rules), `tools/sim.js` (balance bots), `build.js` and playtests. |
 | `shared/` | Code the games share: math questions, English word facts (`english-words.js`: opposites, past tenses, same-meaning words, plurals, common misspellings), general knowledge (`knowledge.js`: capitals, animal babies, science, geography, calendar and animal facts), the music remix engine, sound effects, cube looks and drawing, `arcade-days.js` (`markPlayed()`: every game notes the day it saves, for the streak), and for the newer games `arcade-ui.css` (colours, buttons, menus, HUD, toasts) and `arcade-core.js` (helpers, the shared save, `writeSave()` which marks the day played and `writeRecords()` which does not, math bookkeeping, screens, read-aloud with a British voice where the device has one, on-device voices first). A page marks the spot with `/*__SHARED:name__*/` (or `/*__SHARED:arcade-ui.css__*/` inside its style) and the build fills it in; shared files can use markers too. |
 | `web/` | The arcade home page (`hub.html`: game cards, Today, stats, Badges, Progress for parents), the offline service worker, the app manifest and icons (`make-icons.js` redraws the icons). |
 | `build.js` | Builds every game into `games/*/dist/` and the website into `docs/`: the home page, one folder per game, the manifest, icons and an offline cache whose version changes with the content. |
 | `docs/` | The built website. GitHub Pages serves it from the `main` branch. Do not edit by hand. |
 
-Progress is saved in each browser's localStorage: `number-dash.v1` holds Number Dash levels plus the settings (level, music, read-aloud) and math record every game shares; the days played are in `arcade-days.v1`; each other game keeps its records under its own key (`number-ladder.v1`, `pair-up.v1`, `number-pop.v1`, `spell-it.v1`, `english-quest.v1`). The home page reads them for its stats.
+Progress is saved in each browser's localStorage: `number-dash.v1` holds Number Dash levels plus the settings (level, music, read-aloud) and math record every game shares; the days played are in `arcade-days.v1`; each other game keeps its records under its own key (`number-ladder.v1`, `pair-up.v1`, `number-pop.v1`, `spell-it.v1`, `english-quest.v1`, `memory-lane.v1`, `code-robot.v1`, `tycoon-town.v1`). The home page reads them for its stats.
 
 ## Commands
 
@@ -171,6 +197,30 @@ node games/quest/tools/check-content.js
 
 ```bash
 ND_URL=file:///D:/Github/number-dash/games/quest/dist/preview.html ND_READY='!!window.__quest' ND_BOT=none node games/dash/playtest/shoot.js games/quest/playtest/play.js
+```
+
+Code Robot: prove every level, then play every solution through the page (`levels.js`), by finger on an iPad (`play.js`) and on iPads both ways, a phone and dark mode (`ipad.js`):
+
+```bash
+node games/robot/tools/check.js
+```
+
+```bash
+ND_URL=file:///D:/Github/number-dash/games/robot/dist/preview.html ND_READY='!!window.__robot' ND_BOT=none node games/dash/playtest/shoot.js games/robot/playtest/levels.js
+```
+
+Tycoon Town: check the content (`--all` also fails on a business without its cases), run the balance bots, then the playtests: `play.js` (a first company by finger, saving and resuming, save codes), `cases.js` (two-choice cases, offers, the phone header) and `content.js` (every case and offer opened in the real dialogs on a phone and an iPad):
+
+```bash
+node games/tycoon/tools/check-content.js --all
+```
+
+```bash
+node games/tycoon/tools/sim.js
+```
+
+```bash
+ND_URL=file:///D:/Github/number-dash/games/tycoon/dist/preview.html ND_READY='!!window.__tycoon' ND_BOT=none node games/dash/playtest/shoot.js games/tycoon/playtest/play.js
 ```
 
 Several playtests can run at once when each gets its own browser port and profile: add `ND_CDP=9371 ND_PROFILE=edge-profile-pair` (any free port and folder name).

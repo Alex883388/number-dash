@@ -1,5 +1,5 @@
 // Code Robot on emulated iPads and a phone, light and dark (run from the repo root):
-//   node games/robot/build.js && ND_CDP=9511 ND_PROFILE=edge-profile-robot-wt ND_URL=file:///D:/Github/number-dash-robot/games/robot/dist/preview.html ND_READY='!!window.__robot' ND_BOT=none node games/dash/playtest/shoot.js games/robot/playtest/ipad.js
+//   node games/robot/build.js && ND_CDP=9511 ND_PROFILE=edge-profile-robot ND_URL=file:///D:/Github/number-dash/games/robot/dist/preview.html ND_READY='!!window.__robot' ND_BOT=none node games/dash/playtest/shoot.js games/robot/playtest/ipad.js
 // Every stop checks the layout with __robot.fits(): the page never scrolls (only a long program scrolls inside its own
 // pane), everything is inside the screen, the map, the robot's speech and the editor do not overlap, every block, gap,
 // palette button and control a finger taps is 48 px or more, and no text is cut off. Stops: a landscape iPad (home,

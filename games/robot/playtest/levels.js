@@ -1,5 +1,5 @@
 // Code Robot: every level proved with the game's own interpreter, then played through the page (run from the repo root):
-//   node games/robot/build.js && ND_CDP=9511 ND_PROFILE=edge-profile-robot-wt ND_URL=file:///D:/Github/number-dash-robot/games/robot/dist/preview.html ND_READY='!!window.__robot' ND_BOT=none node games/dash/playtest/shoot.js games/robot/playtest/levels.js
+//   node games/robot/build.js && ND_CDP=9511 ND_PROFILE=edge-profile-robot ND_URL=file:///D:/Github/number-dash/games/robot/dist/preview.html ND_READY='!!window.__robot' ND_BOT=none node games/dash/playtest/shoot.js games/robot/playtest/levels.js
 // Checks, in the page: 40 levels, 8 per world; every reference solution finishes its level with every gem, uses
 // exactly par blocks, fits the block limit, uses only the palette's blocks, and takes fewer than STEP_CAP steps; every
 // alt solution finishes within the limit; the world's idea is needed (Loops, Functions and Conditions levels: the

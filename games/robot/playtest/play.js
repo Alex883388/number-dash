@@ -1,5 +1,5 @@
 // Code Robot by finger on an emulated iPad (run from the repo root):
-//   node games/robot/build.js && ND_CDP=9511 ND_PROFILE=edge-profile-robot-wt ND_URL=file:///D:/Github/number-dash-robot/games/robot/dist/preview.html ND_READY='!!window.__robot' ND_BOT=none node games/dash/playtest/shoot.js games/robot/playtest/play.js
+//   node games/robot/build.js && ND_CDP=9511 ND_PROFILE=edge-profile-robot ND_URL=file:///D:/Github/number-dash/games/robot/dist/preview.html ND_READY='!!window.__robot' ND_BOT=none node games/dash/playtest/shoot.js games/robot/playtest/play.js
 // Every program here is built with finger taps on the palette, the gaps and the blocks. Opening the page writes nothing;
 // Start shows World 1's intro card; a menu choice and a draft are saved without marking the day played, a finished level
 // marks it. 1-1 by taps and Run (3 stars); 1-2 by Step, one block lit at a time; 1-3 a wrong turn (a kind bump), then

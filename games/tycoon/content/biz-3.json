@@ -1,0 +1,2217 @@
+{
+  "businesses": [
+    {
+      "id": "appstudio",
+      "pitch": "A team of coders and designers who build phone apps for clients and for themselves.",
+      "earns": "Companies pay you to build their apps, and your own apps earn money from downloads and small in-app purchases.",
+      "costs": "Salaries for coders and designers, powerful computers, cloud servers that run the apps, and adverts for new launches.",
+      "risks": "A new app can flop, a bug can crash it on launch day, a big client can leave, or hackers can steal users' data.",
+      "tip": "Mix steady client work with a few bets of your own, so one flop can never sink the whole studio.",
+      "cases": [
+        {
+          "id": "appstudio-1",
+          "title": "The first big plan",
+          "story": "Your studio opens with six coders. A bank offers $60,000 to build its new banking app in four months. Your team would rather spend a whole year making one giant game of their own. What is your plan?",
+          "options": [
+            {
+              "text": "Take the bank job and let a small team build a little game too",
+              "spend": "none",
+              "rev": 2,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "grade": "best",
+              "skill": "strategy",
+              "result": "The bank's money pays the salaries, and the little game teaches you what players enjoy. Steady work plus a small bet keeps the studio safe.",
+              "lesson": "Steady paid work keeps the lights on while you test your own bigger ideas."
+            },
+            {
+              "text": "Hire a project manager to plan the work and talk to clients",
+              "spend": "low",
+              "rev": 1,
+              "costs": 1,
+              "risk": -1,
+              "rep": 1,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "people",
+              "result": "Priya, your new project manager, splits the work into weekly goals. Deadlines are met and the bank is delighted, though her salary costs extra.",
+              "lesson": "A good manager turns a group of clever people into a team that finishes on time."
+            },
+            {
+              "text": "Put the whole team on one giant game for a year",
+              "spend": "mid",
+              "rev": 0,
+              "costs": 1,
+              "risk": 1,
+              "rep": 0,
+              "timing": "slow",
+              "grade": "poor",
+              "skill": "strategy",
+              "result": "A year later the game is only half finished and the money is nearly gone. Nobody has played it yet, so you still do not know if it is fun.",
+              "lesson": "Do not bet everything on one huge idea; test something small first and learn fast."
+            },
+            {
+              "text": "Promise the bank it will be ready in four weeks, to impress them",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 1,
+              "rep": -2,
+              "timing": "short",
+              "grade": "poor",
+              "skill": "ethics",
+              "result": "The bank is thrilled, but four weeks is impossible. The app is late and full of bugs, and the bank tells other companies about it.",
+              "lesson": "Promise only what your team can really deliver; a broken promise costs more than a lost deal."
+            },
+            {
+              "text": "Copy a famous game, change its name and sell it fast",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 1,
+              "rep": -2,
+              "timing": "short",
+              "penalty": "mid",
+              "grade": "trap",
+              "skill": "ethics",
+              "result": "The famous game's makers spot the copy within a week. The app store removes it, and their lawyers make you pay for using their work.",
+              "lesson": "Copying someone else's work is stealing, and it is very easy to get caught."
+            }
+          ]
+        },
+        {
+          "id": "appstudio-2",
+          "title": "A hacker got in",
+          "story": "Your homework app has 80,000 users. A hacker guessed a coder's password, 'password123', and copied users' email addresses. Nobody outside the studio knows yet. What do you do?",
+          "options": [
+            {
+              "text": "Tell users and the data protection office today, and fix the hole",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 2,
+              "timing": "now",
+              "grade": "best",
+              "skill": "ethics",
+              "result": "Some users are upset, but they thank you for being quick and honest. The hole is closed the same day, and most families keep using the app.",
+              "lesson": "Owning up fast and fixing the problem keeps people's trust, even after a mistake."
+            },
+            {
+              "text": "Turn on two-step login and long passwords for every account",
+              "spend": "low",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "safety",
+              "result": "Now a stolen password is not enough: every login also needs a code sent to a phone. The next hacker who tries gives up.",
+              "lesson": "Strong passwords and two-step login lock the door that hackers try first."
+            },
+            {
+              "text": "Pay a security expert to test the whole app for weak spots",
+              "spend": "mid",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "grade": "ok",
+              "skill": "safety",
+              "result": "The expert finds three more weak spots and you fix them all. It is expensive, but the app is much safer now.",
+              "lesson": "Paying an expert to find holes costs less than letting a criminal find them."
+            },
+            {
+              "text": "Fire the coder in front of everyone to show you are tough",
+              "spend": "none",
+              "rev": 0,
+              "costs": 1,
+              "risk": 0,
+              "rep": -1,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "people",
+              "result": "The team is frightened and two more coders quit. The real problem was that nobody had ever been taught safe passwords.",
+              "lesson": "Fix the system that allowed a mistake instead of scaring the whole team."
+            },
+            {
+              "text": "Keep it secret, so users do not panic and delete the app",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": 1,
+              "rep": -3,
+              "timing": "now",
+              "penalty": "mid",
+              "grade": "trap",
+              "skill": "ethics",
+              "result": "Weeks later a reporter finds out. Hiding a data leak is against the law, so you pay a big fine, and angry parents delete the app.",
+              "lesson": "Hiding a data leak turns one problem into two: the leak and the cover-up."
+            }
+          ]
+        },
+        {
+          "id": "appstudio-3",
+          "title": "Money comes knocking",
+          "story": "Your puzzle game is a hit with 2 million players! An investor offers $400,000 to own a quarter of the studio. And an online 'adviser' promises to turn $40,000 of your profit into $1 million in one month.",
+          "options": [
+            {
+              "text": "Take the investor's money after your lawyer checks the deal",
+              "spend": "low",
+              "rev": 2,
+              "costs": 1,
+              "risk": -1,
+              "rep": 1,
+              "timing": "slow",
+              "grade": "best",
+              "skill": "money",
+              "result": "Your lawyer makes sure you stay in charge. The $400,000 pays for new coders and a safety cushion, so one flop can no longer sink you.",
+              "lesson": "Sharing a slice of a growing company can make the whole company stronger and safer."
+            },
+            {
+              "text": "Use the hit's profits to build a second game, step by step",
+              "spend": "low",
+              "rev": 1,
+              "costs": 0,
+              "risk": -1,
+              "rep": 0,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "strategy",
+              "result": "The second game grows slowly but surely. With two games earning, the studio no longer depends on one hit.",
+              "lesson": "Two earners are safer than one: hits fade, so start the next one early."
+            },
+            {
+              "text": "Translate the game into five languages for new countries",
+              "spend": "low",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "marketing",
+              "result": "Players in Brazil, Japan and Poland discover your puzzles. Downloads keep climbing for months.",
+              "lesson": "A product people already love can find new fans in new markets."
+            },
+            {
+              "text": "Spend every dollar of profit on giant adverts this month",
+              "spend": "high",
+              "rev": 2,
+              "costs": 0,
+              "risk": 1,
+              "rep": 0,
+              "timing": "short",
+              "grade": "poor",
+              "skill": "marketing",
+              "result": "Downloads jump for a few weeks, then fall back. The adverts cost far more than the new players spent.",
+              "lesson": "Big spending on a short burst rarely pays; check what each new customer is worth."
+            },
+            {
+              "text": "Send $40,000 to the adviser: a million dollars in a month!",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": 1,
+              "rep": 0,
+              "timing": "now",
+              "penalty": "mid",
+              "grade": "trap",
+              "skill": "safety",
+              "result": "The 'adviser' and your $40,000 vanish. Nobody can make money grow 25 times in a month; it was a scam all along.",
+              "lesson": "Huge, sure profits in a hurry are always a scam; real investing grows slowly."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "restaurant",
+      "pitch": "A busy Italian restaurant where families come for pasta, pizza and puddings.",
+      "earns": "Each meal sells for about three times what its ingredients cost, and busy evenings and holidays fill every table.",
+      "costs": "Chefs' and waiters' wages, fresh food, rent for the building, gas and electricity, and replacing broken plates.",
+      "risks": "Quiet weeks, a bad review, a food-safety mistake, a new restaurant opening next door, or your best chef leaving.",
+      "tip": "Keep the menu short and the kitchen spotless; happy regulars bring their friends, and that advertising is free.",
+      "cases": [
+        {
+          "id": "restaurant-1",
+          "title": "Who runs the kitchen?",
+          "story": "Your 60-seat restaurant opens in two weeks. Marco, an experienced head chef (the boss of the kitchen), asks $4,000 a month. You also need your first customers fast. What will you do?",
+          "options": [
+            {
+              "text": "Hire Marco at fair pay and plan the menu together",
+              "spend": "none",
+              "rev": 2,
+              "costs": 1,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "grade": "best",
+              "skill": "people",
+              "result": "Marco builds a short menu of dishes his team can cook perfectly every time. Plates come out hot and fast, and word spreads: the tables fill up.",
+              "lesson": "Paying fairly for a skilled leader is an investment, not a waste."
+            },
+            {
+              "text": "Hold a test night for friends and family before opening",
+              "spend": "low",
+              "rev": 1,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "operations",
+              "result": "The test night shows that the pizza oven is too slow for a full room. You fix it before the real opening, so paying diners never notice.",
+              "lesson": "Practise on a friendly crowd first, and fix the problems before real customers arrive."
+            },
+            {
+              "text": "Give free starters to nearby office workers during opening week",
+              "spend": "low",
+              "rev": 2,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "short",
+              "grade": "ok",
+              "skill": "marketing",
+              "result": "Lunchtimes are packed for a few weeks and some workers come back with their families. Later the free-food crowd fades away.",
+              "lesson": "A free taste brings people in, but only good food brings them back."
+            },
+            {
+              "text": "Put 50 dishes on the menu so everyone finds something",
+              "spend": "none",
+              "rev": 1,
+              "costs": 2,
+              "risk": 0,
+              "rep": -1,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "operations",
+              "result": "The kitchen needs so many ingredients that lots of them go off before they are used. Orders are slow and the food is only so-so.",
+              "lesson": "A short menu done brilliantly beats a long menu done badly."
+            },
+            {
+              "text": "Buy 200 five-star reviews online for just $300",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": -2,
+              "timing": "short",
+              "penalty": "low",
+              "grade": "trap",
+              "skill": "ethics",
+              "result": "The review website spots the fakes and warns diners that you bought them. Inspectors fine you for fooling customers.",
+              "lesson": "Fake reviews trick customers, and when they are found out, nobody trusts you."
+            }
+          ]
+        },
+        {
+          "id": "restaurant-2",
+          "title": "A food-safety scare",
+          "story": "Three diners say they felt ill after eating your chicken on Saturday. The kitchen fridge may have been too warm overnight. A food inspector visits on Friday. What do you do?",
+          "options": [
+            {
+              "text": "Close for a day, deep clean, check every fridge and tell diners",
+              "spend": "low",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 2,
+              "timing": "now",
+              "grade": "best",
+              "skill": "safety",
+              "result": "You find the broken fridge, throw out the risky food and explain everything on your website. The inspector praises your honesty and your clean kitchen.",
+              "lesson": "In a crisis, find the cause, fix it and tell people the truth: that is how trust survives."
+            },
+            {
+              "text": "Phone the three diners, say sorry and refund their meals",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "people",
+              "result": "The diners are surprised and pleased that the owner called them personally. One even books a table for next month.",
+              "lesson": "A quick, sincere sorry can turn an unhappy customer into a loyal one."
+            },
+            {
+              "text": "Fit fridge alarms that text the chef if they get too warm",
+              "spend": "low",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "good",
+              "skill": "safety",
+              "result": "Two months later an alarm wakes the chef at 3am: a fridge door was left open. The food is saved and nobody gets ill.",
+              "lesson": "Simple safety tools catch small problems before they become big ones."
+            },
+            {
+              "text": "Post online that the diners are making it up",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": 0,
+              "rep": -2,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "ethics",
+              "result": "Your post is shared everywhere, and people are shocked that you blamed ill customers. Bookings drop sharply.",
+              "lesson": "Attacking unhappy customers in public always makes a problem bigger."
+            },
+            {
+              "text": "Throw away the fridge temperature log before the inspector comes",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": 1,
+              "rep": -3,
+              "timing": "now",
+              "penalty": "mid",
+              "grade": "trap",
+              "skill": "ethics",
+              "result": "The inspector asks for the log and sees it is missing. Hiding evidence makes it far worse: a big fine and a low food hygiene score on your door.",
+              "lesson": "Hiding a problem from inspectors and customers turns a mistake into a scandal."
+            }
+          ]
+        },
+        {
+          "id": "restaurant-3",
+          "title": "Ten more restaurants?",
+          "story": "Zest Foods wants to open ten copies of your restaurant in other towns, using your name and recipes (that is a franchise). They would pay you $1,000 a month for each one, but say: sign tonight or the offer is gone.",
+          "options": [
+            {
+              "text": "Ask a lawyer to read every page, then agree with quality rules",
+              "spend": "low",
+              "rev": 2,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "slow",
+              "grade": "best",
+              "skill": "strategy",
+              "result": "The lawyer finds that Zest could change your recipes, so you add quality rules and the right to inspect. The fees soon arrive every month.",
+              "lesson": "Read a contract carefully before you sign; the small print is where the surprises hide."
+            },
+            {
+              "text": "Start with two restaurants as a trial before agreeing to ten",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": -1,
+              "rep": 0,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "strategy",
+              "result": "The two trial restaurants go well, so you agree to more. Testing first means you never put your good name at risk all at once.",
+              "lesson": "Try a big step on a small scale first; it is cheaper to learn from a small mistake."
+            },
+            {
+              "text": "Negotiate a higher fee for each restaurant before agreeing",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 0,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "pricing",
+              "result": "Zest really wants your recipes, so they agree to $1,300 a month for each restaurant. Asking politely earned you more every single month.",
+              "lesson": "When someone wants what you have, it is fair to ask for a better price."
+            },
+            {
+              "text": "Open a second restaurant of your own, slowly",
+              "spend": "mid",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "slow",
+              "grade": "ok",
+              "skill": "strategy",
+              "result": "Your second restaurant is lovely but costs a lot to set up. It takes many months before it earns back the money.",
+              "lesson": "Growing on your own keeps control, but it is slower and needs more of your money."
+            },
+            {
+              "text": "Sign tonight before the offer disappears",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": 1,
+              "rep": -2,
+              "timing": "now",
+              "penalty": "mid",
+              "grade": "trap",
+              "skill": "safety",
+              "result": "The small print lets Zest sell cheap frozen meals under your name and pay you nothing for five years. Diners blame you for their bad food.",
+              "lesson": "'Sign tonight or lose it' is a warning sign; a good deal will still be there tomorrow."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "scooters",
+      "pitch": "Electric scooters that people unlock with a phone app and ride around the city.",
+      "earns": "Riders pay $1 to unlock a scooter and 20 cents a minute; sunny days and busy streets mean thousands of rides.",
+      "costs": "Buying and charging scooters, repairs, staff who collect and fix them, insurance, and a fee to the city council.",
+      "risks": "Rainy months, accidents, scooters left blocking pavements, broken scooters, a rival company, or a council ban.",
+      "tip": "Safety first: riders, walkers and the council must all trust you, or the city can switch you off overnight.",
+      "cases": [
+        {
+          "id": "scooters-1",
+          "title": "300 scooters arrive",
+          "story": "Your 300 scooters arrive next week. The council will let you run them if riders are safe and scooters do not block pavements. What will you set up first?",
+          "options": [
+            {
+              "text": "Use GPS to slow scooters near schools and mark parking bays",
+              "spend": "low",
+              "rev": 1,
+              "costs": 0,
+              "risk": -1,
+              "rep": 2,
+              "timing": "now",
+              "grade": "best",
+              "skill": "safety",
+              "result": "GPS (the scooter knows where it is) slows riders in busy places, and neat parking bays keep pavements clear. The council and riders are both happy.",
+              "lesson": "Building safety into your product wins the trust you need to grow."
+            },
+            {
+              "text": "Hire a team to charge and check every scooter each night",
+              "spend": "none",
+              "rev": 1,
+              "costs": 1,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "operations",
+              "result": "Every morning the scooters are full of charge and safe to ride. The team costs money, but riders never find a flat or broken scooter.",
+              "lesson": "Riders come back when your product works every single time."
+            },
+            {
+              "text": "Add a quick safety quiz in the app before anyone's first ride",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "safety",
+              "result": "New riders learn the rules in one minute: no pavements, one person per scooter, park in a bay. There are fewer bumps and complaints.",
+              "lesson": "Teaching customers the rules is cheap and makes everyone safer."
+            },
+            {
+              "text": "Put all 300 scooters in the city centre where the crowds are",
+              "spend": "none",
+              "rev": 2,
+              "costs": 0,
+              "risk": 1,
+              "rep": -1,
+              "timing": "now",
+              "grade": "ok",
+              "skill": "strategy",
+              "result": "Rides shoot up, but scooters pile up on busy pavements and people complain. The council sends you a warning letter.",
+              "lesson": "Chasing the biggest crowd is not enough; think about the people around your business too."
+            },
+            {
+              "text": "Skip insurance to save $2,000 a month",
+              "spend": "none",
+              "rev": 0,
+              "costs": -1,
+              "risk": 1,
+              "rep": -1,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "money",
+              "result": "You save a little each month, but now one bad crash could cost you a fortune. The council's permit officer is not impressed.",
+              "lesson": "Insurance feels like wasted money until the day you really need it."
+            }
+          ]
+        },
+        {
+          "id": "scooters-2",
+          "title": "A brake fails",
+          "story": "A rider fell when a scooter's brake failed. She sprained her wrist and will be fine. Your mechanics say checking every brake each day takes too long, and the council wants answers by Monday.",
+          "options": [
+            {
+              "text": "Check every brake before scooters go out again, and tell the council",
+              "spend": "low",
+              "rev": -1,
+              "costs": 0,
+              "risk": -1,
+              "rep": 2,
+              "timing": "short",
+              "grade": "best",
+              "skill": "safety",
+              "result": "You find twelve worn brakes and fix them all. Your honest report shows the council you take safety seriously, so you are allowed to keep going.",
+              "lesson": "Losing a few days of rides is a small price for safety and the city's trust."
+            },
+            {
+              "text": "Visit the rider, say sorry and pay for her treatment",
+              "spend": "low",
+              "rev": 0,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "people",
+              "result": "The rider is grateful that you came in person. She tells the local newspaper that your company did the right thing.",
+              "lesson": "When someone is hurt by your product, caring comes first and paperwork second."
+            },
+            {
+              "text": "Fit smart sensors that warn when a brake is wearing out",
+              "spend": "mid",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "operations",
+              "result": "Now each scooter reports its own brakes to the mechanics' screens. It costs a lot, but worn brakes are spotted before they fail.",
+              "lesson": "Good technology can make safety checks quicker without skipping them."
+            },
+            {
+              "text": "Say the rider must have been riding badly",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": 0,
+              "rep": -2,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "ethics",
+              "result": "The repair records show the brake was worn out. Blaming the rider makes you look careless and unkind.",
+              "lesson": "Blaming a customer for your own fault makes people trust you even less."
+            },
+            {
+              "text": "Skip the daily brake checks to keep more scooters on the road",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 1,
+              "rep": -2,
+              "timing": "now",
+              "penalty": "mid",
+              "grade": "trap",
+              "skill": "safety",
+              "result": "Another brake fails and a second rider is hurt. The council fines you and stops your scooters for a month. Saving time on safety cost far more.",
+              "lesson": "Never cut a safety check to save time; accidents cost far more than checks."
+            }
+          ]
+        },
+        {
+          "id": "scooters-3",
+          "title": "The big city contract",
+          "story": "The council will pick only two scooter companies to run the city for three years. Bids (written offers) are due next month. A man called Rex says he knows someone at the council and can make sure you win, for $20,000 in cash with no receipt.",
+          "options": [
+            {
+              "text": "Write an honest bid showing your safety record and parking plan",
+              "spend": "low",
+              "rev": 2,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "slow",
+              "grade": "best",
+              "skill": "strategy",
+              "result": "Your clear safety numbers impress the council and you win a three-year contract. Knowing you will stay for years, you can plan ahead with confidence.",
+              "lesson": "Win big contracts by being the best choice, and show proof of it."
+            },
+            {
+              "text": "Team up with the bus company so riders can hop from bus to scooter",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "strategy",
+              "result": "One ticket now covers the bus and the last part of the journey by scooter. People going to work love it, and the council likes the idea too.",
+              "lesson": "A partner who serves the same customers can make both businesses stronger."
+            },
+            {
+              "text": "Offer free rides to nurses and carers on their way to work",
+              "spend": "low",
+              "rev": 0,
+              "costs": 0,
+              "risk": 0,
+              "rep": 2,
+              "timing": "now",
+              "grade": "good",
+              "skill": "marketing",
+              "result": "Hospital staff thank you on the local radio. The free rides cost a little, but the whole city now sees you as a good neighbour.",
+              "lesson": "Helping your community is right, and people remember who helped."
+            },
+            {
+              "text": "Bid a price so low you cannot afford it, just to win",
+              "spend": "none",
+              "rev": 1,
+              "costs": 2,
+              "risk": 1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "pricing",
+              "result": "You win, but every ride now loses money. After a few months you must ask the council to change the deal, and they are not pleased.",
+              "lesson": "Winning a contract that loses money is not really winning."
+            },
+            {
+              "text": "Pay Rex the $20,000 in cash so you are sure to win",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": 1,
+              "rep": -3,
+              "timing": "now",
+              "penalty": "mid",
+              "grade": "trap",
+              "skill": "ethics",
+              "result": "Rex was asking for a bribe, which is against the law. The council finds out, throws out your bid and fines you. The $20,000 is gone too.",
+              "lesson": "Secret cash with no receipt to win a deal is a bribe: illegal and a trap."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "delivery",
+      "pitch": "A fleet of vans and drivers delivering parcels for online shops across the city.",
+      "earns": "Shops pay you about $4 for every parcel you deliver, and at Christmas the vans carry twice as many.",
+      "costs": "Drivers' wages, the vans, fuel or charging, a big warehouse, and the software that plans each route.",
+      "risks": "Late parcels, a van crash, drivers leaving, fuel prices rising, or a big customer moving to a cheaper rival.",
+      "tip": "Treat drivers well and plan smart routes: on-time parcels and happy drivers keep big customers loyal.",
+      "cases": [
+        {
+          "id": "delivery-1",
+          "title": "The first big customer",
+          "story": "Your delivery company starts with 20 drivers, 20 vans and a warehouse. ShopRight, a big online shop, will send you 2,000 parcels a day if you deliver on time. How will you get ready?",
+          "options": [
+            {
+              "text": "Buy route-planning software that finds the quickest roads",
+              "spend": "low",
+              "rev": 2,
+              "costs": -1,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "best",
+              "skill": "operations",
+              "result": "The software plans each van's route around traffic. Drivers finish on time, use less fuel, and ShopRight's parcels arrive when promised.",
+              "lesson": "Smart planning saves time and money on every single trip."
+            },
+            {
+              "text": "Train every driver in safe, careful driving",
+              "spend": "low",
+              "rev": 0,
+              "costs": -1,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "safety",
+              "result": "Fewer dents, fewer fines and calmer drivers. Smooth driving even uses less fuel, so the training pays for itself.",
+              "lesson": "Training your team is one of the best investments a company can make."
+            },
+            {
+              "text": "Swap half the vans for electric ones that are cheap to charge",
+              "spend": "mid",
+              "rev": 0,
+              "costs": -1,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "flag": "eco",
+              "grade": "good",
+              "skill": "strategy",
+              "result": "The electric vans cost a lot to buy but very little to run. Quiet, clean vans also help ShopRight tell its customers it cares about the planet.",
+              "lesson": "Green choices can cost more today and save money for years."
+            },
+            {
+              "text": "Say yes to every shop that asks, even with only 20 vans",
+              "spend": "none",
+              "rev": 1,
+              "costs": 1,
+              "risk": 0,
+              "rep": -2,
+              "timing": "short",
+              "grade": "poor",
+              "skill": "operations",
+              "result": "Parcels pile up in the warehouse and deliveries are days late. ShopRight warns that it will leave if it happens again.",
+              "lesson": "Never promise more than you can deliver; it ruins your good name."
+            }
+          ]
+        },
+        {
+          "id": "delivery-2",
+          "title": "Drivers at breaking point",
+          "story": "It is nearly Christmas and parcels have doubled. Drivers say their routes are impossible to finish, two have quit, and the rest have asked for a meeting. What do you do?",
+          "options": [
+            {
+              "text": "Meet the drivers, listen, and set fair routes with proper breaks",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "grade": "best",
+              "skill": "people",
+              "result": "The drivers point out three routes that cross the whole city twice. You fix them together, nobody else quits, and parcels arrive on time again.",
+              "lesson": "Listen to the people doing the work; they often know the answer already."
+            },
+            {
+              "text": "Hire extra drivers just for the Christmas rush",
+              "spend": "none",
+              "rev": 2,
+              "costs": 1,
+              "risk": -1,
+              "rep": 1,
+              "timing": "short",
+              "grade": "good",
+              "skill": "operations",
+              "result": "Ten extra drivers share the load until January. It costs more, but every parcel arrives in time for Christmas.",
+              "lesson": "Plan extra help for your busiest season instead of overloading your team."
+            },
+            {
+              "text": "Pay a Christmas bonus to every driver who stays",
+              "spend": "low",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "people",
+              "result": "The drivers feel valued and stay for the rush. Keeping experienced drivers is cheaper than training new ones.",
+              "lesson": "Showing staff they are valued keeps your best people."
+            },
+            {
+              "text": "Tell them anyone who complains can find another job",
+              "spend": "none",
+              "rev": 0,
+              "costs": 1,
+              "risk": 1,
+              "rep": -1,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "people",
+              "result": "Five more drivers leave the next day. Parcels pile up, and hiring and training new drivers costs a fortune.",
+              "lesson": "A boss who will not listen soon has nobody left to lead."
+            },
+            {
+              "text": "Pay drivers $100 extra to skip their rest breaks this month",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 1,
+              "rep": -1,
+              "timing": "short",
+              "penalty": "low",
+              "grade": "trap",
+              "skill": "safety",
+              "result": "Tired drivers make mistakes: one van scrapes three parked cars. Drivers must rest by law, so the road safety office fines you too.",
+              "lesson": "Tired drivers are dangerous drivers; rest breaks are a safety rule, not a luxury."
+            }
+          ]
+        },
+        {
+          "id": "delivery-3",
+          "title": "A double-sized contract?",
+          "story": "An email that looks like it is from ShopRight says: 'Great news! We want to double your contract. Log in at this link with your company password to sign today.' It comes from shopright-deals.net, not shopright.com.",
+          "options": [
+            {
+              "text": "Phone your contact at ShopRight on the number you already have",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "slow",
+              "grade": "best",
+              "skill": "safety",
+              "result": "ShopRight never sent it: it was phishing (a fake email that steals passwords). Impressed by your care, they really do give you more parcels next year.",
+              "lesson": "Check a surprising email by phoning a number you already trust, never by its link."
+            },
+            {
+              "text": "Report the fake email and teach staff how to spot others",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "good",
+              "skill": "safety",
+              "result": "A week later the same trick arrives for your accounts team. They recognise it at once and delete it.",
+              "lesson": "One person who spots a scam can protect the whole company if they share it."
+            },
+            {
+              "text": "Just delete the email",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": 0,
+              "rep": 0,
+              "timing": "now",
+              "grade": "ok",
+              "skill": "safety",
+              "result": "You are safe this time, but nobody else is warned, and next week a new driver almost clicks a similar link.",
+              "lesson": "Avoiding a scam is good; warning your team is even better."
+            },
+            {
+              "text": "Reply to the email and ask if it is really from ShopRight",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": 1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "safety",
+              "result": "The scammers answer 'Yes, it is real!' and send another link. Asking a stranger to check themselves proves nothing.",
+              "lesson": "Never ask a suspicious sender to prove who they are; check another way."
+            },
+            {
+              "text": "Click the link and log in quickly before the offer goes",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": 1,
+              "rep": -1,
+              "timing": "now",
+              "penalty": "mid",
+              "grade": "trap",
+              "skill": "safety",
+              "result": "The link opens a fake page. Criminals use your password to move $75,000 of company money into their own account.",
+              "lesson": "Never type a company password into a link from an email, however exciting it looks."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "supermarket",
+      "pitch": "A big supermarket selling food and everyday things to thousands of local families.",
+      "earns": "It makes only a few cents on each item, but sells so many thousands every day that it adds up to steady profits.",
+      "costs": "Buying stock from suppliers, staff wages, rent, fridges and freezers running all day, and food that goes out of date.",
+      "risks": "A cheaper rival chain, a supplier letting you down, food going to waste, or shoplifting.",
+      "tip": "Tiny profits on each item add up: buy well, waste little and keep shelves full of what customers want.",
+      "cases": [
+        {
+          "id": "supermarket-1",
+          "title": "Getting ready to open",
+          "story": "Your supermarket opens next month. A big supplier offers milk, bread and fruit at its normal price. Amara, your store manager, thinks you could get a better deal, and the old tills keep breaking. What will you do?",
+          "options": [
+            {
+              "text": "Negotiate: promise a year of orders in return for a lower price",
+              "spend": "none",
+              "rev": 0,
+              "costs": -2,
+              "risk": -1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "best",
+              "skill": "pricing",
+              "result": "The supplier agrees to 8% off in return for a year of steady orders. Every item now earns a little more, and your shelves are never empty.",
+              "lesson": "Offer something the other side wants, and you can ask for a better price."
+            },
+            {
+              "text": "Put in new tills, including fast self-checkouts",
+              "spend": "mid",
+              "rev": 1,
+              "costs": -1,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "operations",
+              "result": "Queues are shorter and the tills never break. They cost a lot, but customers notice how quick it is to pay.",
+              "lesson": "Fixing what annoys customers every day is worth paying for."
+            },
+            {
+              "text": "Ask local families what they would like to find on the shelves",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "marketing",
+              "result": "Families ask for more fresh bread, gluten-free food and spices from around the world. You stock them, and those shelves sell out first.",
+              "lesson": "The quickest way to know what customers want is to ask them."
+            },
+            {
+              "text": "Price everything below every rival, even below what it costs you",
+              "spend": "none",
+              "rev": 1,
+              "costs": 2,
+              "risk": 0,
+              "rep": 0,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "pricing",
+              "result": "The store is packed, but you lose money on almost every basket. You cannot keep it up for long.",
+              "lesson": "Busy is not the same as profitable; every sale must earn something."
+            }
+          ]
+        },
+        {
+          "id": "supermarket-2",
+          "title": "The lorry is late",
+          "story": "A storm has closed the main road, so your fruit and vegetable lorry will be four days late. Shelves are emptying fast. A man offers 'top brand' crisps and chocolate at half price, cash only, from the back of his van.",
+          "options": [
+            {
+              "text": "Buy from two local farms to fill the gap, and keep them as backups",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "grade": "best",
+              "skill": "strategy",
+              "result": "The farms deliver fresh apples and carrots the next morning. Now you have three suppliers, so one late lorry can never empty your shelves again.",
+              "lesson": "Never depend on just one supplier; a backup keeps you open when things go wrong."
+            },
+            {
+              "text": "Put up honest signs explaining the delay and when fruit returns",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "people",
+              "result": "Shoppers understand the storm is not your fault and thank you for telling them. Most come back on Friday for their fruit.",
+              "lesson": "When something goes wrong, telling customers the truth keeps their trust."
+            },
+            {
+              "text": "Fill the gaps with frozen and tinned vegetables for now",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 0,
+              "timing": "short",
+              "grade": "good",
+              "skill": "operations",
+              "result": "Frozen peas and tinned tomatoes fly off the shelves. It is not the same as fresh food, but families can still cook dinner.",
+              "lesson": "When one product runs out, offer the next best thing."
+            },
+            {
+              "text": "Double the price of the fruit you still have",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": -2,
+              "timing": "short",
+              "grade": "poor",
+              "skill": "pricing",
+              "result": "You make a little extra this week, but shoppers feel cheated and some move to the rival supermarket for good.",
+              "lesson": "Raising prices when customers have no choice feels unfair, and they remember it."
+            },
+            {
+              "text": "Buy the van man's half-price 'top brand' snacks for cash",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": 1,
+              "rep": -2,
+              "timing": "now",
+              "penalty": "low",
+              "grade": "trap",
+              "skill": "safety",
+              "result": "The snacks are fakes in copied wrappers, and customers say they taste odd. Inspectors fine you for selling counterfeit (fake copied) goods.",
+              "lesson": "Famous brands at half price, cash only, from a van are almost always fakes."
+            }
+          ]
+        },
+        {
+          "id": "supermarket-3",
+          "title": "The loyalty card data",
+          "story": "Your loyalty card (members collect points every time they shop) has 20,000 members. An advertising company offers $50,000 for the members' names, addresses and lists of what they buy. What will you do?",
+          "options": [
+            {
+              "text": "Keep the data private and use the points to reward your regulars",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "flag": "loyal",
+              "grade": "best",
+              "skill": "ethics",
+              "result": "Members get birthday treats and points on the things they buy most. They feel looked after, and they keep shopping with you even when times are hard.",
+              "lesson": "Use customers' data to serve them better, never to sell them out."
+            },
+            {
+              "text": "Share data only with members who say yes to partner offers",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "ethics",
+              "result": "You ask every member clearly. About a quarter say yes, and they enjoy the offers. Everyone else's data stays private.",
+              "lesson": "Asking clear permission first is what makes sharing data fair."
+            },
+            {
+              "text": "Turn the card into a phone app with digital coupons",
+              "spend": "low",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 0,
+              "timing": "slow",
+              "flag": "online",
+              "grade": "ok",
+              "skill": "marketing",
+              "result": "Younger shoppers love the app, and some order online for collection. It takes a while for older members to try it.",
+              "lesson": "Meet customers where they are, on their phones as well as in the shop."
+            },
+            {
+              "text": "Give every member double points forever",
+              "spend": "none",
+              "rev": 1,
+              "costs": 2,
+              "risk": 0,
+              "rep": 0,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "pricing",
+              "result": "Members are thrilled, but every point costs you money. Your thin profit on each item almost disappears.",
+              "lesson": "A reward you cannot afford forever is a promise you will have to break."
+            },
+            {
+              "text": "Sell the members' details to the advertisers for easy money",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": 1,
+              "rep": -3,
+              "timing": "now",
+              "penalty": "mid",
+              "grade": "trap",
+              "skill": "ethics",
+              "result": "Members start getting strange adverts and calls and work out where they came from. Selling data without permission breaks the law: a huge fine.",
+              "lesson": "Customers' data belongs to them; never sell it without their clear permission."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vfarm",
+      "pitch": "An indoor farm that grows salad and herbs on tall shelves under LED lights.",
+      "earns": "Supermarkets and restaurants pay well for fresh, local leaves picked the same morning, every month of the year.",
+      "costs": "Electricity for the lights, water pumps, seeds, workers, and expensive machines that control heat and light.",
+      "risks": "Electricity prices jumping, a plant disease spreading through the shelves, a pump breaking, or a big buyer leaving.",
+      "tip": "Sell to several buyers and keep energy costs low; a farm that relies on one customer or cheap power is fragile.",
+      "cases": [
+        {
+          "id": "vfarm-1",
+          "title": "Who buys the first crop?",
+          "story": "Your farm's ten floors of shelves are ready. FreshMart would buy lots of lettuce every week at a low price. Chef Ines wants herbs for her three restaurants at a high price, but only a few boxes a week. How will you start?",
+          "options": [
+            {
+              "text": "Sell lettuce to FreshMart and herbs to Chef Ines: two kinds of buyer",
+              "spend": "none",
+              "rev": 2,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "grade": "best",
+              "skill": "strategy",
+              "result": "FreshMart's steady order pays the bills, and the pricey herbs add extra profit. If one buyer leaves, the other still keeps you going.",
+              "lesson": "Several customers are safer than one, however big that one is."
+            },
+            {
+              "text": "Start with three floors, learn what grows best, then fill the rest",
+              "spend": "none",
+              "rev": 0,
+              "costs": -1,
+              "risk": -1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "good",
+              "skill": "strategy",
+              "result": "In the first month you find that basil grows twice as fast as lettuce under your lights. You fill the other floors with what works.",
+              "lesson": "Start small, learn quickly, then grow what works."
+            },
+            {
+              "text": "Fit sensors that give each plant exactly the light and water it needs",
+              "spend": "mid",
+              "rev": 1,
+              "costs": -1,
+              "risk": 0,
+              "rep": 0,
+              "timing": "now",
+              "grade": "good",
+              "skill": "operations",
+              "result": "The sensors cost a lot, but no plant gets too much water or light. Leaves grow faster and the power bill drops.",
+              "lesson": "Technology pays when it saves you money every single day."
+            },
+            {
+              "text": "Hire Dr Okafor, a plant scientist, as your farm manager",
+              "spend": "none",
+              "rev": 1,
+              "costs": 1,
+              "risk": -1,
+              "rep": 0,
+              "timing": "slow",
+              "grade": "ok",
+              "skill": "people",
+              "result": "Dr Okafor knows exactly why leaves turn yellow and how to stop it. Her salary is high, so it takes a while before she pays for herself.",
+              "lesson": "Expert help costs money; it pays off most when the problem is hard."
+            },
+            {
+              "text": "Grow 40 different rare plants to impress everyone",
+              "spend": "none",
+              "rev": 1,
+              "costs": 2,
+              "risk": 1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "operations",
+              "result": "Every plant needs different light and care, and most rare plants have no buyer yet. Many crops end up in the compost bin.",
+              "lesson": "Grow what customers will buy, not just what looks exciting."
+            }
+          ]
+        },
+        {
+          "id": "vfarm-2",
+          "title": "The power bill triples",
+          "story": "Electricity prices have tripled this winter. Your lights shine 16 hours a day, so the monthly power bill has jumped from $12,000 to $36,000. What do you do?",
+          "options": [
+            {
+              "text": "Fit low-energy lights and run them at night, when power is cheaper",
+              "spend": "low",
+              "rev": 0,
+              "costs": -2,
+              "risk": -1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "best",
+              "skill": "operations",
+              "result": "The new lights use half the power, and night-time electricity is cheaper. The plants do not mind, and the bill drops to $15,000.",
+              "lesson": "Know your biggest cost and tackle it first."
+            },
+            {
+              "text": "Explain the rise to buyers and add 10 cents to each bag",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 0,
+              "timing": "now",
+              "grade": "good",
+              "skill": "pricing",
+              "result": "Your buyers know power prices have soared. Most accept the small rise, because fresh local salad is still worth it.",
+              "lesson": "When your costs really rise, a small, honest price rise is fair."
+            },
+            {
+              "text": "Fix your electricity price for two years with a power company",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "good",
+              "skill": "money",
+              "result": "The fixed price is not cheap, but now it cannot jump again. You can plan the next two years without nasty surprises.",
+              "lesson": "A fixed price protects you from shocks, so you can plan ahead."
+            },
+            {
+              "text": "Turn the lights down by half to save power",
+              "spend": "none",
+              "rev": -2,
+              "costs": -1,
+              "risk": 0,
+              "rep": 0,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "operations",
+              "result": "The bill falls, but the plants grow half as fast. You cannot fill your orders, and FreshMart is unhappy.",
+              "lesson": "Cutting the very thing that makes your product is not saving; it is shrinking."
+            },
+            {
+              "text": "Buy a salesman's $50,000 box that 'cuts any power bill by 90%'",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": 1,
+              "rep": 0,
+              "timing": "now",
+              "penalty": "low",
+              "grade": "trap",
+              "skill": "safety",
+              "result": "The box is just lights and plastic. The bill does not change, the salesman stops answering his phone, and your $50,000 is gone.",
+              "lesson": "If a gadget promises a miracle, ask real customers for proof before you pay."
+            }
+          ]
+        },
+        {
+          "id": "vfarm-3",
+          "title": "A greener label",
+          "story": "A supermarket chain will pay 20% more for salad with a proper green label, in all 50 of its shops. Solar panels for your roof would cost $150,000. Your marketing assistant says: 'Just print organic on the bags. We have no certificate, but who checks?'",
+          "options": [
+            {
+              "text": "Fit solar panels and show buyers your true green numbers",
+              "spend": "high",
+              "rev": 1,
+              "costs": -2,
+              "risk": -1,
+              "rep": 2,
+              "timing": "slow",
+              "flag": "eco",
+              "grade": "best",
+              "skill": "strategy",
+              "result": "The panels make a third of your power for free. With real numbers to show, the chain gives you the green label and the higher price.",
+              "lesson": "Real green changes can save money and win customers for years."
+            },
+            {
+              "text": "Turn leftover roots and leaves into compost for local gardens",
+              "spend": "none",
+              "rev": 0,
+              "costs": -1,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "flag": "eco",
+              "grade": "good",
+              "skill": "strategy",
+              "result": "Nothing goes to waste any more, and the bin bill shrinks. Local gardeners love the free compost and tell their friends.",
+              "lesson": "Waste is often something useful that nobody has used yet."
+            },
+            {
+              "text": "Swap plastic boxes for paper bags that can be recycled",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "ok",
+              "skill": "marketing",
+              "result": "Shoppers like the paper bags, though the leaves wilt a little faster in them. It is a small step in the right direction.",
+              "lesson": "Small green steps count, but check they work for your product too."
+            },
+            {
+              "text": "Ignore the label: shoppers only care about price",
+              "spend": "none",
+              "rev": -1,
+              "costs": 0,
+              "risk": 0,
+              "rep": -1,
+              "timing": "slow",
+              "grade": "poor",
+              "skill": "strategy",
+              "result": "The chain picks a rival farm with a real green label. You keep your old price, but miss the biggest order of the year.",
+              "lesson": "More and more customers care about the planet; ignoring them leaves money behind."
+            },
+            {
+              "text": "Print 'organic' on the bags: it costs nothing and sells more",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": -3,
+              "timing": "now",
+              "penalty": "low",
+              "grade": "trap",
+              "skill": "ethics",
+              "result": "Food inspectors do check. With no certificate, you must take every bag off the shelves and pay a fine, and the news calls it fake green.",
+              "lesson": "Only claim what is true; customers and inspectors find out about fake labels."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cinema",
+      "pitch": "A cinema with five screens showing the latest films, plus popcorn, snacks and drinks.",
+      "earns": "Tickets bring in money, but most profit comes from popcorn and drinks; school holidays and big new films fill the seats.",
+      "costs": "Film studios take about half of every ticket, plus staff wages, rent, electricity and keeping the projectors working.",
+      "risks": "A run of boring films, people watching at home instead, a rival cinema opening, or a projector breaking on a big night.",
+      "tip": "Give people a night out they cannot get at home: comfy seats, great sound and friendly staff.",
+      "cases": [
+        {
+          "id": "cinema-1",
+          "title": "Opening night plans",
+          "story": "Your five-screen cinema is ready to open. Tickets in town cost about $12. Many people now watch films at home on the sofa, so you need reasons for them to come out. What will you do first?",
+          "options": [
+            {
+              "text": "Sell a $15-a-month card that lets members see as many films as they like",
+              "spend": "none",
+              "rev": 2,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "flag": "loyal",
+              "grade": "best",
+              "skill": "strategy",
+              "result": "Hundreds of film fans sign up. The cards bring in steady money every month, and members buy popcorn every time they come.",
+              "lesson": "Regular monthly customers keep your income steady, even in quiet weeks."
+            },
+            {
+              "text": "Fit big comfy seats and great sound in your two biggest screens",
+              "spend": "mid",
+              "rev": 2,
+              "costs": 0,
+              "risk": 0,
+              "rep": 2,
+              "timing": "now",
+              "grade": "good",
+              "skill": "operations",
+              "result": "People say it feels better than any sofa. Those two screens sell out first every weekend, even at a slightly higher price.",
+              "lesson": "Give customers an experience they cannot get at home."
+            },
+            {
+              "text": "Run cheap Saturday morning shows for families with little children",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "marketing",
+              "result": "Parents love a calm, cheap morning out, with softer sound and the lights a little brighter. Many come back for birthday parties too.",
+              "lesson": "Serving a group that others ignore can bring you loyal customers."
+            },
+            {
+              "text": "Charge $20 a ticket, because new films are popular",
+              "spend": "none",
+              "rev": -1,
+              "costs": 0,
+              "risk": 0,
+              "rep": -1,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "pricing",
+              "result": "Most people decide to wait and watch the film at home. Half your seats stay empty on the opening weekend.",
+              "lesson": "A price far above everyone else's needs a very good reason, or customers stay away."
+            }
+          ]
+        },
+        {
+          "id": "cinema-2",
+          "title": "A giant rival opens",
+          "story": "A huge 20-screen cinema opens across town with $6 tickets. Your weekday crowds have halved, and your staff are worried about their jobs. What do you do?",
+          "options": [
+            {
+              "text": "Hold special nights: film quizzes, sing-alongs and birthday parties",
+              "spend": "low",
+              "rev": 2,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "best",
+              "skill": "marketing",
+              "result": "Your cinema becomes the place for fun nights out, not just cheap tickets. The sing-along nights sell out weeks ahead.",
+              "lesson": "When a rival is cheaper, be different and better, not just cheaper."
+            },
+            {
+              "text": "Ask your regulars what would keep them coming back",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "people",
+              "result": "They ask for a quiet film club, cheaper snacks for children and easier parking. You do all three, and most of them stay.",
+              "lesson": "Your loyal customers can tell you exactly how to keep them."
+            },
+            {
+              "text": "Cut prices on quiet weekday afternoons only",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 0,
+              "timing": "now",
+              "grade": "good",
+              "skill": "pricing",
+              "result": "Students and retired people fill the afternoon shows. Evenings stay at the normal price, so you do not lose money.",
+              "lesson": "Lower prices only when the seats would otherwise be empty."
+            },
+            {
+              "text": "Cut every ticket to $5 to beat them",
+              "spend": "none",
+              "rev": 1,
+              "costs": 2,
+              "risk": 1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "pricing",
+              "result": "The giant rival cuts to $4. Now both cinemas lose money, and they have far more cash than you to keep on fighting.",
+              "lesson": "A price war with a much bigger rival is a fight you will probably lose."
+            },
+            {
+              "text": "Squeeze 40 more seats into each screen, in front of a side exit",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 1,
+              "rep": -2,
+              "timing": "now",
+              "penalty": "mid",
+              "grade": "trap",
+              "skill": "safety",
+              "result": "A fire inspector finds the blocked exits and shuts the cinema until they are cleared, with a big fine. In an emergency, people need every exit.",
+              "lesson": "Fire exits must always stay clear; no extra profit is worth people's safety."
+            }
+          ]
+        },
+        {
+          "id": "cinema-3",
+          "title": "Empty morning seats",
+          "story": "Your screens sit empty on weekday mornings. The city's schools want to bring 5,000 pupils a year for film mornings at a special price. And a man offers you brand-new films a week before other cinemas, for $5,000 cash and no paperwork.",
+          "options": [
+            {
+              "text": "Agree a fair school price that fills the empty morning seats",
+              "spend": "none",
+              "rev": 2,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "grade": "best",
+              "skill": "pricing",
+              "result": "Empty seats now earn money every weekday morning. Pupils love it, and many come back at the weekend with their families.",
+              "lesson": "Selling empty seats cheaply is smart when they would otherwise earn nothing."
+            },
+            {
+              "text": "Add a teachers' guide and a short talk about how films are made",
+              "spend": "low",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "marketing",
+              "result": "Teachers can now link the trip to their lessons, so more schools sign up every term.",
+              "lesson": "Make your product fit what the customer really needs."
+            },
+            {
+              "text": "Rent empty screens to companies for big meetings",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 0,
+              "timing": "now",
+              "grade": "good",
+              "skill": "strategy",
+              "result": "Companies love presenting on a giant screen with great sound. It is a brand-new way to earn from rooms you already have.",
+              "lesson": "Look for new customers who could use what you already own."
+            },
+            {
+              "text": "Charge schools full adult prices: they have no other cinema nearby",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": 0,
+              "rep": -1,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "pricing",
+              "result": "The schools decide the trip is too expensive and stay at school instead. The seats stay empty and you earn nothing.",
+              "lesson": "An empty seat earns nothing; a fair deal beats no deal."
+            },
+            {
+              "text": "Pay the man $5,000 cash for the early films and beat every rival",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": 1,
+              "rep": -3,
+              "timing": "now",
+              "penalty": "mid",
+              "grade": "trap",
+              "skill": "ethics",
+              "result": "The films were stolen copies. The studios find out, stop sending you films and take you to court. Your $5,000 is lost too.",
+              "lesson": "Cheap 'exclusive' deals for cash with no paperwork are usually stolen or fake."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "toyfactory",
+      "pitch": "A factory that designs and makes toys, from wooden trains to soft teddy bears.",
+      "earns": "Toy shops and online stores buy your toys by the boxful; half the year's sales happen in the weeks before Christmas.",
+      "costs": "Wood, plastic and fabric, factory workers' wages, machines, safety testing, and shipping toys to the shops.",
+      "risks": "A toy nobody wants, a safety recall (calling unsafe toys back), a big shop cancelling an order, or missing Christmas.",
+      "tip": "Test every toy as if your own little brother or sister will play with it; one unsafe toy can ruin a brand.",
+      "cases": [
+        {
+          "id": "toyfactory-1",
+          "title": "50,000 teddy bears",
+          "story": "ToyWorld, a chain of 200 shops, wants 50,000 teddy bears by October at $6 each: $300,000! Each bear costs you $4 to make, and you must buy all the fabric first. How do you handle your first giant order?",
+          "options": [
+            {
+              "text": "Say yes, but ask for a third of the money up front for materials",
+              "spend": "none",
+              "rev": 2,
+              "costs": 0,
+              "risk": -1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "best",
+              "skill": "money",
+              "result": "ToyWorld agrees to pay $100,000 now. You buy the fabric without borrowing, and the bears arrive on time.",
+              "lesson": "Big orders need money before they pay; ask for a deposit (part of the money up front)."
+            },
+            {
+              "text": "Hire extra workers on fair pay for the busy months",
+              "spend": "none",
+              "rev": 1,
+              "costs": 1,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "people",
+              "result": "With the extra team, every order is finished without exhausted workers. Nobody has to stay late every night.",
+              "lesson": "Plan extra help for busy times instead of wearing out your team."
+            },
+            {
+              "text": "Read the contract: what happens if you are a week late?",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "good",
+              "skill": "strategy",
+              "result": "The small print says you pay $10,000 for every day late! You ask for a fairer $1,000 a day, and ToyWorld agrees.",
+              "lesson": "Before you sign, read what happens if things go wrong."
+            },
+            {
+              "text": "Use cheaper, thinner fabric to earn more on each bear",
+              "spend": "none",
+              "rev": 0,
+              "costs": -1,
+              "risk": 0,
+              "rep": -2,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "operations",
+              "result": "The bears look worn out after one wash. Parents complain, and ToyWorld gives next year's order to another factory.",
+              "lesson": "Saving a few cents on quality can cost you your best customer."
+            }
+          ]
+        },
+        {
+          "id": "toyfactory-2",
+          "title": "The paint test",
+          "story": "It is October, and 20,000 toy trains must reach the shops for Christmas. The safety lab needs two weeks to test the new paint. Your paint supplier says: 'It is fine, I promise. Skip the test and ship now.'",
+          "options": [
+            {
+              "text": "Wait for the test, and tell the shops honestly about the delay",
+              "spend": "none",
+              "rev": -1,
+              "costs": 0,
+              "risk": -1,
+              "rep": 2,
+              "timing": "short",
+              "grade": "best",
+              "skill": "safety",
+              "result": "The test finds the paint flakes off when chewed! You switch to a safe paint and warn the shops. The trains arrive a week late, but safe.",
+              "lesson": "Never skip a safety test on a child's toy; a short delay beats a dangerous toy."
+            },
+            {
+              "text": "Pay workers fair overtime to catch up once the test is done",
+              "spend": "none",
+              "rev": 1,
+              "costs": 1,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "people",
+              "result": "Workers who want extra hours stay some evenings for extra pay, and the lost week is caught up. Nobody is forced to stay.",
+              "lesson": "Ask, do not force: fair pay for extra work keeps your team on your side."
+            },
+            {
+              "text": "Send the toys that already passed their tests first",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 0,
+              "timing": "short",
+              "grade": "good",
+              "skill": "operations",
+              "result": "Teddy bears and puzzles reach the shops first, so the shelves stay full while the trains finish testing.",
+              "lesson": "When one product is held up, keep the others moving."
+            },
+            {
+              "text": "Cancel the trains completely to avoid any risk",
+              "spend": "none",
+              "rev": -2,
+              "costs": 0,
+              "risk": 0,
+              "rep": -1,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "strategy",
+              "result": "The shops are left with empty spaces at Christmas and are cross. Waiting two weeks would have saved the whole order.",
+              "lesson": "Being careful does not mean giving up; find the safe way to go on."
+            },
+            {
+              "text": "Skip the test and ship now: the supplier promised it is fine",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 1,
+              "rep": -3,
+              "timing": "short",
+              "penalty": "mid",
+              "grade": "trap",
+              "skill": "safety",
+              "result": "The paint flakes off when toddlers chew it. Every train must be recalled from shops and homes, and the fines and refunds are enormous.",
+              "lesson": "A supplier's promise is not a safety test; check every toy made for children."
+            }
+          ]
+        },
+        {
+          "id": "toyfactory-3",
+          "title": "Twice as many toys",
+          "story": "ToyWorld wants twice as many toys next year. A new production line (another row of machines) in your factory would cost about $100,000. A company abroad offers to make your toys for half your cost, but will not let you visit its factory.",
+          "options": [
+            {
+              "text": "Choose a maker that lets you visit and treats its workers fairly",
+              "spend": "low",
+              "rev": 2,
+              "costs": -1,
+              "risk": 0,
+              "rep": 1,
+              "timing": "slow",
+              "grade": "best",
+              "skill": "ethics",
+              "result": "You find a fair factory in Portugal that welcomes visitors. Costs fall, quality is good, and you can tell shops proudly how your toys are made.",
+              "lesson": "Know who makes your products and how they are treated; your name is on every box."
+            },
+            {
+              "text": "Build the new production line in your own factory",
+              "spend": "mid",
+              "rev": 2,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "strategy",
+              "result": "The new line costs a lot, but you control every step. The town gains new jobs and is proud of its toy factory.",
+              "lesson": "Keeping control of quality can be worth paying a bit more."
+            },
+            {
+              "text": "Ask ToyWorld to sign a two-year order before you spend anything",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "good",
+              "skill": "strategy",
+              "result": "ToyWorld signs for two years. Now you know the extra toys will really be sold before you invest in making them.",
+              "lesson": "Get the order promised in writing before you spend big money to fill it."
+            },
+            {
+              "text": "Double everyone's hours for a year instead of hiring",
+              "spend": "none",
+              "rev": 1,
+              "costs": 1,
+              "risk": 1,
+              "rep": -1,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "people",
+              "result": "Tired workers make mistakes, and several leave for calmer jobs. Overtime pay costs more than new staff would have.",
+              "lesson": "Worn-out teams make mistakes; grow your team when the work grows."
+            },
+            {
+              "text": "Sign with the half-price factory abroad: no visit needed",
+              "spend": "none",
+              "rev": 1,
+              "costs": -1,
+              "risk": 1,
+              "rep": -3,
+              "timing": "now",
+              "penalty": "low",
+              "grade": "trap",
+              "skill": "ethics",
+              "result": "A news team films inside: workers there are paid almost nothing for 14-hour days. Shops pull your toys, and you pay back their orders.",
+              "lesson": "If a supplier hides how it treats its workers, its cheap price has a hidden cost."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hotel",
+      "pitch": "A stylish 40-room hotel in the city centre for tourists and business travellers.",
+      "earns": "Guests pay about $150 a night for a room, plus breakfast, meeting rooms and events; summer fills every room.",
+      "costs": "Cleaners, receptionists and chefs, laundry, energy, repairs, and fees to booking websites for each guest they send.",
+      "risks": "Empty rooms in quiet months, bad online reviews, a burst pipe, or tourists choosing a new hotel down the road.",
+      "tip": "Every guest can write a review that thousands will read, so make each stay feel special.",
+      "cases": [
+        {
+          "id": "hotel-1",
+          "title": "Doors open in May",
+          "story": "Your 40-room hotel opens in May. Booking websites fill rooms fast but keep 18% of every booking. You also need a general manager to run the hotel day to day. What will you do?",
+          "options": [
+            {
+              "text": "Hire Leila, an experienced manager, and train staff to welcome guests",
+              "spend": "none",
+              "rev": 2,
+              "costs": 1,
+              "risk": -1,
+              "rep": 2,
+              "timing": "slow",
+              "grade": "best",
+              "skill": "people",
+              "result": "Leila trains every receptionist and cleaner to learn guests' names and fix problems fast. Reviews start saying 'the staff made our trip'.",
+              "lesson": "Great service comes from a well-trained, well-led team."
+            },
+            {
+              "text": "Use booking websites at first, and build your own booking website too",
+              "spend": "low",
+              "rev": 2,
+              "costs": 0,
+              "risk": 0,
+              "rep": 0,
+              "timing": "now",
+              "flag": "online",
+              "grade": "good",
+              "skill": "strategy",
+              "result": "The big websites bring your first guests. Many book their next stay on your own site, so you keep the whole room price.",
+              "lesson": "Use big websites to be found, then build your own way to reach customers."
+            },
+            {
+              "text": "Insure the hotel against fire, floods and burst pipes",
+              "spend": "low",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 0,
+              "timing": "now",
+              "flag": "insured",
+              "grade": "good",
+              "skill": "money",
+              "result": "The insurance costs money every year. In November a frozen pipe floods three rooms, and the insurer pays for nearly all the repairs.",
+              "lesson": "Insurance turns a disaster you cannot afford into a bill you can."
+            },
+            {
+              "text": "Spend a fortune on a marble lobby before the rooms are finished",
+              "spend": "mid",
+              "rev": 0,
+              "costs": 1,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "money",
+              "result": "The lobby is stunning, but the rooms still have old beds and weak showers. Guests spend most of their time in their rooms, so reviews are mixed.",
+              "lesson": "Spend your money where customers spend their time."
+            },
+            {
+              "text": "Add a surprise $25 'hotel fee' in tiny print at checkout",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": -3,
+              "timing": "now",
+              "penalty": "low",
+              "grade": "trap",
+              "skill": "ethics",
+              "result": "Guests feel tricked and say so in their reviews. Booking websites hide your hotel, and inspectors make you refund every fee.",
+              "lesson": "Show the full price up front; hidden fees turn happy guests into angry reviewers."
+            }
+          ]
+        },
+        {
+          "id": "hotel-2",
+          "title": "A rainy summer",
+          "story": "It has rained all summer, and a shiny new hotel has opened down the road. In July only half of your 40 rooms are booked, and the hotel is losing money. What do you do?",
+          "options": [
+            {
+              "text": "Create rainy-day packages with local museums and restaurants",
+              "spend": "none",
+              "rev": 2,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "best",
+              "skill": "marketing",
+              "result": "Guests get a room, museum tickets and dinner for one price. Travel websites love it, and bookings climb even on wet weekends.",
+              "lesson": "When the weather turns against you, give customers a new reason to come."
+            },
+            {
+              "text": "Win weekday bookings from companies for meetings and training",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": -1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "good",
+              "skill": "strategy",
+              "result": "Three local companies book your meeting room and bedrooms every week. Business guests come rain or shine.",
+              "lesson": "Different kinds of customers make a business steadier in a bad season."
+            },
+            {
+              "text": "Lower prices for last-minute bookings on empty nights",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 0,
+              "timing": "short",
+              "grade": "ok",
+              "skill": "pricing",
+              "result": "Some empty rooms fill up with bargain hunters. It helps a little, but you earn less for each room.",
+              "lesson": "A small price cut can fill empty rooms, but it will not fix a bad season alone."
+            },
+            {
+              "text": "Cut the cleaners' hours in half to save money",
+              "spend": "none",
+              "rev": 0,
+              "costs": -1,
+              "risk": 0,
+              "rep": -2,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "people",
+              "result": "The rooms are not quite clean, and guests notice. Two reviews say 'dusty', and bookings fall even further.",
+              "lesson": "Cutting what guests care about most makes a bad season worse."
+            }
+          ]
+        },
+        {
+          "id": "hotel-3",
+          "title": "A pop star books in",
+          "story": "Pop star Nova wants your whole hotel for a week at triple the normal price, but 15 rooms are already booked by other guests. A magazine also offers $20,000 for secret photos of Nova in the hotel.",
+          "options": [
+            {
+              "text": "Give Nova the 25 free rooms and keep your promise to booked guests",
+              "spend": "none",
+              "rev": 2,
+              "costs": 0,
+              "risk": 0,
+              "rep": 2,
+              "timing": "short",
+              "grade": "best",
+              "skill": "ethics",
+              "result": "Nova's team takes 25 rooms and loves how calm the hotel is. Your other guests keep their rooms, plus the fun of a famous neighbour.",
+              "lesson": "Keep your promises to the customers you have, even when a bigger one comes along."
+            },
+            {
+              "text": "Keep Nova's visit secret to protect her and the other guests",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "people",
+              "result": "Your staff promise not to tell anyone. Nova's week is peaceful, and her manager says they will come back every year.",
+              "lesson": "Protecting a guest's privacy is part of great service."
+            },
+            {
+              "text": "Ask for a deposit and a signed contract before Nova arrives",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": -1,
+              "rep": 0,
+              "timing": "short",
+              "grade": "good",
+              "skill": "money",
+              "result": "Nova's team pays half up front. When they change plans and leave two days early, you are still paid.",
+              "lesson": "For big bookings, get a deposit and the deal in writing."
+            },
+            {
+              "text": "Cancel the other guests' bookings: Nova pays triple",
+              "spend": "none",
+              "rev": 2,
+              "costs": 0,
+              "risk": 0,
+              "rep": -3,
+              "timing": "short",
+              "grade": "poor",
+              "skill": "ethics",
+              "result": "Fifteen families find their holiday cancelled at the last minute. Their furious reviews say you only care about money.",
+              "lesson": "Breaking promises to ordinary customers costs more than a star's money brings."
+            },
+            {
+              "text": "Sell the magazine secret photos of Nova for $20,000",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": 1,
+              "rep": -3,
+              "timing": "now",
+              "penalty": "low",
+              "grade": "trap",
+              "skill": "ethics",
+              "result": "Nova's lawyers find out where the photos came from. You pay back far more than $20,000, and famous guests never book with you again.",
+              "lesson": "Guests trust you with their privacy; selling it is wrong and very costly."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "office",
+      "pitch": "A ten-floor office building in the city centre, rented out to companies.",
+      "earns": "Companies pay about $4,000 a month for each floor, on leases (rental contracts) that usually last several years.",
+      "costs": "Repairs, cleaning, lifts, heating and cooling, insurance, a building manager, and property taxes.",
+      "risks": "A tenant (a company that rents a floor) leaving, floors standing empty, or an old lift or boiler breaking down.",
+      "tip": "Happy tenants stay for years: fix problems fast and keep the building modern, and the rent keeps flowing in.",
+      "cases": [
+        {
+          "id": "office-1",
+          "title": "Ten empty floors",
+          "story": "You now own a ten-floor office building, but no tenants (companies that rent space) yet. TechCo offers to rent all ten floors for ten years at a low price. Lots of smaller companies want one or two floors each at a higher rent.",
+          "options": [
+            {
+              "text": "Rent to several different companies, each signing for three to five years",
+              "spend": "none",
+              "rev": 2,
+              "costs": 0,
+              "risk": -1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "best",
+              "skill": "strategy",
+              "result": "A bakery's head office, a design firm, a charity and seven others move in. If one ever leaves, the other floors still pay rent.",
+              "lesson": "Many different tenants are safer than one giant one."
+            },
+            {
+              "text": "Offer TechCo four floors at a higher rent, instead of all ten",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": -1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "good",
+              "skill": "pricing",
+              "result": "TechCo agrees to four floors at a better rent. They are a solid tenant, but no longer so big that losing them would sink you.",
+              "lesson": "You can say yes to part of a deal and shape it to suit you."
+            },
+            {
+              "text": "Have a lawyer write clear contracts: who fixes what, and when rent rises",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "strategy",
+              "result": "Every tenant knows the rules from day one. When a radiator breaks, nobody argues about who pays.",
+              "lesson": "Clear contracts stop arguments before they start."
+            },
+            {
+              "text": "Let anyone move in who can pay the first month, with no checks",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": 1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "money",
+              "result": "One new tenant stops paying after two months and takes ages to leave. A quick check would have shown they had done it before.",
+              "lesson": "Check a new tenant's history before you hand over the keys."
+            }
+          ]
+        },
+        {
+          "id": "office-2",
+          "title": "A big tenant may leave",
+          "story": "BrightBank rents three floors for $12,000 a month. They say they will leave when their rental contract (lease) ends in six months, because the building feels old: slow lifts, chilly offices and nowhere to park bikes.",
+          "options": [
+            {
+              "text": "Ask BrightBank what would make them stay, and fix the top problems",
+              "spend": "low",
+              "rev": 1,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "grade": "best",
+              "skill": "people",
+              "result": "They want warmer offices and bike storage most of all. You fix both, they sign for five more years, and the other tenants love the changes too.",
+              "lesson": "Keeping a good customer is cheaper than finding a new one."
+            },
+            {
+              "text": "Offer a small rent discount if they sign for five more years",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "pricing",
+              "result": "BrightBank likes the offer. You earn a little less per month, but you are sure of $11,000 a month for five years.",
+              "lesson": "A small discount for a long promise can be a smart trade."
+            },
+            {
+              "text": "Start looking for a new tenant now, just in case",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "good",
+              "skill": "strategy",
+              "result": "Two companies come to look round. Whatever BrightBank decides, the floors will not stand empty for long.",
+              "lesson": "Plan for the worst while working for the best."
+            },
+            {
+              "text": "Threaten to take BrightBank to court if they leave",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": 0,
+              "rep": -2,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "people",
+              "result": "Their lawyers point out that the lease lets them leave. Now they are leaving cross, and they tell other companies you are hard to deal with.",
+              "lesson": "Threats will not keep a customer; a better offer might."
+            },
+            {
+              "text": "When they leave, keep their $24,000 deposit by blaming old marks",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": 0,
+              "rep": -3,
+              "timing": "now",
+              "penalty": "low",
+              "grade": "trap",
+              "skill": "ethics",
+              "result": "BrightBank shows photos from the day they moved in: the marks were already there. A court makes you repay everything, plus their costs.",
+              "lesson": "A deposit is the tenant's money, held in case of damage; keep only what real damage costs."
+            }
+          ]
+        },
+        {
+          "id": "office-3",
+          "title": "A greener building",
+          "story": "Companies now want greener offices, and your heating bill is $5,000 a month. Insulation (warm padding in the walls) and a heat pump (a very efficient heater) would cost $180,000 and halve it. A salesman offers 'free' solar panels if you sign his 25-year contract today.",
+          "options": [
+            {
+              "text": "Pay for insulation and a heat pump, and tell tenants about it",
+              "spend": "mid",
+              "rev": 1,
+              "costs": -2,
+              "risk": -1,
+              "rep": 1,
+              "timing": "slow",
+              "flag": "eco",
+              "grade": "best",
+              "skill": "strategy",
+              "result": "Heating bills halve, offices are cosier, and companies looking for green offices ask to move in. Over the years, the work pays for itself.",
+              "lesson": "Think long term: spend now on things that keep paying you back for years."
+            },
+            {
+              "text": "Ask three companies for prices before choosing who does the work",
+              "spend": "none",
+              "rev": 0,
+              "costs": -1,
+              "risk": -1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "good",
+              "skill": "money",
+              "result": "The prices range from $150,000 to $240,000 for the same job. Comparing them saves you a fortune.",
+              "lesson": "Always compare a few prices before a big job; they can be very different."
+            },
+            {
+              "text": "Add bike racks, showers and plants to make the offices nicer",
+              "spend": "low",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "marketing",
+              "result": "Cyclists can now ride to work and shower before meetings. Tenants say the building feels fresh and modern.",
+              "lesson": "Small touches that make people's day better help tenants stay."
+            },
+            {
+              "text": "Change nothing: the building has worked fine for 30 years",
+              "spend": "none",
+              "rev": -1,
+              "costs": 0,
+              "risk": 0,
+              "rep": -1,
+              "timing": "slow",
+              "grade": "poor",
+              "skill": "strategy",
+              "result": "One by one, companies move to newer, greener buildings nearby. Empty floors earn nothing, and the heating bill keeps climbing.",
+              "lesson": "What worked for the last 30 years may not work for the next ten; keep improving."
+            },
+            {
+              "text": "Sign today for the 'free' solar panels: nothing to pay!",
+              "spend": "none",
+              "rev": 0,
+              "costs": 2,
+              "risk": 1,
+              "rep": 0,
+              "timing": "now",
+              "penalty": "low",
+              "grade": "trap",
+              "skill": "safety",
+              "result": "The small print says you must buy his electricity at double the normal price for 25 years, with a huge fee to leave early.",
+              "lesson": "'Free' deals with long contracts hide their cost in the small print; read every line first."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

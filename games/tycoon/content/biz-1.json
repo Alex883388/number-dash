@@ -1,0 +1,450 @@
+{
+  "businesses": [
+    {
+      "id": "lemonade",
+      "pitch": "Cold, homemade lemonade sold from your own little stall on hot days.",
+      "earns": "Each cup sells for more than its lemons, sugar and cup cost. Hot days and busy places sell the most.",
+      "costs": "Lemons, sugar, cups and ice, plus a small fee for a good spot on busy days.",
+      "risks": "Rain keeps people away, lemons go soft if you buy too many, and money can go missing from the cash box.",
+      "tip": "Buy for the weather: lots of lemons for a hot weekend, only a few when rain is coming.",
+      "cases": [
+        {
+          "id": "lemonade-1",
+          "title": "Where to set up",
+          "story": "Your stall is ready. A cup costs you 30 cents to make, and you'll sell it for $1. On Saturday there's a football match in the park. Where will you set up?",
+          "options": [
+            { "text": "By the bus stop on the busy main road", "spend": "none", "rev": 1, "costs": 0, "risk": 0, "rep": 0, "timing": "now", "grade": "good", "skill": "strategy", "result": "Lots of people pass, but most are rushing for a bus. You still sell 15 cups. Not bad!", "lesson": "Busy is good, but people in a hurry don't often stop to buy." },
+            { "text": "Outside your house on your quiet road", "spend": "none", "rev": -1, "costs": 0, "risk": 0, "rep": 0, "timing": "now", "grade": "poor", "skill": "strategy", "result": "It's easy and free, but only four people walk past all day. You sell two cups, and one of them is to your gran.", "lesson": "A great drink still needs people walking past to buy it." },
+            { "text": "Next to the football pitch, where the match is on", "spend": "none", "rev": 2, "costs": 0, "risk": 0, "rep": 1, "timing": "now", "grade": "best", "skill": "strategy", "result": "Hot, thirsty players and parents queue up at half-time. You sell 45 cups and go home with sticky hands and a heavy tin.", "lesson": "Set up where lots of thirsty people already are." },
+            { "text": "Right next to the ice-cream van", "spend": "none", "rev": 0, "costs": 0, "risk": 0, "rep": 0, "timing": "now", "grade": "ok", "skill": "strategy", "result": "Crowds come by, but most of them want an ice cream, not a drink. You sell 10 cups.", "lesson": "Next to a bigger, louder seller, your stall can easily get missed." }
+          ]
+        },
+        {
+          "id": "lemonade-2",
+          "title": "A rainy week",
+          "story": "The weather forecast says rain all week. When it rains, hardly anyone wants a cold drink. You usually buy 40 lemons on Friday. What will you do?",
+          "options": [
+            { "text": "Buy 40 lemons as usual, just in case", "spend": "none", "rev": 0, "costs": 1, "risk": 0, "rep": 0, "timing": "now", "grade": "poor", "skill": "operations", "result": "It pours all week. Most of the lemons go soft and you have to throw them away. That's $8 in the bin.", "lesson": "Stock you can't sell is money in the bin." },
+            { "text": "Sell homemade lemon biscuits too: people buy those in any weather", "spend": "low", "rev": 1, "costs": 0, "risk": 0, "rep": 0, "timing": "now", "grade": "good", "skill": "strategy", "result": "Your dad helps you bake, and biscuits sell even on wet days. You earn $6 while the lemons wait for the sun.", "lesson": "A second thing to sell can keep money coming when the first one is slow." },
+            { "text": "Cut the price to 20 cents so people buy in the rain", "spend": "none", "rev": -1, "costs": 0, "risk": 0, "rep": 0, "timing": "now", "grade": "poor", "skill": "pricing", "result": "A few people buy, but each cup costs you 30 cents to make. You lose money on every single cup!", "lesson": "Never sell for less than it costs you to make." },
+            { "text": "Buy only 10 lemons, and buy more when the sun comes back", "spend": "none", "rev": 0, "costs": -1, "risk": -1, "rep": 0, "timing": "now", "grade": "best", "skill": "operations", "result": "You sell a few cups on Sunday and nothing goes to waste. When the sun comes back, you're ready with fresh lemons.", "lesson": "Check the weather and buy only what you can sell." },
+            { "text": "Start a rainy-day jar: save $2 from every sunny week", "spend": "none", "rev": 0, "costs": 0, "risk": -1, "rep": 0, "timing": "now", "grade": "good", "skill": "money", "result": "This week is quiet, but the jar fills up all summer. Next time the rain comes, it pays for your lemons.", "lesson": "Saving in the good weeks helps you get through the bad ones." }
+          ]
+        },
+        {
+          "id": "lemonade-3",
+          "title": "An offer of help",
+          "story": "Saturdays are so busy that people give up waiting. Dean, an older boy you met last week, says: 'I'm your mate. Give me the cash box key and I'll look after the money.' Your sister Mia wants to help too.",
+          "options": [
+            { "text": "Give Dean the key so you can make drinks faster", "spend": "none", "rev": 0, "costs": 0, "risk": 0, "rep": 0, "timing": "now", "penalty": "low", "grade": "trap", "skill": "safety", "result": "Dean is friendly all day. But at home the tin is $12 short, and Dean says he didn't see anything.", "lesson": "Keep the money key yourself, or give it only to someone who has earned your trust." },
+            { "text": "Make big jugs at home first, so serving is quicker", "spend": "none", "rev": 1, "costs": 0, "risk": 0, "rep": 0, "timing": "now", "grade": "good", "skill": "operations", "result": "Pouring from ready jugs is much quicker. The queue is shorter, though you're still rushing on your own.", "lesson": "Getting ready before the rush makes busy days easier." },
+            { "text": "Pay three friends $5 each to help", "spend": "none", "rev": 1, "costs": 2, "risk": 0, "rep": 0, "timing": "now", "grade": "poor", "skill": "money", "result": "It's fun and fast, but you pay out $15 and only sell $10 more. You end up with less than before!", "lesson": "More helpers only pay off if they bring in more than they cost." },
+            { "text": "Do everything yourself and keep every cent", "spend": "none", "rev": 0, "costs": 0, "risk": 0, "rep": -1, "timing": "now", "grade": "ok", "skill": "money", "result": "You keep all the money, but the long queue gets fed up and some people walk off.", "lesson": "Doing it all alone can cost you customers." },
+            { "text": "Team up with Mia: she pours, you take the money, and you share", "spend": "none", "rev": 2, "costs": 1, "risk": 0, "rep": 1, "timing": "now", "grade": "best", "skill": "people", "result": "The queue moves twice as fast. You count the money together at the end, and Mia gets her fair share. You both grin.", "lesson": "Share the work with someone you trust, and agree a fair split before you start." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dogwalk",
+      "pitch": "Walking your neighbours' dogs for them, rain or shine.",
+      "earns": "Owners pay you for each walk, say $3 for half an hour. Happy dogs mean owners book you again every week.",
+      "costs": "Leads, poo bags, dog treats and a good raincoat. Your biggest cost is your own time.",
+      "risks": "A dog can pull, run off or not get on with other dogs. One lost dog or a missed walk can lose you a customer.",
+      "tip": "Be on time, every time: owners stay with a walker they can count on.",
+      "cases": [
+        {
+          "id": "dogwalk-1",
+          "title": "Your first customers",
+          "story": "You have leads, poo bags and treats. You'll charge $3 for a 30-minute walk. But nobody knows you walk dogs yet. How will you find your first customers?",
+          "options": [
+            { "text": "Put cards through doors on your street with your mum's phone number", "spend": "low", "rev": 2, "costs": 0, "risk": 0, "rep": 0, "timing": "now", "grade": "good", "skill": "marketing", "result": "Three people ring your mum. One of them books a walk for her spaniel, Toffee.", "lesson": "A simple card works, and a grown-up's number keeps you safe." },
+            { "text": "Offer Mrs Okafor next door one free walk for her dog, Biscuit", "spend": "none", "rev": 2, "costs": 0, "risk": 0, "rep": 1, "timing": "slow", "flag": "loyal", "grade": "best", "skill": "marketing", "result": "Biscuit comes back happy and tired. Mrs Okafor books you twice a week and tells two friends from her dog club.", "lesson": "A happy first customer is the best advert you can get." },
+            { "text": "Wait at home until someone asks you", "spend": "none", "rev": -1, "costs": 0, "risk": 0, "rep": 0, "timing": "now", "grade": "poor", "skill": "marketing", "result": "A whole week goes by. Nobody knows you walk dogs, so nobody asks.", "lesson": "Customers can't book you if they've never heard of you." },
+            { "text": "Put your name, address and photo online for everyone to see", "spend": "none", "rev": 1, "costs": 0, "risk": 1, "rep": -1, "timing": "now", "grade": "poor", "skill": "safety", "result": "Your mum spots it and takes it down fast. Strangers don't need to know where you live.", "lesson": "Never put your home address online. Let a grown-up handle the contact details." }
+          ]
+        },
+        {
+          "id": "dogwalk-2",
+          "title": "Seven dogs at once?",
+          "story": "You walk four small dogs together every afternoon. Mr Bell asks you to take his three big huskies too, for $3 each. Seven dogs means more money, but huskies pull hard.",
+          "options": [
+            { "text": "Ask your big brother Sam to hold some leads, and share the pay", "spend": "none", "rev": 2, "costs": 1, "risk": 0, "rep": 1, "timing": "now", "grade": "good", "skill": "people", "result": "With Sam there, the walk is calm and fun. You each earn a bit less, but every owner is happy.", "lesson": "A helper you trust lets you take on more, safely." },
+            { "text": "Walk all seven together: more money for the same time!", "spend": "none", "rev": 1, "costs": 0, "risk": 0, "rep": -2, "timing": "now", "penalty": "mid", "grade": "trap", "skill": "safety", "result": "A squirrel runs past. The huskies pull, the leads tangle and two dogs run off. You find them, but one owner wants her money back.", "lesson": "Never take on more than you can safely handle, however good the money." },
+            { "text": "Say no to Mr Bell", "spend": "none", "rev": 0, "costs": 0, "risk": 0, "rep": 0, "timing": "now", "grade": "ok", "skill": "strategy", "result": "Your four dogs stay safe, but Mr Bell finds another walker.", "lesson": "Before you say no, look for a safe way to say yes." },
+            { "text": "Walk the huskies on a second walk, after the first four", "spend": "none", "rev": 2, "costs": 0, "risk": 0, "rep": 1, "timing": "now", "grade": "best", "skill": "operations", "result": "It takes an extra hour, but every dog is safe and happy. Mr Bell books you for the whole summer.", "lesson": "Split a big job into safe pieces, and then you can say yes." }
+          ]
+        },
+        {
+          "id": "dogwalk-3",
+          "title": "Holiday dog-sitting",
+          "story": "The Nowak family are going away for a week. They ask you to walk and feed their dog Pepper every day, for $30. They will give you a key to their house.",
+          "options": [
+            { "text": "Say yes, and with your dad write down Pepper's food times and vet's number", "spend": "none", "rev": 2, "costs": 0, "risk": 0, "rep": 1, "timing": "now", "grade": "best", "skill": "operations", "result": "You know exactly what to do each day. Pepper is happy, and the Nowaks bring you a thank-you present from their trip.", "lesson": "Write down the important things before a big job starts." },
+            { "text": "Say yes to three families going away the same week", "spend": "none", "rev": 1, "costs": 0, "risk": 1, "rep": -2, "timing": "now", "grade": "poor", "skill": "strategy", "result": "You rush between houses all week. Pepper's walk is late every day, and one cat isn't fed until bedtime.", "lesson": "Too many promises at once means breaking some of them." },
+            { "text": "Say yes, and ask your dad to come with you each day", "spend": "none", "rev": 1, "costs": 0, "risk": -1, "rep": 0, "timing": "now", "grade": "good", "skill": "safety", "result": "It's safe and fun with your dad. But he's busy on two of the days, so Pepper only gets a short walk.", "lesson": "Plan who can help on every day of the job, not just the first." },
+            { "text": "Let your friend Kai do some days: give him the key and share the $30", "spend": "none", "rev": 0, "costs": 0, "risk": 0, "rep": -2, "timing": "now", "penalty": "low", "grade": "trap", "skill": "safety", "result": "Kai forgets to lock the back door, and the Nowaks come home to find it open. They're very upset, and you pay for a new lock.", "lesson": "A key someone trusts you with is like a password: never pass it on." },
+            { "text": "Ask for $60 because it's the holidays", "spend": "none", "rev": 1, "costs": 0, "risk": 0, "rep": -1, "timing": "now", "grade": "ok", "skill": "pricing", "result": "The Nowaks pay, but they look a bit shocked. Next time, they ask someone else first.", "lesson": "Charging too much can win you one job and lose you the next." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "thrift",
+      "pitch": "A market stall selling pre-loved toys, books, games and clothes at bargain prices.",
+      "earns": "You buy things cheaply or are given them, then sell them for more. A $1 book from a car boot sale can sell for $3.",
+      "costs": "Stock from car boot sales and charity shops, the stall fee each Saturday, and bags and price stickers.",
+      "risks": "Some things never sell, some turn out to be broken, and some bargains are stolen. Some weeks you earn nothing at all.",
+      "tip": "Buy only what you know you can sell for more, and always know where your stock came from.",
+      "cases": [
+        {
+          "id": "thrift-1",
+          "title": "Pricing your first box",
+          "story": "Your aunt gives you a box of old toys, books and board games to start your stall. They cost you nothing. How will you price them?",
+          "options": [
+            { "text": "Put everything in a box marked '50 cents each'", "spend": "none", "rev": 1, "costs": 0, "risk": 0, "rep": 0, "timing": "short", "grade": "ok", "skill": "pricing", "result": "Everything is gone in an hour! Later you find out that one of the games was worth $15.", "lesson": "Selling fast is nice, but selling too cheap gives your money away." },
+            { "text": "Price everything at $10: old things are 'vintage'!", "spend": "none", "rev": -2, "costs": 0, "risk": 0, "rep": 0, "timing": "now", "grade": "poor", "skill": "pricing", "result": "People pick things up, see the price and put them down again. You sell one toy all day.", "lesson": "A price is only right if customers will really pay it." },
+            { "text": "Look up what similar things sell for, then price yours a bit lower", "spend": "none", "rev": 2, "costs": 0, "risk": 0, "rep": 1, "timing": "now", "grade": "best", "skill": "pricing", "result": "Your prices feel fair, so things fly off the table. A board game you nearly sold for $1 goes for $6!", "lesson": "Find out what things are worth before you put a price on them." },
+            { "text": "Ask your aunt what she thinks each thing is worth", "spend": "none", "rev": 1, "costs": 0, "risk": 0, "rep": 0, "timing": "now", "grade": "good", "skill": "pricing", "result": "Your aunt knows a lot of the prices, but not all. You sell plenty, but a few things go too cheap.", "lesson": "Asking someone who knows is a good start. Checking real prices is even better." }
+          ]
+        },
+        {
+          "id": "thrift-2",
+          "title": "Nobody stops",
+          "story": "Your stall is full, but people walk straight past. Everything is in one big messy pile, with no prices on anything. What will you do?",
+          "options": [
+            { "text": "Sort things into neat boxes: toys, books, games, each with a clear price", "spend": "none", "rev": 2, "costs": 0, "risk": 0, "rep": 1, "timing": "now", "grade": "best", "skill": "marketing", "result": "Now people can see what's there. A girl finds three books she wants in seconds. It's your best Saturday yet!", "lesson": "People buy what they can see and understand quickly." },
+            { "text": "Buy lots more stock so there's more to choose from", "spend": "low", "rev": 0, "costs": 1, "risk": 0, "rep": 0, "timing": "now", "grade": "poor", "skill": "money", "result": "Now the messy pile is even bigger, and you've spent $12 on more things that don't sell.", "lesson": "Fix why things aren't selling before you buy more." },
+            { "text": "Make a '3 for $2' bargain box at the front", "spend": "none", "rev": 2, "costs": 0, "risk": 0, "rep": 0, "timing": "short", "grade": "good", "skill": "marketing", "result": "The bargain box makes people stop, and some of them look at the rest of the stall too.", "lesson": "A bargain at the front gets people to stop and look." },
+            { "text": "Shout 'Bargains!' at everyone who walks past", "spend": "none", "rev": 0, "costs": 0, "risk": 0, "rep": -1, "timing": "now", "grade": "poor", "skill": "marketing", "result": "A few people jump. Most of them walk faster. The pile is still a mess.", "lesson": "Being loud is not the same as being helpful." }
+          ]
+        },
+        {
+          "id": "thrift-3",
+          "title": "A bargain from a van",
+          "story": "A man in a van offers you a box of five nearly new games consoles for $30 each. 'No receipt, no questions,' he says. You could sell them for $150 each!",
+          "options": [
+            { "text": "Ask him for a receipt first", "spend": "none", "rev": 0, "costs": 0, "risk": -1, "rep": 0, "timing": "now", "grade": "good", "skill": "safety", "result": "He mumbles something and drives off fast. Now you know why there was no receipt.", "lesson": "Asking for a receipt is a quick test: honest sellers have one." },
+            { "text": "Just walk away and say nothing", "spend": "none", "rev": 0, "costs": 0, "risk": 0, "rep": 0, "timing": "now", "grade": "ok", "skill": "safety", "result": "Your money is safe. But the man drives on to the next market to try again.", "lesson": "Walking away keeps you safe; telling someone helps others too." },
+            { "text": "Buy the whole box: that's a huge profit!", "spend": "none", "rev": 2, "costs": 0, "risk": 0, "rep": -2, "timing": "now", "penalty": "high", "grade": "trap", "skill": "ethics", "result": "A week later a police officer visits the market. The consoles were stolen from a shop. They go back to the shop, and your $150 is gone.", "lesson": "No receipt and a price too good to be true? It's probably stolen." },
+            { "text": "Say no, and buy games from families who still have the boxes", "spend": "none", "rev": 1, "costs": 0, "risk": 0, "rep": 1, "timing": "now", "grade": "good", "skill": "strategy", "result": "A family sells you their old console in its box, with the receipt, for $40. You sell it for $70.", "lesson": "Buy from people who can show that what they're selling is really theirs." },
+            { "text": "Say no, and tell the market manager about the van", "spend": "none", "rev": 1, "costs": 0, "risk": -1, "rep": 2, "timing": "now", "grade": "best", "skill": "ethics", "result": "The manager thanks you and warns the other stalls. Next week she gives you a better spot, right by the entrance.", "lesson": "Saying no to a dodgy deal protects your good name, and people notice." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cupcake",
+      "pitch": "Homemade cupcakes with bright icing, sold from a stall at the Saturday market.",
+      "earns": "Each cupcake sells for much more than its flour, eggs, sugar and icing cost. A box of four makes a bigger sale.",
+      "costs": "Ingredients, paper cases, boxes and the stall fee. Burnt or unsold cakes are money lost.",
+      "risks": "Cakes go stale in a day or two, a rainy market is quiet, and a mistake about nuts could make someone ill.",
+      "tip": "Know what one cupcake costs you to make, then price it well above that.",
+      "cases": [
+        {
+          "id": "cupcake-1",
+          "title": "What does one cost?",
+          "story": "Flour, eggs, sugar and icing for 12 cupcakes cost you $6, so each one costs you 50 cents. The bakery on the corner sells cupcakes for $3. What will you charge?",
+          "options": [
+            { "text": "Ask five parents what they would pay, before you decide", "spend": "none", "rev": 1, "costs": 0, "risk": 0, "rep": 0, "timing": "now", "grade": "good", "skill": "strategy", "result": "Most of them say about $2. Now you know your price is right before you even start baking.", "lesson": "Asking customers first saves you from guessing." },
+            { "text": "50 cents each: cheap means lots of sales", "spend": "none", "rev": -2, "costs": 0, "risk": 0, "rep": 1, "timing": "now", "grade": "poor", "skill": "pricing", "result": "They sell out in no time, but you only get back what you spent. A whole morning of baking for nothing!", "lesson": "If the price only covers the cost, you are working for free." },
+            { "text": "$2 each, or a box of four for $7", "spend": "none", "rev": 2, "costs": 0, "risk": 0, "rep": 1, "timing": "now", "grade": "best", "skill": "pricing", "result": "Your price feels fair, and families love the box deal. You sell 30 cupcakes on your very first Saturday.", "lesson": "Price well above your cost, then a deal for buying several gets people to buy more." },
+            { "text": "$3, the same as the bakery", "spend": "none", "rev": 1, "costs": 0, "risk": 0, "rep": 0, "timing": "now", "grade": "good", "skill": "pricing", "result": "Some people buy, but many think: 'Same price? I'll go to the bakery I know.'", "lesson": "Matching a bigger shop's price can work, but give people a reason to pick you." },
+            { "text": "$6 each: homemade is special!", "spend": "none", "rev": -2, "costs": 0, "risk": 0, "rep": 0, "timing": "now", "grade": "poor", "skill": "pricing", "result": "People say 'Ooh, lovely!' and walk on. You take most of the cakes home again.", "lesson": "Too high a price scares customers away, however good the cake." }
+          ]
+        },
+        {
+          "id": "cupcake-2",
+          "title": "Are there nuts in it?",
+          "story": "A mum asks: 'My son is allergic to nuts. Are there any nuts in your chocolate cupcakes?' You used a new chocolate spread this week, and you can't remember what was in it.",
+          "options": [
+            { "text": "Tell her honestly that you're not sure, so he shouldn't have one", "spend": "none", "rev": 0, "costs": 0, "risk": 0, "rep": 1, "timing": "now", "grade": "good", "skill": "ethics", "result": "She thanks you for being honest. She doesn't buy today, but she remembers your stall.", "lesson": "'I don't know' is a safe and honest answer." },
+            { "text": "Stop selling chocolate cupcakes altogether", "spend": "none", "rev": -1, "costs": 0, "risk": -1, "rep": 0, "timing": "now", "grade": "ok", "skill": "operations", "result": "No chocolate means no worry, but chocolate was your best seller. Sales drop.", "lesson": "Fix the problem itself, instead of throwing away what works." },
+            { "text": "Bake a nut-free tray every Saturday, with a sign", "spend": "none", "rev": 1, "costs": 0, "risk": 0, "rep": 1, "timing": "now", "grade": "good", "skill": "operations", "result": "Families with nut allergies start coming just for you. Your Saturday queue grows longer.", "lesson": "Solving one customer's problem can win you lots of new customers." },
+            { "text": "Check the jar, and from now on label every tray with what's in it", "spend": "none", "rev": 1, "costs": 0, "risk": -1, "rep": 2, "timing": "slow", "grade": "best", "skill": "safety", "result": "The jar says 'contains hazelnuts', so you say sorry, not this one. Your new labels make parents trust you, and they come back.", "lesson": "Clear labels keep people safe and make them trust you." },
+            { "text": "Say 'No, I don't think so,' so you don't lose the sale", "spend": "none", "rev": 0, "costs": 0, "risk": 0, "rep": -2, "timing": "now", "penalty": "low", "grade": "trap", "skill": "safety", "result": "The spread had hazelnuts in it! His mum spots it on the jar just in time. The market makes you throw away the whole tray, and parents stop trusting you.", "lesson": "Never guess about allergies. Check, or say you don't know." }
+          ]
+        },
+        {
+          "id": "cupcake-3",
+          "title": "A big order",
+          "story": "Rosa's Café wants 60 cupcakes every week, but will only pay $1 each. Each costs you 50 cents to make, and baking 60 takes your whole Saturday.",
+          "options": [
+            { "text": "Say yes to 60 at $1: that's a lot of cupcakes!", "spend": "none", "rev": 1, "costs": 1, "risk": 0, "rep": 0, "timing": "now", "grade": "ok", "skill": "money", "result": "You bake all Saturday and earn $30. It's steady, but you have no time left for your own stall.", "lesson": "A big order is only good if the price is good too." },
+            { "text": "Offer 30 a week at $1.50 each, so it's worth your time", "spend": "none", "rev": 2, "costs": 0, "risk": -1, "rep": 0, "timing": "now", "grade": "best", "skill": "money", "result": "Rosa thinks about it, then says yes. Now you have steady money every week and still have time for your stall.", "lesson": "You can say 'Yes, but...' to a deal and make it fair for you too." },
+            { "text": "Say yes, then use cheaper margarine and less icing", "spend": "none", "rev": -1, "costs": -1, "risk": 0, "rep": -2, "timing": "now", "grade": "poor", "skill": "ethics", "result": "Rosa's customers notice that the cakes taste worse. After three weeks, she stops the order.", "lesson": "Cutting quality to save money loses customers." },
+            { "text": "Try it for two weeks, then talk to Rosa again", "spend": "none", "rev": 1, "costs": 0, "risk": 0, "rep": 0, "timing": "now", "grade": "good", "skill": "strategy", "result": "After two weeks you know it's hard work for little money. You ask for a better price, and Rosa agrees to $1.25.", "lesson": "A short try shows you whether a deal really works." },
+            { "text": "Say no: you'd rather sell at your stall for $2", "spend": "none", "rev": 0, "costs": 0, "risk": 0, "rep": 0, "timing": "now", "grade": "ok", "skill": "strategy", "result": "Your stall stays the same. You keep your Saturdays, but you miss out on steady money.", "lesson": "Before saying no to a big order, see if you can change it to suit you." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "party",
+      "pitch": "Magic tricks, games and balloon animals at children's birthday parties.",
+      "earns": "Parents pay for each party, say $40 for an hour of fun. Happy parents tell their friends, and bookings grow.",
+      "costs": "Balloons, small prizes, a costume, a speaker for music and getting to each party.",
+      "risks": "Parties get cancelled at the last minute, a trick can go wrong, and one bad party gets talked about at the school gate.",
+      "tip": "Practise every trick until it's perfect, and arrive early: parents remember an entertainer who's ready.",
+      "cases": [
+        {
+          "id": "party-1",
+          "title": "Your first poster",
+          "story": "You need a poster to get bookings. You've done two parties for your cousins. Online, a famous entertainer called Magic Max has amazing photos of huge shows. What will you put on your poster?",
+          "options": [
+            { "text": "Use Magic Max's photos: they look amazing and nobody will check", "spend": "none", "rev": 1, "costs": 0, "risk": 0, "rep": -2, "timing": "now", "penalty": "low", "grade": "trap", "skill": "ethics", "result": "A dad spots the same photos on Magic Max's website and tells everyone. Max's team also makes you pay for using them.", "lesson": "Using someone else's work as your own is copying, and it gets found out." },
+            { "text": "Ask your aunt to write a few kind words for the poster", "spend": "none", "rev": 1, "costs": 0, "risk": 0, "rep": 1, "timing": "now", "grade": "good", "skill": "marketing", "result": "'Our kids laughed all afternoon!' looks great on your poster. Two parents ring to ask about dates.", "lesson": "A few true words from a happy customer are very powerful." },
+            { "text": "Write 'Best entertainer in the country!' in huge letters", "spend": "none", "rev": 0, "costs": 0, "risk": 0, "rep": -1, "timing": "now", "grade": "poor", "skill": "marketing", "result": "People smile at the big claim, but nobody believes it. One parent asks, 'Says who?'", "lesson": "Big claims you can't prove make people trust you less." },
+            { "text": "No poster: just wait for your cousins to tell people", "spend": "none", "rev": 1, "costs": 0, "risk": 0, "rep": 0, "timing": "slow", "grade": "ok", "skill": "marketing", "result": "A few people hear about you, but it's very slow. You get one booking in a month.", "lesson": "Word of mouth is great, but it helps to give it a push." },
+            { "text": "Real photos from your cousins' parties, with their parents' OK", "spend": "low", "rev": 2, "costs": 0, "risk": 0, "rep": 1, "timing": "now", "grade": "best", "skill": "marketing", "result": "The photos are small but real: happy faces and wobbly balloon dogs. Parents like that you're honest, and you get three bookings.", "lesson": "Honest adverts with real photos win people's trust." }
+          ]
+        },
+        {
+          "id": "party-2",
+          "title": "Cancelled at the last minute",
+          "story": "You bought $20 of balloons and prizes for Leo's party. The night before, his dad rings to cancel. You've spent money and earned nothing.",
+          "options": [
+            { "text": "From now on, ask for a $10 deposit (money paid early) when people book", "spend": "none", "rev": 0, "costs": -1, "risk": -1, "rep": 0, "timing": "now", "grade": "best", "skill": "money", "result": "Families still book, and now a late cancel doesn't cost you anything. Leo's dad even books again, deposit paid.", "lesson": "A deposit shows people are serious, and protects you if they cancel." },
+            { "text": "Ring Leo's dad back and tell him off", "spend": "none", "rev": 0, "costs": 0, "risk": 0, "rep": -2, "timing": "now", "grade": "poor", "skill": "people", "result": "He says sorry, but he sounds annoyed. Later he tells other parents you were rude.", "lesson": "Getting cross with a customer makes things worse, not better." },
+            { "text": "Ask Leo's dad nicely if he'd like a new date", "spend": "none", "rev": 1, "costs": 0, "risk": 0, "rep": 1, "timing": "short", "grade": "good", "skill": "people", "result": "He's glad you asked. The party moves to next Saturday, and you use the balloons after all.", "lesson": "Being kind when things go wrong can save the sale." },
+            { "text": "Keep the balloons and prizes for your next party", "spend": "none", "rev": 0, "costs": -1, "risk": 0, "rep": 0, "timing": "now", "grade": "good", "skill": "operations", "result": "Nothing goes to waste: Ella's party next week gets them. But the next cancel could still catch you out.", "lesson": "Saving supplies for next time stops waste, but it doesn't stop cancels." }
+          ]
+        },
+        {
+          "id": "party-3",
+          "title": "The school summer fair",
+          "story": "The school asks you to entertain at the summer fair: 3 hours, about 80 children, for $60. That's a lot of children for one entertainer! Your friend Aisha is great at face painting.",
+          "options": [
+            { "text": "Do it alone and keep all $60", "spend": "none", "rev": 1, "costs": 0, "risk": 0, "rep": -1, "timing": "now", "grade": "ok", "skill": "money", "result": "You earn $60, but the queue is huge and lots of children don't get a turn. Some go home grumpy.", "lesson": "Taking on too much alone can let people down." },
+            { "text": "Ask for $200 because it's a big job", "spend": "none", "rev": -1, "costs": 0, "risk": 0, "rep": 0, "timing": "now", "grade": "poor", "skill": "pricing", "result": "The school says that's far too much, and books someone else.", "lesson": "Ask for a fair price, not the biggest number you can think of." },
+            { "text": "Ask for $90, since three hours is longer than a party", "spend": "none", "rev": 1, "costs": 0, "risk": 0, "rep": 0, "timing": "now", "grade": "good", "skill": "pricing", "result": "The school agrees to $80. You earn more, though you're very tired by the end.", "lesson": "It's fine to ask for a fair price for a bigger job." },
+            { "text": "Team up with Aisha: you do magic, she paints faces, you share the $60", "spend": "none", "rev": 2, "costs": 1, "risk": 0, "rep": 2, "timing": "now", "grade": "best", "skill": "people", "result": "Two queues, no long waits and lots of painted tigers. The head teacher books you both for the Christmas fair too!", "lesson": "Partners with different skills can do more together than alone." },
+            { "text": "Say yes, and book a birthday party the same afternoon", "spend": "none", "rev": 1, "costs": 0, "risk": 1, "rep": -2, "timing": "now", "grade": "poor", "skill": "strategy", "result": "You rush off from the fair early and arrive late at the party, out of breath. Nobody is happy.", "lesson": "Two bookings at once usually means doing both of them badly." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "carwash",
+      "pitch": "Washing cars on driveways at the weekend with buckets, sponges and a big smile.",
+      "earns": "Drivers pay for a clean, shiny car, say $6 a wash. Regular customers come back every week or two.",
+      "costs": "Car shampoo, sponges, soft cloths, buckets and water. Good tools cost more but last longer.",
+      "risks": "Rainy weeks and cold winters mean fewer washes, and a scratched car or a fake banknote can cost you.",
+      "tip": "Wash every car as if it were your own: a shiny car is the best advert on the street.",
+      "cases": [
+        {
+          "id": "carwash-1",
+          "title": "Buckets or a hose?",
+          "story": "You're getting ready for your first car wash weekend. A hose is quick but uses lots of water. The man at the shop says washing-up liquid can make car paint dull. What will you buy?",
+          "options": [
+            { "text": "A hose and washing-up liquid: quick and cheap", "spend": "none", "rev": 0, "costs": 1, "risk": 0, "rep": -1, "timing": "now", "grade": "poor", "skill": "operations", "result": "It's quick, but you use loads of water, and Mr Lee's paint looks dull afterwards. He doesn't come back.", "lesson": "Cheap and quick can cost you customers if the job isn't done well." },
+            { "text": "Buckets, soft sponges and proper car shampoo", "spend": "low", "rev": 1, "costs": -1, "risk": 0, "rep": 1, "timing": "now", "flag": "eco", "grade": "best", "skill": "operations", "result": "Cars come out shiny, and you use five buckets of water instead of a running hose. Mr Lee says it's the best wash he's had.", "lesson": "The right tools do a better job, and save water and money too." },
+            { "text": "Borrow your uncle's powerful pressure washer", "spend": "none", "rev": 1, "costs": 0, "risk": 1, "rep": 0, "timing": "now", "grade": "ok", "skill": "safety", "result": "It blasts the dirt off fast, but it nearly pulls off a wing mirror and soaks a neighbour. Your uncle takes it back.", "lesson": "Powerful tools need training before you use them." },
+            { "text": "Buy a big $120 car-cleaning kit from an advert", "spend": "high", "rev": 1, "costs": 0, "risk": 0, "rep": 0, "timing": "now", "grade": "poor", "skill": "money", "result": "It has 20 bottles you never use. You've spent a big chunk of your money before washing a single car.", "lesson": "Start with what you need, and buy more when you've earned it." },
+            { "text": "Ask Mr Lee next door, who loves his car, what he uses", "spend": "none", "rev": 1, "costs": 0, "risk": 0, "rep": 1, "timing": "now", "grade": "good", "skill": "strategy", "result": "Mr Lee shows you how to wash from the top down and lends you his soft cloth. He also books the very first wash!", "lesson": "Asking someone who knows can save you from beginner mistakes." }
+          ]
+        },
+        {
+          "id": "carwash-2",
+          "title": "A scratch on the door",
+          "story": "Mrs Adeyemi says there's a new scratch on her car door after your wash. You did drop a sponge on the ground and kept using it, and grit on a sponge can scratch paint.",
+          "options": [
+            { "text": "Say sorry and give her next wash free", "spend": "none", "rev": 0, "costs": 0, "risk": 0, "rep": 1, "timing": "now", "grade": "good", "skill": "people", "result": "She accepts, but the scratch is still there. She's polite, but she doesn't book again for a while.", "lesson": "Saying sorry is good. Putting the problem right is even better." },
+            { "text": "Ask your mum to talk to her for you", "spend": "none", "rev": 0, "costs": 0, "risk": 0, "rep": 0, "timing": "now", "grade": "ok", "skill": "people", "result": "Your mum sorts it out, but Mrs Adeyemi wonders why you didn't speak to her yourself.", "lesson": "It's your business, so speak up yourself, with a grown-up beside you if you like." },
+            { "text": "Say sorry, pay to have it polished out, and always rinse dropped sponges", "spend": "low", "rev": 0, "costs": 0, "risk": -1, "rep": 2, "timing": "now", "grade": "best", "skill": "ethics", "result": "It costs you $20, but she says, 'Thank you for being honest.' She keeps coming back and tells her friends you're fair.", "lesson": "Owning up to a mistake costs a little, but it builds a lot of trust." },
+            { "text": "Say the scratch was already there: she can't prove it", "spend": "none", "rev": 0, "costs": 0, "risk": 0, "rep": -2, "timing": "now", "penalty": "low", "grade": "trap", "skill": "ethics", "result": "She shows you a photo she took that morning: no scratch. Now you have to pay for it anyway, and she never books you again.", "lesson": "A fib to dodge a mistake usually makes it much worse." }
+          ]
+        },
+        {
+          "id": "carwash-3",
+          "title": "In a big hurry",
+          "story": "A man hands you a $50 note for a $6 wash. 'Quick, give me $44 change, I'm late!' The note feels thin and a bit odd, and he keeps looking at his watch. Your dad is helping in the garage.",
+          "options": [
+            { "text": "Give him his $44 change quickly so he isn't late", "spend": "none", "rev": 0, "costs": 0, "risk": 0, "rep": 0, "timing": "now", "penalty": "low", "grade": "trap", "skill": "safety", "result": "He zooms off. Later your dad holds the note up to the light: it's fake. You've lost $44 and a free wash.", "lesson": "When someone rushes you to hand over money, slow down." },
+            { "text": "Ask him for a smaller note or the exact money", "spend": "none", "rev": 0, "costs": 0, "risk": -1, "rep": 0, "timing": "now", "grade": "good", "skill": "safety", "result": "He grumbles, finds a $10 note, and you give him $4 change. Phew! You never find out about the $50.", "lesson": "You can always ask for a smaller note." },
+            { "text": "Tell him he can pay next time instead", "spend": "none", "rev": -1, "costs": 0, "risk": 0, "rep": 0, "timing": "short", "grade": "ok", "skill": "money", "result": "He never comes back. You've lost a $6 wash, but at least it wasn't $44.", "lesson": "Free washes for strangers don't pay the bills." },
+            { "text": "Stay calm, and ask your dad to check the note first", "spend": "none", "rev": 0, "costs": 0, "risk": -1, "rep": 1, "timing": "now", "grade": "best", "skill": "safety", "result": "Your dad checks it: fake! The man drives off without his change. The neighbours hear the story and like how careful you are.", "lesson": "Take your time with money, even when someone tries to hurry you." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "flowers",
+      "pitch": "Bright bunches of fresh flowers sold from a stall near the station.",
+      "earns": "You buy flowers cheaply by the bucket and sell them as pretty bunches, say $6 each. Mother's Day sells the most.",
+      "costs": "Fresh flowers every few days, buckets, paper, ribbon and the stall fee. Flowers that droop are money lost.",
+      "risks": "Flowers only stay fresh for a few days, quiet weeks leave you with droopy stock, and a big holiday can sell out or flop.",
+      "tip": "Buy little and often so your flowers are always fresh, and plan early for the big flower days.",
+      "cases": [
+        {
+          "id": "flowers-1",
+          "title": "Where to get flowers",
+          "story": "You need flowers to sell. The big flower market opens at 5 in the morning and is cheap. The supermarket sells bunches for $4. Your gran says sunflowers grow well in her garden.",
+          "options": [
+            { "text": "Go to the early flower market with your mum and buy by the bucket", "spend": "none", "rev": 1, "costs": -1, "risk": 0, "rep": 1, "timing": "now", "grade": "best", "skill": "money", "result": "It's a yawny start, but the flowers are fresh and cheap. Your bunches look lovely and cost less than the supermarket's.", "lesson": "Buying from where the shops buy is often fresher and cheaper." },
+            { "text": "Buy supermarket bunches for $4 and sell them for $5", "spend": "none", "rev": 0, "costs": 1, "risk": 0, "rep": 0, "timing": "now", "grade": "poor", "skill": "money", "result": "You make $1 a bunch, and people can buy the same flowers for less in the shop next door.", "lesson": "If you buy where your customers shop, it's hard to make a profit." },
+            { "text": "Pick flowers from the flower beds in the park: they're free!", "spend": "none", "rev": 0, "costs": 0, "risk": 0, "rep": -2, "timing": "now", "penalty": "low", "grade": "trap", "skill": "ethics", "result": "A park keeper stops you: those flowers belong to everyone. Your mum has to pay a fine, and you feel awful.", "lesson": "Free isn't free if it belongs to someone else." },
+            { "text": "Grow sunflowers in Gran's garden", "spend": "none", "rev": 1, "costs": -1, "risk": 0, "rep": 0, "timing": "slow", "flag": "eco", "grade": "good", "skill": "strategy", "result": "It takes months, but your tall sunflowers are a hit. Nothing is cheaper than flowers you grew yourself.", "lesson": "Growing your own takes time, but it can pay off later." }
+          ]
+        },
+        {
+          "id": "flowers-2",
+          "title": "Droopy flowers",
+          "story": "It's Monday, and you have 10 bunches left over from Saturday. They're starting to droop. Your next fresh flowers arrive on Wednesday.",
+          "options": [
+            { "text": "Buy fewer flowers for Saturday next time", "spend": "none", "rev": 0, "costs": -1, "risk": -1, "rep": 0, "timing": "now", "grade": "good", "skill": "operations", "result": "You still have a few droopy ones this week, but next weekend you sell out with almost nothing left over.", "lesson": "Learn from your leftovers: buy what you can sell." },
+            { "text": "Throw them away and start fresh", "spend": "none", "rev": 0, "costs": 1, "risk": 0, "rep": 0, "timing": "now", "grade": "poor", "skill": "money", "result": "Your stall looks nice again, but $30 of flowers went in the bin.", "lesson": "Throwing stock away is like throwing money away." },
+            { "text": "Tell customers they're fresh today: they'll never know", "spend": "none", "rev": 1, "costs": 0, "risk": 0, "rep": -2, "timing": "now", "penalty": "low", "grade": "trap", "skill": "ethics", "result": "By Tuesday the flowers are dead. Three people come back for their money, and they don't trust your stall any more.", "lesson": "Fibbing about what you sell catches up with you fast." },
+            { "text": "Give them to the care home down the road", "spend": "none", "rev": 0, "costs": 0, "risk": 0, "rep": 2, "timing": "now", "grade": "good", "skill": "people", "result": "The people who live there are delighted, and the local paper prints a photo. More people get to know your stall's name.", "lesson": "Kindness can be good business too: people remember it." },
+            { "text": "Sell them as 'Monday bunches' at half price, with a clear sign", "spend": "none", "rev": 1, "costs": -1, "risk": 0, "rep": 1, "timing": "now", "grade": "best", "skill": "ethics", "result": "People love a bargain. All 10 bunches go by lunchtime, and customers like that you're honest about them.", "lesson": "Selling old stock cheaply and honestly beats throwing it away." }
+          ]
+        },
+        {
+          "id": "flowers-3",
+          "title": "Mother's Day is coming",
+          "story": "Mother's Day is in two weeks. Last year the other flower stall sold out by 10 o'clock. But flowers bought too early will droop before the big day.",
+          "options": [
+            { "text": "Make a poster: 'Mother's Day bunches, $8, with a free card'", "spend": "low", "rev": 2, "costs": 0, "risk": 0, "rep": 0, "timing": "short", "grade": "good", "skill": "marketing", "result": "The free card is a hit with children buying for their mums. You sell out by noon.", "lesson": "A small extra, like a free card, can make yours the one people pick." },
+            { "text": "Take orders now, then buy just enough, plus a few extra", "spend": "none", "rev": 2, "costs": 0, "risk": -1, "rep": 0, "timing": "now", "grade": "best", "skill": "strategy", "result": "You get 25 orders! You buy the right amount on Friday, and every mum gets a fresh bunch. Hardly a petal is wasted.", "lesson": "Taking orders early tells you exactly how much to buy." },
+            { "text": "Buy 300 bunches today so you don't run out", "spend": "mid", "rev": 0, "costs": 0, "risk": 1, "rep": 0, "timing": "now", "grade": "poor", "skill": "operations", "result": "By Mother's Day half of them are drooping. You sell lots, but you throw away about $75 of flowers.", "lesson": "Buying too early can spoil the stock you need for the big day." },
+            { "text": "Double your prices, just for Mother's Day", "spend": "none", "rev": 1, "costs": 0, "risk": 0, "rep": -1, "timing": "now", "grade": "ok", "skill": "pricing", "result": "Some people pay, but a few say 'That's not fair!' and buy at the supermarket instead.", "lesson": "A small holiday price rise is fine; a huge one makes people feel tricked." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bikefix",
+      "pitch": "Fixing punctures, chains and brakes for cyclists from a corner of the market.",
+      "earns": "Riders pay for each fix, say $5 for a puncture. A patch costs you only 30 cents: people are paying for your skill.",
+      "costs": "Tools, a pump, puncture patches, brake pads and chains. Good tools cost more but last for years.",
+      "risks": "Winter is quiet, a job done badly can cause a crash, and cheap parts can break when someone needs them most.",
+      "tip": "Never skip a safety check: a cyclist trusts your work on every ride.",
+      "cases": [
+        {
+          "id": "bikefix-1",
+          "title": "Learn before you fix",
+          "story": "You can fix a puncture, but you've never fixed brakes or gears. People are already asking. The community centre runs a free bike-fixing class on Saturdays.",
+          "options": [
+            { "text": "Fix only punctures for now, since you know how", "spend": "none", "rev": 1, "costs": 0, "risk": -1, "rep": 0, "timing": "now", "grade": "good", "skill": "strategy", "result": "Your puncture fixes are quick and perfect, and people come back. But you have to send the gear jobs away.", "lesson": "Start with what you can do really well." },
+            { "text": "Buy a $90 professional toolkit to look like an expert", "spend": "mid", "rev": 0, "costs": 0, "risk": 0, "rep": 0, "timing": "now", "grade": "poor", "skill": "money", "result": "The shiny tools look great, but you still don't know how to fix gears.", "lesson": "Fancy tools don't make you an expert: practice does." },
+            { "text": "Fix anything people bring, and learn as you go", "spend": "none", "rev": 1, "costs": 0, "risk": 1, "rep": -2, "timing": "now", "grade": "poor", "skill": "safety", "result": "You fix a gear so that it slips. The rider wobbles home cross and asks for his money back.", "lesson": "Guessing on someone else's bike can make it unsafe." },
+            { "text": "Do the free class, and fix only punctures until you've learned", "spend": "none", "rev": 2, "costs": 0, "risk": -1, "rep": 1, "timing": "slow", "grade": "best", "skill": "operations", "result": "Four Saturdays later you can fix brakes, gears and chains. Word gets round that your work is spot on.", "lesson": "Time spent learning a skill properly keeps paying you back." },
+            { "text": "Watch videos and practise on your own old bike", "spend": "none", "rev": 1, "costs": 0, "risk": 0, "rep": 0, "timing": "slow", "grade": "good", "skill": "operations", "result": "You learn a lot, but you also pick up a few bad habits that a teacher would have spotted.", "lesson": "Practising is great; a good teacher makes it even better." }
+          ]
+        },
+        {
+          "id": "bikefix-2",
+          "title": "A long queue",
+          "story": "It's a sunny Saturday and ten bikes are waiting. Checking each bike's brakes takes 10 minutes. Your friend Omar says: 'Skip the brake checks. Nobody will know.'",
+          "options": [
+            { "text": "Check every bike, and give each person a time to come back", "spend": "none", "rev": 1, "costs": 0, "risk": -1, "rep": 2, "timing": "now", "grade": "best", "skill": "operations", "result": "Nobody has to stand and wait. They come back at their time, and every bike is safe. Five of them book you again.", "lesson": "Doing it right, and saying when it will be ready, keeps everyone happy." },
+            { "text": "Send everyone away and close early", "spend": "none", "rev": -1, "costs": 0, "risk": 0, "rep": -1, "timing": "now", "grade": "poor", "skill": "people", "result": "It's calm, but ten riders go home annoyed, and some go to the bike shop instead.", "lesson": "Turning everyone away loses customers you worked hard to get." },
+            { "text": "Skip the brake checks so everyone gets their bike back fast", "spend": "none", "rev": 1, "costs": 0, "risk": 0, "rep": -2, "timing": "now", "penalty": "mid", "grade": "trap", "skill": "safety", "result": "On the hill, a boy's brakes don't work and he rolls into a hedge. He's okay, but his mum is upset, and you pay for a new wheel.", "lesson": "Safety checks are never the bit to skip." },
+            { "text": "Ask Omar to pump tyres and oil chains while you do the brakes", "spend": "none", "rev": 1, "costs": 1, "risk": 0, "rep": 1, "timing": "now", "grade": "good", "skill": "people", "result": "Omar is a fast pumper! The queue moves quicker, and you still check every brake yourself.", "lesson": "Give helpers the easy jobs, and keep the safety jobs for yourself." }
+          ]
+        },
+        {
+          "id": "bikefix-3",
+          "title": "Sign today only!",
+          "story": "Big Wheels bike shop wants you to fix punctures for its customers, for $4 each. The manager hands you a paper full of tiny writing and says: 'Sign it today, or the deal is off!'",
+          "options": [
+            { "text": "Say no thanks: you're happy as you are", "spend": "none", "rev": 0, "costs": 0, "risk": 0, "rep": 0, "timing": "now", "grade": "ok", "skill": "strategy", "result": "Nothing changes. You keep your customers, but you miss out on extra work.", "lesson": "Reading the paper first might have turned a 'no' into a good 'yes'." },
+            { "text": "Ask the manager to explain the tiny writing, out loud", "spend": "none", "rev": 0, "costs": 0, "risk": -1, "rep": 0, "timing": "now", "grade": "good", "skill": "safety", "result": "He mumbles that you'd only be allowed to work for Big Wheels. Now you know the catch, and you can say no.", "lesson": "Asking what the small print means is always allowed." },
+            { "text": "Take the paper home and read it with a grown-up first", "spend": "none", "rev": 2, "costs": 0, "risk": -1, "rep": 0, "timing": "now", "grade": "best", "skill": "strategy", "result": "Your mum spots the catch: you could only work for Big Wheels. The shop crosses it out, and you sign on Monday. Extra work, and you keep your customers!", "lesson": "A real deal can wait a day for you to read it. 'Today only' is a warning sign." },
+            { "text": "Sign it now, before they change their mind", "spend": "none", "rev": -1, "costs": 0, "risk": 1, "rep": 0, "timing": "now", "penalty": "low", "grade": "trap", "skill": "safety", "result": "The tiny writing says you can only fix bikes for Big Wheels. You have to turn your own customers away, and getting out costs $60.", "lesson": "Never sign something you haven't read, however much someone rushes you." },
+            { "text": "Sign it, but secretly keep fixing bikes for others too", "spend": "none", "rev": 0, "costs": 0, "risk": 0, "rep": -2, "timing": "now", "penalty": "low", "grade": "poor", "skill": "ethics", "result": "Big Wheels finds out within a week. They end the deal, make you pay $60 and tell other shops you can't be trusted.", "lesson": "Breaking a promise in secret still breaks your good name." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "phonecase",
+      "pitch": "A little kiosk in the shopping centre selling cool, colourful phone cases.",
+      "earns": "A case costs you about $2 to buy and sells for $8 to $12. Christmas and birthdays bring the busiest weeks.",
+      "costs": "Cases to sell, the kiosk rent each month and a few display stands. Cases that go out of fashion are hard to sell.",
+      "risks": "New phones come out and old cases stop selling, fake 'designer' goods are everywhere, and some online sellers are scammers.",
+      "tip": "Stock cases for the phones your customers really have, and buy only from sellers you can trust.",
+      "cases": [
+        {
+          "id": "phonecase-1",
+          "title": "Which cases to stock?",
+          "story": "There are hundreds of different phones. You have $120 to spend on your first cases. Which ones will you buy?",
+          "options": [
+            { "text": "Buy half now, then buy more of whatever sells", "spend": "none", "rev": 1, "costs": 0, "risk": -1, "rep": 0, "timing": "now", "grade": "good", "skill": "money", "result": "In the first week you see which cases sell best, and you buy more of those. Very little is left over.", "lesson": "Buying a little first lets you learn before you spend it all." },
+            { "text": "A few cases for every phone ever made", "spend": "none", "rev": 0, "costs": 1, "risk": 0, "rep": 0, "timing": "now", "grade": "poor", "skill": "operations", "result": "Your shelves are full, but there's only one case for each phone, and most are for old phones nobody uses.", "lesson": "Spreading your money too thin means too little of what sells." },
+            { "text": "Spend it all on cases for the newest phone", "spend": "none", "rev": 1, "costs": 0, "risk": 1, "rep": 0, "timing": "now", "grade": "ok", "skill": "strategy", "result": "A few people have the new phone and buy one. But most people still use older phones, so lots of cases just sit there.", "lesson": "The newest thing isn't always what most people have." },
+            { "text": "Buy the cases you like best", "spend": "none", "rev": -1, "costs": 0, "risk": 0, "rep": 0, "timing": "now", "grade": "poor", "skill": "strategy", "result": "You love the glittery unicorn cases. Sadly, only two other people do.", "lesson": "Stock what customers like, not just what you like." },
+            { "text": "Ask 20 shoppers which phone they have, then buy cases for those", "spend": "none", "rev": 2, "costs": 0, "risk": 0, "rep": 1, "timing": "now", "grade": "best", "skill": "strategy", "result": "Most people have one of four phones. You buy cases just for those and sell half of them in the first week.", "lesson": "Ask customers what they need before you buy your stock." }
+          ]
+        },
+        {
+          "id": "phonecase-2",
+          "title": "Cheap 'designer' cases",
+          "story": "A kiosk nearby sells cases with famous fashion logos for $3, and it's busy. A supplier offers you the same 'designer' cases for $1 each. Real ones cost $40 in the brand's own shop.",
+          "options": [
+            { "text": "Drop your prices to $3 to match them", "spend": "none", "rev": -1, "costs": 0, "risk": 0, "rep": 0, "timing": "now", "grade": "poor", "skill": "pricing", "result": "You sell a few more, but you make almost nothing on each case.", "lesson": "A price war with cheap fakes is a war you can't win." },
+            { "text": "Make your own designs: name cases and patterns nobody else has", "spend": "low", "rev": 2, "costs": 0, "risk": 0, "rep": 1, "timing": "now", "grade": "best", "skill": "marketing", "result": "Your name cases are a hit: people queue to get their own name on a case. Nobody else in the centre does that.", "lesson": "Something special that's all yours beats copying someone else." },
+            { "text": "Buy 100 'designer' cases: people love the logos!", "spend": "none", "rev": 2, "costs": 0, "risk": 0, "rep": -2, "timing": "now", "penalty": "mid", "grade": "trap", "skill": "ethics", "result": "Officers come to the shopping centre and take every fake case. You lose all that stock and have to pay a fine.", "lesson": "Fake brand goods are against the law, however cheap they are." },
+            { "text": "Tell the shopping centre manager about the fakes", "spend": "none", "rev": 1, "costs": 0, "risk": 0, "rep": 1, "timing": "now", "grade": "good", "skill": "ethics", "result": "The manager thanks you and checks the other kiosk. The fakes go, and some of their customers come to you.", "lesson": "Speaking up about fakes protects honest sellers, including you." }
+          ]
+        },
+        {
+          "id": "phonecase-3",
+          "title": "Selling online",
+          "story": "You start selling cases on a shopping app too. A seller on the app offers you 200 cases for $200, half the usual price, if you pay him straight into his bank account, outside the app.",
+          "options": [
+            { "text": "Ask the seller for photos of the cases first", "spend": "none", "rev": 0, "costs": 0, "risk": 0, "rep": 0, "timing": "now", "grade": "ok", "skill": "safety", "result": "He sends lovely photos, but later you find the same ones on another shop's page. Photos can be copied.", "lesson": "Photos can be faked; paying the safe way is what protects you." },
+            { "text": "Tell him you'll only pay through the app", "spend": "none", "rev": 0, "costs": 0, "risk": -1, "rep": 0, "timing": "now", "grade": "good", "skill": "safety", "result": "The seller stops replying. That tells you everything! Your money stays safe.", "lesson": "A real seller is happy to be paid the safe way." },
+            { "text": "Stop selling online: the internet is full of scams", "spend": "none", "rev": -1, "costs": 0, "risk": 0, "rep": 0, "timing": "now", "grade": "poor", "skill": "strategy", "result": "You're safe, but you miss out on all the shoppers who buy from home.", "lesson": "Don't run away from the internet: learn its safety rules instead." },
+            { "text": "Report him to the app, and buy from sellers with good reviews", "spend": "none", "rev": 2, "costs": 0, "risk": -1, "rep": 1, "timing": "now", "flag": "online", "grade": "best", "skill": "safety", "result": "The app removes his page. Your cases from a well-reviewed seller arrive safely, and your own app shop grows every week.", "lesson": "Pay inside the app, where your money is protected, and warn others about scams." },
+            { "text": "Pay outside the app: half price is a great deal!", "spend": "none", "rev": 0, "costs": 0, "risk": 0, "rep": 0, "timing": "now", "penalty": "mid", "grade": "trap", "skill": "safety", "result": "You send the money. The seller's page vanishes, and no cases ever arrive. Outside the app, nobody can help you get it back.", "lesson": "If a seller asks you to pay outside the app, it's almost always a scam." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bubbletea",
+      "pitch": "A bright cart selling sweet bubble tea: milky tea with chewy tapioca pearls.",
+      "earns": "A cup costs you about $1.20 to make and sells for $4. On hot days the queue can go round the corner.",
+      "costs": "Tea, milk, fruit syrups, tapioca pearls, cups and big straws, plus the fee for your spot. Pearls must be fresh every day.",
+      "risks": "Cold, wet months can mean losses, new flavours can flop, and one bad review online can keep customers away.",
+      "tip": "Keep the menu small and sell what people love. Save some summer money for the cold months.",
+      "cases": [
+        {
+          "id": "bubbletea-1",
+          "title": "How big a menu?",
+          "story": "Your cart is ready. Each flavour needs its own syrup, and syrup that isn't used goes off. The big bubble tea chain has 30 flavours. How many will you sell?",
+          "options": [
+            { "text": "Only one flavour, to keep things simple", "spend": "none", "rev": 0, "costs": -1, "risk": 0, "rep": 0, "timing": "now", "grade": "ok", "skill": "operations", "result": "Nothing goes to waste, but people who don't like milk tea walk straight past.", "lesson": "Too little choice can send customers away too." },
+            { "text": "Ask people walking past to vote for their favourite flavours", "spend": "none", "rev": 1, "costs": 0, "risk": 0, "rep": 1, "timing": "slow", "grade": "good", "skill": "strategy", "result": "After 300 votes you know that mango, taro and strawberry win. You start with those.", "lesson": "Let your customers tell you what to sell." },
+            { "text": "Four favourite flavours, and a free-taste day to get started", "spend": "low", "rev": 2, "costs": 0, "risk": 0, "rep": 1, "timing": "now", "grade": "best", "skill": "marketing", "result": "Hundreds of people try a tiny cup. Mango and strawberry are the winners, and lots of tasters come back to buy.", "lesson": "A small menu is easier to run, and a free taste gets people trying." },
+            { "text": "Thirty flavours, just like the big chain", "spend": "none", "rev": 1, "costs": 2, "risk": 1, "rep": 0, "timing": "now", "grade": "poor", "skill": "operations", "result": "People take ages to choose, and half the syrups go off before anyone orders them. That's money down the sink.", "lesson": "More choice means more waste for a small business." }
+          ]
+        },
+        {
+          "id": "bubbletea-2",
+          "title": "Winter is coming",
+          "story": "Summer was great: you made $900! But in cold, wet months people want hot drinks, and last November you lost money. What's your plan for the winter?",
+          "options": [
+            { "text": "Save some of the summer money, and add hot bubble tea to the menu", "spend": "none", "rev": 2, "costs": 0, "risk": -1, "rep": 0, "timing": "now", "grade": "best", "skill": "money", "result": "Hot brown-sugar milk tea is a cosy winter hit, and your savings cover the quiet weeks.", "lesson": "Save in the busy season, and change what you sell for the quiet one." },
+            { "text": "Keep going as usual and hope for a warm winter", "spend": "none", "rev": -1, "costs": 0, "risk": 1, "rep": 0, "timing": "now", "grade": "poor", "skill": "strategy", "result": "It's a cold, rainy winter. Some days you sell five cups and lose money on the pearls you made.", "lesson": "Hoping isn't a plan: get ready for the season you know is coming." },
+            { "text": "Move the cart inside the shopping centre for winter, for $100 a month", "spend": "none", "rev": 2, "costs": 1, "risk": 0, "rep": 0, "timing": "now", "grade": "good", "skill": "strategy", "result": "Warm shoppers buy plenty of tea, but the rent eats a big part of the profit.", "lesson": "A busier spot can be worth paying for, if you do the sums first." },
+            { "text": "Close for the winter and keep your money safe", "spend": "none", "rev": -1, "costs": -1, "risk": -1, "rep": 0, "timing": "now", "grade": "ok", "skill": "money", "result": "You lose nothing over the winter, but you earn nothing either, and some of your regular customers find a new drink.", "lesson": "Closing is safe, but a winter plan could keep money coming in." },
+            { "text": "Spend the summer money on a new speaker and flashing lights", "spend": "mid", "rev": 1, "costs": 0, "risk": 0, "rep": 0, "timing": "short", "grade": "poor", "skill": "money", "result": "The cart looks amazing, but in December nobody is out to see it, and you have no money left for supplies.", "lesson": "Spending all your profit leaves nothing for the hard months." }
+          ]
+        },
+        {
+          "id": "bubbletea-3",
+          "title": "Five stars for sale",
+          "story": "Your cart has 12 reviews online: mostly happy, one grumpy. A man messages you: 'Pay me $60 and I'll post 100 five-star reviews. You'll be number one in town!'",
+          "options": [
+            { "text": "Reply kindly to the grumpy review, and fix what went wrong", "spend": "none", "rev": 0, "costs": 0, "risk": 0, "rep": 2, "timing": "now", "grade": "good", "skill": "people", "result": "The grumpy reviewer said the pearls were hard. You fix your recipe and say thanks. She changes her review to four stars!", "lesson": "A kind reply to a complaint shows everyone that you care." },
+            { "text": "Put a sign on the cart: 'Enjoyed it? Please leave us a review!'", "spend": "none", "rev": 1, "costs": 0, "risk": 0, "rep": 2, "timing": "slow", "grade": "best", "skill": "marketing", "result": "Happy customers start writing real reviews. In a month you have 60, and people say lovely things about your mango tea.", "lesson": "Real reviews from happy customers are worth more than any you could buy." },
+            { "text": "Write a few good reviews yourself, using made-up names", "spend": "none", "rev": 0, "costs": 0, "risk": 0, "rep": -2, "timing": "now", "grade": "poor", "skill": "ethics", "result": "Your friends spot that 'Bob from Leeds' writes just like you. It's embarrassing, and the app deletes them.", "lesson": "Pretending to be your own customer is still a fake review." },
+            { "text": "Pay the $60: being number one will bring loads of customers", "spend": "low", "rev": 0, "costs": 0, "risk": 0, "rep": -2, "timing": "now", "penalty": "low", "grade": "trap", "skill": "ethics", "result": "The app spots 100 reviews in one night, deletes them and puts a warning on your page. Now people don't trust any of your reviews.", "lesson": "Fake reviews get spotted, and then nobody believes the real ones." }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+// Tycoon Town: two-action cases, offers and the phone header (run from the repo root):
+//   node games/tycoon/build.js && ND_CDP=9522 ND_PROFILE=edge-profile-tycoon2 ND_URL=file:///D:/Github/number-dash/games/tycoon/dist/preview.html ND_READY='!!window.__tycoon' ND_BOT=none node games/dash/playtest/shoot.js games/tycoon/playtest/cases.js
+// A High Street business opened by finger with its land bought; its case decided with two actions (a third
+// tap swaps out the first); an offer read aloud and answered with its trap; the report lists new CEO words;
+// on a phone the top bar keeps Next month on the first row.
+const T = 'window.__tycoon';
+module.exports = [
+  { viewport: [1180, 820, true, false, 2] },
+  { eval: `(() => { localStorage.removeItem('tycoon-town.v1'); const W = ${T}; W.G = W.TY.newGame('Case Test', 5); W.G.logo = '🐼'; W.G.cash = 100000; W.G.tier = 2; W.rec.slots[0] = null; W.saveGame(false); W.play(0); W.closeModal(); return [W.G.tier, W.G.cash]; })()` },
+  { sleep: 500 },
+  { touchEl: '[data-biz="bakery"]' }, { sleep: 300 }, { touchEl: '#openIt' }, { sleep: 300 },
+  { touchEl: '#optBuy' }, { sleep: 200 },
+  { log: "[document.getElementById('optBuy').classList.contains('sun'), document.getElementById('doOpen').textContent]" },
+  { shot: 'ty-20-buy-land' },
+  { touchEl: '#doOpen' }, { sleep: 900 },
+  { log: `[${T}.G.biz[0].id, ${T}.TY.rentFor(${T}.G, ${T}.G.biz[0]), !!document.querySelector('#dialog .opt')]` },
+  { touchEl: '#dialog .opt[data-k="0"]' }, { touchEl: '#dialog .opt[data-k="1"]' }, { sleep: 150 },
+  { log: "[...document.querySelectorAll('#dialog .opt')].map((o) => o.getAttribute('aria-pressed')).join(',')" },
+  { touchEl: '#dialog .opt[data-k="2"]' }, { sleep: 150 },
+  { log: "[...document.querySelectorAll('#dialog .opt')].map((o) => o.getAttribute('aria-pressed')).join(',')" },
+  { touchEl: '#dialog .opt[data-k="0"]' }, { sleep: 150 },
+  { log: "[...document.querySelectorAll('#dialog .opt')].map((o) => o.getAttribute('aria-pressed')).join(',')" },
+  { shot: 'ty-21-two-picks' },
+  { touchEl: '#decide' }, { sleep: 400 },
+  { log: `[document.querySelectorAll('#dialog > .res').length, document.querySelectorAll('#dialog .bigstars span:not(.off)').length, ${T}.G.stats.cases]` },
+  { shot: 'ty-22-two-results' },
+  { touchEl: '#dialog [data-close]' }, { sleep: 200 },
+  // an offer: read aloud, then the trap
+  { eval: `(() => { const W = ${T}; W.save.settings.speak = true; const o = W.TY.OFFERS[0]; W.G.inbox.push({ key: 'o-test', kind: 'offer', id: o.id, arrived: W.G.month, due: W.G.month + 2 }); W.render(); return o.id; })()` },
+  { touchEl: '#inboxBtn' }, { sleep: 300 },
+  { log: "[!!document.querySelector('#dialog .opt'), document.querySelector('#dialog h2').textContent]" },
+  { touchEl: '#sayIt' }, { sleep: 200 },
+  { log: `${T}.Speech.said.slice(-1)[0].slice(0, 40)` },
+  { eval: `(() => { const k = ${T}.TY.OFFERS[0].options.findIndex((o) => o.grade === 'trap'); document.querySelector('#dialog .opt[data-k="' + k + '"]').setAttribute('data-tap', '1'); return k; })()` },
+  { touchEl: '#dialog .opt[data-tap]' }, { touchEl: '#decide' }, { sleep: 400 },
+  { log: `[document.querySelector('#dialog h2').textContent, ${T}.G.stats.fell, ${T}.G.cash < 100000]` },
+  { shot: 'ty-23-trap' },
+  { touchEl: '#dialog [data-close]' }, { sleep: 200 },
+  { touchEl: '#nextBtn' }, { sleep: 500 },
+  { log: "[...document.querySelectorAll('#dialog .word')].map((w) => w.textContent.slice(0, 60)).join(' | ')" },
+  { shot: 'ty-24-report-words' },
+  { touchEl: '#dialog [data-close]' }, { sleep: 200 },
+  // fast forward: up to three months, one report (it stops early when something arrives)
+  { eval: `(() => { const W = ${T}; W.G.inbox.slice().forEach((x) => W.TY.decide(W.G, x.key, [0])); W.render(); return [W.G.inbox.length, W.G.month]; })()` },
+  { touchEl: '#ffBtn' }, { sleep: 500 },
+  { log: `[document.querySelector('#dialog .who').textContent, ${T}.G.month, ${T}.G.inbox.length]` },
+  { shot: 'ty-26-fast-forward' },
+  { touchEl: '#dialog [data-close]' }, { sleep: 200 },
+  // phone: Next month on the first row with the menu
+  { viewport: [390, 844, true, false, 3] }, { sleep: 400 },
+  { log: "(() => { const a = document.getElementById('menuBtn').getBoundingClientRect(), b = document.getElementById('nextBtn').getBoundingClientRect(), c = document.getElementById('cashChip').getBoundingClientRect(); return [Math.abs(a.top - b.top) < 20, c.top > a.bottom - 4, Math.round(document.getElementById('plots').getBoundingClientRect().width)]; })()" },
+  { shot: 'ty-25-phone-bar' },
+  { log: 'JSON.stringify(window.__errs)' }
+];

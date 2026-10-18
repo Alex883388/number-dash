@@ -1,0 +1,2148 @@
+{
+  "businesses": [
+    {
+      "id": "tutoring",
+      "pitch": "A friendly centre where tutors help children get better at maths, reading and science.",
+      "earns": "Parents pay for each lesson, and one tutor can teach a small group of children at the same time.",
+      "costs": "Tutors' pay, rent for the rooms, books and worksheets, plus heating and electricity.",
+      "risks": "A great tutor leaving, quiet school holidays, and parents walking away if their child stops improving.",
+      "tip": "Show parents how their child is improving: happy parents tell other parents, and that's free advertising.",
+      "cases": [
+        {
+          "id": "tutoring-1",
+          "title": "Your first tutor",
+          "story": "Your centre opens on Monday and you need a tutor. Mrs Adeyemi, a trained teacher, asks $20 an hour. Jake, a student, asks $9. Every adult who works with children must pass a safety check, and Jake's will take two weeks.",
+          "options": [
+            {
+              "text": "Run a free taster lesson so parents can see the centre",
+              "spend": "low",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "marketing",
+              "result": "Twelve families come to try a lesson. Eight of them sign up for the whole term.",
+              "lesson": "Letting people try first is a great way to win their trust."
+            },
+            {
+              "text": "Promise parents that every child will get top marks",
+              "spend": "none",
+              "rev": 2,
+              "costs": 0,
+              "risk": 0,
+              "rep": -2,
+              "timing": "short",
+              "grade": "poor",
+              "skill": "marketing",
+              "result": "Lots of families sign up, but not every child gets top marks. Disappointed parents leave and tell their friends.",
+              "lesson": "Promise only what you can deliver, then try to do even better."
+            },
+            {
+              "text": "Let Jake start on Monday, before his safety check comes back",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": -2,
+              "timing": "now",
+              "penalty": "mid",
+              "grade": "trap",
+              "skill": "safety",
+              "result": "A parent asks to see Jake's safety check. There isn't one yet, so families leave and you are fined for breaking the rules.",
+              "lesson": "Safety rules protect children. Never skip them to save time."
+            },
+            {
+              "text": "Pay for an advert in the school newsletter",
+              "spend": "low",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 0,
+              "timing": "now",
+              "grade": "ok",
+              "skill": "marketing",
+              "result": "A few parents ring after seeing the advert. It helps, but most still want to see the centre first.",
+              "lesson": "Adverts get attention, but trust is what makes people buy."
+            },
+            {
+              "text": "Hire Mrs Adeyemi, a trained teacher, at a fair $20 an hour",
+              "spend": "none",
+              "rev": 2,
+              "costs": 1,
+              "risk": 0,
+              "rep": 2,
+              "timing": "now",
+              "grade": "best",
+              "skill": "people",
+              "result": "Parents love her calm lessons and clear progress notes. By the end of the month, every group is full.",
+              "lesson": "Paying fairly for real skill brings customers who stay."
+            }
+          ]
+        },
+        {
+          "id": "tutoring-2",
+          "title": "Your best tutor might leave",
+          "story": "Sam is your most popular tutor. Another centre has offered him $3 more an hour, and he's thinking of leaving. Twelve families come especially for his lessons.",
+          "options": [
+            {
+              "text": "Make every tutor promise never to work for another centre",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": 1,
+              "rep": -1,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "people",
+              "result": "The tutors feel trapped and grumpy. Two of them start looking for new jobs.",
+              "lesson": "People stay because they want to, not because they're forced to."
+            },
+            {
+              "text": "Raise Sam's pay by $2 and let him run a new science club",
+              "spend": "none",
+              "rev": 2,
+              "costs": 1,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "grade": "best",
+              "skill": "people",
+              "result": "Sam stays and loves running the science club. Six new families join just to try it.",
+              "lesson": "Keeping a great person is usually cheaper than replacing them."
+            },
+            {
+              "text": "Ask all your tutors what they enjoy and what they'd change",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": -1,
+              "rep": 0,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "people",
+              "result": "They ask for better books and a proper break room. Small changes, big smiles: nobody wants to leave now.",
+              "lesson": "Asking your team what they need costs little and stops problems early."
+            },
+            {
+              "text": "Ask Sam to write down his best lesson ideas for the team",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "ok",
+              "skill": "operations",
+              "result": "Now every tutor can use Sam's fun maths games. If he ever leaves, his ideas won't leave with him.",
+              "lesson": "Don't let all your know-how live in one person's head."
+            }
+          ]
+        },
+        {
+          "id": "tutoring-3",
+          "title": "Test time rush",
+          "story": "Big tests are six weeks away. Forty new families want lessons, but you only have room for twenty. Then a man emails offering a copy of the real test answers for $300.",
+          "options": [
+            {
+              "text": "Squeeze ten children into every group",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": -2,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "operations",
+              "result": "The rooms are noisy and crowded. Children get less help, and some parents complain and leave.",
+              "lesson": "Cramming in more customers can spoil the very thing they came for."
+            },
+            {
+              "text": "Add Saturday classes and hire another safety-checked tutor",
+              "spend": "low",
+              "rev": 3,
+              "costs": 1,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "best",
+              "skill": "strategy",
+              "result": "The Saturday groups fill up in two days. More children get help, and your income jumps.",
+              "lesson": "When demand is bigger than you, grow carefully: more hours and more good people."
+            },
+            {
+              "text": "Start a waiting list and offer the next free places first",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "operations",
+              "result": "Families are happy to wait for a centre they trust. Your list is full until next term.",
+              "lesson": "A waiting list keeps eager customers for later."
+            },
+            {
+              "text": "Raise prices a little for new families only",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 0,
+              "timing": "now",
+              "grade": "ok",
+              "skill": "pricing",
+              "result": "A few families say no, but most happily pay. You earn a bit more without upsetting your regulars.",
+              "lesson": "When lots of people want what you sell, a small price rise can be fair."
+            },
+            {
+              "text": "Buy the secret test answers so every child gets top marks",
+              "spend": "low",
+              "rev": 2,
+              "costs": 0,
+              "risk": 0,
+              "rep": -3,
+              "timing": "short",
+              "penalty": "mid",
+              "grade": "trap",
+              "skill": "ethics",
+              "result": "The school finds out the answers were stolen. The test is cancelled, and furious parents blame you and want their money back.",
+              "lesson": "Cheating breaks trust in a moment; real learning is what parents pay for."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "barber",
+      "pitch": "A barber shop with two chairs, where people come for a haircut and a friendly chat.",
+      "earns": "Each haircut costs $15. Regulars come back every few weeks, so a busy chair earns money all month long.",
+      "costs": "Rent for the shop, the barbers' pay, clippers, towels, shampoo and the electricity bill.",
+      "risks": "A cheaper barber nearby, a bad review online, or a great barber leaving and taking customers along.",
+      "tip": "Remember names and how people like their hair: regulars who feel at home come back for years.",
+      "cases": [
+        {
+          "id": "barber-1",
+          "title": "Opening the doors",
+          "story": "Your shop has two chairs. You cut hair yourself and need one more barber. Most barbers nearby charge $15 for a cut. What will you do first?",
+          "options": [
+            {
+              "text": "Hire Tomas, a skilled barber, on fair pay plus his tips",
+              "spend": "none",
+              "rev": 2,
+              "costs": 1,
+              "risk": 0,
+              "rep": 2,
+              "timing": "now",
+              "grade": "best",
+              "skill": "people",
+              "result": "Tomas is quick, friendly and brilliant with tricky haircuts. Customers start asking for him by name.",
+              "lesson": "A skilled, fairly paid team member is the best advert a shop can have."
+            },
+            {
+              "text": "Give free haircuts to everyone for the whole first month",
+              "spend": "mid",
+              "rev": 1,
+              "costs": 1,
+              "risk": 0,
+              "rep": 1,
+              "timing": "short",
+              "grade": "poor",
+              "skill": "pricing",
+              "result": "Crowds come for free cuts, but many never return once you charge. You worked a whole month for nothing.",
+              "lesson": "Giving everything away attracts bargain hunters, not loyal customers."
+            },
+            {
+              "text": "Start a loyalty card: every sixth haircut is free",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "slow",
+              "flag": "loyal",
+              "grade": "good",
+              "skill": "marketing",
+              "result": "Customers love collecting stamps. Most come back every month to fill their cards.",
+              "lesson": "Rewarding regulars keeps them coming to you, not to the shop down the road."
+            },
+            {
+              "text": "Charge $15 like everyone else, and $10 for children on weekdays",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "pricing",
+              "result": "Parents bring children after school on quiet weekdays. Your chairs are busy even on Tuesdays.",
+              "lesson": "A cheaper price at quiet times fills empty chairs without lowering your main price."
+            }
+          ]
+        },
+        {
+          "id": "barber-2",
+          "title": "A cheaper rival opens",
+          "story": "'Quick Cuts' opens across the road, charging $8 a cut, and some of your customers try it. A website offers to sell you 200 five-star reviews for $300.",
+          "options": [
+            {
+              "text": "Add a free hot-towel finish and easy online booking",
+              "spend": "low",
+              "rev": 2,
+              "costs": 1,
+              "risk": 0,
+              "rep": 2,
+              "timing": "now",
+              "flag": "online",
+              "grade": "best",
+              "skill": "strategy",
+              "result": "Customers notice the difference. Many who tried Quick Cuts come back, saying your cuts last longer.",
+              "lesson": "You don't have to be the cheapest; be the one that's worth paying for."
+            },
+            {
+              "text": "Cut your price to $7 to beat them",
+              "spend": "none",
+              "rev": -1,
+              "costs": 0,
+              "risk": 1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "pricing",
+              "result": "The shop is packed, but each cut barely pays for itself. You're working harder for less money.",
+              "lesson": "A price war with a cheaper rival usually makes you both poorer."
+            },
+            {
+              "text": "Ask happy customers to leave an honest review",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "marketing",
+              "result": "Twenty real reviews appear, full of kind words about your barbers. New customers read them and come in.",
+              "lesson": "Real reviews from happy customers are worth more than any advert."
+            },
+            {
+              "text": "Open late on Thursdays for people who work all day",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 0,
+              "timing": "now",
+              "grade": "ok",
+              "skill": "operations",
+              "result": "Busy workers pop in after their jobs. Thursday evenings become your second-busiest time.",
+              "lesson": "Opening when customers are free can win people a rival forgets about."
+            },
+            {
+              "text": "Pay $300 for 200 five-star reviews and look like the best shop",
+              "spend": "low",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": -2,
+              "timing": "short",
+              "penalty": "low",
+              "grade": "trap",
+              "skill": "ethics",
+              "result": "The review site spots the fakes, deletes them and puts a warning on your page. You are fined for tricking customers.",
+              "lesson": "Fake reviews are lying to customers, and they nearly always get found out."
+            }
+          ]
+        },
+        {
+          "id": "barber-3",
+          "title": "Room to grow",
+          "story": "Your shop is full every Saturday and people wait an hour. The empty shop next door is for rent at $500 a month. The agent says: 'Three others want it. Sign the rent contract today!'",
+          "options": [
+            {
+              "text": "Sign the contract today, before the other people get it",
+              "spend": "mid",
+              "rev": 2,
+              "costs": 0,
+              "risk": 1,
+              "rep": -1,
+              "timing": "now",
+              "penalty": "mid",
+              "grade": "trap",
+              "skill": "safety",
+              "result": "The small print makes you pay for a new roof and stay for ten years. It's a huge bill you never saw coming.",
+              "lesson": "'Sign today or lose it!' is a pressure trick. A fair deal lets you read it first."
+            },
+            {
+              "text": "Text regulars to suggest quieter times, like Tuesday mornings",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 0,
+              "timing": "now",
+              "grade": "good",
+              "skill": "operations",
+              "result": "Many regulars are happy to come on quieter days. Saturdays are calmer, and Tuesdays get busier.",
+              "lesson": "Spreading customers across the week can be cheaper than getting bigger."
+            },
+            {
+              "text": "Ask the agent for a lower rent and a shorter contract",
+              "spend": "none",
+              "rev": 0,
+              "costs": -1,
+              "risk": -1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "good",
+              "skill": "money",
+              "result": "The agent agrees to $450 a month for two years, not ten. Asking politely saves you $600 a year.",
+              "lesson": "Asking for better terms costs nothing: the worst they can say is no."
+            },
+            {
+              "text": "Squeeze a third chair into your small shop",
+              "spend": "low",
+              "rev": 1,
+              "costs": 0,
+              "risk": 1,
+              "rep": -1,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "operations",
+              "result": "Barbers bump elbows and customers feel cramped. It's a little quicker, but nobody enjoys it.",
+              "lesson": "Growing in a hurry can make a nice place feel worse."
+            },
+            {
+              "text": "Promote your best barber to run the new shop, with a pay rise",
+              "spend": "mid",
+              "rev": 3,
+              "costs": 1,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "best",
+              "skill": "people",
+              "result": "Your barber is proud to run the new shop. Saturday queues vanish, and both shops are busy.",
+              "lesson": "Growing works best when you trust good people with real responsibility."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "icecream",
+      "pitch": "A bright parlour selling scoops, sundaes and milkshakes in lots of flavours.",
+      "earns": "A scoop costs about 40 cents to make and sells for $3. On a hot day, hundreds of scoops go out of the door.",
+      "costs": "Milk, cream and fruit, big freezers that use lots of electricity, staff pay and the shop's rent.",
+      "risks": "Cold, rainy summers, empty winters, and a freezer breaking down with all the stock inside.",
+      "tip": "Save money from the hot months for the winter bills, and give people a reason to visit when it's cold.",
+      "cases": [
+        {
+          "id": "icecream-1",
+          "title": "Opening the parlour",
+          "story": "It's April, and your parlour opens next week. A scoop costs you about 40 cents to make and sells for $3. Summer is when you'll sell the most, so the first weeks really matter.",
+          "options": [
+            {
+              "text": "Give away free scoops every day for a whole month",
+              "spend": "mid",
+              "rev": 1,
+              "costs": 1,
+              "risk": 0,
+              "rep": 1,
+              "timing": "short",
+              "grade": "poor",
+              "skill": "pricing",
+              "result": "Huge queues for free ice cream, but most people never buy once it costs money. You gave away $1,200 of stock.",
+              "lesson": "Free treats should bring customers back, not just give your stock away."
+            },
+            {
+              "text": "Hire two cheerful part-time helpers for summer weekends",
+              "spend": "none",
+              "rev": 1,
+              "costs": 1,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "people",
+              "result": "Weekend queues move quickly and nobody gives up waiting. Your helpers are great with families.",
+              "lesson": "Extra hands at your busiest times turn long queues into sales."
+            },
+            {
+              "text": "Hold a 'name our new flavour' competition for local children",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "marketing",
+              "result": "Over 200 names arrive. The winner, Strawberry Volcano, becomes your bestseller.",
+              "lesson": "When customers help create something, they feel it's partly theirs."
+            },
+            {
+              "text": "Make your own ice cream with fresh milk from the local dairy",
+              "spend": "low",
+              "rev": 2,
+              "costs": 1,
+              "risk": 0,
+              "rep": 2,
+              "timing": "now",
+              "grade": "best",
+              "skill": "operations",
+              "result": "The fresh, creamy taste gets people talking. Queues form on the very first sunny Saturday.",
+              "lesson": "A product people can't get anywhere else is worth a little extra cost."
+            }
+          ]
+        },
+        {
+          "id": "icecream-2",
+          "title": "The freezer breaks",
+          "story": "On the hottest Saturday of the year, your biggest freezer breaks down. $1,200 of ice cream starts to melt, and the repair firm can't come until Monday.",
+          "options": [
+            {
+              "text": "Pay $1,200 for an emergency repair on Saturday night",
+              "spend": "mid",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 0,
+              "timing": "short",
+              "grade": "poor",
+              "skill": "money",
+              "result": "The freezer works again by Sunday, but the repair cost as much as all the ice cream you saved.",
+              "lesson": "Before paying to fix a problem, check the fix doesn't cost more than the problem."
+            },
+            {
+              "text": "Buy insurance that pays for spoiled stock in future",
+              "spend": "low",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 0,
+              "timing": "now",
+              "flag": "insured",
+              "grade": "good",
+              "skill": "money",
+              "result": "The next time something breaks, the insurance pays for the lost stock. You sleep better all summer.",
+              "lesson": "Insurance costs a little each year to save you from a big loss one day."
+            },
+            {
+              "text": "Ask the café next door to keep your tubs in their freezer",
+              "spend": "none",
+              "rev": 2,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "best",
+              "skill": "people",
+              "result": "Mrs Chen says yes if you send her some sundaes. Your stock is saved, and you've made a good friend.",
+              "lesson": "Good neighbours are a business's secret safety net."
+            },
+            {
+              "text": "Sell the softest tubs today as $2 milkshakes",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "short",
+              "grade": "good",
+              "skill": "operations",
+              "result": "Milkshake fans queue up all afternoon, and very little ice cream goes to waste.",
+              "lesson": "Quick thinking can turn a problem into a sale."
+            },
+            {
+              "text": "Refreeze the melted ice cream and sell it next week",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": -3,
+              "timing": "now",
+              "penalty": "mid",
+              "grade": "trap",
+              "skill": "safety",
+              "result": "Several customers get tummy aches. A food inspector closes the parlour for a week and fines you.",
+              "lesson": "Never bend food safety rules: melted ice cream must not be refrozen."
+            }
+          ]
+        },
+        {
+          "id": "icecream-3",
+          "title": "Winter is coming",
+          "story": "Summer is over, and ice cream sales drop by three quarters, but the $800 rent stays the same. A man offers you $3,000 for half of your parlour, forever, if you say yes tonight.",
+          "options": [
+            {
+              "text": "Take orders for ice cream birthday cakes all year round",
+              "spend": "low",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "marketing",
+              "result": "Parents order cakes for winter birthdays. One cake earns as much as ten scoops.",
+              "lesson": "Birthdays happen all year, so selling for them keeps money coming in."
+            },
+            {
+              "text": "Stay open until 10 pm every night to catch a few more customers",
+              "spend": "none",
+              "rev": 0,
+              "costs": 1,
+              "risk": 0,
+              "rep": 0,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "operations",
+              "result": "Night after night the shop sits empty, with the lights and freezers humming. The bills go up, not the sales.",
+              "lesson": "Opening longer only helps if customers actually come."
+            },
+            {
+              "text": "Add hot waffles and hot chocolate to the winter menu",
+              "spend": "low",
+              "rev": 2,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "grade": "best",
+              "skill": "strategy",
+              "result": "Warm waffles and hot chocolate bring families in on chilly days. Winter is no longer empty.",
+              "lesson": "A second product for the quiet season smooths out the ups and downs."
+            },
+            {
+              "text": "Sell half the parlour tonight for $3,000",
+              "spend": "none",
+              "rev": -3,
+              "costs": 0,
+              "risk": -1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "strategy",
+              "result": "You get $3,000 now, but from next summer half of every scoop's profit goes to him, year after year.",
+              "lesson": "Never sell part of your business in a hurry: a share is worth years of profit."
+            },
+            {
+              "text": "Use money saved in summer to pay the winter bills",
+              "spend": "none",
+              "rev": 0,
+              "costs": -1,
+              "risk": -1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "good",
+              "skill": "money",
+              "result": "Your summer savings cover the rent. No panic, no borrowing, and your staff still get paid.",
+              "lesson": "Busy months should pay for quiet months: keep a cash cushion."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bakery",
+      "pitch": "A warm bakery selling fresh bread, croissants and birthday cakes every morning.",
+      "earns": "A loaf costs about $1 to make and sells for $3. Early customers buy bread, and party cakes earn extra.",
+      "costs": "Flour, butter and eggs, gas for the ovens, the bakers' pay, and the shop's rent.",
+      "risks": "Bread left over at closing time, flour prices going up, and a supermarket selling cheaper loaves.",
+      "tip": "Bake to match what really sells: write down what's left each day and bake a little less of it tomorrow.",
+      "cases": [
+        {
+          "id": "bakery-1",
+          "title": "Getting ready to bake",
+          "story": "Your ovens are ready. Mill Lane Flour sells good flour at $30 a sack and delivers every week. A website you've never heard of offers 'the same flour' for $10 a sack, if you pay for a whole year up front.",
+          "options": [
+            {
+              "text": "Label every cake that contains nuts, milk or eggs",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "safety",
+              "result": "A mum whose son has a nut allergy thanks you for the clear labels, and tells all her friends.",
+              "lesson": "Clear allergy labels keep customers safe and earn their trust."
+            },
+            {
+              "text": "Buy from Mill Lane and ask for a regular-order discount",
+              "spend": "none",
+              "rev": 0,
+              "costs": -1,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "grade": "best",
+              "skill": "money",
+              "result": "Mill Lane agrees to $27 a sack for a weekly order. Your bread tastes great, and your costs are lower.",
+              "lesson": "A reliable supplier plus a polite request for a discount is a winning recipe."
+            },
+            {
+              "text": "Hand out warm bread samples at the door in opening week",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "marketing",
+              "result": "The smell of warm bread pulls people in. Many become regulars who come every morning.",
+              "lesson": "Let your best product sell itself: a free taste can win a customer for years."
+            },
+            {
+              "text": "Sell loaves for $1.20 to beat the supermarket",
+              "spend": "none",
+              "rev": -1,
+              "costs": 0,
+              "risk": 1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "pricing",
+              "result": "You're busy all day but make almost nothing on each loaf. One slow week and you can't pay the rent.",
+              "lesson": "A price must cover your costs and leave a profit, or being busy just makes it worse."
+            },
+            {
+              "text": "Pay the new website a year up front for $10 flour",
+              "spend": "mid",
+              "rev": 0,
+              "costs": -2,
+              "risk": 0,
+              "rep": 0,
+              "timing": "now",
+              "penalty": "mid",
+              "grade": "trap",
+              "skill": "safety",
+              "result": "The website takes your $1,350 and vanishes. No flour ever comes, so you rush to buy more at full price.",
+              "lesson": "Unknown, super cheap and 'pay everything first' are the warning signs of a scam."
+            }
+          ]
+        },
+        {
+          "id": "bakery-2",
+          "title": "Too much bread left over",
+          "story": "Every evening, about 20 loaves are left unsold. That's around $600 a month of flour, butter and hard work going in the bin.",
+          "options": [
+            {
+              "text": "Sell yesterday's bread tomorrow as 'baked this morning'",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": -3,
+              "timing": "now",
+              "penalty": "low",
+              "grade": "trap",
+              "skill": "ethics",
+              "result": "Customers notice the stale crusts. One complains to the council, you are fined, and regulars stop trusting your sign.",
+              "lesson": "Calling old food fresh is lying, and lost trust is hard to win back."
+            },
+            {
+              "text": "Sell what's left at half price in the last hour",
+              "spend": "none",
+              "rev": 1,
+              "costs": -1,
+              "risk": 0,
+              "rep": 0,
+              "timing": "now",
+              "grade": "good",
+              "skill": "pricing",
+              "result": "Bargain hunters queue at five o'clock. Almost nothing goes in the bin any more.",
+              "lesson": "Half price is better than no price for food that won't keep."
+            },
+            {
+              "text": "Give leftover loaves to the local food bank",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": 0,
+              "rep": 2,
+              "timing": "now",
+              "grade": "good",
+              "skill": "ethics",
+              "result": "The food bank is so grateful, and the local paper writes about your kindness. More people choose your shop.",
+              "lesson": "Helping your community is the right thing to do, and people remember it."
+            },
+            {
+              "text": "Keep a daily record: bake more of what sells out, less of what doesn't",
+              "spend": "none",
+              "rev": 1,
+              "costs": -2,
+              "risk": 0,
+              "rep": 0,
+              "timing": "now",
+              "grade": "best",
+              "skill": "operations",
+              "result": "Your notebook shows white loaves sell out but seeded ones don't. Swapping trays cuts waste and sells more.",
+              "lesson": "Your sales records tell you what to bake: let the numbers guide the oven."
+            }
+          ]
+        },
+        {
+          "id": "bakery-3",
+          "title": "A big café order",
+          "story": "A café chain wants 100 croissants a week at $1 each. They'd pay 60 days after each delivery, so you'd buy butter and flour for two months before any money arrives.",
+          "options": [
+            {
+              "text": "Say yes, but ask to be paid every two weeks instead",
+              "spend": "low",
+              "rev": 2,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "best",
+              "skill": "money",
+              "result": "The café agrees to pay every two weeks. Money comes in steadily, and your bakery hums along.",
+              "lesson": "A big order is only good if the money arrives in time to pay your own bills."
+            },
+            {
+              "text": "Start with a one-month trial to see if it works for you both",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": -1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "good",
+              "skill": "strategy",
+              "result": "The trial shows you can bake them easily before opening time. Both sides happily carry on.",
+              "lesson": "A small trial lets you test a big deal before you bet on it."
+            },
+            {
+              "text": "Hire a part-time baker for the early croissant shift",
+              "spend": "none",
+              "rev": 2,
+              "costs": 1,
+              "risk": 0,
+              "rep": 0,
+              "timing": "now",
+              "grade": "good",
+              "skill": "people",
+              "result": "Amara joins at 5 am, three days a week. The croissants are ready on time, and you get some sleep.",
+              "lesson": "When you grow, get help early, before you wear yourself out."
+            },
+            {
+              "text": "Swap butter for cheap margarine to earn more on each one",
+              "spend": "none",
+              "rev": -1,
+              "costs": -1,
+              "risk": 0,
+              "rep": -2,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "operations",
+              "result": "The café notices the croissants taste greasy and stops the order after a month.",
+              "lesson": "Cutting quality to squeeze out profit can lose you the customer altogether."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "petshop",
+      "pitch": "A friendly pet shop selling fish, pet food, toys and cosy beds for cats and dogs.",
+      "earns": "Owners buy pet food every week or two, and toys, tanks and treats add extra, especially at Christmas.",
+      "costs": "Stock from suppliers, the shop's rent, staff pay, and heating and filters for the fish tanks.",
+      "risks": "Online pet stores selling cheaper, food going out of date, and sick fish if the tanks aren't cared for.",
+      "tip": "Give owners good advice and help them care for their pets: they'll trust you and buy from you for years.",
+      "cases": [
+        {
+          "id": "petshop-1",
+          "title": "Filling the shelves",
+          "story": "Your shelves are empty. A trusted supplier sells Happy Paws dog food at $20 a bag, and you can sell it for $28. A man in a van offers 'Happy Paws' bags for $8 each, cash only, no receipt.",
+          "options": [
+            {
+              "text": "Fill the shop with 30 kinds of fish to look impressive",
+              "spend": "mid",
+              "rev": 1,
+              "costs": 1,
+              "risk": 1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "operations",
+              "result": "Caring for so many tanks is hard work. Some fish get sick, and you can't sell them.",
+              "lesson": "Start with what customers ask for, not with everything you could buy."
+            },
+            {
+              "text": "Buy from the trusted supplier, starting with what owners ask for",
+              "spend": "low",
+              "rev": 2,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "best",
+              "skill": "operations",
+              "result": "You stock the foods local owners ask for most. They sell fast, and nothing sits on the shelf for long.",
+              "lesson": "Stock what your customers actually want, from suppliers you can trust."
+            },
+            {
+              "text": "Offer free nail trims for dogs on Saturday mornings",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "marketing",
+              "result": "Dog owners queue up on Saturdays, and most buy food or treats while they wait.",
+              "lesson": "A small free service brings people through the door, and they rarely leave empty-handed."
+            },
+            {
+              "text": "Hire Ana, who studied animal care, to give owners advice",
+              "spend": "none",
+              "rev": 1,
+              "costs": 1,
+              "risk": 0,
+              "rep": 2,
+              "timing": "now",
+              "grade": "good",
+              "skill": "people",
+              "result": "Ana helps a girl choose the right food for her old cat. Her family now buys everything from you.",
+              "lesson": "Expert advice turns a quick visit into a loyal customer."
+            },
+            {
+              "text": "Buy the $8 'Happy Paws' bags from the van for a huge profit",
+              "spend": "none",
+              "rev": 2,
+              "costs": 0,
+              "risk": 0,
+              "rep": -3,
+              "timing": "now",
+              "penalty": "mid",
+              "grade": "trap",
+              "skill": "safety",
+              "result": "The food is fake and upsets several dogs' tummies. You refund the owners, pay the vet bills and lose their trust.",
+              "lesson": "A famous brand at a third of the price, cash only, is almost always a fake."
+            }
+          ]
+        },
+        {
+          "id": "petshop-2",
+          "title": "The giant online store",
+          "story": "PetMegaStore online now sells dog food $3 cheaper than you, with free delivery. Some of your regulars have stopped coming in.",
+          "options": [
+            {
+              "text": "Let regulars order online and get local delivery",
+              "spend": "low",
+              "rev": 2,
+              "costs": 1,
+              "risk": 0,
+              "rep": 0,
+              "timing": "now",
+              "flag": "online",
+              "grade": "good",
+              "skill": "operations",
+              "result": "Busy owners love having heavy bags brought to their door. Many come back to you.",
+              "lesson": "Meet customers where they are, even if that's on their phone."
+            },
+            {
+              "text": "Match their price on your five best-selling foods",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "pricing",
+              "result": "Regulars notice the fair prices and return. You earn a little less per bag, but you keep them as customers.",
+              "lesson": "Matching price on your key products can stop customers drifting away."
+            },
+            {
+              "text": "Offer what a website can't: expert advice and a puppy class",
+              "spend": "low",
+              "rev": 2,
+              "costs": 0,
+              "risk": 0,
+              "rep": 2,
+              "timing": "now",
+              "grade": "best",
+              "skill": "strategy",
+              "result": "Your Saturday puppy class is a hit. Owners stay to chat, ask questions and buy their food while they're here.",
+              "lesson": "Don't fight a giant on price; win on the things only you can do."
+            },
+            {
+              "text": "Tell customers the website's food is old (you don't know that)",
+              "spend": "none",
+              "rev": -1,
+              "costs": 0,
+              "risk": 0,
+              "rep": -2,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "ethics",
+              "result": "A customer checks, and it isn't true. Word gets round that you tell fibs, and people trust your advice less.",
+              "lesson": "Spreading rumours about a rival makes you look worse, not them."
+            }
+          ]
+        },
+        {
+          "id": "petshop-3",
+          "title": "The Christmas rush",
+          "story": "December is your busiest month. A supplier offers 400 pet Christmas stockings at $2 each, if you buy them all today. Some parents want to buy rabbits as surprise presents.",
+          "options": [
+            {
+              "text": "Make a festive window of gift bundles from your shelves",
+              "spend": "none",
+              "rev": 2,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "short",
+              "grade": "good",
+              "skill": "marketing",
+              "result": "Your twinkly window of treats and toys stops shoppers in the street. December sales are your best ever.",
+              "lesson": "A great window display is an advert that works all day long."
+            },
+            {
+              "text": "Hire a cheerful helper for the busy December weekends",
+              "spend": "low",
+              "rev": 2,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "short",
+              "grade": "good",
+              "skill": "people",
+              "result": "With an extra pair of hands, nobody waits long. Shoppers leave smiling with bags full of presents.",
+              "lesson": "Extra help at your busiest time keeps customers happy and sales flowing."
+            },
+            {
+              "text": "Sell rabbits as surprise presents to anyone who asks",
+              "spend": "none",
+              "rev": 2,
+              "costs": 0,
+              "risk": 0,
+              "rep": -2,
+              "timing": "short",
+              "grade": "poor",
+              "skill": "ethics",
+              "result": "In January, several rabbits are brought back by families who weren't ready. The local paper isn't kind.",
+              "lesson": "Selling a pet to someone who isn't ready is bad for the pet and for your name."
+            },
+            {
+              "text": "Sell gift vouchers so families can choose a pet together later",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 2,
+              "timing": "now",
+              "grade": "best",
+              "skill": "ethics",
+              "result": "Vouchers sell well, and in January families come in calm and ready. The new pets go to happy, prepared homes.",
+              "lesson": "A pet is for life, not just for Christmas: help families get it right."
+            },
+            {
+              "text": "Buy all 400 stockings today to get the low price",
+              "spend": "low",
+              "rev": 1,
+              "costs": 1,
+              "risk": 1,
+              "rep": 0,
+              "timing": "short",
+              "grade": "poor",
+              "skill": "operations",
+              "result": "You sell 120. The other 280 sit in the stockroom until next Christmas, taking up space.",
+              "lesson": "A bargain is only a bargain if you can sell it in time."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "printshop",
+      "pitch": "A shop that prints posters, leaflets and T-shirts, and designs logos for local people.",
+      "earns": "Customers pay for each job: 500 leaflets might cost $15 to print and sell for $60. Schools and clubs order again and again.",
+      "costs": "Big printers, ink and paper, a designer's pay, and the shop's rent.",
+      "risks": "A printer breaking at a busy time, customers who pay late, and cheap printing websites.",
+      "tip": "Always show customers a proof, one test copy, before printing 1,000 of anything: mistakes are expensive.",
+      "cases": [
+        {
+          "id": "printshop-1",
+          "title": "Setting up shop",
+          "story": "You open in September, when schools and clubs need posters and programmes. The big colour printer costs $4,200 to buy, or $150 a month to rent with repairs included.",
+          "options": [
+            {
+              "text": "Skip showing customers a test copy so jobs get done faster",
+              "spend": "none",
+              "rev": 1,
+              "costs": 1,
+              "risk": 0,
+              "rep": -2,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "operations",
+              "result": "A school programme comes back with the head teacher's name spelt wrong. You reprint 300 copies for free.",
+              "lesson": "Checking a test copy takes minutes; reprinting takes hours and money."
+            },
+            {
+              "text": "Download a free copy of a $600 design program from a random site",
+              "spend": "none",
+              "rev": 0,
+              "costs": -1,
+              "risk": 0,
+              "rep": -1,
+              "timing": "now",
+              "penalty": "mid",
+              "grade": "trap",
+              "skill": "safety",
+              "result": "The 'free' program hides a virus that locks your computer. Customers' files are lost, and the expert fix costs a fortune.",
+              "lesson": "'Free' copies of paid software are stolen, and they often carry viruses."
+            },
+            {
+              "text": "Hire a part-time designer to make customers' ideas look great",
+              "spend": "none",
+              "rev": 2,
+              "costs": 1,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "people",
+              "result": "Priya turns scribbled ideas into beautiful posters. Customers come back just for her designs.",
+              "lesson": "Skilled people can turn a simple service into something special."
+            },
+            {
+              "text": "Rent the printer with repairs included, and keep your cash",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": -1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "good",
+              "skill": "money",
+              "result": "When the printer jams in October, it's fixed free the next day. Your $4,200 stays safe in the bank.",
+              "lesson": "Renting can beat buying when it keeps your cash free and the repairs covered."
+            },
+            {
+              "text": "Visit five local schools with free sample posters",
+              "spend": "low",
+              "rev": 2,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "best",
+              "skill": "marketing",
+              "result": "Three schools love your samples and order programmes for their autumn concerts. One asks for a new logo too.",
+              "lesson": "Go and show customers what you can do, instead of waiting for them to find you."
+            }
+          ]
+        },
+        {
+          "id": "printshop-2",
+          "title": "Breakdown before the deadline",
+          "story": "The day before twenty orders are due, your big printer jams and won't start. The repair person can't come until the day after tomorrow, and customers are counting on you.",
+          "options": [
+            {
+              "text": "Phone every customer, explain, and offer a new time with 10% off",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 2,
+              "timing": "now",
+              "grade": "best",
+              "skill": "people",
+              "result": "Most customers thank you for telling them early. Only two need their jobs today, and you sort those out.",
+              "lesson": "Telling customers about a problem early keeps their trust, even when things go wrong."
+            },
+            {
+              "text": "Buy a small back-up printer for emergencies",
+              "spend": "low",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "good",
+              "skill": "operations",
+              "result": "The little printer can't do big posters, but it handles leaflets whenever the big one is down.",
+              "lesson": "A back-up plan seems a waste until the day you need it."
+            },
+            {
+              "text": "Pay a print shop across town to do the most urgent jobs",
+              "spend": "low",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "operations",
+              "result": "The other shop prints your urgent jobs overnight. You earn a little less, but every deadline is met.",
+              "lesson": "Even a rival can be a helpful partner in an emergency."
+            },
+            {
+              "text": "Print the jobs on your blotchy old office printer anyway",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": 0,
+              "rep": -2,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "operations",
+              "result": "Faint, streaky posters go out of the door. Two clubs ask for their money back.",
+              "lesson": "Rushing out poor work hurts your name more than being a little late."
+            }
+          ]
+        },
+        {
+          "id": "printshop-3",
+          "title": "1,000 football shirts",
+          "story": "A man wants 1,000 T-shirts printed with a famous football club's badge, to sell outside the stadium. He'll pay $5,000 cash today. He hasn't got the club's permission, but says 'nobody checks'.",
+          "options": [
+            {
+              "text": "Offer to design him an original fan shirt with no club badge",
+              "spend": "none",
+              "rev": 2,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "best",
+              "skill": "strategy",
+              "result": "He likes your fun original design. The shirts sell well, and he comes back for scarves and hats.",
+              "lesson": "When a deal is wrong, look for an honest version that still works for everyone."
+            },
+            {
+              "text": "Print the shirts: $5,000 cash is a lot of money!",
+              "spend": "none",
+              "rev": 2,
+              "costs": 0,
+              "risk": 0,
+              "rep": -2,
+              "timing": "short",
+              "penalty": "mid",
+              "grade": "trap",
+              "skill": "ethics",
+              "result": "The club finds the fake shirts and traces them to you. The shirts are taken away, and you pay a big fine.",
+              "lesson": "Printing someone else's badge without permission is making fakes, and that's against the law."
+            },
+            {
+              "text": "Advertise custom shirts to local sports teams and schools",
+              "spend": "low",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "marketing",
+              "result": "Junior football and netball teams order shirts with their own badges. It's steady work you're proud of.",
+              "lesson": "There's plenty of honest work if you go looking for it."
+            },
+            {
+              "text": "Say no politely, and explain the badge belongs to the club",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "ethics",
+              "result": "He shrugs and leaves. Weeks later you hear his fake shirts were taken away from another printer, who was fined.",
+              "lesson": "Saying no to a dishonest deal protects your business and your name."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "foodtruck",
+      "pitch": "A taco truck that drives to wherever the hungry crowds are.",
+      "earns": "Each taco costs about $1 to make and sells for $4. A busy lunchtime or a summer festival can sell hundreds.",
+      "costs": "Ingredients, fuel, fees for good spots to park, the cook's pay, and keeping the truck on the road.",
+      "risks": "Rainy days, a breakdown on the way to a big event, and a food inspection you're not ready for.",
+      "tip": "Follow the crowds, and post where you'll be each day so your fans can find you.",
+      "cases": [
+        {
+          "id": "foodtruck-1",
+          "title": "Where to park?",
+          "story": "Your taco truck is ready to roll. Office workers want lunch on Park Road, but a council permit to sell there costs $750. Outside the busy station there's no fee, but parking isn't allowed.",
+          "options": [
+            {
+              "text": "Post your weekly route online so fans can find you",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "flag": "online",
+              "grade": "good",
+              "skill": "marketing",
+              "result": "Fans start following your truck online. Some even cross town for your Friday fish tacos.",
+              "lesson": "Telling customers where you'll be turns one-time buyers into fans."
+            },
+            {
+              "text": "Park outside the busy station: no fee to pay!",
+              "spend": "none",
+              "rev": 2,
+              "costs": 0,
+              "risk": 1,
+              "rep": -1,
+              "timing": "now",
+              "penalty": "low",
+              "grade": "trap",
+              "skill": "safety",
+              "result": "Buses can't get past. You're fined twice, and on Friday the truck is towed away. That cost far more than the permit!",
+              "lesson": "Breaking parking rules to save a fee usually ends up costing more."
+            },
+            {
+              "text": "Pay $750 for the Park Road permit and serve office lunches",
+              "spend": "low",
+              "rev": 2,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "best",
+              "skill": "strategy",
+              "result": "Office workers queue every lunchtime. The permit pays for itself in the first two weeks.",
+              "lesson": "Paying for the right spot is an investment when the customers are there."
+            },
+            {
+              "text": "Charge just $2 a taco to get huge crowds",
+              "spend": "none",
+              "rev": -1,
+              "costs": 0,
+              "risk": 1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "pricing",
+              "result": "The queues are long, but each taco barely covers its cost. Busy days leave you tired and no richer.",
+              "lesson": "Low prices bring crowds, but only a fair profit on each one pays the bills."
+            },
+            {
+              "text": "Keep the menu small: three tacos done brilliantly",
+              "spend": "none",
+              "rev": 0,
+              "costs": -1,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "operations",
+              "result": "Food comes out fast, nothing goes to waste, and people rave about your three tacos.",
+              "lesson": "Doing a few things brilliantly beats doing lots of things badly."
+            }
+          ]
+        },
+        {
+          "id": "foodtruck-2",
+          "title": "The food inspector",
+          "story": "A food inspector visits on Friday. Her score for cleanliness and safety will be shown to customers. Your fridge has been running a bit warm, and you haven't written down its temperature every day like you should.",
+          "options": [
+            {
+              "text": "Close the truck on Friday so the inspector can't visit",
+              "spend": "none",
+              "rev": -1,
+              "costs": 0,
+              "risk": 1,
+              "rep": -1,
+              "timing": "short",
+              "grade": "poor",
+              "skill": "strategy",
+              "result": "The inspector simply comes back next week, extra careful. You lost a busy day of sales for nothing.",
+              "lesson": "Hiding from a problem doesn't make it go away."
+            },
+            {
+              "text": "Fill in a week of pretend temperatures before Friday",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": 0,
+              "rep": -2,
+              "timing": "now",
+              "penalty": "low",
+              "grade": "trap",
+              "skill": "ethics",
+              "result": "The inspector's thermometer shows the fridge is too warm, so your log is clearly made up. You're fined and get one star out of five.",
+              "lesson": "Faking safety records is dishonest and dangerous, and inspectors know the signs."
+            },
+            {
+              "text": "Ask a friend who runs a café to look over your truck first",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "ok",
+              "skill": "safety",
+              "result": "She spots a greasy fan above the cooker that you'd stopped noticing. It's cleaned before Friday.",
+              "lesson": "A fresh pair of experienced eyes can spot what you've stopped seeing."
+            },
+            {
+              "text": "Send your cook on a short food safety course",
+              "spend": "low",
+              "rev": 1,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "people",
+              "result": "Your cook comes back full of good habits: clean boards, hot food hot, cold food cold.",
+              "lesson": "Training your team means good habits happen even when you're not watching."
+            },
+            {
+              "text": "Fix the fridge now and start a daily temperature log",
+              "spend": "low",
+              "rev": 1,
+              "costs": 0,
+              "risk": -1,
+              "rep": 2,
+              "timing": "now",
+              "grade": "best",
+              "skill": "safety",
+              "result": "The inspector checks your fridge and your new log, and gives you five stars. You proudly stick it on the window.",
+              "lesson": "Doing safety properly every day means inspections are nothing to fear."
+            }
+          ]
+        },
+        {
+          "id": "foodtruck-3",
+          "title": "The summer festival",
+          "story": "The Summer Music Festival wants your truck for three days, and 5,000 hungry people are expected. The organisers pay you a $1,000 deposit in cash today to save your place.",
+          "options": [
+            {
+              "text": "Bring ten kinds of taco so everyone finds one they like",
+              "spend": "none",
+              "rev": 1,
+              "costs": 1,
+              "risk": 0,
+              "rep": -1,
+              "timing": "short",
+              "grade": "poor",
+              "skill": "operations",
+              "result": "Service is slow, the truck is a mess, and lots of ingredients go to waste in the heat.",
+              "lesson": "At a busy event, a simple menu is faster and wastes less."
+            },
+            {
+              "text": "Team up with a lemonade stall to share a pitch and a queue",
+              "spend": "none",
+              "rev": 2,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "short",
+              "grade": "good",
+              "skill": "strategy",
+              "result": "Tacos and lemonade go together perfectly. Customers buy both, and you each sell more.",
+              "lesson": "The right partner can help you both win."
+            },
+            {
+              "text": "Hire and train a helper so the queue moves fast",
+              "spend": "low",
+              "rev": 2,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "short",
+              "grade": "good",
+              "skill": "people",
+              "result": "With two of you serving, the queue never gets too long. Happy festival-goers come back for seconds.",
+              "lesson": "Long queues lose sales; the right helper wins them back."
+            },
+            {
+              "text": "Keep the $1,000 cash deposit secret so you pay less tax",
+              "spend": "none",
+              "rev": 0,
+              "costs": -1,
+              "risk": 0,
+              "rep": -1,
+              "timing": "now",
+              "penalty": "mid",
+              "grade": "trap",
+              "skill": "ethics",
+              "result": "The festival's records show they paid you. The tax office finds the missing $1,000, and you pay a big fine on top.",
+              "lesson": "Every dollar a business takes belongs in its accounts; hiding money is against the law."
+            },
+            {
+              "text": "Ask the organisers what sold last year, then plan your stock",
+              "spend": "none",
+              "rev": 3,
+              "costs": -1,
+              "risk": 0,
+              "rep": 1,
+              "timing": "short",
+              "grade": "best",
+              "skill": "operations",
+              "result": "Last year people wanted quick, simple food. You prepare plenty of easy tacos and sell out on the last night, with no waste.",
+              "lesson": "Planning with real numbers means more sales and less waste."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "laundry",
+      "pitch": "A bright launderette where people wash and dry their clothes, or pay you to do it.",
+      "earns": "Customers pay $4 a wash and $2 a dry. A service wash, where your staff do it all, costs more and earns more.",
+      "costs": "Water, electricity, soap, machine repairs, the attendant's pay and the shop's rent.",
+      "risks": "Machines breaking down, a burst pipe flooding the floor, and customers upset about damaged clothes.",
+      "tip": "Machines that always work and a shop that's always clean bring people back every single week.",
+      "cases": [
+        {
+          "id": "laundry-1",
+          "title": "Opening the launderette",
+          "story": "Ten new washing machines arrive next week, and the $6,000 bill is due. Then an email arrives that looks like it's from the machine company: 'We've changed banks. Please pay to this new account today.'",
+          "options": [
+            {
+              "text": "Give a free first wash to people in the flats nearby",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "short",
+              "grade": "good",
+              "skill": "marketing",
+              "result": "Lots of neighbours try a free wash, and many of them come back every week after that.",
+              "lesson": "A free first try is a good way to turn neighbours into regulars."
+            },
+            {
+              "text": "Pay the new account today so the machines arrive on time",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": 0,
+              "rep": 0,
+              "timing": "now",
+              "penalty": "mid",
+              "grade": "trap",
+              "skill": "safety",
+              "result": "The machine company never gets the money. A scammer has your $6,000, and you still owe the real bill.",
+              "lesson": "An email asking you to pay a new account is a classic trick: check before you pay."
+            },
+            {
+              "text": "Hire a friendly attendant and offer a 'we wash it for you' service",
+              "spend": "none",
+              "rev": 2,
+              "costs": 1,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "best",
+              "skill": "people",
+              "result": "Mr Osei keeps the shop spotless and does service washes for busy families. Each one earns twice as much as a normal wash.",
+              "lesson": "A friendly face and an extra service can make an ordinary shop special."
+            },
+            {
+              "text": "Phone the machine company on the number you already have",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "good",
+              "skill": "safety",
+              "result": "They never sent that email! It came from a scammer. You pay the real account and warn the company.",
+              "lesson": "Always check changed bank details by phoning a number you already trust."
+            },
+            {
+              "text": "Stay open all night with nobody looking after the shop",
+              "spend": "none",
+              "rev": 0,
+              "costs": -1,
+              "risk": 1,
+              "rep": -1,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "operations",
+              "result": "At night, machines get jammed and nobody tidies up. In the morning, your regulars walk into a mess.",
+              "lesson": "Opening longer only helps if you can keep the place safe and clean."
+            }
+          ]
+        },
+        {
+          "id": "laundry-2",
+          "title": "A shrunken jumper",
+          "story": "Mrs Kowalski is upset. Her favourite wool jumper shrank in your service wash, and she's written a one-star review: 'They ruined my clothes!' The jumper cost $60.",
+          "options": [
+            {
+              "text": "Get insurance that pays if customers' clothes are damaged",
+              "spend": "low",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 0,
+              "timing": "now",
+              "flag": "insured",
+              "grade": "good",
+              "skill": "money",
+              "result": "The next time something goes wrong, the insurance pays the customer quickly. Nobody has to argue.",
+              "lesson": "Insurance turns a scary surprise into a small, planned cost."
+            },
+            {
+              "text": "Train staff to check every label and wash wool on a cool setting",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "operations",
+              "result": "Now every bag is sorted by its labels. Months go by without a single shrunken jumper.",
+              "lesson": "Fix the cause of a mistake, not just the mistake itself."
+            },
+            {
+              "text": "Put up a sign: 'We are not responsible for damaged clothes'",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": 0,
+              "rep": -1,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "people",
+              "result": "Customers read the sign and frown. Some take their washing to the launderette across town.",
+              "lesson": "A sign that dodges blame tells customers you won't look after them."
+            },
+            {
+              "text": "Say sorry, pay for the jumper, and reply kindly to her review",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 2,
+              "timing": "now",
+              "grade": "best",
+              "skill": "people",
+              "result": "Mrs Kowalski is surprised and pleased. She changes her review: 'Mistakes happen, but they made it right!'",
+              "lesson": "How you fix a mistake can win more trust than never making one."
+            }
+          ]
+        },
+        {
+          "id": "laundry-3",
+          "title": "The hotel's big order",
+          "story": "The Grand Hotel wants you to wash 300 sheets a week for $900 a month. In the day your machines are busy, but at night they stand empty. The contract is ten pages long.",
+          "options": [
+            {
+              "text": "Wash the hotel's sheets at night, when the machines stand empty",
+              "spend": "none",
+              "rev": 3,
+              "costs": 1,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "best",
+              "skill": "operations",
+              "result": "Your night-time washing hums along while the town sleeps. Daytime customers never notice, and your income jumps.",
+              "lesson": "Using machines that would sit idle is one of the smartest ways to grow."
+            },
+            {
+              "text": "Work out what 300 sheets really cost you before agreeing a price",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": -1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "good",
+              "skill": "pricing",
+              "result": "Your sums show $900 barely covers soap and power. You ask for $1,100, and the hotel agrees.",
+              "lesson": "Know your costs before you name your price."
+            },
+            {
+              "text": "Read all ten pages carefully before you sign",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "good",
+              "skill": "safety",
+              "result": "Page nine says you pay $200 for every late bag. You ask them to change it, and they do.",
+              "lesson": "The small print is where the costly surprises hide."
+            },
+            {
+              "text": "Borrow money to buy five more machines straight away",
+              "spend": "mid",
+              "rev": 1,
+              "costs": 1,
+              "risk": 1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "money",
+              "result": "The new machines mostly stand still, but the loan payments arrive every single month.",
+              "lesson": "Use what you already have before you borrow to buy more."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gym",
+      "pitch": "A busy gym with weights, running machines and fun fitness classes for grown-ups and teens.",
+      "earns": "Members pay $30 a month. With 200 members, that's $6,000 a month coming in before costs.",
+      "costs": "Rent for a big space, trainers' pay, electricity, showers and towels, and fixing the machines.",
+      "risks": "Members who stop coming after January, a cheaper gym nearby, and injuries if equipment isn't safe.",
+      "tip": "Members who make friends at the gym keep coming: classes and friendly trainers matter more than shiny machines.",
+      "cases": [
+        {
+          "id": "gym-1",
+          "title": "Opening in January",
+          "story": "Your gym opens in January, when lots of people want to get fit. Most gyms nearby charge $30 a month, plus a $50 joining fee. How will you win your first members?",
+          "options": [
+            {
+              "text": "Drop the joining fee for everyone who joins in January",
+              "spend": "none",
+              "rev": 2,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "best",
+              "skill": "pricing",
+              "result": "With no joining fee, 150 people sign up in January. It's a flying start.",
+              "lesson": "Removing a small barrier at the right moment can bring a rush of customers."
+            },
+            {
+              "text": "Hire two friendly trainers to run free beginner classes",
+              "spend": "none",
+              "rev": 2,
+              "costs": 1,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "people",
+              "result": "Nervous beginners love the friendly classes. Many say they'd never have joined a gym otherwise.",
+              "lesson": "Make new customers feel welcome and they'll keep coming."
+            },
+            {
+              "text": "Give local office workers a free two-week trial",
+              "spend": "none",
+              "rev": 2,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "short",
+              "grade": "good",
+              "skill": "marketing",
+              "result": "Lots of office workers try it at lunchtime, and a good number sign up when the trial ends.",
+              "lesson": "A free trial lets people discover they like you."
+            },
+            {
+              "text": "Charge just $10 a month to fill the gym fast",
+              "spend": "none",
+              "rev": -1,
+              "costs": 1,
+              "risk": 1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "pricing",
+              "result": "The gym is packed and the machines keep breaking, but $10 doesn't cover the costs. You lose money every month.",
+              "lesson": "Cheap prices that don't cover costs fill the room and empty the bank."
+            },
+            {
+              "text": "Hide extra fees in the small print for more money each month",
+              "spend": "none",
+              "rev": 2,
+              "costs": 0,
+              "risk": 0,
+              "rep": -3,
+              "timing": "now",
+              "penalty": "low",
+              "grade": "trap",
+              "skill": "ethics",
+              "result": "Members feel tricked when surprise fees appear. Angry reviews pour in, and you must refund many of them.",
+              "lesson": "Tricking customers with small print wins money once and loses trust for good."
+            }
+          ]
+        },
+        {
+          "id": "gym-2",
+          "title": "The February fade",
+          "story": "In January, 150 new members joined. Now it's February, and half of them have stopped coming. People who never come usually cancel soon after.",
+          "options": [
+            {
+              "text": "Give each new member a free session to plan their goals",
+              "spend": "none",
+              "rev": 1,
+              "costs": 1,
+              "risk": 0,
+              "rep": 1,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "people",
+              "result": "With a clear plan, new members see progress and keep coming. Trainers get to know them by name.",
+              "lesson": "Customers who reach their goals stay, so help them get there."
+            },
+            {
+              "text": "Start a gym buddy club and fun group classes",
+              "spend": "none",
+              "rev": 2,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "flag": "loyal",
+              "grade": "best",
+              "skill": "people",
+              "result": "Members who train with a buddy keep turning up. By March, most of them are still coming, and loving it.",
+              "lesson": "People stick with things they enjoy doing with friends."
+            },
+            {
+              "text": "Make cancelling hard: only in person, on Monday mornings",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": -2,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "ethics",
+              "result": "Members get cross and write angry reviews. People read them and choose a different gym.",
+              "lesson": "Making it hard to leave just makes people want to leave more."
+            },
+            {
+              "text": "Spend $4,500 on big adverts to replace them",
+              "spend": "mid",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 0,
+              "timing": "short",
+              "grade": "poor",
+              "skill": "marketing",
+              "result": "New people join in March, then stop coming in April, just like the others.",
+              "lesson": "Keeping the customers you have is cheaper than always finding new ones."
+            },
+            {
+              "text": "Send a friendly message to members who've stopped coming",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "marketing",
+              "result": "'We miss you!' messages bring dozens back. Some just needed a little nudge.",
+              "lesson": "A friendly reminder can win back customers who were drifting away."
+            }
+          ]
+        },
+        {
+          "id": "gym-3",
+          "title": "Miracle Muscle pills",
+          "story": "A man named Rick wants to be your partner: 'Sell my Miracle Muscle pills at your front desk. Muscles in one week! You'll make $3,000 a month.' The pills have no safety label.",
+          "options": [
+            {
+              "text": "Ask your trainers what members really want to buy",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "people",
+              "result": "The trainers suggest water bottles, gym towels and yoga mats. They all sell steadily.",
+              "lesson": "The people closest to customers often have the best product ideas."
+            },
+            {
+              "text": "Partner with Rick: $3,000 a month for doing nothing!",
+              "spend": "none",
+              "rev": 3,
+              "costs": 0,
+              "risk": 0,
+              "rep": -3,
+              "timing": "short",
+              "penalty": "mid",
+              "grade": "trap",
+              "skill": "safety",
+              "result": "Some members feel ill after taking the pills. The pills are banned, you are fined, and the local news names your gym.",
+              "lesson": "Big promises, easy money and no safety label: that's a get-rich-quick trap."
+            },
+            {
+              "text": "Hold a free healthy-eating talk with a real nutrition expert",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "short",
+              "grade": "good",
+              "skill": "marketing",
+              "result": "Members learn that good food, sleep and training build muscle. They trust your gym even more.",
+              "lesson": "Honest advice builds trust that no magic pill can buy."
+            },
+            {
+              "text": "Open a smoothie bar with healthy snacks instead",
+              "spend": "low",
+              "rev": 2,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "best",
+              "skill": "strategy",
+              "result": "After a workout, members love a banana smoothie. The bar earns money every day, and it's honest.",
+              "lesson": "Sell things that truly help your customers, and they'll keep buying."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "flats",
+      "pitch": "A building of eight flats where tenants pay you rent every month to live there.",
+      "earns": "Eight tenants each pay $350 a month in rent. That's $2,800 coming in before repairs and other costs.",
+      "costs": "Repairs, insurance, cleaning the stairs, safety checks, and saving for big jobs like a new roof.",
+      "risks": "Empty flats with no rent coming in, a tenant who can't pay, and costly repairs like a leaking roof.",
+      "tip": "Treat tenants fairly and fix things fast: happy tenants stay for years and look after your building.",
+      "cases": [
+        {
+          "id": "flats-1",
+          "title": "Getting the flats ready",
+          "story": "You now own a block of eight flats, and twenty people want to rent one. Rents nearby are $350 a month. Each tenant pays a $700 deposit: money you look after in case of damage. By law it must be kept in a special safe scheme.",
+          "options": [
+            {
+              "text": "Buy landlord insurance against fire, floods and storms",
+              "spend": "low",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 0,
+              "timing": "now",
+              "flag": "insured",
+              "grade": "good",
+              "skill": "money",
+              "result": "You hope you'll never need it, but if a storm hits, the insurance will help pay for the repairs.",
+              "lesson": "Insurance protects the thing you worked so hard to buy."
+            },
+            {
+              "text": "Fit smoke alarms and get the gas checked before anyone moves in",
+              "spend": "low",
+              "rev": 1,
+              "costs": 0,
+              "risk": -1,
+              "rep": 2,
+              "timing": "now",
+              "grade": "best",
+              "skill": "safety",
+              "result": "Every flat passes its safety checks. Tenants move in feeling safe, and they tell friends about their caring landlord.",
+              "lesson": "A landlord's first job is keeping tenants safe in their homes."
+            },
+            {
+              "text": "Charge $500 a month: somebody might pay it",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 1,
+              "rep": -1,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "pricing",
+              "result": "Only three flats fill. The others stay empty for months, so you earn less than you would at a fair rent.",
+              "lesson": "A fair rent keeps your flats full; empty flats earn nothing."
+            },
+            {
+              "text": "Keep the deposits in your own account and spend them on repairs",
+              "spend": "none",
+              "rev": 0,
+              "costs": -1,
+              "risk": 0,
+              "rep": -2,
+              "timing": "now",
+              "penalty": "mid",
+              "grade": "trap",
+              "skill": "ethics",
+              "result": "When tenants move out, there's no deposit to give back. A court orders you to pay each of them three times as much.",
+              "lesson": "Money you hold for someone else isn't yours to spend."
+            },
+            {
+              "text": "Ask every renter the same questions, and check with their old landlord",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "people",
+              "result": "Treating everyone the same, you choose tenants who are honest and can afford the rent. Rent arrives on time.",
+              "lesson": "Fair, careful checks find good tenants and treat everyone equally."
+            }
+          ]
+        },
+        {
+          "id": "flats-2",
+          "title": "A tenant can't pay",
+          "story": "Mrs Okafor has lived in Flat 3 for four years and always paid on time. She has lost her job and can't pay this month's $350 rent. She's looking hard for new work.",
+          "options": [
+            {
+              "text": "Keep a savings pot so one late rent doesn't hurt",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "good",
+              "skill": "money",
+              "result": "This month your savings cover the gap. No panic, and the money for the roof stays safe.",
+              "lesson": "Saving for bad months means one problem never becomes a disaster."
+            },
+            {
+              "text": "Agree a plan: she pays a little each week until she catches up",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": -1,
+              "rep": 2,
+              "timing": "now",
+              "grade": "best",
+              "skill": "people",
+              "result": "Mrs Okafor finds a new job in six weeks and pays back every dollar. She tells everyone you're the fairest landlord in town.",
+              "lesson": "Being fair to a good tenant in a hard time pays you back in trust."
+            },
+            {
+              "text": "Help her find a free advice centre for money and jobs",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "people",
+              "result": "The advice centre helps her get support while she looks for work. She's grateful you cared.",
+              "lesson": "Pointing people to the right help is kind and practical."
+            },
+            {
+              "text": "Raise everyone's rent to cover her missing $350",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 1,
+              "rep": -2,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "pricing",
+              "result": "The other tenants are cross about paying for something that isn't their fault. Two start looking for new flats.",
+              "lesson": "Making other customers pay for one problem is unfair, and they notice."
+            },
+            {
+              "text": "Change the locks while she's out and rent the flat to someone else",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": -3,
+              "timing": "now",
+              "penalty": "mid",
+              "grade": "trap",
+              "skill": "ethics",
+              "result": "That's against the law. A court orders you to let her back in and pay her for the trouble, and now every tenant distrusts you.",
+              "lesson": "A landlord must follow the law, even when a tenant owes money."
+            }
+          ]
+        },
+        {
+          "id": "flats-3",
+          "title": "A leaky roof",
+          "story": "After a storm, rain drips into Flat 8. A trusted local builder can fix the roof next week for $9,000, with a 10-year guarantee. A man knocks on your door: 'I'll patch it today for $3,000 cash. No paperwork.'",
+          "options": [
+            {
+              "text": "Let the man at the door patch it today for $3,000 cash",
+              "spend": "low",
+              "rev": 0,
+              "costs": 0,
+              "risk": 0,
+              "rep": -2,
+              "timing": "now",
+              "penalty": "low",
+              "grade": "trap",
+              "skill": "safety",
+              "result": "He rushes the job and vanishes. In the next storm the leak is worse, and with no paperwork there's no way to find him.",
+              "lesson": "Cash-only workers at the door give you no guarantee and no one to complain to."
+            },
+            {
+              "text": "Paint over the damp patch so it looks fine for now",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": 1,
+              "rep": -1,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "ethics",
+              "result": "Within a week the paint bubbles and the damp spreads. The family is upset you tried to hide it.",
+              "lesson": "Covering up a problem doesn't fix it; it just makes it bigger."
+            },
+            {
+              "text": "Hire the trusted builder with the 10-year guarantee",
+              "spend": "mid",
+              "rev": 1,
+              "costs": -1,
+              "risk": -1,
+              "rep": 2,
+              "timing": "now",
+              "grade": "best",
+              "skill": "operations",
+              "result": "The roof is fixed properly and stays dry through every storm after. The Flat 8 family is relieved and stays for years.",
+              "lesson": "Paying for proper work once is cheaper than paying for bad work twice."
+            },
+            {
+              "text": "Check the other seven flats for storm damage too",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "operations",
+              "result": "You find a cracked window in Flat 2 and fix it before the next rain. A small fix saves a big bill.",
+              "lesson": "After one problem, look for others while they're still small."
+            },
+            {
+              "text": "Pay for the Flat 8 family to stay somewhere dry until it's fixed",
+              "spend": "low",
+              "rev": 0,
+              "costs": 0,
+              "risk": 0,
+              "rep": 2,
+              "timing": "now",
+              "grade": "good",
+              "skill": "people",
+              "result": "The family is grateful you looked after them. They come back to a dry flat and a landlord they trust.",
+              "lesson": "Caring for tenants in a crisis builds loyalty money can't buy."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

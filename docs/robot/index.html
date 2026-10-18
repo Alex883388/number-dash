@@ -1,0 +1,2087 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#8fd1fb">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Number Arcade">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icon-180.png">
+<link rel="icon" type="image/png" href="../icon-192.png">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}body{margin:0;font:14px system-ui}img{max-width:100%}[hidden]{display:none!important}</style>
+<script>window.ARCADE_HOME = "../";</script>
+<title>Code Robot</title>
+<meta name="description" content="Build a program from blocks and guide a friendly robot to the flag, picking up every gem. Sequences, loops, functions, conditions and debugging in 40 levels.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap">
+<style>
+:root {
+  --sky: #e6f3fc; --sky-top: #8fd1fb; --sky-bot: #e8f6ff; --ink: #29345a; --ink-soft: #5d6890; --card: #fdfeff; --card-2: #eef5fc; --line: #d0dff0;
+  --sun: #ffc94d; --sun-deep: #e2a526; --sun-ink: #4a3500; --mint: #4fd1a5; --mint-deep: #2a9f78; --mint-soft: #d9f7ea; --lilac: #9d84ff; --lilac-soft: #ece6ff;
+  --coral: #ff7b86; --coral-deep: #d9505d; --coral-soft: #ffe1e4; --sky-blue: #5cb8ff; --pink: #ff9fcf;
+  --door: #fff3d6; --door-edge: #f0b544; --door-ink: #3a3f6b; --veil: rgba(230, 243, 252, .6);
+  --shadow: 0 12px 32px rgba(41, 52, 90, .16); --shadow-sm: 0 4px 14px rgba(41, 52, 90, .14);
+  --font-display: "Fredoka", "Arial Rounded MT Bold", ui-rounded, "Segoe UI", system-ui, sans-serif;
+  --font-body: "Nunito", ui-rounded, "Segoe UI", system-ui, -apple-system, sans-serif;
+  --emoji: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --sky: #1c2147; --sky-top: #1d2350; --sky-bot: #3b3a7e; --ink: #edf0ff; --ink-soft: #b4bbe3; --card: #283063; --card-2: #222955; --line: #3b437f;
+    --sun: #ffcd5a; --sun-deep: #d99f2c; --sun-ink: #3d2a00; --mint: #5adbb0; --mint-deep: #5adbb0; --mint-soft: #1f4a4a; --lilac: #ab95ff; --lilac-soft: #352f6e;
+    --coral: #ff8a94; --coral-deep: #ff8a94; --coral-soft: #4d2a45; --door: #fff1d2; --veil: rgba(28, 33, 71, .55);
+    --shadow: 0 14px 36px rgba(0, 0, 0, .42); --shadow-sm: 0 4px 14px rgba(0, 0, 0, .3); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --sky: #1c2147; --sky-top: #1d2350; --sky-bot: #3b3a7e; --ink: #edf0ff; --ink-soft: #b4bbe3; --card: #283063; --card-2: #222955; --line: #3b437f;
+  --sun: #ffcd5a; --sun-deep: #d99f2c; --sun-ink: #3d2a00; --mint: #5adbb0; --mint-deep: #5adbb0; --mint-soft: #1f4a4a; --lilac: #ab95ff; --lilac-soft: #352f6e;
+  --coral: #ff8a94; --coral-deep: #ff8a94; --coral-soft: #4d2a45; --door: #fff1d2; --veil: rgba(28, 33, 71, .55);
+  --shadow: 0 14px 36px rgba(0, 0, 0, .42); --shadow-sm: 0 4px 14px rgba(0, 0, 0, .3); color-scheme: dark;
+}
+html, body { height: 100%; overscroll-behavior: none; -webkit-touch-callout: none; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; color: var(--ink); font-family: var(--font-body); overflow: hidden; -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent;
+  background: linear-gradient(var(--sky-top), var(--sky-bot) 75%) fixed; background-color: var(--sky-bot);
+}
+button { font: inherit; color: inherit; }
+button, label, input, .btn, a { touch-action: manipulation; }
+[hidden] { display: none !important; }
+
+/* buttons */
+.btn {
+  font: 600 1.05rem/1.1 var(--font-display); color: var(--ink); background: var(--card-2); border: 2px solid var(--line); border-radius: 16px;
+  padding: .75em 1.15em; box-shadow: 0 4px 0 var(--line); cursor: pointer; text-decoration: none; display: inline-block;
+  transition: transform .08s ease, box-shadow .08s ease, background .15s;
+}
+.btn:hover { background: var(--card); }
+.btn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--line); }
+.btn:focus-visible, .seg input:focus-visible + span { outline: 3px solid var(--lilac); outline-offset: 3px; }
+.btn.sun { background: var(--sun); border-color: var(--sun-deep); color: var(--sun-ink); box-shadow: 0 4px 0 var(--sun-deep); }
+.btn.sun:active { box-shadow: 0 1px 0 var(--sun-deep); }
+.btn.big { font-size: 1.6rem; padding: .6em 2.2em; border-radius: 22px; }
+.btn:disabled { opacity: .5; cursor: default; transform: none; }
+.row { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+
+/* menu screens: cards over the game */
+#screens {
+  position: fixed; inset: 0; display: grid; place-items: center; overflow-y: auto; pointer-events: none; touch-action: pan-y; z-index: 20;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: calc(16px + env(safe-area-inset-top, 0px)) calc(16px + env(safe-area-inset-bottom, 0px));
+}
+#screens.dim { background: var(--veil); pointer-events: auto; }
+.screen { pointer-events: auto; width: min(100%, 600px); animation: rise .35s ease both; }
+.card { background: var(--card); border-radius: 28px; box-shadow: var(--shadow); padding: clamp(18px, 4vw, 34px); display: grid; gap: 18px; text-align: center; }
+.logo { margin: 0; font: 700 clamp(2.5rem, 9vw, 4rem)/.95 var(--font-display); text-wrap: balance; }
+.logo span { color: var(--mint-deep); }
+.tag { margin: 0 auto; max-width: 40ch; color: var(--ink-soft); font-size: 1.08rem; line-height: 1.5; text-wrap: balance; }
+.how { margin: 0; color: var(--ink-soft); font-weight: 700; }
+.small-card h2 { margin: 0; font: 700 clamp(1.9rem, 6vw, 2.6rem)/1.05 var(--font-display); text-wrap: balance; }
+.small-card p { margin: 0; color: var(--ink-soft); }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 10px; margin: 0; }
+.stats div { background: var(--card-2); border-radius: 16px; padding: 12px 6px; min-width: 0; }
+.stats dt { font-size: .74rem; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-soft); font-weight: 800; }
+.stats dd { margin: 4px 0 0; font: 700 1.6rem/1 var(--font-display); font-variant-numeric: tabular-nums; }
+.seg { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.seg label { cursor: pointer; }
+.seg input { position: absolute; opacity: 0; pointer-events: none; }
+.seg span { display: block; font: 600 .95rem/1.15 var(--font-display); padding: .55em .85em; border-radius: 14px; background: var(--card-2); border: 2px solid var(--line); }
+.seg input:checked + span { background: var(--sun); border-color: var(--sun-deep); color: var(--sun-ink); }
+@media (pointer: coarse) { .seg span { min-height: 48px; box-sizing: border-box; display: grid; place-items: center; } }
+.seg-title { margin: 0 0 8px; font: 600 .9rem/1 var(--font-display); color: var(--ink-soft); }
+.stars { font-size: 2.4rem; letter-spacing: .1em; line-height: 1; }
+.stars .off { opacity: .22; filter: grayscale(1); }
+
+/* the HUD along the top while playing */
+#hud { position: fixed; left: 0; right: 0; top: 0; pointer-events: none; z-index: 10; }
+.hud-top {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding-top: calc(10px + env(safe-area-inset-top, 0px));
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.chipbox { background: var(--card); border-radius: 99px; box-shadow: var(--shadow-sm); }
+.hud-chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.chip { font: 600 1.05rem/1 var(--font-display); padding: 8px 14px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.chip.soft { font-size: .9rem; padding: 7px 12px; color: var(--ink-soft); }
+.hud-btn { pointer-events: auto; width: 46px; height: 46px; border-radius: 50%; border: 0; background: var(--card); box-shadow: var(--shadow-sm); cursor: pointer; display: grid; place-items: center; flex: none; color: var(--ink); }
+.hud-btn:focus-visible { outline: 3px solid var(--lilac); outline-offset: 2px; }
+@media (pointer: coarse) { .hud-btn { width: 58px; height: 58px; } }
+
+/* toasts and screen-reader text */
+.toast {
+  position: fixed; left: 50%; top: var(--toast-top, 42%); translate: -50% 0; z-index: 30; pointer-events: none; font: 700 1.4rem/1.1 var(--font-display);
+  padding: 12px 20px; animation: pop .3s ease both; white-space: nowrap; background: var(--card); border-radius: 99px; box-shadow: var(--shadow-sm);
+}
+.toast.hello { top: calc(max(128px, 20%) + env(safe-area-inset-top, 0px)); border: 3px solid var(--lilac); }
+.toast.good { color: var(--mint-deep); border: 3px solid var(--mint); }
+.toast.oops { color: var(--coral-deep); border: 3px solid var(--coral); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+@keyframes rise { from { transform: translateY(14px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes pop { 0% { transform: scale(.85); } 70% { transform: scale(1.04); } 100% { transform: scale(1); } }
+@keyframes shake { 0%, 100% { translate: 0 0; } 20% { translate: -7px 0; } 40% { translate: 6px 0; } 60% { translate: -4px 0; } 80% { translate: 3px 0; } }
+@keyframes glow { 0% { box-shadow: 0 0 0 0 rgba(79, 209, 165, .7); } 100% { box-shadow: 0 0 0 18px rgba(79, 209, 165, 0); } }
+@media (prefers-reduced-motion: reduce) { .screen, .toast, .card { animation: none !important; } }
+/* Code Robot. The play screen has two parts: the stage (the robot's map, and the robot's speech bubble under it) and the
+   editor (the program with its F1 row, the palette of blocks, and the run controls). Side by side on a landscape iPad,
+   one above the other on a portrait iPad or a phone; layout() sizes the map so nothing scrolls (only a long program
+   scrolls inside its own pane). Every block, gap and button a finger taps is 48 px or more. Block colours: green
+   Forward, blue turns, gold loops, lilac F1, pink Ifs; they stay bright in dark mode, like answer tiles. */
+:root {
+  --floor: #fbfdff; --floor-2: #eef6fd; --floor-line: rgba(93, 104, 144, .16); --wall: #a9b4d6; --wall-top: #c7d0ea; --wall-edge: #7d89b2;
+  --water: #9ad7f8; --water-2: #c4e9fc; --trail: rgba(79, 209, 165, .55); --stone: rgba(255, 255, 255, .5);
+  --k-go: #4fd1a5; --k-go-d: #2a9f78; --k-turn: #5cb8ff; --k-turn-d: #2f86cf; --k-loop: #ffc94d; --k-loop-d: #d99f2c; --k-fn: #9d84ff; --k-fn-d: #6f57d6;
+  --k-if: #ff9fcf; --k-if-d: #d9619e; --k-ink: #26304f; --box-loop: #fff4d4; --box-fn: #efe9ff; --box-if: #ffe8f3;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --floor: #323b75; --floor-2: #2b336a; --floor-line: rgba(255, 255, 255, .08); --wall: #59629e; --wall-top: #6c76b4; --wall-edge: #3c447c;
+    --water: #2f6fa6; --water-2: #3d86c2; --trail: rgba(90, 219, 176, .5); --stone: rgba(255, 255, 255, .07);
+    --box-loop: #4a4130; --box-fn: #3c3577; --box-if: #4d2f50;
+  }
+}
+:root[data-theme="dark"] {
+  --floor: #323b75; --floor-2: #2b336a; --floor-line: rgba(255, 255, 255, .08); --wall: #59629e; --wall-top: #6c76b4; --wall-edge: #3c447c;
+  --water: #2f6fa6; --water-2: #3d86c2; --trail: rgba(90, 219, 176, .5); --stone: rgba(255, 255, 255, .07);
+  --box-loop: #4a4130; --box-fn: #3c3577; --box-if: #4d2f50;
+}
+#bg { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+#bg i { position: absolute; border-radius: 22%; border: 2px solid var(--stone); animation: drift 18s ease-in-out infinite alternate; }
+#bg i:nth-child(2n) { border-radius: 50%; animation-duration: 23s; animation-delay: -9s; }
+@keyframes drift { from { transform: translateY(0) rotate(0deg); } to { transform: translateY(-20px) rotate(10deg); } }
+
+/* ---- play: the stage and the editor ---- */
+#play {
+  position: fixed; inset: 0; z-index: 1; box-sizing: border-box; display: grid; gap: var(--g, 12px); touch-action: manipulation;
+  padding: var(--top, 80px) max(16px, env(safe-area-inset-right, 0px)) calc(12px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+}
+#play.wide { grid-template-columns: var(--sw, 480px) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); }
+#play.tall { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
+#play.away { visibility: hidden; }
+.stage { display: flex; flex-direction: column; align-items: center; gap: var(--g, 12px); min-height: 0; min-width: 0; }
+#play.wide .stage { justify-content: center; }
+.board {
+  position: relative; flex: none; width: calc(var(--t, 60px) * var(--cols, 6)); height: calc(var(--t, 60px) * var(--rows, 6));
+  display: grid; grid-template-columns: repeat(var(--cols, 6), var(--t, 60px)); grid-auto-rows: var(--t, 60px);
+  border-radius: calc(var(--t, 60px) * .28); overflow: hidden; box-shadow: var(--shadow); background: var(--floor);
+}
+.tile { position: relative; box-sizing: border-box; display: grid; place-items: center; background: var(--floor); box-shadow: inset 0 0 0 .5px var(--floor-line); }
+.tile.alt { background: var(--floor-2); }
+.tile.wall { background: var(--wall); box-shadow: inset 0 calc(var(--t, 60px) * -.12) 0 var(--wall-edge), inset 0 calc(var(--t, 60px) * .1) 0 var(--wall-top); border-radius: calc(var(--t, 60px) * .14); }
+.tile.water { background: radial-gradient(circle at 30% 35%, var(--water-2) 0 12%, transparent 13%), radial-gradient(circle at 72% 70%, var(--water-2) 0 9%, transparent 10%), var(--water); }
+.tile i { font: 400 calc(var(--t, 60px) * .56)/1 var(--emoji); font-style: normal; transition: transform .25s ease, opacity .25s ease; }
+.tile.gem i { filter: drop-shadow(0 2px 2px rgba(41, 52, 90, .25)); animation: shine 2.4s ease-in-out infinite; }
+.tile.gem.got i { transform: scale(.2) translateY(-40%); opacity: 0; animation: none; }
+.tile.trail::after { content: ''; position: absolute; width: 22%; height: 22%; border-radius: 50%; background: var(--trail); }
+.tile.flag i { transform-origin: 20% 90%; }
+.board.won .tile.flag i { animation: wave .5s ease-in-out 3; }
+@keyframes shine { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+@keyframes wave { 50% { transform: rotate(-14deg) scale(1.15); } }
+.bot {
+  position: absolute; left: 0; top: 0; width: var(--t, 60px); height: var(--t, 60px); z-index: 2; pointer-events: none;
+  transform: translate(calc(var(--x, 0) * var(--t, 60px)), calc(var(--y, 0) * var(--t, 60px))) rotate(var(--a, 0deg));
+  transition: transform var(--ms, 300ms) ease-in-out;
+}
+.bot svg { position: absolute; inset: 7%; width: 86%; height: 86%; filter: drop-shadow(0 3px 3px rgba(41, 52, 90, .3)); }
+.bot.bump svg { animation: bump var(--ms, 300ms) ease-in-out; }
+.bot.hop svg { animation: hop .45s ease-in-out 2; }
+@keyframes bump { 0%, 100% { transform: translateY(0); } 40% { transform: translateY(-22%); } 55% { transform: translateY(-14%) rotate(-6deg); } }
+@keyframes hop { 50% { transform: translateY(-14%) scale(1.08); } }
+.say {
+  flex: none; box-sizing: border-box; width: var(--say-w, 100%); max-width: 100%; height: var(--say-h, 60px); display: flex; align-items: center; gap: 10px;
+  padding: 6px 6px 6px 12px; background: var(--card); border-radius: 18px; box-shadow: var(--shadow-sm); border: 3px solid transparent;
+}
+.say .who { font: 400 1.6rem/1 var(--emoji); flex: none; }
+.say p { margin: 0; flex: 1 1 auto; min-width: 0; font: 700 var(--say-f, 16px)/1.25 var(--font-body); color: var(--ink); overflow: hidden; max-height: 100%; text-wrap: balance; }
+.say.good { border-color: var(--mint); }
+.say.oops { border-color: var(--lilac); }
+.say button { flex: none; width: 48px; height: 48px; border-radius: 14px; border: 2px solid var(--line); background: var(--card-2); font: 400 1.35rem/1 var(--emoji); cursor: pointer; padding: 0; }
+
+.editor { display: flex; flex-direction: column; gap: 8px; min-height: 0; min-width: 0; }
+#code {
+  flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; touch-action: pan-y;
+  background: var(--card); border-radius: 22px; box-shadow: var(--shadow-sm); padding: 8px 10px; display: flex; flex-direction: column; gap: 6px; box-sizing: border-box;
+}
+.cap { margin: 2px 4px 0; font: 700 .8rem/1 var(--font-display); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); display: flex; justify-content: space-between; gap: 8px; }
+.cap b { color: var(--k-fn-d); }
+@media (max-width: 600px) { .lvname { display: none; } }
+.list { display: flex; flex-wrap: wrap; align-items: center; row-gap: 6px; }
+.f1row { border-top: 2px dashed var(--line); padding-top: 8px; }
+.f1row .list { background: var(--box-fn); border-radius: 16px; padding: 2px; }
+.gap { position: relative; flex: none; width: 48px; height: 54px; margin: 0; padding: 0; border: 0; background: none; cursor: pointer; color: inherit; }
+.gap i { position: absolute; left: 50%; top: 13px; bottom: 13px; width: 4px; margin-left: -2px; border-radius: 3px; background: var(--line); }
+.gap.cur i { top: 3px; bottom: 3px; width: 8px; margin-left: -4px; background: var(--sun-deep); box-shadow: 0 0 0 4px rgba(255, 201, 77, .35); animation: blink 1.1s ease-in-out infinite; }
+.gap.only { width: 64px; }
+.gap.only i { top: 5px; bottom: 5px; left: 8px; right: 8px; width: auto; margin: 0; background: none; border: 2px dashed var(--line); border-radius: 12px; }
+.gap.only.cur i { border-color: var(--sun-deep); background: rgba(255, 201, 77, .2); box-shadow: none; }
+@keyframes blink { 50% { opacity: .35; } }
+.blk {
+  flex: none; box-sizing: border-box; width: 54px; height: 54px; margin: 0; padding: 0; display: grid; place-items: center; cursor: pointer;
+  border-radius: 15px; border: 3px solid var(--kd); background: var(--kc); color: var(--k-ink); box-shadow: 0 4px 0 var(--kd);
+  font: 700 1.1rem/1 var(--font-display); transition: transform .08s ease, box-shadow .12s ease;
+}
+.blk svg { width: 30px; height: 30px; fill: none; stroke: currentColor; stroke-width: 2.8; stroke-linecap: round; stroke-linejoin: round; }
+.blk .emo { font: 400 1.25rem/1 var(--emoji); font-style: normal; }
+.blk .tx { font: 700 1.05rem/1 var(--font-display); }
+.blk.two { display: flex; gap: 1px; justify-content: center; align-items: center; }
+.blk.two svg { width: 22px; height: 22px; }
+.blk:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--kd); }
+.kF { --kc: var(--k-go); --kd: var(--k-go-d); }
+.kL, .kR { --kc: var(--k-turn); --kd: var(--k-turn-d); }
+.kr, .ku { --kc: var(--k-loop); --kd: var(--k-loop-d); --kb: var(--box-loop); }
+.kf { --kc: var(--k-fn); --kd: var(--k-fn-d); --kb: var(--box-fn); }
+.ki, .kg { --kc: var(--k-if); --kd: var(--k-if-d); --kb: var(--box-if); }
+.box { display: inline-flex; flex-wrap: wrap; align-items: center; row-gap: 6px; max-width: 100%; box-sizing: border-box; padding: 3px; border-radius: 18px; border: 3px solid var(--kd); background: var(--kb); }
+.box > .blk.head { margin-right: 2px; }
+.num {
+  flex: none; width: 48px; height: 54px; margin: 0; padding: 0; border-radius: 14px; border: 3px solid var(--kd); background: var(--card); color: var(--ink);
+  font: 700 1.3rem/1 var(--font-display); cursor: pointer; box-shadow: 0 3px 0 var(--kd); font-variant-numeric: tabular-nums;
+}
+.num small { font-size: .7em; }
+.else { flex: none; height: 54px; display: grid; place-items: center; padding: 0 8px; font: 700 .95rem/1 var(--font-display); color: var(--k-if-d); }
+.blk.sel { outline: 4px solid var(--ink); outline-offset: 2px; }
+.blk.now { box-shadow: 0 0 0 5px var(--sun), 0 4px 0 var(--kd); transform: scale(1.06); }
+.blk.yes { box-shadow: 0 0 0 5px var(--mint), 0 4px 0 var(--kd); }
+.blk.no { box-shadow: 0 0 0 5px var(--lilac), 0 4px 0 var(--kd); }
+.box.act { box-shadow: 0 0 0 3px var(--sun); }
+.blk.f1now { box-shadow: 0 0 0 5px var(--sun), 0 4px 0 var(--kd); }
+.num .of { font-size: .62em; }
+.editor.busy #code .gap, .editor.busy #code .blk, .editor.busy #code .num { pointer-events: none; }
+
+/* the palette and the controls */
+.palette { flex: none; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.pal {
+  flex: none; width: var(--pw, 76px); height: var(--ph, 64px); box-sizing: border-box; margin: 0; padding: 4px 2px; cursor: pointer;
+  display: grid; grid-template-rows: 1fr auto; place-items: center; gap: 1px; border-radius: 16px; border: 3px solid var(--kd); background: var(--kc); color: var(--k-ink);
+  box-shadow: 0 4px 0 var(--kd); transition: transform .08s ease, box-shadow .08s ease, opacity .2s;
+}
+.pal svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 2.8; stroke-linecap: round; stroke-linejoin: round; }
+.pal .ic { display: flex; align-items: center; gap: 2px; min-height: 26px; }
+.pal .ic .emo { font: 400 1.1rem/1 var(--emoji); font-style: normal; }
+.pal .ic .tx { font: 700 1.05rem/1 var(--font-display); }
+.pal .ic.two svg { width: 20px; height: 20px; }
+.pal b { font: 700 var(--pf, .78rem)/1 var(--font-display); white-space: nowrap; }
+.pal:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--kd); }
+.pal:disabled { opacity: .38; cursor: default; transform: none; }
+.selbar { flex: none; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center; min-height: var(--ph, 64px); }
+.selbar .btn { min-width: 52px; }
+.selbar .btn, .controls .btn { min-height: 52px; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: .5em .9em; }
+.selbar .btn i, .controls .btn i { font-style: normal; font-family: var(--emoji); }
+.controls { flex: none; display: flex; gap: 8px; justify-content: center; flex-wrap: nowrap; }
+.controls .btn { min-width: 52px; padding: .5em .7em; }
+.controls .btn svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.controls .btn.sun svg { fill: currentColor; stroke: none; }
+.controls .lbl { white-space: nowrap; }
+#runBtn { min-width: 108px; }
+@media (max-width: 520px) {
+  .controls { gap: 6px; }
+  .controls .btn { min-width: 48px; padding: .5em .4em; }
+  #runBtn { min-width: 82px; }
+  .selbar { gap: 5px; }
+  .selbar .btn { padding: .5em .45em; font-size: .9rem; gap: 4px; }
+}
+.toast { top: var(--toast-top, 30%); }
+.toast.music { font-size: 1.05rem; padding: 9px 16px; }
+
+/* home, worlds and the other cards */
+.screen { width: min(100%, 640px); }
+.logo .bot-ic { display: inline-block; width: .9em; height: .9em; vertical-align: -.08em; margin-right: .12em; }
+#contBtn { display: grid; gap: 4px; justify-items: center; padding: .55em 1.6em; }
+#contBtn small { font: 700 .9rem/1.1 var(--font-body); opacity: .85; }
+.worlds { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.world {
+  min-height: 104px; display: grid; align-content: center; justify-items: center; gap: 3px; padding: 6px 2px; border-radius: 18px; cursor: pointer; min-width: 0;
+  background: var(--card-2); border: 2px solid var(--line); box-shadow: 0 4px 0 var(--line); color: var(--ink); font: inherit; transition: transform .08s ease, box-shadow .08s ease;
+}
+.world:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--line); }
+.world i { font: 400 1.7rem/1 var(--emoji); font-style: normal; }
+.world b { font: 700 1rem/1.05 var(--font-display); white-space: nowrap; }
+.world small { font-weight: 800; font-size: .76rem; line-height: 1.15; color: var(--ink-soft); white-space: nowrap; }
+.world.locked { opacity: .6; }
+.world.now { background: var(--sun); border-color: var(--sun-deep); box-shadow: 0 4px 0 var(--sun-deep); color: var(--sun-ink); }
+.world.now small { color: var(--sun-ink); }
+.levels { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.lvl {
+  min-height: 80px; display: grid; align-content: center; justify-items: center; gap: 4px; padding: 6px 2px; border-radius: 18px; cursor: pointer; min-width: 0;
+  background: var(--card-2); border: 2px solid var(--line); box-shadow: 0 4px 0 var(--line); color: var(--ink); font: inherit;
+}
+.lvl b { font: 700 1.5rem/1 var(--font-display); }
+.lvl small { font-weight: 800; font-size: .78rem; color: var(--ink-soft); white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+.lvl .ms { font-size: .8rem; letter-spacing: .04em; line-height: 1; }
+.lvl .ms .off, .world .ms .off { opacity: .25; filter: grayscale(1); }
+.lvl.done { background: var(--mint-soft); border-color: var(--mint); box-shadow: 0 4px 0 var(--mint); }
+.lvl.next { background: var(--sun); border-color: var(--sun-deep); box-shadow: 0 4px 0 var(--sun-deep); color: var(--sun-ink); }
+.lvl.next small { color: var(--sun-ink); }
+.lvl:disabled { opacity: .5; cursor: default; }
+.lvl:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 var(--line); }
+.whead { display: flex; align-items: center; justify-content: center; gap: 10px; }
+.whead i { font: 400 2.2rem/1 var(--emoji); font-style: normal; }
+.small-card .lead { font-weight: 700; color: var(--ink-soft); line-height: 1.4; text-wrap: balance; }
+.intro-ic { font: 400 3.6rem/1 var(--emoji); }
+#doneStars span { display: inline-block; animation: pop .45s ease both; }
+#doneStars span:nth-child(2) { animation-delay: .2s; }
+#doneStars span:nth-child(3) { animation-delay: .4s; }
+.done-lv { margin: -8px 0 0; font: 700 1rem/1 var(--font-display); color: var(--ink-soft); }
+#doneNote, #doneNext { font-weight: 700; }
+.minis { display: flex; flex-wrap: wrap; gap: 8px 10px; justify-content: center; }
+.backup textarea {
+  width: 100%; box-sizing: border-box; height: 76px; resize: none; border-radius: 14px; border: 2px solid var(--line); background: var(--card-2); color: var(--ink);
+  font: 600 .82rem/1.35 ui-monospace, "SF Mono", Consolas, monospace; padding: 8px 10px; -webkit-user-select: text; user-select: text; word-break: break-all;
+  -webkit-touch-callout: default; touch-action: auto;
+}
+.backup .part { display: grid; gap: 8px; text-align: left; }
+.backup .part h3 { margin: 0; font: 700 1.05rem/1.1 var(--font-display); }
+.backup .status { min-height: 1.3em; margin: 0; font-weight: 800; color: var(--mint-deep); }
+.backup .status.bad { color: var(--coral-deep); }
+@media (pointer: coarse) { .screen .btn:not(.big) { min-height: 48px; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; } }
+@media (max-width: 600px) {
+  .worlds { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; }
+  .world { grid-column: span 2; min-height: 92px; }
+  .world:nth-child(4) { grid-column: 2 / span 2; }
+  .levels { gap: 8px; }
+  .lvl { min-height: 96px; padding: 6px 3px; }
+  .lvl small { white-space: normal; text-overflow: clip; font-size: .7rem; line-height: 1.1; text-wrap: balance; }
+  .minis .btn { font-size: .92rem; padding: .6em .8em; }
+  #s-home .card { gap: 14px; }
+  #s-home .tag { font-size: 1rem; line-height: 1.4; }
+}
+@media (max-height: 760px) { #s-home .card { gap: 12px; } .world { min-height: 88px; } }
+@media (prefers-reduced-motion: reduce) { #bg i, .tile.gem i, .gap.cur i, #doneStars span { animation: none !important; } .bot { transition: none !important; } }
+.calm #bg i, .calm .tile.gem i, .calm .gap.cur i, .calm #doneStars span, .calm .screen, .calm .toast { animation: none !important; }
+</style>
+</head>
+<body>
+<div id="bg" aria-hidden="true">
+  <i style="left:6%;top:12%;width:96px;height:96px"></i><i style="left:84%;top:9%;width:70px;height:70px"></i>
+  <i style="left:9%;top:72%;width:60px;height:60px"></i><i style="left:78%;top:64%;width:128px;height:128px"></i>
+  <i style="left:46%;top:88%;width:80px;height:80px"></i><i style="left:58%;top:26%;width:46px;height:46px"></i>
+</div>
+<div id="play" hidden>
+  <section class="stage" aria-label="The map">
+    <div class="board" id="board" role="img" aria-label="The map"></div>
+    <div class="say" id="say"><span class="who" aria-hidden="true">🤖</span><p id="sayText"></p><button type="button" id="hintBtn" aria-label="Hint">💡</button></div>
+  </section>
+  <section class="editor" id="editor" aria-label="Your program">
+    <div id="code">
+      <div class="cap"><span>Program</span><span id="capInfo"></span></div>
+      <div class="list" id="mainList" data-list="m"></div>
+      <div class="f1row" id="f1Row" hidden>
+        <div class="cap"><span><b>F1</b></span><span>Use F1 runs these blocks</span></div>
+        <div class="list" id="f1List" data-list="f"></div>
+      </div>
+    </div>
+    <div class="palette" id="palette" role="group" aria-label="Blocks"></div>
+    <div class="selbar" id="selbar" role="group" aria-label="The block you picked" hidden>
+      <button type="button" class="btn" id="selLeft" aria-label="Move left"><i aria-hidden="true">◀️</i><span>Move</span></button>
+      <button type="button" class="btn" id="selDel"><i aria-hidden="true">🗑️</i><span>Delete</span></button>
+      <button type="button" class="btn" id="selRight" aria-label="Move right"><span>Move</span><i aria-hidden="true">▶️</i></button>
+      <button type="button" class="btn" id="selDone"><i aria-hidden="true">✔️</i><span>Done</span></button>
+    </div>
+    <div class="controls" id="controls">
+      <button type="button" class="btn sun" id="runBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12-7.5z"/></svg><span class="lbl">Run</span></button>
+      <button type="button" class="btn" id="stepBtn" aria-label="Step: one block at a time"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l9 7-9 7M18 5v14"/></svg></button>
+      <button type="button" class="btn" id="resetBtn" aria-label="Reset the robot"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.5-5.8M4 4v5h5"/></svg></button>
+      <button type="button" class="btn" id="undoBtn" aria-label="Undo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5M4 9h10a6 6 0 0 1 0 12h-3"/></svg></button>
+      <button type="button" class="btn" id="clearBtn" aria-label="Clear the program"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></svg></button>
+      <button type="button" class="btn" id="speedBtn" aria-label="Speed"><i aria-hidden="true">🚶</i></button>
+    </div>
+  </section>
+</div>
+
+<div id="hud" hidden>
+  <div class="hud-top">
+    <div class="hud-chips">
+      <span class="chip chipbox" id="lvChip">1-1</span>
+      <span class="chip soft chipbox" id="blkChip">Blocks 0 / 7</span>
+      <span class="chip soft chipbox" id="parChip">⭐⭐⭐ 3</span>
+    </div>
+    <button class="hud-btn" id="pauseBtn" aria-label="Pause">
+      <svg width="18" height="20" viewBox="0 0 16 18" aria-hidden="true"><rect x="1" y="1" width="5" height="16" rx="2" fill="currentColor"/><rect x="10" y="1" width="5" height="16" rx="2" fill="currentColor"/></svg>
+    </button>
+  </div>
+</div>
+
+<main id="screens">
+  <section class="screen" id="s-home">
+    <div class="card">
+      <h1 class="logo"><span class="bot-ic" id="logoBot" aria-hidden="true"></span>Code <span>Robot</span></h1>
+      <p class="tag">Build a program from blocks, press Run and watch the robot follow it to the flag. Collect every gem!</p>
+      <div class="row"><button class="btn sun big" id="contBtn"><span id="contTitle">Start</span><small id="contSub">World 1 · Sequences · Level 1</small></button></div>
+      <div>
+        <p class="seg-title">Worlds</p>
+        <div class="worlds" id="worlds"></div>
+      </div>
+      <div class="minis">
+        <button class="btn" id="backupBtn">Back up my progress</button>
+        <button class="btn" id="speakBtn" aria-pressed="true">Read aloud: on</button>
+        <button class="btn" id="soundBtn">Music: on</button>
+        <a class="btn" data-hub hidden href="../">All games</a>
+      </div>
+    </div>
+  </section>
+  <section class="screen" id="s-world" hidden>
+    <div class="card small-card">
+      <div class="whead"><i id="wIcon" aria-hidden="true"></i><h2 id="wTitle">Loops</h2></div>
+      <p class="lead" id="wIntro"></p>
+      <div class="levels" id="levels"></div>
+      <p id="wNote"></p>
+      <div class="row"><button class="btn" id="wHomeBtn">Home</button></div>
+    </div>
+  </section>
+  <section class="screen" id="s-intro" hidden>
+    <div class="card small-card">
+      <div class="intro-ic" id="iIcon" aria-hidden="true"></div>
+      <h2 id="iTitle">World 1: Sequences</h2>
+      <p class="lead" id="iText"></p>
+      <div class="row"><button class="btn sun big" id="iGoBtn">Let's go</button></div>
+    </div>
+  </section>
+  <section class="screen" id="s-pause" hidden>
+    <div class="card small-card">
+      <h2>Paused</h2>
+      <p id="pauseInfo"></p>
+      <div class="row"><button class="btn sun big" id="resumeBtn">Keep coding</button></div>
+      <div class="row"><button class="btn" id="restartBtn">Start the level again</button><button class="btn" id="mapBtn">Levels</button><button class="btn" id="homeBtn">Home</button></div>
+    </div>
+  </section>
+  <section class="screen" id="s-done" hidden>
+    <div class="card small-card">
+      <h2 id="doneTitle">Level done!</h2>
+      <p class="done-lv" id="doneLv"></p>
+      <div class="stars" id="doneStars"></div>
+      <p id="doneNote"></p>
+      <p id="doneNext"></p>
+      <div class="row"><button class="btn sun big" id="nextBtn">Next level</button></div>
+      <div class="row"><button class="btn" id="againBtn">Improve it</button><button class="btn" id="doneMapBtn">Levels</button><a class="btn" data-hub hidden href="../">All games</a></div>
+    </div>
+  </section>
+  <section class="screen" id="s-backup" hidden>
+    <div class="card small-card backup">
+      <h2>Back up my progress</h2>
+      <p>Your progress saves by itself on this device. To take it to another device, copy this code (into Notes, say) and load it there.</p>
+      <div class="part">
+        <h3>This device's save code</h3>
+        <textarea id="codeOut" readonly aria-label="Save code" spellcheck="false"></textarea>
+        <div class="row"><button class="btn sun" id="copyBtn">Copy save code</button></div>
+      </div>
+      <div class="part">
+        <h3>Load a save code</h3>
+        <textarea id="codeIn" aria-label="Paste a save code here" placeholder="Paste a save code here" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea>
+        <div class="row"><button class="btn" id="loadBtn">Load save code</button></div>
+      </div>
+      <p class="status" id="codeStatus" aria-live="polite"></p>
+      <div class="row"><button class="btn" id="backupHomeBtn">Done</button></div>
+    </div>
+  </section>
+  <section class="screen" id="s-confirm" hidden>
+    <div class="card small-card">
+      <h2>Replace your progress?</h2>
+      <p id="confirmText"></p>
+      <div class="row"><button class="btn sun" id="confirmYes">Yes, load it</button><button class="btn" id="confirmNo">No, keep mine</button></div>
+    </div>
+  </section>
+</main>
+<div class="toast" id="toast" hidden></div>
+<div class="sr" aria-live="polite" id="announce"></div>
+
+<script>
+(function () {
+'use strict';
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => Array.from(document.querySelectorAll(s));
+const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
+const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+const frac = (v) => ((v % 1) + 1) % 1;
+function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+const reduceMotion = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+const fmtTime = (s) => Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+const stat = (k, v) => '<div><dt>' + k + '</dt><dd>' + v + '</dd></div>';
+const starRow = (n, of) => Array.from({ length: of || 3 }, (_, i) => '<span' + (i < n ? '' : ' class="off"') + '>⭐</span>').join('');
+
+/* ================= saved progress (this device) =================
+   Settings (math level, music, read-aloud) and the math record are shared by every game in
+   number-dash.v1; each game keeps its own records under its own key via loadRecords(). */
+const SAVE_KEY = 'number-dash.v1';
+const save = {
+  levels: {},
+  math: { right: 0, wrong: 0, streak: 0, best: 0, tricky: [] },
+  settings: { mathLevel: 'explorer', think: 'normal', music: 0.7, sfx: 0.8, sky: 'auto', calm: reduceMotion, speak: true },
+  cube: { color: 0, face: 0 }
+};
+try {
+  const raw = localStorage.getItem(SAVE_KEY);
+  if (raw) { const d = JSON.parse(raw); for (const k of Object.keys(save)) if (d && d[k] && typeof d[k] === 'object') Object.assign(save[k], d[k]); }
+} catch (e) { /* storage blocked: play without saving */ }
+const records = { key: '', data: null };
+function loadRecords(key, defaults) {
+  records.key = key; records.data = defaults;
+  try { const raw = localStorage.getItem(key); if (raw) Object.assign(defaults, JSON.parse(raw)); } catch (e) { /* ignore */ }
+  return defaults;
+}
+function markPlayed() {
+  try {
+    const d = new Date(), k = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    const days = JSON.parse(localStorage.getItem('arcade-days.v1') || '{}') || {};
+    if (days[k]) return;
+    days[k] = 1;
+    const keys = Object.keys(days).sort();
+    while (keys.length > 400) delete days[keys.shift()];
+    localStorage.setItem('arcade-days.v1', JSON.stringify(days));
+  } catch (e) { /* storage blocked */ }
+}
+function writeSave() {
+  markPlayed();
+  try {
+    const cur = JSON.parse(localStorage.getItem(SAVE_KEY) || '{}');
+    cur.math = save.math; cur.settings = save.settings;
+    if (!cur.cube) cur.cube = save.cube;
+    if (!cur.levels) cur.levels = save.levels;
+    localStorage.setItem(SAVE_KEY, JSON.stringify(cur));
+    if (records.key) localStorage.setItem(records.key, JSON.stringify(records.data));
+  } catch (e) { /* ignore */ }
+}
+
+// the game's records only, for bookkeeping that is not play (the day is not marked as played)
+function writeRecords() { try { if (records.key) localStorage.setItem(records.key, JSON.stringify(records.data)); } catch (e) { /* ignore */ } }
+
+/* ================= math bookkeeping =================
+   q is a fact from KINDS (shared/math.js): t = its text, a = its answer. A missed fact is kept
+   (the last 12) and comes back now and then in every game until it is answered right. */
+function factFrom(kinds, avoid) {
+  const tricky = (save.math.tricky || []).filter((t) => !avoid || !avoid.has(t.t));
+  if (tricky.length && Math.random() < 0.25) return Object.assign({}, pick(tricky), { again: true });
+  let q = KINDS[pick(kinds)]();
+  for (let i = 0; i < 12 && avoid && avoid.has(q.t); i++) q = KINDS[pick(kinds)]();
+  return q;
+}
+function mathRight(q) {
+  const m = save.math;
+  m.right++; m.streak++; m.best = Math.max(m.best, m.streak);
+  if (q && q.again) m.tricky = m.tricky.filter((t) => t.t !== q.t);
+  writeSave();
+}
+function mathWrong(q) {
+  const m = save.math;
+  m.wrong++; m.streak = 0;
+  if (q && q.t) {
+    const r = { t: q.t, a: q.a };
+    if (q.f) r.f = q.f;
+    if (q.trap !== undefined) r.trap = q.trap;
+    m.tricky = (m.tricky || []).filter((t) => t.t !== r.t).concat([r]).slice(-12);
+  }
+  writeSave();
+}
+
+/* ================= screens, toasts, links ================= */
+// show one menu card (<section class="screen" id="s-NAME">) over the game, or none
+function showScreen(name, dim) {
+  $$('#screens > .screen').forEach((s) => { s.hidden = s.id !== 's-' + name; });
+  $('#screens').classList.toggle('dim', !!name && dim !== false);
+}
+let toastTimer = 0;
+// kind: 'hello' (sits higher, for something new), 'good', 'oops', or nothing
+function toast(msg, kind, ms) {
+  const t = $('#toast');
+  t.textContent = msg; t.className = 'toast' + (kind ? ' ' + kind : ''); t.hidden = false;
+  t.style.animation = 'none'; void t.offsetWidth; t.style.animation = '';
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, ms || (kind === 'hello' ? 2400 : 1500));
+}
+function announce(msg) { const a = $('#announce'); if (a) a.textContent = msg; }
+// links marked data-hub lead back to the arcade's home page when the game runs inside the site
+function arcadeLinks() { if (window.ARCADE_HOME) $$('[data-hub]').forEach((a) => { a.href = window.ARCADE_HOME; a.hidden = false; }); }
+function toggleMusic() { save.settings.music = save.settings.music > 0 ? 0 : 0.7; writeSave(); Sound.init(); Sound.setVolumes(); return save.settings.music > 0; }
+// the usual page guards: sound starts on the first touch, no pinch or double-tap zoom, onHide when the page goes away
+function arcadeGuards(onHide) {
+  document.addEventListener('pointerdown', () => Sound.init());
+  document.addEventListener('visibilitychange', () => { if (document.hidden) { if (onHide) onHide(); } else Sound.init(); });
+  window.addEventListener('blur', () => { if (onHide) onHide(); });
+  document.addEventListener('gesturestart', (e) => e.preventDefault());
+  document.addEventListener('dblclick', (e) => e.preventDefault());
+}
+
+/* ================= read-aloud =================
+   English words are spoken with the device's own voice (iPad has good offline ones). Off when
+   settings.speak is false. Speech.said keeps the last words asked for, for the playtests. */
+const Speech = (function () {
+  const ok = typeof window.speechSynthesis !== 'undefined' && typeof window.SpeechSynthesisUtterance !== 'undefined';
+  const said = [];
+  let voice = null;
+  function choose() {
+    if (!ok) return;
+    const en = speechSynthesis.getVoices().filter((v) => /^en[-_]/i.test(v.lang));
+    // British English first (the games teach British spelling and IELTS uses British voices), the clearest voices first
+    // (on-device voices before online ones, so read-aloud still works offline)
+    const gb = en.filter((v) => /^en[-_]GB/i.test(v.lang)).sort((x, y) => (y.localService ? 1 : 0) - (x.localService ? 1 : 0));
+    voice = gb.find((v) => /Serena|Kate|Arthur|Martha|Sonia|Libby|Ryan|Google UK English/i.test(v.name)) || gb.find((v) => /Daniel/i.test(v.name)) || gb[0] ||
+      en.find((v) => /Samantha|Karen|Moira|Aria|Jenny|Google US English/i.test(v.name)) || en.find((v) => /^en[-_]US/i.test(v.lang)) || en[0] || null;
+  }
+  if (ok) { choose(); try { speechSynthesis.addEventListener('voiceschanged', choose); } catch (e) { speechSynthesis.onvoiceschanged = choose; } }
+  function say(text, rate) {
+    said.push(text); if (said.length > 40) said.shift();
+    if (!ok || !save.settings.speak) return false;
+    try {
+      const u = new SpeechSynthesisUtterance(text);
+      if (voice) u.voice = voice;
+      u.lang = voice ? voice.lang : 'en-GB'; u.rate = rate || 0.9; u.pitch = 1.05;
+      // some iOS versions drop a word spoken straight after cancel(), so only cut in when something is
+      // still talking, and then give the voice a moment
+      if (speechSynthesis.speaking || speechSynthesis.pending) { speechSynthesis.cancel(); setTimeout(() => speechSynthesis.speak(u), 60); }
+      else speechSynthesis.speak(u);
+      return true;
+    } catch (e) { return false; }
+  }
+  return { ok: ok, say: say, said: said, stop() { if (ok) { try { speechSynthesis.cancel(); } catch (e) { /* ignore */ } } } };
+})();
+
+/* ================= music =================
+   The menu song is the arcade's; the robot's song is calm and even (soft keys, a light kick), good for thinking.
+   Each level plays its own remix of it (level 1 the song itself). */
+const SONGS = {
+  menu: { bpm: 72, swing: 0.14, prog: [[52, 55, 59, 62], [55, 59, 60, 64], [57, 60, 64, 67], [55, 57, 62, 64]], bass: [36, 45, 41, 43],
+          keys: [[0, 1, 4, 15], [10, 0.45, 2, 4]], bassPat: [[0, 0.8, 0, 12]], drums: false,
+          hats: [[0, 0.22], [4, 0.12], [8, 0.22], [12, 0.12]], scale: [72, 74, 76, 79, 81, 84], density: 0.42, seed: 3 },
+  // Cmaj7, Am9, Fmaj7, G6: bright but unhurried
+  robot: { bpm: 74, swing: 0.08, prog: [[48, 55, 59, 64], [45, 52, 59, 60], [41, 48, 52, 57], [43, 50, 52, 59]], bass: [36, 33, 41, 43],
+           keys: [[0, 0.8, 4, 8], [8, 0.45, 3, 6]], bassPat: [[0, 0.75, 0, 8], [8, 0.4, 7, 4]], drums: true,
+           kick: [0, 8], snare: [12], ghost: [],
+           hats: [[0, 0.2], [4, 0.12], [8, 0.2], [12, 0.12]], scale: [72, 74, 76, 79, 81, 84], density: 0.34, seed: 521 }
+};
+// Every new attempt plays the next remix of the level's song: a new key and chord
+// order, another groove and comping style, another lead sound, and a fresh melody.
+const HATS = {
+  eighths: [[0, 0.5], [2, 0.3], [4, 0.5], [6, 0.3], [8, 0.5], [10, 0.3], [12, 0.5], [14, 0.3]],
+  sixteenths: Array.from({ length: 16 }, (_, i) => [i, i % 4 === 0 ? 0.45 : i % 2 ? 0.14 : 0.3]),
+  swing: [[0, 0.45], [3, 0.25], [4, 0.45], [7, 0.25], [8, 0.45], [11, 0.25], [12, 0.45], [15, 0.25]],
+  soft: [[0, 0.3], [4, 0.2], [8, 0.3], [12, 0.2], [14, 0.15]]
+};
+const COMP = {
+  long: [[0, 1, 5, 16]],
+  stabs: [[0, 0.9, 4, 3], [6, 0.6, 3, 2], [10, 0.7, 3, 3], [14, 0.4, 2, 2]],
+  offbeat: [[2, 0.75, 4, 2], [6, 0.6, 3, 2], [10, 0.75, 4, 2], [14, 0.5, 3, 2]]
+};
+const REMIXES = [
+  { name: 'Bubble Beat', shift: 2, rot: 1, kick: [0, 3, 8, 10], hats: 'sixteenths', comp: 'stabs', lead: 'marimba', cutoff: 2900 },
+  { name: 'Sleepy Swing', shift: -3, rot: 2, kick: [0, 10], hats: 'swing', swing: 0.26, comp: 'long', lead: 'flute', cutoff: 1700 },
+  { name: 'Hop Step', shift: 5, rot: 3, kick: [0, 6, 8], hats: 'eighths', comp: 'offbeat', lead: 'bell', cutoff: 2500 },
+  { name: 'Moon Walk', shift: -2, rot: 1, kick: [0, 7, 10], ghost: [11, 15], hats: 'sixteenths', comp: 'arp', lead: 'pluck', cutoff: 2100 },
+  { name: 'Cloud Bounce', shift: 3, rot: 2, kick: [0, 2, 10], hats: 'eighths', comp: 'stabs', lead: 'flute', cutoff: 2600 },
+  { name: 'Starry Glide', shift: -5, rot: 3, kick: [0, 10, 14], hats: 'soft', comp: 'arp', lead: 'bell', cutoff: 2000 },
+  { name: 'Sunny Shuffle', shift: 1, rot: 0, kick: [0, 3, 7, 10], hats: 'swing', swing: 0.24, comp: 'offbeat', lead: 'marimba', cutoff: 2800 }
+];
+function remixOf(s, n) {
+  if (!n || !s.drums) return Object.assign({}, s, { name: '', lead: 'pluck', cutoff: 2300, arp: false });
+  const r = REMIXES[(n - 1) % REMIXES.length], round = Math.floor((n - 1) / REMIXES.length);
+  const len = s.prog.length, sh = r.shift;
+  return Object.assign({}, s, {
+    name: r.name + (round ? ' ' + (round + 1) : ''),
+    prog: s.prog.map((_, i) => s.prog[(i + r.rot) % len].map((m) => m + sh)),
+    bass: s.bass.map((_, i) => s.bass[(i + r.rot) % len] + sh),
+    scale: s.scale.map((m) => m + sh),
+    kick: r.kick, ghost: r.ghost || [], hats: HATS[r.hats],
+    keys: COMP[r.comp] || s.keys, arp: r.comp === 'arp',
+    bassPat: r.kick.map((k, i) => [k, i ? 0.7 : 1, i % 2 ? 7 : 0, i ? 2 : 5]),
+    swing: r.swing || s.swing, lead: r.lead, cutoff: r.cutoff,
+    seed: ((s.seed * 7919 + n * 104729) % 2147483646) + 1,
+    density: clamp(s.density + (((n * 37) % 5) - 2) * 0.04, 0.35, 0.7)
+  });
+}
+const Sound = (function () {
+  let ctx = null, out, musicBus, musicLP, sfxBus, verbSend, keysIn, keysLP, bassIn, drumIn, melIn, wowGain, noise, crackleGain;
+  let song = null, vari = null, songId = '', songStart = 0, step = 0, phrases = null, G = null;
+  const mtof = (m) => 440 * Math.pow(2, (m - 69) / 12);
+
+  function makeNoise(sec) {
+    const b = ctx.createBuffer(1, Math.floor(ctx.sampleRate * sec), ctx.sampleRate), d = b.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    return b;
+  }
+  function makeCrackle(sec) {
+    const b = ctx.createBuffer(1, Math.floor(ctx.sampleRate * sec), ctx.sampleRate), d = b.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = (Math.random() < 0.0007 ? (Math.random() * 2 - 1) * 0.7 : 0) + (Math.random() * 2 - 1) * 0.004;
+    return b;
+  }
+  function makeVerb(sec) {
+    const len = Math.floor(ctx.sampleRate * sec), b = ctx.createBuffer(2, len, ctx.sampleRate);
+    for (let c = 0; c < 2; c++) { const d = b.getChannelData(c); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2.8); }
+    return b;
+  }
+  function filter(type, f, q) { const n = ctx.createBiquadFilter(); n.type = type; n.frequency.value = f; if (q) n.Q.value = q; return n; }
+
+  function init() {
+    if (ctx) { if (ctx.state === 'suspended') ctx.resume(); return; }
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    // iPhone and iPad: play through the speaker even when the silent switch is on
+    try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) { /* older Safari */ }
+    try { ctx = new AC(); } catch (e) { ctx = null; return; }
+    const comp = ctx.createDynamicsCompressor();
+    comp.threshold.value = -16; comp.ratio.value = 3; comp.attack.value = 0.01; comp.release.value = 0.2;
+    out = ctx.createGain(); out.gain.value = 0.9; out.connect(comp); comp.connect(ctx.destination);
+    musicBus = ctx.createGain(); musicLP = filter('lowpass', 16000, 0.5); musicBus.connect(musicLP); musicLP.connect(out);
+    sfxBus = ctx.createGain(); sfxBus.connect(out);
+    const verb = ctx.createConvolver(); verb.buffer = makeVerb(2.4);
+    verbSend = ctx.createGain(); verbSend.gain.value = 0.26; verbSend.connect(verb); verb.connect(musicBus);
+    keysIn = ctx.createGain();
+    keysLP = filter('lowpass', 2300);
+    const trem = ctx.createGain(); trem.gain.value = 0.86;
+    const lfo = ctx.createOscillator(); lfo.frequency.value = 4.2; const lfoG = ctx.createGain(); lfoG.gain.value = 0.12;
+    lfo.connect(lfoG); lfoG.connect(trem.gain); lfo.start();
+    keysIn.connect(keysLP); keysLP.connect(trem); trem.connect(musicBus); trem.connect(verbSend);
+    const wow = ctx.createOscillator(); wow.frequency.value = 0.55; wowGain = ctx.createGain(); wowGain.gain.value = 7; wow.connect(wowGain); wow.start();
+    bassIn = ctx.createGain(); const bLP = filter('lowpass', 520); bassIn.connect(bLP); bLP.connect(musicBus);
+    drumIn = ctx.createGain(); const dLP = filter('lowpass', 6500); drumIn.connect(dLP); dLP.connect(musicBus);
+    melIn = ctx.createGain();
+    const delay = ctx.createDelay(1.5), fb = ctx.createGain(), delLP = filter('lowpass', 2600);
+    delay.delayTime.value = 0.42; fb.gain.value = 0.3;
+    melIn.connect(musicBus); melIn.connect(delay); delay.connect(delLP); delLP.connect(fb); fb.connect(delay); delLP.connect(musicBus); melIn.connect(verbSend);
+    noise = makeNoise(1);
+    crackleGain = ctx.createGain(); crackleGain.gain.value = 0;
+    const cr = ctx.createBufferSource(); cr.buffer = makeCrackle(3.3); cr.loop = true;
+    const cHP = filter('highpass', 1200); cr.connect(cHP); cHP.connect(crackleGain); crackleGain.connect(musicBus); cr.start();
+    newGen();
+    setVolumes();
+    setInterval(tick, 25);
+  }
+  // Notes enter through a per-song "generation" of gains, so a song or remix change
+  // can fade out the notes still ringing from the one before.
+  function newGen() {
+    const old = G;
+    G = { keys: ctx.createGain(), bass: ctx.createGain(), drum: ctx.createGain(), mel: ctx.createGain() };
+    G.keys.connect(keysIn); G.bass.connect(bassIn); G.drum.connect(drumIn); G.mel.connect(melIn);
+    if (!old) return;
+    for (const k in old) old[k].gain.setTargetAtTime(0, ctx.currentTime, 0.06);
+    setTimeout(() => { for (const k in old) { try { old[k].disconnect(); } catch (e) { /* gone */ } } }, 4000);
+  }
+  function setVolumes() {
+    if (!ctx) return;
+    musicBus.gain.setTargetAtTime(save.settings.music * 0.6, ctx.currentTime, 0.05);
+    sfxBus.gain.setTargetAtTime(save.settings.sfx * 0.6, ctx.currentTime, 0.05);
+  }
+
+  // ---- instruments ----
+  function keyNote(t, m, v, dur) {
+    const f = mtof(m), g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(v, t + 0.012);
+    g.gain.exponentialRampToValueAtTime(v * 0.32, t + 0.7);
+    g.gain.setTargetAtTime(0.0001, t + Math.max(0.75, dur), 0.25);
+    const o = ctx.createOscillator(); o.type = 'sine'; o.frequency.value = f;
+    const o2 = ctx.createOscillator(); o2.type = 'sine'; o2.frequency.value = f * 2;
+    const g2 = ctx.createGain(); g2.gain.setValueAtTime(0.5, t); g2.gain.exponentialRampToValueAtTime(0.0001, t + 0.45);
+    wowGain.connect(o.detune);
+    o.connect(g); o2.connect(g2); g2.connect(g); g.connect(G.keys);
+    o.start(t); o2.start(t); o.stop(t + dur + 1.4); o2.stop(t + 0.5);
+    o.onended = () => { try { wowGain.disconnect(o.detune); } catch (e) { /* already gone */ } };
+  }
+  function bassNote(t, m, v, dur) {
+    const f = mtof(m), g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.02);
+    g.gain.setTargetAtTime(v * 0.6, t + 0.05, 0.2); g.gain.setTargetAtTime(0.0001, t + dur, 0.07);
+    const o = ctx.createOscillator(); o.type = 'triangle'; o.frequency.value = f;
+    const o2 = ctx.createOscillator(); o2.type = 'sine'; o2.frequency.value = f;
+    o.connect(g); o2.connect(g); g.connect(G.bass);
+    o.start(t); o2.start(t); o.stop(t + dur + 0.5); o2.stop(t + dur + 0.5);
+  }
+  function kick(t, v) {
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.frequency.setValueAtTime(115, t); o.frequency.exponentialRampToValueAtTime(46, t + 0.12);
+    g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.38);
+    o.connect(g); g.connect(G.drum); o.start(t); o.stop(t + 0.4);
+  }
+  function snare(t, v) {
+    const s = ctx.createBufferSource(); s.buffer = noise;
+    const bp = filter('bandpass', 1700, 0.8), g = ctx.createGain();
+    g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.2);
+    s.connect(bp); bp.connect(g); g.connect(G.drum); g.connect(verbSend);
+    s.start(t, Math.random() * 0.5, 0.25);
+    const o = ctx.createOscillator(); o.type = 'triangle';
+    o.frequency.setValueAtTime(190, t); o.frequency.exponentialRampToValueAtTime(140, t + 0.08);
+    const g2 = ctx.createGain(); g2.gain.setValueAtTime(v * 0.6, t); g2.gain.exponentialRampToValueAtTime(0.0001, t + 0.1);
+    o.connect(g2); g2.connect(G.drum); o.start(t); o.stop(t + 0.12);
+  }
+  function hat(t, v, open) {
+    const s = ctx.createBufferSource(); s.buffer = noise;
+    const hp = filter('highpass', 7000), g = ctx.createGain();
+    g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(0.0001, t + (open ? 0.22 : 0.045));
+    s.connect(hp); hp.connect(g); g.connect(G.drum);
+    s.start(t, Math.random() * 0.5, 0.3);
+  }
+  function pluck(t, m, v, dur, dest) {
+    const f = mtof(m), g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.006);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + Math.max(0.35, dur));
+    const o = ctx.createOscillator(); o.type = 'sine'; o.frequency.value = f;
+    const o2 = ctx.createOscillator(); o2.type = 'sine'; o2.frequency.value = f * 3;
+    const g2 = ctx.createGain(); g2.gain.value = 0.12;
+    o.connect(g); o2.connect(g2); g2.connect(g); g.connect(dest || G.mel);
+    o.start(t); o2.start(t); o.stop(t + dur + 0.45); o2.stop(t + dur + 0.45);
+  }
+  // melody voices for the remixes: a short wooden marimba, a ringing bell, a soft flute
+  function lead(t, m, v, dur, kind) {
+    if (kind !== 'marimba' && kind !== 'bell' && kind !== 'flute') { pluck(t, m, v, dur); return; }
+    const f = mtof(m), g = ctx.createGain(), o = ctx.createOscillator();
+    g.gain.setValueAtTime(0.0001, t);
+    let end;
+    if (kind === 'flute') {
+      o.type = 'triangle'; o.frequency.value = f;
+      const vib = ctx.createOscillator(), vg = ctx.createGain();
+      vib.frequency.value = 5; vg.gain.value = 7; vib.connect(vg); vg.connect(o.detune);
+      g.gain.exponentialRampToValueAtTime(v * 0.75, t + 0.06);
+      g.gain.setTargetAtTime(0.0001, t + Math.max(0.2, dur * 0.9), 0.08);
+      end = t + dur + 0.5; vib.start(t); vib.stop(end);
+    } else {
+      o.type = 'sine'; o.frequency.value = f;
+      const o2 = ctx.createOscillator(), g2 = ctx.createGain();
+      o2.type = 'sine'; o2.frequency.value = f * (kind === 'bell' ? 2.76 : 4);
+      g2.gain.value = kind === 'bell' ? 0.2 : 0.08;
+      o2.connect(g2); g2.connect(g);
+      const decay = kind === 'bell' ? 1.3 : 0.24;
+      g.gain.exponentialRampToValueAtTime(v * (kind === 'bell' ? 0.8 : 1.1), t + 0.004);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + decay);
+      end = t + decay + 0.05; o2.start(t); o2.stop(end);
+    }
+    o.connect(g); g.connect(G.mel); o.start(t); o.stop(end);
+  }
+
+  // ---- scheduler: a 16-bar arrangement that loops its last 12 bars ----
+  function buildPhrases(s) {
+    let seed = s.seed;
+    const r = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+    const slots = [0, 3, 6, 8, 10, 12, 14, 16, 19, 22, 24, 26, 28, 30];
+    const make = () => {
+      const notes = [];
+      let d = 2 + Math.floor(r() * 3);
+      for (const st of slots) {
+        if (r() < s.density) {
+          d = clamp(d + [-2, -1, -1, 0, 1, 1, 2][Math.floor(r() * 7)], 0, s.scale.length - 1);
+          notes.push({ st: st, m: s.scale[d], len: [2, 3, 4][Math.floor(r() * 3)], v: 0.7 + r() * 0.3 });
+        }
+      }
+      return notes;
+    };
+    return [make(), make()];
+  }
+  function sectionOf(bar) { return bar < 16 ? bar : 4 + ((bar - 4) % 12); }
+  function playStep(i, t, d16) {
+    const s = vari, bar = Math.floor(i / 16), st = i % 16, sec = sectionOf(bar);
+    const ci = bar % s.prog.length, chord = s.prog[ci], root = s.bass[ci];
+    const intro = sec < 2, light = sec < 4, brk = sec === 15;
+    if (s.arp) {
+      if (st === 0) chord.forEach((m, k) => keyNote(t + k * 0.012, m, 0.03, d16 * 16));
+      if (!intro && st % 2 === 0) {
+        const order = chord.concat(chord.slice(1, -1).reverse());
+        keyNote(t, order[(st / 2) % order.length] + 12, 0.036, d16 * 3);
+      }
+    } else for (const h of s.keys) {
+      if (h[0] !== st || (intro && st !== 0)) continue;
+      const notes = h[2] >= chord.length ? chord : chord.slice(chord.length - h[2]);
+      notes.forEach((m, k) => keyNote(t + k * 0.012, m, 0.05 * h[1] * (intro ? 0.85 : 1), d16 * h[3]));
+    }
+    if (!intro && !brk) for (const b of s.bassPat) if (b[0] === st) bassNote(t, root + (b[2] || 0), 0.2 * b[1], d16 * b[3]);
+    if (s.drums && !light) {
+      if (s.kick.indexOf(st) >= 0 && !(brk && st > 6)) kick(t, 0.5);
+      if (s.snare.indexOf(st) >= 0 && !brk) snare(t, 0.11);
+      if (s.ghost.indexOf(st) >= 0 && !brk) snare(t, 0.035);
+    }
+    if (!intro) for (const hh of s.hats) if (hh[0] === st) hat(t, hh[1] * 0.07 * (light ? 0.6 : 1), hh[2]);
+    if (sec >= 6 && sec <= 13 && phrases) {
+      const ph = phrases[((sec - 6) >> 1) % 2], pi = (sec % 2) * 16 + st;
+      for (const n of ph) if (n.st === pi) lead(t, n.m, 0.065 * n.v, d16 * n.len, s.lead);
+    }
+  }
+  function tick() {
+    if (!ctx || !song || ctx.state !== 'running') return;
+    const d16 = 60 / song.bpm / 4, ahead = ctx.currentTime + 0.16;
+    for (;;) {
+      const t = songStart + step * d16 + (step % 2 ? vari.swing * d16 : 0);
+      if (t > ahead) break;
+      if (t > ctx.currentTime - 0.04) playStep(step, t, d16);
+      step++;
+    }
+  }
+  function play(id, restart) {
+    if (!ctx) return;
+    if (songId === id && song && !restart) return;
+    songId = id; song = SONGS[id] || SONGS.menu;
+    vari = remixOf(song, 0); phrases = buildPhrases(vari);
+    newGen();
+    keysLP.frequency.setTargetAtTime(vari.cutoff, ctx.currentTime, 0.05);
+    songStart = ctx.currentTime + 0.08; step = 0;
+    crackleGain.gain.setTargetAtTime(0.05, ctx.currentTime, 0.3);
+  }
+  // Attempt n gets remix n, started straight into the full groove (bar 4) and lined
+  // up so the beat falls where it would if the player had run from the start.
+  function remix(n, phaseBeats, id) {
+    const base = song && songId === id ? song : SONGS[id];
+    const v = base ? remixOf(base, n) : null;
+    if (!ctx || !song || songId !== id || !v) return v ? v.name : '';
+    vari = v; phrases = buildPhrases(vari);
+    newGen();
+    keysLP.frequency.setTargetAtTime(vari.cutoff, ctx.currentTime, 0.05);
+    const startBeat = 16 + frac(phaseBeats || 0);
+    songStart = ctx.currentTime + 0.03 - startBeat * 60 / song.bpm;
+    step = Math.floor(startBeat * 4);
+    return vari.name;
+  }
+  function beatAt(perfMs) {
+    if (!ctx || !song) return null;
+    return (ctx.currentTime + (perfMs - performance.now()) / 1000 - songStart) * song.bpm / 60;
+  }
+  function muffle(on) { if (ctx) musicLP.frequency.setTargetAtTime(on ? 700 : 16000, ctx.currentTime, on ? 0.04 : 0.25); }
+  // slow motion: the music goes soft and underwater for the second it lasts
+  function slow(on) {
+    if (!ctx) return;
+    musicLP.frequency.setTargetAtTime(on ? 1400 : 16000, ctx.currentTime, on ? 0.05 : 0.2);
+    blip('sine', on ? 700 : 330, on ? 330 : 700, 0.28, 0.1);
+  }
+
+  // ---- effects ----
+  function blip(type, f0, f1, dur, v, delay) {
+    if (!ctx) return;
+    const t = ctx.currentTime + (delay || 0), o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = type; o.frequency.setValueAtTime(f0, t);
+    if (f1 !== f0) o.frequency.exponentialRampToValueAtTime(f1, t + dur);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.012); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(sfxBus); o.start(t); o.stop(t + dur + 0.05);
+  }
+  function bell(m, v, delay) { if (ctx) pluck(ctx.currentTime + (delay || 0), m, v, 0.5, sfxBus); }
+  function whoosh() {
+    if (!ctx) return;
+    const t = ctx.currentTime, s = ctx.createBufferSource(); s.buffer = noise;
+    const bp = filter('bandpass', 500, 1.2), g = ctx.createGain();
+    bp.frequency.setValueAtTime(500, t); bp.frequency.exponentialRampToValueAtTime(2600, t + 0.3);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.12, t + 0.05); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.34);
+    s.connect(bp); bp.connect(g); g.connect(sfxBus); s.start(t, 0, 0.4);
+  }
+  const sfx = {
+    orb() { blip('sine', 520, 900, 0.14, 0.18); },
+    pad() { blip('triangle', 260, 760, 0.18, 0.16); },
+    portal: whoosh,
+    star() { [84, 88, 91].forEach((m, i) => bell(m, 0.15, i * 0.07)); },
+    right() { bell(76, 0.2, 0); bell(83, 0.2, 0.09); bell(88, 0.14, 0.18); },
+    wrong() { blip('sine', 330, 170, 0.32, 0.2, 0.05); },
+    die() { blip('sine', 240, 90, 0.22, 0.22); },
+    win() { [72, 76, 79, 84, 88, 91].forEach((m, i) => bell(m, 0.15, i * 0.09)); },
+    click() { blip('sine', 880, 880, 0.04, 0.05); },
+    check() { blip('sine', 660, 990, 0.09, 0.07); }
+  };
+  return { init, play, remix, beatAt, muffle, slow, setVolumes, sfx, bpm: () => (song ? song.bpm : 80), ready: () => !!ctx };
+})();
+
+/* ================= the interpreter and the levels ================= */
+const Robot = (function () {
+  const STEP_CAP = 300;
+  const DX = [0, 1, 0, -1], DY = [-1, 0, 1, 0];   // 0 up, 1 right, 2 down, 3 left
+  const FACING = { '^': 0, '>': 1, 'v': 2, '<': 3 };
+  const BOX = { r: 1, i: 1, g: 1, u: 1 };           // blocks with blocks inside
+
+  function parseMap(rows) {
+    const h = rows.length, w = rows[0].length, cells = [], gems = [];
+    let start = null, flag = -1;
+    for (let y = 0; y < h; y++) {
+      if (rows[y].length !== w) throw new Error('map row ' + y + ' is ' + rows[y].length + ' squares, not ' + w);
+      for (let x = 0; x < w; x++) {
+        let c = rows[y][x];
+        if (FACING[c] !== undefined) { if (start) throw new Error('two robots'); start = { x: x, y: y, d: FACING[c] }; c = '.'; }
+        if ('.#~*G'.indexOf(c) < 0) throw new Error('unknown square ' + c);
+        if (c === '*') gems.push(y * w + x);
+        if (c === 'G') { if (flag >= 0) throw new Error('two flags'); flag = y * w + x; }
+        cells.push(c);
+      }
+    }
+    if (!start || flag < 0) throw new Error('a map needs a robot and a flag');
+    if (w > 8 || h > 8) throw new Error('a map is at most 8 x 8');
+    return { w: w, h: h, cells: cells, start: start, gems: gems, flag: flag };
+  }
+  const inside = (m, x, y) => x >= 0 && y >= 0 && x < m.w && y < m.h;
+  const open = (m, x, y) => inside(m, x, y) && m.cells[y * m.w + x] !== '#' && m.cells[y * m.w + x] !== '~';
+  const blocker = (m, x, y) => (!inside(m, x, y) ? 'edge' : m.cells[y * m.w + x] === '~' ? 'water' : 'wall');
+
+  /* ---- programs ---- */
+  function make(t, n) {
+    if (t === 'r') return { t: 'r', n: n || 2, b: [] };
+    if (t === 'i') return { t: 'i', b: [], e: [] };
+    if (BOX[t]) return { t: t, b: [] };
+    return { t: t };
+  }
+  function parse(text) {
+    const s = String(text || '').replace(/\s+/g, '');
+    let i = 0;
+    function seq() {
+      const out = [];
+      while (i < s.length && s[i] !== ')' && s[i] !== '|') {
+        const c = s[i++];
+        if (c === 'F' || c === 'L' || c === 'R' || c === 'f') out.push({ t: c });
+        else if (c === 'r') {
+          const n = +s[i++];
+          if (!(n >= 2 && n <= 9)) throw new Error('a repeat needs 2 to 9 at ' + (i - 1));
+          out.push({ t: 'r', n: n, b: group() });
+        } else if (c === 'i') { const b = group(); out.push({ t: 'i', b: b, e: s[i] === '(' ? group() : [] }); }
+        else if (c === 'g' || c === 'u') out.push({ t: c, b: group() });
+        else throw new Error('unknown block ' + c + ' at ' + (i - 1));
+      }
+      return out;
+    }
+    function group() {
+      if (s[i] !== '(') throw new Error('( expected at ' + i);
+      i++;
+      const b = seq();
+      if (s[i] !== ')') throw new Error(') expected at ' + i);
+      i++;
+      return b;
+    }
+    const main = seq();
+    let f1 = [];
+    if (s[i] === '|') { i++; f1 = seq(); }
+    if (i !== s.length) throw new Error('unexpected ' + s[i] + ' at ' + i);
+    return { main: main, f1: f1 };
+  }
+  function printList(list, sp) {
+    return list.map((b) => (b.t === 'r' ? 'r' + b.n + '(' + printList(b.b, sp) + ')' : b.t === 'i' ? 'i(' + printList(b.b, sp) + ')(' + printList(b.e, sp) + ')'
+      : BOX[b.t] ? b.t + '(' + printList(b.b, sp) + ')' : b.t)).join(sp);
+  }
+  // spaced: 'F F r3(F L)|R'; compact (for saving): 'FFr3(FL)|R'
+  const print = (p, compact) => printList(p.main, compact ? '' : ' ') + (p.f1 && p.f1.length ? '|' + printList(p.f1, compact ? '' : ' ') : '');
+  const countList = (list) => list.reduce((s, b) => s + 1 + (b.b ? countList(b.b) : 0) + (b.e ? countList(b.e) : 0), 0);
+  const count = (p) => countList(p.main) + countList(p.f1 || []);
+  // every kind of block a program uses ('FLR', 'r', ...), and whether F1 uses itself
+  function kinds(p) {
+    const k = new Set();
+    const walk = (list) => list.forEach((b) => { k.add(b.t); if (b.b) walk(b.b); if (b.e) walk(b.e); });
+    walk(p.main); walk(p.f1 || []);
+    return k;
+  }
+  function selfCall(p) {
+    let bad = false;
+    const walk = (list) => list.forEach((b) => { if (b.t === 'f') bad = true; if (b.b) walk(b.b); if (b.e) walk(b.e); });
+    walk(p.f1 || []);
+    return bad;
+  }
+  const clone = (p) => JSON.parse(JSON.stringify(p));
+
+  /* ---- a run ----
+     Events, one per step: { p: the block's path ('m.2', 'm.1.b.0', 'f.0', 'm.3.e.1'), k: what happened, a: the paths of the
+     loops, Ifs and F1 uses it is inside }. k: 'fwd' (x, y, g: the gem picked up there or -1), 'turn' (d, s: -1 left, 1 right),
+     'bump' (x, y, d, what: wall / water / edge), 'rep' (i of n), 'test' (v: true or false; until: for Repeat until flag), 'call'.
+     The run ends: win (on the flag with every gem), bump (what: wall / water / edge), end (the blocks ran out), gems (on the flag, gems still to get),
+     dizzy (STEP_CAP steps: a loop that never finishes), self (F1 using F1), empty (no blocks). */
+  function run(m, prog) {
+    let x = m.start.x, y = m.start.y, d = m.start.d, found = -1, steps = 0, why = '', inF1 = 0, hit = '';
+    const got = [], events = [], active = [], f1 = prog.f1 || [];
+    const here = () => y * m.w + x;
+    const won = () => here() === m.flag && got.length === m.gems.length;
+    const tick = () => { if (steps >= STEP_CAP) { why = 'dizzy'; return false; } steps++; return true; };
+    const ev = (e) => { e.a = active.slice(); events.push(e); };
+    function seq(list, path) { for (let k = 0; k < list.length && !why; k++) one(list[k], path + '.' + k); }
+    function inner(list, p, path) { active.push(p); seq(list, path); active.pop(); }
+    function one(b, p) {
+      if (!tick()) return;
+      if (b.t === 'F') {
+        const nx = x + DX[d], ny = y + DY[d];
+        if (!open(m, nx, ny)) { hit = blocker(m, nx, ny); ev({ p: p, k: 'bump', x: x, y: y, d: d, what: hit }); why = 'bump'; return; }
+        x = nx; y = ny; found = -1;
+        let g = -1;
+        if (m.cells[here()] === '*' && got.indexOf(here()) < 0) { got.push(here()); found = g = here(); }
+        ev({ p: p, k: 'fwd', x: x, y: y, g: g });
+        if (won()) why = 'win';
+      } else if (b.t === 'L' || b.t === 'R') {
+        d = (d + (b.t === 'L' ? 3 : 1)) % 4;
+        ev({ p: p, k: 'turn', d: d, s: b.t === 'L' ? -1 : 1 });
+      } else if (b.t === 'f') {
+        ev({ p: p, k: 'call' });
+        if (inF1) { why = 'self'; return; }
+        inF1++; inner(f1, p, 'f'); inF1--;
+      } else if (b.t === 'r') {
+        for (let i = 1; i <= b.n && !why; i++) {
+          if (i > 1 && !tick()) return;
+          ev({ p: p, k: 'rep', i: i, n: b.n });
+          inner(b.b, p, p + '.b');
+        }
+      } else if (b.t === 'i') {
+        const v = open(m, x + DX[d], y + DY[d]);
+        ev({ p: p, k: 'test', v: v });
+        inner(v ? b.b : b.e, p, p + (v ? '.b' : '.e'));
+      } else if (b.t === 'g') {
+        const v = found === here();
+        ev({ p: p, k: 'test', v: v });
+        if (v) inner(b.b, p, p + '.b');
+      } else if (b.t === 'u') {
+        for (let first = true; !why; first = false) {
+          if (!first && !tick()) return;
+          const v = here() === m.flag;
+          ev({ p: p, k: 'test', v: v, until: true });
+          if (v) return;
+          inner(b.b, p, p + '.b');
+        }
+      }
+    }
+    if (!count(prog)) why = 'empty';
+    else seq(prog.main, 'm');
+    if (!why) why = won() ? 'win' : here() === m.flag ? 'gems' : 'end';
+    return { events: events, why: why, ok: why === 'win', steps: steps, x: x, y: y, d: d, got: got.length, left: m.gems.length - got.length, what: hit };
+  }
+
+  /* ---- checks for the levels ---- */
+  // the fewest Forward / Turn blocks in a plain list (no loops) that finish the map, or Infinity
+  function minStraight(m, cap) {
+    const G = m.gems.length, full = (1 << G) - 1, gemBit = {};
+    m.gems.forEach((g, k) => { gemBit[g] = 1 << k; });
+    const key = (x, y, d, mask) => ((y * m.w + x) * 4 + d) * (full + 1) + mask;
+    const seen = new Set([key(m.start.x, m.start.y, m.start.d, 0)]);
+    let front = [[m.start.x, m.start.y, m.start.d, 0]];
+    for (let depth = 1; front.length && depth <= (cap || 200); depth++) {
+      const next = [];
+      for (const [x, y, d, mask] of front) {
+        const moves = [[x, y, (d + 3) % 4, mask], [x, y, (d + 1) % 4, mask]];
+        const nx = x + DX[d], ny = y + DY[d];
+        if (open(m, nx, ny)) {
+          const i = ny * m.w + nx, nm = mask | (gemBit[i] || 0);
+          if (i === m.flag && nm === full) return depth;
+          moves.push([nx, ny, d, nm]);
+        }
+        for (const s of moves) { const k = key(s[0], s[1], s[2], s[3]); if (!seen.has(k)) { seen.add(k); next.push(s); } }
+      }
+      front = next;
+    }
+    return Infinity;
+  }
+  // how many blocks were added, taken away, changed or moved one place between two programs (a Repeat's number counts
+  // as its block, and moving a block into or out of a Repeat next to it is one change)
+  function tokens(p) {
+    return print(p).replace(/\(/g, '( ').replace(/\)/g, ' )').replace(/\|/g, ' | ').split(/\s+/).filter(Boolean);
+  }
+  function changes(a, b) {
+    const s = tokens(a), t = tokens(b), D = [];
+    for (let i = 0; i <= s.length; i++) { D.push([i]); for (let j = 1; j <= t.length; j++) D[i].push(i ? 0 : j); }
+    for (let i = 1; i <= s.length; i++) {
+      for (let j = 1; j <= t.length; j++) {
+        D[i][j] = Math.min(D[i - 1][j] + 1, D[i][j - 1] + 1, D[i - 1][j - 1] + (s[i - 1] === t[j - 1] ? 0 : 1));
+        if (i > 1 && j > 1 && s[i - 1] === t[j - 2] && s[i - 2] === t[j - 1]) D[i][j] = Math.min(D[i][j], D[i - 2][j - 2] + 1);
+      }
+    }
+    return D[s.length][t.length];
+  }
+
+  return { STEP_CAP: STEP_CAP, DX: DX, DY: DY, BOX: BOX, parseMap: parseMap, open: open, make: make, parse: parse, print: print, count: count, countList: countList,
+    kinds: kinds, selfCall: selfCall, clone: clone, run: run, minStraight: minStraight, changes: changes };
+})();
+const ROBOT_WORLDS = [
+  { id: 1, name: 'Sequences', icon: '👣', intro: 'A program is a list of steps. The robot does them in order, one by one.' },
+  { id: 2, name: 'Loops', icon: '🔁', intro: 'Repeat does the blocks inside it again and again, so you need far fewer blocks.' },
+  { id: 3, name: 'Functions', icon: '🧩', intro: 'F1 is your own block. Build it once in the F1 row, then use it as often as you like.' },
+  { id: 4, name: 'Conditions', icon: '🤔', intro: 'If lets the robot look before it moves, so one short program can find its own way.' },
+  { id: 5, name: 'Debugging', icon: '🐞', intro: 'These programs have bugs. Run them, spot what goes wrong and fix them with few changes.' }
+];
+const ROBOT_LEVELS = [
+  /* ---- 1 Sequences: forward and turns, one block per step ---- */
+  { id: '1-1', name: 'First steps', pal: 'FLR', max: 7, par: 3, sol: 'F F F',
+    map: ['~~~~~~', '~>..G~', '~~~~~~'],
+    hint: 'Tap Forward three times, then press Run.' },
+  { id: '1-2', name: 'Shiny gem', pal: 'FLR', max: 8, par: 4, sol: 'F F F F',
+    map: ['~~~~~~~', '~>.*.G~', '~~~~~~~'],
+    hint: 'Walk over the gem to pick it up, then on to the flag.' },
+  { id: '1-3', name: 'Round the corner', pal: 'FLR', max: 9, par: 5, sol: 'F F R F F',
+    map: ['~~~~~', '~>..~', '~~~.~', '~~~G~', '~~~~~'],
+    hint: 'Turn right turns the robot on the spot. It does not move.' },
+  { id: '1-4', name: 'Left this time', pal: 'FLR', max: 10, par: 6, sol: 'F F F L F F',
+    map: ['~~~~~~', '~~~~G~', '~~~~.~', '~>.*.~', '~~~~~~'],
+    hint: 'Pick up the gem, then turn left to face the flag.' },
+  { id: '1-5', name: 'Zigzag', pal: 'FLR', max: 13, par: 9, sol: 'F R F L F R F L F',
+    map: ['~~~~~~', '~>.~~~', '~~.*~~', '~~~.G~', '~~~~~~'],
+    hint: 'Right, left, right, left: one square at a time.' },
+  { id: '1-6', name: 'Turn around', pal: 'FLR', max: 13, par: 9, sol: 'F F R R F F F F F', alt: ['F F L L F F F F F'],
+    map: ['~~~~~~~~', '~*.<..G~', '~~~~~~~~'],
+    hint: 'Get the gem first. Two turns make the robot face the other way.' },
+  { id: '1-7', name: 'Round the pond', pal: 'FLR', max: 16, par: 12, sol: 'F F F F R F F R F F F F',
+    map: ['#######', '#>...*#', '#~~~~.#', '#G....#', '#######'],
+    hint: 'Go all the way round the water. Robots cannot swim!' },
+  { id: '1-8', name: 'Long walk', pal: 'FLR', max: 17, par: 13, sol: 'F F F R F F R F F F L F F',
+    map: ['######', '#>.*.#', '####.#', '#.*..#', '#.####', '#G####'],
+    hint: 'A long walk with two gems. Plan it one square at a time.' },
+
+  /* ---- 2 Loops: the block limit leaves too few blocks for a plain list ---- */
+  { id: '2-1', name: 'Repeat!', pal: 'FLRr', max: 3, par: 2, sol: 'r7(F)',
+    map: ['~~~~~~~~', '>.*..*.G', '~~~~~~~~'],
+    hint: 'Put Forward inside Repeat, then tap the number until it says 7.' },
+  { id: '2-2', name: 'Two lines', pal: 'FLRr', max: 6, par: 5, sol: 'r3(F) R r4(F)',
+    map: ['~~~~~~', '>...~~', '~~~.~~', '~~~*~~', '~~~.~~', '~~~G~~'],
+    hint: 'Use a Repeat for each straight line, with a turn between.' },
+  { id: '2-3', name: 'Staircase', pal: 'FLRr', max: 6, par: 5, sol: 'r5(F R F L)',
+    map: ['>.####', '#..###', '##*.##', '###..#', '####.*', '#####G'],
+    hint: 'One step, turn, one step, turn. Put that pattern in a Repeat.' },
+  { id: '2-4', name: 'Three lines', pal: 'FLRr', max: 9, par: 8, sol: 'r2(F) R r3(F) L r5(F)', alt: ['F F R r3(F) L r5(F)'],
+    map: ['>..~~~~~', '~~.~~~~~', '~~*~~~~~', '~~...*.G'],
+    hint: 'Count each straight line. A Repeat for each one saves blocks.' },
+  { id: '2-5', name: 'Big steps', pal: 'FLRr', max: 7, par: 6, sol: 'r3(F F L F R)',
+    map: ['~~~~~~G', '~~~~..*', '~~..*~~', '>..~~~~'],
+    hint: 'Two steps, turn left, one step, turn right. Then again!' },
+  { id: '2-6', name: 'Loop in a loop', pal: 'FLRr', max: 6, par: 4, sol: 'r4(r3(F) R)', alt: ['r4(F F F R)'],
+    map: ['######', '#>..*#', '#G~~.#', '#.~~.#', '#*..*#', '######'],
+    hint: 'A Repeat can go inside another Repeat. Try one for each side.' },
+  { id: '2-7', name: 'Rectangle', pal: 'FLRr', max: 8, par: 7, sol: 'r2(r5(F) R r3(F) R)',
+    map: ['########', '#>....*#', '#G~~~~.#', '#.~~~~.#', '#*....*#', '########'],
+    hint: 'A long side, a turn, a short side, a turn. Do that twice.' },
+  { id: '2-8', name: 'Comb', pal: 'FLRr', max: 11, par: 9, sol: 'r4(r2(L F F F L) F F)', alt: ['r4(L r3(F) R R r3(F) L r2(F))'],
+    map: ['*#*#*#G', '.#.#.#.', '.#*#.#.', '>..*...'],
+    hint: 'Turn left, go up, turn left: twice takes you up and back down.' },
+
+  /* ---- 3 Functions: F1 is a pattern built once and used again ---- */
+  { id: '3-1', name: 'Meet F1', pal: 'FLRf', max: 9, par: 8, sol: 'f R f L f|F F F',
+    map: ['>..*~~~', '~~~.~~~', '~~~.~~~', '~~~..*G'],
+    hint: 'Build three Forwards in the F1 row. Then use F1 in your program.' },
+  { id: '3-2', name: 'F1 stairs', pal: 'FLRf', max: 9, par: 8, sol: 'f f f f|F R F L',
+    map: ['~~~.G', '~~.*~', '~..~~', '.*~~~', '^~~~~'],
+    hint: 'Put one stair in F1: Forward, turn right, Forward, turn left.' },
+  { id: '3-3', name: 'Gem trips', pal: 'FLRf', max: 12, par: 11, sol: 'f f f|F L F R R F L F', alt: ['f f f|F L F L L F L F'],
+    map: ['~*~*~*~', '>.....G', '~~~~~~~'],
+    hint: 'One trip to a gem and back goes in F1. Use it three times.' },
+  { id: '3-4', name: 'Plus sign', pal: 'FLRf', max: 13, par: 11, sol: 'f f R f f|F F L L F F', alt: ['f f f F F|F F R R F F L'],
+    map: ['~~*~~', '~~.~~', 'G.^.*', '~~.~~', '~~*~~'],
+    hint: 'In F1, go to the end of an arm and back. Which way is it facing then?' },
+  { id: '3-5', name: 'Stairs and a step', pal: 'FLRf', max: 11, par: 10, sol: 'f f F f f f|F L F R',
+    map: ['~~~~~~G', '~~~~~*.', '~~~~..~', '~~.*.~~', '~..~~~~', '>.~~~~~'],
+    hint: 'One stair goes in F1. Use it, step along, then use it again.' },
+  { id: '3-6', name: 'Turning stairs', pal: 'FLRf', max: 13, par: 12, sol: 'f f f R f f f f|F R F L',
+    map: ['~>.~~', '~~..~', '~~~*.', '~~~~.', '~~~..', '~~.*~', '~..~~', 'G.~~~'],
+    hint: 'F1 works whichever way the robot faces. Turn, then use it again.' },
+  { id: '3-7', name: 'Gem alleys', pal: 'FLRf', max: 13, par: 12, sol: 'f f F f|F R F L L F R F', alt: ['f f F f|F R F R R F R F'],
+    map: ['~~~~~~~~', '>......G', '#*#*##*#'],
+    hint: 'The alleys are not evenly spaced. An extra Forward fills the gap.' },
+  { id: '3-8', name: 'Two gardens', pal: 'FLRrf', max: 11, par: 11, sol: 'f r4(F) f R r3(F)|r4(F F R)',
+    map: ['>.....*', '.~.#.~.', '*.*#..*', '~~~~G~~'],
+    hint: 'Walking round a garden is the same each time. A Repeat fits in F1!' },
+
+  /* ---- 4 Conditions: the robot checks before it moves ---- */
+  { id: '4-1', name: 'Until the flag', pal: 'FLRu', max: 3, par: 2, sol: 'u(F)',
+    map: ['~~~~~~~~', '>.*..*.G', '~~~~~~~~'],
+    hint: 'Repeat until flag keeps going until the robot is on the flag.' },
+  { id: '4-2', name: 'Clear ahead?', pal: 'FLRiu', max: 5, par: 4, sol: 'u(i(F)(R))',
+    map: ['>....', '~~~~.', '~~~~*', '~~~~.', '~~~~G'],
+    hint: 'If the way ahead is clear, go Forward. If not, turn right.' },
+  { id: '4-3', name: 'Snail shell', pal: 'FLRiu', max: 5, par: 4, sol: 'u(i(F)(R))',
+    map: ['>..*...', '######.', '.....#.', '.###.#.', '*#G..#*', '.#####.', '...*...'],
+    hint: 'The same four blocks can follow the whole spiral. Let If decide!' },
+  { id: '4-4', name: 'Gem signs', pal: 'FLRigu', max: 5, par: 4, sol: 'u(F g(R))',
+    map: ['>....*', '..~~..', '.*.G..', '...~..', '.*...*'],
+    hint: 'Keep walking. Each time the robot finds a gem, it turns right.' },
+  { id: '4-5', name: 'Walls and gems', pal: 'FLRigu', max: 7, par: 6, sol: 'u(i(F)(L) g(R))',
+    map: ['>..*.~~', '~~~.~~~', '~~~.~~~', '~~~..*.', '~~~#~.~', '~~~~~G~'],
+    hint: 'A wall ahead means turn left. A gem means turn right.' },
+  { id: '4-6', name: 'Left or right?', pal: 'FLRiu', max: 8, par: 7, sol: 'u(i(F)(L i()(R R)))', alt: ['u(i(F)(L i()(L L)))'],
+    map: ['########', '###.*..#', '###.##.#', '>*..##.#', '######*#', '######.G', '########'],
+    hint: 'At a corner try left. If left is blocked too, turn round to face right.' },
+  { id: '4-7', name: 'Rocky road', pal: 'FLRiu', max: 12, par: 11, sol: 'u(i(F)(L F R F F R F L))',
+    map: ['~.*.#.*.', '>.#.*.#G', '~~~~~~~~'],
+    hint: 'When a rock is in the way, step up, go past it and come back down.' },
+  { id: '4-8', name: 'Long maze', pal: 'FLRiu', max: 8, par: 7, sol: 'u(i(F)(L i()(R R)))', alt: ['u(i(F)(R i()(L L)))'],
+    map: ['>.*..###', '####.###', '####...#', '######.#', '##.*...#', '##.#####', '##..*G##'],
+    hint: 'A big maze, but the program from Left or right? still works.' },
+
+  /* ---- 5 Debugging: each level opens with a program that has a bug ---- */
+  { id: '5-1', name: 'Wrong turn', pal: 'FLR', max: 8, par: 6, sol: 'F F F R F F', start: 'F F F L F F', fix: 1,
+    map: ['~>.*.~', '~~~~.~', '~~~~G~'],
+    hint: 'The robot turns the wrong way. Find that turn and fix it.' },
+  { id: '5-2', name: 'Count again', pal: 'FLRr', max: 6, par: 5, sol: 'r3(F) L r4(F)', start: 'r3(F) L r3(F)', fix: 1,
+    map: ['~.*.<~', '~.~~~~', '~*~~~~', '~.~~~~', '~G~~~~'],
+    hint: 'The robot stops one square too soon. Check the Repeat numbers.' },
+  { id: '5-3', name: 'Inside or out?', pal: 'FLRr', max: 6, par: 5, sol: 'r4(F R F L)', start: 'r4(F R F) L', fix: 1,
+    map: ['~~~~~v~', '~~~~..~', '~~~*.~~', '~~..~~~', '~G*~~~~'],
+    hint: 'One block is outside the Repeat. Should it be inside?' },
+  { id: '5-4', name: 'Short F1', pal: 'FLRf', max: 9, par: 8, sol: 'f R f L f|F F F', start: 'f R f L f|F F', fix: 1,
+    map: ['~~~~G~', '~~~~.~', '~~~~*~', '~.*..~', '~.~~~~', '~.~~~~', '~^~~~~'],
+    hint: 'F1 is one step too short. Fix F1 and every use of it gets better.' },
+  { id: '5-5', name: 'Dizzy robot', pal: 'FLRiu', max: 5, par: 4, sol: 'u(i(F)(R))', start: 'u(i(F)())', fix: 1,
+    map: ['~~~~~v~', '~~~~~.~', '~~~~~*~', '~~~~~.~', '~G.*..~'],
+    hint: 'The robot gets dizzy at the corner. What should it do there?' },
+  { id: '5-6', name: 'Spinning', pal: 'FLRr', max: 6, par: 4, sol: 'r4(r3(F) R)', start: 'r4(r3(F) R R)', fix: 1,
+    map: ['######', '#.*..#', '#.~~.#', '#*~~*#', '#^G..#', '######'],
+    hint: 'The robot spins too much at each corner. Take one block away.' },
+  { id: '5-7', name: 'Mixed up', pal: 'FLRiu', max: 5, par: 4, sol: 'u(i(F)(R))', start: 'u(i(R)(F))', fix: 2,
+    map: ['>.*...', '#####.', '##.G#*', '##.##.', '##.*..'],
+    hint: 'The If is mixed up. Which block belongs on which side?' },
+  { id: '5-8', name: 'Two bugs', pal: 'FLRrf', max: 11, par: 9, sol: 'r2(f) F r3(f)|F R F L', start: 'r2(f) F r2(f)|F R F R', fix: 2,
+    map: ['>.~~~~~', '~..~~~~', '~~.*.~~', '~~~~..~', '~~~~~*.', '~~~~~~G'],
+    hint: 'Two bugs this time: one in the program and one in F1.' }
+];
+const WORLDS = ROBOT_WORLDS;
+const LEVELS = ROBOT_LEVELS.map((L, i) => Object.assign({}, L, { i: i, w: +L.id.split('-')[0], k: +L.id.split('-')[1], m: Robot.parseMap(L.map) }));
+const byId = {};
+LEVELS.forEach((L) => { byId[L.id] = L; });
+const worldOf = (w) => WORLDS[w - 1];
+
+/* ================= records =================
+   code-robot.v1: levels (per level id '2-3': s = best stars 1-3, b = fewest blocks in a working program), done (levels
+   done) and stars (all stars) for the arcade's home page, last (the level open last), drafts (per level id, the program
+   as it was left, in the compact text form, '|' before F1's blocks), seen (world intro cards shown), speed (0 slow,
+   1 normal, 2 fast). A finished level is saved with writeSave() (it marks the day played); drafts and menu choices with
+   writeRecords(). Opening the page writes nothing. */
+const SAVE_DEFAULTS = () => ({ v: 1, levels: {}, done: 0, stars: 0, last: '', drafts: {}, seen: {}, speed: 1 });
+const rec = loadRecords('code-robot.v1', SAVE_DEFAULTS());
+function tidyRecords() {
+  ['levels', 'drafts', 'seen'].forEach((k) => { if (!rec[k] || typeof rec[k] !== 'object' || Array.isArray(rec[k])) rec[k] = {}; });
+  for (const id of Object.keys(rec.levels)) { const r = rec.levels[id]; if (!byId[id] || !r || !(r.s >= 1 && r.s <= 3)) delete rec.levels[id]; }
+  for (const id of Object.keys(rec.drafts)) if (!byId[id] || typeof rec.drafts[id] !== 'string') delete rec.drafts[id];
+  if (!byId[rec.last]) rec.last = '';
+  rec.speed = [0, 1, 2].indexOf(rec.speed) >= 0 ? rec.speed : 1;
+  totals();
+}
+function totals() {
+  let done = 0, stars = 0;
+  for (const id of Object.keys(rec.levels)) { done++; stars += rec.levels[id].s; }
+  rec.done = done; rec.stars = stars;
+}
+tidyRecords();
+const isDone = (id) => !!rec.levels[id];
+const worldDone = (w) => LEVELS.filter((L) => L.w === w && isDone(L.id)).length;
+const worldStars = (w) => LEVELS.filter((L) => L.w === w).reduce((s, L) => s + (rec.levels[L.id] ? rec.levels[L.id].s : 0), 0);
+const OPEN_AT = 6;   // a world opens when the world before has this many levels done
+const worldOpen = (w) => w === 1 || worldDone(w - 1) >= OPEN_AT;
+const levelOpen = (L) => worldOpen(L.w) && (L.k === 1 || isDone(L.w + '-' + (L.k - 1)));
+const starsFor = (blocks, par) => (blocks <= par ? 3 : blocks <= par + 2 ? 2 : 1);
+// the level Continue opens: the last one, or else the first open level not done yet
+function continueLevel() {
+  if (rec.last && levelOpen(byId[rec.last])) return byId[rec.last];
+  return LEVELS.find((L) => levelOpen(L) && !isDone(L.id)) || LEVELS[0];
+}
+
+/* ================= blocks: names, icons ================= */
+const BLOCKS = {
+  F: { name: 'Forward', pal: 'Forward' }, L: { name: 'Turn left', pal: 'Left' }, R: { name: 'Turn right', pal: 'Right' },
+  r: { name: 'Repeat', pal: 'Repeat' }, f: { name: 'F1', pal: 'Use F1' }, i: { name: 'If path ahead', pal: 'If path' },
+  g: { name: 'If gem here', pal: 'If gem' }, u: { name: 'Repeat until flag', pal: 'Until flag' }
+};
+const svg = (d) => '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="' + d + '"/></svg>';
+const PATH = {
+  F: 'M12 20V5M6 11l6-6 6 6', L: 'M17 20v-6a5 5 0 0 0-5-5H6M10 5 6 9l4 4', R: 'M7 20v-6a5 5 0 0 1 5-5h6M14 5l4 4-4 4',
+  loop: 'M4 12a8 8 0 0 1 13.7-5.7L20 8.5M20 3.5v5h-5M20 12a8 8 0 0 1-13.7 5.7L4 15.5M4 20.5v-5h5', ahead: 'M12 19V7M7 11l5-5 5 5'
+};
+const ICON = {
+  F: svg(PATH.F), L: svg(PATH.L), R: svg(PATH.R), r: svg(PATH.loop), f: '<span class="tx">F1</span>',
+  i: '<span class="tx">if</span>' + svg(PATH.ahead), g: '<span class="tx">if</span><i class="emo">💎</i>', u: svg(PATH.loop) + '<i class="emo">🏁</i>'
+};
+const TWO = { i: 1, g: 1, u: 1 };
+const ROBOT_SVG = '<svg viewBox="0 0 100 100" aria-hidden="true"><rect x="9" y="24" width="15" height="54" rx="7" fill="#3b4677"/><rect x="76" y="24" width="15" height="54" rx="7" fill="#3b4677"/>' +
+  '<path d="M50 3 63 19H37z" fill="#ff7b86"/><rect x="19" y="17" width="62" height="66" rx="20" fill="#ffd25e" stroke="#d99f2c" stroke-width="4"/>' +
+  '<rect x="29" y="26" width="42" height="27" rx="11" fill="#29345a"/><circle cx="41" cy="39" r="5.5" fill="#7ff0c8"/><circle cx="59" cy="39" r="5.5" fill="#7ff0c8"/>' +
+  '<path d="M40 64q10 8 20 0" fill="none" stroke="#d99f2c" stroke-width="4" stroke-linecap="round"/><circle cx="50" cy="75" r="4" fill="#ff7b86"/></svg>';
+
+/* ================= game state ================= */
+const SPEEDS = [{ name: 'Slow', ic: '🐢', ms: 700 }, { name: 'Normal', ic: '🚶', ms: 420 }, { name: 'Fast', ic: '🐇', ms: 170 }];
+const game = {
+  state: 'menu', L: null, prog: { main: [], f1: [] }, cur: { list: 'm', i: 0 }, sel: null, undo: [],
+  mode: 'edit', trace: null, idx: 0, timer: 0, bot: null, got: [], timeScale: 1, prevMode: '', result: null, attempt: 0
+};
+const PLAYING = new Set(['play']);
+const calm = () => !!save.settings.calm || reduceMotion;
+const playEl = $('#play'), boardEl = $('#board'), mainEl = $('#mainList'), f1El = $('#f1List'), editorEl = $('#editor'), sayEl = $('#say');
+const palEl = $('#palette'), selbarEl = $('#selbar');
+$('#logoBot').innerHTML = ROBOT_SVG;
+
+/* ================= program paths =================
+   A list path: 'm' (the program), 'f' (F1's row), then '.k.b' into block k's blocks or '.k.e' into its else blocks:
+   'm.2.b', 'f.0.e'. A block path is a list path and an index: 'm.2', 'm.2.b.0'. */
+function listAt(path) {
+  const parts = path.split('.');
+  let list = parts[0] === 'f' ? game.prog.f1 : game.prog.main;
+  for (let k = 1; k < parts.length; k += 2) { const b = list[+parts[k]]; if (!b) return null; list = parts[k + 1] === 'e' ? b.e : b.b; if (!list) return null; }
+  return list;
+}
+const parentOf = (p) => p.slice(0, p.lastIndexOf('.'));
+const indexOf = (p) => +p.slice(p.lastIndexOf('.') + 1);
+const blockAt = (p) => { const l = listAt(parentOf(p)); return l ? l[indexOf(p)] : null; };
+// every gap of one row ('m' or 'f') in reading order
+function gapsOf(row) {
+  const out = [];
+  (function walk(list, path) {
+    for (let i = 0; i <= list.length; i++) {
+      out.push({ list: path, i: i });
+      if (i < list.length) { const b = list[i]; if (b.b) walk(b.b, path + '.' + i + '.b'); if (b.e) walk(b.e, path + '.' + i + '.e'); }
+    }
+  })(row === 'f' ? game.prog.f1 : game.prog.main, row);
+  return out;
+}
+const blocksUsed = () => Robot.count(game.prog);
+// can the picked block travel one gap that way (it stays in its own row)?
+function canMove(dir) {
+  const p = game.sel, keep = game.prog;
+  if (!p) return false;
+  game.prog = Robot.clone(keep);
+  const par = parentOf(p), i = indexOf(p);
+  listAt(par).splice(i, 1);
+  const gaps = gapsOf(p[0]), k = gaps.findIndex((g) => g.list === par && g.i === i);
+  game.prog = keep;
+  return k + dir >= 0 && k + dir < gaps.length;
+}
+const offersF1 = () => game.L.pal.indexOf('f') >= 0 || game.prog.f1.length > 0 || Robot.kinds(game.prog).has('f');
+
+/* ================= drawing: the map ================= */
+function drawBoard() {
+  const m = game.L.m;
+  boardEl.style.setProperty('--cols', m.w); boardEl.style.setProperty('--rows', m.h);
+  let h = '';
+  for (let i = 0; i < m.cells.length; i++) {
+    const c = m.cells[i];
+    const cls = c === '#' ? 'wall' : c === '~' ? 'water' : c === '*' ? 'gem' : c === 'G' ? 'flag' : 'floor';
+    h += '<div class="tile ' + cls + ((i % m.w + Math.floor(i / m.w)) % 2 ? ' alt' : '') + '" data-i="' + i + '">' + (c === '*' ? '<i>💎</i>' : c === 'G' ? '<i>🏁</i>' : '') + '</div>';
+  }
+  boardEl.innerHTML = h + '<div class="bot" id="bot">' + ROBOT_SVG + '</div>';
+  boardEl.setAttribute('aria-label', 'A map of ' + m.w + ' by ' + m.h + ' squares with ' + m.gems.length + (m.gems.length === 1 ? ' gem' : ' gems') + ' and a flag');
+  resetBot();
+}
+const tileEl = (i) => boardEl.children[i];
+function placeBot(ms) {
+  const b = $('#bot'), s = game.bot;
+  b.style.setProperty('--ms', (ms || 0) + 'ms');
+  b.style.setProperty('--x', s.x); b.style.setProperty('--y', s.y); b.style.setProperty('--a', s.a + 'deg');
+}
+function resetBot() {
+  const st = game.L.m.start;
+  game.bot = { x: st.x, y: st.y, d: st.d, a: st.d * 90 };
+  game.got = [];
+  $$('#board .tile.got').forEach((t) => t.classList.remove('got'));
+  $$('#board .tile.trail').forEach((t) => t.classList.remove('trail'));
+  boardEl.classList.remove('won');
+  const b = $('#bot'); if (b) { b.classList.remove('bump', 'hop'); b.style.transition = 'none'; placeBot(0); void b.offsetWidth; b.style.transition = ''; }
+}
+
+/* ================= drawing: the program ================= */
+function gapHTML(list, i, n) {
+  const cur = game.mode !== 'run' && !game.sel && game.cur.list === list && game.cur.i === i;
+  return '<button type="button" class="gap' + (n === 0 ? ' only' : '') + (cur ? ' cur' : '') + '" data-gap="' + list + ':' + i + '" aria-label="' +
+    (cur ? 'The next block goes here' : 'Put the next block here') + '"><i></i></button>';
+}
+function listHTML(list, path) {
+  let h = gapHTML(path, 0, list.length);
+  list.forEach((b, i) => { h += blockHTML(b, path + '.' + i) + gapHTML(path, i + 1, list.length); });
+  return h;
+}
+function label(b) {
+  if (b.t === 'r') return 'Repeat ' + b.n + ' times, ' + Robot.countList(b.b) + ' blocks inside';
+  if (Robot.BOX[b.t]) return BLOCKS[b.t].name + ', ' + Robot.countList(b.b) + ' blocks inside' + (b.t === 'i' ? ', ' + Robot.countList(b.e) + ' in else' : '');
+  return BLOCKS[b.t].name;
+}
+function blockHTML(b, p) {
+  const sel = game.sel === p ? ' sel' : '';
+  const btn = '<button type="button" class="blk k' + b.t + (TWO[b.t] ? ' two' : '') + (Robot.BOX[b.t] ? ' head' : '') + sel + '" data-path="' + p + '" aria-label="' + label(b) + '">' + ICON[b.t] + '</button>';
+  if (!Robot.BOX[b.t]) return btn;
+  let h = '<div class="box k' + b.t + '" data-box="' + p + '">' + btn;
+  if (b.t === 'r') h += '<button type="button" class="num" data-num="' + p + '" aria-label="' + b.n + ' times. Tap to change the number.">' + b.n + '<small>×</small></button>';
+  h += listHTML(b.b, p + '.b');
+  if (b.t === 'i') h += '<span class="else">else</span>' + listHTML(b.e, p + '.e');
+  return h + '</div>';
+}
+function drawProgram() {
+  mainEl.innerHTML = listHTML(game.prog.main, 'm');
+  const f1 = offersF1();
+  $('#f1Row').hidden = !f1;
+  f1El.innerHTML = f1 ? listHTML(game.prog.f1, 'f') : '';
+  updateEditor();
+  // a redraw while stepping (or after a run) keeps the last step lit
+  if ((game.mode === 'step' || game.mode === 'end') && game.trace && game.idx) markEvent(game.trace.events[game.idx - 1]);
+}
+function updateEditor() {
+  const L = game.L, n = blocksUsed(), full = n >= L.max, busy = game.mode === 'run' || game.mode === 'won';
+  $('#blkChip').textContent = 'Blocks ' + n + ' / ' + L.max;
+  $('#capInfo').textContent = full ? 'Block limit reached' : '';
+  editorEl.classList.toggle('busy', busy);
+  palEl.hidden = !!game.sel; selbarEl.hidden = !game.sel;
+  $$('#palette .pal').forEach((b) => { const t = b.dataset.add; b.disabled = busy || full || (t === 'f' && game.cur.list[0] === 'f'); });
+  $('#runBtn').innerHTML = (busy ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h12v12H6z"/></svg>' : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12-7.5z"/></svg>') + '<span class="lbl">' + (busy ? 'Stop' : 'Run') + '</span>';
+  $('#undoBtn').disabled = busy || !game.undo.length;
+  $('#clearBtn').disabled = busy || !n;
+  $('#resetBtn').disabled = game.mode === 'edit';
+  $('#stepBtn').disabled = false;
+  if (game.sel) { $('#selLeft').disabled = busy || !canMove(-1); $('#selRight').disabled = busy || !canMove(1); }
+  const s = SPEEDS[rec.speed];
+  $('#speedBtn').innerHTML = '<i aria-hidden="true">' + s.ic + '</i>';
+  $('#speedBtn').setAttribute('aria-label', 'Speed: ' + s.name + '. Tap to change.');
+}
+function drawPalette() {
+  palEl.innerHTML = game.L.pal.split('').map((t) => '<button type="button" class="pal k' + t + '" data-add="' + t + '" aria-label="Add ' + BLOCKS[t].name + '"><span class="ic' + (TWO[t] ? ' two' : '') + '">' + ICON[t] + '</span><b>' + BLOCKS[t].pal + '</b></button>').join('');
+}
+function say(text, kind) {
+  $('#sayText').textContent = text;
+  sayEl.className = 'say' + (kind ? ' ' + kind : '');
+  fitSay();
+}
+function fitSay() {
+  const p = $('#sayText');
+  let f = parseFloat(getComputedStyle(playEl).getPropertyValue('--say-max')) || 16;
+  p.style.fontSize = f + 'px';
+  for (let k = 0; k < 8 && (p.scrollHeight > p.clientHeight + 1 || p.scrollWidth > p.clientWidth + 1); k++) { f -= 1; p.style.fontSize = f + 'px'; }
+}
+
+/* ================= editing =================
+   Every change keeps an undo step and saves the level's draft (writeRecords: it does not mark the day played). */
+function pushUndo() { game.undo.push({ p: Robot.print(game.prog, true), cur: Object.assign({}, game.cur) }); if (game.undo.length > 120) game.undo.shift(); }
+function saveDraft() { rec.drafts[game.L.id] = Robot.print(game.prog, true); writeRecords(); }
+function edited() { saveDraft(); drawProgram(); }
+// any edit after a run puts the robot back at the start
+function toEdit() { if (game.mode !== 'edit') stopRun(); }
+const LIMIT_TIP = { 1: 'Try a shorter way.', 2: 'A Repeat saves blocks.', 3: 'F1 saves blocks.', 4: 'Let an If do the work.', 5: 'Fix the bug instead.' };
+function addBlock(t) {
+  if (game.mode === 'run' || !game.L || game.L.pal.indexOf(t) < 0) return;
+  if (blocksUsed() >= game.L.max) { toast('That is the most blocks here (' + game.L.max + '). ' + LIMIT_TIP[game.L.w], 'oops', 2200); return; }
+  if (t === 'f' && game.cur.list[0] === 'f') { toast('F1 cannot use itself', 'oops'); return; }
+  if (game.sel) game.sel = null;
+  if (!listAt(game.cur.list)) game.cur = { list: 'm', i: game.prog.main.length };
+  toEdit();
+  pushUndo();
+  const b = Robot.make(t, 2);
+  listAt(game.cur.list).splice(game.cur.i, 0, b);
+  const p = game.cur.list + '.' + game.cur.i;
+  game.cur = b.b ? { list: p + '.b', i: 0 } : { list: game.cur.list, i: game.cur.i + 1 };
+  Sound.sfx.click();
+  edited();
+  announce('Added ' + BLOCKS[t].name + (b.b ? '. The next blocks go inside it.' : '.'));
+}
+function setCursor(list, i) {
+  if (game.mode === 'run') return;
+  game.sel = null; game.cur = { list: list, i: i };
+  Sound.sfx.check();
+  drawProgram();
+}
+function selectBlock(p) {
+  if (game.mode === 'run') return;
+  game.sel = game.sel === p ? null : p;
+  if (!game.sel) { const i = indexOf(p); game.cur = { list: parentOf(p), i: i + 1 }; }
+  Sound.sfx.check();
+  drawProgram();
+  if (game.sel) announce(label(blockAt(p)) + ' picked. Move it or delete it.');
+}
+function deleteSel() {
+  const p = game.sel; if (!p || game.mode === 'run') return;
+  toEdit(); pushUndo();
+  listAt(parentOf(p)).splice(indexOf(p), 1);
+  game.cur = { list: parentOf(p), i: indexOf(p) }; game.sel = null;
+  Sound.sfx.click();
+  edited();
+}
+// a block travels one gap at a time through its own row, into and out of Repeats and Ifs
+function moveSel(dir) {
+  const p = game.sel; if (!p || game.mode === 'run') return;
+  const row = p[0], par = parentOf(p), i = indexOf(p);
+  toEdit();
+  const before = Robot.print(game.prog, true), cur0 = Object.assign({}, game.cur);
+  const b = listAt(par).splice(i, 1)[0];
+  const gaps = gapsOf(row), k = gaps.findIndex((g) => g.list === par && g.i === i), g = gaps[clamp(k + dir, 0, gaps.length - 1)];
+  listAt(g.list).splice(g.i, 0, b);
+  if (Robot.print(game.prog, true) === before) { game.sel = g.list + '.' + g.i; drawProgram(); return; }
+  game.undo.push({ p: before, cur: cur0 }); if (game.undo.length > 120) game.undo.shift();
+  game.sel = g.list + '.' + g.i;
+  Sound.sfx.click();
+  edited();
+}
+function cycleNumber(p) {
+  const b = blockAt(p); if (!b || b.t !== 'r' || game.mode === 'run') return;
+  toEdit(); pushUndo();
+  b.n = b.n >= 9 ? 2 : b.n + 1;
+  Sound.sfx.click();
+  edited();
+  announce('Repeat ' + b.n + ' times');
+}
+function undo() {
+  if (game.mode === 'run' || !game.undo.length) return;
+  toEdit();
+  const u = game.undo.pop();
+  game.prog = Robot.parse(u.p); game.cur = u.cur; game.sel = null;
+  if (!listAt(game.cur.list)) game.cur = { list: 'm', i: game.prog.main.length };
+  Sound.sfx.click();
+  edited();
+}
+function clearProgram() {
+  if (game.mode === 'run' || !blocksUsed()) return;
+  toEdit(); pushUndo();
+  game.prog = { main: [], f1: [] }; game.cur = { list: 'm', i: 0 }; game.sel = null;
+  edited();
+  say('All clear. Tap a block to start again (Undo brings it back).');
+}
+function restartLevel() {
+  toEdit(); pushUndo();
+  game.prog = game.L.start ? Robot.parse(game.L.start) : { main: [], f1: [] };
+  game.cur = { list: 'm', i: game.prog.main.length }; game.sel = null;
+  edited();
+  say(game.L.hint);
+}
+
+/* ================= running =================
+   The whole run is worked out first (Robot.run); then each step is shown in turn: the block lights up, the robot
+   moves. Step shows one step per press. */
+const stepMs = () => SPEEDS[rec.speed].ms / game.timeScale;
+const durOf = (e) => (e.k === 'fwd' || e.k === 'turn' || e.k === 'bump' ? stepMs() : stepMs() * 0.5);
+function clearLights() { $$('#code .now, #code .yes, #code .no, #code .f1now').forEach((e) => e.classList.remove('now', 'yes', 'no', 'f1now')); $$('#code .act').forEach((e) => e.classList.remove('act')); }
+function beginRun() {
+  game.trace = Robot.run(game.L.m, game.prog);
+  game.idx = 0; game.result = null;
+  resetBot();
+  game.sel = null;
+  if (game.trace.why === 'empty') { game.mode = 'edit'; drawProgram(); say(outcome(game.trace), 'oops'); return false; }
+  return true;
+}
+function run() {
+  if (game.mode === 'won') return;
+  if (game.mode === 'run') { stopRun(); say('Stopped. Press Run to start again.'); return; }
+  Sound.init();
+  if (game.mode !== 'step' && !beginRun()) return;
+  game.mode = 'run';
+  drawProgram();
+  say('Running…');
+  clearTimeout(game.timer);
+  game.timer = setTimeout(nextEvent, 120 / game.timeScale);
+}
+function step() {
+  Sound.init();
+  if (game.mode === 'run') { clearTimeout(game.timer); game.mode = 'step'; drawProgram(); markEvent(game.trace.events[game.idx - 1]); return; }
+  if (game.mode === 'edit' || game.mode === 'end') { if (!beginRun()) return; game.mode = 'step'; drawProgram(); say('Step by step: press Step again for the next block.'); }
+  if (game.mode !== 'step') return;
+  if (game.idx >= game.trace.events.length) { finishRun(); return; }
+  nextEvent();
+}
+function nextEvent() {
+  const evs = game.trace.events;
+  if (game.idx >= evs.length) { finishRun(); return; }
+  const e = evs[game.idx++];
+  showEvent(e);
+  if (game.mode === 'run') game.timer = setTimeout(nextEvent, durOf(e));
+  else if (game.idx >= evs.length && game.mode === 'step') game.timer = setTimeout(finishRun, durOf(e));
+}
+function elOfPath(p) { return document.querySelector('#code [data-path="' + p + '"]'); }
+function markEvent(e) {
+  clearLights();
+  if (!e) return;
+  const el = elOfPath(e.p);
+  e.a.forEach((p) => { const box = document.querySelector('#code [data-box="' + p + '"]'); if (box) box.classList.add('act'); const c = elOfPath(p); if (c && blockAt(p) && blockAt(p).t === 'f') c.classList.add('f1now'); });
+  if (el) {
+    el.classList.add(e.k === 'test' ? (e.v ? 'yes' : 'no') : 'now');
+    const code = $('#code'), r = el.getBoundingClientRect(), cr = code.getBoundingClientRect();
+    if (r.top < cr.top + 4 || r.bottom > cr.bottom - 4) code.scrollTop += r.top - cr.top - cr.height / 3;
+  }
+  if (e.k === 'rep') { const nb = document.querySelector('#code [data-num="' + e.p + '"]'); if (nb) nb.innerHTML = e.i + '<small class="of">/' + e.n + '</small>'; }
+}
+function showEvent(e) {
+  markEvent(e);
+  const s = game.bot, ms = Math.round(durOf(e) * 0.85), b = $('#bot');
+  b.classList.remove('bump');
+  if (e.k === 'fwd') {
+    s.x = e.x; s.y = e.y; placeBot(ms);
+    const i = e.y * game.L.m.w + e.x;
+    setTimeout(() => { const t = tileEl(i); if (t) t.classList.add('trail'); }, ms * 0.6);
+    if (e.g >= 0) { game.got.push(e.g); setTimeout(() => { tileEl(e.g).classList.add('got'); Sound.sfx.orb(); }, ms * 0.7); }
+    else Sound.sfx.check();
+  } else if (e.k === 'turn') { s.d = e.d; s.a += e.s * 90; placeBot(ms); Sound.sfx.click(); }
+  else if (e.k === 'bump') { b.style.setProperty('--ms', ms + 'ms'); void b.offsetWidth; b.classList.add('bump'); Sound.sfx.pad(); }
+}
+function stopRun() {
+  clearTimeout(game.timer);
+  game.mode = 'edit'; game.trace = null; game.idx = 0;
+  clearLights();
+  resetBot();
+  drawProgram();
+}
+function resetRobot() { if (game.mode === 'edit') return; stopRun(); say(game.L.hint); }
+const gemsLeft = (n) => (n === 1 ? '1 gem is' : n + ' gems are') + ' still waiting';
+function outcome(r) {
+  if (r.why === 'win') return 'Hooray! The robot made it.';
+  if (r.why === 'bump') return r.what === 'water' ? 'Splash! Robots cannot swim. Try another way.' : r.what === 'edge' ? 'Bump! That is the edge of the map. Try another way.' : 'Bump! A wall is in the way. Try another way.';
+  if (r.why === 'gems') return 'So close! ' + gemsLeft(r.left) + '. Collect ' + (r.left === 1 ? 'it' : 'them') + ', then come back to the flag.';
+  if (r.why === 'end') return 'The blocks ran out before the flag' + (r.left ? ', and ' + gemsLeft(r.left).replace(' is', ' was').replace(' are', ' were') : '') + '. Add a few more!';
+  if (r.why === 'dizzy') return 'The robot got dizzy: is your loop able to finish?';
+  if (r.why === 'self') return 'F1 cannot use F1. Take it out of the F1 row.';
+  return 'Add some blocks first, then press Run.';
+}
+function finishRun() {
+  clearTimeout(game.timer);
+  const r = game.trace;
+  game.result = r;
+  if (r.ok) { game.mode = 'won'; won(); return; }
+  game.mode = 'end';
+  drawProgram();
+  const last = r.events[r.events.length - 1];
+  if (last) markEvent(last);
+  say(outcome(r), 'oops');
+  announce(outcome(r));
+}
+
+/* ================= a level done ================= */
+const CHEERS3 = ['Perfect program!', 'Brilliant coding!', 'Super smart!'];
+function won() {
+  const L = game.L, blocks = blocksUsed(), stars = starsFor(blocks, L.par), prev = rec.levels[L.id];
+  const better = !prev || stars > prev.s || blocks < prev.b;
+  rec.levels[L.id] = { s: Math.max(prev ? prev.s : 0, stars), b: prev ? Math.min(prev.b, blocks) : blocks };
+  totals();
+  saveDraft();
+  writeSave();
+  drawProgram();
+  boardEl.classList.add('won');
+  const b = $('#bot'); b.classList.add('hop');
+  say(outcome(game.trace), 'good');
+  Sound.sfx.win();
+  const changes = L.start ? Robot.changes(Robot.parse(L.start), game.prog) : -1;
+  game.lastWin = { id: L.id, stars: stars, blocks: blocks, better: better, changes: changes };
+  clearTimeout(game.timer);
+  game.timer = setTimeout(() => showDone(), calm() ? 500 : 1100 / Math.min(game.timeScale, 4));
+}
+function nextLevelOf(L) { const n = LEVELS[L.i + 1]; return n && levelOpen(n) ? n : null; }
+function showDone() {
+  const L = game.L, w = game.lastWin, n = nextLevelOf(L);
+  game.state = 'done';
+  $('#doneTitle').textContent = w.stars === 3 ? pick(CHEERS3) : w.stars === 2 ? 'Level done!' : 'You did it!';
+  $('#doneLv').textContent = 'World ' + L.w + ' · Level ' + L.k + ' · ' + L.name;
+  $('#doneStars').innerHTML = starRow(w.stars);
+  $('#doneStars').setAttribute('aria-label', w.stars + ' of 3 stars');
+  let note = 'You used ' + w.blocks + (w.blocks === 1 ? ' block' : ' blocks') + '. ';
+  note += w.stars === 3 ? 'That is par (' + L.par + ') or better!' : '3 stars at ' + L.par + ' blocks or fewer.';
+  if (w.changes >= 0) note += ' Fixed with ' + w.changes + (w.changes === 1 ? ' change' : ' changes') + (w.changes <= L.fix ? ': a neat fix!' : ' (it can be done with ' + L.fix + ').');
+  $('#doneNote').textContent = note;
+  const wDone = worldDone(L.w);
+  $('#doneNext').textContent = !n && L.i === LEVELS.length - 1 ? 'You finished every level of Code Robot!' :
+    !n ? (L.w < WORLDS.length && !worldOpen(L.w + 1) ? 'Finish ' + (OPEN_AT - wDone) + ' more in ' + worldOf(L.w).name + ' to open ' + worldOf(L.w + 1).name + '.' : '') :
+    n.w !== L.w ? 'Next: World ' + n.w + ', ' + worldOf(n.w).name + '!' : '';
+  $('#nextBtn').hidden = !n;
+  $('#againBtn').textContent = w.stars < 3 ? 'Try for 3 stars' : 'Play it again';
+  $('#hud').hidden = true; playEl.classList.add('away');
+  showScreen('done');
+  arcadeLinks();
+  for (let k = 0; k < w.stars; k++) setTimeout(() => Sound.sfx.star(), 250 + k * 200);
+  announce('Level done. ' + w.stars + ' stars.');
+}
+
+/* ================= opening a level ================= */
+// force: the test hook opens any level, locked or not
+function openLevel(L, skipIntro, force) {
+  if (!L || (!levelOpen(L) && !force)) return;
+  Sound.init();
+  if (!skipIntro && !rec.seen[L.w]) { showIntro(L); return; }
+  clearTimeout(game.timer);
+  game.L = L; game.state = 'play'; game.mode = 'edit'; game.sel = null; game.undo = []; game.trace = null;
+  rec.last = L.id; writeRecords();
+  let prog = null;
+  try { if (rec.drafts[L.id] !== undefined) prog = Robot.parse(rec.drafts[L.id]); } catch (e) { prog = null; }
+  if (!prog) prog = L.start ? Robot.parse(L.start) : { main: [], f1: [] };
+  game.prog = prog;
+  game.cur = { list: 'm', i: game.prog.main.length };
+  showScreen(null);
+  $('#hud').hidden = false; playEl.hidden = false; playEl.classList.remove('away');
+  document.body.classList.toggle('calm', calm());
+  $('#lvChip').innerHTML = '<b>' + L.id + '</b> <span class="lvname">' + L.name + '</span>';
+  $('#parChip').textContent = '⭐⭐⭐ ≤ ' + L.par;
+  $('#parChip').setAttribute('aria-label', 'Three stars at ' + L.par + ' blocks or fewer');
+  drawBoard(); drawPalette(); drawProgram();
+  layout();
+  say(L.hint);
+  Sound.play('robot');
+  game.attempt++;
+  if (L.i > 0) { const name = Sound.remix(L.i, 0, 'robot'); if (name) toast('♪ ' + name, 'music', 1300); }
+  announce('World ' + L.w + ', level ' + L.k + ': ' + L.name + '. ' + L.hint);
+}
+function showIntro(L) {
+  const W = worldOf(L.w);
+  game.state = 'intro'; game.introFor = L.id;
+  $('#iIcon').textContent = W.icon;
+  $('#iTitle').textContent = 'World ' + W.id + ': ' + W.name;
+  $('#iText').textContent = W.intro;
+  $('#hud').hidden = true; playEl.hidden = true;
+  showScreen('intro');
+  Speech.say(W.name + '. ' + W.intro);
+}
+
+/* ================= menus ================= */
+const lvLine = (L) => 'World ' + L.w + ' · ' + worldOf(L.w).name + ' · Level ' + L.k;
+function renderHome() {
+  const c = continueLevel(), started = Object.keys(rec.levels).length || rec.last;
+  $('#contTitle').textContent = started ? 'Continue' : 'Start';
+  $('#contSub').textContent = lvLine(c);
+  $('#worlds').innerHTML = WORLDS.map((W) => {
+    const open = worldOpen(W.id), d = worldDone(W.id), st = worldStars(W.id);
+    const sub = open ? d + ' of 8 · ' + st + '⭐' : '🔒 Locked';
+    return '<button type="button" class="world' + (open ? '' : ' locked') + (c.w === W.id ? ' now' : '') + '" data-world="' + W.id + '" aria-label="World ' + W.id + ', ' + W.name +
+      (open ? ', ' + d + ' of 8 levels done, ' + st + ' stars' : ', locked: finish ' + (OPEN_AT - worldDone(W.id - 1)) + ' more in ' + worldOf(W.id - 1).name) + '"><i aria-hidden="true">' + W.icon + '</i><b>' + W.name + '</b><small aria-hidden="true">' + sub + '</small></button>';
+  }).join('');
+  const sp = $('#speakBtn');
+  sp.textContent = !Speech.ok ? 'Read aloud: not here' : save.settings.speak ? 'Read aloud: on' : 'Read aloud: off';
+  sp.disabled = !Speech.ok; sp.setAttribute('aria-pressed', String(!!save.settings.speak));
+  $('#soundBtn').textContent = save.settings.music > 0 ? 'Music: on' : 'Music: off';
+  arcadeLinks();
+}
+function goHome() {
+  clearTimeout(game.timer);
+  if (game.L && game.mode !== 'edit') { game.mode = 'edit'; game.trace = null; }
+  game.state = 'menu'; Speech.stop();
+  $('#hud').hidden = true; playEl.hidden = true;
+  Sound.play('menu');
+  renderHome();
+  showScreen('home', false);
+}
+function showWorld(w) {
+  const W = worldOf(w);
+  if (!worldOpen(w)) { toast('Finish ' + (OPEN_AT - worldDone(w - 1)) + ' more levels in ' + worldOf(w - 1).name + ' first', 'hello', 2200); return; }
+  clearTimeout(game.timer);
+  game.state = 'world'; game.world = w;
+  $('#wIcon').textContent = W.icon;
+  $('#wTitle').textContent = 'World ' + w + ': ' + W.name;
+  $('#wIntro').textContent = W.intro;
+  const todo = LEVELS.find((L) => L.w === w && levelOpen(L) && !isDone(L.id));
+  $('#levels').innerHTML = LEVELS.filter((L) => L.w === w).map((L) => {
+    const r = rec.levels[L.id], open = levelOpen(L);
+    return '<button type="button" class="lvl' + (r ? ' done' : todo && todo.id === L.id ? ' next' : '') + '" data-level="' + L.id + '"' + (open ? '' : ' disabled') +
+      ' aria-label="Level ' + L.k + ', ' + L.name + (r ? ', ' + r.s + ' stars' : open ? '' : ', locked') + '"><b>' + (open ? L.k : '🔒') + '</b><span class="ms" aria-hidden="true">' + starRow(r ? r.s : 0) + '</span><small aria-hidden="true">' + L.name + '</small></button>';
+  }).join('');
+  const d = worldDone(w);
+  $('#wNote').textContent = w < WORLDS.length ? (worldOpen(w + 1) ? worldOf(w + 1).name + ' is open.' : (OPEN_AT - d) + ' more ' + (OPEN_AT - d === 1 ? 'level opens ' : 'levels open ') + worldOf(w + 1).name + '.') : d + ' of 8 done.';
+  $('#hud').hidden = true; playEl.hidden = true;
+  Sound.play('menu');
+  showScreen('world');
+  arcadeLinks();
+}
+function pause() {
+  if (game.state !== 'play' || game.mode === 'won') return;
+  game.prevMode = game.mode;
+  if (game.mode === 'run') { clearTimeout(game.timer); game.mode = 'step'; }
+  game.state = 'pause';
+  Speech.stop();
+  $('#pauseInfo').textContent = 'World ' + game.L.w + ' · Level ' + game.L.k + ' · ' + game.L.name + '. Your program is saved.';
+  showScreen('pause');
+}
+function resume() {
+  if (game.state !== 'pause') return;
+  game.state = 'play';
+  showScreen(null);
+  if (game.prevMode === 'run') { game.mode = 'run'; drawProgram(); game.timer = setTimeout(nextEvent, 200); }
+}
+
+/* ================= the save code =================
+   'CR1-' and the records (levels, last, drafts, seen, speed) as base64 of JSON. Loading checks every part, shows what
+   is in the code next to what is on this device, and replaces only after a yes. */
+function saveCode() {
+  const data = { v: 1, levels: rec.levels, last: rec.last, drafts: rec.drafts, seen: rec.seen, speed: rec.speed };
+  return 'CR1-' + btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+}
+// the records in a code, or a reason it is not a good code
+function readCode(text) {
+  const t = String(text || '').replace(/\s+/g, '');
+  if (!t) return { bad: 'Paste a save code into the box first.' };
+  if (t.indexOf('CR1-') !== 0) return { bad: 'That is not a Code Robot save code. It starts with CR1-.' };
+  let d;
+  try { d = JSON.parse(decodeURIComponent(escape(atob(t.slice(4))))); } catch (e) { return { bad: 'That code is not complete. Copy all of it and try again.' }; }
+  if (!d || typeof d !== 'object' || d.v !== 1 || !d.levels || typeof d.levels !== 'object' || Array.isArray(d.levels)) return { bad: 'That code does not look right.' };
+  const out = SAVE_DEFAULTS();
+  for (const id of Object.keys(d.levels)) {
+    const r = d.levels[id];
+    if (!byId[id] || !r || [1, 2, 3].indexOf(r.s) < 0 || !(Number.isInteger(r.b) && r.b >= 1 && r.b <= 99)) return { bad: 'That code does not look right.' };
+    out.levels[id] = { s: r.s, b: r.b };
+  }
+  if (d.drafts && typeof d.drafts === 'object') for (const id of Object.keys(d.drafts)) {
+    if (!byId[id] || typeof d.drafts[id] !== 'string' || d.drafts[id].length > 400) continue;
+    try { Robot.parse(d.drafts[id]); out.drafts[id] = d.drafts[id]; } catch (e) { /* a broken draft is left out */ }
+  }
+  if (d.seen && typeof d.seen === 'object') for (const w of Object.keys(d.seen)) if (WORLDS[+w - 1]) out.seen[w] = 1;
+  out.last = byId[d.last] ? d.last : '';
+  out.speed = [0, 1, 2].indexOf(d.speed) >= 0 ? d.speed : 1;
+  let done = 0, stars = 0;
+  for (const id of Object.keys(out.levels)) { done++; stars += out.levels[id].s; }
+  out.done = done; out.stars = stars;
+  return { rec: out };
+}
+let pendingLoad = null;
+function openBackup() {
+  game.state = 'backup';
+  $('#codeOut').value = saveCode();
+  $('#codeIn').value = '';
+  status('');
+  showScreen('backup');
+}
+function status(msg, bad) { const s = $('#codeStatus'); s.textContent = msg; s.classList.toggle('bad', !!bad); }
+function copyCode() {
+  const ta = $('#codeOut'), code = saveCode();
+  ta.value = code;
+  const done = () => { status('Copied! Keep it somewhere safe, like Notes.'); Sound.sfx.check(); };
+  const fallback = () => {
+    ta.focus(); ta.select(); ta.setSelectionRange(0, code.length);
+    let ok = false; try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    if (ok) done(); else status('The code is selected: tap Copy in the menu to copy it.');
+  };
+  try { if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(code).then(done, fallback); else fallback(); } catch (e) { fallback(); }
+}
+function loadCode() {
+  const r = readCode($('#codeIn').value);
+  if (r.bad) { status(r.bad, true); return; }
+  pendingLoad = r.rec;
+  const lv = (n) => n + (n === 1 ? ' level' : ' levels');
+  $('#confirmText').textContent = 'The code has ' + lv(r.rec.done) + ' done and ' + r.rec.stars + ' stars. This device has ' + lv(rec.done) + ' and ' + rec.stars + ' stars. Loading the code replaces what is on this device.';
+  game.state = 'confirm';
+  showScreen('confirm');
+}
+function confirmLoad(yes) {
+  if (yes && pendingLoad) {
+    for (const k of Object.keys(rec)) delete rec[k];
+    Object.assign(rec, pendingLoad);
+    tidyRecords();
+    writeRecords();
+    pendingLoad = null;
+    openBackup();
+    status('Progress loaded: ' + rec.done + ' levels and ' + rec.stars + ' stars.');
+    Sound.sfx.win();
+    return;
+  }
+  pendingLoad = null;
+  openBackup();
+  status('Nothing changed.');
+}
+
+/* ================= layout =================
+   Wide screens: the stage on the left, the editor on the right. Tall ones: the stage on top. The map's squares are
+   as big as the room allows (at most 84 px); the program pane takes the height that is left. */
+function layout() {
+  if (playEl.hidden || !game.L) return;
+  const st = playEl.style, m = game.L.m, vh = innerHeight;
+  const top = Math.round(($('#hud').hidden ? 0 : $('.hud-top').getBoundingClientRect().bottom) + 8);
+  st.setProperty('--top', top + 'px');
+  const cs = getComputedStyle(playEl);
+  const W = playEl.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight), H = vh - top - parseFloat(cs.paddingBottom);
+  const g = clamp(Math.round(Math.min(W, H) * 0.018), 8, 14);
+  st.setProperty('--g', g + 'px');
+  const wide = W >= 860 && W > H * 1.2;
+  playEl.classList.toggle('wide', wide); playEl.classList.toggle('tall', !wide);
+  const sayH = wide ? 64 : (W < 500 ? 58 : 62);
+  st.setProperty('--say-h', sayH + 'px');
+  st.setProperty('--say-max', (W < 500 ? 15 : 16.5) + 'px');
+  // palette buttons: one or two rows across the editor's width
+  const ew = wide ? Math.floor(W * 0.5) : W, n = game.L.pal.length;
+  const perRow = n <= 4 ? n : Math.ceil(n / (ew >= 8 * 70 ? 1 : 2));
+  const pw = Math.floor(clamp((ew - (perRow - 1) * 8) / perRow, 56, 96));
+  st.setProperty('--pw', pw + 'px'); st.setProperty('--ph', (W < 500 ? 58 : 62) + 'px'); st.setProperty('--pf', (pw < 66 ? 0.7 : 0.78) + 'rem');
+  let t;
+  if (wide) {
+    const sw = Math.min(Math.floor(W * 0.5), 640);
+    t = Math.floor(Math.min((H - sayH - g) / m.h, sw / m.w, 84));
+    const bw = t * m.w;
+    st.setProperty('--sw', Math.max(bw, Math.min(sw, 420)) + 'px');
+    st.setProperty('--say-w', Math.max(bw, Math.min(sw, 420)) + 'px');
+  } else {
+    // the editor needs its palette, its controls and at least three lines of program
+    const palRows = Math.ceil(n / Math.max(1, Math.floor((W + 8) / (pw + 8))));
+    const ed = palRows * (W < 500 ? 58 : 62) + (palRows - 1) * 8 + 52 + 8 + 8 + 3 * 60 + 36 + g;
+    t = Math.floor(Math.min(W / m.w, (H - sayH - g - ed) / m.h, H * 0.46 / m.h, 84));
+    st.setProperty('--say-w', '100%');
+  }
+  t = Math.max(t, 22);
+  boardEl.style.setProperty('--t', t + 'px');
+  document.documentElement.style.setProperty('--toast-top', Math.round(top + 40) + 'px');
+  fitSay();
+}
+
+/* ================= input ================= */
+// taps in the program: a gap moves the cursor there, a block is picked (or let go), a Repeat's number counts up
+$('#code').addEventListener('click', (e) => {
+  const gap = e.target.closest('[data-gap]'), num = e.target.closest('[data-num]'), blk = e.target.closest('[data-path]');
+  if (num) { cycleNumber(num.dataset.num); return; }
+  if (gap) { const v = gap.dataset.gap, k = v.lastIndexOf(':'); setCursor(v.slice(0, k), +v.slice(k + 1)); return; }
+  if (blk) selectBlock(blk.dataset.path);
+});
+palEl.addEventListener('click', (e) => { const b = e.target.closest('[data-add]'); if (b && !b.disabled) addBlock(b.dataset.add); });
+$('#selDel').addEventListener('click', deleteSel);
+$('#selLeft').addEventListener('click', () => moveSel(-1));
+$('#selRight').addEventListener('click', () => moveSel(1));
+$('#selDone').addEventListener('click', () => { if (game.sel) selectBlock(game.sel); });
+$('#runBtn').addEventListener('click', run);
+$('#stepBtn').addEventListener('click', step);
+$('#resetBtn').addEventListener('click', resetRobot);
+$('#undoBtn').addEventListener('click', undo);
+$('#clearBtn').addEventListener('click', clearProgram);
+$('#speedBtn').addEventListener('click', () => { rec.speed = (rec.speed + 1) % SPEEDS.length; writeRecords(); updateEditor(); toast(SPEEDS[rec.speed].ic + ' ' + SPEEDS[rec.speed].name, '', 900); });
+$('#hintBtn').addEventListener('click', () => { if (!game.L) return; say(game.L.hint); Speech.say(game.L.hint); });
+$('#pauseBtn').addEventListener('click', (e) => { e.stopPropagation(); pause(); });
+$('#resumeBtn').addEventListener('click', resume);
+$('#restartBtn').addEventListener('click', () => { resume(); restartLevel(); });
+$('#mapBtn').addEventListener('click', () => showWorld(game.L.w));
+$('#homeBtn').addEventListener('click', goHome);
+$('#contBtn').addEventListener('click', () => openLevel(continueLevel()));
+$('#worlds').addEventListener('click', (e) => { const b = e.target.closest('[data-world]'); if (b) { Sound.sfx.check(); showWorld(+b.dataset.world); } });
+$('#levels').addEventListener('click', (e) => { const b = e.target.closest('[data-level]'); if (b && !b.disabled) openLevel(byId[b.dataset.level]); });
+$('#wHomeBtn').addEventListener('click', goHome);
+$('#iGoBtn').addEventListener('click', () => { const L = byId[game.introFor]; rec.seen[L.w] = 1; writeRecords(); openLevel(L, true); });
+$('#nextBtn').addEventListener('click', () => { const n = nextLevelOf(game.L); if (n) openLevel(n); });
+$('#againBtn').addEventListener('click', () => openLevel(game.L, true));
+$('#doneMapBtn').addEventListener('click', () => showWorld(game.L.w));
+$('#backupBtn').addEventListener('click', openBackup);
+$('#copyBtn').addEventListener('click', copyCode);
+$('#loadBtn').addEventListener('click', loadCode);
+$('#backupHomeBtn').addEventListener('click', goHome);
+$('#confirmYes').addEventListener('click', () => confirmLoad(true));
+$('#confirmNo').addEventListener('click', () => confirmLoad(false));
+$('#speakBtn').addEventListener('click', () => { save.settings.speak = !save.settings.speak; writeSave(); renderHome(); if (save.settings.speak) Speech.say('Read aloud is on.'); });
+$('#soundBtn').addEventListener('click', () => { if (toggleMusic() && game.state === 'menu') Sound.play('menu'); renderHome(); });
+window.addEventListener('keydown', (e) => {
+  if (e.ctrlKey || e.metaKey || e.altKey || e.repeat) return;
+  if (e.target && (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT')) return;
+  if (e.key === 'Escape') { if (game.state === 'play') { e.preventDefault(); pause(); } else if (game.state === 'pause') { e.preventDefault(); resume(); } }
+});
+arcadeGuards(pause);
+document.addEventListener('pointerdown', () => { if (game.state === 'menu' && save.settings.music > 0) Sound.play('menu'); });
+window.addEventListener('resize', layout);
+window.addEventListener('orientationchange', () => setTimeout(layout, 120));
+
+document.body.classList.toggle('calm', calm());
+renderHome();
+showScreen('home', false);
+if (document.fonts && document.fonts.load) document.fonts.load('700 40px Fredoka').then(() => { if (!playEl.hidden) layout(); }).catch(() => {});
+
+/* ================= test hooks ================= */
+// what a finished layout must hold: nothing scrolls, everything inside the screen, every finger target 48 px or more,
+// no text cut off, the map and the editor apart
+function fits() {
+  const bad = [], vw = innerWidth, vh = innerHeight, R = (el) => el.getBoundingClientRect();
+  const in1 = (r) => r.left >= -0.5 && r.right <= vw + 0.5 && r.top >= -0.5 && r.bottom <= vh + 0.5;
+  const cut = (el, what) => { if (el && el.offsetParent !== null && (el.scrollWidth > el.clientWidth + 1 || el.scrollHeight > el.clientHeight + 1)) bad.push(what + ' text cut: ' + el.textContent.trim().slice(0, 30)); };
+  const finger = matchMedia('(pointer: coarse)').matches, minT = 48;
+  if (document.documentElement.scrollHeight > vh + 1 || document.documentElement.scrollWidth > vw + 1) bad.push('page scrolls');
+  if (!playEl.hidden && !playEl.classList.contains('away')) {
+    const hudB = R($('.hud-top')).bottom;
+    $$('#hud .chip').forEach((c) => { cut(c, 'chip'); if (!in1(R(c))) bad.push('chip outside'); });
+    const pb = R($('#pauseBtn')); if (!in1(pb) || pb.width < (finger ? 48 : 44)) bad.push('pause button ' + Math.round(pb.width));
+    const br = R(boardEl), ed = R(editorEl), sy = R(sayEl), code = R($('#code'));
+    if (!in1(br)) bad.push('map outside'); if (br.top < hudB - 1) bad.push('map under the HUD');
+    if (!in1(sy)) bad.push('speech outside'); cut($('#sayText'), 'speech');
+    if (!in1(ed)) bad.push('editor outside ' + Math.round(ed.bottom) + ' of ' + vh);
+    const hit = (a, b) => a.left < b.right - 0.5 && b.left < a.right - 0.5 && a.top < b.bottom - 0.5 && b.top < a.bottom - 0.5;
+    if (hit(br, ed) || hit(sy, ed) || hit(br, sy)) bad.push('the map, speech and editor overlap');
+    if (code.height < 110) bad.push('program pane only ' + Math.round(code.height) + ' px');
+    const targets = $$('#palette .pal, #selbar .btn, #controls .btn, #hintBtn').filter((b) => b.offsetParent !== null);
+    targets.forEach((b) => { const r = R(b); if (!in1(r)) bad.push('button outside: ' + (b.getAttribute('aria-label') || b.textContent.trim())); if (r.width < minT || r.height < minT) bad.push('button small ' + Math.round(r.width) + 'x' + Math.round(r.height) + ': ' + (b.getAttribute('aria-label') || b.textContent.trim())); });
+    $$('#palette .pal b, #selbar .btn span, #controls .lbl').forEach((b) => { if (b.offsetParent !== null && b.scrollWidth > R(b.closest('button')).width) bad.push('label cut: ' + b.textContent); });
+    $$('#code .gap, #code .blk, #code .num').forEach((b) => { const r = R(b); if (r.width < minT || r.height < minT) bad.push('program target small ' + Math.round(r.width) + 'x' + Math.round(r.height)); if (r.right > code.right + 0.5 || r.left < code.left - 0.5) bad.push('program target outside its pane'); });
+  } else {
+    const card = $$('#screens > .screen').find((s) => !s.hidden);
+    if (card) {
+      const r = R(card.querySelector('.card'));
+      if (r.bottom > vh + 1 || r.top < -1 || r.right > vw + 1 || r.left < -1) bad.push('menu card does not fit (' + Math.round(r.top) + '-' + Math.round(r.bottom) + ' of ' + vh + ')');
+      if ($('#screens').scrollHeight > vh + 1) bad.push('menu scrolls');
+      card.querySelectorAll('.btn, .world, .lvl').forEach((b) => { const rb = R(b); if (b.offsetParent === null) return; if ((finger && (rb.height < 48 || rb.width < 48)) || !in1(rb)) bad.push('button ' + b.textContent.trim().slice(0, 18) + ' ' + Math.round(rb.width) + 'x' + Math.round(rb.height)); cut(b, 'button'); });
+      card.querySelectorAll('.world b, .world small, .lvl small').forEach((b) => cut(b, 'label'));
+    }
+  }
+  return bad;
+}
+// check a program on a level without the page: the result of a run
+function check(id, text) { const L = byId[id], r = Robot.run(L.m, Robot.parse(text)); return { ok: r.ok, why: r.why, steps: r.steps, left: r.left, blocks: Robot.count(Robot.parse(text)), message: outcome(r) }; }
+window.__robot = {
+  game: game, rec: rec, save: save, LEVELS: LEVELS, WORLDS: WORLDS, Robot: Robot, Sound: Sound, Speech: Speech, OPEN_AT: OPEN_AT, SPEEDS: SPEEDS,
+  state: () => ({ state: game.state, mode: game.mode, level: game.L ? game.L.id : '', prog: game.L ? Robot.print(game.prog) : '', blocks: game.L ? blocksUsed() : 0,
+    cur: Object.assign({}, game.cur), sel: game.sel, idx: game.idx, events: game.trace ? game.trace.events.length : 0, why: game.trace ? game.trace.why : '', say: $('#sayText').textContent }),
+  open: (id) => { openLevel(byId[id], true, true); return game.state; },
+  setProg: (text) => { game.prog = Robot.parse(text); game.cur = { list: 'm', i: game.prog.main.length }; game.sel = null; toEdit(); edited(); return Robot.print(game.prog); },
+  setSpeed: (k) => { game.timeScale = k; }, check: check, outcome: outcome, starsFor: starsFor, fits: fits, layout: layout, goHome: goHome, showWorld: showWorld,
+  // progress from earlier play, for the playtests: these levels done with par
+  grant: (ids) => { ids.forEach((id) => { rec.levels[id] = { s: 3, b: byId[id].par }; }); totals(); writeRecords(); return rec.done; },
+  levelOpen: (id) => levelOpen(byId[id]), worldOpen: worldOpen, saveCode: saveCode, readCode: readCode, run: run, step: step, pause: pause, resume: resume
+};
+})();
+</script>
+<script>if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('../sw.js').catch(function () {});</script>
+</body>
+</html>
