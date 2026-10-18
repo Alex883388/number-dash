@@ -14,7 +14,10 @@
     "solar": ["Sun Power Co", "Bright Fields"], "ebus": ["Volt Buses", "Green Line"], "mall": ["Mega Mall", "City Gate Centre"],
     "datacentre": ["Cloud Castle", "Byte Bank"], "themepark": ["Funland", "Thrill Hill"], "football": ["City Rovers", "United Stars"],
     "port": ["Ocean Gate", "Blue Harbour Co"], "skyscraper": ["Sky Needle", "Cloud Tower"], "airline": ["Fly High Air", "Jet Stream"],
-    "space": ["Star Voyages", "Orbit Tours"]
+    "space": ["Star Voyages", "Orbit Tours"],
+    "intairport": ["Sky Gate Airport", "Cloud Port"], "cruiseport": ["Sea Breeze Cruises", "Wave Line"], "shipyard": ["Iron Keel Yard", "Harbour Works"],
+    "bullettrain": ["Lightning Rail", "Star Express"], "filmstudio": ["Silver Screen Co", "Big Picture"], "megaresort": ["Paradise Palms", "Sunset Shores"],
+    "arena": ["Star Dome", "Thunder Hall"], "robotfactory": ["Robo Works", "Gear Minds"], "satellite": ["Space Link", "Star Beam"], "cleanpower": ["Green Spark", "Bright Wave"]
   },
   "cases": [
     {

@@ -3,11 +3,12 @@
 //   node games/tycoon/build.js && ND_CDP=9523 ND_PROFILE=edge-profile-tycoon3 ND_URL=file:///D:/Github/number-dash/games/tycoon/dist/preview.html ND_READY='!!window.__tycoon' ND_BOT=none node games/dash/playtest/shoot.js games/tycoon/playtest/content.js
 // On a phone and an iPad: each case and offer shows its story and every option without sideways overflow, a choice
 // can be made and its result and the other choices are shown; every business card and its spot box open; every
-// business stands on the map (its building is painted without errors); the rival cases fill in their names.
+// business stands on the map of Sakura City, the Gateway's mega businesses too (each building painted without
+// errors); the rival cases fill in their names.
 const T = 'window.__tycoon';
 const sweep = (label) => `(async () => {
   const W = ${T}, TY = W.TY, sleep = (ms) => new Promise((r) => setTimeout(r, ms)), bad = [];
-  W.G = TY.newGame('Sweep', 9); W.G.cash = 1e9; W.G.tier = 4; W.G.logo = '🦊'; W.enterGame(); W.closeModal(); W.clock.paused = true;
+  W.G = TY.newGame('Sweep', 9, 'sakura'); W.G.cash = 1e10; W.G.tier = 5; W.G.logo = '🦊'; TY.DISTRICTS.forEach((d) => { W.G.lot[d.id] = W.G.lot[d.id].map(() => 0); }); W.enterGame(); W.closeModal(); W.clock.paused = true;
   let cases = 0, offers = 0, cards = 0, rivals = 0;
   const check = (what) => {
     const d = document.getElementById('dialog'), r = d.getBoundingClientRect();
@@ -24,8 +25,9 @@ const sweep = (label) => `(async () => {
     if (!document.querySelector('#dialog .bigstars')) bad.push(what + ': no result');
     check(what + ' result'); W.closeModal();
   };
-  for (const r of TY.available()) {
-    const d = TY.districtOfTier(r.tier).id, free = TY.freeLots(W.G, d).filter((i) => !r.needs || (TY.featOf(d, i)[r.needs] || 0) >= 1).sort((a, b) => (r.needs ? 0 : (TY.featOf(d, a).harbour || 0) - (TY.featOf(d, b).harbour || 0)));
+  for (const r of TY.available(W.G)) {
+    const d = TY.districtOfTier(r.tier).id, f = (i) => TY.featOf(W.G, d, i), spare = (i) => (f(i).harbour || 0) + (f(i).airport || 0);
+    const free = TY.freeLots(W.G, d).filter((i) => !r.needs || (f(i)[r.needs] || 0) >= 1).sort((a, b) => (r.needs ? 0 : spare(a) - spare(b)));
     W.aboutBiz(r.id); await sleep(30); check(r.id + ' card'); cards++; W.closeModal();
     if (!free.length) { bad.push(r.id + ': no lot for it'); continue; }
     W.openWizard(r.id, d, free[0]); await sleep(20); check(r.id + ' spot'); W.closeModal();
@@ -72,5 +74,7 @@ module.exports = [
   { shot: 'ty-31-skyline-businesses' },
   { eval: `(() => { ${T}.map.focus('downtown', null, 0.8); return 1; })()` }, { sleep: 2000 },
   { shot: 'ty-32-downtown-businesses' },
+  { eval: `(() => { ${T}.map.focus('gateway', null, 0.8); return 1; })()` }, { sleep: 2000 },
+  { shot: 'ty-33-gateway-businesses' },
   { log: 'JSON.stringify(window.__errs)' }
 ];

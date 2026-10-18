@@ -4,7 +4,8 @@
     { "tier": 1, "id": "market", "name": "Market Street", "emoji": "🧺", "unlock": 0, "land": 200 },
     { "tier": 2, "id": "high", "name": "High Street", "emoji": "🏪", "unlock": 4000, "land": 5000 },
     { "tier": 3, "id": "downtown", "name": "Downtown", "emoji": "🏙️", "unlock": 100000, "land": 100000 },
-    { "tier": 4, "id": "skyline", "name": "Skyline & Harbour", "emoji": "🌆", "unlock": 2000000, "land": 1500000 }
+    { "tier": 4, "id": "skyline", "name": "Skyline & Harbour", "emoji": "🌆", "unlock": 2000000, "land": 1500000 },
+    { "tier": 5, "id": "gateway", "name": "Gateway", "emoji": "✈️", "unlock": 25000000, "land": 6000000 }
   ],
   "businesses": [
     { "id": "lemonade", "name": "Lemonade Stand", "emoji": "🍋", "tier": 1, "industry": "food", "kind": "business", "price": 150, "profit": [5, 35], "risk": 2, "season": "summer", "likes": {"park": 0.2, "school": 0.15, "tourism": 0.1} },
@@ -49,6 +50,17 @@
     { "id": "port", "name": "Container Port", "emoji": "🚢", "tier": 4, "industry": "logistics", "kind": "business", "price": 15000000, "profit": [300000, 760000], "risk": 2, "season": "holiday", "likes": {"harbour": 0.3, "industry": 0.05}, "needs": "harbour" },
     { "id": "skyscraper", "name": "Skyscraper", "emoji": "🏙️", "tier": 4, "industry": "property", "kind": "property", "price": 18000000, "profit": [400000, 460000], "risk": 1, "season": null, "likes": {"water": 0.15, "park": 0.1, "tourism": 0.05} },
     { "id": "airline", "name": "Airline", "emoji": "✈️", "tier": 4, "industry": "transport", "kind": "business", "price": 22000000, "profit": [-1800000, 3800000], "risk": 4, "season": "summer", "likes": {"airport": 0.35} },
-    { "id": "space", "name": "Space Tourism", "emoji": "🚀", "tier": 4, "industry": "tech", "kind": "business", "price": 35000000, "profit": [-3500000, 6500000], "risk": 4, "season": null, "likes": {"water": 0.2, "quiet": 0.1} }
+    { "id": "space", "name": "Space Tourism", "emoji": "🚀", "tier": 4, "industry": "tech", "kind": "business", "price": 35000000, "profit": [-3500000, 6500000], "risk": 4, "season": null, "likes": {"water": 0.2, "quiet": 0.1} },
+
+    { "id": "intairport", "name": "International Airport", "emoji": "🛫", "tier": 5, "industry": "transport", "kind": "business", "price": 60000000, "profit": [1500000, 4500000], "risk": 3, "season": "summer", "likes": {"airport": 0.3, "station": 0.1}, "needs": "airport" },
+    { "id": "cruiseport", "name": "Cruise Terminal", "emoji": "🛳️", "tier": 5, "industry": "hospitality", "kind": "business", "price": 40000000, "profit": [600000, 3200000], "risk": 3, "season": "summer", "likes": {"harbour": 0.25, "tourism": 0.1}, "needs": "harbour" },
+    { "id": "shipyard", "name": "Shipyard", "emoji": "⚓", "tier": 5, "industry": "manufacturing", "kind": "business", "price": 45000000, "profit": [900000, 2600000], "risk": 2, "season": null, "likes": {"harbour": 0.25, "industry": 0.1}, "needs": "harbour" },
+    { "id": "bullettrain", "name": "Bullet Train Line", "emoji": "🚄", "tier": 5, "industry": "transport", "kind": "business", "price": 55000000, "profit": [1200000, 2800000], "risk": 2, "season": "holiday", "likes": {"station": 0.25, "airport": 0.1} },
+    { "id": "filmstudio", "name": "Film Studio", "emoji": "🎥", "tier": 5, "industry": "entertainment", "kind": "business", "price": 30000000, "profit": [-800000, 3200000], "risk": 4, "season": null, "likes": {"quiet": 0.2, "tourism": 0.1} },
+    { "id": "megaresort", "name": "Mega Resort", "emoji": "🏝️", "tier": 5, "industry": "hospitality", "kind": "business", "price": 50000000, "profit": [400000, 3600000], "risk": 3, "season": "summer", "likes": {"water": 0.2, "tourism": 0.1, "quiet": 0.1} },
+    { "id": "arena", "name": "Concert Arena", "emoji": "🎤", "tier": 5, "industry": "entertainment", "kind": "business", "price": 25000000, "profit": [200000, 1800000], "risk": 3, "season": "holiday", "likes": {"station": 0.15, "avenue": 0.15} },
+    { "id": "robotfactory", "name": "Robot Factory", "emoji": "🤖", "tier": 5, "industry": "manufacturing", "kind": "business", "price": 65000000, "profit": [1000000, 3000000], "risk": 2, "season": null, "likes": {"industry": 0.15, "station": 0.1, "avenue": 0.1} },
+    { "id": "satellite", "name": "Satellite Company", "emoji": "🛰️", "tier": 5, "industry": "tech", "kind": "business", "price": 80000000, "profit": [-2000000, 6000000], "risk": 4, "season": null, "likes": {"quiet": 0.2, "airport": 0.05} },
+    { "id": "cleanpower", "name": "Clean Power Plant", "emoji": "🔋", "tier": 5, "industry": "energy", "kind": "business", "price": 35000000, "profit": [800000, 1600000], "risk": 1, "season": null, "likes": {"water": 0.15, "quiet": 0.1} }
   ]
 }

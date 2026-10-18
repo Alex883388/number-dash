@@ -1,15 +1,15 @@
 # Tycoon Town content format
 
 Tycoon Town is a business and city-building game for a child aged 8–12 (British English). He starts with
-$500 on Market Street, opens small businesses, earns monthly profits, buys land, unlocks bigger districts and
-grows a company towards $100 million. The point is to learn to think like a CEO with street smarts: money,
+$500 on the market street of the city he picks, opens small businesses, earns monthly profits, buys land, unlocks bigger
+districts up to the Gateway (an airport and a port) and grows a company towards $100 million and a billion. The point is to learn to think like a CEO with street smarts: money,
 customers, people, risk, honesty and spotting traps. Each business he buys brings **business cases**: short
 real problems where he chooses what to do. Good choices raise the business's monthly profit, make it safer or
 build its reputation; poor choices or traps cost money. Several answers can work (that is the lesson: there is
 more than one way to solve a problem), but one is the best.
 
 The numbers (price, profit, risk) live in `roster.json` and are not yours to change. You write the words and
-the cases in `biz-1.json` … `biz-4.json` (one file per district tier), checked by
+the cases in `biz-1.json` … `biz-5.json` (one file per district tier), checked by
 `node games/tycoon/tools/check-content.js` (must say 0 errors; warnings explain what looks inconsistent).
 
 ## A business: profile
@@ -104,8 +104,10 @@ answer always the most expensive or always the cautious "do nothing": real CEOs 
 - **Kind and age-appropriate**: no violence, no scary crime details, no romance, no alcohol, no gambling as a
   good idea. Characters have everyday names from many backgrounds.
 - **Tiers**: Market Street (tier 1) uses very simple words and small sums; High Street adds staff and shops;
-  Downtown adds teams, contracts and bigger deals; Skyline adds big companies, cities and investors — still in
-  words a 12-year-old follows (explain any hard word in the story).
+  Downtown adds teams, contracts and bigger deals; Skyline adds big companies, cities and investors; the Gateway
+  (tier 5) adds national projects, governments, safety rules and huge loans — still in words a 12-year-old
+  follows (explain any hard word in the story). The cities differ (a desert, a neon strip, a Japanese city), so
+  a story should not name one city's sights: a business can open in any of them.
 - British English spelling (colour, centre, organise, neighbour, favourite, programme for TV, cheque).
 - Money in the stories should roughly match the roster (a lemonade stand earns tens of dollars a month; a skyscraper
   earns hundreds of thousands).
@@ -140,7 +142,8 @@ what near its lot brings it customers, as a share of sales per thing (−0.3 to 
 there). The things a lot can be near: `park`, `water`, `beach`, `school`, `station`, `hospital`, `church`,
 `tourism` (squares, the museum, the waterfront, the marina), `airport`, `harbour`, `industry` (docks, the
 runway), `avenue` (a lot on a busy avenue), `homes`, `offices`, `quiet` (no avenue, docks or station close by).
-`needs` names a thing its lot must have (the container port needs the harbour). Keep the likes true to life and
+`needs` names a thing its lot must have (the container port, the cruise terminal and the shipyard need the
+harbour, the international airport the airfield). Keep the likes true to life and
 different from business to business: the point is that a child learns to look for the right spot.
 
 ## Rivals (rivals.json)

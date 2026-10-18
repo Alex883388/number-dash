@@ -1,5 +1,6 @@
-// Builds Tycoon Town as one self-contained page: dist/tycoon-town.html (shared code, the city in src/city.js, the
-// rules in src/engine.js, the map in src/map.js and the content from content/*.json filled in), plus
+// Builds Tycoon Town as one self-contained page: dist/tycoon-town.html (shared code, the cities in src/city.js, the
+// rules in src/engine.js, the pictures in src/art-*.js, the map in src/map.js and the content from content/*.json
+// filled in), plus
 // dist/preview.html for local testing.
 // A business without written content yet is simply not offered. TYCOON_CONTENT=<folder> builds from other files.
 // The website (docs/ at the repository root) is assembled by the root build.js.
@@ -17,14 +18,14 @@ function build() {
   };
   const roster = read('roster.json');
   if (!roster) throw new Error('content/roster.json is missing');
-  const biz = [1, 2, 3, 4].map((t) => read('biz-' + t + '.json')).filter(Boolean);
+  const biz = [1, 2, 3, 4, 5].map((t) => read('biz-' + t + '.json')).filter(Boolean);
   const offers = read('offers.json'), rivals = read('rivals.json');
   const data = JSON.stringify({ roster: roster, biz: biz, offers: offers, rivals: rivals }).replace(/<\//g, '<\\/');
   const src = (f) => fs.readFileSync(path.join(__dirname, 'src', f), 'utf8');
   const out = inlineShared(src('tycoon.html'))
     .replace('/*__CITY__*/', () => src('city.js'))
     .replace('/*__ENGINE__*/', () => src('engine.js'))
-    .replace('/*__MAP__*/', () => src('map.js'))
+    .replace('/*__MAP__*/', () => ['art-kit.js', 'art-build.js', 'art-land.js', 'map.js'].map(src).join('\n'))
     .replace('/*__TYCOON__*/null', () => data);
   fs.mkdirSync(path.join(__dirname, 'dist'), { recursive: true });
   fs.writeFileSync(dist('tycoon-town.html'), out);

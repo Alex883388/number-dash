@@ -1,12 +1,12 @@
 <title>Tycoon Town</title>
-<meta name="description" content="Build a business empire one smart choice at a time: open shops in a living 2.5D city, pick good spots, buy land before it is gone, beat rivals, spot scams and grow from a lemonade stand to a skyscraper.">
+<meta name="description" content="Build a business empire one smart choice at a time: pick a city (by the sea, in the desert, on a neon strip or among cherry blossoms), open shops on a living 2.5D map, pick good spots, buy land before it is gone, beat rivals, insure against storms and earthquakes, spot scams and grow from a lemonade stand to an international airport.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap">
 <style>
 /*__SHARED:arcade-ui.css__*/
 /* Tycoon Town: a top bar (company, date and clock, cash, net worth, inbox, pause, speed, Next month), the living
-   city map on the left (drag, pinch, tap a lot) and a side panel on the right (Invest, Company, Bank, Goals, CEO,
+   city map (one of four cities) on the left (drag, pinch, tap a lot) and a side panel on the right (Invest, Company, Bank, Goals, CEO,
    or the lot that was tapped). On a portrait screen the map sits on top and the panel below it. Cases, offers,
    rivals, the month's report and every choice open in a dialog, which pauses the clock. */
 :root { --emoji: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; --good: #2a9f78; --bad: #d9534a; }
@@ -23,6 +23,18 @@ input, textarea { -webkit-user-select: text; user-select: text; font: inherit; c
 .logos { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
 .logos button { width: 58px; height: 58px; border-radius: 16px; border: 3px solid var(--line); background: var(--card-2); font: 1.9rem/1 var(--emoji); cursor: pointer; }
 .logos button[aria-pressed="true"] { border-color: var(--sun-deep); background: var(--sun); }
+.cities { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.cities button { display: grid; grid-template-columns: 44px 1fr; gap: 4px 10px; align-items: center; text-align: left; border: 3px solid var(--line); background: var(--card-2); border-radius: 16px; padding: 10px; cursor: pointer; color: var(--ink); font: inherit; }
+.cities button i { grid-row: 1 / 3; font: normal 2rem/1 var(--emoji); text-align: center; }
+.cities button b { font: 700 1.05rem/1.15 var(--font-display); }
+.cities button small { color: var(--ink-soft); font-size: .8rem; line-height: 1.3; }
+.cities button[aria-pressed="true"] { border-color: var(--sun-deep); background: #fff3cf; color: #3d2a00; }
+.cities button[aria-pressed="true"] small { color: #6b5a2a; }
+.ins { display: grid; grid-template-columns: 30px 1fr; gap: 6px 8px; align-items: center; background: #eaf2ff; color: #23345a; border-radius: 14px; padding: 10px 12px; font-size: .92rem; line-height: 1.35; }
+.ins > i { font: normal 1.4rem/1 var(--emoji); }
+.ins .btnrow { grid-column: 1 / -1; }
+.ins.on { background: #e4f6ec; color: #1d4a35; }
+.today { background: #fff3df; color: #4a3200; border-radius: 14px; padding: 8px 12px; font-weight: 700; font-size: .9rem; line-height: 1.35; }
 .name-in { width: 100%; box-sizing: border-box; font: 700 1.3rem/1.2 var(--font-display); padding: 12px 14px; border-radius: 14px; border: 2px solid var(--line); background: var(--card-2); text-align: center; }
 
 /* the game */
@@ -145,17 +157,18 @@ textarea.code { width: 100%; min-height: 110px; box-sizing: border-box; border-r
   .playfield { grid-template-columns: 1fr; grid-template-rows: minmax(0, 56%) minmax(0, 1fr); }
 }
 @media (max-width: 560px) {
+  .cities { grid-template-columns: 1fr; }
   .bar { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto auto auto; gap: 6px; }
   .bar .chips { grid-column: 1 / -1; order: 5; justify-content: space-between; flex-wrap: nowrap; }
   .chip2 { padding: 6px 8px; font-size: .86rem; }
   .bar .co b { font-size: 1rem; }
   .bar .iconbtn { width: 44px; height: 44px; }
-  #nextBtn { padding: .55em .7em; font-size: .95rem; }
+  #nextBtn { padding: .55em .7em; font-size: .95rem; min-height: 44px; }
   #nextBtn .lbl { display: none; }
   .playfield { grid-template-rows: minmax(0, 52%) minmax(0, 1fr); }
   .ptabs button { font-size: .66rem; }
   .barrow { grid-template-columns: 92px 1fr 30px; }
-  .dnav button { padding: 0 10px; min-height: 38px; }
+  .dnav button { padding: 0 10px; min-height: 40px; min-width: 42px; justify-content: center; }
   .dnav button span { display: none; }
   .mbanner { top: 54px; }
 }
@@ -165,14 +178,14 @@ textarea.code { width: 100%; min-height: 110px; box-sizing: border-box; border-r
   <section class="screen" id="s-home">
     <div class="card home">
       <h1 class="logo">Tycoon <span>Town</span></h1>
-      <p class="tag">Open shops in a living city, pick the best spots, beat your rivals, spot the scams, and grow your company from a lemonade stand to a skyscraper.</p>
+      <p class="tag">Pick a city, open shops on its living map, choose the best spots, beat your rivals, spot the scams, and grow your company from a lemonade stand to an international airport.</p>
       <div class="slots" id="slots"></div>
       <details class="others"><summary>💾 Back up or move your game</summary>
         <p class="note">Your game saves by itself on this device after every move. A save code or file keeps a copy you can load on another device, or after clearing the browser.</p>
         <div class="btnrow" id="backupBtns"></div>
       </details>
       <details class="others"><summary>❓ How to play</summary>
-        <p class="note">The whole city is one big map: drag to look around, pinch to zoom, tap a lot. Pick a business in <b>Invest</b> and choose where it goes: a business sells more in a good spot (a lemonade stand by the park, bubble tea near a school). Time runs by itself, a month a day: watch the money pop up over your businesses every hour. <b>⏸</b> pauses, <b>1× 2× 4×</b> changes the speed, <b>Next month</b> jumps to the evening. The city fills up as others buy land, and rivals open next to you. Each business brings <b>business cases</b>: decide what a smart CEO would do, and watch out for traps and scams! Grow your net worth to open High Street, Downtown, then Skyline &amp; Harbour.</p>
+        <p class="note">The whole city is one big map: drag to look around, pinch to zoom, tap a lot. Pick a business in <b>Invest</b> and choose where it goes: a business sells more in a good spot (a lemonade stand by the park, bubble tea near a school). Time runs by itself, a month a day: watch the money pop up over your businesses every hour. <b>⏸</b> pauses, <b>1× 2× 4×</b> changes the speed, <b>Next month</b> jumps to the evening. The city fills up as others buy land, and rivals open next to you. Each business brings <b>business cases</b>: decide what a smart CEO would do, and watch out for traps and scams! Grow your net worth to open the next district, all the way to the <b>Gateway</b> with its airport and port. The seasons change the city, and now and then something happens on the map: roadworks, a carnival parade, a storm, a flood, an earthquake. <b>Insurance</b> costs a little every month and pays most of the repairs.</p>
       </details>
       <div class="row">
         <button class="btn" id="musicBtn">Music on</button>
@@ -184,11 +197,13 @@ textarea.code { width: 100%; min-height: 110px; box-sizing: border-box; border-r
   <section class="screen" id="s-new" hidden>
     <div class="card">
       <h2 class="logo" style="font-size:2.2rem">Your new company</h2>
-      <p class="note">Every tycoon starts with $500 and a spot on Market Street. What is your company called?</p>
+      <p class="note">Every tycoon starts with $500 and a spot on the city's market street. What is your company called?</p>
       <input class="name-in" id="coName" maxlength="22" autocomplete="off" spellcheck="false" aria-label="Company name">
       <div class="row" id="nameIdeas"></div>
       <p class="seg-title">Choose a logo</p>
       <div class="logos" id="logos"></div>
+      <p class="seg-title">Choose your city</p>
+      <div class="cities" id="cities"></div>
       <div class="row"><button class="btn" id="newBack">Back</button><button class="btn sun big" id="newGo">Start</button></div>
     </div>
   </section>
@@ -269,7 +284,7 @@ let G = null, slot = 0, map = null;
 const view = { tab: 'invest', sel: null };          // sel: { d, i } = the lot tapped on the map
 function saveGame(real) {
   if (!G) return;
-  rec.slots[slot] = { name: G.name, logo: G.logo, month: G.month, nw: TY.netWorth(G), title: TY.title(G).name, savedAt: Date.now(), game: G };
+  rec.slots[slot] = { name: G.name, logo: G.logo, city: G.map, month: G.month, nw: TY.netWorth(G), title: TY.title(G).name, savedAt: Date.now(), game: G };
   rec.last = slot;
   if (real) writeSave(); else writeRecords();
 }
@@ -319,6 +334,8 @@ const HANDBOOK = {
   tax: ['Tax', 'Part of the profit paid to the city for roads, schools and parks (here 10%).'],
   reputation: ['Reputation', 'How much customers trust you. A good reputation brings more customers.'],
   insurance: ['Insurance', 'Pay a little regularly so that a disaster costs you much less.'],
+  premium: ['Premium', 'What insurance costs each month. It is higher where disasters happen more often.'],
+  excess: ['Excess', 'The part of a repair bill you still pay yourself, even when you are insured.'],
   loyalty: ['Loyal customers', 'People who come back again and again, even when money is tight or a rival opens.'],
   brand: ['Brand', 'What people think of when they hear your company\'s name.'],
   scam: ['Scam', 'A trick to take your money. If it sounds too good to be true, check it first!'],
@@ -338,21 +355,23 @@ function newWords() {   // words learned since the last report
 const likesIcons = (r) => Object.keys(r.likes || {}).filter((k) => r.likes[k] > 0).map((k) => FEAT[k][0]).join('');
 // how good a lot is for a business, in words
 function spotBox(id, d, i) {
-  const loc = TY.locOf(id, d, i), st = TY.locStars(loc.mult), r = TY.biz(id);
+  const loc = TY.locOf(G, id, d, i), st = TY.locStars(loc.mult), r = TY.biz(id), f = TY.featOf(G, d, i);
   const parts = loc.parts.map((p) => FEAT[p.f][0] + ' ' + FEAT[p.f][1] + ' <b>' + pct(p.v) + '</b>');
   return '<div class="spot' + (st <= 2 ? ' bad' : st === 3 ? ' meh' : '') + '"><span><b>This spot: </b><span class="st">' + starsTxt(st) + '</span> · sales ' + pct(loc.mult - 1) + '</span>' +
     (parts.length ? '<span>' + parts.join(' · ') + '</span>' : '<span>Nothing nearby that helps a ' + esc(r.name.toLowerCase()) + '. It likes ' + Object.keys(r.likes || {}).filter((k) => r.likes[k] > 0).map((k) => FEAT[k][1]).join(', ') + '.</span>') +
-    (TY.featOf(d, i).harbour >= 1 && !r.needs ? '<span>⚓ One of the few harbour lots: a container port can only be built on one of these.</span>' : '') + '</div>';
+    (f.harbour >= 1 && !r.needs ? '<span>⚓ One of the few harbour lots: ' + (d === 'gateway' ? 'the cruise terminal and the shipyard need one.' : 'a container port can only be built on one of these.') + '</span>' : '') +
+    (f.airport >= 1 && d === 'gateway' && !r.needs ? '<span>✈️ One of the few airport lots: the international airport needs one.</span>' : '') + '</div>';
 }
 
 /* ================= home: slots and backup ================= */
 const LOGOS = ['🦊', '🐯', '🐼', '🦄', '🚀', '⭐', '🐙', '🦁', '🐳', '🌈'];
 const LOGO_COL = { '🦊': '#f08a3c', '🐯': '#f2b632', '🐼': '#5e6b7d', '🦄': '#c58be0', '🚀': '#e05a5a', '⭐': '#f2c14e', '🐙': '#e86fa0', '🦁': '#e2a526', '🐳': '#4f9ad9', '🌈': '#6cc08f' };
 const NAMES = ['Super Co.', 'Rocket Ventures', 'Sunny Side Ltd', 'Big Ideas Inc.', 'Golden Owl Group', 'Tiny Titan Co.'];
-let newSlot = 0, newLogo = LOGOS[0];
+let newSlot = 0, newLogo = LOGOS[0], newCity = 'bay';
+const cityName = (id) => { const c = TY.CITIES.find((x) => x.id === id) || TY.CITIES[0]; return c.emoji + ' ' + c.name; };
 function renderHome() {
   $('#slots').innerHTML = rec.slots.map((x, i) => x
-    ? '<div class="slot"><span class="logo-i" aria-hidden="true">' + (x.logo || '🏢') + '</span><span><b>' + esc(x.name) + '</b><small>Month ' + (x.month + 1) + ' · worth ' + short(x.nw) + ' · ' + esc(x.title) + '</small></span>' +
+    ? '<div class="slot"><span class="logo-i" aria-hidden="true">' + (x.logo || '🏢') + '</span><span><b>' + esc(x.name) + '</b><small>' + cityName(x.city || (x.game && x.game.map) || 'bay') + ' · month ' + (x.month + 1) + ' · worth ' + short(x.nw) + ' · ' + esc(x.title) + '</small></span>' +
       '<span class="acts"><button class="btn sun mini" data-play="' + i + '">' + (i === rec.last ? 'Continue' : 'Play') + '</button><button class="btn mini" data-del="' + i + '" aria-label="Delete ' + esc(x.name) + '">🗑️</button></span></div>'
     : '<div class="slot empty"><span>Empty slot ' + (i + 1) + '</span><button class="btn mini" data-new="' + i + '">New company</button></div>').join('');
   $('#backupBtns').innerHTML = '<button class="btn mini" id="copyCode">📋 Copy a save code</button><button class="btn mini" id="pasteCode">📥 Load a save code</button>' +
@@ -366,9 +385,10 @@ function startNew(i) {
   $('#coName').value = '';
   $('#coName').placeholder = pick(NAMES);
   $('#nameIdeas').innerHTML = shuffle(NAMES.slice()).slice(0, 3).map((n) => '<button class="btn mini" data-name="' + esc(n) + '">' + esc(n) + '</button>').join('');
-  renderLogos();
+  renderLogos(); renderCities();
   showScreen('new');
 }
+function renderCities() { $('#cities').innerHTML = TY.CITIES.map((c) => '<button aria-pressed="' + (c.id === newCity) + '" data-city="' + c.id + '"><i aria-hidden="true">' + c.emoji + '</i><b>' + esc(c.name) + '</b><small>' + esc(c.blurb) + '</small></button>').join(''); }
 function renderLogos() { $('#logos').innerHTML = LOGOS.map((l) => '<button aria-pressed="' + (l === newLogo) + '" data-logo="' + l + '" aria-label="Logo ' + l + '">' + l + '</button>').join(''); }
 function play(i) {
   const x = rec.slots[i]; if (!x) return;
@@ -393,9 +413,9 @@ function enterGame() {
 }
 function welcome() {
   openDialog('<div class="who"><i>🦉</i>Coach Owl</div><h2>Welcome, CEO of ' + esc(G.name) + '!</h2>' +
-    '<p class="story">You have <b>$500</b> and the whole city in front of you. Start on <b>Market Street</b>: pick a business in <b>Invest</b>, then tap a lot with a <b>SALE</b> sign. Good spots bring more customers.</p>' +
+    '<p class="story">You have <b>$500</b> and the whole of ' + esc(TY.cityOf(G).name) + ' in front of you. Start on <b>' + esc(TY.dname(G, 'market')) + '</b>: pick a business in <b>Invest</b>, then tap a lot with a <b>SALE</b> sign. Good spots bring more customers.</p>' +
     '<div class="tip"><i>⏱️</i><span>The clock runs by itself: a month goes by like one day, and your money pops up every hour. ⏸ pauses, 1× 2× 4× changes the speed.</span></div>' +
-    '<div class="tip"><i>💡</i><span>Start with something cheap and steady, and keep a little cash for surprises.</span></div>' +
+    '<div class="tip"><i>💡</i><span>Start with something cheap and steady, and keep a little cash for surprises: storms, floods and roadworks happen!</span></div>' +
     '<div class="row"><button class="btn sun big" data-close>Let\'s go!</button></div>');
 }
 // a save code: TYCOON1. + base64 of the slot as JSON
@@ -406,7 +426,7 @@ function slotFrom(text) {
     let x;
     if (text.startsWith('TYCOON1.')) x = JSON.parse(decodeURIComponent(escape(atob(text.slice(8).replace(/\s+/g, '')))));
     else x = JSON.parse(text);
-    if (x && x.game) { const g = TY.restore(x.game); if (g) return { name: g.name, logo: g.logo || x.logo, month: g.month, nw: TY.netWorth(g), title: TY.title(g).name, savedAt: Date.now(), game: g }; }
+    if (x && x.game) { const g = TY.restore(x.game); if (g) return { name: g.name, logo: g.logo || x.logo, city: g.map, month: g.month, nw: TY.netWorth(g), title: TY.title(g).name, savedAt: Date.now(), game: g }; }
   } catch (e) { /* not a save */ }
   return null;
 }
@@ -473,16 +493,20 @@ function banner(icon, html, buttons, ms, hold) {
   announce(b.textContent);
 }
 function hideBanner() { clearTimeout(bannerTimer); $('#mbanner').hidden = true; clock.hold = false; }
+// the morning's notes wait their turn: one at a time, over the map, never under a dialog
+const bannerQ = [];
+function nextBanner() { if (bannerQ.length && $('#mbanner').hidden && $('#modal').hidden && !pickState) banner(...bannerQ.shift()); }
 
 /* ================= the clock: a month plays as one working day =================
    2 seconds an hour at 1x (a month in about half a minute), paused while a dialog is open, while a lot is being
    picked or a banner waits for an answer. Every hour each business's money pops up over it on the map. */
 const SEC_PER_HOUR = 2;
 const clock = { paused: false, speed: 1, hold: false, night: 0, hour: 0, got: {}, month: -1, seen: new Set(), sinceSave: 0, barT: 0 };
-function clockReset() { clock.hour = Math.floor(G.live ? G.live.h : 0); clock.got = Object.assign({}, G.live ? G.live.got : {}); clock.month = G.month; clock.night = 0; }
+function clockReset() { bannerQ.length = 0; clock.hour = Math.floor(G.live ? G.live.h : 0); clock.got = Object.assign({}, G.live ? G.live.got : {}); clock.month = G.month; clock.night = 0; clock.season = TY.season(G); if (G.live) G.live.fresh = []; }
 const ticking = () => G && !$('#game').hidden && $('#modal').hidden && !clock.paused && !clock.hold && !pickState && !document.hidden;
 function onFrame(dt) {
   if (!G || $('#game').hidden) return;
+  if (clock.night === 0) nextBanner();
   if (clock.night > 0) {
     if (ticking() || clock.night > 1.2) clock.night = Math.max(0, clock.night - dt * Math.max(1, clock.speed));
     const k = clock.night > 2.2 ? (3 - clock.night) / 0.8 : clock.night < 0.8 ? clock.night / 0.8 : 1;
@@ -493,6 +517,7 @@ function onFrame(dt) {
   if (ticking()) {
     const rep = TY.advance(G, dt * clock.speed / SEC_PER_HOUR);
     if (rep) { monthClosed(rep); return; }
+    if (G.live.fresh.length) incidentNow();
     hourPops();
     clock.sinceSave += dt;
     if (clock.sinceSave > 12) { clock.sinceSave = 0; saveGame(false); }
@@ -501,6 +526,21 @@ function onFrame(dt) {
   clock.barT += dt; if (clock.barT > 0.25) { clock.barT = 0; renderBar(); }
 }
 function popFor(uid, amount) { if (amount) map.pop(+uid, amount, (amount > 0 ? '+' : '') + short(amount)); }
+// something happens on the map: a banner, the bills over the businesses it hit
+const INC_SFX = { quake: 'wrong', flood: 'wrong', typhoon: 'wrong', storm: 'wrong', sandstorm: 'wrong', roadworks: 'click', carnival: 'win' };
+function incidentNow() {
+  const L = G.live, xs = L.fresh.map((k) => L.inc[k]).filter(Boolean); L.fresh = [];
+  xs.forEach((x) => {
+    const hits = G.biz.filter((b) => L.hit[b.uid] && L.hit[b.uid].inc === x.id);
+    hits.forEach((b) => { const h = L.hit[b.uid]; if (h.own) map.pop(b.uid, -h.own, '−' + short(h.own), h.icon === '🧹' ? '🧹' : '🔧'); });
+    const closed = hits.filter((b) => L.hit[b.uid].closed).length, paid = hits.reduce((t, b) => t + (L.hit[b.uid].bill - L.hit[b.uid].own), 0);
+    const tail = (closed ? ' ' + closed + ' of your businesses ' + (closed > 1 ? 'are' : 'is') + ' closed for the day.' : '') + (paid ? ' Insurance paid ' + money(paid) + ' of the repairs.' : '');
+    const sfx = Sound.sfx[INC_SFX[x.id]]; if (sfx) sfx();
+    banner(x.emoji, '<b>' + esc(x.title) + '</b> ' + esc(x.text) + tail, [{ id: 'ok', label: 'OK' }, { id: 'see', label: '📍 Show me', sun: true, go: () => map.focusIncident(x) }], 9000, false);
+    learnUI(x.id === 'roadworks' || x.id === 'carnival' ? 'location' : 'insurance');
+  });
+  render();
+}
 function hourPops() {
   const L = G.live, h = Math.floor(L.h);
   if (clock.month !== G.month) { clock.month = G.month; clock.hour = 0; clock.got = {}; }
@@ -519,21 +559,34 @@ function monthClosed(rep) {
   summary(rep);
   if (rep.goals.length || rep.unlocked || rep.forced || rep.expired.length || rep.rivalsNew.length || rep.rivalsGone.length) setTimeout(() => showReport(rep), 500);
 }
-// morning: the month's news, then anything new to decide
+// morning: a warning for today, the month's news, then anything new to decide
+const SEASON_NEWS = { spring: ['🌸', 'Spring is here!', 'The trees blossom and the city wakes up.'], summer: ['☀️', 'Summer!', 'Long sunny days: outdoor fun and cold drinks sell.'],
+  autumn: ['🍂', 'Autumn', 'The leaves turn red and gold, and the school year starts.'], winter: ['❄️', 'Winter', 'Cold days, and in some cities snow on every roof.'] };
 function dawn() {
   const fresh = G.inbox.filter((x) => !clock.seen.has(x.key));
   G.inbox.forEach((x) => clock.seen.add(x.key));
-  const ev = G.live.rep.events;
+  const ev = G.live.rep.events, warn = G.live.inc.find((x) => x.dawn && !x.on), season = TY.season(G), newSeason = season !== clock.season;
+  clock.season = season;
   if (fresh.length) {
     const x = fresh[0], c = TY.caseOf(G, x), b = x.uid && G.biz.find((y) => y.uid === x.uid), r = b && TY.biz(b.id);
     const what = x.kind === 'rival' ? 'A rival opened next to your ' + esc(r.name) + '!' : x.kind === 'offer' ? '✉️ ' + esc(c.from) + ': ' + esc(c.title) : esc(r.name) + ' has a business case: ' + esc(c.title);
-    banner(x.kind === 'rival' ? '🥊' : '📨', what + (fresh.length > 1 ? ' (and ' + (fresh.length - 1) + ' more)' : ''), [{ id: 'later', label: 'Later' }, { id: 'go', label: 'Read it', sun: true, go: () => openCase(x.key) }], 0, true);
-  } else if (ev.length) {
-    banner('📰', '<b>' + esc(ev[0].title) + '</b> ' + esc(ev[0].text), [], 6000, false);
-  } else {
-    const soon = G.inbox.find((x) => x.due - G.month <= 1);
-    if (soon) banner('⏰', 'Decide soon! Something in your inbox runs out at the end of this month.', [{ id: 'go', label: 'Open', sun: true, go: openInbox }], 6000, false);
+    bannerQ.push([x.kind === 'rival' ? '🥊' : '📨', what + (fresh.length > 1 ? ' (and ' + (fresh.length - 1) + ' more)' : ''), [{ id: 'later', label: 'Later' }, { id: 'go', label: 'Read it', sun: true, go: () => openCase(x.key) }], 0, true]);
   }
+  if (warn) {
+    const open = G.biz.filter((b) => !TY.insured(b)).length, ins = TY.INC[warn.id].warn && open ? ' ' + open + ' of your businesses ' + (open > 1 ? 'have' : 'has') + ' no insurance.' : '';
+    bannerQ.push([warn.emoji, '<b>' + esc(warn.title) + '</b> ' + esc(warn.dawn) + esc(ins), [{ id: 'ok', label: 'OK' }, { id: 'see', label: '📍 Show me', sun: true, go: () => map.focusIncident(warn) }], 9000, false]);
+  }
+  if (ev.length) {
+    bannerQ.push(['📰', '<b>' + esc(ev[0].title) + '</b> ' + esc(ev[0].text), [], 6000, false]);
+  } else if (newSeason) {
+    const n = SEASON_NEWS[season], snowy = TY.cityOf(G).climate === 'snowy';
+    bannerQ.push([n[0], '<b>' + n[1] + '</b> ' + (season === 'winter' ? (snowy ? 'Snow falls on ' + esc(TY.cityOf(G).name) + ': hot drinks sell, outdoor stalls are quiet.' : 'Cool, sunny days in ' + esc(TY.cityOf(G).name) + '.') : n[2]), [], 5000, false]);
+  }
+  if (!bannerQ.length) {
+    const soon = G.inbox.find((x) => x.due - G.month <= 1);
+    if (soon) bannerQ.push(['⏰', 'Decide soon! Something in your inbox runs out at the end of this month.', [{ id: 'go', label: 'Open', sun: true, go: openInbox }], 6000, false]);
+  }
+  nextBanner();
   renderBar();
 }
 function nextMonth() {   // jump to the evening: the rest of today's money comes in at once
@@ -568,7 +621,7 @@ function renderBar() {
   if (!G) return;
   const ck = TY.clock(G), night = clock.night > 0, h = night ? 21 : ck.hour, ic = night ? '🌙' : h < 9 ? '🌅' : h < 17 ? '☀️' : h < 19 ? '🌇' : '🌆';
   $('#coLogo').textContent = G.logo || '🏢'; $('#coNameTxt').textContent = G.name;
-  $('#dateChip').textContent = ic + ' ' + String(h).padStart(2, '0') + ':' + (night ? '00' : String(Math.floor(ck.minute / 15) * 15).padStart(2, '0')) + ' · ' + TY.MONTHS[TY.calMonth(G)].slice(0, 3) + ' yr ' + TY.year(G);
+  $('#dateChip').textContent = ic + ' ' + String(h).padStart(2, '0') + ':' + (night ? '00' : String(Math.floor(ck.minute / 15) * 15).padStart(2, '0')) + ' · ' + TY.MONTHS[TY.calMonth(G)].slice(0, 3) + ' yr ' + TY.year(G) + ' ' + SEASON_NEWS[TY.season(G)][0];
   $('#cashChip').textContent = short(G.cash); $('#cashChip').style.color = G.cash < 0 ? 'var(--bad)' : '';
   $('#worthChip').textContent = short(TY.netWorth(G));
   const n = G.inbox.length; $('#inboxBadge').hidden = !n; $('#inboxBadge').textContent = n;
@@ -576,13 +629,16 @@ function renderBar() {
   $('#speedBtn').textContent = clock.speed + '×'; $('#speedBtn').setAttribute('aria-label', 'Speed: ' + ({ 1: 'normal', 2: 'fast', 4: 'very fast' }[clock.speed]));
 }
 function renderNav() {
-  $('#dnav').innerHTML = TY.DISTRICTS.map((d) => '<button data-d="' + d.id + '" class="' + (TY.unlocked(G, d) ? '' : 'locked') + '" aria-label="' + esc(d.name) + (TY.unlocked(G, d) ? '' : ', locked') + '"><i aria-hidden="true">' + (TY.unlocked(G, d) ? d.emoji : '🔒') + '</i><span>' + esc(d.name.replace(' & Harbour', '')) + '</span></button>').join('');
+  $('#dnav').innerHTML = TY.DISTRICTS.map((d) => { const nm = TY.dname(G, d.id); return '<button data-d="' + d.id + '" class="' + (TY.unlocked(G, d) ? '' : 'locked') + '" aria-label="' + esc(nm) + (TY.unlocked(G, d) ? '' : ', locked') + '"><i aria-hidden="true">' + (TY.unlocked(G, d) ? TY.demoji(G, d.id) : '🔒') + '</i><span>' + esc(nm.replace(' & Harbour', '')) + '</span></button>'; }).join('');
 }
 
 /* ---------- the panel ---------- */
 function coachTip() {
   if (!G.biz.length) return 'Pick a business below, then choose its spot on the map. The stars show how many customers a spot brings.';
   if (G.cash < 0) return 'Your cash is below zero! The bank charges extra. Sell something or borrow before it grows.';
+  const warn = G.live && G.live.inc.find((x) => TY.INC[x.id].warn && !x.done);
+  if (warn) return warn.on ? warn.title + ' Your businesses by the water are hit hardest. Insured ones only pay a small part of the repairs.' : warn.dawn;
+  if (G.month >= 4 && G.biz.length >= 2 && !G.biz.some((b) => TY.insured(b)) && G.month % 3 === 0) return TY.danger(G) > 2 ? 'Earthquakes and typhoons are common in ' + TY.cityOf(G).name + '. Insurance costs more here, but one disaster can cost far more.' : 'None of your businesses is insured. A storm or a flood could bring a big repair bill. Tap a business to see what insurance costs.';
   if (G.inbox.some((x) => x.kind === 'rival')) return 'A rival is taking your customers! Open the 📨 inbox and decide how to win them back.';
   if (G.inbox.some((x) => x.kind === 'case')) return 'A business case is waiting (📨). Problems grow if you ignore them for three months.';
   if (G.inbox.length) return 'An offer is waiting (📨). Is it a real chance, or a trap? Check before you decide.';
@@ -590,10 +646,10 @@ function coachTip() {
   if (G.biz.length >= 3 && inds.size === 1) { learnUI('diversify'); return 'All your businesses are the same kind. If that kind has a bad month, everything does. Try a different industry.'; }
   if (G.loan > 0 && G.cash > G.loan * 1.2) return 'You could pay back your loan and stop paying interest.';
   const d = TY.districtOfTier(G.tier).id, left = TY.forSale(G, d).length;
-  if (left <= 6) return 'Only ' + left + ' lots left for sale in ' + TY.district(d).name + '! Land gets dearer as the city fills up. Buying a lot early keeps it for you.';
+  if (left <= 6) return 'Only ' + left + ' lots left for sale in ' + TY.dname(G, d) + '! Land gets dearer as the city fills up. Buying a lot early keeps it for you.';
   const nw = TY.netWorth(G), risky = G.biz.filter((b) => b.band >= 3).reduce((t, b) => t + TY.bizValue(G, b), 0);
   if (risky > nw * 0.6 && G.biz.length >= 2) return 'Most of your money is in high-risk businesses. One bad month could hurt a lot.';
-  const cheapest = TY.available().filter((r) => r.tier <= G.tier && !G.biz.some((b) => b.id === r.id)).map((r) => r.price).sort((a, b) => a - b)[0];
+  const cheapest = TY.available(G).filter((r) => r.tier <= G.tier && !G.biz.some((b) => b.id === r.id)).map((r) => r.price).sort((a, b) => a - b)[0];
   if (cheapest && G.cash > cheapest * 2.5) return 'You have plenty of cash sitting still. Money that is invested can grow, but keep some for surprises.';
   const t = ['A good CEO checks the numbers every month: which business earns most for what it cost?', 'Happy customers come back. Reputation is worth money.',
     'Location, location, location: the same shop earns more in the right spot.', 'Big risks can bring big rewards, or big losses. Spread your money around.',
@@ -615,7 +671,7 @@ function renderPanel() {
 function riskTag(r) { return '<span class="tagr">' + RISK_I[r.risk] + ' ' + RISK[r.risk] + '</span>'; }
 function bizCard(r, lot) {
   const owned = G.biz.some((b) => b.id === r.id), d = TY.districtOfTier(r.tier), open = TY.unlocked(G, d), pb = payback(r);
-  const st = lot ? TY.locStars(TY.locOf(r.id, lot.d, lot.i).mult) : 0;
+  const st = lot ? TY.locStars(TY.locOf(G, r.id, lot.d, lot.i).mult) : 0;
   return '<button class="bcard' + (owned ? ' own' : '') + (open ? '' : ' dim') + '" data-biz="' + r.id + '"' + (lot ? ' data-lot="' + lot.d + ':' + lot.i + '"' : '') + '><span class="e" aria-hidden="true">' + r.emoji + '</span><span><b>' + esc(r.name) + (owned ? ' ✓' : '') + '</b>' +
     '<small>Earns about ' + money(TY.midOf(r)) + ' a month' + (pb ? ' · pays back in ~' + pb + ' months' : '') + '</small>' + riskTag(r) + '<span class="tagr">' + IND[r.industry][0] + ' ' + IND[r.industry][1] + '</span><span class="tagr likes" title="Likes">📍' + likesIcons(r) + '</span></span>' +
     '<span class="price">' + short(r.price) + (lot ? '<br><small aria-label="' + st + ' stars here">' + '★'.repeat(st) + '</small>' : '') + '</span></button>';
@@ -623,14 +679,14 @@ function bizCard(r, lot) {
 function nextDistrict() {   // how far the company is from opening the next district
   const d = TY.DISTRICTS.find((x) => x.tier === G.tier + 1); if (!d) return '';
   const nw = Math.max(0, TY.netWorth(G)), p = Math.min(100, Math.round(nw / d.unlock * 100));
-  return '<div class="nextd"><span>🔓 Next: ' + d.emoji + ' ' + esc(d.name) + ' opens at a net worth of ' + money(d.unlock) + '</span><span class="track"><i style="width:' + p + '%"></i></span><span class="note">You: ' + money(nw) + ' (' + p + '%)</span></div>';
+  return '<div class="nextd"><span>🔓 Next: ' + TY.demoji(G, d.id) + ' ' + esc(TY.dname(G, d.id)) + ' opens at a net worth of ' + money(d.unlock) + '</span><span class="track"><i style="width:' + p + '%"></i></span><span class="note">You: ' + money(nw) + ' (' + p + '%)</span></div>';
 }
 function investPanel() {
   let h = '<h3>Invest</h3>' + nextDistrict() + '<p class="note">Tap a business to read about it. 📍 shows what it likes nearby. You have <b>' + money(G.cash) + '</b> in cash.</p>';
   TY.DISTRICTS.forEach((d) => {
-    const list = TY.available().filter((r) => r.tier === d.tier);
+    const list = TY.available(G).filter((r) => r.tier === d.tier);
     if (!list.length) return;
-    h += '<h4>' + d.emoji + ' ' + esc(d.name) + (TY.unlocked(G, d) ? ' · ' + TY.forSale(G, d.id).length + ' lots for sale' : ' · 🔒 at ' + short(d.unlock)) + '</h4>';
+    h += '<h4>' + TY.demoji(G, d.id) + ' ' + esc(TY.dname(G, d.id)) + (TY.unlocked(G, d) ? ' · ' + TY.forSale(G, d.id).length + ' lots for sale' : ' · 🔒 at ' + short(d.unlock)) + '</h4>';
     h += list.map((r) => bizCard(r)).join('');
   });
   return h;
@@ -645,9 +701,14 @@ function companyPanel() {
     h += '<h4>Industries (' + inds.size + ')</h4><div>' + [...inds].map((i) => '<span class="tagr">' + IND[i][0] + ' ' + IND[i][1] + '</span>').join('') + '</div>';
     h += '<h4>Your businesses</h4>' + G.biz.map((b) => {
       const r = TY.biz(b.id), last2 = b.hist.length ? b.hist[b.hist.length - 1] : 0, rv = G.rivals.find((x) => x.uid === b.uid);
-      return '<button class="bcard own" data-goto="' + b.uid + '"><span class="e" aria-hidden="true">' + r.emoji + '</span><span><b>' + esc(r.name) + (rv ? ' 🥊' : '') + '</b><small>' + '★'.repeat(TY.quality(b)) + ' quality · spot ' + '★'.repeat(TY.locStars(b.loc || 1)) + ' · last month ' + signed(last2) + '</small></span><span class="price">' + short(TY.bizValue(G, b)) + '</span></button>';
+      return '<button class="bcard own" data-goto="' + b.uid + '"><span class="e" aria-hidden="true">' + r.emoji + '</span><span><b>' + esc(r.name) + (rv ? ' 🥊' : '') + (TY.insured(b) ? ' 🛡️' : '') + '</b><small>' + '★'.repeat(TY.quality(b)) + ' quality · spot ' + '★'.repeat(TY.locStars(b.loc || 1)) + ' · last month ' + signed(last2) + '</small></span><span class="price">' + short(TY.bizValue(G, b)) + '</span></button>';
     }).join('');
   } else h += '<p class="note">No businesses yet. Open one from Invest.</p>';
+  if (G.biz.length) {
+    const open = G.biz.filter((b) => !TY.insured(b)), mine = G.biz.filter((b) => b.ins), all = open.reduce((t, b) => t + TY.premium(G, b), 0), pay = mine.reduce((t, b) => t + TY.premium(G, b), 0), why = TY.warned(G);
+    h += '<h4>🛡️ Insurance</h4><div class="ins' + (open.length ? '' : ' on') + '"><i>🛡️</i><span>' + (G.biz.length - open.length) + ' of ' + G.biz.length + ' businesses insured' + (pay ? ' · ' + money(pay) + ' a month' : '') + '. Insurance pays 80% of repairs after storms, floods and earthquakes.</span>' +
+      (open.length ? '<div class="btnrow">' + (why ? '<span class="note">No insurer sells a new policy with ' + esc(why) + ' on the way.</span>' : '<button class="btn mini" id="insureAll">Insure all ' + open.length + ' for ' + money(all) + ' a month</button>') + '</div>' : '') + '</div>';
+  }
   h += '<div class="btnrow"><button class="btn mini" id="lastReport"' + (G.report ? '' : ' disabled') + '>📊 Last month\'s report</button><button class="btn mini" id="homeBtn2">🏠 Save and exit</button></div>';
   return h;
 }
@@ -669,7 +730,7 @@ function goalsPanel() {
   const nxt = TY.nextGoals(G, 3);
   return '<h3>🎯 Goals</h3><p class="note">Each goal you reach brings a prize from the city\'s investors.</p>' +
     (nxt.length ? '<h4>Next up</h4>' + nxt.map((g) => '<div class="goal"><i>⭐</i><span>' + esc(g.text) + '</span></div>').join('') : '') +
-    '<h4>All goals</h4>' + TY.GOALS.map((g) => '<div class="goal' + (G.goals[g.id] ? ' done' : '') + '"><i>' + (G.goals[g.id] ? '✅' : '⬜') + '</i><span>' + esc(g.text) + (G.goals[g.id] ? ' · month ' + G.goals[g.id] : '') + '</span></div>').join('');
+    '<h4>All goals</h4>' + TY.GOALS.map((g) => '<div class="goal' + (G.goals[g.id] ? ' done' : '') + '"><i>' + (G.goals[g.id] ? '✅' : '⬜') + '</i><span>' + esc(TY.goalText(G, g)) + (G.goals[g.id] ? ' · month ' + G.goals[g.id] : '') + '</span></div>').join('');
 }
 function ceoPanel() {
   const t = TY.title(G), st = G.stats, sk = TY.SKILLS, max = Math.max(6, ...Object.keys(sk).map((k) => st.skills[k] || 0));
@@ -679,9 +740,24 @@ function ceoPanel() {
     '<h4>CEO skills</h4><div class="bars">' + Object.keys(sk).map((k) => { const v = Math.max(0, st.skills[k] || 0); return '<div class="barrow"><span>' + sk[k] + '</span><span class="track"><i style="width:' + Math.round(v / max * 100) + '%"></i></span><span>' + v + '</span></div>'; }).join('') + '</div>' +
     '<h4>CEO words you have learned (' + words.length + ')</h4>' + (words.length ? words.map((k) => '<div class="word"><b>' + HANDBOOK[k][0] + ':</b> ' + esc(HANDBOOK[k][1]) + '</div>').join('') : '<p class="note">Play a few months to learn the words CEOs use.</p>');
 }
+// how a business's day is going (roadworks outside, closed after a flood, a carnival crowd)
+function todayBox(b) {
+  const t = TY.todayOf(G, b); if (!t.notes.length && !t.hit) return '';
+  const words = t.notes.slice(); if (t.hit && t.hit.bill && !words.length) words.push('repairs today');
+  return '<div class="today">' + (t.k === 0 ? '🚫 Closed today: ' : t.k > 1 ? '🎉 Busy today: ' : '⚠️ Today: ') + esc(words.join(', ')) + (t.k > 0 && t.k !== 1 ? ' (' + (t.k > 1 ? '+' : '−') + Math.round(Math.abs(t.k - 1) * 100) + '% customers)' : '') +
+    (t.hit && t.hit.bill ? ' · repairs ' + money(t.hit.bill) + (t.hit.bill > t.hit.own ? ', insurance paid ' + money(t.hit.bill - t.hit.own) : '') : '') + '</div>';
+}
+// insurance for one business
+function insBox(b) {
+  const p = TY.premium(G, b), why = TY.canInsure(G, b), danger = TY.danger(G) > 2, wet = (TY.featOf(G, ...b.plot.split(':').map((v, j) => (j ? +v : v))).water || 0) >= 0.5;
+  if (b.ins) return '<div class="ins on"><i>🛡️</i><span><b>Insured</b> · ' + money(p) + ' a month. Storms, floods and earthquakes: insurance pays 80% of the repairs; you pay the rest (the excess).</span><div class="btnrow"><button class="btn mini" data-uninsure="' + b.uid + '">Stop the insurance</button></div></div>';
+  if (TY.insured(b)) return '<div class="ins on"><i>🛡️</i><span><b>Insured</b> by a plan from a business case: half of every bad month is paid, and 80% of repairs.</span></div>';
+  return '<div class="ins"><i>🛡️</i><span><b>Insurance: ' + money(p) + ' a month.</b> It pays 80% of the repairs after a storm, a flood or an earthquake.' + (wet ? ' This spot is by the water, so it costs a bit more.' : '') + (danger ? ' Disasters are common in ' + esc(TY.cityOf(G).name) + '.' : '') + '</span>' +
+    '<div class="btnrow">' + (why ? '<span class="note">' + esc(why) + '</span>' : '<button class="btn mini sun" data-insure="' + b.uid + '">🛡️ Insure it</button>') + '</div></div>';
+}
 // the lot tapped on the map
 function lotPanel() {
-  const { d, i } = view.sel, dist = TY.district(d), st = TY.lotState(G, d, i), lv = TY.landValue(G, d, i), open = TY.unlocked(G, d), f = TY.featOf(d, i);
+  const { d, i } = view.sel, dist = TY.district(d), dn = TY.dname(G, d), st = TY.lotState(G, d, i), lv = TY.landValue(G, d, i), open = TY.unlocked(G, d), f = TY.featOf(G, d, i);
   const near = Object.keys(f).filter((k) => f[k] >= 1 && FEAT[k] && !['homes', 'offices'].includes(k)).map((k) => FEAT[k][0] + ' ' + FEAT[k][1]);
   let h = '<div class="btnrow"><button class="btn mini" id="backTabs">← Back</button></div>';
   if (st.k === 'biz') {
@@ -690,12 +766,13 @@ function lotPanel() {
     h += '<h3>' + r.emoji + ' ' + esc(r.name) + '</h3><div class="note">' + '★'.repeat(TY.quality(b)) + '☆'.repeat(5 - TY.quality(b)) + ' quality · ' + RISK_I[b.band] + ' ' + RISK[b.band] + ' · ' + IND[r.industry][0] + ' ' + IND[r.industry][1] + '</div>' +
       (b.flags.length ? '<div>' + b.flags.map((fl) => '<span class="tagr">' + FLAGS[fl] + '</span>').join('') + '</div>' : '') +
       (waiting ? '<button class="btn sun" data-case="' + waiting.key + '">' + (waiting.kind === 'rival' ? '🥊 A rival is here: decide what to do' : '📨 A case is waiting: decide now') + '</button>' : '') +
-      spotBox(b.id, d, i) +
+      todayBox(b) + spotBox(b.id, d, i) +
       (rv.length ? '<div class="warnbox">🥊 ' + rv.map((x) => esc(x.name)).join(', ') + ' opened ' + esc(rv[0].where) + ' and takes about ' + Math.round(cut * 100) + '% of your customers.</div>' : '') +
       '<div class="kv"><span>Today so far</span><span id="todayAmt">' + signed(G.live.got[b.uid] || 0) + '</span><span>Last month</span><span>' + signed(b.hist.length ? b.hist[b.hist.length - 1] : 0) + '</span><span>Average month</span><span>' + signed(avg) + '</span><span>Expected now</span><span>' + signed(TY.preview(G, b) - rent) + '</span>' +
       '<span>Reputation</span><span>' + (b.rep > 0 ? '+' : '') + b.rep + '</span><span>Paid</span><span>' + money(b.paid) + '</span><span>Worth now</span><span>' + money(TY.bizValue(G, b)) + '</span>' +
       '<span>' + (rent ? 'Rent for the lot' : 'The land') + '</span><span>' + (rent ? money(rent) + ' a month' : 'yours') + '</span></div>' +
       (c.pitch ? '<details class="others"><summary>About this business</summary><div class="kv" style="grid-template-columns:1fr"><span>' + esc(c.pitch) + '</span><span style="text-align:left;font-weight:600">💰 ' + esc(c.earns) + '</span><span style="text-align:left;font-weight:600">🧾 ' + esc(c.costs) + '</span><span style="text-align:left;font-weight:600">⚠️ ' + esc(c.risks) + '</span><span style="text-align:left;font-weight:600">💡 ' + esc(c.tip) + '</span></div></details>' : '') +
+      insBox(b) +
       '<div class="btnrow">' + (rent && r.kind !== 'property' ? '<button class="btn mini" id="buyUnder">Buy the land under it: ' + short(lv) + '</button>' : '') + '<button class="btn mini" id="sellBiz">Sell for ' + short(TY.sellPrice(G, b)) + '</button></div>';
   } else if (st.k === 'rival') {
     const x = st.rival, r = TY.biz(x.bid), mine = G.biz.find((b) => b.uid === x.uid), waiting = G.inbox.find((y) => y.rid === x.id);
@@ -705,16 +782,16 @@ function lotPanel() {
       '<div class="tip"><i>💡</i><span>Rivals lose when your customers are happy and loyal: better quality, a loyalty card, great service. Lies and price wars backfire.</span></div>';
   } else if (st.k === 'npc' || st.k === 'build') {
     h += '<h3>' + (st.k === 'build' ? '🏗️ Being built' : '🏠 Neighbours') + '</h3><p class="note">' + (st.k === 'build' ? 'Someone bought this lot and is building on it.' : 'Someone else\'s home or business. Not for sale.') + ' Busy neighbours make the land around them worth more.</p>' +
-      '<div class="kv"><span>Land value here</span><span>' + money(lv) + '</span><span>Lots for sale in ' + esc(dist.name) + '</span><span>' + TY.forSale(G, d).length + '</span></div>' + (near.length ? '<p class="note">Nearby: ' + near.join(' · ') + '</p>' : '');
+      '<div class="kv"><span>Land value here</span><span>' + money(lv) + '</span><span>Lots for sale in ' + esc(dn) + '</span><span>' + TY.forSale(G, d).length + '</span></div>' + (near.length ? '<p class="note">Nearby: ' + near.join(' · ') + '</p>' : '');
   } else {
     const mine = st.k === 'land';
-    h += '<h3>' + (mine ? '🚩 Your land' : '🪧 A lot for sale') + '</h3>' + (!open ? '<div class="warnbox">🔒 ' + esc(dist.name) + ' opens when your company is worth ' + money(dist.unlock) + '.</div>' : '') +
-      '<div class="kv"><span>Land value</span><span>' + money(lv) + '</span>' + (mine ? '' : '<span>Rent if you open here</span><span>' + money(TY.rentOf(G, d, i)) + ' a month</span>') + '<span>Lots still for sale</span><span>' + TY.forSale(G, d).length + ' of ' + TY.lotsOf(d).length + '</span></div>' +
+    h += '<h3>' + (mine ? '🚩 Your land' : '🪧 A lot for sale') + '</h3>' + (!open ? '<div class="warnbox">🔒 ' + esc(dn) + ' opens when your company is worth ' + money(dist.unlock) + '.</div>' : '') +
+      '<div class="kv"><span>Land value</span><span>' + money(lv) + '</span>' + (mine ? '' : '<span>Rent if you open here</span><span>' + money(TY.rentOf(G, d, i)) + ' a month</span>') + '<span>Lots still for sale</span><span>' + TY.forSale(G, d).length + ' of ' + TY.lotsOf(G, d).length + '</span></div>' +
       (near.length ? '<p class="note">Nearby: ' + near.join(' · ') + '</p>' : '<p class="note">A quiet spot with nothing special nearby.</p>') +
       '<p class="note">' + (mine ? 'You own this land: no rent to pay. Its value rises as the city fills up.' : 'Buy it to keep it for later (others are buying lots too), or rent it when you open a business here.') + '</p>' +
       (open ? '<div class="btnrow">' + (mine ? '<button class="btn mini" id="sellLand">Sell the land: ' + short(Math.round(lv * 0.95)) + '</button>' : '<button class="btn mini" id="buyLand">Buy the land: ' + short(lv) + '</button>') + '</div>' : '');
     if (open) {
-      const list = TY.available().filter((r) => r.tier === dist.tier).sort((a, b) => TY.locOf(b.id, d, i).mult - TY.locOf(a.id, d, i).mult);
+      const list = TY.available(G).filter((r) => r.tier === dist.tier).sort((a, b) => TY.locOf(G, b.id, d, i).mult - TY.locOf(G, a.id, d, i).mult);
       h += '<h4>Open a business here (★ = how good this spot is for it)</h4>' + list.map((r) => bizCard(r, { d: d, i: i })).join('');
     }
   }
@@ -727,7 +804,7 @@ function aboutBiz(id, lot) {
   learnUI('payback');
   const likes = Object.keys(r.likes || {}).filter((k) => r.likes[k] > 0).map((k) => FEAT[k][0] + ' ' + FEAT[k][1]).join(' · ');
   const dislikes = Object.keys(r.likes || {}).filter((k) => r.likes[k] < 0).map((k) => FEAT[k][0] + ' ' + FEAT[k][1]).join(' · ');
-  openDialog('<div class="who"><i>' + r.emoji + '</i>' + esc(d.name) + '</div><h2>' + esc(r.name) + '</h2><p class="story">' + esc(c.pitch) + '</p>' +
+  openDialog('<div class="who"><i>' + r.emoji + '</i>' + esc(TY.dname(G, d.id)) + '</div><h2>' + esc(r.name) + '</h2><p class="story">' + esc(c.pitch) + '</p>' +
     '<div class="kv"><span>Costs to open</span><span>' + money(r.price) + '</span><span>Usual month</span><span>' + money(r.profit[0]) + ' to ' + money(r.profit[1]) + '</span>' +
     '<span>Pays back in about</span><span>' + (pb ? pb + ' months' : 'uncertain') + '</span><span>Risk</span><span>' + RISK_I[r.risk] + ' ' + RISK[r.risk] + '</span><span>Industry</span><span>' + IND[r.industry][0] + ' ' + IND[r.industry][1] + '</span></div>' +
     '<div class="word">📍 <b>Best spots:</b> ' + likes + (dislikes ? '. <b>Not:</b> ' + dislikes : '') + (r.needs ? '. <b>Must be ' + esc(FEAT[r.needs][1]) + '.</b>' : '') + '</div>' +
@@ -739,17 +816,18 @@ function aboutBiz(id, lot) {
 let pickState = null;
 function startPick(id) {
   const r = TY.biz(id), d = TY.districtOfTier(r.tier);
-  if (!TY.unlocked(G, d)) { toast(d.name + ' is still locked', 'hello'); return; }
-  const lots = TY.freeLots(G, d.id).filter((i) => !r.needs || (TY.featOf(d.id, i)[r.needs] || 0) >= 1);
-  if (!lots.length) { closeModal(); toast('No lot for sale in ' + d.name + ' right now. Wait for one, or sell a business there.', 'hello', 3500); return; }
-  const stars = {}; lots.forEach((i) => { stars[i] = TY.locStars(TY.locOf(id, d.id, i).mult); });
+  if (!TY.unlocked(G, d)) { toast(TY.dname(G, d.id) + ' is still locked', 'hello'); return; }
+  if (TY.missing(G, id)) { toast(TY.missing(G, id), 'hello', 3500); return; }
+  const lots = TY.freeLots(G, d.id).filter((i) => !r.needs || (TY.featOf(G, d.id, i)[r.needs] || 0) >= 1);
+  if (!lots.length) { closeModal(); toast('No lot for sale in ' + TY.dname(G, d.id) + (r.needs ? ' ' + FEAT[r.needs][1] : '') + ' right now. Wait for one, or sell a business there.', 'hello', 3500); return; }
+  const stars = {}; lots.forEach((i) => { stars[i] = TY.locStars(TY.locOf(G, id, d.id, i).mult); });
   closeModal(); view.sel = null; renderPanel();
   pickState = { id: id, d: d.id, lots: lots, stars: stars };
   map.select(null); map.pick({ d: d.id, lots: lots, stars: stars });
   const best = bestLot(id, d.id, lots); map.focus(d.id, best, 0.85);
   banner(r.emoji, '<b>Where will your ' + esc(r.name) + ' go?</b> Tap a glowing lot. More ★ = more customers.', [{ id: 'cancel', label: 'Cancel', go: endPick }, { id: 'best', label: '⭐ Best spot', sun: true, go: () => { const i = bestLot(id, d.id, lots); pickState = null; map.pick(null); openWizard(id, d.id, i); } }], 0, true);
 }
-function bestLot(id, d, lots) { return lots.slice().sort((a, b) => (TY.locOf(id, d, b).mult - TY.locOf(id, d, a).mult) || ((G.land[TY.lotKey(d, b)] ? 1 : 0) - (G.land[TY.lotKey(d, a)] ? 1 : 0)) || (TY.landValue(G, d, a) - TY.landValue(G, d, b)))[0]; }
+function bestLot(id, d, lots) { return lots.slice().sort((a, b) => (TY.locOf(G, id, d, b).mult - TY.locOf(G, id, d, a).mult) || ((G.land[TY.lotKey(d, b)] ? 1 : 0) - (G.land[TY.lotKey(d, a)] ? 1 : 0)) || (TY.landValue(G, d, a) - TY.landValue(G, d, b)))[0]; }
 function endPick() { if (pickState) { pickState = null; if (map) map.pick(null); } if (!$('#mbanner').hidden) hideBanner(); }
 function openWizard(id, d, i) {
   endPick();
@@ -757,7 +835,7 @@ function openWizard(id, d, i) {
   let buy = false;
   const draw = () => {
     const own = !!G.land[TY.lotKey(d, i)], lv = TY.landValue(G, d, i), prop = r.kind === 'property', cost = TY.openCost(G, id, d, i, buy && !own), why = TY.canOpen(G, id, d, i, buy && !own);
-    openDialog('<div class="who"><i>' + r.emoji + '</i>Open a ' + esc(r.name) + '</div><h2>' + esc(TY.district(d).name) + ', this spot</h2>' + spotBox(id, d, i) +
+    openDialog('<div class="who"><i>' + r.emoji + '</i>Open a ' + esc(r.name) + '</div><h2>' + esc(TY.dname(G, d)) + ', this spot</h2>' + spotBox(id, d, i) +
       (prop ? '<p class="note">A ' + esc(r.name.toLowerCase()) + ' comes with its land: no rent, and its value grows with the city.</p>'
         : own ? '<p class="note">🚩 You own this land: no rent to pay!</p>'
         : '<div class="choice2"><button class="btn' + (buy ? '' : ' sun') + '" id="optRent">🏷️ Rent the lot: ' + money(TY.rentOf(G, d, i)) + ' a month</button><button class="btn' + (buy ? ' sun' : '') + '" id="optBuy">🚩 Buy the land too: +' + money(lv) + ' (no rent, can grow in value)</button></div>') +
@@ -793,7 +871,7 @@ function mapTap(hit) {
   }
   if (hit.kind === 'lot') {
     Sound.sfx.click(); view.sel = { d: hit.d, i: hit.i }; map.select(hit.d, hit.i); renderPanel(); $('#pbody').scrollTop = 0;
-    if (!TY.unlocked(G, hit.d) && hit.st.k !== 'free') toast('🔒 ' + TY.district(hit.d).name + ' opens at ' + short(TY.district(hit.d).unlock), 'hello');
+    if (!TY.unlocked(G, hit.d) && hit.st.k !== 'free') toast('🔒 ' + TY.dname(G, hit.d) + ' opens at ' + short(TY.district(hit.d).unlock), 'hello');
     return;
   }
   if (view.sel) { view.sel = null; map.select(null); renderPanel(); }
@@ -864,6 +942,7 @@ function decide(item, c, picks, r) {
 /* ================= the month's report ================= */
 function showReport(rep) {
   let h = '<div class="who"><i>📊</i>Monthly report</div><h2>' + esc(rep.month) + '</h2>';
+  (rep.inc || []).forEach((e) => { h += '<div class="news">' + e.emoji + ' <b>' + esc(e.title) + '</b> ' + esc(e.text) + '</div>'; });
   rep.events.forEach((e) => { h += '<div class="news">📰 <b>' + esc(e.title) + '</b> ' + esc(e.text) + '</div>'; });
   if (rep.unlocked) h += '<div class="cheer">🎉 ' + esc(rep.unlocked) + ' is open! Bigger businesses are waiting there.</div>';
   rep.goals.forEach((g) => { h += '<div class="cheer">🏆 Goal reached: ' + esc(g.text) + (g.reward ? ' · prize ' + money(g.reward) : '') + '</div>'; });
@@ -872,7 +951,8 @@ function showReport(rep) {
   if (rep.lines.length) {
     h += rep.lines.map((l) => '<div class="rep-line"><i>' + l.emoji + '</i><span>' + esc(l.name) + (l.note || l.rent ? '<small>' + esc([l.note, l.rent ? 'rent ' + money(l.rent) : ''].filter(Boolean).join(' · ')) + '</small>' : '') + '</span><span class="amt ' + (l.profit >= 0 ? 'up' : 'down') + '">' + signed(l.profit) + '</span></div>').join('');
   } else h += '<p class="note">No businesses yet, so no profit. Open one from Invest!</p>';
-  rep.extra.forEach((x) => { h += '<div class="rep-line"><i>⚠️</i><span>' + esc(x.text) + '</span><span class="amt down">' + signed(x.amount) + '</span></div>'; });
+  rep.extra.forEach((x) => { h += '<div class="rep-line"><i>' + (x.icon || '⚠️') + '</i><span>' + esc(x.text) + '</span><span class="amt down">' + signed(x.amount) + '</span></div>'; });
+  if (rep.premiums) h += '<div class="rep-line"><i>🛡️</i><span>Insurance for ' + rep.policies + ' business' + (rep.policies > 1 ? 'es' : '') + '<small>paid at the start of the month</small></span><span class="amt down">' + signed(-rep.premiums) + '</span></div>';
   if (rep.tax) h += '<div class="rep-line"><i>🏛️</i><span>City tax (10% of profit)</span><span class="amt down">' + signed(-rep.tax) + '</span></div>';
   if (rep.interest) h += '<div class="rep-line"><i>🏦</i><span>Interest to the bank</span><span class="amt down">' + signed(-rep.interest) + '</span></div>';
   h += '<div class="rep-line"><i>💵</i><span><b>Cash this month</b></span><span class="amt ' + (rep.net >= 0 ? 'up' : 'down') + '">' + signed(rep.net) + '</span></div>' +
@@ -907,10 +987,11 @@ document.addEventListener('click', (e) => {
   if (t.closest('#loadFile')) { $('#fileIn').click(); return; }
   const nm = t.closest('[data-name]'); if (nm) { $('#coName').value = nm.dataset.name; return; }
   const lg = t.closest('[data-logo]'); if (lg) { newLogo = lg.dataset.logo; renderLogos(); return; }
+  const ct = t.closest('[data-city]'); if (ct) { newCity = ct.dataset.city; Sound.sfx.click(); renderCities(); return; }
   if (t.closest('#newBack')) { showScreen('home'); return; }
   if (t.closest('#newGo')) {
     const name = ($('#coName').value.trim() || $('#coName').placeholder || 'Super Co.').slice(0, 22);
-    G = TY.newGame(name, (Date.now() ^ Math.floor(Math.random() * 1e9)) >>> 0); G.logo = newLogo; slot = newSlot;
+    G = TY.newGame(name, (Date.now() ^ Math.floor(Math.random() * 1e9)) >>> 0, newCity); G.logo = newLogo; slot = newSlot;
     saveGame(false); enterGame(); return;
   }
   if ($('#game').hidden || !G) return;
@@ -932,7 +1013,7 @@ document.addEventListener('click', (e) => {
     };
     return;
   }
-  const dn = t.closest('#dnav [data-d]'); if (dn) { const d = TY.district(dn.dataset.d); map.focus(d.id, null, 0.75); Sound.sfx.click(); if (!TY.unlocked(G, d)) toast('🔒 ' + d.name + ' opens at a net worth of ' + short(d.unlock), 'hello'); return; }
+  const dn = t.closest('#dnav [data-d]'); if (dn) { const d = TY.district(dn.dataset.d); map.focus(d.id, null, 0.75); Sound.sfx.click(); if (!TY.unlocked(G, d)) toast('🔒 ' + TY.dname(G, d.id) + ' opens at a net worth of ' + short(d.unlock), 'hello'); return; }
   const tab = t.closest('#ptabs [data-tab]'); if (tab) { view.tab = tab.dataset.tab; view.sel = null; map.select(null); renderPanel(); $('#pbody').scrollTop = 0; return; }
   if (t.closest('#backTabs')) { view.sel = null; map.select(null); renderPanel(); return; }
   const bc = t.closest('[data-biz]');
@@ -961,6 +1042,15 @@ document.addEventListener('click', (e) => {
       '<div class="row"><button class="btn" data-close>Keep it</button><button class="btn sun" id="reallySell">Sell</button></div>');
     $('#reallySell').onclick = () => { const res = TY.sell(G, b.uid); closeModal(); if (res.ok) { Sound.sfx.right(); toast('Sold for ' + short(res.price), 'good'); view.sel = null; map.select(null); saveGame(false); render(); } };
     return;
+  }
+  const ins = t.closest('[data-insure]');
+  if (ins) { const res = TY.insure(G, +ins.dataset.insure, true); if (!res.ok) { toast(res.why, 'oops', 3500); return; } Sound.sfx.right(); toast('🛡️ Insured: ' + money(res.premium) + ' a month', 'good'); saveGame(false); render(); return; }
+  const un = t.closest('[data-uninsure]');
+  if (un) { TY.insure(G, +un.dataset.uninsure, false); Sound.sfx.click(); toast('Insurance stopped', 'hello'); saveGame(false); render(); return; }
+  if (t.closest('#insureAll')) {
+    let n = 0, why = ''; G.biz.filter((b) => !TY.insured(b)).forEach((b) => { const res = TY.insure(G, b.uid, true); if (res.ok) n++; else why = why || res.why; });
+    if (n) { Sound.sfx.right(); toast('🛡️ ' + n + ' business' + (n > 1 ? 'es' : '') + ' insured', 'good'); } else toast(why || 'Nothing to insure', 'oops', 3500);
+    saveGame(false); render(); return;
   }
   if (t.closest('#lastReport') && G.report) { showReport(G.report); return; }
   if (t.closest('#homeBtn2')) { saveGame(false); goHome(); return; }

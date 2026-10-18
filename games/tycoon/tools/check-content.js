@@ -42,7 +42,7 @@ const ids = new Map();
 roster.businesses.forEach((b) => {
   if (ids.has(b.id)) err('roster', 'duplicate id ' + b.id);
   ids.set(b.id, b);
-  if (!(b.price > 0) || !Array.isArray(b.profit) || b.profit[0] > b.profit[1] || ![1, 2, 3, 4].includes(b.risk) || ![1, 2, 3, 4].includes(b.tier)) err('roster ' + b.id, 'bad numbers');
+  if (!(b.price > 0) || !Array.isArray(b.profit) || b.profit[0] > b.profit[1] || ![1, 2, 3, 4].includes(b.risk) || ![1, 2, 3, 4, 5].includes(b.tier)) err('roster ' + b.id, 'bad numbers');
   if (!INDUSTRIES.includes(b.industry)) err('roster ' + b.id, 'unknown industry ' + b.industry);
   if (!b.likes || typeof b.likes !== 'object' || !Object.keys(b.likes).length) err('roster ' + b.id, 'needs likes (what nearby helps it)');
   else for (const k in b.likes) { if (!FEATURES.includes(k)) err('roster ' + b.id, 'unknown like ' + k); if (!(b.likes[k] >= -0.3 && b.likes[k] <= 0.4)) err('roster ' + b.id, 'like ' + k + ' must be -0.3 to 0.4'); }
@@ -51,7 +51,7 @@ roster.businesses.forEach((b) => {
 
 // businesses
 const seen = new Map();
-for (let t = 1; t <= 4; t++) {
+for (let t = 1; t <= 5; t++) {
   const f = 'biz-' + t + '.json', data = read(f);
   if (!data) continue;
   if (!Array.isArray(data.businesses)) { err(f, 'needs { "businesses": [ … ] }'); continue; }
@@ -126,7 +126,7 @@ if (offers) {
     const w = 'offers ' + (o.id || i);
     if (!o.id || oids.has(o.id)) err(w, 'missing or duplicate id'); oids.add(o.id);
     len(w, 'title', o.title, 40, 4); len(w, 'story', o.story, 300, 40); len(w, 'from', o.from, 60, 4);
-    if (![1, 2, 3, 4].includes(o.minTier)) err(w, 'minTier 1-4');
+    if (![1, 2, 3, 4, 5].includes(o.minTier)) err(w, 'minTier 1-5');
     if (!Array.isArray(o.options) || o.options.length !== 4) { err(w, 'needs 4 options'); return; }
     const g = o.options.map((x) => x.grade);
     if (g.filter((x) => x === 'best').length !== 1) err(w, 'exactly one best');

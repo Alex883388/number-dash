@@ -12,7 +12,7 @@ module.exports = [
   { touchEl: '[data-biz="bakery"]' }, { sleep: 300 }, { touchEl: '#openIt' }, { sleep: 1200 },
   { log: `[${T}.picking.d, ${T}.picking.lots.length > 3]` },
   { touchEl: '#mbanner [data-b="best"]' }, { sleep: 400 },
-  { log: `[document.querySelector('#dialog .spot .st').textContent, ${T}.TY.locStars(${T}.TY.locOf('bakery', ${T}.G.inbox.length ? 'high' : 'high', 0).mult) >= 1]` },
+  { log: `[document.querySelector('#dialog .spot .st').textContent, ${T}.TY.locStars(${T}.TY.locOf(${T}.G, 'bakery', 'high', 0).mult) >= 1]` },
   { touchEl: '#optBuy' }, { sleep: 200 },
   { log: "[document.getElementById('optBuy').classList.contains('sun'), document.getElementById('doOpen').textContent]" },
   { shot: 'ty-20-buy-land' },
