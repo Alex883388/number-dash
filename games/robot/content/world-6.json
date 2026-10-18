@@ -1,0 +1,145 @@
+{
+  "world": 6,
+  "levels": [
+    {
+      "id": "6-1", "name": "Muddled corner", "mode": "order",
+      "sol": "F F R F F",
+      "start": "F F F F R",
+      "map": ["~~~~~", "~>.*~", "~~~.~", "~~~G~", "~~~~~"],
+      "hint": "Run it and watch. On which square should the robot turn?"
+    },
+    {
+      "id": "6-2", "name": "Topsy-turvy turns", "mode": "order",
+      "sol": "F L F F R F F",
+      "start": "F R F F L F F",
+      "map": ["~~~~~~", "~~*.G~", "~~.~~~", "~>*~~~", "~~~~~~"],
+      "hint": "Watch the first corner. Which way should the robot turn there?"
+    },
+    {
+      "id": "6-3", "name": "Turn first", "mode": "order",
+      "sol": "R F L F R F L F",
+      "start": "F R F L F R F L",
+      "map": ["~~~~~", "~>~~~", "~.*~~", "~~.G~", "~~~~~"],
+      "hint": "Which way is the robot facing? Should it step first, or turn first?"
+    },
+    {
+      "id": "6-4", "name": "Short then long", "mode": "order",
+      "sol": "r2(F) R r5(F)",
+      "start": "r5(F) R r2(F)",
+      "map": ["~~~~~", "~>.*~", "~~~.~", "~~~.~", "~~~*~", "~~~.~", "~~~G~", "~~~~~"],
+      "hint": "Count the squares in each straight line. Which Repeat goes first?"
+    },
+    {
+      "id": "6-5", "name": "Loop the stairs", "mode": "order",
+      "sol": "r4(F R F L)",
+      "start": "r4(F) R F L",
+      "map": [">.~~~", "~*.~~", "~~*.~", "~~~*.", "~~~~G"],
+      "hint": "Only Forward repeats now. Which other blocks make one whole stair?"
+    },
+    {
+      "id": "6-6", "name": "Climb, then stroll", "mode": "order",
+      "sol": "r3(F L F R) F F",
+      "start": "r3(F L F R F F)",
+      "map": ["~~~*.G", "~~*.~~", "~*.~~~", ">.~~~~"],
+      "hint": "The stairs repeat three times. Does the walk at the top repeat too?"
+    },
+    {
+      "id": "6-7", "name": "Long strides", "mode": "order",
+      "sol": "r2(F F R F F L)",
+      "start": "r2(F R F F L F)",
+      "map": [">.*~~", "~~.~~", "~~*.*", "~~~~.", "~~~~G"],
+      "hint": "Look at one big stride. How far along before the robot turns down?"
+    },
+    {
+      "id": "6-8", "name": "Twos and threes", "mode": "order",
+      "sol": "r2(F F) L r3(F) R F",
+      "start": "r2(F) L r3(F F) R F",
+      "map": ["~~~~.G", "~~~~.~", "~~~~.~", ">...*~"],
+      "hint": "Two times what makes the first line? Three times what makes the next?"
+    },
+    {
+      "id": "6-9", "name": "Turns in between", "mode": "order",
+      "sol": "r3(F) R r4(F) L F",
+      "start": "r3(F R) r4(F L) F",
+      "map": [">..*~", "~~~.~", "~~~.~", "~~~.~", "~~~*G"],
+      "hint": "A turn inside a Repeat happens every time. Should these turns repeat?"
+    },
+    {
+      "id": "6-10", "name": "Up, along, down", "mode": "order",
+      "sol": "r3(F L F R) r2(F) R r3(F)",
+      "start": "r2(F) R r3(F) r3(F L F R)",
+      "map": ["~~~..*", "~~*.~.", "~*.~~.", ">.~~~G"],
+      "hint": "All the parts are right, but in a muddle. Which part comes first?"
+    },
+    {
+      "id": "6-11", "name": "Horseshoe", "mode": "order",
+      "sol": "r3(R r2(F))",
+      "start": "r2(R r3(F))",
+      "map": ["~~~~~", "~^.*~", "~~~.~", "~G.*~", "~~~~~"],
+      "hint": "One Repeat sits inside the other. Which number belongs outside?"
+    },
+    {
+      "id": "6-12", "name": "Mountain steps", "mode": "order",
+      "sol": "r3(r2(F) L r2(F) R)",
+      "start": "r3(r2(F L) r2(F R))",
+      "map": ["~~~~~~G", "~~~~~~.", "~~~~..*", "~~~~.~~", "~~..*~~", "~~.~~~~", ">.*~~~~"],
+      "hint": "Each big step is two lines and two turns. Should a turn repeat?"
+    },
+    {
+      "id": "6-13", "name": "Tooth by tooth", "mode": "order",
+      "sol": "r3(r2(L F F L) F F)",
+      "start": "r3(F F r2(L F F L))",
+      "map": ["*~*~*~~", ".~.~.~~", ">.....G"],
+      "hint": "The first tooth is right above the robot. Climb first, or walk first?"
+    },
+    {
+      "id": "6-14", "name": "Fishing hook", "mode": "order",
+      "sol": "r2(r4(F) R) r2(r2(F) R)",
+      "start": "r2(r2(F) R) r2(r4(F) R)",
+      "map": [">...*", "~~~~.", "~~G~.", "~~.~.", "~~*.*"],
+      "hint": "Follow the hook from the robot. Long sides first, or short sides?"
+    },
+    {
+      "id": "6-15", "name": "Nosy robot", "mode": "order",
+      "sol": "r3(F F L F R R F L) R r3(F)",
+      "start": "r3(F F L F F R R L) R r3(F)",
+      "map": ["~~*~*~*", ">......", "~~~~~~.", "~~~~~~.", "~~~~~~G"],
+      "hint": "Peek into a nook, then out again. When does the robot turn round?"
+    },
+    {
+      "id": "6-16", "name": "Whirlpool", "mode": "order",
+      "sol": "r3(r6(F) R) r2(r4(F) R) r2(r2(F) R)",
+      "start": "r2(r6(F) R) r3(r4(F) R) r2(r2(F) R)",
+      "map": [">.....*", "~~~~~~.", "*...*~.", ".~~~.~.", ".~G..~.", ".~~~~~.", "*.....*"],
+      "hint": "Count the sides: how many long ones, middle ones and short ones?"
+    },
+    {
+      "id": "6-17", "name": "F1 in a muddle", "mode": "order",
+      "sol": "f f f|F F R F L",
+      "start": "f f f|F F L F R",
+      "map": [">.*~~~~", "~~..*~~", "~~~~..*", "~~~~~~G"],
+      "hint": "F1 runs the blocks in its own row. Fix that row and every F1 works!"
+    },
+    {
+      "id": "6-18", "name": "Duck pond", "mode": "order",
+      "sol": "r2(f R) f|r2(F) R r3(F) L",
+      "start": "r2(f) R f|r3(F) R r2(F) L",
+      "map": ["~~~>.*", "~~~~~.", "G~~~~.", ".~~~~.", ".~~~~.", "*....*"],
+      "hint": "Each F1 goes round one corner of the pond. How far along, how far down?"
+    },
+    {
+      "id": "6-19", "name": "Winding stairs", "mode": "order",
+      "sol": "f R F f R f|r2(F R F L)",
+      "start": "f F R f R f|r2(F L F R)",
+      "map": ["~~>.~", "~~~*.", "~~~~.", "G~~~.", "..~..", "~..*~"],
+      "hint": "Fix F1's stairs first. Between flights: turn first, or step first?"
+    },
+    {
+      "id": "6-20", "name": "Castle arches", "mode": "order",
+      "sol": "r2(f F F)|L F F R F F R F F L",
+      "start": "r2(F F f)|L F F R F F L F F R",
+      "map": ["*.*~*.*", ".~.~.~.", ">~...~G"],
+      "hint": "F1 climbs one arch. Check its turns, then climb first or walk first?"
+    }
+  ]
+}

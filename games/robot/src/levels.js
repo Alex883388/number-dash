@@ -1,146 +1,31 @@
-/* games/robot/src/levels.js — Code Robot's worlds and its 40 levels (8 per world). Inlined into robot.html by build.js;
-   games/robot/tools/check.js and playtest/levels.js prove every level with the game's own interpreter (src/engine.js).
-   A level: map (rows of squares: . floor, # wall, ~ water, * gem, G flag, ^ > v < the robot facing that way), pal (the
-   blocks on offer: F forward, L turn left, R turn right, r Repeat, f F1, i If path ahead, g If gem here, u Repeat until
-   flag), max (the most blocks), par (the blocks in the reference solution, for 3 stars), hint, sol (the reference
-   solution in the text form of engine.js; '|' starts F1's own blocks), alt (other good solutions), and for Debugging:
-   start (the program with the bug the level opens with) and fix (changes from start to sol). */
-const ROBOT_WORLDS = [
-  { id: 1, name: 'Sequences', icon: '👣', intro: 'A program is a list of steps. The robot does them in order, one by one.' },
-  { id: 2, name: 'Loops', icon: '🔁', intro: 'Repeat does the blocks inside it again and again, so you need far fewer blocks.' },
-  { id: 3, name: 'Functions', icon: '🧩', intro: 'F1 is your own block. Build it once in the F1 row, then use it as often as you like.' },
-  { id: 4, name: 'Conditions', icon: '🤔', intro: 'If lets the robot look before it moves, so one short program can find its own way.' },
-  { id: 5, name: 'Debugging', icon: '🐞', intro: 'These programs have bugs. Run them, spot what goes wrong and fix them with few changes.' }
-];
-const ROBOT_LEVELS = [
-  /* ---- 1 Sequences: forward and turns, one block per step ---- */
-  { id: '1-1', name: 'First steps', pal: 'FLR', max: 7, par: 3, sol: 'F F F',
-    map: ['~~~~~~', '~>..G~', '~~~~~~'],
-    hint: 'Tap Forward three times, then press Run.' },
-  { id: '1-2', name: 'Shiny gem', pal: 'FLR', max: 8, par: 4, sol: 'F F F F',
-    map: ['~~~~~~~', '~>.*.G~', '~~~~~~~'],
-    hint: 'Walk over the gem to pick it up, then on to the flag.' },
-  { id: '1-3', name: 'Round the corner', pal: 'FLR', max: 9, par: 5, sol: 'F F R F F',
-    map: ['~~~~~', '~>..~', '~~~.~', '~~~G~', '~~~~~'],
-    hint: 'Turn right turns the robot on the spot. It does not move.' },
-  { id: '1-4', name: 'Left this time', pal: 'FLR', max: 10, par: 6, sol: 'F F F L F F',
-    map: ['~~~~~~', '~~~~G~', '~~~~.~', '~>.*.~', '~~~~~~'],
-    hint: 'Pick up the gem, then turn left to face the flag.' },
-  { id: '1-5', name: 'Zigzag', pal: 'FLR', max: 13, par: 9, sol: 'F R F L F R F L F',
-    map: ['~~~~~~', '~>.~~~', '~~.*~~', '~~~.G~', '~~~~~~'],
-    hint: 'Right, left, right, left: one square at a time.' },
-  { id: '1-6', name: 'Turn around', pal: 'FLR', max: 13, par: 9, sol: 'F F R R F F F F F', alt: ['F F L L F F F F F'],
-    map: ['~~~~~~~~', '~*.<..G~', '~~~~~~~~'],
-    hint: 'Get the gem first. Two turns make the robot face the other way.' },
-  { id: '1-7', name: 'Round the pond', pal: 'FLR', max: 16, par: 12, sol: 'F F F F R F F R F F F F',
-    map: ['#######', '#>...*#', '#~~~~.#', '#G....#', '#######'],
-    hint: 'Go all the way round the water. Robots cannot swim!' },
-  { id: '1-8', name: 'Long walk', pal: 'FLR', max: 17, par: 13, sol: 'F F F R F F R F F F L F F',
-    map: ['######', '#>.*.#', '####.#', '#.*..#', '#.####', '#G####'],
-    hint: 'A long walk with two gems. Plan it one square at a time.' },
-
-  /* ---- 2 Loops: the block limit leaves too few blocks for a plain list ---- */
-  { id: '2-1', name: 'Repeat!', pal: 'FLRr', max: 3, par: 2, sol: 'r7(F)',
-    map: ['~~~~~~~~', '>.*..*.G', '~~~~~~~~'],
-    hint: 'Put Forward inside Repeat, then tap the number until it says 7.' },
-  { id: '2-2', name: 'Two lines', pal: 'FLRr', max: 6, par: 5, sol: 'r3(F) R r4(F)',
-    map: ['~~~~~~', '>...~~', '~~~.~~', '~~~*~~', '~~~.~~', '~~~G~~'],
-    hint: 'Use a Repeat for each straight line, with a turn between.' },
-  { id: '2-3', name: 'Staircase', pal: 'FLRr', max: 6, par: 5, sol: 'r5(F R F L)',
-    map: ['>.####', '#..###', '##*.##', '###..#', '####.*', '#####G'],
-    hint: 'One step, turn, one step, turn. Put that pattern in a Repeat.' },
-  { id: '2-4', name: 'Three lines', pal: 'FLRr', max: 9, par: 8, sol: 'r2(F) R r3(F) L r5(F)', alt: ['F F R r3(F) L r5(F)'],
-    map: ['>..~~~~~', '~~.~~~~~', '~~*~~~~~', '~~...*.G'],
-    hint: 'Count each straight line. A Repeat for each one saves blocks.' },
-  { id: '2-5', name: 'Big steps', pal: 'FLRr', max: 7, par: 6, sol: 'r3(F F L F R)',
-    map: ['~~~~~~G', '~~~~..*', '~~..*~~', '>..~~~~'],
-    hint: 'Two steps, turn left, one step, turn right. Then again!' },
-  { id: '2-6', name: 'Loop in a loop', pal: 'FLRr', max: 6, par: 4, sol: 'r4(r3(F) R)', alt: ['r4(F F F R)'],
-    map: ['######', '#>..*#', '#G~~.#', '#.~~.#', '#*..*#', '######'],
-    hint: 'A Repeat can go inside another Repeat. Try one for each side.' },
-  { id: '2-7', name: 'Rectangle', pal: 'FLRr', max: 8, par: 7, sol: 'r2(r5(F) R r3(F) R)',
-    map: ['########', '#>....*#', '#G~~~~.#', '#.~~~~.#', '#*....*#', '########'],
-    hint: 'A long side, a turn, a short side, a turn. Do that twice.' },
-  { id: '2-8', name: 'Comb', pal: 'FLRr', max: 11, par: 9, sol: 'r4(r2(L F F F L) F F)', alt: ['r4(L r3(F) R R r3(F) L r2(F))'],
-    map: ['*#*#*#G', '.#.#.#.', '.#*#.#.', '>..*...'],
-    hint: 'Turn left, go up, turn left: twice takes you up and back down.' },
-
-  /* ---- 3 Functions: F1 is a pattern built once and used again ---- */
-  { id: '3-1', name: 'Meet F1', pal: 'FLRf', max: 9, par: 8, sol: 'f R f L f|F F F',
-    map: ['>..*~~~', '~~~.~~~', '~~~.~~~', '~~~..*G'],
-    hint: 'Build three Forwards in the F1 row. Then use F1 in your program.' },
-  { id: '3-2', name: 'F1 stairs', pal: 'FLRf', max: 9, par: 8, sol: 'f f f f|F R F L',
-    map: ['~~~.G', '~~.*~', '~..~~', '.*~~~', '^~~~~'],
-    hint: 'Put one stair in F1: Forward, turn right, Forward, turn left.' },
-  { id: '3-3', name: 'Gem trips', pal: 'FLRf', max: 12, par: 11, sol: 'f f f|F L F R R F L F', alt: ['f f f|F L F L L F L F'],
-    map: ['~*~*~*~', '>.....G', '~~~~~~~'],
-    hint: 'One trip to a gem and back goes in F1. Use it three times.' },
-  { id: '3-4', name: 'Plus sign', pal: 'FLRf', max: 13, par: 11, sol: 'f f R f f|F F L L F F', alt: ['f f f F F|F F R R F F L'],
-    map: ['~~*~~', '~~.~~', 'G.^.*', '~~.~~', '~~*~~'],
-    hint: 'In F1, go to the end of an arm and back. Which way is it facing then?' },
-  { id: '3-5', name: 'Stairs and a step', pal: 'FLRf', max: 11, par: 10, sol: 'f f F f f f|F L F R',
-    map: ['~~~~~~G', '~~~~~*.', '~~~~..~', '~~.*.~~', '~..~~~~', '>.~~~~~'],
-    hint: 'One stair goes in F1. Use it, step along, then use it again.' },
-  { id: '3-6', name: 'Turning stairs', pal: 'FLRf', max: 13, par: 12, sol: 'f f f R f f f f|F R F L',
-    map: ['~>.~~', '~~..~', '~~~*.', '~~~~.', '~~~..', '~~.*~', '~..~~', 'G.~~~'],
-    hint: 'F1 works whichever way the robot faces. Turn, then use it again.' },
-  { id: '3-7', name: 'Gem alleys', pal: 'FLRf', max: 13, par: 12, sol: 'f f F f|F R F L L F R F', alt: ['f f F f|F R F R R F R F'],
-    map: ['~~~~~~~~', '>......G', '#*#*##*#'],
-    hint: 'The alleys are not evenly spaced. An extra Forward fills the gap.' },
-  { id: '3-8', name: 'Two gardens', pal: 'FLRrf', max: 11, par: 11, sol: 'f r4(F) f R r3(F)|r4(F F R)',
-    map: ['>.....*', '.~.#.~.', '*.*#..*', '~~~~G~~'],
-    hint: 'Walking round a garden is the same each time. A Repeat fits in F1!' },
-
-  /* ---- 4 Conditions: the robot checks before it moves ---- */
-  { id: '4-1', name: 'Until the flag', pal: 'FLRu', max: 3, par: 2, sol: 'u(F)',
-    map: ['~~~~~~~~', '>.*..*.G', '~~~~~~~~'],
-    hint: 'Repeat until flag keeps going until the robot is on the flag.' },
-  { id: '4-2', name: 'Clear ahead?', pal: 'FLRiu', max: 5, par: 4, sol: 'u(i(F)(R))',
-    map: ['>....', '~~~~.', '~~~~*', '~~~~.', '~~~~G'],
-    hint: 'If the way ahead is clear, go Forward. If not, turn right.' },
-  { id: '4-3', name: 'Snail shell', pal: 'FLRiu', max: 5, par: 4, sol: 'u(i(F)(R))',
-    map: ['>..*...', '######.', '.....#.', '.###.#.', '*#G..#*', '.#####.', '...*...'],
-    hint: 'The same four blocks can follow the whole spiral. Let If decide!' },
-  { id: '4-4', name: 'Gem signs', pal: 'FLRigu', max: 5, par: 4, sol: 'u(F g(R))',
-    map: ['>....*', '..~~..', '.*.G..', '...~..', '.*...*'],
-    hint: 'Keep walking. Each time the robot finds a gem, it turns right.' },
-  { id: '4-5', name: 'Walls and gems', pal: 'FLRigu', max: 7, par: 6, sol: 'u(i(F)(L) g(R))',
-    map: ['>..*.~~', '~~~.~~~', '~~~.~~~', '~~~..*.', '~~~#~.~', '~~~~~G~'],
-    hint: 'A wall ahead means turn left. A gem means turn right.' },
-  { id: '4-6', name: 'Left or right?', pal: 'FLRiu', max: 8, par: 7, sol: 'u(i(F)(L i()(R R)))', alt: ['u(i(F)(L i()(L L)))'],
-    map: ['########', '###.*..#', '###.##.#', '>*..##.#', '######*#', '######.G', '########'],
-    hint: 'At a corner try left. If left is blocked too, turn round to face right.' },
-  { id: '4-7', name: 'Rocky road', pal: 'FLRiu', max: 12, par: 11, sol: 'u(i(F)(L F R F F R F L))',
-    map: ['~.*.#.*.', '>.#.*.#G', '~~~~~~~~'],
-    hint: 'When a rock is in the way, step up, go past it and come back down.' },
-  { id: '4-8', name: 'Long maze', pal: 'FLRiu', max: 8, par: 7, sol: 'u(i(F)(L i()(R R)))', alt: ['u(i(F)(R i()(L L)))'],
-    map: ['>.*..###', '####.###', '####...#', '######.#', '##.*...#', '##.#####', '##..*G##'],
-    hint: 'A big maze, but the program from Left or right? still works.' },
-
-  /* ---- 5 Debugging: each level opens with a program that has a bug ---- */
-  { id: '5-1', name: 'Wrong turn', pal: 'FLR', max: 8, par: 6, sol: 'F F F R F F', start: 'F F F L F F', fix: 1,
-    map: ['~>.*.~', '~~~~.~', '~~~~G~'],
-    hint: 'The robot turns the wrong way. Find that turn and fix it.' },
-  { id: '5-2', name: 'Count again', pal: 'FLRr', max: 6, par: 5, sol: 'r3(F) L r4(F)', start: 'r3(F) L r3(F)', fix: 1,
-    map: ['~.*.<~', '~.~~~~', '~*~~~~', '~.~~~~', '~G~~~~'],
-    hint: 'The robot stops one square too soon. Check the Repeat numbers.' },
-  { id: '5-3', name: 'Inside or out?', pal: 'FLRr', max: 6, par: 5, sol: 'r4(F R F L)', start: 'r4(F R F) L', fix: 1,
-    map: ['~~~~~v~', '~~~~..~', '~~~*.~~', '~~..~~~', '~G*~~~~'],
-    hint: 'One block is outside the Repeat. Should it be inside?' },
-  { id: '5-4', name: 'Short F1', pal: 'FLRf', max: 9, par: 8, sol: 'f R f L f|F F F', start: 'f R f L f|F F', fix: 1,
-    map: ['~~~~G~', '~~~~.~', '~~~~*~', '~.*..~', '~.~~~~', '~.~~~~', '~^~~~~'],
-    hint: 'F1 is one step too short. Fix F1 and every use of it gets better.' },
-  { id: '5-5', name: 'Dizzy robot', pal: 'FLRiu', max: 5, par: 4, sol: 'u(i(F)(R))', start: 'u(i(F)())', fix: 1,
-    map: ['~~~~~v~', '~~~~~.~', '~~~~~*~', '~~~~~.~', '~G.*..~'],
-    hint: 'The robot gets dizzy at the corner. What should it do there?' },
-  { id: '5-6', name: 'Spinning', pal: 'FLRr', max: 6, par: 4, sol: 'r4(r3(F) R)', start: 'r4(r3(F) R R)', fix: 1,
-    map: ['######', '#.*..#', '#.~~.#', '#*~~*#', '#^G..#', '######'],
-    hint: 'The robot spins too much at each corner. Take one block away.' },
-  { id: '5-7', name: 'Mixed up', pal: 'FLRiu', max: 5, par: 4, sol: 'u(i(F)(R))', start: 'u(i(R)(F))', fix: 2,
-    map: ['>.*...', '#####.', '##.G#*', '##.##.', '##.*..'],
-    hint: 'The If is mixed up. Which block belongs on which side?' },
-  { id: '5-8', name: 'Two bugs', pal: 'FLRrf', max: 11, par: 9, sol: 'r2(f) F r3(f)|F R F L', start: 'r2(f) F r2(f)|F R F R', fix: 2,
-    map: ['>.~~~~~', '~..~~~~', '~~.*.~~', '~~~~..~', '~~~~~*.', '~~~~~~G'],
-    hint: 'Two bugs this time: one in the program and one in F1.' }
-];
-if (typeof module !== 'undefined' && module.exports) module.exports = { ROBOT_WORLDS: ROBOT_WORLDS, ROBOT_LEVELS: ROBOT_LEVELS };
+/* games/robot/src/levels.js — loads Code Robot's worlds (content/worlds.json, in playing order) and their levels
+   (content/world-<id>.json, format in content/FORMAT.md) for Node: the checker, the tools and the build, which writes
+   them into the page as ROBOT_WORLDS and ROBOT_LEVELS. A world without its file yet is left out.
+   CODE_ROBOT_CONTENT=<folder> loads from another folder. load(dir, { lenient: true }) also leaves out a world whose file
+   does not read (its error goes to .errors) instead of stopping. */
+const fs = require('fs'), path = require('path');
+function load(dir, opts) {
+  dir = dir || process.env.CODE_ROBOT_CONTENT || path.join(__dirname, '..', 'content');
+  opts = opts || {};
+  const meta = JSON.parse(fs.readFileSync(path.join(dir, 'worlds.json'), 'utf8'));
+  const worlds = [], levels = [], errors = [];
+  for (const id of meta.order) {
+    const W = meta.worlds.find((x) => x.id === id), f = path.join(dir, 'world-' + id + '.json');
+    if (!W) throw new Error('worlds.json: world ' + id + ' is in the order but not in the list');
+    if (!fs.existsSync(f)) continue;
+    let data;
+    try {
+      data = JSON.parse(fs.readFileSync(f, 'utf8'));
+      if (data.world !== id) throw new Error('"world" says ' + data.world);
+      if (!Array.isArray(data.levels)) throw new Error('no "levels" list');
+    } catch (e) {
+      if (!opts.lenient) throw new Error('world-' + id + '.json: ' + e.message);
+      errors.push({ world: id, message: 'world-' + id + '.json: ' + e.message });
+      continue;
+    }
+    worlds.push(W);
+    data.levels.forEach((L) => levels.push(L));
+  }
+  return { ROBOT_WORLDS: worlds, ROBOT_LEVELS: levels, errors: errors };
+}
+module.exports = { load: load };

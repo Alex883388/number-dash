@@ -68,7 +68,7 @@ module.exports = [
   prog('F F F F', '1-2 taps'),
   ...tap('#stepBtn', 500),
   ok("__robot.state().mode === 'step' && __robot.state().idx === 1 && document.querySelector('#code [data-path=\"m.0\"]').classList.contains('now')", 'Step 1 did not light the first block'),
-  ok("getComputedStyle(document.getElementById('bot')).getPropertyValue('--x').trim() === '2'", 'Step 1 did not move the robot one square'),
+  ok("getComputedStyle(document.getElementById('bot0')).getPropertyValue('--x').trim() === '2'", 'Step 1 did not move the robot one square'),
   ...tap('#stepBtn', 500),
   ok("__robot.state().idx === 2 && document.querySelector('#code [data-path=\"m.1\"]').classList.contains('now') && !document.querySelector('#code [data-path=\"m.0\"]').classList.contains('now')", 'Step 2 did not light the second block only'),
   ok("document.querySelector('#board .tile.gem.got')", 'the gem was not picked up at step 2'),

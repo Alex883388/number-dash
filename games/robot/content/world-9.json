@@ -1,0 +1,132 @@
+{
+  "world": 9,
+  "levels": [
+    {
+      "id": "9-1", "name": "Twin lanes", "pal": "FLRr", "max": 3, "par": 2,
+      "sol": "r6(F)",
+      "map": [">.*...G", "~~~~~~~", ">...*.G"],
+      "hint": "Both robots run your program, one after the other. One program for two!"
+    },
+    {
+      "id": "9-2", "name": "Turned stairs", "pal": "FLRr", "max": 7, "par": 5,
+      "sol": "r3(F R F L)",
+      "map": [">.~~~~~~", "~.*~~~~~", "~~..~~~~", "~~~G~~~~", "~~~~~~.G", "~~~~~*.~", "~~~~..~~", "~~~~^~~~"],
+      "hint": "The stairs point different ways, but each robot turns its own way."
+    },
+    {
+      "id": "9-3", "name": "Pond laps", "pal": "FLRr", "max": 6, "par": 4,
+      "sol": "r4(r3(F) R)",
+      "map": [">.*.~~~~", "G~~.~~~~", ".~~.~~~~", "..*.~~~~", "~~~~..*.", "~~~~.~~.", "~~~~.~~G", "~~~~.*.<"],
+      "hint": "Both robots go round a pond the same way. Can a Repeat hold a Repeat?"
+    },
+    {
+      "id": "9-4", "name": "Biggest number", "pal": "FLRr", "max": 7, "par": 5,
+      "sol": "r4(F R F L)",
+      "map": ["~~~~>.~~", "~~~~~*.~", "~~~~~~G~", ">.~~~~~~", "~*.~~~~~", "~~..~~~~", "~~~*.~~~", "~~~~G~~~"],
+      "hint": "Each robot stops on its own flag. Which Repeat number works for both?"
+    },
+    {
+      "id": "9-5", "name": "No counting", "pal": "FLRu", "max": 3, "par": 2,
+      "sol": "u(F)",
+      "map": [">.*G~~~~", "~~~~~~~~", ">.*....G"],
+      "hint": "Short or long, Repeat until flag stops each robot on its own flag."
+    },
+    {
+      "id": "9-6", "name": "Hop to it", "pal": "FLRu", "max": 7, "par": 6,
+      "sol": "u(F F L F R)",
+      "map": ["~~~~G~~~", "~~..*~~~", ">..~~~~~", "~~~~~~G~", "~~~~.*.~", "~~...~~~", ">*.~~~~~"],
+      "hint": "Some robots hop more times than others. You do not need to count!"
+    },
+    {
+      "id": "9-7", "name": "Bends and ends", "pal": "FLRiu", "max": 5, "par": 4,
+      "sol": "u(i(F)(R))",
+      "map": [">....*~~", "~~G...~~", "~~~~~~~~", "G>...*~~"],
+      "hint": "Corners and dead ends in different places. Look before you step!"
+    },
+    {
+      "id": "9-8", "name": "Turn either way", "pal": "FLRiu", "max": 8, "par": 7,
+      "sol": "u(i(F)(L i()(R R)))",
+      "alt": ["u(i(F)(R i()(L L)))"],
+      "map": ["~G...*~~", ">.*...~~", "~~~~~~~~", ">.....*~", "~~G....~"],
+      "hint": "One road turns left, the other turns right. One program must do both!"
+    },
+    {
+      "id": "9-9", "name": "Three in one", "pal": "FLRiu", "max": 8, "par": 7,
+      "sol": "u(i(F)(L i()(R R)))",
+      "alt": ["u(i(F)(R i()(L L)))"],
+      "map": ["~~.*.~~~", ">..~...G", "~~~~~~~~", "G>...*~~", "~~~~~~~~", ">..*....", "~~~~~~~.", "~~G*...."],
+      "hint": "A twisty road, a dead end and a hairpin. Can one program do them all?"
+    },
+    {
+      "id": "9-10", "name": "Gem signals", "pal": "FLRigu", "max": 5, "par": 4,
+      "sol": "u(F g(R))",
+      "map": [">..*.~~~", "~~~.~~~~", "G..*~~~~", "~~~.~.~~", "~.~~~*.G", "~*G~~.~~", "~.~~~.~~", ".*<~.*.<"],
+      "hint": "The gems show each robot where to turn, even when the path goes on."
+    },
+    {
+      "id": "9-11", "name": "Gems and walls", "pal": "FLRigu", "max": 7, "par": 6,
+      "sol": "u(i(F)(L) g(R))",
+      "map": [">.*.~~~~", "~~.~~~~~", "~~...*.~", "~~#~~..G", "G..~#~~~", "~.*..~~~", "~~~~.~~~", "~~~.*..<"],
+      "hint": "A wall means turn left. A gem means turn right. Same rules for both!"
+    },
+    {
+      "id": "9-12", "name": "Side doors", "pal": "FLRijku", "max": 4, "par": 4,
+      "sol": "u(j(L) F)",
+      "alt": ["u(F j(L))"],
+      "map": ["~~~.~~~~", "G.*.~~~~", "~~~.~~~~", ">.*..~~~", "~~~~~~~.", "~~~~.*..", "~~~~~.~.", "~~~~~G~^"],
+      "hint": "The doors are in different places. Let each robot look for its own!"
+    },
+    {
+      "id": "9-13", "name": "Doors both sides", "pal": "FLRijku", "max": 7, "par": 6,
+      "sol": "u(j(L)(k(R)) F)",
+      "map": ["G....~~~", "~~*#.~~~", ">....~~~", "~~~~~~~~", "~..*..~~", "~.~~~*~~", "~G.....<"],
+      "hint": "Take each door, left or right. Use else so the robot turns only once!"
+    },
+    {
+      "id": "9-14", "name": "Mind the loops", "pal": "FLRijku", "max": 7, "par": 6,
+      "sol": "u(i(F)(j(L)(R)))",
+      "alt": ["u(i(F)(k(R)(L)))"],
+      "map": [">..*...#", "~~.~.~.~", "~~...~.~", "~~~~~~.G", "~~~~~~~~", "~...*..<", "~.~.~.~~", "~G~...~~"],
+      "hint": "Little loops skip the gems. Stay on the road, and turn only at walls!"
+    },
+    {
+      "id": "9-15", "name": "Two mazes", "pal": "FLRijku", "max": 8, "par": 7,
+      "sol": "u(j(L F)(i(F)(R)))",
+      "alt": ["u(k(R F)(i(F)(L)))"],
+      "map": [">.*.*..", "##.#.#.", "...#G#.", "~~~~~~~", "v#.#..G", ".#.#*##", ".*....."],
+      "hint": "Two different mazes, one program. Your maze rule works in both!"
+    },
+    {
+      "id": "9-16", "name": "Pond and maze", "pal": "FLRijku", "max": 8, "par": 7,
+      "sol": "u(k(R F)(i(F)(L)))",
+      "map": [".....~~G", "v~~~.~~.", "..*.....", "~~~~~~~~", "G.*#...~", "##.#.##~", ">.*....~"],
+      "hint": "One robot starts next to a pond. Which hand keeps it from going round?"
+    },
+    {
+      "id": "9-17", "name": "Dead end gems", "pal": "FLRijku", "max": 8, "par": 7,
+      "sol": "u(j(L F)(i(F)(R)))",
+      "map": ["#*#*#*#G", ">.......", "#.#.#.##", "~~~~~~~~", "*#G...<~", ".###.##~", "......*~"],
+      "hint": "The gems hide in dead ends. Which hand peeks into them on the way?"
+    },
+    {
+      "id": "9-18", "name": "No peeking team", "pal": "FLRjku", "max": 6, "par": 5,
+      "sol": "u(j(L F)(R))",
+      "alt": ["u(k(R F)(L))"],
+      "map": ["#G#v#.#.", ".*.*....", ".#.#.#.#", "~~~~~~~~", "*.*<#...", "G#.#.#.#", "#......."],
+      "hint": "No If path ahead again! Your short maze rule works for both robots."
+    },
+    {
+      "id": "9-19", "name": "Three shapes", "pal": "FLRijku", "max": 8, "par": 7,
+      "sol": "u(j(L F)(i(F)(R)))",
+      "alt": ["u(k(R F)(i(F)(L)))"],
+      "map": [">.......", "#######.", "G.*.....", "~~~~~~~~", ">.##~#G#", "#.*#~#v#", "##..~#.#", "###G~*.*"],
+      "hint": "A hairpin, some stairs and a T. One maze rule gets all three home!"
+    },
+    {
+      "id": "9-20", "name": "Maze team", "pal": "FLRijku", "max": 8, "par": 7,
+      "sol": "u(j(L F)(i(F)(R)))",
+      "map": ["v#*#.#*#", "...#....", "G#...#.#", "~~~~~~~~", "v#*#~G.<", "....~#.#", "G#.#~*..", "#...~#.#"],
+      "hint": "Three mazes, one program. Which hand gets every robot home?"
+    }
+  ]
+}

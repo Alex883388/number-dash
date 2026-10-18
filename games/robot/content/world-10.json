@@ -1,0 +1,127 @@
+{
+  "world": 10,
+  "levels": [
+    {
+      "id": "10-1", "name": "Spiral out", "pal": "FLRr+", "max": 6, "par": 5,
+      "sol": "r5(rn(F) L +)",
+      "map": ["*..*~~", ".~~.~~", ".~>*~~", ".~~~~~", "*....G"],
+      "hint": "Repeat n walks n steps. Plus one makes the next walk one step longer."
+    },
+    {
+      "id": "10-2", "name": "Plus goes first", "pal": "FLRr+", "max": 6, "par": 5,
+      "sol": "r4(+ rn(F) R)",
+      "alt": ["+ r4(rn(F) R +)"],
+      "map": ["G~~~~", ".~~~~", ".~>.*", ".~~~.", ".~~~.", "*...*"],
+      "hint": "This time the first walk is two steps long. Where should the plus go?"
+    },
+    {
+      "id": "10-3", "name": "Growing stairs", "pal": "FLRr+", "max": 8, "par": 7,
+      "sol": "r3(R rn(F) L F +)",
+      "map": [">~~~", "**~~", "~.~~", "~**~", "~~.~", "~~.~", "~~*G"],
+      "hint": "Each drop is one square deeper than the last. Let n count the drop."
+    },
+    {
+      "id": "10-4", "name": "Giant steps", "pal": "FLRr+", "max": 9, "par": 8,
+      "sol": "r3(rn(F) R rn(F) L +)",
+      "map": [">*~~~~~", "~*.*~~~", "~~~.~~~", "~~~*..*", "~~~~~~.", "~~~~~~.", "~~~~~~G"],
+      "hint": "Each giant step goes n along and n down. Then n grows!"
+    },
+    {
+      "id": "10-5", "name": "Big start", "pal": "FLRr+", "max": 6, "par": 5, "n0": 3,
+      "sol": "r3(rn(F) R +)",
+      "map": ["~~>..*", "~~~~~.", "~~~~~.", "~~~~~.", "G....*"],
+      "hint": "Look at the robot's number before you start. n is 3 this time!"
+    },
+    {
+      "id": "10-6", "name": "Jump by two", "pal": "FLRr+", "max": 7, "par": 6, "n0": 0,
+      "sol": "r3(+ + rn(F) R)",
+      "map": ["~~~~>.*", "~~~~~~.", "~~~~~~.", "~~~~~~.", "G.....*"],
+      "hint": "n starts at 0, and each walk is two steps longer than the one before."
+    },
+    {
+      "id": "10-7", "name": "Spiral in", "pal": "FLRr-", "max": 6, "par": 5, "n0": 5,
+      "sol": "r5(rn(F) R -)",
+      "map": [">....*", "~~~~~.", "~~*G~.", "~~.~~.", "~~*..*"],
+      "hint": "n starts at 5. Minus one makes each walk one step shorter."
+    },
+    {
+      "id": "10-8", "name": "Countdown stairs", "pal": "FLRr-", "max": 8, "par": 7, "n0": 3,
+      "sol": "r3(R rn(F) L F -)",
+      "map": [">~~~", ".~~~", ".~~~", "**~~", "~.~~", "~**~", "~~*G"],
+      "hint": "Each drop is one square shorter than the last. Count down with minus."
+    },
+    {
+      "id": "10-9", "name": "Shrinking steps", "pal": "FLRr+-", "max": 9, "par": 8, "n0": 3,
+      "sol": "r3(rn(F) R rn(F) L -)",
+      "map": [">..*~~~", "~~~.~~~", "~~~.~~~", "~~~*.*~", "~~~~~.~", "~~~~~**", "~~~~~~G"],
+      "hint": "Giant steps again, but each one smaller. Plus or minus?"
+    },
+    {
+      "id": "10-10", "name": "Star arms", "pal": "FLRr+-", "max": 10, "par": 9,
+      "sol": "r4(rn(F) R R rn(F) L +)",
+      "map": ["~~~G~", "~~~.~", "~~~.~", "~~~.~", "*..>*", "~~~.~", "~~~*~"],
+      "hint": "Each arm is one longer. Walk out to the gem, then back to the middle."
+    },
+    {
+      "id": "10-11", "name": "Shrinking star", "pal": "FLRr+-", "max": 10, "par": 9, "n0": 4,
+      "sol": "r4(rn(F) R R rn(F) L -)",
+      "map": ["~~G~~~~", "*.>...*", "~~.~~~~", "~~.~~~~", "~~*~~~~"],
+      "hint": "Four arms again, and each one is shorter than the one before."
+    },
+    {
+      "id": "10-12", "name": "n inside n", "pal": "FLRr+-", "max": 7, "par": 6,
+      "sol": "r3(rn(rn(F) R) +)",
+      "map": ["*..*", ".>*.", ".~..", "*.*G"],
+      "hint": "One side of 1, two sides of 2, three sides of 3. Repeat n in Repeat n!"
+    },
+    {
+      "id": "10-13", "name": "Grow and shrink", "pal": "FLRr+-", "max": 12, "par": 11, "n0": 4,
+      "sol": "r2(rn(F) R +) - r4(- rn(F) R)",
+      "map": [">...*", "~~~~.", "*.*~.", ".~G~.", ".~~~.", "*...*"],
+      "hint": "The walks get longer, then shorter. Plus first, then minus."
+    },
+    {
+      "id": "10-14", "name": "Painted spiral", "pal": "FLRPr+", "max": 7, "par": 6,
+      "sol": "r6(rn(F P) R +)",
+      "map": ["oooooo", "o~~~~o", "o~>o~o", "o~~o~o", "oooo~o", "~~~~~o", "~~~~~o"],
+      "hint": "Paint as you walk. Each side of the spiral is one square longer."
+    },
+    {
+      "id": "10-15", "name": "Paint inwards", "pal": "FLRPr+-", "max": 7, "par": 6, "n0": 6,
+      "sol": "r6(rn(F P) R -)",
+      "map": [">oooooo", "~~~~~~o", "~~ooo~o", "~~o~o~o", "~~o~~~o", "~~ooooo"],
+      "hint": "n starts at 6. Paint the spiral from the outside in."
+    },
+    {
+      "id": "10-16", "name": "Spiral with gaps", "pal": "FLRPr+-", "max": 9, "par": 8,
+      "sol": "r3(r2(rn(F P) R) + +)",
+      "map": ["oooooo", "o~~~~o", "o~>o~o", "oooo~o", "~~~~~o", "~~~~~o"],
+      "hint": "Two sides of each length, and each length is two longer."
+    },
+    {
+      "id": "10-17", "name": "Painted steps", "pal": "FLRPr+f", "max": 10, "par": 9,
+      "sol": "r3(f R f L +)|rn(F P)",
+      "alt": ["r3(rn(F P) R rn(F P) L +)"],
+      "map": [">o~~~~~", "~ooo~~~", "~~~o~~~", "~~~oooo", "~~~~~~o", "~~~~~~o", "~~~~~~o"],
+      "hint": "F1 can paint a line n long. Use it along and down, then grow n."
+    },
+    {
+      "id": "10-18", "name": "Bar chart", "pal": "FLRPr+-", "max": 14, "par": 13,
+      "sol": "r4(L rn(F P) R R rn(F) L F F +)",
+      "map": ["~~~~~~o", "~~~~o~o", "~~o~o~o", "o~o~o~o", ">......"],
+      "hint": "Paint a bar going up, walk back down, move along. Each bar is taller."
+    },
+    {
+      "id": "10-19", "name": "Sound wave", "pal": "FLRPr+-f", "max": 16, "par": 15,
+      "sol": "r3(F L f f R F +)|rn(F P) R R rn(F)",
+      "map": ["~~~~~o", "~~~o~o", "~o~o~o", ">.....", "~o~o~o", "~~~o~o", "~~~~~o"],
+      "hint": "Every column has a bar up and a bar down. F1 can paint one bar."
+    },
+    {
+      "id": "10-20", "name": "Pyramid", "pal": "FLRPr+-f", "max": 17, "par": 16,
+      "sol": "r3(f +) r4(f -)|L rn(F P) R R rn(F) L F",
+      "map": ["~~~o~~~", "~~ooo~~", "~ooooo~", "ooooooo", ">......"],
+      "hint": "The bars grow, then shrink. Put one bar in F1, then plus, then minus."
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 <title>Code Robot</title>
-<meta name="description" content="Build a program from blocks and guide a friendly robot to the flag, picking up every gem. Sequences, loops, functions, conditions and debugging in 40 levels.">
+<meta name="description" content="Build a program from blocks and guide a friendly robot to the flag, picking up every gem. 208 levels in 11 worlds: loops, functions, conditions, painting, robot teams, counters, reading and debugging code.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap">
@@ -9,24 +9,26 @@
    editor (the program with its F1 row, the palette of blocks, and the run controls). Side by side on a landscape iPad,
    one above the other on a portrait iPad or a phone; layout() sizes the map so nothing scrolls (only a long program
    scrolls inside its own pane). Every block, gap and button a finger taps is 48 px or more. Block colours: green
-   Forward, blue turns, gold loops, lilac F1, pink Ifs; they stay bright in dark mode, like answer tiles. */
+   Forward, blue turns, gold loops, lilac F1, pink Ifs, orange Paint, teal for the robot's number; they stay bright in
+   dark mode, like answer tiles. */
 :root {
   --floor: #fbfdff; --floor-2: #eef6fd; --floor-line: rgba(93, 104, 144, .16); --wall: #a9b4d6; --wall-top: #c7d0ea; --wall-edge: #7d89b2;
   --water: #9ad7f8; --water-2: #c4e9fc; --trail: rgba(79, 209, 165, .55); --stone: rgba(255, 255, 255, .5);
   --k-go: #4fd1a5; --k-go-d: #2a9f78; --k-turn: #5cb8ff; --k-turn-d: #2f86cf; --k-loop: #ffc94d; --k-loop-d: #d99f2c; --k-fn: #9d84ff; --k-fn-d: #6f57d6;
   --k-if: #ff9fcf; --k-if-d: #d9619e; --k-ink: #26304f; --box-loop: #fff4d4; --box-fn: #efe9ff; --box-if: #ffe8f3;
+  --k-paint: #ffa679; --k-paint-d: #d9693c; --k-num: #7fe0d4; --k-num-d: #2a9f91; --paint-line: rgba(93, 104, 144, .5); --paint-fill: #ff8fab;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --floor: #323b75; --floor-2: #2b336a; --floor-line: rgba(255, 255, 255, .08); --wall: #59629e; --wall-top: #6c76b4; --wall-edge: #3c447c;
     --water: #2f6fa6; --water-2: #3d86c2; --trail: rgba(90, 219, 176, .5); --stone: rgba(255, 255, 255, .07);
-    --box-loop: #4a4130; --box-fn: #3c3577; --box-if: #4d2f50;
+    --box-loop: #4a4130; --box-fn: #3c3577; --box-if: #4d2f50; --paint-line: rgba(255, 255, 255, .45);
   }
 }
 :root[data-theme="dark"] {
   --floor: #323b75; --floor-2: #2b336a; --floor-line: rgba(255, 255, 255, .08); --wall: #59629e; --wall-top: #6c76b4; --wall-edge: #3c447c;
   --water: #2f6fa6; --water-2: #3d86c2; --trail: rgba(90, 219, 176, .5); --stone: rgba(255, 255, 255, .07);
-  --box-loop: #4a4130; --box-fn: #3c3577; --box-if: #4d2f50;
+  --box-loop: #4a4130; --box-fn: #3c3577; --box-if: #4d2f50; --paint-line: rgba(255, 255, 255, .45);
 }
 #bg { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
 #bg i { position: absolute; border-radius: 22%; border: 2px solid var(--stone); animation: drift 18s ease-in-out infinite alternate; }
@@ -57,6 +59,18 @@
 .tile.gem.got i { transform: scale(.2) translateY(-40%); opacity: 0; animation: none; }
 .tile.trail::after { content: ''; position: absolute; width: 22%; height: 22%; border-radius: 50%; background: var(--trail); }
 .tile.flag i { transform-origin: 20% 90%; }
+.tile.target::before { content: ''; position: absolute; inset: 13%; border-radius: 24%; border: 3px dashed var(--paint-line); }
+.tile.painted { background: var(--paint-fill); box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .35); }
+.tile.painted::before { border-color: transparent; }
+.tile.wrong { background: repeating-linear-gradient(45deg, var(--coral-soft) 0 8px, var(--coral) 8px 14px); }
+.tile .pin { position: absolute; inset: 0; display: grid; place-items: center; font: 400 calc(var(--t, 60px) * .5)/1 var(--emoji); pointer-events: none; z-index: 3; animation: pin .3s ease both;
+  background: radial-gradient(circle, rgba(255, 255, 255, .85) 0 34%, transparent 36%); }
+.tile.guess { box-shadow: inset 0 0 0 4px var(--coral); }
+.tile.miss { box-shadow: inset 0 0 0 4px var(--line); }
+.tile.miss .pin { filter: grayscale(.8); opacity: .55; }
+.tile.answer { box-shadow: inset 0 0 0 4px var(--sun-deep), inset 0 0 0 9px rgba(255, 201, 77, .35); }
+.board.pick .tile:not(.wall):not(.water) { cursor: pointer; }
+@keyframes pin { from { transform: translateY(-30%) scale(.6); opacity: 0; } }
 .board.won .tile.flag i { animation: wave .5s ease-in-out 3; }
 @keyframes shine { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
 @keyframes wave { 50% { transform: rotate(-14deg) scale(1.15); } }
@@ -68,6 +82,7 @@
 .bot svg { position: absolute; inset: 7%; width: 86%; height: 86%; filter: drop-shadow(0 3px 3px rgba(41, 52, 90, .3)); }
 .bot.bump svg { animation: bump var(--ms, 300ms) ease-in-out; }
 .bot.hop svg { animation: hop .45s ease-in-out 2; }
+.board.team.running .bot:not(.turn) { opacity: .5; }
 @keyframes bump { 0%, 100% { transform: translateY(0); } 40% { transform: translateY(-22%); } 55% { transform: translateY(-14%) rotate(-6deg); } }
 @keyframes hop { 50% { transform: translateY(-14%) scale(1.08); } }
 .say {
@@ -113,7 +128,16 @@
 .kL, .kR { --kc: var(--k-turn); --kd: var(--k-turn-d); }
 .kr, .ku { --kc: var(--k-loop); --kd: var(--k-loop-d); --kb: var(--box-loop); }
 .kf { --kc: var(--k-fn); --kd: var(--k-fn-d); --kb: var(--box-fn); }
-.ki, .kg { --kc: var(--k-if); --kd: var(--k-if-d); --kb: var(--box-if); }
+.ki, .kg, .kj, .kk { --kc: var(--k-if); --kd: var(--k-if-d); --kb: var(--box-if); }
+.kP { --kc: var(--k-paint); --kd: var(--k-paint-d); }
+.kplus, .kminus { --kc: var(--k-num); --kd: var(--k-num-d); }
+.cap .nval { color: var(--k-num-d); letter-spacing: .02em; text-transform: none; font-size: .95rem; }
+.editor.read .gap { display: none; }
+.editor.read .list, .editor.read .box { column-gap: 6px; }
+.editor.order .gap:not(.only) { display: none; }
+.editor.order .gap.only { width: 56px; pointer-events: none; }
+.editor.order .list, .editor.order .box { column-gap: 6px; }
+.editor.read #code .blk { cursor: default; }
 .box { display: inline-flex; flex-wrap: wrap; align-items: center; row-gap: 6px; max-width: 100%; box-sizing: border-box; padding: 3px; border-radius: 18px; border: 3px solid var(--kd); background: var(--kb); }
 .box > .blk.head { margin-right: 2px; }
 .num {
@@ -121,6 +145,7 @@
   font: 700 1.3rem/1 var(--font-display); cursor: pointer; box-shadow: 0 3px 0 var(--kd); font-variant-numeric: tabular-nums;
 }
 .num small { font-size: .7em; }
+.num.fixed { cursor: default; }
 .else { flex: none; height: 54px; display: grid; place-items: center; padding: 0 8px; font: 700 .95rem/1 var(--font-display); color: var(--k-if-d); }
 .blk.sel { outline: 4px solid var(--ink); outline-offset: 2px; }
 .blk.now { box-shadow: 0 0 0 5px var(--sun), 0 4px 0 var(--kd); transform: scale(1.06); }
@@ -164,6 +189,7 @@
   .selbar .btn { padding: .5em .45em; font-size: .9rem; gap: 4px; }
 }
 .toast { top: var(--toast-top, 30%); }
+#blkChip.over { color: var(--coral-deep); }
 .toast.music { font-size: 1.05rem; padding: 9px 16px; }
 
 /* home, worlds and the other cards */
@@ -171,25 +197,25 @@
 .logo .bot-ic { display: inline-block; width: .9em; height: .9em; vertical-align: -.08em; margin-right: .12em; }
 #contBtn { display: grid; gap: 4px; justify-items: center; padding: .55em 1.6em; }
 #contBtn small { font: 700 .9rem/1.1 var(--font-body); opacity: .85; }
-.worlds { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.worlds { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
 .world {
-  min-height: 104px; display: grid; align-content: center; justify-items: center; gap: 3px; padding: 6px 2px; border-radius: 18px; cursor: pointer; min-width: 0;
+  min-height: 84px; display: grid; align-content: center; justify-items: center; gap: 2px; padding: 6px 3px; border-radius: 18px; cursor: pointer; min-width: 0;
   background: var(--card-2); border: 2px solid var(--line); box-shadow: 0 4px 0 var(--line); color: var(--ink); font: inherit; transition: transform .08s ease, box-shadow .08s ease;
 }
 .world:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--line); }
-.world i { font: 400 1.7rem/1 var(--emoji); font-style: normal; }
-.world b { font: 700 1rem/1.05 var(--font-display); white-space: nowrap; }
+.world i { font: 400 1.5rem/1 var(--emoji); font-style: normal; }
+.world b { font: 700 .95rem/1.05 var(--font-display); text-align: center; text-wrap: balance; }
 .world small { font-weight: 800; font-size: .76rem; line-height: 1.15; color: var(--ink-soft); white-space: nowrap; }
 .world.locked { opacity: .6; }
 .world.now { background: var(--sun); border-color: var(--sun-deep); box-shadow: 0 4px 0 var(--sun-deep); color: var(--sun-ink); }
 .world.now small { color: var(--sun-ink); }
-.levels { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.levels { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
 .lvl {
-  min-height: 80px; display: grid; align-content: center; justify-items: center; gap: 4px; padding: 6px 2px; border-radius: 18px; cursor: pointer; min-width: 0;
+  min-height: 74px; display: grid; align-content: center; justify-items: center; gap: 4px; padding: 6px 2px; border-radius: 18px; cursor: pointer; min-width: 0;
   background: var(--card-2); border: 2px solid var(--line); box-shadow: 0 4px 0 var(--line); color: var(--ink); font: inherit;
 }
-.lvl b { font: 700 1.5rem/1 var(--font-display); }
-.lvl small { font-weight: 800; font-size: .78rem; color: var(--ink-soft); white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+.lvl b { font: 700 1.35rem/1 var(--font-display); }
+.lvl small { font-weight: 800; font-size: .76rem; line-height: 1.1; color: var(--ink-soft); max-width: 100%; text-align: center; text-wrap: balance; }
 .lvl .ms { font-size: .8rem; letter-spacing: .04em; line-height: 1; }
 .lvl .ms .off, .world .ms .off { opacity: .25; filter: grayscale(1); }
 .lvl.done { background: var(--mint-soft); border-color: var(--mint); box-shadow: 0 4px 0 var(--mint); }
@@ -218,17 +244,16 @@
 .backup .status.bad { color: var(--coral-deep); }
 @media (pointer: coarse) { .screen .btn:not(.big) { min-height: 48px; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; } }
 @media (max-width: 600px) {
-  .worlds { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; }
-  .world { grid-column: span 2; min-height: 92px; }
-  .world:nth-child(4) { grid-column: 2 / span 2; }
-  .levels { gap: 8px; }
-  .lvl { min-height: 96px; padding: 6px 3px; }
+  .worlds { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .world { min-height: 76px; }
+  .levels { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px; }
+  .lvl { min-height: 78px; padding: 5px 3px; }
   .lvl small { white-space: normal; text-overflow: clip; font-size: .7rem; line-height: 1.1; text-wrap: balance; }
   .minis .btn { font-size: .92rem; padding: .6em .8em; }
   #s-home .card { gap: 14px; }
   #s-home .tag { font-size: 1rem; line-height: 1.4; }
 }
-@media (max-height: 760px) { #s-home .card { gap: 12px; } .world { min-height: 88px; } }
+@media (max-height: 760px) { #s-home .card { gap: 12px; } .world { min-height: 74px; } }
 @media (prefers-reduced-motion: reduce) { #bg i, .tile.gem i, .gap.cur i, #doneStars span { animation: none !important; } .bot { transition: none !important; } }
 .calm #bg i, .calm .tile.gem i, .calm .gap.cur i, .calm #doneStars span, .calm .screen, .calm .toast { animation: none !important; }
 </style>
@@ -245,7 +270,7 @@
   </section>
   <section class="editor" id="editor" aria-label="Your program">
     <div id="code">
-      <div class="cap"><span>Program</span><span id="capInfo"></span></div>
+      <div class="cap"><span>Program <span class="nval" id="nInfo" hidden></span></span><span id="capInfo"></span></div>
       <div class="list" id="mainList" data-list="m"></div>
       <div class="f1row" id="f1Row" hidden>
         <div class="cap"><span><b>F1</b></span><span>Use F1 runs these blocks</span></div>
@@ -390,11 +415,32 @@ const SONGS = {
 /* ================= the interpreter and the levels ================= */
 /*__ROBOT:engine__*/
 /*__ROBOT:levels__*/
-const WORLDS = ROBOT_WORLDS;
-const LEVELS = ROBOT_LEVELS.map((L, i) => Object.assign({}, L, { i: i, w: +L.id.split('-')[0], k: +L.id.split('-')[1], m: Robot.parseMap(L.map) }));
+/* A level's mode: build (the program starts empty), fix (Debugging: it opens with a bug), order (Mixed-up Code: blocks
+   can only be moved), shrink (Shrink It: a working program to make short) or predict (Code Reader: tap the square where
+   the robot will stop). Worlds keep their ids (the ids in saved progress); WORLDS is in playing order, and the screen
+   numbers worlds and levels by that order (World 3 is Mixed-up Code, its levels 3-1, 3-2 …). */
+const WORLDS = ROBOT_WORLDS.filter((W) => ROBOT_LEVELS.some((L) => +L.id.split('-')[0] === W.id));
+const LEVELS = ROBOT_LEVELS.map((L, i) => {
+  const mode = L.mode || (L.start ? 'fix' : 'build');
+  const o = Object.assign({}, L, { i: i, w: +L.id.split('-')[0], k: +L.id.split('-')[1], mode: mode, pal: L.pal || '' });
+  o.m = Robot.parseMap(L.map, { free: mode === 'predict', n0: L.n0 });
+  if (mode === 'order') o.max = o.par = Robot.count(Robot.parse(L.start));
+  if (mode === 'shrink') o.cap = Math.max(L.max, Robot.count(Robot.parse(L.start)) + 4);   // room to work in while shrinking
+  if (mode === 'predict') { const r = Robot.run(o.m, Robot.parse(L.prog)); o.answer = r.y * o.m.w + r.x; o.max = o.par = Robot.count(Robot.parse(L.prog)); }
+  return o;
+});
 const byId = {};
 LEVELS.forEach((L) => { byId[L.id] = L; });
-const worldOf = (w) => WORLDS[w - 1];
+const worldOf = (w) => WORLDS.find((W) => W.id === w);
+const worldAt = (w) => WORLDS.findIndex((W) => W.id === w);          // its place in the playing order, 0 first
+const wNum = (w) => worldAt(w) + 1;                                     // the world's number on screen
+const prevWorld = (w) => (worldAt(w) > 0 ? WORLDS[worldAt(w) - 1].id : 0);
+const nextWorld = (w) => (worldAt(w) >= 0 && worldAt(w) < WORLDS.length - 1 ? WORLDS[worldAt(w) + 1].id : 0);
+const worldSize = (w) => LEVELS.filter((L) => L.w === w).length;
+const lvName = (L) => wNum(L.w) + '-' + L.k;                           // the level's number on screen
+const byTries = (L) => L.mode === 'order' || L.mode === 'predict';     // stars by tries, not blocks
+// levels with the robot's number n: its blocks on offer, or used in the program the level opens with
+const counters = (L) => /[+-]/.test(L.pal) || /[+-]|rn\(/.test(L.prog || L.start || '') || L.n0 !== undefined;
 
 /* ================= records =================
    code-robot.v1: levels (per level id '2-3': s = best stars 1-3, b = fewest blocks in a working program), done (levels
@@ -421,10 +467,11 @@ tidyRecords();
 const isDone = (id) => !!rec.levels[id];
 const worldDone = (w) => LEVELS.filter((L) => L.w === w && isDone(L.id)).length;
 const worldStars = (w) => LEVELS.filter((L) => L.w === w).reduce((s, L) => s + (rec.levels[L.id] ? rec.levels[L.id].s : 0), 0);
-const OPEN_AT = 6;   // a world opens when the world before has this many levels done
-const worldOpen = (w) => w === 1 || worldDone(w - 1) >= OPEN_AT;
+const OPEN_AT = 6;   // a world opens when the world before it (in playing order) has this many levels done
+const worldOpen = (w) => worldAt(w) === 0 || worldDone(prevWorld(w)) >= OPEN_AT || worldDone(w) > 0;
 const levelOpen = (L) => worldOpen(L.w) && (L.k === 1 || isDone(L.w + '-' + (L.k - 1)));
 const starsFor = (blocks, par) => (blocks <= par ? 3 : blocks <= par + 2 ? 2 : 1);
+const starsForTries = (misses) => (misses <= 0 ? 3 : misses === 1 ? 2 : 1);
 // the level Continue opens: the last one, or else the first open level not done yet
 function continueLevel() {
   if (rec.last && levelOpen(byId[rec.last])) return byId[rec.last];
@@ -434,29 +481,40 @@ function continueLevel() {
 /* ================= blocks: names, icons ================= */
 const BLOCKS = {
   F: { name: 'Forward', pal: 'Forward' }, L: { name: 'Turn left', pal: 'Left' }, R: { name: 'Turn right', pal: 'Right' },
-  r: { name: 'Repeat', pal: 'Repeat' }, f: { name: 'F1', pal: 'Use F1' }, i: { name: 'If path ahead', pal: 'If path' },
+  P: { name: 'Paint', pal: 'Paint' }, '+': { name: 'Add one to n', pal: 'n + 1' }, '-': { name: 'Take one from n', pal: 'n − 1' },
+  r: { name: 'Repeat', pal: 'Repeat' }, f: { name: 'F1', pal: 'Use F1' }, i: { name: 'If path ahead', pal: 'If ahead' },
+  j: { name: 'If path left', pal: 'If left' }, k: { name: 'If path right', pal: 'If right' },
   g: { name: 'If gem here', pal: 'If gem' }, u: { name: 'Repeat until flag', pal: 'Until flag' }
 };
+const kcls = (t) => 'k' + ({ '+': 'plus', '-': 'minus' }[t] || t);   // the colour class of a block
 const svg = (d) => '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="' + d + '"/></svg>';
 const PATH = {
   F: 'M12 20V5M6 11l6-6 6 6', L: 'M17 20v-6a5 5 0 0 0-5-5H6M10 5 6 9l4 4', R: 'M7 20v-6a5 5 0 0 1 5-5h6M14 5l4 4-4 4',
-  loop: 'M4 12a8 8 0 0 1 13.7-5.7L20 8.5M20 3.5v5h-5M20 12a8 8 0 0 1-13.7 5.7L4 15.5M4 20.5v-5h5', ahead: 'M12 19V7M7 11l5-5 5 5'
+  loop: 'M4 12a8 8 0 0 1 13.7-5.7L20 8.5M20 3.5v5h-5M20 12a8 8 0 0 1-13.7 5.7L4 15.5M4 20.5v-5h5', ahead: 'M12 19V7M7 11l5-5 5 5',
+  left: 'M19 12H6M10 7l-5 5 5 5', right: 'M5 12h13M14 7l5 5-5 5'
 };
 const ICON = {
   F: svg(PATH.F), L: svg(PATH.L), R: svg(PATH.R), r: svg(PATH.loop), f: '<span class="tx">F1</span>',
-  i: '<span class="tx">if</span>' + svg(PATH.ahead), g: '<span class="tx">if</span><i class="emo">💎</i>', u: svg(PATH.loop) + '<i class="emo">🏁</i>'
+  i: '<span class="tx">if</span>' + svg(PATH.ahead), g: '<span class="tx">if</span><i class="emo">💎</i>', u: svg(PATH.loop) + '<i class="emo">🏁</i>',
+  j: '<span class="tx">if</span>' + svg(PATH.left), k: '<span class="tx">if</span>' + svg(PATH.right),
+  P: '<i class="emo">🖌️</i>', '+': '<span class="tx">n+1</span>', '-': '<span class="tx">n−1</span>'
 };
-const TWO = { i: 1, g: 1, u: 1 };
+const TWO = { i: 1, j: 1, k: 1, g: 1, u: 1 };
 const ROBOT_SVG = '<svg viewBox="0 0 100 100" aria-hidden="true"><rect x="9" y="24" width="15" height="54" rx="7" fill="#3b4677"/><rect x="76" y="24" width="15" height="54" rx="7" fill="#3b4677"/>' +
   '<path d="M50 3 63 19H37z" fill="#ff7b86"/><rect x="19" y="17" width="62" height="66" rx="20" fill="#ffd25e" stroke="#d99f2c" stroke-width="4"/>' +
   '<rect x="29" y="26" width="42" height="27" rx="11" fill="#29345a"/><circle cx="41" cy="39" r="5.5" fill="#7ff0c8"/><circle cx="59" cy="39" r="5.5" fill="#7ff0c8"/>' +
   '<path d="M40 64q10 8 20 0" fill="none" stroke="#d99f2c" stroke-width="4" stroke-linecap="round"/><circle cx="50" cy="75" r="4" fill="#ff7b86"/></svg>';
+// a team: the yellow robot goes first, then the blue one, then the pink one
+const TEAM = [{ name: 'yellow', body: '#ffd25e', edge: '#d99f2c' }, { name: 'blue', body: '#8fd3ff', edge: '#3f8fd6' }, { name: 'pink', body: '#ffb3d9', edge: '#d9619e' }];
+const robotSvg = (k) => ROBOT_SVG.replace(/#ffd25e/g, TEAM[k || 0].body).replace(/#d99f2c/g, TEAM[k || 0].edge);
+const PAINTS = ['#ff8fab', '#ffb35c', '#6fd08c', '#6cc4ff', '#b48cff'];   // a picture's colour, by level
 
 /* ================= game state ================= */
 const SPEEDS = [{ name: 'Slow', ic: '🐢', ms: 700 }, { name: 'Normal', ic: '🚶', ms: 420 }, { name: 'Fast', ic: '🐇', ms: 170 }];
 const game = {
   state: 'menu', L: null, prog: { main: [], f1: [] }, cur: { list: 'm', i: 0 }, sel: null, undo: [],
-  mode: 'edit', trace: null, idx: 0, timer: 0, bot: null, got: [], timeScale: 1, prevMode: '', result: null, attempt: 0
+  mode: 'edit', trace: null, idx: 0, timer: 0, bots: [], got: [], timeScale: 1, prevMode: '', result: null, attempt: 0,
+  guess: -1, tries: 0, n: 1, turn: 0   // Code Reader's guess (a square), misses (Reader) or failed runs (Mixed-up Code), the robot's number, whose turn
 };
 const PLAYING = new Set(['play']);
 const calm = () => !!save.settings.calm || reduceMotion;
@@ -503,37 +561,53 @@ const offersF1 = () => game.L.pal.indexOf('f') >= 0 || game.prog.f1.length > 0 |
 
 /* ================= drawing: the map ================= */
 function drawBoard() {
-  const m = game.L.m;
+  const L = game.L, m = L.m;
   boardEl.style.setProperty('--cols', m.w); boardEl.style.setProperty('--rows', m.h);
+  boardEl.style.setProperty('--paint-fill', PAINTS[L.k % PAINTS.length]);
   let h = '';
   for (let i = 0; i < m.cells.length; i++) {
     const c = m.cells[i];
-    const cls = c === '#' ? 'wall' : c === '~' ? 'water' : c === '*' ? 'gem' : c === 'G' ? 'flag' : 'floor';
+    const cls = c === '#' ? 'wall' : c === '~' ? 'water' : c === '*' ? 'gem' : c === 'G' ? 'flag' : c === 'o' ? 'floor target' : 'floor';
     h += '<div class="tile ' + cls + ((i % m.w + Math.floor(i / m.w)) % 2 ? ' alt' : '') + '" data-i="' + i + '">' + (c === '*' ? '<i>💎</i>' : c === 'G' ? '<i>🏁</i>' : '') + '</div>';
   }
-  boardEl.innerHTML = h + '<div class="bot" id="bot">' + ROBOT_SVG + '</div>';
-  boardEl.setAttribute('aria-label', 'A map of ' + m.w + ' by ' + m.h + ' squares with ' + m.gems.length + (m.gems.length === 1 ? ' gem' : ' gems') + ' and a flag');
+  boardEl.innerHTML = h + m.robots.map((r, k) => '<div class="bot" id="bot' + k + '">' + robotSvg(k) + '</div>').join('');
+  boardEl.classList.toggle('team', m.robots.length > 1);
+  boardEl.classList.toggle('pick', L.mode === 'predict');
+  const parts = [m.w + ' by ' + m.h + ' squares'];
+  if (m.robots.length > 1) parts.push(m.robots.length + ' robots: ' + m.robots.map((r, k) => TEAM[k].name).join(', '));
+  if (m.gems.length) parts.push(m.gems.length + (m.gems.length === 1 ? ' gem' : ' gems'));
+  if (m.flags.length) parts.push(m.flags.length === 1 ? 'a flag' : m.flags.length + ' flags');
+  if (m.targets.length) parts.push(m.targets.length + ' squares to paint');
+  boardEl.setAttribute('aria-label', 'A map of ' + parts.join(', '));
   resetBot();
 }
 const tileEl = (i) => boardEl.children[i];
-function placeBot(ms) {
-  const b = $('#bot'), s = game.bot;
+const botEl = (k) => document.getElementById('bot' + (k || 0));
+function placeBot(ms, k) {
+  const b = botEl(k), s = game.bots[k || 0];
   b.style.setProperty('--ms', (ms || 0) + 'ms');
   b.style.setProperty('--x', s.x); b.style.setProperty('--y', s.y); b.style.setProperty('--a', s.a + 'deg');
 }
+// every robot back at its start, the map as it was (the reader's guess stays)
 function resetBot() {
-  const st = game.L.m.start;
-  game.bot = { x: st.x, y: st.y, d: st.d, a: st.d * 90 };
-  game.got = [];
+  const m = game.L.m;
+  game.bots = m.robots.map((r) => ({ x: r.x, y: r.y, d: r.d, a: r.d * 90 }));
+  game.got = []; game.n = m.n0; game.turn = 0;
   $$('#board .tile.got').forEach((t) => t.classList.remove('got'));
-  $$('#board .tile.trail').forEach((t) => t.classList.remove('trail'));
-  boardEl.classList.remove('won');
-  const b = $('#bot'); if (b) { b.classList.remove('bump', 'hop'); b.style.transition = 'none'; placeBot(0); void b.offsetWidth; b.style.transition = ''; }
+  $$('#board .tile.trail, #board .tile.painted, #board .tile.wrong, #board .tile.answer').forEach((t) => t.classList.remove('trail', 'painted', 'wrong', 'answer'));
+  boardEl.classList.remove('won', 'running');
+  game.bots.forEach((s, k) => {
+    const b = botEl(k); if (!b) return;
+    b.classList.remove('bump', 'hop'); b.classList.toggle('turn', k === 0);
+    b.style.transition = 'none'; placeBot(0, k); void b.offsetWidth; b.style.transition = '';
+  });
+  showN();
 }
+function showN() { const el = $('#nInfo'); el.hidden = !counters(game.L); el.textContent = 'n = ' + game.n; }
 
 /* ================= drawing: the program ================= */
 function gapHTML(list, i, n) {
-  const cur = game.mode !== 'run' && !game.sel && game.cur.list === list && game.cur.i === i;
+  const cur = game.mode !== 'run' && !game.sel && game.L.mode !== 'order' && game.cur.list === list && game.cur.i === i;
   return '<button type="button" class="gap' + (n === 0 ? ' only' : '') + (cur ? ' cur' : '') + '" data-gap="' + list + ':' + i + '" aria-label="' +
     (cur ? 'The next block goes here' : 'Put the next block here') + '"><i></i></button>';
 }
@@ -543,21 +617,23 @@ function listHTML(list, path) {
   return h;
 }
 function label(b) {
-  if (b.t === 'r') return 'Repeat ' + b.n + ' times, ' + Robot.countList(b.b) + ' blocks inside';
-  if (Robot.BOX[b.t]) return BLOCKS[b.t].name + ', ' + Robot.countList(b.b) + ' blocks inside' + (b.t === 'i' ? ', ' + Robot.countList(b.e) + ' in else' : '');
+  if (b.t === 'r') return 'Repeat ' + (b.n === 'n' ? 'n' : b.n) + ' times, ' + Robot.countList(b.b) + ' blocks inside';
+  if (Robot.BOX[b.t]) return BLOCKS[b.t].name + ', ' + Robot.countList(b.b) + ' blocks inside' + (Robot.ELSE[b.t] ? ', ' + Robot.countList(b.e) + ' in else' : '');
   return BLOCKS[b.t].name;
 }
 function blockHTML(b, p) {
-  const sel = game.sel === p ? ' sel' : '';
-  const btn = '<button type="button" class="blk k' + b.t + (TWO[b.t] ? ' two' : '') + (Robot.BOX[b.t] ? ' head' : '') + sel + '" data-path="' + p + '" aria-label="' + label(b) + '">' + ICON[b.t] + '</button>';
+  const sel = game.sel === p ? ' sel' : '', fixed = game.L.mode === 'order' || game.L.mode === 'predict';
+  const btn = '<button type="button" class="blk ' + kcls(b.t) + (TWO[b.t] ? ' two' : '') + (Robot.BOX[b.t] ? ' head' : '') + sel + '" data-path="' + p + '" aria-label="' + label(b) + '">' + ICON[b.t] + '</button>';
   if (!Robot.BOX[b.t]) return btn;
-  let h = '<div class="box k' + b.t + '" data-box="' + p + '">' + btn;
-  if (b.t === 'r') h += '<button type="button" class="num" data-num="' + p + '" aria-label="' + b.n + ' times. Tap to change the number.">' + b.n + '<small>×</small></button>';
+  let h = '<div class="box ' + kcls(b.t) + '" data-box="' + p + '">' + btn;
+  if (b.t === 'r') h += '<button type="button" class="num' + (fixed ? ' fixed' : '') + '" data-num="' + p + '" aria-label="' + (b.n === 'n' ? 'n times: the robot’s number' : b.n + ' times') + (fixed ? '' : '. Tap to change the number.') + '">' + b.n + '<small>×</small></button>';
   h += listHTML(b.b, p + '.b');
-  if (b.t === 'i') h += '<span class="else">else</span>' + listHTML(b.e, p + '.e');
+  if (Robot.ELSE[b.t]) h += '<span class="else">else</span>' + listHTML(b.e, p + '.e');
   return h + '</div>';
 }
 function drawProgram() {
+  editorEl.classList.toggle('read', game.L.mode === 'predict');
+  editorEl.classList.toggle('order', game.L.mode === 'order');
   mainEl.innerHTML = listHTML(game.prog.main, 'm');
   const f1 = offersF1();
   $('#f1Row').hidden = !f1;
@@ -567,24 +643,31 @@ function drawProgram() {
   if ((game.mode === 'step' || game.mode === 'end') && game.trace && game.idx) markEvent(game.trace.events[game.idx - 1]);
 }
 function updateEditor() {
-  const L = game.L, n = blocksUsed(), full = n >= L.max, busy = game.mode === 'run' || game.mode === 'won';
+  const L = game.L, n = blocksUsed(), busy = game.mode === 'run' || game.mode === 'won', fixed = L.mode === 'order' || L.mode === 'predict';
+  const full = n >= (L.mode === 'shrink' ? L.cap : L.max);
+  $('#blkChip').hidden = fixed;
   $('#blkChip').textContent = 'Blocks ' + n + ' / ' + L.max;
-  $('#capInfo').textContent = full ? 'Block limit reached' : '';
+  $('#blkChip').classList.toggle('over', n > L.max);
+  $('#capInfo').textContent = L.mode === 'predict' ? (game.guess < 0 ? 'Tap a square on the map' : 'Then press Check') : L.mode === 'order' ? 'Move the blocks' :
+    n > L.max ? (n - L.max) + ' over the limit' : full ? 'Block limit reached' : '';
   editorEl.classList.toggle('busy', busy);
-  palEl.hidden = !!game.sel; selbarEl.hidden = !game.sel;
+  palEl.hidden = !!game.sel || fixed; selbarEl.hidden = !game.sel;
+  $('#selDel').hidden = L.mode === 'order';
   $$('#palette .pal').forEach((b) => { const t = b.dataset.add; b.disabled = busy || full || (t === 'f' && game.cur.list[0] === 'f'); });
-  $('#runBtn').innerHTML = (busy ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h12v12H6z"/></svg>' : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12-7.5z"/></svg>') + '<span class="lbl">' + (busy ? 'Stop' : 'Run') + '</span>';
+  $('#runBtn').innerHTML = (busy ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h12v12H6z"/></svg>' : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12-7.5z"/></svg>') + '<span class="lbl">' + (busy ? 'Stop' : L.mode === 'predict' ? 'Check' : 'Run') + '</span>';
+  $('#runBtn').disabled = L.mode === 'predict' && game.guess < 0 && !busy;
+  $('#undoBtn').hidden = L.mode === 'predict'; $('#clearBtn').hidden = fixed;
   $('#undoBtn').disabled = busy || !game.undo.length;
   $('#clearBtn').disabled = busy || !n;
   $('#resetBtn').disabled = game.mode === 'edit';
-  $('#stepBtn').disabled = false;
+  $('#stepBtn').disabled = L.mode === 'predict' && game.tries < 2 && game.mode !== 'step';   // a reader steps through only once the robot has shown the answer
   if (game.sel) { $('#selLeft').disabled = busy || !canMove(-1); $('#selRight').disabled = busy || !canMove(1); }
   const s = SPEEDS[rec.speed];
   $('#speedBtn').innerHTML = '<i aria-hidden="true">' + s.ic + '</i>';
   $('#speedBtn').setAttribute('aria-label', 'Speed: ' + s.name + '. Tap to change.');
 }
 function drawPalette() {
-  palEl.innerHTML = game.L.pal.split('').map((t) => '<button type="button" class="pal k' + t + '" data-add="' + t + '" aria-label="Add ' + BLOCKS[t].name + '"><span class="ic' + (TWO[t] ? ' two' : '') + '">' + ICON[t] + '</span><b>' + BLOCKS[t].pal + '</b></button>').join('');
+  palEl.innerHTML = game.L.pal.split('').map((t) => '<button type="button" class="pal ' + kcls(t) + '" data-add="' + t + '" aria-label="Add ' + BLOCKS[t].name + '"><span class="ic' + (TWO[t] ? ' two' : '') + '">' + ICON[t] + '</span><b>' + BLOCKS[t].pal + '</b></button>').join('');
 }
 function say(text, kind) {
   $('#sayText').textContent = text;
@@ -605,10 +688,10 @@ function saveDraft() { rec.drafts[game.L.id] = Robot.print(game.prog, true); wri
 function edited() { saveDraft(); drawProgram(); }
 // any edit after a run puts the robot back at the start
 function toEdit() { if (game.mode !== 'edit') stopRun(); }
-const LIMIT_TIP = { 1: 'Try a shorter way.', 2: 'A Repeat saves blocks.', 3: 'F1 saves blocks.', 4: 'Let an If do the work.', 5: 'Fix the bug instead.' };
 function addBlock(t) {
-  if (game.mode === 'run' || !game.L || game.L.pal.indexOf(t) < 0) return;
-  if (blocksUsed() >= game.L.max) { toast('That is the most blocks here (' + game.L.max + '). ' + LIMIT_TIP[game.L.w], 'oops', 2200); return; }
+  if (game.mode === 'run' || !game.L || game.L.pal.indexOf(t) < 0 || game.L.mode === 'order' || game.L.mode === 'predict') return;
+  if (game.L.mode === 'shrink' && blocksUsed() >= game.L.cap) { toast('That is plenty of blocks. Take some away first!', 'oops', 2200); return; }
+  if (game.L.mode !== 'shrink' && blocksUsed() >= game.L.max) { toast('That is the most blocks here (' + game.L.max + '). ' + worldOf(game.L.w).tip, 'oops', 2200); return; }
   if (t === 'f' && game.cur.list[0] === 'f') { toast('F1 cannot use itself', 'oops'); return; }
   if (game.sel) game.sel = null;
   if (!listAt(game.cur.list)) game.cur = { list: 'm', i: game.prog.main.length };
@@ -623,13 +706,13 @@ function addBlock(t) {
   announce('Added ' + BLOCKS[t].name + (b.b ? '. The next blocks go inside it.' : '.'));
 }
 function setCursor(list, i) {
-  if (game.mode === 'run') return;
+  if (game.mode === 'run' || game.L.mode === 'order' || game.L.mode === 'predict') return;
   game.sel = null; game.cur = { list: list, i: i };
   Sound.sfx.check();
   drawProgram();
 }
 function selectBlock(p) {
-  if (game.mode === 'run') return;
+  if (game.mode === 'run' || game.L.mode === 'predict') return;
   game.sel = game.sel === p ? null : p;
   if (!game.sel) { const i = indexOf(p); game.cur = { list: parentOf(p), i: i + 1 }; }
   Sound.sfx.check();
@@ -637,7 +720,7 @@ function selectBlock(p) {
   if (game.sel) announce(label(blockAt(p)) + ' picked. Move it or delete it.');
 }
 function deleteSel() {
-  const p = game.sel; if (!p || game.mode === 'run') return;
+  const p = game.sel; if (!p || game.mode === 'run' || game.L.mode === 'order') return;
   toEdit(); pushUndo();
   listAt(parentOf(p)).splice(indexOf(p), 1);
   game.cur = { list: parentOf(p), i: indexOf(p) }; game.sel = null;
@@ -659,13 +742,15 @@ function moveSel(dir) {
   Sound.sfx.click();
   edited();
 }
+// a Repeat's number counts 2 to 9, then n (where the robot's number is on offer), then 2 again
 function cycleNumber(p) {
-  const b = blockAt(p); if (!b || b.t !== 'r' || game.mode === 'run') return;
+  const b = blockAt(p); if (!b || b.t !== 'r' || game.mode === 'run' || game.L.mode === 'order' || game.L.mode === 'predict') return;
   toEdit(); pushUndo();
-  b.n = b.n >= 9 ? 2 : b.n + 1;
+  const seq = [2, 3, 4, 5, 6, 7, 8, 9].concat(/[+-]/.test(game.L.pal) ? ['n'] : []);
+  b.n = seq[(seq.indexOf(b.n) + 1) % seq.length];
   Sound.sfx.click();
   edited();
-  announce('Repeat ' + b.n + ' times');
+  announce(b.n === 'n' ? 'Repeat n times: the robot’s number' : 'Repeat ' + b.n + ' times');
 }
 function undo() {
   if (game.mode === 'run' || !game.undo.length) return;
@@ -677,7 +762,7 @@ function undo() {
   edited();
 }
 function clearProgram() {
-  if (game.mode === 'run' || !blocksUsed()) return;
+  if (game.mode === 'run' || !blocksUsed() || game.L.mode === 'order' || game.L.mode === 'predict') return;
   toEdit(); pushUndo();
   game.prog = { main: [], f1: [] }; game.cur = { list: 'm', i: 0 }; game.sel = null;
   edited();
@@ -685,39 +770,80 @@ function clearProgram() {
 }
 function restartLevel() {
   toEdit(); pushUndo();
-  game.prog = game.L.start ? Robot.parse(game.L.start) : { main: [], f1: [] };
-  game.cur = { list: 'm', i: game.prog.main.length }; game.sel = null;
+  game.prog = startProgram(game.L);
+  game.cur = { list: 'm', i: game.prog.main.length }; game.sel = null; game.tries = 0;
+  if (game.L.mode === 'predict') { game.undo = []; clearGuess(); }
   edited();
   say(game.L.hint);
+}
+// the program a level opens with: empty, its bug, its muddle, its long version, or the program to read
+const startProgram = (L) => (L.mode === 'predict' ? Robot.parse(L.prog) : L.start ? Robot.parse(L.start) : { main: [], f1: [] });
+// the same blocks in two programs, in any order and nesting (a Mixed-up Code draft must keep the level's blocks)
+const blockBag = (p) => Robot.tokens(p).filter((t) => t !== ')').sort().join(' ');
+
+/* ================= Code Reader: the guess =================
+   The child taps the square where the robot will stop, then Check. Right: the robot runs there (3 stars first time,
+   2 the second). A first miss only says so; a second miss runs the robot to show where it really stops, and the child
+   taps that square to finish (1 star). */
+function setGuess(i) {
+  const c = game.L.m.cells[i];
+  if (game.mode === 'run' || game.mode === 'won') return;
+  if (c === '#' || c === '~') { toast(c === '#' ? 'Robots cannot stand on a wall' : 'Robots cannot stand in water', 'hello', 1400); return; }
+  if (game.mode !== 'edit') stopRun();
+  clearGuess();
+  game.guess = i;
+  tileEl(i).insertAdjacentHTML('beforeend', '<b class="pin" aria-hidden="true">📍</b>');
+  tileEl(i).classList.add('guess');
+  Sound.sfx.check();
+  updateEditor();
+  const x = i % game.L.m.w, y = Math.floor(i / game.L.m.w);
+  say('Marked! Press Check to see if you read it right.');
+  announce('Your guess: column ' + (x + 1) + ', row ' + (y + 1) + '. Press Check.');
+}
+function clearGuess() { game.guess = -1; $$('#board .pin').forEach((p) => p.remove()); $$('#board .tile.miss, #board .tile.guess').forEach((t) => t.classList.remove('miss', 'guess')); }
+// true when the robot should run now
+function predictCheck() {
+  const L = game.L;
+  if (game.guess < 0) { say('Tap the square where you think the robot will stop.'); return false; }
+  if (game.guess === L.answer || game.tries >= 2) return true;
+  game.tries++;
+  tileEl(game.guess).classList.replace('guess', 'miss');
+  Sound.sfx.wrong();
+  if (game.tries === 1) { say('Not quite. Read it again, block by block, and tap another square.', 'oops'); announce('Not quite. Try another square.'); updateEditor(); return false; }
+  say('Not there either. Watch where the robot really stops!', 'oops');
+  return true;
 }
 
 /* ================= running =================
    The whole run is worked out first (Robot.run); then each step is shown in turn: the block lights up, the robot
    moves. Step shows one step per press. */
 const stepMs = () => SPEEDS[rec.speed].ms / game.timeScale;
-const durOf = (e) => (e.k === 'fwd' || e.k === 'turn' || e.k === 'bump' ? stepMs() : stepMs() * 0.5);
+const durOf = (e) => (e.k === 'start' ? stepMs() * 1.4 : e.k === 'fwd' || e.k === 'turn' || e.k === 'bump' || e.k === 'paint' ? stepMs() : stepMs() * 0.5);
 function clearLights() { $$('#code .now, #code .yes, #code .no, #code .f1now').forEach((e) => e.classList.remove('now', 'yes', 'no', 'f1now')); $$('#code .act').forEach((e) => e.classList.remove('act')); }
 function beginRun() {
   game.trace = Robot.run(game.L.m, game.prog);
   game.idx = 0; game.result = null;
   resetBot();
+  boardEl.classList.add('running');
   game.sel = null;
   if (game.trace.why === 'empty') { game.mode = 'edit'; drawProgram(); say(outcome(game.trace), 'oops'); return false; }
   return true;
 }
 function run() {
   if (game.mode === 'won') return;
-  if (game.mode === 'run') { stopRun(); say('Stopped. Press Run to start again.'); return; }
+  if (game.mode === 'run') { stopRun(); say('Stopped. Press ' + (game.L.mode === 'predict' ? 'Check' : 'Run') + ' to start again.'); return; }
   Sound.init();
+  if (game.L.mode === 'predict' && !predictCheck()) return;
   if (game.mode !== 'step' && !beginRun()) return;
   game.mode = 'run';
   drawProgram();
-  say('Running…');
+  if (game.L.mode !== 'predict' || game.tries < 2) say(game.L.m.robots.length > 1 ? 'The yellow robot goes first…' : 'Running…');
   clearTimeout(game.timer);
   game.timer = setTimeout(nextEvent, 120 / game.timeScale);
 }
 function step() {
   Sound.init();
+  if (game.L.mode === 'predict' && game.tries < 2 && game.mode !== 'step') return;
   if (game.mode === 'run') { clearTimeout(game.timer); game.mode = 'step'; drawProgram(); markEvent(game.trace.events[game.idx - 1]); return; }
   if (game.mode === 'edit' || game.mode === 'end') { if (!beginRun()) return; game.mode = 'step'; drawProgram(); say('Step by step: press Step again for the next block.'); }
   if (game.mode !== 'step') return;
@@ -747,16 +873,24 @@ function markEvent(e) {
 }
 function showEvent(e) {
   markEvent(e);
-  const s = game.bot, ms = Math.round(durOf(e) * 0.85), b = $('#bot');
+  const k = e.r || 0, s = game.bots[k], ms = Math.round(durOf(e) * 0.85), b = botEl(k);
+  if (e.k === 'start') {
+    game.turn = k;
+    game.bots.forEach((x, q) => botEl(q).classList.toggle('turn', q === k));
+    if (k > 0) { say('Now the ' + TEAM[k].name + ' robot runs the same program…'); Sound.sfx.check(); }
+    return;
+  }
   b.classList.remove('bump');
   if (e.k === 'fwd') {
-    s.x = e.x; s.y = e.y; placeBot(ms);
+    s.x = e.x; s.y = e.y; placeBot(ms, k);
     const i = e.y * game.L.m.w + e.x;
     setTimeout(() => { const t = tileEl(i); if (t) t.classList.add('trail'); }, ms * 0.6);
     if (e.g >= 0) { game.got.push(e.g); setTimeout(() => { tileEl(e.g).classList.add('got'); Sound.sfx.orb(); }, ms * 0.7); }
     else Sound.sfx.check();
-  } else if (e.k === 'turn') { s.d = e.d; s.a += e.s * 90; placeBot(ms); Sound.sfx.click(); }
+  } else if (e.k === 'turn') { s.d = e.d; s.a += e.s * 90; placeBot(ms, k); Sound.sfx.click(); }
   else if (e.k === 'bump') { b.style.setProperty('--ms', ms + 'ms'); void b.offsetWidth; b.classList.add('bump'); Sound.sfx.pad(); }
+  else if (e.k === 'paint') { const t = tileEl(e.i); if (t) t.classList.add(e.ok ? 'painted' : 'wrong'); if (e.ok) Sound.sfx.orb(); else Sound.sfx.pad(); }
+  else if (e.k === 'set') { game.n = e.n; showN(); Sound.sfx.click(); }
 }
 function stopRun() {
   clearTimeout(game.timer);
@@ -767,20 +901,42 @@ function stopRun() {
 }
 function resetRobot() { if (game.mode === 'edit') return; stopRun(); say(game.L.hint); }
 const gemsLeft = (n) => (n === 1 ? '1 gem is' : n + ' gems are') + ' still waiting';
+// what happened, kindly; a team's message says which robot
 function outcome(r) {
-  if (r.why === 'win') return 'Hooray! The robot made it.';
-  if (r.why === 'bump') return r.what === 'water' ? 'Splash! Robots cannot swim. Try another way.' : r.what === 'edge' ? 'Bump! That is the edge of the map. Try another way.' : 'Bump! A wall is in the way. Try another way.';
-  if (r.why === 'gems') return 'So close! ' + gemsLeft(r.left) + '. Collect ' + (r.left === 1 ? 'it' : 'them') + ', then come back to the flag.';
-  if (r.why === 'end') return 'The blocks ran out before the flag' + (r.left ? ', and ' + gemsLeft(r.left).replace(' is', ' was').replace(' are', ' were') : '') + '. Add a few more!';
-  if (r.why === 'dizzy') return 'The robot got dizzy: is your loop able to finish?';
+  const who = r.team ? 'The ' + TEAM[r.robot].name + ' robot: ' : '';
+  if (r.why === 'win') return r.team ? 'Hooray! Every robot made it with one program.' : r.painted && !r.unpainted ? 'Hooray! The picture is finished.' : 'Hooray! The robot made it.';
+  if (r.why === 'bump') return who + (r.what === 'water' ? 'Splash! Robots cannot swim. Try another way.' : r.what === 'edge' ? 'Bump! That is the edge of the map. Try another way.' : 'Bump! A wall is in the way. Try another way.');
+  if (r.why === 'paint') return who + 'Careful! That square is not in the picture. Paint only the dotted squares.';
+  if (r.why === 'unpainted') return 'The blocks ran out with ' + (r.unpainted === 1 ? '1 square' : r.unpainted + ' squares') + ' still to paint. Add a few more!';
+  if (r.why === 'gems') return who + 'So close! ' + gemsLeft(r.left) + '. Collect ' + (r.left === 1 ? 'it' : 'them') + ', then come back to the flag.';
+  if (r.why === 'end') return who + 'The blocks ran out before the flag' + (r.left ? ', and ' + gemsLeft(r.left).replace(' is', ' was').replace(' are', ' were') : '') + '. Add a few more!';
+  if (r.why === 'dizzy') return who + 'The robot got dizzy: is your loop able to finish?';
   if (r.why === 'self') return 'F1 cannot use F1. Take it out of the F1 row.';
   return 'Add some blocks first, then press Run.';
 }
 function finishRun() {
   clearTimeout(game.timer);
-  const r = game.trace;
+  boardEl.classList.remove('running');
+  const r = game.trace, L = game.L;
   game.result = r;
+  if (L.mode === 'predict') {
+    if (game.guess === L.answer) { game.mode = 'won'; won(); return; }
+    game.mode = 'end';
+    drawProgram();
+    const t = tileEl(L.answer); if (t) t.classList.add('answer');
+    say('This is where it stops. Can you see why? Tap that square, then Check.', 'oops');
+    announce('The robot stopped on the lit square. Tap it, then press Check.');
+    return;
+  }
+  if (r.ok && L.mode === 'shrink' && blocksUsed() > L.max) {
+    game.mode = 'end';
+    drawProgram();
+    const msg = 'It works! But it has ' + blocksUsed() + ' blocks. Shrink it to ' + L.max + ' or fewer.';
+    say(msg, 'oops'); announce(msg);
+    return;
+  }
   if (r.ok) { game.mode = 'won'; won(); return; }
+  if (L.mode === 'order') game.tries++;
   game.mode = 'end';
   drawProgram();
   const last = r.events[r.events.length - 1];
@@ -792,19 +948,21 @@ function finishRun() {
 /* ================= a level done ================= */
 const CHEERS3 = ['Perfect program!', 'Brilliant coding!', 'Super smart!'];
 function won() {
-  const L = game.L, blocks = blocksUsed(), stars = starsFor(blocks, L.par), prev = rec.levels[L.id];
-  const better = !prev || stars > prev.s || blocks < prev.b;
-  rec.levels[L.id] = { s: Math.max(prev ? prev.s : 0, stars), b: prev ? Math.min(prev.b, blocks) : blocks };
+  const L = game.L, blocks = blocksUsed(), tries = byTries(L), prev = rec.levels[L.id];
+  const stars = tries ? starsForTries(game.tries) : starsFor(blocks, L.par);
+  const score = tries ? game.tries + 1 : blocks;   // b: the fewest blocks, or for Mixed-up Code and Code Reader the fewest tries
+  const better = !prev || stars > prev.s || score < prev.b;
+  rec.levels[L.id] = { s: Math.max(prev ? prev.s : 0, stars), b: prev ? Math.min(prev.b, score) : score };
   totals();
-  saveDraft();
+  if (L.mode !== 'predict') saveDraft();
   writeSave();
   drawProgram();
   boardEl.classList.add('won');
-  const b = $('#bot'); b.classList.add('hop');
-  say(outcome(game.trace), 'good');
+  game.bots.forEach((x, k) => botEl(k).classList.add('hop'));
+  say(L.mode === 'predict' ? (game.tries ? 'Yes! That is where it stops.' : 'Spot on! You read it like a real coder.') : outcome(game.trace), 'good');
   Sound.sfx.win();
-  const changes = L.start ? Robot.changes(Robot.parse(L.start), game.prog) : -1;
-  game.lastWin = { id: L.id, stars: stars, blocks: blocks, better: better, changes: changes };
+  const changes = L.mode === 'fix' ? Robot.changes(Robot.parse(L.start), game.prog) : -1;
+  game.lastWin = { id: L.id, stars: stars, blocks: blocks, tries: game.tries, better: better, changes: changes, first: !prev };
   clearTimeout(game.timer);
   game.timer = setTimeout(() => showDone(), calm() ? 500 : 1100 / Math.min(game.timeScale, 4));
 }
@@ -813,17 +971,23 @@ function showDone() {
   const L = game.L, w = game.lastWin, n = nextLevelOf(L);
   game.state = 'done';
   $('#doneTitle').textContent = w.stars === 3 ? pick(CHEERS3) : w.stars === 2 ? 'Level done!' : 'You did it!';
-  $('#doneLv').textContent = 'World ' + L.w + ' · Level ' + L.k + ' · ' + L.name;
+  $('#doneLv').textContent = 'World ' + wNum(L.w) + ' · Level ' + L.k + ' · ' + L.name;
   $('#doneStars').innerHTML = starRow(w.stars);
   $('#doneStars').setAttribute('aria-label', w.stars + ' of 3 stars');
-  let note = 'You used ' + w.blocks + (w.blocks === 1 ? ' block' : ' blocks') + '. ';
-  note += w.stars === 3 ? 'That is par (' + L.par + ') or better!' : '3 stars at ' + L.par + ' blocks or fewer.';
-  if (w.changes >= 0) note += ' Fixed with ' + w.changes + (w.changes === 1 ? ' change' : ' changes') + (w.changes <= L.fix ? ': a neat fix!' : ' (it can be done with ' + L.fix + ').');
+  let note;
+  if (L.mode === 'predict') note = w.tries === 0 ? 'You read the program right first time!' : w.tries === 1 ? 'Right on your second go. Right first time earns 3 stars.' : 'The robot showed you this time. Follow the next one block by block.';
+  else if (L.mode === 'order') note = w.tries === 0 ? 'Right on the first Run: a careful coder!' : 'Done in ' + (w.tries + 1) + ' runs. Right on the first Run earns 3 stars.';
+  else {
+    note = 'You used ' + w.blocks + (w.blocks === 1 ? ' block' : ' blocks') + '. ';
+    note += w.stars === 3 ? 'That is par (' + L.par + ') or better!' : '3 stars at ' + L.par + ' blocks or fewer.';
+    if (w.changes >= 0 && L.mode === 'fix') note += ' Fixed with ' + w.changes + (w.changes === 1 ? ' change' : ' changes') + (w.changes <= L.fix ? ': a neat fix!' : ' (it can be done with ' + L.fix + ').');
+  }
   $('#doneNote').textContent = note;
-  const wDone = worldDone(L.w);
+  const wDone = worldDone(L.w), nw = nextWorld(L.w);
   $('#doneNext').textContent = !n && L.i === LEVELS.length - 1 ? 'You finished every level of Code Robot!' :
-    !n ? (L.w < WORLDS.length && !worldOpen(L.w + 1) ? 'Finish ' + (OPEN_AT - wDone) + ' more in ' + worldOf(L.w).name + ' to open ' + worldOf(L.w + 1).name + '.' : '') :
-    n.w !== L.w ? 'Next: World ' + n.w + ', ' + worldOf(n.w).name + '!' : '';
+    w.first && nw && wDone === OPEN_AT ? '🎉 A new world is open: ' + worldOf(nw).name + '!' :
+    !n ? (nw && !worldOpen(nw) ? 'Finish ' + (OPEN_AT - wDone) + ' more in ' + worldOf(L.w).name + ' to open ' + worldOf(nw).name + '.' : '') :
+    n.w !== L.w ? 'Next: World ' + wNum(n.w) + ', ' + worldOf(n.w).name + '!' : '';
   $('#nextBtn').hidden = !n;
   $('#againBtn').textContent = w.stars < 3 ? 'Try for 3 stars' : 'Play it again';
   $('#hud').hidden = true; playEl.classList.add('away');
@@ -840,32 +1004,33 @@ function openLevel(L, skipIntro, force) {
   Sound.init();
   if (!skipIntro && !rec.seen[L.w]) { showIntro(L); return; }
   clearTimeout(game.timer);
-  game.L = L; game.state = 'play'; game.mode = 'edit'; game.sel = null; game.undo = []; game.trace = null;
+  game.L = L; game.state = 'play'; game.mode = 'edit'; game.sel = null; game.undo = []; game.trace = null; game.guess = -1; game.tries = 0;
   rec.last = L.id; writeRecords();
   let prog = null;
-  try { if (rec.drafts[L.id] !== undefined) prog = Robot.parse(rec.drafts[L.id]); } catch (e) { prog = null; }
-  if (!prog) prog = L.start ? Robot.parse(L.start) : { main: [], f1: [] };
+  try { if (rec.drafts[L.id] !== undefined && L.mode !== 'predict') prog = Robot.parse(rec.drafts[L.id]); } catch (e) { prog = null; }
+  if (prog && L.mode === 'order' && blockBag(prog) !== blockBag(Robot.parse(L.start))) prog = null;   // a muddle keeps its blocks
+  if (!prog) prog = startProgram(L);
   game.prog = prog;
   game.cur = { list: 'm', i: game.prog.main.length };
   showScreen(null);
   $('#hud').hidden = false; playEl.hidden = false; playEl.classList.remove('away');
   document.body.classList.toggle('calm', calm());
-  $('#lvChip').innerHTML = '<b>' + L.id + '</b> <span class="lvname">' + L.name + '</span>';
-  $('#parChip').textContent = '⭐⭐⭐ ≤ ' + L.par;
-  $('#parChip').setAttribute('aria-label', 'Three stars at ' + L.par + ' blocks or fewer');
+  $('#lvChip').innerHTML = '<b>' + lvName(L) + '</b> <span class="lvname">' + L.name + '</span>';
+  $('#parChip').textContent = byTries(L) ? '⭐⭐⭐ first try' : '⭐⭐⭐ ≤ ' + L.par;
+  $('#parChip').setAttribute('aria-label', byTries(L) ? 'Three stars when it is right first time' : 'Three stars at ' + L.par + ' blocks or fewer');
   drawBoard(); drawPalette(); drawProgram();
   layout();
   say(L.hint);
   Sound.play('robot');
   game.attempt++;
   if (L.i > 0) { const name = Sound.remix(L.i, 0, 'robot'); if (name) toast('♪ ' + name, 'music', 1300); }
-  announce('World ' + L.w + ', level ' + L.k + ': ' + L.name + '. ' + L.hint);
+  announce('World ' + wNum(L.w) + ', level ' + L.k + ': ' + L.name + '. ' + L.hint);
 }
 function showIntro(L) {
   const W = worldOf(L.w);
   game.state = 'intro'; game.introFor = L.id;
   $('#iIcon').textContent = W.icon;
-  $('#iTitle').textContent = 'World ' + W.id + ': ' + W.name;
+  $('#iTitle').textContent = 'World ' + wNum(W.id) + ': ' + W.name;
   $('#iText').textContent = W.intro;
   $('#hud').hidden = true; playEl.hidden = true;
   showScreen('intro');
@@ -873,16 +1038,16 @@ function showIntro(L) {
 }
 
 /* ================= menus ================= */
-const lvLine = (L) => 'World ' + L.w + ' · ' + worldOf(L.w).name + ' · Level ' + L.k;
+const lvLine = (L) => 'World ' + wNum(L.w) + ' · ' + worldOf(L.w).name + ' · Level ' + L.k;
 function renderHome() {
   const c = continueLevel(), started = Object.keys(rec.levels).length || rec.last;
   $('#contTitle').textContent = started ? 'Continue' : 'Start';
   $('#contSub').textContent = lvLine(c);
   $('#worlds').innerHTML = WORLDS.map((W) => {
-    const open = worldOpen(W.id), d = worldDone(W.id), st = worldStars(W.id);
-    const sub = open ? d + ' of 8 · ' + st + '⭐' : '🔒 Locked';
-    return '<button type="button" class="world' + (open ? '' : ' locked') + (c.w === W.id ? ' now' : '') + '" data-world="' + W.id + '" aria-label="World ' + W.id + ', ' + W.name +
-      (open ? ', ' + d + ' of 8 levels done, ' + st + ' stars' : ', locked: finish ' + (OPEN_AT - worldDone(W.id - 1)) + ' more in ' + worldOf(W.id - 1).name) + '"><i aria-hidden="true">' + W.icon + '</i><b>' + W.name + '</b><small aria-hidden="true">' + sub + '</small></button>';
+    const open = worldOpen(W.id), d = worldDone(W.id), st = worldStars(W.id), size = worldSize(W.id), pw = prevWorld(W.id);
+    const sub = open ? d + ' of ' + size + ' · ' + st + '⭐' : '🔒 Locked';
+    return '<button type="button" class="world' + (open ? '' : ' locked') + (c.w === W.id ? ' now' : '') + '" data-world="' + W.id + '" aria-label="World ' + wNum(W.id) + ', ' + W.name +
+      (open ? ', ' + d + ' of ' + size + ' levels done, ' + st + ' stars' : ', locked: finish ' + (OPEN_AT - worldDone(pw)) + ' more in ' + worldOf(pw).name) + '"><i aria-hidden="true">' + W.icon + '</i><b>' + W.name.replace(/-/g, '\u2011') + '</b><small aria-hidden="true">' + sub + '</small></button>';
   }).join('');
   const sp = $('#speakBtn');
   sp.textContent = !Speech.ok ? 'Read aloud: not here' : save.settings.speak ? 'Read aloud: on' : 'Read aloud: off';
@@ -901,11 +1066,11 @@ function goHome() {
 }
 function showWorld(w) {
   const W = worldOf(w);
-  if (!worldOpen(w)) { toast('Finish ' + (OPEN_AT - worldDone(w - 1)) + ' more levels in ' + worldOf(w - 1).name + ' first', 'hello', 2200); return; }
+  if (!worldOpen(w)) { const pw = prevWorld(w); toast('Finish ' + (OPEN_AT - worldDone(pw)) + ' more levels in ' + worldOf(pw).name + ' first', 'hello', 2200); return; }
   clearTimeout(game.timer);
   game.state = 'world'; game.world = w;
   $('#wIcon').textContent = W.icon;
-  $('#wTitle').textContent = 'World ' + w + ': ' + W.name;
+  $('#wTitle').textContent = 'World ' + wNum(w) + ': ' + W.name;
   $('#wIntro').textContent = W.intro;
   const todo = LEVELS.find((L) => L.w === w && levelOpen(L) && !isDone(L.id));
   $('#levels').innerHTML = LEVELS.filter((L) => L.w === w).map((L) => {
@@ -913,8 +1078,8 @@ function showWorld(w) {
     return '<button type="button" class="lvl' + (r ? ' done' : todo && todo.id === L.id ? ' next' : '') + '" data-level="' + L.id + '"' + (open ? '' : ' disabled') +
       ' aria-label="Level ' + L.k + ', ' + L.name + (r ? ', ' + r.s + ' stars' : open ? '' : ', locked') + '"><b>' + (open ? L.k : '🔒') + '</b><span class="ms" aria-hidden="true">' + starRow(r ? r.s : 0) + '</span><small aria-hidden="true">' + L.name + '</small></button>';
   }).join('');
-  const d = worldDone(w);
-  $('#wNote').textContent = w < WORLDS.length ? (worldOpen(w + 1) ? worldOf(w + 1).name + ' is open.' : (OPEN_AT - d) + ' more ' + (OPEN_AT - d === 1 ? 'level opens ' : 'levels open ') + worldOf(w + 1).name + '.') : d + ' of 8 done.';
+  const d = worldDone(w), nw = nextWorld(w);
+  $('#wNote').textContent = nw ? (worldOpen(nw) ? worldOf(nw).name + ' is open.' : (OPEN_AT - d) + ' more ' + (OPEN_AT - d === 1 ? 'level opens ' : 'levels open ') + worldOf(nw).name + '.') : d + ' of ' + worldSize(w) + ' done.';
   $('#hud').hidden = true; playEl.hidden = true;
   Sound.play('menu');
   showScreen('world');
@@ -926,7 +1091,7 @@ function pause() {
   if (game.mode === 'run') { clearTimeout(game.timer); game.mode = 'step'; }
   game.state = 'pause';
   Speech.stop();
-  $('#pauseInfo').textContent = 'World ' + game.L.w + ' · Level ' + game.L.k + ' · ' + game.L.name + '. Your program is saved.';
+  $('#pauseInfo').textContent = 'World ' + wNum(game.L.w) + ' · Level ' + game.L.k + ' · ' + game.L.name + '.' + (game.L.mode === 'predict' ? '' : ' Your program is saved.');
   showScreen('pause');
 }
 function resume() {
@@ -961,7 +1126,7 @@ function readCode(text) {
     if (!byId[id] || typeof d.drafts[id] !== 'string' || d.drafts[id].length > 400) continue;
     try { Robot.parse(d.drafts[id]); out.drafts[id] = d.drafts[id]; } catch (e) { /* a broken draft is left out */ }
   }
-  if (d.seen && typeof d.seen === 'object') for (const w of Object.keys(d.seen)) if (WORLDS[+w - 1]) out.seen[w] = 1;
+  if (d.seen && typeof d.seen === 'object') for (const w of Object.keys(d.seen)) if (worldOf(+w)) out.seen[w] = 1;
   out.last = byId[d.last] ? d.last : '';
   out.speed = [0, 1, 2].indexOf(d.speed) >= 0 ? d.speed : 1;
   let done = 0, stars = 0;
@@ -1033,8 +1198,8 @@ function layout() {
   st.setProperty('--say-h', sayH + 'px');
   st.setProperty('--say-max', (W < 500 ? 15 : 16.5) + 'px');
   // palette buttons: one or two rows across the editor's width
-  const ew = wide ? Math.floor(W * 0.5) : W, n = game.L.pal.length;
-  const perRow = n <= 4 ? n : Math.ceil(n / (ew >= 8 * 70 ? 1 : 2));
+  const ew = wide ? Math.floor(W * 0.5) : W, n = game.L.mode === 'predict' ? 0 : game.L.mode === 'order' ? 4 : game.L.pal.length;
+  const perRow = Math.max(1, n <= 4 ? n : Math.ceil(n / (ew >= 8 * 70 ? 1 : 2)));
   const pw = Math.floor(clamp((ew - (perRow - 1) * 8) / perRow, 56, 96));
   st.setProperty('--pw', pw + 'px'); st.setProperty('--ph', (W < 500 ? 58 : 62) + 'px'); st.setProperty('--pf', (pw < 66 ? 0.7 : 0.78) + 'rem');
   let t;
@@ -1046,8 +1211,8 @@ function layout() {
     st.setProperty('--say-w', Math.max(bw, Math.min(sw, 420)) + 'px');
   } else {
     // the editor needs its palette, its controls and at least three lines of program
-    const palRows = Math.ceil(n / Math.max(1, Math.floor((W + 8) / (pw + 8))));
-    const ed = palRows * (W < 500 ? 58 : 62) + (palRows - 1) * 8 + 52 + 8 + 8 + 3 * 60 + 36 + g;
+    const palRows = n ? Math.ceil(n / Math.max(1, Math.floor((W + 8) / (pw + 8)))) : 0;
+    const ed = palRows * (W < 500 ? 58 : 62) + Math.max(0, palRows - 1) * 8 + 52 + 8 + 8 + 3 * 60 + 36 + g;
     t = Math.floor(Math.min(W / m.w, (H - sayH - g - ed) / m.h, H * 0.46 / m.h, 84));
     st.setProperty('--say-w', '100%');
   }
@@ -1066,6 +1231,7 @@ $('#code').addEventListener('click', (e) => {
   if (blk) selectBlock(blk.dataset.path);
 });
 palEl.addEventListener('click', (e) => { const b = e.target.closest('[data-add]'); if (b && !b.disabled) addBlock(b.dataset.add); });
+boardEl.addEventListener('click', (e) => { const t = e.target.closest('.tile'); if (t && game.L && game.L.mode === 'predict' && game.state === 'play') setGuess(+t.dataset.i); });
 $('#selDel').addEventListener('click', deleteSel);
 $('#selLeft').addEventListener('click', () => moveSel(-1));
 $('#selRight').addEventListener('click', () => moveSel(1));
@@ -1136,7 +1302,7 @@ function fits() {
     const targets = $$('#palette .pal, #selbar .btn, #controls .btn, #hintBtn').filter((b) => b.offsetParent !== null);
     targets.forEach((b) => { const r = R(b); if (!in1(r)) bad.push('button outside: ' + (b.getAttribute('aria-label') || b.textContent.trim())); if (r.width < minT || r.height < minT) bad.push('button small ' + Math.round(r.width) + 'x' + Math.round(r.height) + ': ' + (b.getAttribute('aria-label') || b.textContent.trim())); });
     $$('#palette .pal b, #selbar .btn span, #controls .lbl').forEach((b) => { if (b.offsetParent !== null && b.scrollWidth > R(b.closest('button')).width) bad.push('label cut: ' + b.textContent); });
-    $$('#code .gap, #code .blk, #code .num').forEach((b) => { const r = R(b); if (r.width < minT || r.height < minT) bad.push('program target small ' + Math.round(r.width) + 'x' + Math.round(r.height)); if (r.right > code.right + 0.5 || r.left < code.left - 0.5) bad.push('program target outside its pane'); });
+    $$('#code .gap, #code .blk, #code .num').filter((b) => b.offsetParent !== null && getComputedStyle(b).pointerEvents !== 'none').forEach((b) => { const r = R(b); if (r.width < minT || r.height < minT) bad.push('program target small ' + Math.round(r.width) + 'x' + Math.round(r.height)); if (r.right > code.right + 0.5 || r.left < code.left - 0.5) bad.push('program target outside its pane'); });
   } else {
     const card = $$('#screens > .screen').find((s) => !s.hidden);
     if (card) {
@@ -1150,17 +1316,22 @@ function fits() {
   return bad;
 }
 // check a program on a level without the page: the result of a run
-function check(id, text) { const L = byId[id], r = Robot.run(L.m, Robot.parse(text)); return { ok: r.ok, why: r.why, steps: r.steps, left: r.left, blocks: Robot.count(Robot.parse(text)), message: outcome(r) }; }
+function check(id, text) {
+  const L = byId[id], p = Robot.parse(text === undefined ? L.sol || L.prog : text), r = Robot.run(L.m, p);
+  return { ok: r.ok, why: r.why, steps: r.steps, left: r.left, blocks: Robot.count(p), message: outcome(r), x: r.x, y: r.y, end: r.y * L.m.w + r.x, robot: r.robot || 0 };
+}
 window.__robot = {
   game: game, rec: rec, save: save, LEVELS: LEVELS, WORLDS: WORLDS, Robot: Robot, Sound: Sound, Speech: Speech, OPEN_AT: OPEN_AT, SPEEDS: SPEEDS,
   state: () => ({ state: game.state, mode: game.mode, level: game.L ? game.L.id : '', prog: game.L ? Robot.print(game.prog) : '', blocks: game.L ? blocksUsed() : 0,
-    cur: Object.assign({}, game.cur), sel: game.sel, idx: game.idx, events: game.trace ? game.trace.events.length : 0, why: game.trace ? game.trace.why : '', say: $('#sayText').textContent }),
+    cur: Object.assign({}, game.cur), sel: game.sel, idx: game.idx, events: game.trace ? game.trace.events.length : 0, why: game.trace ? game.trace.why : '', say: $('#sayText').textContent,
+    lmode: game.L ? game.L.mode : '', guess: game.guess, tries: game.tries, n: game.n }),
   open: (id) => { openLevel(byId[id], true, true); return game.state; },
   setProg: (text) => { game.prog = Robot.parse(text); game.cur = { list: 'm', i: game.prog.main.length }; game.sel = null; toEdit(); edited(); return Robot.print(game.prog); },
   setSpeed: (k) => { game.timeScale = k; }, check: check, outcome: outcome, starsFor: starsFor, fits: fits, layout: layout, goHome: goHome, showWorld: showWorld,
   // progress from earlier play, for the playtests: these levels done with par
-  grant: (ids) => { ids.forEach((id) => { rec.levels[id] = { s: 3, b: byId[id].par }; }); totals(); writeRecords(); return rec.done; },
-  levelOpen: (id) => levelOpen(byId[id]), worldOpen: worldOpen, saveCode: saveCode, readCode: readCode, run: run, step: step, pause: pause, resume: resume
+  grant: (ids) => { ids.forEach((id) => { rec.levels[id] = { s: 3, b: byTries(byId[id]) ? 1 : byId[id].par }; }); totals(); writeRecords(); return rec.done; },
+  levelOpen: (id) => levelOpen(byId[id]), worldOpen: worldOpen, saveCode: saveCode, readCode: readCode, run: run, step: step, pause: pause, resume: resume,
+  guess: (i) => { setGuess(i); return game.guess; }, wNum: wNum, lvName: (id) => lvName(byId[id]), nextWorld: nextWorld, prevWorld: prevWorld, worldSize: worldSize, TEAM: TEAM
 };
 })();
 </script>

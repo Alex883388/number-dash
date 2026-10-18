@@ -1,0 +1,134 @@
+{
+  "world": 2,
+  "levels": [
+    {
+      "id": "2-1", "name": "Repeat!", "pal": "FLRr", "max": 3, "par": 2,
+      "sol": "r7(F)",
+      "map": ["~~~~~~~~", ">.*..*.G", "~~~~~~~~"],
+      "hint": "Put Forward inside Repeat, then tap the number until it says 7."
+    },
+    {
+      "id": "2-2", "name": "Two lines", "pal": "FLRr", "max": 6, "par": 5,
+      "sol": "r3(F) R r4(F)",
+      "map": ["~~~~~~", ">...~~", "~~~.~~", "~~~*~~", "~~~.~~", "~~~G~~"],
+      "hint": "Use a Repeat for each straight line, with a turn between."
+    },
+    {
+      "id": "2-3", "name": "Staircase", "pal": "FLRr", "max": 6, "par": 5,
+      "sol": "r5(F R F L)",
+      "map": [">.####", "#..###", "##*.##", "###..#", "####.*", "#####G"],
+      "hint": "One step, turn, one step, turn. Put that pattern in a Repeat."
+    },
+    {
+      "id": "2-4", "name": "Three lines", "pal": "FLRr", "max": 9, "par": 8,
+      "sol": "r2(F) R r3(F) L r5(F)",
+      "alt": ["F F R r3(F) L r5(F)"],
+      "map": [">..~~~~~", "~~.~~~~~", "~~*~~~~~", "~~...*.G"],
+      "hint": "Count each straight line. A Repeat for each one saves blocks."
+    },
+    {
+      "id": "2-5", "name": "Big steps", "pal": "FLRr", "max": 7, "par": 6,
+      "sol": "r3(F F L F R)",
+      "map": ["~~~~~~G", "~~~~..*", "~~..*~~", ">..~~~~"],
+      "hint": "Two steps, turn left, one step, turn right. Then again!"
+    },
+    {
+      "id": "2-6", "name": "Loop in a loop", "pal": "FLRr", "max": 6, "par": 4,
+      "sol": "r4(r3(F) R)",
+      "alt": ["r4(F F F R)"],
+      "map": ["######", "#>..*#", "#G~~.#", "#.~~.#", "#*..*#", "######"],
+      "hint": "A Repeat can go inside another Repeat. Try one for each side."
+    },
+    {
+      "id": "2-7", "name": "Rectangle", "pal": "FLRr", "max": 8, "par": 7,
+      "sol": "r2(r5(F) R r3(F) R)",
+      "map": ["########", "#>....*#", "#G~~~~.#", "#.~~~~.#", "#*....*#", "########"],
+      "hint": "A long side, a turn, a short side, a turn. Do that twice."
+    },
+    {
+      "id": "2-8", "name": "Comb", "pal": "FLRr", "max": 11, "par": 9,
+      "sol": "r4(r2(L F F F L) F F)",
+      "alt": ["r4(L r3(F) R R r3(F) L r2(F))"],
+      "map": ["*#*#*#G", ".#.#.#.", ".#*#.#.", ">..*..."],
+      "hint": "Turn left, go up, turn left: twice takes you up and back down."
+    },
+    {
+      "id": "2-9", "name": "Square swirl", "pal": "FLRr", "max": 10, "par": 8,
+      "sol": "r3(r4(F) R) r2(r2(F) R)",
+      "alt": ["r3(r4(F) R) r2(F F R)"],
+      "map": [">...*", "~~~~.", "..G~.", ".~~~.", "*...*"],
+      "hint": "Three long sides, then two short ones. One Repeat for each kind!"
+    },
+    {
+      "id": "2-10", "name": "S for snake", "pal": "FLRr", "max": 10, "par": 8,
+      "sol": "r2(r3(F) L) r3(r3(F) R)",
+      "map": ["*..<", ".~~~", ".~~~", "...*", "~~~.", "~~~.", "G..*"],
+      "hint": "The top of the S turns one way. The bottom turns the other way."
+    },
+    {
+      "id": "2-11", "name": "Four windows", "pal": "FLRr", "max": 8, "par": 6,
+      "sol": "r4(r4(F F R) R)",
+      "map": ["*...*", ".~G~.", "..^..", ".~.~.", "*...*"],
+      "hint": "Go round one window pane, then turn. How many panes are there?"
+    },
+    {
+      "id": "2-12", "name": "Compass points", "pal": "FLRr", "max": 9, "par": 7,
+      "sol": "r4(r2(F F L L) R)",
+      "alt": ["r4(F F R R F F L)"],
+      "map": ["~~*~~", "~~.~~", "G.^.*", "~~.~~", "~~*~~"],
+      "hint": "Out to a gem and back again. Is that the same few blocks twice?"
+    },
+    {
+      "id": "2-13", "name": "Diamond stairs", "pal": "FLRr", "max": 9, "par": 7,
+      "sol": "r4(r3(F R F L) R)",
+      "map": ["~~G>.~~", "~..~..~", "..~~~..", "*~~~~~*", "..~~~..", "~..~..~", "~~.*.~~"],
+      "hint": "Each side of the diamond is a staircase. Then the robot turns."
+    },
+    {
+      "id": "2-14", "name": "Cut corners", "pal": "FLRr", "max": 10, "par": 8,
+      "sol": "r4(r3(F) R F L F R)",
+      "map": ["~>..*~", ".G~~..", ".~~~~*", "*~~~~.", "..~~..", "~.*..~"],
+      "hint": "A long side, then a little step round the corner. Spot it four times!"
+    },
+    {
+      "id": "2-15", "name": "Wonky box", "pal": "FLRr", "max": 12, "par": 10,
+      "sol": "r2(r3(F) R r3(F R F L) R)",
+      "map": ["~~G>...", "~..~~*.", "*.~~..~", "...*.~~"],
+      "hint": "Two sides are straight and two are stairs. Do one of each, twice."
+    },
+    {
+      "id": "2-16", "name": "Hilltop", "pal": "FLRr", "max": 10, "par": 8,
+      "sol": "r2(r3(L F R F) R F)",
+      "alt": ["r3(L F R F) r3(R F L F)"],
+      "map": ["~~.*~~~", "~*...~~", "..~~.*~", ">~~~~.G"],
+      "hint": "Look again: is the way down the same stairs as the way up, turned?"
+    },
+    {
+      "id": "2-17", "name": "Boulder hop", "pal": "FLRr", "max": 11, "par": 9,
+      "sol": "r2(L r2(F R F) L F F)",
+      "alt": ["r2(L F R F F R F L F F)"],
+      "map": ["~~~~~~~", ".*.#.*.", ">#.*.#G", "~~~~~~~"],
+      "hint": "Up, over and down a rock: can you spot a little piece that comes twice?"
+    },
+    {
+      "id": "2-18", "name": "Plus pond", "pal": "FLRr", "max": 9, "par": 7,
+      "sol": "r4(r3(F F R) L L)",
+      "alt": ["r4(r2(F F R) F F L)"],
+      "map": ["~~..*~~", "~~.~.~~", ".G^~...", ".~~~~~.", "...~..*", "~~.~.~~", "~~*..~~"],
+      "hint": "Each arm of the pond is three sides of a little square."
+    },
+    {
+      "id": "2-19", "name": "Tree branches", "pal": "FLRr", "max": 12, "par": 10,
+      "sol": "r3(L r2(F L L F) R F F)",
+      "map": ["~~G~~", "~~.~~", "~*.*~", "~~.~~", "~*.*~", "~~.~~", "~*^*~"],
+      "hint": "Out to a gem and back, then the same on the other side. Then climb!"
+    },
+    {
+      "id": "2-20", "name": "Big window", "pal": "FLRr", "max": 8, "par": 6,
+      "sol": "r4(r4(r3(F) R) R)",
+      "alt": ["r4(r4(F F F R) R)"],
+      "map": ["*.....*", ".~~.~~.", ".~~G~~.", "...^...", ".~~.~~.", ".~~.~~.", "*.....*"],
+      "hint": "A loop in a loop in a loop! Start with one side of one pane."
+    }
+  ]
+}

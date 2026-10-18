@@ -1,0 +1,54 @@
+{
+  "world": 1,
+  "levels": [
+    {
+      "id": "1-1", "name": "First steps", "pal": "FLR", "max": 7, "par": 3,
+      "sol": "F F F",
+      "map": ["~~~~~~", "~>..G~", "~~~~~~"],
+      "hint": "Tap Forward three times, then press Run."
+    },
+    {
+      "id": "1-2", "name": "Shiny gem", "pal": "FLR", "max": 8, "par": 4,
+      "sol": "F F F F",
+      "map": ["~~~~~~~", "~>.*.G~", "~~~~~~~"],
+      "hint": "Walk over the gem to pick it up, then on to the flag."
+    },
+    {
+      "id": "1-3", "name": "Round the corner", "pal": "FLR", "max": 9, "par": 5,
+      "sol": "F F R F F",
+      "map": ["~~~~~", "~>..~", "~~~.~", "~~~G~", "~~~~~"],
+      "hint": "Turn right turns the robot on the spot. It does not move."
+    },
+    {
+      "id": "1-4", "name": "Left this time", "pal": "FLR", "max": 10, "par": 6,
+      "sol": "F F F L F F",
+      "map": ["~~~~~~", "~~~~G~", "~~~~.~", "~>.*.~", "~~~~~~"],
+      "hint": "Pick up the gem, then turn left to face the flag."
+    },
+    {
+      "id": "1-5", "name": "Zigzag", "pal": "FLR", "max": 13, "par": 9,
+      "sol": "F R F L F R F L F",
+      "map": ["~~~~~~", "~>.~~~", "~~.*~~", "~~~.G~", "~~~~~~"],
+      "hint": "Right, left, right, left: one square at a time."
+    },
+    {
+      "id": "1-6", "name": "Turn around", "pal": "FLR", "max": 13, "par": 9,
+      "sol": "F F R R F F F F F",
+      "alt": ["F F L L F F F F F"],
+      "map": ["~~~~~~~~", "~*.<..G~", "~~~~~~~~"],
+      "hint": "Get the gem first. Two turns make the robot face the other way."
+    },
+    {
+      "id": "1-7", "name": "Round the pond", "pal": "FLR", "max": 16, "par": 12,
+      "sol": "F F F F R F F R F F F F",
+      "map": ["#######", "#>...*#", "#~~~~.#", "#G....#", "#######"],
+      "hint": "Go all the way round the water. Robots cannot swim!"
+    },
+    {
+      "id": "1-8", "name": "Long walk", "pal": "FLR", "max": 17, "par": 13,
+      "sol": "F F F R F F R F F F L F F",
+      "map": ["######", "#>.*.#", "####.#", "#.*..#", "#.####", "#G####"],
+      "hint": "A long walk with two gems. Plan it one square at a time."
+    }
+  ]
+}

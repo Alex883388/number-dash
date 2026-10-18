@@ -22,7 +22,7 @@ const LONGEST = "(() => { const L = __robot.LEVELS.slice().sort((a, b) => b.hint
 const menus = (tag) => [
   { eval: '__robot.goHome(); "home"' }, { sleep: 400 }, { shot: 'rob-i-' + tag + '-home' }, fit(tag + ' home'),
   ...tap('.world[data-world="2"]'), { shot: 'rob-i-' + tag + '-world' }, fit(tag + ' world card'),
-  ...tap('#wHomeBtn'), ...tap('#backupBtn'), { shot: 'rob-i-' + tag + '-backup' }, fit(tag + ' backup card'),
+  ...tap('#wHomeBtn'), ...tap('#backupBtn'), { sleep: 300 }, { shot: 'rob-i-' + tag + '-backup' }, fit(tag + ' backup card'),
   { eval: "document.getElementById('codeIn').value = document.getElementById('codeOut').value; 'pasted'" }, ...tap('#loadBtn'), fit(tag + ' question card'),
   ...tap('#confirmNo'), ...tap('#backupHomeBtn')
 ];

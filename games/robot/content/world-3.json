@@ -1,0 +1,129 @@
+{
+  "world": 3,
+  "levels": [
+    {
+      "id": "3-1", "name": "Meet F1", "pal": "FLRf", "max": 9, "par": 8,
+      "sol": "f R f L f|F F F",
+      "map": [">..*~~~", "~~~.~~~", "~~~.~~~", "~~~..*G"],
+      "hint": "Build three Forwards in the F1 row. Then use F1 in your program."
+    },
+    {
+      "id": "3-2", "name": "F1 stairs", "pal": "FLRf", "max": 9, "par": 8,
+      "sol": "f f f f|F R F L",
+      "map": ["~~~.G", "~~.*~", "~..~~", ".*~~~", "^~~~~"],
+      "hint": "Put one stair in F1: Forward, turn right, Forward, turn left."
+    },
+    {
+      "id": "3-3", "name": "Gem trips", "pal": "FLRf", "max": 12, "par": 11,
+      "sol": "f f f|F L F R R F L F",
+      "alt": ["f f f|F L F L L F L F"],
+      "map": ["~*~*~*~", ">.....G", "~~~~~~~"],
+      "hint": "One trip to a gem and back goes in F1. Use it three times."
+    },
+    {
+      "id": "3-4", "name": "Plus sign", "pal": "FLRf", "max": 13, "par": 11,
+      "sol": "f f R f f|F F L L F F",
+      "alt": ["f f f F F|F F R R F F L"],
+      "map": ["~~*~~", "~~.~~", "G.^.*", "~~.~~", "~~*~~"],
+      "hint": "In F1, go to the end of an arm and back. Which way is it facing then?"
+    },
+    {
+      "id": "3-5", "name": "Stairs and a step", "pal": "FLRf", "max": 11, "par": 10,
+      "sol": "f f F f f f|F L F R",
+      "map": ["~~~~~~G", "~~~~~*.", "~~~~..~", "~~.*.~~", "~..~~~~", ">.~~~~~"],
+      "hint": "One stair goes in F1. Use it, step along, then use it again."
+    },
+    {
+      "id": "3-6", "name": "Turning stairs", "pal": "FLRf", "max": 13, "par": 12,
+      "sol": "f f f R f f f f|F R F L",
+      "map": ["~>.~~", "~~..~", "~~~*.", "~~~~.", "~~~..", "~~.*~", "~..~~", "G.~~~"],
+      "hint": "F1 works whichever way the robot faces. Turn, then use it again."
+    },
+    {
+      "id": "3-7", "name": "Gem alleys", "pal": "FLRf", "max": 13, "par": 12,
+      "sol": "f f F f|F R F L L F R F",
+      "alt": ["f f F f|F R F R R F R F"],
+      "map": ["~~~~~~~~", ">......G", "#*#*##*#"],
+      "hint": "The alleys are not evenly spaced. An extra Forward fills the gap."
+    },
+    {
+      "id": "3-8", "name": "Two gardens", "pal": "FLRrf", "max": 11, "par": 11,
+      "sol": "f r4(F) f R r3(F)|r4(F F R)",
+      "map": [">.....*", ".~.#.~.", "*.*#..*", "~~~~G~~"],
+      "hint": "Walking round a garden is the same each time. A Repeat fits in F1!"
+    },
+    {
+      "id": "3-9", "name": "Hook spiral", "pal": "FLRrf", "max": 9, "par": 8,
+      "sol": "f L r3(f)|F F R F",
+      "map": [">..~~", "~~*..", "~~~~*", "~G~~.", "~..*."],
+      "hint": "The path is four hooks. Build one hook in F1. Is there an extra turn?"
+    },
+    {
+      "id": "3-10", "name": "Garden steps", "pal": "FLRrf", "max": 9, "par": 8,
+      "sol": "f r3(f L)|F R F F",
+      "map": ["~~~~~>.", "~~~~~~.", "~~~~~~*", "~~~~*..", "~~*..~~", "G..~~~~"],
+      "hint": "Every step down is the same piece. Which turn comes after each one?"
+    },
+    {
+      "id": "3-11", "name": "Two by two", "pal": "FLRrf", "max": 10, "par": 9,
+      "sol": "r2(f L F f)|F R F F",
+      "map": ["~>.~~", "~~.~~", "~~*..", "~~~~.", "~~~~*", "~~*..", "~~.~~", "G..~~"],
+      "hint": "Find the piece that comes four times. Two of them fit in each round!"
+    },
+    {
+      "id": "3-12", "name": "Bumpy slope", "pal": "FLRrf", "max": 12, "par": 10,
+      "sol": "f F R r3(f)|F F R F L",
+      "map": [">..~", "~~*.", "~~~.", "~~*.", "~~.~", "~*.~", "~.~~", "G.~~"],
+      "hint": "Spot the piece that keeps coming back. One gap is different!"
+    },
+    {
+      "id": "3-13", "name": "Two pairs", "pal": "FLRrf", "max": 11, "par": 10,
+      "sol": "r2(f F) L r2(f)|F F R F",
+      "map": ["~~~>..", "~~~~~*", "~~~~~.", "~~~~~.", "~~~.*.", "G~~.~~", "..*.~~"],
+      "hint": "The hooks come in pairs. What happens between the two pairs?"
+    },
+    {
+      "id": "3-14", "name": "Stair landing", "pal": "FLRrf", "max": 10, "par": 9,
+      "sol": "f F f f|r2(F R F L)",
+      "map": [">.~~~~~~", "~..~~~~~", "~~*..~~~", "~~~~..~~", "~~~~~*.~", "~~~~~~..", "~~~~~~~G"],
+      "hint": "Two stairs make one flight. Put a Repeat in F1. Where is the landing?"
+    },
+    {
+      "id": "3-15", "name": "Cog wheel", "pal": "FLRrf", "max": 11, "par": 9,
+      "sol": "f r3(f F)|r2(F R F) L",
+      "alt": ["f r3(f F)|F R F F R F L"],
+      "map": ["~..*~~", "~.~.G~", "*.~~>.", ".~~~~.", "...~.*", "~~*..~"],
+      "hint": "Each tooth of the cog is the same. Look for the steps between teeth!"
+    },
+    {
+      "id": "3-16", "name": "Wiggly road", "pal": "FLRrf", "max": 12, "par": 11,
+      "sol": "r2(f) r2(f R F)|F R F L F",
+      "map": [">.~~~~~", "~.*.~~~", "~~~.*.~", "~~~~~.*", "~~~~~~.", "~~~~~..", "~~~~G*~"],
+      "hint": "Every wiggle is the same. Do the wiggles come in twos?"
+    },
+    {
+      "id": "3-17", "name": "Three ponds", "pal": "FLRrf", "max": 12, "par": 10,
+      "sol": "f r2(f F)|L r3(F F R) L",
+      "map": ["~..*~~", "~.~.~~", "~>~...", "G~~~~.", ".~...*", ".~.~~~", "*..~~~"],
+      "hint": "Round three sides of a pond is one F1. Look at the gaps between."
+    },
+    {
+      "id": "3-18", "name": "Stair hook", "pal": "FLRrf", "max": 13, "par": 11,
+      "sol": "f r2(f R) F f|r2(F R F L)",
+      "map": ["~>.~~~", "~~..~~", "~~~*.~", "~~~~..", "G~~~~*", "..~~..", "~..*.~"],
+      "hint": "One staircase goes in F1. It comes four times, facing different ways."
+    },
+    {
+      "id": "3-19", "name": "Stone arch", "pal": "FLRrf", "max": 12, "par": 10,
+      "sol": "f F f f|r3(L F R F) R",
+      "map": ["~~.*~~~", "~....~~", "..~~..~", ">~~~~..", "~~~~~~*", "~~~~~..", "~~~~..~", "~~~G.~~"],
+      "hint": "Each staircase ends with a turn. Find the one gap that is different."
+    },
+    {
+      "id": "3-20", "name": "Ring of stairs", "pal": "FLRrf", "max": 12, "par": 10,
+      "sol": "f r3(f F)|R r3(L F R F)",
+      "map": ["~~.*G~~~", "~..~>.~~", "..~~~..~", ".~~~~~..", "*~~~~~~*", "..~~~~..", "~..~~..~", "~~..*.~~"],
+      "hint": "Turn, then climb a staircase: that is F1. Which corners have a step?"
+    }
+  ]
+}

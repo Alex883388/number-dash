@@ -1,0 +1,93 @@
+{
+  "order": [1, 2, 3, 6, 7, 8, 4, 9, 10, 11, 5],
+  "worlds": [
+    {
+      "id": 1,
+      "name": "Sequences",
+      "icon": "👣",
+      "size": 8,
+      "tip": "Try a shorter way.",
+      "intro": "A program is a list of steps. The robot does them in order, one by one."
+    },
+    {
+      "id": 2,
+      "name": "Loops",
+      "icon": "🔁",
+      "size": 20,
+      "tip": "A Repeat saves blocks.",
+      "intro": "Repeat does the blocks inside it again and again, so you need far fewer blocks."
+    },
+    {
+      "id": 3,
+      "name": "Functions",
+      "icon": "🧩",
+      "size": 20,
+      "tip": "F1 saves blocks.",
+      "intro": "F1 is your own block. Build it once in the F1 row, then use it as often as you like."
+    },
+    {
+      "id": 6,
+      "name": "Mixed-up Code",
+      "icon": "🔀",
+      "size": 20,
+      "tip": "Move the blocks instead.",
+      "intro": "All the right blocks are here, but in a muddle. Tap a block and move it until the order is right."
+    },
+    {
+      "id": 7,
+      "name": "Shrink It",
+      "icon": "🗜️",
+      "size": 20,
+      "tip": "Repeat and F1 make it shorter.",
+      "intro": "These programs work, but they are far too long. Make them short and neat with Repeat and F1."
+    },
+    {
+      "id": 8,
+      "name": "Pixel Painter",
+      "icon": "🎨",
+      "size": 20,
+      "tip": "A Repeat saves blocks.",
+      "intro": "Paint colours the square the robot is on. Paint every dotted square to finish the picture."
+    },
+    {
+      "id": 4,
+      "name": "Conditions",
+      "icon": "🤔",
+      "size": 20,
+      "tip": "Let an If do the work.",
+      "intro": "If lets the robot look before it moves, so one short program can find its own way."
+    },
+    {
+      "id": 9,
+      "name": "Robot Team",
+      "icon": "🤝",
+      "size": 20,
+      "tip": "Let an If do the work.",
+      "intro": "Every robot runs the same program, one after the other. Write one program that works for them all."
+    },
+    {
+      "id": 10,
+      "name": "Counters",
+      "icon": "🔢",
+      "size": 20,
+      "tip": "Let n do the counting.",
+      "intro": "The robot can remember a number called n. Plus one makes it bigger, and Repeat n uses it."
+    },
+    {
+      "id": 11,
+      "name": "Code Reader",
+      "icon": "🔍",
+      "size": 20,
+      "tip": "",
+      "intro": "Read the program like a real coder. Where will the robot stop? Tap that square, then check."
+    },
+    {
+      "id": 5,
+      "name": "Debugging",
+      "icon": "🐞",
+      "size": 20,
+      "tip": "Fix the bug instead.",
+      "intro": "These programs have bugs. Run them, spot what goes wrong and fix them with few changes."
+    }
+  ]
+}

@@ -1,0 +1,134 @@
+{
+  "world": 4,
+  "levels": [
+    {
+      "id": "4-1", "name": "Until the flag", "pal": "FLRu", "max": 3, "par": 2,
+      "sol": "u(F)",
+      "map": ["~~~~~~~~", ">.*..*.G", "~~~~~~~~"],
+      "hint": "Repeat until flag keeps going until the robot is on the flag."
+    },
+    {
+      "id": "4-2", "name": "Clear ahead?", "pal": "FLRiu", "max": 5, "par": 4,
+      "sol": "u(i(F)(R))",
+      "map": [">....", "~~~~.", "~~~~*", "~~~~.", "~~~~G"],
+      "hint": "If the way ahead is clear, go Forward. If not, turn right."
+    },
+    {
+      "id": "4-3", "name": "Snail shell", "pal": "FLRiu", "max": 5, "par": 4,
+      "sol": "u(i(F)(R))",
+      "map": [">..*...", "######.", ".....#.", ".###.#.", "*#G..#*", ".#####.", "...*..."],
+      "hint": "The same four blocks can follow the whole spiral. Let If decide!"
+    },
+    {
+      "id": "4-4", "name": "Gem signs", "pal": "FLRigu", "max": 5, "par": 4,
+      "sol": "u(F g(R))",
+      "map": [">....*", "..~~..", ".*.G..", "...~..", ".*...*"],
+      "hint": "Keep walking. Each time the robot finds a gem, it turns right."
+    },
+    {
+      "id": "4-5", "name": "Walls and gems", "pal": "FLRigu", "max": 7, "par": 6,
+      "sol": "u(i(F)(L) g(R))",
+      "map": [">..*.~~", "~~~.~~~", "~~~.~~~", "~~~..*.", "~~~#~.~", "~~~~~G~"],
+      "hint": "A wall ahead means turn left. A gem means turn right."
+    },
+    {
+      "id": "4-6", "name": "Left or right?", "pal": "FLRiu", "max": 8, "par": 7,
+      "sol": "u(i(F)(L i()(R R)))",
+      "alt": ["u(i(F)(L i()(L L)))"],
+      "map": ["########", "###.*..#", "###.##.#", ">*..##.#", "######*#", "######.G", "########"],
+      "hint": "At a corner try left. If left is blocked too, turn round to face right."
+    },
+    {
+      "id": "4-7", "name": "Rocky road", "pal": "FLRiu", "max": 12, "par": 11,
+      "sol": "u(i(F)(L F R F F R F L))",
+      "map": ["~.*.#.*.", ">.#.*.#G", "~~~~~~~~"],
+      "hint": "When a rock is in the way, step up, go past it and come back down."
+    },
+    {
+      "id": "4-8", "name": "Long maze", "pal": "FLRiu", "max": 8, "par": 7,
+      "sol": "u(i(F)(L i()(R R)))",
+      "alt": ["u(i(F)(R i()(L L)))"],
+      "map": [">.*..###", "####.###", "####...#", "######.#", "##.*...#", "##.#####", "##..*G##"],
+      "hint": "A big maze, but the program from Left or right? still works."
+    },
+    {
+      "id": "4-9", "name": "Look left", "pal": "FLRiju", "max": 4, "par": 4,
+      "sol": "u(j(L) F)",
+      "alt": ["u(F j(L))"],
+      "map": ["~~~~.~~~", "~G*..~~~", "~~~~.~~~", "~>.*...~", "~~~~~~~~"],
+      "hint": "New block: If path left. The robot can look sideways as it walks!"
+    },
+    {
+      "id": "4-10", "name": "Look right", "pal": "FLRijku", "max": 4, "par": 4,
+      "sol": "u(k(R) F)",
+      "alt": ["u(F k(R))"],
+      "map": ["~.~~~~~~", "~...*..~", "~.~~~.~~", "~*~~~.~~", "~.~G*.~~", "~.~~~.~~", "~^~~~~~~"],
+      "hint": "Now meet If path right. Which way do these side paths go?"
+    },
+    {
+      "id": "4-11", "name": "Stay on the road", "pal": "FLRijku", "max": 7, "par": 6,
+      "sol": "u(i(F)(j(L)(R)))",
+      "alt": ["u(i(F)(k(R)(L)))"],
+      "map": [">..*...#", "##.#.#.#", "##...#.#", "######.#", "#...*..#", "#.#.#.##", "#G#...##"],
+      "hint": "The little loops skip the gems. At a wall, which way is open?"
+    },
+    {
+      "id": "4-12", "name": "Side streets", "pal": "FLRijku", "max": 7, "par": 6,
+      "sol": "u(j(L)(k(R)) F)",
+      "alt": ["u(k(R)(j(L)) F)"],
+      "map": ["##...###", "##.#.*G#", "##.#*#.#", "##.*...#", "##.#####", ">*..####"],
+      "hint": "Turn into each side street, but only once. The else part can help!"
+    },
+    {
+      "id": "4-13", "name": "Gem town", "pal": "FLRigjku", "max": 7, "par": 6,
+      "sol": "u(F g(j(L)(R)))",
+      "map": ["..*.*", ".#.#.", "..G..", ".#.#.", "*...*", ".#.#.", "^...."],
+      "hint": "Each gem says turn here. The walls say which way."
+    },
+    {
+      "id": "4-14", "name": "Wall walker", "pal": "FLRijku", "max": 8, "par": 7,
+      "sol": "u(j(L F)(i(F)(R)))",
+      "map": ["###v#.*", "###...#", "#...###", "###....", "#...###", "###..*#", "###G###"],
+      "hint": "In a maze, keep your left hand on the wall and you will never get lost."
+    },
+    {
+      "id": "4-15", "name": "Frog pond", "pal": "FLRijku", "max": 8, "par": 7,
+      "sol": "u(k(R F)(i(F)(L)))",
+      "map": ["......#G", "v~~~~.#.", ".~~~~...", ".~~~~.##", "......##", "*##*####"],
+      "hint": "Round and round the pond! Which hand should touch the wall this time?"
+    },
+    {
+      "id": "4-16", "name": "Which hand?", "pal": "FLRijku", "max": 8, "par": 7,
+      "sol": "u(j(L F)(i(F)(R)))",
+      "map": ["*##*###", ".##.###", ".##.###", "...^..G", ".##.###", "*##.###"],
+      "hint": "One hand finds the flag too soon. Which hand gets the gems first?"
+    },
+    {
+      "id": "4-17", "name": "Round trip", "pal": "FLRijku", "max": 8, "par": 7,
+      "sol": "u(j(L F)(i(F)(R)))",
+      "alt": ["u(k(R F)(i(F)(L)))"],
+      "map": ["###*####", "G>......", "#####*#.", "####*##.", "##......", "###*##*#"],
+      "hint": "The flag is just behind you. Fetch the gems first, then come back!"
+    },
+    {
+      "id": "4-18", "name": "Crystal cave", "pal": "FLRijku", "max": 8, "par": 7,
+      "sol": "u(j(L F)(i(F)(R)))",
+      "map": ["##*##*##", ">......#", ".......#", "##.##..#", "#.###..*", "G......#", ".......#", "###*####"],
+      "hint": "Wide tunnels, but a hand on the wall still finds the way. Which hand?"
+    },
+    {
+      "id": "4-19", "name": "No looking ahead", "pal": "FLRjku", "max": 6, "par": 5,
+      "sol": "u(j(L F)(R))",
+      "alt": ["u(k(R F)(L))"],
+      "map": ["v#.#...", ".#.###.", ".*...*.", ".#.#.#.", ".#.#.#G"],
+      "hint": "No If path ahead today. Can you keep a hand on the wall without it?"
+    },
+    {
+      "id": "4-20", "name": "Maze master", "pal": "FLRijku", "max": 8, "par": 7,
+      "sol": "u(j(L F)(i(F)(R)))",
+      "alt": ["u(k(R F)(i(F)(L)))"],
+      "map": ["..*#.#.", ".#.#.#.", "^#.*...", "####.##", ".#.....", ".#.#*##", "...#..G"],
+      "hint": "One short program can solve any maze. You know it already!"
+    }
+  ]
+}

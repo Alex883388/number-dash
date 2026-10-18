@@ -1,0 +1,165 @@
+{
+  "world": 5,
+  "levels": [
+    {
+      "id": "5-1", "name": "Wrong turn", "mode": "fix", "pal": "FLR", "max": 8, "par": 6,
+      "sol": "F F F R F F",
+      "start": "F F F L F F",
+      "fix": 1,
+      "map": ["~>.*.~", "~~~~.~", "~~~~G~"],
+      "hint": "The robot turns the wrong way. Find that turn and fix it."
+    },
+    {
+      "id": "5-2", "name": "Count again", "mode": "fix", "pal": "FLRr", "max": 6, "par": 5,
+      "sol": "r3(F) L r4(F)",
+      "start": "r3(F) L r3(F)",
+      "fix": 1,
+      "map": ["~.*.<~", "~.~~~~", "~*~~~~", "~.~~~~", "~G~~~~"],
+      "hint": "The robot stops one square too soon. Check the Repeat numbers."
+    },
+    {
+      "id": "5-3", "name": "Inside or out?", "mode": "fix", "pal": "FLRr", "max": 6, "par": 5,
+      "sol": "r4(F R F L)",
+      "start": "r4(F R F) L",
+      "fix": 1,
+      "map": ["~~~~~v~", "~~~~..~", "~~~*.~~", "~~..~~~", "~G*~~~~"],
+      "hint": "One block is outside the Repeat. Should it be inside?"
+    },
+    {
+      "id": "5-4", "name": "Short F1", "mode": "fix", "pal": "FLRf", "max": 9, "par": 8,
+      "sol": "f R f L f|F F F",
+      "start": "f R f L f|F F",
+      "fix": 1,
+      "map": ["~~~~G~", "~~~~.~", "~~~~*~", "~.*..~", "~.~~~~", "~.~~~~", "~^~~~~"],
+      "hint": "F1 is one step too short. Fix F1 and every use of it gets better."
+    },
+    {
+      "id": "5-5", "name": "Dizzy robot", "mode": "fix", "pal": "FLRiu", "max": 5, "par": 4,
+      "sol": "u(i(F)(R))",
+      "start": "u(i(F)())",
+      "fix": 1,
+      "map": ["~~~~~v~", "~~~~~.~", "~~~~~*~", "~~~~~.~", "~G.*..~"],
+      "hint": "The robot gets dizzy at the corner. What should it do there?"
+    },
+    {
+      "id": "5-6", "name": "Spinning", "mode": "fix", "pal": "FLRr", "max": 6, "par": 4,
+      "sol": "r4(r3(F) R)",
+      "start": "r4(r3(F) R R)",
+      "fix": 1,
+      "map": ["######", "#.*..#", "#.~~.#", "#*~~*#", "#^G..#", "######"],
+      "hint": "The robot spins too much at each corner. Take one block away."
+    },
+    {
+      "id": "5-7", "name": "Mixed up", "mode": "fix", "pal": "FLRiu", "max": 5, "par": 4,
+      "sol": "u(i(F)(R))",
+      "start": "u(i(R)(F))",
+      "fix": 2,
+      "map": [">.*...", "#####.", "##.G#*", "##.##.", "##.*.."],
+      "hint": "The If is mixed up. Which block belongs on which side?"
+    },
+    {
+      "id": "5-8", "name": "Two bugs", "mode": "fix", "pal": "FLRrf", "max": 11, "par": 9,
+      "sol": "r2(f) F r3(f)|F R F L",
+      "start": "r2(f) F r2(f)|F R F R",
+      "fix": 2,
+      "map": [">.~~~~~", "~..~~~~", "~~.*.~~", "~~~~..~", "~~~~~*.", "~~~~~~G"],
+      "hint": "Two bugs this time: one in the program and one in F1."
+    },
+    {
+      "id": "5-9", "name": "Missed turning", "mode": "fix", "pal": "FLRjku", "max": 6, "par": 4,
+      "sol": "u(F k(R)())",
+      "start": "u(F j(R)())",
+      "fix": 1,
+      "map": ["..*...", ".~~~~.", ".~~~~*", ".~~~~.", "^~~~~G"],
+      "hint": "The robot walks straight past the turning and bumps."
+    },
+    {
+      "id": "5-10", "name": "One too few", "mode": "fix", "pal": "FLRr+-", "max": 7, "par": 6, "n0": 2,
+      "sol": "+ r3(rn(F) R +)",
+      "start": "r3(rn(F) R +)",
+      "fix": 1,
+      "map": ["...*.", "*~~~.", ".~~~.", "^~~~.", "~~~~.", "~~~~G"],
+      "hint": "The robot turns one square too soon and bumps."
+    },
+    {
+      "id": "5-11", "name": "Missing pixel", "mode": "fix", "pal": "FLRPr", "max": 8, "par": 7,
+      "sol": "r4(F P) L r3(F P)",
+      "start": "r4(F P) L r3(P F)",
+      "fix": 1,
+      "map": [".v....", ".o....", ".o....", ".o....", ".oooo.", "......"],
+      "hint": "The last square of the L stays blank."
+    },
+    {
+      "id": "5-12", "name": "Rock hopper", "mode": "fix", "pal": "FLRrf", "max": 15, "par": 13,
+      "sol": "F f F F f|L F R F F R F L",
+      "start": "F f F f F|L F R F F R F L",
+      "fix": 1,
+      "map": ["~.*.~.*.", ">.#...#G", "~~~~~~~~"],
+      "hint": "The robot's second hop bumps into the water."
+    },
+    {
+      "id": "5-13", "name": "Two arches", "mode": "fix", "pal": "FLRgu", "max": 6, "par": 4,
+      "sol": "u(F g(R))",
+      "start": "u(F F g(R))",
+      "fix": 1,
+      "map": ["*.*~*.*", ".~.~.~.", "^~G~.~.", "~~~~^~G"],
+      "hint": "The second robot steps onto its gem but does not turn."
+    },
+    {
+      "id": "5-14", "name": "Look before you leap", "mode": "fix", "pal": "FLRiu", "max": 6, "par": 4,
+      "sol": "u(i(F)(L))",
+      "start": "u(i(F F)(L))",
+      "fix": 1,
+      "map": ["*...*", ".###.", ".#G#.", "...#.", "####^"],
+      "hint": "The robot checks the way is clear, then bumps anyway."
+    },
+    {
+      "id": "5-15", "name": "Four arms", "mode": "fix", "pal": "FLRr", "max": 10, "par": 8,
+      "sol": "r4(r2(F) R R r2(F) L)",
+      "start": "r4(r2(F) R R) r2(F) L",
+      "fix": 2,
+      "map": ["~~*~~", "~~.~~", "G.^.*", "~~.~~", "~~*~~"],
+      "hint": "The robot walks up and down one arm and never tries the others."
+    },
+    {
+      "id": "5-16", "name": "Wiggle stairs", "mode": "fix", "pal": "FLRru+-", "max": 9, "par": 8, "n0": 1,
+      "sol": "u(rn(F) R rn(F) L +)",
+      "start": "u(rn(F) R rn(F) L -)",
+      "fix": 1,
+      "map": ["~~~...G", "~~~.~~~", "~~~.~~~", "~..*~~~", "~.~~~~~", ".*~~~~~", "^~~~~~~"],
+      "hint": "After one stair, the robot stands still and wiggles for ever."
+    },
+    {
+      "id": "5-17", "name": "Hand on the wall", "mode": "fix", "pal": "FLRiku", "max": 9, "par": 7,
+      "sol": "u(k(R F)(i(F)(L)))",
+      "start": "u(k(R F)(i(F)(R)))",
+      "fix": 1,
+      "map": [".*..G", ".####", "..*.#", "###.#", ".*..#", ".####", "^####"],
+      "hint": "At the first left-hand corner, the robot turns round and walks back."
+    },
+    {
+      "id": "5-18", "name": "Paint a cup", "mode": "fix", "pal": "FLRPr", "max": 12, "par": 11,
+      "sol": "r3(F P) L r2(F P) L r2(F P)",
+      "start": "r3(F P) R r3(F P) L r2(F P)",
+      "fix": 2,
+      "map": [".v...", ".o.o.", ".o.o.", ".ooo.", "....."],
+      "hint": "Two bugs: the robot paints outside the cup in two places."
+    },
+    {
+      "id": "5-19", "name": "Dizzy corners", "mode": "fix", "pal": "FLRiku", "max": 7, "par": 6,
+      "sol": "u(i(F)(k(R)(L)))",
+      "start": "u(i(F)(k(L)()))",
+      "fix": 2,
+      "map": [".*..~~~G", ".~~.~~~.", "^~~G~.*.", "~~~~~.~~", "~~~~~.~~", "~~~~~^~~"],
+      "hint": "Two bugs! Each robot gets dizzy at a different kind of corner."
+    },
+    {
+      "id": "5-20", "name": "Triple trouble", "mode": "fix", "pal": "FLRrfjku", "max": 13, "par": 12,
+      "sol": "r3(F) r2(f) u(F k(R)())|R F L F",
+      "start": "r4(F) r2(f) u(F j(R)())|R F R F",
+      "fix": 3,
+      "map": ["~~....*", "~~*~~~.", "~..~~~G", "*.~~~~~", ".~~~~~~", ".~~~~~~", "^~~~~~~"],
+      "hint": "Three bugs: the robot bumps before the stairs, on them and at the top."
+    }
+  ]
+}

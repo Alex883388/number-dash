@@ -1,0 +1,132 @@
+{
+  "world": 8,
+  "levels": [
+    {
+      "id": "8-1", "name": "First stripe", "pal": "FLRPr", "max": 4, "par": 3,
+      "sol": "r5(F P)",
+      "map": ["~~~~~~~", ">ooooo~", "~~~~~~~"],
+      "hint": "Step forward, then paint. A Repeat can do that pair five times."
+    },
+    {
+      "id": "8-2", "name": "Dotted line", "pal": "FLRPr", "max": 5, "par": 4,
+      "sol": "r4(F P F)",
+      "map": ["~~~~~~~~", ">o.o.o.o", "~~~~~~~~"],
+      "hint": "Paint one square, skip the next. A Repeat does the rest."
+    },
+    {
+      "id": "8-3", "name": "Letter L", "pal": "FLRPr", "max": 7, "par": 5,
+      "sol": "r2(r4(F P) L)",
+      "alt": ["r4(F P) L r4(F P)"],
+      "map": ["v~~~~", "o~~~~", "o~~~~", "o~~~~", "ooooo"],
+      "hint": "Both arms of the L are four squares long. Can one Repeat do both?"
+    },
+    {
+      "id": "8-4", "name": "Stairway", "pal": "FLRPr", "max": 8, "par": 7,
+      "sol": "r4(F P L F P R)",
+      "map": ["~~~~o", "~~~oo", "~~oo~", "~oo~~", ">o~~~"],
+      "hint": "Each stair is two painted squares and two turns. Repeat one stair."
+    },
+    {
+      "id": "8-5", "name": "Picture frame", "pal": "FLRPr", "max": 8, "par": 6,
+      "sol": "F r4(r3(F P) R)",
+      "map": [">oooo", "~o~~o", "~o~~o", "~oooo"],
+      "hint": "Step onto the corner first. After that, every side is the same."
+    },
+    {
+      "id": "8-6", "name": "Diagonal", "pal": "FLRPr", "max": 8, "par": 6,
+      "sol": "r5(F P R F L)",
+      "map": [">o~~~~", "~.o~~~", "~~.o~~", "~~~.o~", "~~~~.o"],
+      "hint": "The robot cannot step sideways. Paint, then take a zigzag step."
+    },
+    {
+      "id": "8-7", "name": "Mountain", "pal": "FLRPr", "max": 10, "par": 9,
+      "sol": "r2(r3(F P L F P R) R)",
+      "map": ["~~~o~~~", "~~ooo~~", "~oo~oo~", ">o~~~o~"],
+      "hint": "Climb the stairs, turn, and the same stair blocks bring you down!"
+    },
+    {
+      "id": "8-8", "name": "Robot compass", "pal": "FLRPr", "max": 11, "par": 9,
+      "sol": "r4(r2(F P) R R r2(F) L)",
+      "map": ["~~o~~", "~~o~~", "oo^oo", "~~o~~", "~~o~~"],
+      "hint": "Paint one arm, walk back to the middle, then turn to the next arm."
+    },
+    {
+      "id": "8-9", "name": "Letter T", "pal": "FLRPr", "max": 11, "par": 9,
+      "sol": "r2(r5(F P) L L r2(F) L)",
+      "alt": ["r5(F P) L L r2(F) L r5(F P)"],
+      "map": [">ooooo", "~~~o~~", "~~~o~~", "~~~o~~", "~~~o~~", "~~~o~~"],
+      "hint": "The bar and the stem are both five long. Turn round to reach the stem."
+    },
+    {
+      "id": "8-10", "name": "Letter Z", "pal": "FLRPr", "max": 14, "par": 12,
+      "sol": "r2(r5(F P) R r4(F R F P L) L)",
+      "alt": ["r5(F P) R r4(F R F P L) L r4(F P)"],
+      "map": [">ooooo", "~~~~o.", "~~~o.~", "~~o.~~", "~ooooo"],
+      "hint": "A bar, a zigzag, a bar. The robot stops as soon as the Z is done."
+    },
+    {
+      "id": "8-11", "name": "Doughnut", "pal": "FLRPf", "max": 13, "par": 11,
+      "sol": "F f f f f|F P F P F R",
+      "map": [">.oo.", "~o~~o", "~o~~o", "~.oo."],
+      "hint": "No Repeat today. Every side of the ring is the same. Use F1!"
+    },
+    {
+      "id": "8-12", "name": "Big stairs", "pal": "FLRPrf", "max": 9, "par": 8,
+      "sol": "r2(f R f L)|r3(F P)",
+      "alt": ["r2(r3(F P) R r3(F P) L)"],
+      "map": [">ooo~~~", "~~~o~~~", "~~~o~~~", "~~~oooo", "~~~~~~o", "~~~~~~o", "~~~~~~o"],
+      "hint": "Every long stair is three painted squares. F1 can paint one stair."
+    },
+    {
+      "id": "8-13", "name": "Diamond", "pal": "FLRPrf", "max": 10, "par": 9,
+      "sol": "F r4(r2(F R F P L) R)",
+      "map": ["~>o.~", ".o~o.", "o~~~o", ".o~o.", "~.o.~"],
+      "hint": "Each side is a zigzag of two diagonal steps. Four sides, four turns."
+    },
+    {
+      "id": "8-14", "name": "Noughts and crosses", "pal": "FLRPrf", "max": 11, "par": 10,
+      "sol": "r4(r5(F P) L F F L F L)",
+      "alt": ["r4(r5(F P) L F r2(F L))"],
+      "map": [".......", "..o.o..", ">ooooo.", "..o.o..", ".ooooo.", "..o.o..", "......."],
+      "hint": "Paint one line, then hop round to the start of the next. Four lines!"
+    },
+    {
+      "id": "8-15", "name": "Window panes", "pal": "FLRPrf", "max": 12, "par": 11,
+      "sol": "F R F r4(f R)|r4(r2(F P) R)",
+      "alt": ["F R F r4(r4(r2(F P) R) R)"],
+      "map": ["ooooo", "o>o.o", "ooooo", "o.o.o", "ooooo"],
+      "hint": "Walk to the middle. From there each pane is a little square for F1."
+    },
+    {
+      "id": "8-16", "name": "Square spiral", "pal": "FLRPrf", "max": 13, "par": 11,
+      "sol": "F r3(r4(P F) R) r3(r2(P F) R)",
+      "alt": ["r5(F P) r2(R r4(F P)) r2(R r2(F P))"],
+      "map": [">ooooo", "~~~~~o", "~ooo~o", "~o~~~o", "~ooooo"],
+      "hint": "Try Paint before Forward. Which sides of the spiral are the same?"
+    },
+    {
+      "id": "8-17", "name": "Kite", "pal": "FLRPrf", "max": 14, "par": 13,
+      "sol": "F r4(f L) R R f|r2(F R F P L)",
+      "map": ["~~o~~", "~o.o~", "o.~.o", "~o.o~", "~~o~~", "~o^~~", "o.~~~"],
+      "hint": "F1 can paint one diagonal side. The tail is one more side!"
+    },
+    {
+      "id": "8-18", "name": "Zigzag line", "pal": "FLRPrf", "max": 14, "par": 13,
+      "sol": "F P r2(f R f L)|r2(F R F P L)",
+      "map": ["~.o.~.o", ".o~o.o~", "o~~~o~~", "^~~~~~~"],
+      "hint": "Up, down, up: every slope is the same diagonal. Put it in F1."
+    },
+    {
+      "id": "8-19", "name": "Up arrow", "pal": "FLRPrf", "max": 16, "par": 15,
+      "sol": "r5(F P) r2(R R f) R f|r2(F R F P L)",
+      "map": ["~.o.~", ".ooo.", "o.o.o", "~~o~~", "~~o~~", "~~^~~"],
+      "hint": "Paint the shaft, then use F1 for the diagonals. You may paint twice!"
+    },
+    {
+      "id": "8-20", "name": "Three bubbles", "pal": "FLRPrf", "max": 16, "par": 15,
+      "sol": "F f R r4(F) f L F F f|r4(r2(F P) R)",
+      "map": ["~>ooo~~", "~~o~o~~", "~~ooo~~", "~~.~~~~", "ooo.ooo", "o~o~o~o", "ooo~ooo"],
+      "hint": "Every bubble is the same ring. Draw it in F1, then hop to the next."
+    }
+  ]
+}

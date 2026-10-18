@@ -1,5 +1,5 @@
 <title>Code Robot</title>
-<meta name="description" content="Build a program from blocks and guide a friendly robot to the flag, picking up every gem. Sequences, loops, functions, conditions and debugging in 40 levels.">
+<meta name="description" content="Build a program from blocks and guide a friendly robot to the flag, picking up every gem. 208 levels in 11 worlds: loops, functions, conditions, painting, robot teams, counters, reading and debugging code.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap">
@@ -115,24 +115,26 @@ button, label, input, .btn, a { touch-action: manipulation; }
    editor (the program with its F1 row, the palette of blocks, and the run controls). Side by side on a landscape iPad,
    one above the other on a portrait iPad or a phone; layout() sizes the map so nothing scrolls (only a long program
    scrolls inside its own pane). Every block, gap and button a finger taps is 48 px or more. Block colours: green
-   Forward, blue turns, gold loops, lilac F1, pink Ifs; they stay bright in dark mode, like answer tiles. */
+   Forward, blue turns, gold loops, lilac F1, pink Ifs, orange Paint, teal for the robot's number; they stay bright in
+   dark mode, like answer tiles. */
 :root {
   --floor: #fbfdff; --floor-2: #eef6fd; --floor-line: rgba(93, 104, 144, .16); --wall: #a9b4d6; --wall-top: #c7d0ea; --wall-edge: #7d89b2;
   --water: #9ad7f8; --water-2: #c4e9fc; --trail: rgba(79, 209, 165, .55); --stone: rgba(255, 255, 255, .5);
   --k-go: #4fd1a5; --k-go-d: #2a9f78; --k-turn: #5cb8ff; --k-turn-d: #2f86cf; --k-loop: #ffc94d; --k-loop-d: #d99f2c; --k-fn: #9d84ff; --k-fn-d: #6f57d6;
   --k-if: #ff9fcf; --k-if-d: #d9619e; --k-ink: #26304f; --box-loop: #fff4d4; --box-fn: #efe9ff; --box-if: #ffe8f3;
+  --k-paint: #ffa679; --k-paint-d: #d9693c; --k-num: #7fe0d4; --k-num-d: #2a9f91; --paint-line: rgba(93, 104, 144, .5); --paint-fill: #ff8fab;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --floor: #323b75; --floor-2: #2b336a; --floor-line: rgba(255, 255, 255, .08); --wall: #59629e; --wall-top: #6c76b4; --wall-edge: #3c447c;
     --water: #2f6fa6; --water-2: #3d86c2; --trail: rgba(90, 219, 176, .5); --stone: rgba(255, 255, 255, .07);
-    --box-loop: #4a4130; --box-fn: #3c3577; --box-if: #4d2f50;
+    --box-loop: #4a4130; --box-fn: #3c3577; --box-if: #4d2f50; --paint-line: rgba(255, 255, 255, .45);
   }
 }
 :root[data-theme="dark"] {
   --floor: #323b75; --floor-2: #2b336a; --floor-line: rgba(255, 255, 255, .08); --wall: #59629e; --wall-top: #6c76b4; --wall-edge: #3c447c;
   --water: #2f6fa6; --water-2: #3d86c2; --trail: rgba(90, 219, 176, .5); --stone: rgba(255, 255, 255, .07);
-  --box-loop: #4a4130; --box-fn: #3c3577; --box-if: #4d2f50;
+  --box-loop: #4a4130; --box-fn: #3c3577; --box-if: #4d2f50; --paint-line: rgba(255, 255, 255, .45);
 }
 #bg { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
 #bg i { position: absolute; border-radius: 22%; border: 2px solid var(--stone); animation: drift 18s ease-in-out infinite alternate; }
@@ -163,6 +165,18 @@ button, label, input, .btn, a { touch-action: manipulation; }
 .tile.gem.got i { transform: scale(.2) translateY(-40%); opacity: 0; animation: none; }
 .tile.trail::after { content: ''; position: absolute; width: 22%; height: 22%; border-radius: 50%; background: var(--trail); }
 .tile.flag i { transform-origin: 20% 90%; }
+.tile.target::before { content: ''; position: absolute; inset: 13%; border-radius: 24%; border: 3px dashed var(--paint-line); }
+.tile.painted { background: var(--paint-fill); box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .35); }
+.tile.painted::before { border-color: transparent; }
+.tile.wrong { background: repeating-linear-gradient(45deg, var(--coral-soft) 0 8px, var(--coral) 8px 14px); }
+.tile .pin { position: absolute; inset: 0; display: grid; place-items: center; font: 400 calc(var(--t, 60px) * .5)/1 var(--emoji); pointer-events: none; z-index: 3; animation: pin .3s ease both;
+  background: radial-gradient(circle, rgba(255, 255, 255, .85) 0 34%, transparent 36%); }
+.tile.guess { box-shadow: inset 0 0 0 4px var(--coral); }
+.tile.miss { box-shadow: inset 0 0 0 4px var(--line); }
+.tile.miss .pin { filter: grayscale(.8); opacity: .55; }
+.tile.answer { box-shadow: inset 0 0 0 4px var(--sun-deep), inset 0 0 0 9px rgba(255, 201, 77, .35); }
+.board.pick .tile:not(.wall):not(.water) { cursor: pointer; }
+@keyframes pin { from { transform: translateY(-30%) scale(.6); opacity: 0; } }
 .board.won .tile.flag i { animation: wave .5s ease-in-out 3; }
 @keyframes shine { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
 @keyframes wave { 50% { transform: rotate(-14deg) scale(1.15); } }
@@ -174,6 +188,7 @@ button, label, input, .btn, a { touch-action: manipulation; }
 .bot svg { position: absolute; inset: 7%; width: 86%; height: 86%; filter: drop-shadow(0 3px 3px rgba(41, 52, 90, .3)); }
 .bot.bump svg { animation: bump var(--ms, 300ms) ease-in-out; }
 .bot.hop svg { animation: hop .45s ease-in-out 2; }
+.board.team.running .bot:not(.turn) { opacity: .5; }
 @keyframes bump { 0%, 100% { transform: translateY(0); } 40% { transform: translateY(-22%); } 55% { transform: translateY(-14%) rotate(-6deg); } }
 @keyframes hop { 50% { transform: translateY(-14%) scale(1.08); } }
 .say {
@@ -219,7 +234,16 @@ button, label, input, .btn, a { touch-action: manipulation; }
 .kL, .kR { --kc: var(--k-turn); --kd: var(--k-turn-d); }
 .kr, .ku { --kc: var(--k-loop); --kd: var(--k-loop-d); --kb: var(--box-loop); }
 .kf { --kc: var(--k-fn); --kd: var(--k-fn-d); --kb: var(--box-fn); }
-.ki, .kg { --kc: var(--k-if); --kd: var(--k-if-d); --kb: var(--box-if); }
+.ki, .kg, .kj, .kk { --kc: var(--k-if); --kd: var(--k-if-d); --kb: var(--box-if); }
+.kP { --kc: var(--k-paint); --kd: var(--k-paint-d); }
+.kplus, .kminus { --kc: var(--k-num); --kd: var(--k-num-d); }
+.cap .nval { color: var(--k-num-d); letter-spacing: .02em; text-transform: none; font-size: .95rem; }
+.editor.read .gap { display: none; }
+.editor.read .list, .editor.read .box { column-gap: 6px; }
+.editor.order .gap:not(.only) { display: none; }
+.editor.order .gap.only { width: 56px; pointer-events: none; }
+.editor.order .list, .editor.order .box { column-gap: 6px; }
+.editor.read #code .blk { cursor: default; }
 .box { display: inline-flex; flex-wrap: wrap; align-items: center; row-gap: 6px; max-width: 100%; box-sizing: border-box; padding: 3px; border-radius: 18px; border: 3px solid var(--kd); background: var(--kb); }
 .box > .blk.head { margin-right: 2px; }
 .num {
@@ -227,6 +251,7 @@ button, label, input, .btn, a { touch-action: manipulation; }
   font: 700 1.3rem/1 var(--font-display); cursor: pointer; box-shadow: 0 3px 0 var(--kd); font-variant-numeric: tabular-nums;
 }
 .num small { font-size: .7em; }
+.num.fixed { cursor: default; }
 .else { flex: none; height: 54px; display: grid; place-items: center; padding: 0 8px; font: 700 .95rem/1 var(--font-display); color: var(--k-if-d); }
 .blk.sel { outline: 4px solid var(--ink); outline-offset: 2px; }
 .blk.now { box-shadow: 0 0 0 5px var(--sun), 0 4px 0 var(--kd); transform: scale(1.06); }
@@ -270,6 +295,7 @@ button, label, input, .btn, a { touch-action: manipulation; }
   .selbar .btn { padding: .5em .45em; font-size: .9rem; gap: 4px; }
 }
 .toast { top: var(--toast-top, 30%); }
+#blkChip.over { color: var(--coral-deep); }
 .toast.music { font-size: 1.05rem; padding: 9px 16px; }
 
 /* home, worlds and the other cards */
@@ -277,25 +303,25 @@ button, label, input, .btn, a { touch-action: manipulation; }
 .logo .bot-ic { display: inline-block; width: .9em; height: .9em; vertical-align: -.08em; margin-right: .12em; }
 #contBtn { display: grid; gap: 4px; justify-items: center; padding: .55em 1.6em; }
 #contBtn small { font: 700 .9rem/1.1 var(--font-body); opacity: .85; }
-.worlds { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.worlds { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
 .world {
-  min-height: 104px; display: grid; align-content: center; justify-items: center; gap: 3px; padding: 6px 2px; border-radius: 18px; cursor: pointer; min-width: 0;
+  min-height: 84px; display: grid; align-content: center; justify-items: center; gap: 2px; padding: 6px 3px; border-radius: 18px; cursor: pointer; min-width: 0;
   background: var(--card-2); border: 2px solid var(--line); box-shadow: 0 4px 0 var(--line); color: var(--ink); font: inherit; transition: transform .08s ease, box-shadow .08s ease;
 }
 .world:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--line); }
-.world i { font: 400 1.7rem/1 var(--emoji); font-style: normal; }
-.world b { font: 700 1rem/1.05 var(--font-display); white-space: nowrap; }
+.world i { font: 400 1.5rem/1 var(--emoji); font-style: normal; }
+.world b { font: 700 .95rem/1.05 var(--font-display); text-align: center; text-wrap: balance; }
 .world small { font-weight: 800; font-size: .76rem; line-height: 1.15; color: var(--ink-soft); white-space: nowrap; }
 .world.locked { opacity: .6; }
 .world.now { background: var(--sun); border-color: var(--sun-deep); box-shadow: 0 4px 0 var(--sun-deep); color: var(--sun-ink); }
 .world.now small { color: var(--sun-ink); }
-.levels { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.levels { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
 .lvl {
-  min-height: 80px; display: grid; align-content: center; justify-items: center; gap: 4px; padding: 6px 2px; border-radius: 18px; cursor: pointer; min-width: 0;
+  min-height: 74px; display: grid; align-content: center; justify-items: center; gap: 4px; padding: 6px 2px; border-radius: 18px; cursor: pointer; min-width: 0;
   background: var(--card-2); border: 2px solid var(--line); box-shadow: 0 4px 0 var(--line); color: var(--ink); font: inherit;
 }
-.lvl b { font: 700 1.5rem/1 var(--font-display); }
-.lvl small { font-weight: 800; font-size: .78rem; color: var(--ink-soft); white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+.lvl b { font: 700 1.35rem/1 var(--font-display); }
+.lvl small { font-weight: 800; font-size: .76rem; line-height: 1.1; color: var(--ink-soft); max-width: 100%; text-align: center; text-wrap: balance; }
 .lvl .ms { font-size: .8rem; letter-spacing: .04em; line-height: 1; }
 .lvl .ms .off, .world .ms .off { opacity: .25; filter: grayscale(1); }
 .lvl.done { background: var(--mint-soft); border-color: var(--mint); box-shadow: 0 4px 0 var(--mint); }
@@ -324,17 +350,16 @@ button, label, input, .btn, a { touch-action: manipulation; }
 .backup .status.bad { color: var(--coral-deep); }
 @media (pointer: coarse) { .screen .btn:not(.big) { min-height: 48px; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; } }
 @media (max-width: 600px) {
-  .worlds { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; }
-  .world { grid-column: span 2; min-height: 92px; }
-  .world:nth-child(4) { grid-column: 2 / span 2; }
-  .levels { gap: 8px; }
-  .lvl { min-height: 96px; padding: 6px 3px; }
+  .worlds { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .world { min-height: 76px; }
+  .levels { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px; }
+  .lvl { min-height: 78px; padding: 5px 3px; }
   .lvl small { white-space: normal; text-overflow: clip; font-size: .7rem; line-height: 1.1; text-wrap: balance; }
   .minis .btn { font-size: .92rem; padding: .6em .8em; }
   #s-home .card { gap: 14px; }
   #s-home .tag { font-size: 1rem; line-height: 1.4; }
 }
-@media (max-height: 760px) { #s-home .card { gap: 12px; } .world { min-height: 88px; } }
+@media (max-height: 760px) { #s-home .card { gap: 12px; } .world { min-height: 74px; } }
 @media (prefers-reduced-motion: reduce) { #bg i, .tile.gem i, .gap.cur i, #doneStars span { animation: none !important; } .bot { transition: none !important; } }
 .calm #bg i, .calm .tile.gem i, .calm .gap.cur i, .calm #doneStars span, .calm .screen, .calm .toast { animation: none !important; }
 </style>
@@ -351,7 +376,7 @@ button, label, input, .btn, a { touch-action: manipulation; }
   </section>
   <section class="editor" id="editor" aria-label="Your program">
     <div id="code">
-      <div class="cap"><span>Program</span><span id="capInfo"></span></div>
+      <div class="cap"><span>Program <span class="nval" id="nInfo" hidden></span></span><span id="capInfo"></span></div>
       <div class="list" id="mainList" data-list="m"></div>
       <div class="f1row" id="f1Row" hidden>
         <div class="cap"><span><b>F1</b></span><span>Use F1 runs these blocks</span></div>
@@ -962,25 +987,65 @@ const Robot = (function () {
   const STEP_CAP = 300;
   const DX = [0, 1, 0, -1], DY = [-1, 0, 1, 0];   // 0 up, 1 right, 2 down, 3 left
   const FACING = { '^': 0, '>': 1, 'v': 2, '<': 3 };
-  const BOX = { r: 1, i: 1, g: 1, u: 1 };           // blocks with blocks inside
+  const BOX = { r: 1, i: 1, j: 1, k: 1, g: 1, u: 1 };   // blocks with blocks inside
+  const ELSE = { i: 1, j: 1, k: 1 };                      // the Ifs with an else
+  const SIMPLE = 'FLRP+-f';                               // blocks with nothing inside
 
-  function parseMap(rows) {
-    const h = rows.length, w = rows[0].length, cells = [], gems = [];
-    let start = null, flag = -1;
+  // opts: free (a map for reading a program: no flag needed), n0 (the robot's number at the start, 1 if not given)
+  function parseMap(rows, opts) {
+    opts = opts || {};
+    const h = rows.length, w = rows[0].length, cells = [], gems = [], flags = [], targets = [], robots = [];
+    if (w > 8 || h > 8) throw new Error('a map is at most 8 x 8');
     for (let y = 0; y < h; y++) {
       if (rows[y].length !== w) throw new Error('map row ' + y + ' is ' + rows[y].length + ' squares, not ' + w);
       for (let x = 0; x < w; x++) {
         let c = rows[y][x];
-        if (FACING[c] !== undefined) { if (start) throw new Error('two robots'); start = { x: x, y: y, d: FACING[c] }; c = '.'; }
-        if ('.#~*G'.indexOf(c) < 0) throw new Error('unknown square ' + c);
-        if (c === '*') gems.push(y * w + x);
-        if (c === 'G') { if (flag >= 0) throw new Error('two flags'); flag = y * w + x; }
+        if (FACING[c] !== undefined) { robots.push({ x: x, y: y, d: FACING[c] }); c = '.'; }
+        if ('.#~*Go'.indexOf(c) < 0) throw new Error('unknown square ' + c);
+        const i = y * w + x;
+        if (c === '*') gems.push(i);
+        if (c === 'G') flags.push(i);
+        if (c === 'o') targets.push(i);
         cells.push(c);
       }
     }
-    if (!start || flag < 0) throw new Error('a map needs a robot and a flag');
-    if (w > 8 || h > 8) throw new Error('a map is at most 8 x 8');
-    return { w: w, h: h, cells: cells, start: start, gems: gems, flag: flag };
+    if (!robots.length) throw new Error('a map needs a robot');
+    // areas: the squares a robot could reach, if it could turn and go anywhere
+    const area = new Array(w * h).fill(-1);
+    let na = 0;
+    for (let i = 0; i < w * h; i++) {
+      if (area[i] >= 0 || cells[i] === '#' || cells[i] === '~') continue;
+      const stack = [i];
+      area[i] = na;
+      while (stack.length) {
+        const j = stack.pop(), x = j % w, y = (j - x) / w;
+        for (let d = 0; d < 4; d++) {
+          const nx = x + DX[d], ny = y + DY[d], q = ny * w + nx;
+          if (nx >= 0 && ny >= 0 && nx < w && ny < h && area[q] < 0 && cells[q] !== '#' && cells[q] !== '~') { area[q] = na; stack.push(q); }
+        }
+      }
+      na++;
+    }
+    robots.forEach((r) => {
+      r.area = area[r.y * w + r.x];
+      r.gems = gems.filter((g) => area[g] === r.area);
+      const f = flags.filter((g) => area[g] === r.area);
+      r.flag = f.length ? f[0] : -1;
+    });
+    if (robots.length > 1) {
+      if (targets.length) throw new Error('a team does not paint');
+      if (new Set(robots.map((r) => r.area)).size < robots.length) throw new Error('two robots share an area');
+      robots.forEach((r, k) => { if (flags.filter((g) => area[g] === r.area).length !== 1) throw new Error('robot ' + (k + 1) + ' needs one flag in its area'); });
+      gems.concat(flags).forEach((g) => { if (!robots.some((r) => r.area === area[g])) throw new Error('a gem or flag no robot can reach'); });
+    } else {
+      if (flags.length > 1) throw new Error('two flags');
+      if (targets.length && (gems.length || flags.length)) throw new Error('a picture to paint has no gems or flag');
+      if (!targets.length && !flags.length && !opts.free) throw new Error('a map needs a flag');
+      if (!opts.free) gems.concat(flags, targets).forEach((g) => { if (area[g] !== robots[0].area) throw new Error('a square the robot cannot reach: ' + (g % w) + ',' + Math.floor(g / w)); });
+    }
+    const s = robots[0];
+    return { w: w, h: h, cells: cells, start: { x: s.x, y: s.y, d: s.d }, robots: robots, gems: gems, flags: flags, flag: s.flag,
+      targets: targets, area: area, n0: opts.n0 === undefined ? 1 : opts.n0 };
   }
   const inside = (m, x, y) => x >= 0 && y >= 0 && x < m.w && y < m.h;
   const open = (m, x, y) => inside(m, x, y) && m.cells[y * m.w + x] !== '#' && m.cells[y * m.w + x] !== '~';
@@ -989,7 +1054,7 @@ const Robot = (function () {
   /* ---- programs ---- */
   function make(t, n) {
     if (t === 'r') return { t: 'r', n: n || 2, b: [] };
-    if (t === 'i') return { t: 'i', b: [], e: [] };
+    if (ELSE[t]) return { t: t, b: [], e: [] };
     if (BOX[t]) return { t: t, b: [] };
     return { t: t };
   }
@@ -1000,12 +1065,12 @@ const Robot = (function () {
       const out = [];
       while (i < s.length && s[i] !== ')' && s[i] !== '|') {
         const c = s[i++];
-        if (c === 'F' || c === 'L' || c === 'R' || c === 'f') out.push({ t: c });
+        if (SIMPLE.indexOf(c) >= 0) out.push({ t: c });
         else if (c === 'r') {
-          const n = +s[i++];
-          if (!(n >= 2 && n <= 9)) throw new Error('a repeat needs 2 to 9 at ' + (i - 1));
+          const ch = s[i++], n = ch === 'n' ? 'n' : +ch;
+          if (n !== 'n' && !(n >= 2 && n <= 9)) throw new Error('a repeat needs 2 to 9 or n at ' + (i - 1));
           out.push({ t: 'r', n: n, b: group() });
-        } else if (c === 'i') { const b = group(); out.push({ t: 'i', b: b, e: s[i] === '(' ? group() : [] }); }
+        } else if (ELSE[c]) { const b = group(); out.push({ t: c, b: b, e: s[i] === '(' ? group() : [] }); }
         else if (c === 'g' || c === 'u') out.push({ t: c, b: group() });
         else throw new Error('unknown block ' + c + ' at ' + (i - 1));
       }
@@ -1026,17 +1091,17 @@ const Robot = (function () {
     return { main: main, f1: f1 };
   }
   function printList(list, sp) {
-    return list.map((b) => (b.t === 'r' ? 'r' + b.n + '(' + printList(b.b, sp) + ')' : b.t === 'i' ? 'i(' + printList(b.b, sp) + ')(' + printList(b.e, sp) + ')'
+    return list.map((b) => (b.t === 'r' ? 'r' + b.n + '(' + printList(b.b, sp) + ')' : ELSE[b.t] ? b.t + '(' + printList(b.b, sp) + ')(' + printList(b.e, sp) + ')'
       : BOX[b.t] ? b.t + '(' + printList(b.b, sp) + ')' : b.t)).join(sp);
   }
   // spaced: 'F F r3(F L)|R'; compact (for saving): 'FFr3(FL)|R'
   const print = (p, compact) => printList(p.main, compact ? '' : ' ') + (p.f1 && p.f1.length ? '|' + printList(p.f1, compact ? '' : ' ') : '');
   const countList = (list) => list.reduce((s, b) => s + 1 + (b.b ? countList(b.b) : 0) + (b.e ? countList(b.e) : 0), 0);
   const count = (p) => countList(p.main) + countList(p.f1 || []);
-  // every kind of block a program uses ('FLR', 'r', ...), and whether F1 uses itself
+  // every kind of block a program uses ('F', 'r', ...), plus 'n' when a Repeat counts with the robot's number
   function kinds(p) {
     const k = new Set();
-    const walk = (list) => list.forEach((b) => { k.add(b.t); if (b.b) walk(b.b); if (b.e) walk(b.e); });
+    const walk = (list) => list.forEach((b) => { k.add(b.t); if (b.t === 'r' && b.n === 'n') k.add('n'); if (b.b) walk(b.b); if (b.e) walk(b.e); });
     walk(p.main); walk(p.f1 || []);
     return k;
   }
@@ -1050,19 +1115,25 @@ const Robot = (function () {
 
   /* ---- a run ----
      Events, one per step: { p: the block's path ('m.2', 'm.1.b.0', 'f.0', 'm.3.e.1'), k: what happened, a: the paths of the
-     loops, Ifs and F1 uses it is inside }. k: 'fwd' (x, y, g: the gem picked up there or -1), 'turn' (d, s: -1 left, 1 right),
-     'bump' (x, y, d, what: wall / water / edge), 'rep' (i of n), 'test' (v: true or false; until: for Repeat until flag), 'call'.
-     The run ends: win (on the flag with every gem), bump (what: wall / water / edge), end (the blocks ran out), gems (on the flag, gems still to get),
-     dizzy (STEP_CAP steps: a loop that never finishes), self (F1 using F1), empty (no blocks). */
-  function run(m, prog) {
-    let x = m.start.x, y = m.start.y, d = m.start.d, found = -1, steps = 0, why = '', inF1 = 0, hit = '';
-    const got = [], events = [], active = [], f1 = prog.f1 || [];
+     loops, Ifs and F1 uses it is inside, r: the robot (0 for the first) }. k: 'fwd' (x, y, g: the gem picked up there
+     or -1), 'turn' (d, s: -1 left, 1 right), 'bump' (x, y, d, what: wall / water / edge), 'paint' (i: the square, ok:
+     part of the picture or not), 'set' (n: the robot's number now), 'rep' (i of n; 0 of 0 when n is 0 or less), 'test'
+     (v: true or false; until: for Repeat until flag), 'call', and for a team 'start' before each robot's turn.
+     A robot's run ends: win (on its flag with every gem of its area, or the whole picture painted), bump (what: wall /
+     water / edge), paint (it painted a square that is not in the picture), end (the blocks ran out), gems (on the flag,
+     gems still to get), unpainted (the blocks ran out with squares still to paint), dizzy (STEP_CAP steps: a loop that
+     never finishes), self (F1 using F1), empty (no blocks). */
+  function runOne(m, prog, k) {
+    const R0 = m.robots[k], G = R0.gems, F = R0.flag, T = m.targets;
+    let x = R0.x, y = R0.y, d = R0.d, n = m.n0, found = -1, steps = 0, why = '', inF1 = 0, hit = '';
+    const got = [], painted = [], events = [], active = [], f1 = prog.f1 || [];
     const here = () => y * m.w + x;
-    const won = () => here() === m.flag && got.length === m.gems.length;
+    const finished = () => (T.length ? painted.length === T.length : here() === F && got.length === G.length);
     const tick = () => { if (steps >= STEP_CAP) { why = 'dizzy'; return false; } steps++; return true; };
-    const ev = (e) => { e.a = active.slice(); events.push(e); };
-    function seq(list, path) { for (let k = 0; k < list.length && !why; k++) one(list[k], path + '.' + k); }
+    const ev = (e) => { e.a = active.slice(); e.r = k; events.push(e); };
+    function seq(list, path) { for (let q = 0; q < list.length && !why; q++) one(list[q], path + '.' + q); }
     function inner(list, p, path) { active.push(p); seq(list, path); active.pop(); }
+    function look(dir) { return open(m, x + DX[dir], y + DY[dir]); }
     function one(b, p) {
       if (!tick()) return;
       if (b.t === 'F') {
@@ -1070,24 +1141,35 @@ const Robot = (function () {
         if (!open(m, nx, ny)) { hit = blocker(m, nx, ny); ev({ p: p, k: 'bump', x: x, y: y, d: d, what: hit }); why = 'bump'; return; }
         x = nx; y = ny; found = -1;
         let g = -1;
-        if (m.cells[here()] === '*' && got.indexOf(here()) < 0) { got.push(here()); found = g = here(); }
+        if (G.indexOf(here()) >= 0 && got.indexOf(here()) < 0) { got.push(here()); found = g = here(); }
         ev({ p: p, k: 'fwd', x: x, y: y, g: g });
-        if (won()) why = 'win';
+        if (!T.length && finished()) why = 'win';
       } else if (b.t === 'L' || b.t === 'R') {
         d = (d + (b.t === 'L' ? 3 : 1)) % 4;
         ev({ p: p, k: 'turn', d: d, s: b.t === 'L' ? -1 : 1 });
+      } else if (b.t === 'P') {
+        const i = here(), ok = T.indexOf(i) >= 0;
+        ev({ p: p, k: 'paint', i: i, ok: ok });
+        if (!ok) { why = 'paint'; return; }
+        if (painted.indexOf(i) < 0) painted.push(i);
+        if (finished()) why = 'win';
+      } else if (b.t === '+' || b.t === '-') {
+        n += b.t === '+' ? 1 : -1;
+        ev({ p: p, k: 'set', n: n });
       } else if (b.t === 'f') {
         ev({ p: p, k: 'call' });
         if (inF1) { why = 'self'; return; }
         inF1++; inner(f1, p, 'f'); inF1--;
       } else if (b.t === 'r') {
-        for (let i = 1; i <= b.n && !why; i++) {
+        const times = b.n === 'n' ? Math.max(0, n) : b.n;
+        if (!times) { ev({ p: p, k: 'rep', i: 0, n: 0 }); return; }
+        for (let i = 1; i <= times && !why; i++) {
           if (i > 1 && !tick()) return;
-          ev({ p: p, k: 'rep', i: i, n: b.n });
+          ev({ p: p, k: 'rep', i: i, n: times });
           inner(b.b, p, p + '.b');
         }
-      } else if (b.t === 'i') {
-        const v = open(m, x + DX[d], y + DY[d]);
+      } else if (ELSE[b.t]) {
+        const v = look(b.t === 'i' ? d : b.t === 'j' ? (d + 3) % 4 : (d + 1) % 4);
         ev({ p: p, k: 'test', v: v });
         inner(v ? b.b : b.e, p, p + (v ? '.b' : '.e'));
       } else if (b.t === 'g') {
@@ -1097,7 +1179,7 @@ const Robot = (function () {
       } else if (b.t === 'u') {
         for (let first = true; !why; first = false) {
           if (!first && !tick()) return;
-          const v = here() === m.flag;
+          const v = here() === F;
           ev({ p: p, k: 'test', v: v, until: true });
           if (v) return;
           inner(b.b, p, p + '.b');
@@ -1106,13 +1188,31 @@ const Robot = (function () {
     }
     if (!count(prog)) why = 'empty';
     else seq(prog.main, 'm');
-    if (!why) why = won() ? 'win' : here() === m.flag ? 'gems' : 'end';
-    return { events: events, why: why, ok: why === 'win', steps: steps, x: x, y: y, d: d, got: got.length, left: m.gems.length - got.length, what: hit };
+    if (!why) why = finished() ? 'win' : T.length ? 'unpainted' : F >= 0 && here() === F ? 'gems' : 'end';
+    return { events: events, why: why, ok: why === 'win', steps: steps, x: x, y: y, d: d, n: n, got: got.length, left: G.length - got.length,
+      painted: painted.length, unpainted: T.length - painted.length, what: hit, robot: k };
+  }
+  // one robot: its run; a team: each robot's run in turn (stopping at the first that does not finish), as one list of events
+  function run(m, prog) {
+    if (m.robots.length === 1) return runOne(m, prog, 0);
+    const events = [], parts = [];
+    let last = null;
+    for (let k = 0; k < m.robots.length; k++) {
+      events.push({ p: '', k: 'start', a: [], r: k });
+      last = runOne(m, prog, k);
+      last.events.forEach((e) => events.push(e));
+      parts.push(last);
+      if (!last.ok) break;
+    }
+    const ok = parts.length === m.robots.length && parts.every((r) => r.ok);
+    return { events: events, why: ok ? 'win' : last.why, ok: ok, team: parts, steps: parts.reduce((s, r) => s + r.steps, 0), x: last.x, y: last.y, d: last.d, n: last.n,
+      got: last.got, left: last.left, painted: 0, unpainted: 0, what: last.what, robot: last.robot };
   }
 
   /* ---- checks for the levels ---- */
-  // the fewest Forward / Turn blocks in a plain list (no loops) that finish the map, or Infinity
+  // the fewest Forward / Turn blocks in a plain list (no loops) that finish a one-robot map with gems and a flag, or Infinity
   function minStraight(m, cap) {
+    if (m.robots.length !== 1 || m.flag < 0) return Infinity;
     const G = m.gems.length, full = (1 << G) - 1, gemBit = {};
     m.gems.forEach((g, k) => { gemBit[g] = 1 << k; });
     const key = (x, y, d, mask) => ((y * m.w + x) * 4 + d) * (full + 1) + mask;
@@ -1151,152 +1251,37 @@ const Robot = (function () {
     return D[s.length][t.length];
   }
 
-  return { STEP_CAP: STEP_CAP, DX: DX, DY: DY, BOX: BOX, parseMap: parseMap, open: open, make: make, parse: parse, print: print, count: count, countList: countList,
-    kinds: kinds, selfCall: selfCall, clone: clone, run: run, minStraight: minStraight, changes: changes };
+  return { STEP_CAP: STEP_CAP, DX: DX, DY: DY, BOX: BOX, ELSE: ELSE, parseMap: parseMap, open: open, make: make, parse: parse, print: print, count: count,
+    countList: countList, kinds: kinds, selfCall: selfCall, clone: clone, run: run, minStraight: minStraight, tokens: tokens, changes: changes };
 })();
-const ROBOT_WORLDS = [
-  { id: 1, name: 'Sequences', icon: '👣', intro: 'A program is a list of steps. The robot does them in order, one by one.' },
-  { id: 2, name: 'Loops', icon: '🔁', intro: 'Repeat does the blocks inside it again and again, so you need far fewer blocks.' },
-  { id: 3, name: 'Functions', icon: '🧩', intro: 'F1 is your own block. Build it once in the F1 row, then use it as often as you like.' },
-  { id: 4, name: 'Conditions', icon: '🤔', intro: 'If lets the robot look before it moves, so one short program can find its own way.' },
-  { id: 5, name: 'Debugging', icon: '🐞', intro: 'These programs have bugs. Run them, spot what goes wrong and fix them with few changes.' }
-];
-const ROBOT_LEVELS = [
-  /* ---- 1 Sequences: forward and turns, one block per step ---- */
-  { id: '1-1', name: 'First steps', pal: 'FLR', max: 7, par: 3, sol: 'F F F',
-    map: ['~~~~~~', '~>..G~', '~~~~~~'],
-    hint: 'Tap Forward three times, then press Run.' },
-  { id: '1-2', name: 'Shiny gem', pal: 'FLR', max: 8, par: 4, sol: 'F F F F',
-    map: ['~~~~~~~', '~>.*.G~', '~~~~~~~'],
-    hint: 'Walk over the gem to pick it up, then on to the flag.' },
-  { id: '1-3', name: 'Round the corner', pal: 'FLR', max: 9, par: 5, sol: 'F F R F F',
-    map: ['~~~~~', '~>..~', '~~~.~', '~~~G~', '~~~~~'],
-    hint: 'Turn right turns the robot on the spot. It does not move.' },
-  { id: '1-4', name: 'Left this time', pal: 'FLR', max: 10, par: 6, sol: 'F F F L F F',
-    map: ['~~~~~~', '~~~~G~', '~~~~.~', '~>.*.~', '~~~~~~'],
-    hint: 'Pick up the gem, then turn left to face the flag.' },
-  { id: '1-5', name: 'Zigzag', pal: 'FLR', max: 13, par: 9, sol: 'F R F L F R F L F',
-    map: ['~~~~~~', '~>.~~~', '~~.*~~', '~~~.G~', '~~~~~~'],
-    hint: 'Right, left, right, left: one square at a time.' },
-  { id: '1-6', name: 'Turn around', pal: 'FLR', max: 13, par: 9, sol: 'F F R R F F F F F', alt: ['F F L L F F F F F'],
-    map: ['~~~~~~~~', '~*.<..G~', '~~~~~~~~'],
-    hint: 'Get the gem first. Two turns make the robot face the other way.' },
-  { id: '1-7', name: 'Round the pond', pal: 'FLR', max: 16, par: 12, sol: 'F F F F R F F R F F F F',
-    map: ['#######', '#>...*#', '#~~~~.#', '#G....#', '#######'],
-    hint: 'Go all the way round the water. Robots cannot swim!' },
-  { id: '1-8', name: 'Long walk', pal: 'FLR', max: 17, par: 13, sol: 'F F F R F F R F F F L F F',
-    map: ['######', '#>.*.#', '####.#', '#.*..#', '#.####', '#G####'],
-    hint: 'A long walk with two gems. Plan it one square at a time.' },
-
-  /* ---- 2 Loops: the block limit leaves too few blocks for a plain list ---- */
-  { id: '2-1', name: 'Repeat!', pal: 'FLRr', max: 3, par: 2, sol: 'r7(F)',
-    map: ['~~~~~~~~', '>.*..*.G', '~~~~~~~~'],
-    hint: 'Put Forward inside Repeat, then tap the number until it says 7.' },
-  { id: '2-2', name: 'Two lines', pal: 'FLRr', max: 6, par: 5, sol: 'r3(F) R r4(F)',
-    map: ['~~~~~~', '>...~~', '~~~.~~', '~~~*~~', '~~~.~~', '~~~G~~'],
-    hint: 'Use a Repeat for each straight line, with a turn between.' },
-  { id: '2-3', name: 'Staircase', pal: 'FLRr', max: 6, par: 5, sol: 'r5(F R F L)',
-    map: ['>.####', '#..###', '##*.##', '###..#', '####.*', '#####G'],
-    hint: 'One step, turn, one step, turn. Put that pattern in a Repeat.' },
-  { id: '2-4', name: 'Three lines', pal: 'FLRr', max: 9, par: 8, sol: 'r2(F) R r3(F) L r5(F)', alt: ['F F R r3(F) L r5(F)'],
-    map: ['>..~~~~~', '~~.~~~~~', '~~*~~~~~', '~~...*.G'],
-    hint: 'Count each straight line. A Repeat for each one saves blocks.' },
-  { id: '2-5', name: 'Big steps', pal: 'FLRr', max: 7, par: 6, sol: 'r3(F F L F R)',
-    map: ['~~~~~~G', '~~~~..*', '~~..*~~', '>..~~~~'],
-    hint: 'Two steps, turn left, one step, turn right. Then again!' },
-  { id: '2-6', name: 'Loop in a loop', pal: 'FLRr', max: 6, par: 4, sol: 'r4(r3(F) R)', alt: ['r4(F F F R)'],
-    map: ['######', '#>..*#', '#G~~.#', '#.~~.#', '#*..*#', '######'],
-    hint: 'A Repeat can go inside another Repeat. Try one for each side.' },
-  { id: '2-7', name: 'Rectangle', pal: 'FLRr', max: 8, par: 7, sol: 'r2(r5(F) R r3(F) R)',
-    map: ['########', '#>....*#', '#G~~~~.#', '#.~~~~.#', '#*....*#', '########'],
-    hint: 'A long side, a turn, a short side, a turn. Do that twice.' },
-  { id: '2-8', name: 'Comb', pal: 'FLRr', max: 11, par: 9, sol: 'r4(r2(L F F F L) F F)', alt: ['r4(L r3(F) R R r3(F) L r2(F))'],
-    map: ['*#*#*#G', '.#.#.#.', '.#*#.#.', '>..*...'],
-    hint: 'Turn left, go up, turn left: twice takes you up and back down.' },
-
-  /* ---- 3 Functions: F1 is a pattern built once and used again ---- */
-  { id: '3-1', name: 'Meet F1', pal: 'FLRf', max: 9, par: 8, sol: 'f R f L f|F F F',
-    map: ['>..*~~~', '~~~.~~~', '~~~.~~~', '~~~..*G'],
-    hint: 'Build three Forwards in the F1 row. Then use F1 in your program.' },
-  { id: '3-2', name: 'F1 stairs', pal: 'FLRf', max: 9, par: 8, sol: 'f f f f|F R F L',
-    map: ['~~~.G', '~~.*~', '~..~~', '.*~~~', '^~~~~'],
-    hint: 'Put one stair in F1: Forward, turn right, Forward, turn left.' },
-  { id: '3-3', name: 'Gem trips', pal: 'FLRf', max: 12, par: 11, sol: 'f f f|F L F R R F L F', alt: ['f f f|F L F L L F L F'],
-    map: ['~*~*~*~', '>.....G', '~~~~~~~'],
-    hint: 'One trip to a gem and back goes in F1. Use it three times.' },
-  { id: '3-4', name: 'Plus sign', pal: 'FLRf', max: 13, par: 11, sol: 'f f R f f|F F L L F F', alt: ['f f f F F|F F R R F F L'],
-    map: ['~~*~~', '~~.~~', 'G.^.*', '~~.~~', '~~*~~'],
-    hint: 'In F1, go to the end of an arm and back. Which way is it facing then?' },
-  { id: '3-5', name: 'Stairs and a step', pal: 'FLRf', max: 11, par: 10, sol: 'f f F f f f|F L F R',
-    map: ['~~~~~~G', '~~~~~*.', '~~~~..~', '~~.*.~~', '~..~~~~', '>.~~~~~'],
-    hint: 'One stair goes in F1. Use it, step along, then use it again.' },
-  { id: '3-6', name: 'Turning stairs', pal: 'FLRf', max: 13, par: 12, sol: 'f f f R f f f f|F R F L',
-    map: ['~>.~~', '~~..~', '~~~*.', '~~~~.', '~~~..', '~~.*~', '~..~~', 'G.~~~'],
-    hint: 'F1 works whichever way the robot faces. Turn, then use it again.' },
-  { id: '3-7', name: 'Gem alleys', pal: 'FLRf', max: 13, par: 12, sol: 'f f F f|F R F L L F R F', alt: ['f f F f|F R F R R F R F'],
-    map: ['~~~~~~~~', '>......G', '#*#*##*#'],
-    hint: 'The alleys are not evenly spaced. An extra Forward fills the gap.' },
-  { id: '3-8', name: 'Two gardens', pal: 'FLRrf', max: 11, par: 11, sol: 'f r4(F) f R r3(F)|r4(F F R)',
-    map: ['>.....*', '.~.#.~.', '*.*#..*', '~~~~G~~'],
-    hint: 'Walking round a garden is the same each time. A Repeat fits in F1!' },
-
-  /* ---- 4 Conditions: the robot checks before it moves ---- */
-  { id: '4-1', name: 'Until the flag', pal: 'FLRu', max: 3, par: 2, sol: 'u(F)',
-    map: ['~~~~~~~~', '>.*..*.G', '~~~~~~~~'],
-    hint: 'Repeat until flag keeps going until the robot is on the flag.' },
-  { id: '4-2', name: 'Clear ahead?', pal: 'FLRiu', max: 5, par: 4, sol: 'u(i(F)(R))',
-    map: ['>....', '~~~~.', '~~~~*', '~~~~.', '~~~~G'],
-    hint: 'If the way ahead is clear, go Forward. If not, turn right.' },
-  { id: '4-3', name: 'Snail shell', pal: 'FLRiu', max: 5, par: 4, sol: 'u(i(F)(R))',
-    map: ['>..*...', '######.', '.....#.', '.###.#.', '*#G..#*', '.#####.', '...*...'],
-    hint: 'The same four blocks can follow the whole spiral. Let If decide!' },
-  { id: '4-4', name: 'Gem signs', pal: 'FLRigu', max: 5, par: 4, sol: 'u(F g(R))',
-    map: ['>....*', '..~~..', '.*.G..', '...~..', '.*...*'],
-    hint: 'Keep walking. Each time the robot finds a gem, it turns right.' },
-  { id: '4-5', name: 'Walls and gems', pal: 'FLRigu', max: 7, par: 6, sol: 'u(i(F)(L) g(R))',
-    map: ['>..*.~~', '~~~.~~~', '~~~.~~~', '~~~..*.', '~~~#~.~', '~~~~~G~'],
-    hint: 'A wall ahead means turn left. A gem means turn right.' },
-  { id: '4-6', name: 'Left or right?', pal: 'FLRiu', max: 8, par: 7, sol: 'u(i(F)(L i()(R R)))', alt: ['u(i(F)(L i()(L L)))'],
-    map: ['########', '###.*..#', '###.##.#', '>*..##.#', '######*#', '######.G', '########'],
-    hint: 'At a corner try left. If left is blocked too, turn round to face right.' },
-  { id: '4-7', name: 'Rocky road', pal: 'FLRiu', max: 12, par: 11, sol: 'u(i(F)(L F R F F R F L))',
-    map: ['~.*.#.*.', '>.#.*.#G', '~~~~~~~~'],
-    hint: 'When a rock is in the way, step up, go past it and come back down.' },
-  { id: '4-8', name: 'Long maze', pal: 'FLRiu', max: 8, par: 7, sol: 'u(i(F)(L i()(R R)))', alt: ['u(i(F)(R i()(L L)))'],
-    map: ['>.*..###', '####.###', '####...#', '######.#', '##.*...#', '##.#####', '##..*G##'],
-    hint: 'A big maze, but the program from Left or right? still works.' },
-
-  /* ---- 5 Debugging: each level opens with a program that has a bug ---- */
-  { id: '5-1', name: 'Wrong turn', pal: 'FLR', max: 8, par: 6, sol: 'F F F R F F', start: 'F F F L F F', fix: 1,
-    map: ['~>.*.~', '~~~~.~', '~~~~G~'],
-    hint: 'The robot turns the wrong way. Find that turn and fix it.' },
-  { id: '5-2', name: 'Count again', pal: 'FLRr', max: 6, par: 5, sol: 'r3(F) L r4(F)', start: 'r3(F) L r3(F)', fix: 1,
-    map: ['~.*.<~', '~.~~~~', '~*~~~~', '~.~~~~', '~G~~~~'],
-    hint: 'The robot stops one square too soon. Check the Repeat numbers.' },
-  { id: '5-3', name: 'Inside or out?', pal: 'FLRr', max: 6, par: 5, sol: 'r4(F R F L)', start: 'r4(F R F) L', fix: 1,
-    map: ['~~~~~v~', '~~~~..~', '~~~*.~~', '~~..~~~', '~G*~~~~'],
-    hint: 'One block is outside the Repeat. Should it be inside?' },
-  { id: '5-4', name: 'Short F1', pal: 'FLRf', max: 9, par: 8, sol: 'f R f L f|F F F', start: 'f R f L f|F F', fix: 1,
-    map: ['~~~~G~', '~~~~.~', '~~~~*~', '~.*..~', '~.~~~~', '~.~~~~', '~^~~~~'],
-    hint: 'F1 is one step too short. Fix F1 and every use of it gets better.' },
-  { id: '5-5', name: 'Dizzy robot', pal: 'FLRiu', max: 5, par: 4, sol: 'u(i(F)(R))', start: 'u(i(F)())', fix: 1,
-    map: ['~~~~~v~', '~~~~~.~', '~~~~~*~', '~~~~~.~', '~G.*..~'],
-    hint: 'The robot gets dizzy at the corner. What should it do there?' },
-  { id: '5-6', name: 'Spinning', pal: 'FLRr', max: 6, par: 4, sol: 'r4(r3(F) R)', start: 'r4(r3(F) R R)', fix: 1,
-    map: ['######', '#.*..#', '#.~~.#', '#*~~*#', '#^G..#', '######'],
-    hint: 'The robot spins too much at each corner. Take one block away.' },
-  { id: '5-7', name: 'Mixed up', pal: 'FLRiu', max: 5, par: 4, sol: 'u(i(F)(R))', start: 'u(i(R)(F))', fix: 2,
-    map: ['>.*...', '#####.', '##.G#*', '##.##.', '##.*..'],
-    hint: 'The If is mixed up. Which block belongs on which side?' },
-  { id: '5-8', name: 'Two bugs', pal: 'FLRrf', max: 11, par: 9, sol: 'r2(f) F r3(f)|F R F L', start: 'r2(f) F r2(f)|F R F R', fix: 2,
-    map: ['>.~~~~~', '~..~~~~', '~~.*.~~', '~~~~..~', '~~~~~*.', '~~~~~~G'],
-    hint: 'Two bugs this time: one in the program and one in F1.' }
-];
-const WORLDS = ROBOT_WORLDS;
-const LEVELS = ROBOT_LEVELS.map((L, i) => Object.assign({}, L, { i: i, w: +L.id.split('-')[0], k: +L.id.split('-')[1], m: Robot.parseMap(L.map) }));
+const ROBOT_WORLDS = [{"id":1,"name":"Sequences","icon":"👣","size":8,"tip":"Try a shorter way.","intro":"A program is a list of steps. The robot does them in order, one by one."},{"id":2,"name":"Loops","icon":"🔁","size":20,"tip":"A Repeat saves blocks.","intro":"Repeat does the blocks inside it again and again, so you need far fewer blocks."},{"id":3,"name":"Functions","icon":"🧩","size":20,"tip":"F1 saves blocks.","intro":"F1 is your own block. Build it once in the F1 row, then use it as often as you like."},{"id":6,"name":"Mixed-up Code","icon":"🔀","size":20,"tip":"Move the blocks instead.","intro":"All the right blocks are here, but in a muddle. Tap a block and move it until the order is right."},{"id":7,"name":"Shrink It","icon":"🗜️","size":20,"tip":"Repeat and F1 make it shorter.","intro":"These programs work, but they are far too long. Make them short and neat with Repeat and F1."},{"id":8,"name":"Pixel Painter","icon":"🎨","size":20,"tip":"A Repeat saves blocks.","intro":"Paint colours the square the robot is on. Paint every dotted square to finish the picture."},{"id":4,"name":"Conditions","icon":"🤔","size":20,"tip":"Let an If do the work.","intro":"If lets the robot look before it moves, so one short program can find its own way."},{"id":9,"name":"Robot Team","icon":"🤝","size":20,"tip":"Let an If do the work.","intro":"Every robot runs the same program, one after the other. Write one program that works for them all."},{"id":10,"name":"Counters","icon":"🔢","size":20,"tip":"Let n do the counting.","intro":"The robot can remember a number called n. Plus one makes it bigger, and Repeat n uses it."},{"id":11,"name":"Code Reader","icon":"🔍","size":20,"tip":"","intro":"Read the program like a real coder. Where will the robot stop? Tap that square, then check."},{"id":5,"name":"Debugging","icon":"🐞","size":20,"tip":"Fix the bug instead.","intro":"These programs have bugs. Run them, spot what goes wrong and fix them with few changes."}];
+const ROBOT_LEVELS = [{"id":"1-1","name":"First steps","pal":"FLR","max":7,"par":3,"sol":"F F F","map":["~~~~~~","~>..G~","~~~~~~"],"hint":"Tap Forward three times, then press Run."},{"id":"1-2","name":"Shiny gem","pal":"FLR","max":8,"par":4,"sol":"F F F F","map":["~~~~~~~","~>.*.G~","~~~~~~~"],"hint":"Walk over the gem to pick it up, then on to the flag."},{"id":"1-3","name":"Round the corner","pal":"FLR","max":9,"par":5,"sol":"F F R F F","map":["~~~~~","~>..~","~~~.~","~~~G~","~~~~~"],"hint":"Turn right turns the robot on the spot. It does not move."},{"id":"1-4","name":"Left this time","pal":"FLR","max":10,"par":6,"sol":"F F F L F F","map":["~~~~~~","~~~~G~","~~~~.~","~>.*.~","~~~~~~"],"hint":"Pick up the gem, then turn left to face the flag."},{"id":"1-5","name":"Zigzag","pal":"FLR","max":13,"par":9,"sol":"F R F L F R F L F","map":["~~~~~~","~>.~~~","~~.*~~","~~~.G~","~~~~~~"],"hint":"Right, left, right, left: one square at a time."},{"id":"1-6","name":"Turn around","pal":"FLR","max":13,"par":9,"sol":"F F R R F F F F F","alt":["F F L L F F F F F"],"map":["~~~~~~~~","~*.<..G~","~~~~~~~~"],"hint":"Get the gem first. Two turns make the robot face the other way."},{"id":"1-7","name":"Round the pond","pal":"FLR","max":16,"par":12,"sol":"F F F F R F F R F F F F","map":["#######","#>...*#","#~~~~.#","#G....#","#######"],"hint":"Go all the way round the water. Robots cannot swim!"},{"id":"1-8","name":"Long walk","pal":"FLR","max":17,"par":13,"sol":"F F F R F F R F F F L F F","map":["######","#>.*.#","####.#","#.*..#","#.####","#G####"],"hint":"A long walk with two gems. Plan it one square at a time."},{"id":"2-1","name":"Repeat!","pal":"FLRr","max":3,"par":2,"sol":"r7(F)","map":["~~~~~~~~",">.*..*.G","~~~~~~~~"],"hint":"Put Forward inside Repeat, then tap the number until it says 7."},{"id":"2-2","name":"Two lines","pal":"FLRr","max":6,"par":5,"sol":"r3(F) R r4(F)","map":["~~~~~~",">...~~","~~~.~~","~~~*~~","~~~.~~","~~~G~~"],"hint":"Use a Repeat for each straight line, with a turn between."},{"id":"2-3","name":"Staircase","pal":"FLRr","max":6,"par":5,"sol":"r5(F R F L)","map":[">.####","#..###","##*.##","###..#","####.*","#####G"],"hint":"One step, turn, one step, turn. Put that pattern in a Repeat."},{"id":"2-4","name":"Three lines","pal":"FLRr","max":9,"par":8,"sol":"r2(F) R r3(F) L r5(F)","alt":["F F R r3(F) L r5(F)"],"map":[">..~~~~~","~~.~~~~~","~~*~~~~~","~~...*.G"],"hint":"Count each straight line. A Repeat for each one saves blocks."},{"id":"2-5","name":"Big steps","pal":"FLRr","max":7,"par":6,"sol":"r3(F F L F R)","map":["~~~~~~G","~~~~..*","~~..*~~",">..~~~~"],"hint":"Two steps, turn left, one step, turn right. Then again!"},{"id":"2-6","name":"Loop in a loop","pal":"FLRr","max":6,"par":4,"sol":"r4(r3(F) R)","alt":["r4(F F F R)"],"map":["######","#>..*#","#G~~.#","#.~~.#","#*..*#","######"],"hint":"A Repeat can go inside another Repeat. Try one for each side."},{"id":"2-7","name":"Rectangle","pal":"FLRr","max":8,"par":7,"sol":"r2(r5(F) R r3(F) R)","map":["########","#>....*#","#G~~~~.#","#.~~~~.#","#*....*#","########"],"hint":"A long side, a turn, a short side, a turn. Do that twice."},{"id":"2-8","name":"Comb","pal":"FLRr","max":11,"par":9,"sol":"r4(r2(L F F F L) F F)","alt":["r4(L r3(F) R R r3(F) L r2(F))"],"map":["*#*#*#G",".#.#.#.",".#*#.#.",">..*..."],"hint":"Turn left, go up, turn left: twice takes you up and back down."},{"id":"2-9","name":"Square swirl","pal":"FLRr","max":10,"par":8,"sol":"r3(r4(F) R) r2(r2(F) R)","alt":["r3(r4(F) R) r2(F F R)"],"map":[">...*","~~~~.","..G~.",".~~~.","*...*"],"hint":"Three long sides, then two short ones. One Repeat for each kind!"},{"id":"2-10","name":"S for snake","pal":"FLRr","max":10,"par":8,"sol":"r2(r3(F) L) r3(r3(F) R)","map":["*..<",".~~~",".~~~","...*","~~~.","~~~.","G..*"],"hint":"The top of the S turns one way. The bottom turns the other way."},{"id":"2-11","name":"Four windows","pal":"FLRr","max":8,"par":6,"sol":"r4(r4(F F R) R)","map":["*...*",".~G~.","..^..",".~.~.","*...*"],"hint":"Go round one window pane, then turn. How many panes are there?"},{"id":"2-12","name":"Compass points","pal":"FLRr","max":9,"par":7,"sol":"r4(r2(F F L L) R)","alt":["r4(F F R R F F L)"],"map":["~~*~~","~~.~~","G.^.*","~~.~~","~~*~~"],"hint":"Out to a gem and back again. Is that the same few blocks twice?"},{"id":"2-13","name":"Diamond stairs","pal":"FLRr","max":9,"par":7,"sol":"r4(r3(F R F L) R)","map":["~~G>.~~","~..~..~","..~~~..","*~~~~~*","..~~~..","~..~..~","~~.*.~~"],"hint":"Each side of the diamond is a staircase. Then the robot turns."},{"id":"2-14","name":"Cut corners","pal":"FLRr","max":10,"par":8,"sol":"r4(r3(F) R F L F R)","map":["~>..*~",".G~~..",".~~~~*","*~~~~.","..~~..","~.*..~"],"hint":"A long side, then a little step round the corner. Spot it four times!"},{"id":"2-15","name":"Wonky box","pal":"FLRr","max":12,"par":10,"sol":"r2(r3(F) R r3(F R F L) R)","map":["~~G>...","~..~~*.","*.~~..~","...*.~~"],"hint":"Two sides are straight and two are stairs. Do one of each, twice."},{"id":"2-16","name":"Hilltop","pal":"FLRr","max":10,"par":8,"sol":"r2(r3(L F R F) R F)","alt":["r3(L F R F) r3(R F L F)"],"map":["~~.*~~~","~*...~~","..~~.*~",">~~~~.G"],"hint":"Look again: is the way down the same stairs as the way up, turned?"},{"id":"2-17","name":"Boulder hop","pal":"FLRr","max":11,"par":9,"sol":"r2(L r2(F R F) L F F)","alt":["r2(L F R F F R F L F F)"],"map":["~~~~~~~",".*.#.*.",">#.*.#G","~~~~~~~"],"hint":"Up, over and down a rock: can you spot a little piece that comes twice?"},{"id":"2-18","name":"Plus pond","pal":"FLRr","max":9,"par":7,"sol":"r4(r3(F F R) L L)","alt":["r4(r2(F F R) F F L)"],"map":["~~..*~~","~~.~.~~",".G^~...",".~~~~~.","...~..*","~~.~.~~","~~*..~~"],"hint":"Each arm of the pond is three sides of a little square."},{"id":"2-19","name":"Tree branches","pal":"FLRr","max":12,"par":10,"sol":"r3(L r2(F L L F) R F F)","map":["~~G~~","~~.~~","~*.*~","~~.~~","~*.*~","~~.~~","~*^*~"],"hint":"Out to a gem and back, then the same on the other side. Then climb!"},{"id":"2-20","name":"Big window","pal":"FLRr","max":8,"par":6,"sol":"r4(r4(r3(F) R) R)","alt":["r4(r4(F F F R) R)"],"map":["*.....*",".~~.~~.",".~~G~~.","...^...",".~~.~~.",".~~.~~.","*.....*"],"hint":"A loop in a loop in a loop! Start with one side of one pane."},{"id":"3-1","name":"Meet F1","pal":"FLRf","max":9,"par":8,"sol":"f R f L f|F F F","map":[">..*~~~","~~~.~~~","~~~.~~~","~~~..*G"],"hint":"Build three Forwards in the F1 row. Then use F1 in your program."},{"id":"3-2","name":"F1 stairs","pal":"FLRf","max":9,"par":8,"sol":"f f f f|F R F L","map":["~~~.G","~~.*~","~..~~",".*~~~","^~~~~"],"hint":"Put one stair in F1: Forward, turn right, Forward, turn left."},{"id":"3-3","name":"Gem trips","pal":"FLRf","max":12,"par":11,"sol":"f f f|F L F R R F L F","alt":["f f f|F L F L L F L F"],"map":["~*~*~*~",">.....G","~~~~~~~"],"hint":"One trip to a gem and back goes in F1. Use it three times."},{"id":"3-4","name":"Plus sign","pal":"FLRf","max":13,"par":11,"sol":"f f R f f|F F L L F F","alt":["f f f F F|F F R R F F L"],"map":["~~*~~","~~.~~","G.^.*","~~.~~","~~*~~"],"hint":"In F1, go to the end of an arm and back. Which way is it facing then?"},{"id":"3-5","name":"Stairs and a step","pal":"FLRf","max":11,"par":10,"sol":"f f F f f f|F L F R","map":["~~~~~~G","~~~~~*.","~~~~..~","~~.*.~~","~..~~~~",">.~~~~~"],"hint":"One stair goes in F1. Use it, step along, then use it again."},{"id":"3-6","name":"Turning stairs","pal":"FLRf","max":13,"par":12,"sol":"f f f R f f f f|F R F L","map":["~>.~~","~~..~","~~~*.","~~~~.","~~~..","~~.*~","~..~~","G.~~~"],"hint":"F1 works whichever way the robot faces. Turn, then use it again."},{"id":"3-7","name":"Gem alleys","pal":"FLRf","max":13,"par":12,"sol":"f f F f|F R F L L F R F","alt":["f f F f|F R F R R F R F"],"map":["~~~~~~~~",">......G","#*#*##*#"],"hint":"The alleys are not evenly spaced. An extra Forward fills the gap."},{"id":"3-8","name":"Two gardens","pal":"FLRrf","max":11,"par":11,"sol":"f r4(F) f R r3(F)|r4(F F R)","map":[">.....*",".~.#.~.","*.*#..*","~~~~G~~"],"hint":"Walking round a garden is the same each time. A Repeat fits in F1!"},{"id":"3-9","name":"Hook spiral","pal":"FLRrf","max":9,"par":8,"sol":"f L r3(f)|F F R F","map":[">..~~","~~*..","~~~~*","~G~~.","~..*."],"hint":"The path is four hooks. Build one hook in F1. Is there an extra turn?"},{"id":"3-10","name":"Garden steps","pal":"FLRrf","max":9,"par":8,"sol":"f r3(f L)|F R F F","map":["~~~~~>.","~~~~~~.","~~~~~~*","~~~~*..","~~*..~~","G..~~~~"],"hint":"Every step down is the same piece. Which turn comes after each one?"},{"id":"3-11","name":"Two by two","pal":"FLRrf","max":10,"par":9,"sol":"r2(f L F f)|F R F F","map":["~>.~~","~~.~~","~~*..","~~~~.","~~~~*","~~*..","~~.~~","G..~~"],"hint":"Find the piece that comes four times. Two of them fit in each round!"},{"id":"3-12","name":"Bumpy slope","pal":"FLRrf","max":12,"par":10,"sol":"f F R r3(f)|F F R F L","map":[">..~","~~*.","~~~.","~~*.","~~.~","~*.~","~.~~","G.~~"],"hint":"Spot the piece that keeps coming back. One gap is different!"},{"id":"3-13","name":"Two pairs","pal":"FLRrf","max":11,"par":10,"sol":"r2(f F) L r2(f)|F F R F","map":["~~~>..","~~~~~*","~~~~~.","~~~~~.","~~~.*.","G~~.~~","..*.~~"],"hint":"The hooks come in pairs. What happens between the two pairs?"},{"id":"3-14","name":"Stair landing","pal":"FLRrf","max":10,"par":9,"sol":"f F f f|r2(F R F L)","map":[">.~~~~~~","~..~~~~~","~~*..~~~","~~~~..~~","~~~~~*.~","~~~~~~..","~~~~~~~G"],"hint":"Two stairs make one flight. Put a Repeat in F1. Where is the landing?"},{"id":"3-15","name":"Cog wheel","pal":"FLRrf","max":11,"par":9,"sol":"f r3(f F)|r2(F R F) L","alt":["f r3(f F)|F R F F R F L"],"map":["~..*~~","~.~.G~","*.~~>.",".~~~~.","...~.*","~~*..~"],"hint":"Each tooth of the cog is the same. Look for the steps between teeth!"},{"id":"3-16","name":"Wiggly road","pal":"FLRrf","max":12,"par":11,"sol":"r2(f) r2(f R F)|F R F L F","map":[">.~~~~~","~.*.~~~","~~~.*.~","~~~~~.*","~~~~~~.","~~~~~..","~~~~G*~"],"hint":"Every wiggle is the same. Do the wiggles come in twos?"},{"id":"3-17","name":"Three ponds","pal":"FLRrf","max":12,"par":10,"sol":"f r2(f F)|L r3(F F R) L","map":["~..*~~","~.~.~~","~>~...","G~~~~.",".~...*",".~.~~~","*..~~~"],"hint":"Round three sides of a pond is one F1. Look at the gaps between."},{"id":"3-18","name":"Stair hook","pal":"FLRrf","max":13,"par":11,"sol":"f r2(f R) F f|r2(F R F L)","map":["~>.~~~","~~..~~","~~~*.~","~~~~..","G~~~~*","..~~..","~..*.~"],"hint":"One staircase goes in F1. It comes four times, facing different ways."},{"id":"3-19","name":"Stone arch","pal":"FLRrf","max":12,"par":10,"sol":"f F f f|r3(L F R F) R","map":["~~.*~~~","~....~~","..~~..~",">~~~~..","~~~~~~*","~~~~~..","~~~~..~","~~~G.~~"],"hint":"Each staircase ends with a turn. Find the one gap that is different."},{"id":"3-20","name":"Ring of stairs","pal":"FLRrf","max":12,"par":10,"sol":"f r3(f F)|R r3(L F R F)","map":["~~.*G~~~","~..~>.~~","..~~~..~",".~~~~~..","*~~~~~~*","..~~~~..","~..~~..~","~~..*.~~"],"hint":"Turn, then climb a staircase: that is F1. Which corners have a step?"},{"id":"6-1","name":"Muddled corner","mode":"order","sol":"F F R F F","start":"F F F F R","map":["~~~~~","~>.*~","~~~.~","~~~G~","~~~~~"],"hint":"Run it and watch. On which square should the robot turn?"},{"id":"6-2","name":"Topsy-turvy turns","mode":"order","sol":"F L F F R F F","start":"F R F F L F F","map":["~~~~~~","~~*.G~","~~.~~~","~>*~~~","~~~~~~"],"hint":"Watch the first corner. Which way should the robot turn there?"},{"id":"6-3","name":"Turn first","mode":"order","sol":"R F L F R F L F","start":"F R F L F R F L","map":["~~~~~","~>~~~","~.*~~","~~.G~","~~~~~"],"hint":"Which way is the robot facing? Should it step first, or turn first?"},{"id":"6-4","name":"Short then long","mode":"order","sol":"r2(F) R r5(F)","start":"r5(F) R r2(F)","map":["~~~~~","~>.*~","~~~.~","~~~.~","~~~*~","~~~.~","~~~G~","~~~~~"],"hint":"Count the squares in each straight line. Which Repeat goes first?"},{"id":"6-5","name":"Loop the stairs","mode":"order","sol":"r4(F R F L)","start":"r4(F) R F L","map":[">.~~~","~*.~~","~~*.~","~~~*.","~~~~G"],"hint":"Only Forward repeats now. Which other blocks make one whole stair?"},{"id":"6-6","name":"Climb, then stroll","mode":"order","sol":"r3(F L F R) F F","start":"r3(F L F R F F)","map":["~~~*.G","~~*.~~","~*.~~~",">.~~~~"],"hint":"The stairs repeat three times. Does the walk at the top repeat too?"},{"id":"6-7","name":"Long strides","mode":"order","sol":"r2(F F R F F L)","start":"r2(F R F F L F)","map":[">.*~~","~~.~~","~~*.*","~~~~.","~~~~G"],"hint":"Look at one big stride. How far along before the robot turns down?"},{"id":"6-8","name":"Twos and threes","mode":"order","sol":"r2(F F) L r3(F) R F","start":"r2(F) L r3(F F) R F","map":["~~~~.G","~~~~.~","~~~~.~",">...*~"],"hint":"Two times what makes the first line? Three times what makes the next?"},{"id":"6-9","name":"Turns in between","mode":"order","sol":"r3(F) R r4(F) L F","start":"r3(F R) r4(F L) F","map":[">..*~","~~~.~","~~~.~","~~~.~","~~~*G"],"hint":"A turn inside a Repeat happens every time. Should these turns repeat?"},{"id":"6-10","name":"Up, along, down","mode":"order","sol":"r3(F L F R) r2(F) R r3(F)","start":"r2(F) R r3(F) r3(F L F R)","map":["~~~..*","~~*.~.","~*.~~.",">.~~~G"],"hint":"All the parts are right, but in a muddle. Which part comes first?"},{"id":"6-11","name":"Horseshoe","mode":"order","sol":"r3(R r2(F))","start":"r2(R r3(F))","map":["~~~~~","~^.*~","~~~.~","~G.*~","~~~~~"],"hint":"One Repeat sits inside the other. Which number belongs outside?"},{"id":"6-12","name":"Mountain steps","mode":"order","sol":"r3(r2(F) L r2(F) R)","start":"r3(r2(F L) r2(F R))","map":["~~~~~~G","~~~~~~.","~~~~..*","~~~~.~~","~~..*~~","~~.~~~~",">.*~~~~"],"hint":"Each big step is two lines and two turns. Should a turn repeat?"},{"id":"6-13","name":"Tooth by tooth","mode":"order","sol":"r3(r2(L F F L) F F)","start":"r3(F F r2(L F F L))","map":["*~*~*~~",".~.~.~~",">.....G"],"hint":"The first tooth is right above the robot. Climb first, or walk first?"},{"id":"6-14","name":"Fishing hook","mode":"order","sol":"r2(r4(F) R) r2(r2(F) R)","start":"r2(r2(F) R) r2(r4(F) R)","map":[">...*","~~~~.","~~G~.","~~.~.","~~*.*"],"hint":"Follow the hook from the robot. Long sides first, or short sides?"},{"id":"6-15","name":"Nosy robot","mode":"order","sol":"r3(F F L F R R F L) R r3(F)","start":"r3(F F L F F R R L) R r3(F)","map":["~~*~*~*",">......","~~~~~~.","~~~~~~.","~~~~~~G"],"hint":"Peek into a nook, then out again. When does the robot turn round?"},{"id":"6-16","name":"Whirlpool","mode":"order","sol":"r3(r6(F) R) r2(r4(F) R) r2(r2(F) R)","start":"r2(r6(F) R) r3(r4(F) R) r2(r2(F) R)","map":[">.....*","~~~~~~.","*...*~.",".~~~.~.",".~G..~.",".~~~~~.","*.....*"],"hint":"Count the sides: how many long ones, middle ones and short ones?"},{"id":"6-17","name":"F1 in a muddle","mode":"order","sol":"f f f|F F R F L","start":"f f f|F F L F R","map":[">.*~~~~","~~..*~~","~~~~..*","~~~~~~G"],"hint":"F1 runs the blocks in its own row. Fix that row and every F1 works!"},{"id":"6-18","name":"Duck pond","mode":"order","sol":"r2(f R) f|r2(F) R r3(F) L","start":"r2(f) R f|r3(F) R r2(F) L","map":["~~~>.*","~~~~~.","G~~~~.",".~~~~.",".~~~~.","*....*"],"hint":"Each F1 goes round one corner of the pond. How far along, how far down?"},{"id":"6-19","name":"Winding stairs","mode":"order","sol":"f R F f R f|r2(F R F L)","start":"f F R f R f|r2(F L F R)","map":["~~>.~","~~~*.","~~~~.","G~~~.","..~..","~..*~"],"hint":"Fix F1's stairs first. Between flights: turn first, or step first?"},{"id":"6-20","name":"Castle arches","mode":"order","sol":"r2(f F F)|L F F R F F R F F L","start":"r2(F F f)|L F F R F F L F F R","map":["*.*~*.*",".~.~.~.",">~...~G"],"hint":"F1 climbs one arch. Check its turns, then climb first or walk first?"},{"id":"7-1","name":"Lift shaft","mode":"shrink","pal":"FLRr","max":3,"par":2,"sol":"r7(F)","start":"F F F F F F F","map":["~G~","~.~","~*~","~.~","~.~","~*~","~.~","~^~"],"hint":"So many Forwards! Can one Repeat do the same job?"},{"id":"7-2","name":"Long corridor","mode":"shrink","pal":"FLRr","max":6,"par":5,"sol":"R r6(F) L F","start":"R F F F F F F L F","map":["~~~~~~G","^.*..*.","~~~~~~~"],"hint":"Keep the turns as they are. Which part could one Repeat squash?"},{"id":"7-3","name":"Two long halls","mode":"shrink","pal":"FLRr","max":6,"par":5,"sol":"r4(F) R r5(F)","start":"F F F F R F F F F F","map":[">...*","~~~~.","~~~~.","~~~~*","~~~~.","~~~~G"],"hint":"Each straight line can have its own Repeat. Count the squares!"},{"id":"7-4","name":"Three streets","mode":"shrink","pal":"FLRr","max":9,"par":8,"sol":"r3(F) L r3(F) R r4(F)","start":"F F F L F F F R F F F F","map":["~~~*.*.G","~~~.~~~~","~~~.~~~~",">..*~~~~"],"hint":"Three straight lines and two turns. How short can you make it?"},{"id":"7-5","name":"Wide stairs","mode":"shrink","pal":"FLRr","max":7,"par":6,"sol":"r3(F F L F R)","start":"F F L F R F F L F R F F L F","map":["~~~~~~G","~~~~..*","~~..*~~",">.*~~~~"],"hint":"Find the chunk of blocks that comes again and again."},{"id":"7-6","name":"Stairs and a hall","mode":"shrink","pal":"FLRr","max":8,"par":7,"sol":"r3(F L F R) r4(F)","start":"F L F R F L F R F L F R F F F F","map":["~~~*.*.G","~~*.~~~~","~*.~~~~~",">.~~~~~~"],"hint":"Two jobs: climb the stairs, then walk the hall. A Repeat for each!"},{"id":"7-7","name":"Shepherd's crook","mode":"shrink","pal":"FLRr","max":6,"par":5,"sol":"r3(F F R F)","start":"F F R F F F R F F F","map":["~>.*","~~~.","~~~.","G..*"],"hint":"Cut the list into equal chunks. The last chunk may be cut short!"},{"id":"7-8","name":"Magnet","mode":"shrink","pal":"FLRr","max":5,"par":4,"sol":"r3(r4(F) R)","start":"F F F F R F F F F R F F F F","map":[">...*","~~~~.","~~~~.","~~~~.","G...*"],"hint":"Three sides, each a line and a turn. Can a Repeat hold a Repeat?"},{"id":"7-9","name":"Lightning bolt","mode":"shrink","pal":"FLRr","max":8,"par":7,"sol":"r2(r3(F) L r3(F) R)","start":"F F F L F F F R F F F L F F F","map":["~~~~~~G","~~~~~~.","~~~~~~.","~~~*..*","~~~.~~~","~~~.~~~",">..*~~~"],"hint":"Find one giant step, then make each line inside it short too."},{"id":"7-10","name":"Garden rake","mode":"shrink","pal":"FLRr","max":9,"par":8,"sol":"r3(r2(R F F R) F F)","start":"r2(R F F R) F F r2(R F F R) F F r2(R F F R) F F","map":[">.....G",".~.~.~~","*~*~*~~"],"hint":"One tine and a walk come three times. What can hold them all?"},{"id":"7-11","name":"Over the hill","mode":"shrink","pal":"FLRr","max":9,"par":8,"sol":"r2(r3(F L F R) F R)","start":"r3(F L F R) F R r3(F L F R)","map":["~~~**~~~","~~....~~","~*.~~.*~",">.~~~~.G"],"hint":"Both staircases use the same blocks. Can one Repeat do them both?"},{"id":"7-12","name":"Roller coaster","mode":"shrink","pal":"FLRr","max":12,"par":10,"sol":"R r2(r2(F F L) r2(F F R))","start":"R F F L F F L F F R F F R F F L F F L F F","map":[">~...~G",".~.~.~.","*.*~*.*"],"hint":"Each dip turns the same way twice at the bottom. Spot more repeats!"},{"id":"7-13","name":"Pond patrol","mode":"shrink","pal":"FLRf","max":10,"par":8,"sol":"f f f|F F R F F","start":"F F R F F F F R F F F F R F F|F F R F F","map":["~~>.*","~~~~.","G~~~.",".~~~.","*...*"],"hint":"F1 is built already, but nobody uses it! Where do its blocks appear?"},{"id":"7-14","name":"Zigzag cliff","mode":"shrink","pal":"FLRf","max":11,"par":9,"sol":"f f f|F R F F L F","start":"F R F F L F F R F F L F F R F F L F","map":[">.~~~~~","~.~~~~~","~*..~~~","~~~.~~~","~~~*..~","~~~~~.~","~~~~~*G"],"hint":"The same piece comes three times. Build it once in F1!"},{"id":"7-15","name":"Peekaboo","mode":"shrink","pal":"FLRf","max":14,"par":13,"sol":"f F f R f F|F L F R R F L","start":"F L F R R F L F F L F R R F L R F L F R R F L F","map":["~*~*~",">...~","~~~.*","~~~G~"],"hint":"The robot peeks into every nook the same way. Even the last one?"},{"id":"7-16","name":"Three flights","mode":"shrink","pal":"FLRrf","max":11,"par":10,"sol":"f F f R f|r2(F R F L)","start":"r2(F R F L) F F R F L F R F L R F R F L F R F","map":[">.~~~~","~*.~~~","~~...~","~~~~*.","~~~~~.","~~~~..","~~~G*~"],"hint":"One flight is shrunk already. Are the other flights the same piece?"},{"id":"7-17","name":"Bendy pipe","mode":"shrink","pal":"FLRrf","max":15,"par":14,"sol":"f F f R f R r4(F)|F F R F L F","start":"F F R F L F F F F R F L F R F F R F L F R F F F F","map":[">.*~~~~~","~~....*~","~~~~~~..","~~~~~~~.","~~~~~~.*","~~G.*..~"],"hint":"Three bends that match, then a long straight. Use F1 and a Repeat!"},{"id":"7-18","name":"Snake trail","mode":"shrink","pal":"FLRrf","max":14,"par":13,"sol":"r2(f R F) f L f|F R F L r2(F)","start":"F R F L F F R F F R F L F F R F F R F L F F L F R F L F F","map":["~~~>.~~","~~~~.*.","~~~~~~.","~~~~~..","~.*.~*~","..~...~",".~~~~~~","G~~~~~~"],"hint":"F1 can go inside a Repeat. Which uses of F1 come with the same turn?"},{"id":"7-19","name":"Spiral staircase","mode":"shrink","pal":"FLRrf","max":13,"par":12,"sol":"f F F r2(L f)|F r2(F L F R)","start":"f F F L f L f|F F L F R F L F R","map":["~....~",".*~~.*","G~~~~.","~~~...","~~*.~~",">..~~~"],"hint":"Both rows are too long. Look for a repeat in F1 and one in the program."},{"id":"7-20","name":"Grand spiral","mode":"shrink","pal":"FLRrf","max":12,"par":11,"sol":"f F r3(f L)|F r2(F L F R)","start":"F r2(F L F R) F F r2(F L F R) L F r2(F L F R) L F r2(F L F R)","map":["~~~....~","~~.*~~*.","~~G~~~~.","~~~~~~~.","~~~~~~*.","~~~....~","~~*.~~~~",">..~~~~~"],"hint":"Four flights, one piece. What comes between the flights each time?"},{"id":"8-1","name":"First stripe","pal":"FLRPr","max":4,"par":3,"sol":"r5(F P)","map":["~~~~~~~",">ooooo~","~~~~~~~"],"hint":"Step forward, then paint. A Repeat can do that pair five times."},{"id":"8-2","name":"Dotted line","pal":"FLRPr","max":5,"par":4,"sol":"r4(F P F)","map":["~~~~~~~~",">o.o.o.o","~~~~~~~~"],"hint":"Paint one square, skip the next. A Repeat does the rest."},{"id":"8-3","name":"Letter L","pal":"FLRPr","max":7,"par":5,"sol":"r2(r4(F P) L)","alt":["r4(F P) L r4(F P)"],"map":["v~~~~","o~~~~","o~~~~","o~~~~","ooooo"],"hint":"Both arms of the L are four squares long. Can one Repeat do both?"},{"id":"8-4","name":"Stairway","pal":"FLRPr","max":8,"par":7,"sol":"r4(F P L F P R)","map":["~~~~o","~~~oo","~~oo~","~oo~~",">o~~~"],"hint":"Each stair is two painted squares and two turns. Repeat one stair."},{"id":"8-5","name":"Picture frame","pal":"FLRPr","max":8,"par":6,"sol":"F r4(r3(F P) R)","map":[">oooo","~o~~o","~o~~o","~oooo"],"hint":"Step onto the corner first. After that, every side is the same."},{"id":"8-6","name":"Diagonal","pal":"FLRPr","max":8,"par":6,"sol":"r5(F P R F L)","map":[">o~~~~","~.o~~~","~~.o~~","~~~.o~","~~~~.o"],"hint":"The robot cannot step sideways. Paint, then take a zigzag step."},{"id":"8-7","name":"Mountain","pal":"FLRPr","max":10,"par":9,"sol":"r2(r3(F P L F P R) R)","map":["~~~o~~~","~~ooo~~","~oo~oo~",">o~~~o~"],"hint":"Climb the stairs, turn, and the same stair blocks bring you down!"},{"id":"8-8","name":"Robot compass","pal":"FLRPr","max":11,"par":9,"sol":"r4(r2(F P) R R r2(F) L)","map":["~~o~~","~~o~~","oo^oo","~~o~~","~~o~~"],"hint":"Paint one arm, walk back to the middle, then turn to the next arm."},{"id":"8-9","name":"Letter T","pal":"FLRPr","max":11,"par":9,"sol":"r2(r5(F P) L L r2(F) L)","alt":["r5(F P) L L r2(F) L r5(F P)"],"map":[">ooooo","~~~o~~","~~~o~~","~~~o~~","~~~o~~","~~~o~~"],"hint":"The bar and the stem are both five long. Turn round to reach the stem."},{"id":"8-10","name":"Letter Z","pal":"FLRPr","max":14,"par":12,"sol":"r2(r5(F P) R r4(F R F P L) L)","alt":["r5(F P) R r4(F R F P L) L r4(F P)"],"map":[">ooooo","~~~~o.","~~~o.~","~~o.~~","~ooooo"],"hint":"A bar, a zigzag, a bar. The robot stops as soon as the Z is done."},{"id":"8-11","name":"Doughnut","pal":"FLRPf","max":13,"par":11,"sol":"F f f f f|F P F P F R","map":[">.oo.","~o~~o","~o~~o","~.oo."],"hint":"No Repeat today. Every side of the ring is the same. Use F1!"},{"id":"8-12","name":"Big stairs","pal":"FLRPrf","max":9,"par":8,"sol":"r2(f R f L)|r3(F P)","alt":["r2(r3(F P) R r3(F P) L)"],"map":[">ooo~~~","~~~o~~~","~~~o~~~","~~~oooo","~~~~~~o","~~~~~~o","~~~~~~o"],"hint":"Every long stair is three painted squares. F1 can paint one stair."},{"id":"8-13","name":"Diamond","pal":"FLRPrf","max":10,"par":9,"sol":"F r4(r2(F R F P L) R)","map":["~>o.~",".o~o.","o~~~o",".o~o.","~.o.~"],"hint":"Each side is a zigzag of two diagonal steps. Four sides, four turns."},{"id":"8-14","name":"Noughts and crosses","pal":"FLRPrf","max":11,"par":10,"sol":"r4(r5(F P) L F F L F L)","alt":["r4(r5(F P) L F r2(F L))"],"map":[".......","..o.o..",">ooooo.","..o.o..",".ooooo.","..o.o..","......."],"hint":"Paint one line, then hop round to the start of the next. Four lines!"},{"id":"8-15","name":"Window panes","pal":"FLRPrf","max":12,"par":11,"sol":"F R F r4(f R)|r4(r2(F P) R)","alt":["F R F r4(r4(r2(F P) R) R)"],"map":["ooooo","o>o.o","ooooo","o.o.o","ooooo"],"hint":"Walk to the middle. From there each pane is a little square for F1."},{"id":"8-16","name":"Square spiral","pal":"FLRPrf","max":13,"par":11,"sol":"F r3(r4(P F) R) r3(r2(P F) R)","alt":["r5(F P) r2(R r4(F P)) r2(R r2(F P))"],"map":[">ooooo","~~~~~o","~ooo~o","~o~~~o","~ooooo"],"hint":"Try Paint before Forward. Which sides of the spiral are the same?"},{"id":"8-17","name":"Kite","pal":"FLRPrf","max":14,"par":13,"sol":"F r4(f L) R R f|r2(F R F P L)","map":["~~o~~","~o.o~","o.~.o","~o.o~","~~o~~","~o^~~","o.~~~"],"hint":"F1 can paint one diagonal side. The tail is one more side!"},{"id":"8-18","name":"Zigzag line","pal":"FLRPrf","max":14,"par":13,"sol":"F P r2(f R f L)|r2(F R F P L)","map":["~.o.~.o",".o~o.o~","o~~~o~~","^~~~~~~"],"hint":"Up, down, up: every slope is the same diagonal. Put it in F1."},{"id":"8-19","name":"Up arrow","pal":"FLRPrf","max":16,"par":15,"sol":"r5(F P) r2(R R f) R f|r2(F R F P L)","map":["~.o.~",".ooo.","o.o.o","~~o~~","~~o~~","~~^~~"],"hint":"Paint the shaft, then use F1 for the diagonals. You may paint twice!"},{"id":"8-20","name":"Three bubbles","pal":"FLRPrf","max":16,"par":15,"sol":"F f R r4(F) f L F F f|r4(r2(F P) R)","map":["~>ooo~~","~~o~o~~","~~ooo~~","~~.~~~~","ooo.ooo","o~o~o~o","ooo~ooo"],"hint":"Every bubble is the same ring. Draw it in F1, then hop to the next."},{"id":"4-1","name":"Until the flag","pal":"FLRu","max":3,"par":2,"sol":"u(F)","map":["~~~~~~~~",">.*..*.G","~~~~~~~~"],"hint":"Repeat until flag keeps going until the robot is on the flag."},{"id":"4-2","name":"Clear ahead?","pal":"FLRiu","max":5,"par":4,"sol":"u(i(F)(R))","map":[">....","~~~~.","~~~~*","~~~~.","~~~~G"],"hint":"If the way ahead is clear, go Forward. If not, turn right."},{"id":"4-3","name":"Snail shell","pal":"FLRiu","max":5,"par":4,"sol":"u(i(F)(R))","map":[">..*...","######.",".....#.",".###.#.","*#G..#*",".#####.","...*..."],"hint":"The same four blocks can follow the whole spiral. Let If decide!"},{"id":"4-4","name":"Gem signs","pal":"FLRigu","max":5,"par":4,"sol":"u(F g(R))","map":[">....*","..~~..",".*.G..","...~..",".*...*"],"hint":"Keep walking. Each time the robot finds a gem, it turns right."},{"id":"4-5","name":"Walls and gems","pal":"FLRigu","max":7,"par":6,"sol":"u(i(F)(L) g(R))","map":[">..*.~~","~~~.~~~","~~~.~~~","~~~..*.","~~~#~.~","~~~~~G~"],"hint":"A wall ahead means turn left. A gem means turn right."},{"id":"4-6","name":"Left or right?","pal":"FLRiu","max":8,"par":7,"sol":"u(i(F)(L i()(R R)))","alt":["u(i(F)(L i()(L L)))"],"map":["########","###.*..#","###.##.#",">*..##.#","######*#","######.G","########"],"hint":"At a corner try left. If left is blocked too, turn round to face right."},{"id":"4-7","name":"Rocky road","pal":"FLRiu","max":12,"par":11,"sol":"u(i(F)(L F R F F R F L))","map":["~.*.#.*.",">.#.*.#G","~~~~~~~~"],"hint":"When a rock is in the way, step up, go past it and come back down."},{"id":"4-8","name":"Long maze","pal":"FLRiu","max":8,"par":7,"sol":"u(i(F)(L i()(R R)))","alt":["u(i(F)(R i()(L L)))"],"map":[">.*..###","####.###","####...#","######.#","##.*...#","##.#####","##..*G##"],"hint":"A big maze, but the program from Left or right? still works."},{"id":"4-9","name":"Look left","pal":"FLRiju","max":4,"par":4,"sol":"u(j(L) F)","alt":["u(F j(L))"],"map":["~~~~.~~~","~G*..~~~","~~~~.~~~","~>.*...~","~~~~~~~~"],"hint":"New block: If path left. The robot can look sideways as it walks!"},{"id":"4-10","name":"Look right","pal":"FLRijku","max":4,"par":4,"sol":"u(k(R) F)","alt":["u(F k(R))"],"map":["~.~~~~~~","~...*..~","~.~~~.~~","~*~~~.~~","~.~G*.~~","~.~~~.~~","~^~~~~~~"],"hint":"Now meet If path right. Which way do these side paths go?"},{"id":"4-11","name":"Stay on the road","pal":"FLRijku","max":7,"par":6,"sol":"u(i(F)(j(L)(R)))","alt":["u(i(F)(k(R)(L)))"],"map":[">..*...#","##.#.#.#","##...#.#","######.#","#...*..#","#.#.#.##","#G#...##"],"hint":"The little loops skip the gems. At a wall, which way is open?"},{"id":"4-12","name":"Side streets","pal":"FLRijku","max":7,"par":6,"sol":"u(j(L)(k(R)) F)","alt":["u(k(R)(j(L)) F)"],"map":["##...###","##.#.*G#","##.#*#.#","##.*...#","##.#####",">*..####"],"hint":"Turn into each side street, but only once. The else part can help!"},{"id":"4-13","name":"Gem town","pal":"FLRigjku","max":7,"par":6,"sol":"u(F g(j(L)(R)))","map":["..*.*",".#.#.","..G..",".#.#.","*...*",".#.#.","^...."],"hint":"Each gem says turn here. The walls say which way."},{"id":"4-14","name":"Wall walker","pal":"FLRijku","max":8,"par":7,"sol":"u(j(L F)(i(F)(R)))","map":["###v#.*","###...#","#...###","###....","#...###","###..*#","###G###"],"hint":"In a maze, keep your left hand on the wall and you will never get lost."},{"id":"4-15","name":"Frog pond","pal":"FLRijku","max":8,"par":7,"sol":"u(k(R F)(i(F)(L)))","map":["......#G","v~~~~.#.",".~~~~...",".~~~~.##","......##","*##*####"],"hint":"Round and round the pond! Which hand should touch the wall this time?"},{"id":"4-16","name":"Which hand?","pal":"FLRijku","max":8,"par":7,"sol":"u(j(L F)(i(F)(R)))","map":["*##*###",".##.###",".##.###","...^..G",".##.###","*##.###"],"hint":"One hand finds the flag too soon. Which hand gets the gems first?"},{"id":"4-17","name":"Round trip","pal":"FLRijku","max":8,"par":7,"sol":"u(j(L F)(i(F)(R)))","alt":["u(k(R F)(i(F)(L)))"],"map":["###*####","G>......","#####*#.","####*##.","##......","###*##*#"],"hint":"The flag is just behind you. Fetch the gems first, then come back!"},{"id":"4-18","name":"Crystal cave","pal":"FLRijku","max":8,"par":7,"sol":"u(j(L F)(i(F)(R)))","map":["##*##*##",">......#",".......#","##.##..#","#.###..*","G......#",".......#","###*####"],"hint":"Wide tunnels, but a hand on the wall still finds the way. Which hand?"},{"id":"4-19","name":"No looking ahead","pal":"FLRjku","max":6,"par":5,"sol":"u(j(L F)(R))","alt":["u(k(R F)(L))"],"map":["v#.#...",".#.###.",".*...*.",".#.#.#.",".#.#.#G"],"hint":"No If path ahead today. Can you keep a hand on the wall without it?"},{"id":"4-20","name":"Maze master","pal":"FLRijku","max":8,"par":7,"sol":"u(j(L F)(i(F)(R)))","alt":["u(k(R F)(i(F)(L)))"],"map":["..*#.#.",".#.#.#.","^#.*...","####.##",".#.....",".#.#*##","...#..G"],"hint":"One short program can solve any maze. You know it already!"},{"id":"9-1","name":"Twin lanes","pal":"FLRr","max":3,"par":2,"sol":"r6(F)","map":[">.*...G","~~~~~~~",">...*.G"],"hint":"Both robots run your program, one after the other. One program for two!"},{"id":"9-2","name":"Turned stairs","pal":"FLRr","max":7,"par":5,"sol":"r3(F R F L)","map":[">.~~~~~~","~.*~~~~~","~~..~~~~","~~~G~~~~","~~~~~~.G","~~~~~*.~","~~~~..~~","~~~~^~~~"],"hint":"The stairs point different ways, but each robot turns its own way."},{"id":"9-3","name":"Pond laps","pal":"FLRr","max":6,"par":4,"sol":"r4(r3(F) R)","map":[">.*.~~~~","G~~.~~~~",".~~.~~~~","..*.~~~~","~~~~..*.","~~~~.~~.","~~~~.~~G","~~~~.*.<"],"hint":"Both robots go round a pond the same way. Can a Repeat hold a Repeat?"},{"id":"9-4","name":"Biggest number","pal":"FLRr","max":7,"par":5,"sol":"r4(F R F L)","map":["~~~~>.~~","~~~~~*.~","~~~~~~G~",">.~~~~~~","~*.~~~~~","~~..~~~~","~~~*.~~~","~~~~G~~~"],"hint":"Each robot stops on its own flag. Which Repeat number works for both?"},{"id":"9-5","name":"No counting","pal":"FLRu","max":3,"par":2,"sol":"u(F)","map":[">.*G~~~~","~~~~~~~~",">.*....G"],"hint":"Short or long, Repeat until flag stops each robot on its own flag."},{"id":"9-6","name":"Hop to it","pal":"FLRu","max":7,"par":6,"sol":"u(F F L F R)","map":["~~~~G~~~","~~..*~~~",">..~~~~~","~~~~~~G~","~~~~.*.~","~~...~~~",">*.~~~~~"],"hint":"Some robots hop more times than others. You do not need to count!"},{"id":"9-7","name":"Bends and ends","pal":"FLRiu","max":5,"par":4,"sol":"u(i(F)(R))","map":[">....*~~","~~G...~~","~~~~~~~~","G>...*~~"],"hint":"Corners and dead ends in different places. Look before you step!"},{"id":"9-8","name":"Turn either way","pal":"FLRiu","max":8,"par":7,"sol":"u(i(F)(L i()(R R)))","alt":["u(i(F)(R i()(L L)))"],"map":["~G...*~~",">.*...~~","~~~~~~~~",">.....*~","~~G....~"],"hint":"One road turns left, the other turns right. One program must do both!"},{"id":"9-9","name":"Three in one","pal":"FLRiu","max":8,"par":7,"sol":"u(i(F)(L i()(R R)))","alt":["u(i(F)(R i()(L L)))"],"map":["~~.*.~~~",">..~...G","~~~~~~~~","G>...*~~","~~~~~~~~",">..*....","~~~~~~~.","~~G*...."],"hint":"A twisty road, a dead end and a hairpin. Can one program do them all?"},{"id":"9-10","name":"Gem signals","pal":"FLRigu","max":5,"par":4,"sol":"u(F g(R))","map":[">..*.~~~","~~~.~~~~","G..*~~~~","~~~.~.~~","~.~~~*.G","~*G~~.~~","~.~~~.~~",".*<~.*.<"],"hint":"The gems show each robot where to turn, even when the path goes on."},{"id":"9-11","name":"Gems and walls","pal":"FLRigu","max":7,"par":6,"sol":"u(i(F)(L) g(R))","map":[">.*.~~~~","~~.~~~~~","~~...*.~","~~#~~..G","G..~#~~~","~.*..~~~","~~~~.~~~","~~~.*..<"],"hint":"A wall means turn left. A gem means turn right. Same rules for both!"},{"id":"9-12","name":"Side doors","pal":"FLRijku","max":4,"par":4,"sol":"u(j(L) F)","alt":["u(F j(L))"],"map":["~~~.~~~~","G.*.~~~~","~~~.~~~~",">.*..~~~","~~~~~~~.","~~~~.*..","~~~~~.~.","~~~~~G~^"],"hint":"The doors are in different places. Let each robot look for its own!"},{"id":"9-13","name":"Doors both sides","pal":"FLRijku","max":7,"par":6,"sol":"u(j(L)(k(R)) F)","map":["G....~~~","~~*#.~~~",">....~~~","~~~~~~~~","~..*..~~","~.~~~*~~","~G.....<"],"hint":"Take each door, left or right. Use else so the robot turns only once!"},{"id":"9-14","name":"Mind the loops","pal":"FLRijku","max":7,"par":6,"sol":"u(i(F)(j(L)(R)))","alt":["u(i(F)(k(R)(L)))"],"map":[">..*...#","~~.~.~.~","~~...~.~","~~~~~~.G","~~~~~~~~","~...*..<","~.~.~.~~","~G~...~~"],"hint":"Little loops skip the gems. Stay on the road, and turn only at walls!"},{"id":"9-15","name":"Two mazes","pal":"FLRijku","max":8,"par":7,"sol":"u(j(L F)(i(F)(R)))","alt":["u(k(R F)(i(F)(L)))"],"map":[">.*.*..","##.#.#.","...#G#.","~~~~~~~","v#.#..G",".#.#*##",".*....."],"hint":"Two different mazes, one program. Your maze rule works in both!"},{"id":"9-16","name":"Pond and maze","pal":"FLRijku","max":8,"par":7,"sol":"u(k(R F)(i(F)(L)))","map":[".....~~G","v~~~.~~.","..*.....","~~~~~~~~","G.*#...~","##.#.##~",">.*....~"],"hint":"One robot starts next to a pond. Which hand keeps it from going round?"},{"id":"9-17","name":"Dead end gems","pal":"FLRijku","max":8,"par":7,"sol":"u(j(L F)(i(F)(R)))","map":["#*#*#*#G",">.......","#.#.#.##","~~~~~~~~","*#G...<~",".###.##~","......*~"],"hint":"The gems hide in dead ends. Which hand peeks into them on the way?"},{"id":"9-18","name":"No peeking team","pal":"FLRjku","max":6,"par":5,"sol":"u(j(L F)(R))","alt":["u(k(R F)(L))"],"map":["#G#v#.#.",".*.*....",".#.#.#.#","~~~~~~~~","*.*<#...","G#.#.#.#","#......."],"hint":"No If path ahead again! Your short maze rule works for both robots."},{"id":"9-19","name":"Three shapes","pal":"FLRijku","max":8,"par":7,"sol":"u(j(L F)(i(F)(R)))","alt":["u(k(R F)(i(F)(L)))"],"map":[">.......","#######.","G.*.....","~~~~~~~~",">.##~#G#","#.*#~#v#","##..~#.#","###G~*.*"],"hint":"A hairpin, some stairs and a T. One maze rule gets all three home!"},{"id":"9-20","name":"Maze team","pal":"FLRijku","max":8,"par":7,"sol":"u(j(L F)(i(F)(R)))","map":["v#*#.#*#","...#....","G#...#.#","~~~~~~~~","v#*#~G.<","....~#.#","G#.#~*..","#...~#.#"],"hint":"Three mazes, one program. Which hand gets every robot home?"},{"id":"10-1","name":"Spiral out","pal":"FLRr+","max":6,"par":5,"sol":"r5(rn(F) L +)","map":["*..*~~",".~~.~~",".~>*~~",".~~~~~","*....G"],"hint":"Repeat n walks n steps. Plus one makes the next walk one step longer."},{"id":"10-2","name":"Plus goes first","pal":"FLRr+","max":6,"par":5,"sol":"r4(+ rn(F) R)","alt":["+ r4(rn(F) R +)"],"map":["G~~~~",".~~~~",".~>.*",".~~~.",".~~~.","*...*"],"hint":"This time the first walk is two steps long. Where should the plus go?"},{"id":"10-3","name":"Growing stairs","pal":"FLRr+","max":8,"par":7,"sol":"r3(R rn(F) L F +)","map":[">~~~","**~~","~.~~","~**~","~~.~","~~.~","~~*G"],"hint":"Each drop is one square deeper than the last. Let n count the drop."},{"id":"10-4","name":"Giant steps","pal":"FLRr+","max":9,"par":8,"sol":"r3(rn(F) R rn(F) L +)","map":[">*~~~~~","~*.*~~~","~~~.~~~","~~~*..*","~~~~~~.","~~~~~~.","~~~~~~G"],"hint":"Each giant step goes n along and n down. Then n grows!"},{"id":"10-5","name":"Big start","pal":"FLRr+","max":6,"par":5,"n0":3,"sol":"r3(rn(F) R +)","map":["~~>..*","~~~~~.","~~~~~.","~~~~~.","G....*"],"hint":"Look at the robot's number before you start. n is 3 this time!"},{"id":"10-6","name":"Jump by two","pal":"FLRr+","max":7,"par":6,"n0":0,"sol":"r3(+ + rn(F) R)","map":["~~~~>.*","~~~~~~.","~~~~~~.","~~~~~~.","G.....*"],"hint":"n starts at 0, and each walk is two steps longer than the one before."},{"id":"10-7","name":"Spiral in","pal":"FLRr-","max":6,"par":5,"n0":5,"sol":"r5(rn(F) R -)","map":[">....*","~~~~~.","~~*G~.","~~.~~.","~~*..*"],"hint":"n starts at 5. Minus one makes each walk one step shorter."},{"id":"10-8","name":"Countdown stairs","pal":"FLRr-","max":8,"par":7,"n0":3,"sol":"r3(R rn(F) L F -)","map":[">~~~",".~~~",".~~~","**~~","~.~~","~**~","~~*G"],"hint":"Each drop is one square shorter than the last. Count down with minus."},{"id":"10-9","name":"Shrinking steps","pal":"FLRr+-","max":9,"par":8,"n0":3,"sol":"r3(rn(F) R rn(F) L -)","map":[">..*~~~","~~~.~~~","~~~.~~~","~~~*.*~","~~~~~.~","~~~~~**","~~~~~~G"],"hint":"Giant steps again, but each one smaller. Plus or minus?"},{"id":"10-10","name":"Star arms","pal":"FLRr+-","max":10,"par":9,"sol":"r4(rn(F) R R rn(F) L +)","map":["~~~G~","~~~.~","~~~.~","~~~.~","*..>*","~~~.~","~~~*~"],"hint":"Each arm is one longer. Walk out to the gem, then back to the middle."},{"id":"10-11","name":"Shrinking star","pal":"FLRr+-","max":10,"par":9,"n0":4,"sol":"r4(rn(F) R R rn(F) L -)","map":["~~G~~~~","*.>...*","~~.~~~~","~~.~~~~","~~*~~~~"],"hint":"Four arms again, and each one is shorter than the one before."},{"id":"10-12","name":"n inside n","pal":"FLRr+-","max":7,"par":6,"sol":"r3(rn(rn(F) R) +)","map":["*..*",".>*.",".~..","*.*G"],"hint":"One side of 1, two sides of 2, three sides of 3. Repeat n in Repeat n!"},{"id":"10-13","name":"Grow and shrink","pal":"FLRr+-","max":12,"par":11,"n0":4,"sol":"r2(rn(F) R +) - r4(- rn(F) R)","map":[">...*","~~~~.","*.*~.",".~G~.",".~~~.","*...*"],"hint":"The walks get longer, then shorter. Plus first, then minus."},{"id":"10-14","name":"Painted spiral","pal":"FLRPr+","max":7,"par":6,"sol":"r6(rn(F P) R +)","map":["oooooo","o~~~~o","o~>o~o","o~~o~o","oooo~o","~~~~~o","~~~~~o"],"hint":"Paint as you walk. Each side of the spiral is one square longer."},{"id":"10-15","name":"Paint inwards","pal":"FLRPr+-","max":7,"par":6,"n0":6,"sol":"r6(rn(F P) R -)","map":[">oooooo","~~~~~~o","~~ooo~o","~~o~o~o","~~o~~~o","~~ooooo"],"hint":"n starts at 6. Paint the spiral from the outside in."},{"id":"10-16","name":"Spiral with gaps","pal":"FLRPr+-","max":9,"par":8,"sol":"r3(r2(rn(F P) R) + +)","map":["oooooo","o~~~~o","o~>o~o","oooo~o","~~~~~o","~~~~~o"],"hint":"Two sides of each length, and each length is two longer."},{"id":"10-17","name":"Painted steps","pal":"FLRPr+f","max":10,"par":9,"sol":"r3(f R f L +)|rn(F P)","alt":["r3(rn(F P) R rn(F P) L +)"],"map":[">o~~~~~","~ooo~~~","~~~o~~~","~~~oooo","~~~~~~o","~~~~~~o","~~~~~~o"],"hint":"F1 can paint a line n long. Use it along and down, then grow n."},{"id":"10-18","name":"Bar chart","pal":"FLRPr+-","max":14,"par":13,"sol":"r4(L rn(F P) R R rn(F) L F F +)","map":["~~~~~~o","~~~~o~o","~~o~o~o","o~o~o~o",">......"],"hint":"Paint a bar going up, walk back down, move along. Each bar is taller."},{"id":"10-19","name":"Sound wave","pal":"FLRPr+-f","max":16,"par":15,"sol":"r3(F L f f R F +)|rn(F P) R R rn(F)","map":["~~~~~o","~~~o~o","~o~o~o",">.....","~o~o~o","~~~o~o","~~~~~o"],"hint":"Every column has a bar up and a bar down. F1 can paint one bar."},{"id":"10-20","name":"Pyramid","pal":"FLRPr+-f","max":17,"par":16,"sol":"r3(f +) r4(f -)|L rn(F P) R R rn(F) L F","map":["~~~o~~~","~~ooo~~","~ooooo~","ooooooo",">......"],"hint":"The bars grow, then shrink. Put one bar in F1, then plus, then minus."},{"id":"11-1","name":"Finger walk","mode":"predict","prog":"F F R F F","map":["....#",".~~..",".....",".....","^...."],"hint":"Follow the program with your finger, one block at a time."},{"id":"11-2","name":"Whose left?","mode":"predict","prog":"F F L F F","map":["#.v..",".....",".....",".....","...~~"],"hint":"Pretend you are the robot. Which way is its left now?"},{"id":"11-3","name":"About turn","mode":"predict","prog":"F F F R R F","map":[".....",".....","#....",".....","...~.","..^.."],"hint":"Turns stay on the spot. Which way is the robot facing at the end?"},{"id":"11-4","name":"Splash stop","mode":"predict","prog":"F F R F F L F F","map":["......","......","..~~..","..~~..","......","^....."],"hint":"Before each step, check that the square ahead is free."},{"id":"11-5","name":"Times table","mode":"predict","prog":"r2(F F) R r3(F)","map":[".....#","......","......","...~~.","......","^....."],"hint":"Count the steps inside the Repeat, then multiply."},{"id":"11-6","name":"Three sides","mode":"predict","prog":"r3(F F R)","map":["....#",".....",".....","..~..",".^..."],"hint":"Each round walks one side. How many sides will there be?"},{"id":"11-7","name":"Stair climb","mode":"predict","prog":"r4(F R F L)","map":[".#....","~.....","......","......","....~~","^....."],"hint":"Draw the first round with your finger, then do it again."},{"id":"11-8","name":"Bracket hunt","mode":"predict","prog":"r3(F R) F F","map":["#....","...~.",".....",".....","..^.."],"hint":"Find where the Repeat ends. Blocks after it run only once."},{"id":"11-9","name":"Square plus one","mode":"predict","prog":"r4(r2(F) R) F","map":[".....",".~...",".....","....#",".....",".^..."],"hint":"Draw one side, then all four. Where does the square leave the robot?"},{"id":"11-10","name":"Read F1 first","mode":"predict","prog":"f R f L f|F F","map":["......","......","....~.","......",".#....","^....."],"hint":"Read the F1 row first. Each F1 means: do that row here."},{"id":"11-11","name":"Nearly home","mode":"predict","prog":"r3(f) F|F F L","map":["......","......","...~..","....^.","......","#....."],"hint":"F1 ends with a turn, so each F1 starts facing a new way."},{"id":"11-12","name":"Rock says turn","mode":"predict","prog":"r5(F) R r7(i(F)(R))","map":[".......","....#..",".......",".......",".....~.",".....~.",".^....."],"hint":"Each round does one thing: a step or a turn. Count the rounds."},{"id":"11-13","name":"Round the hedge","mode":"predict","prog":"r9(F k(R)())","map":["......","..#...","..#...","..#...","..#..~",".^...."],"hint":"After every step, look to the robot's right. Is the way open?"},{"id":"11-14","name":"Gem signposts","mode":"predict","prog":"r8(F g(R))","map":["......#",".......","...*...",".*..*..",".......",".......",".^...~~"],"hint":"After each step, ask: is the robot standing on a gem?"},{"id":"11-15","name":"Gone gem","mode":"predict","prog":"r7(F g(R R))","map":[".......#","........",".*>*....","........","~~......"],"hint":"Can the robot pick up the same gem twice?"},{"id":"11-16","name":"Growing lines","mode":"predict","n0":1,"prog":"r3(rn(F) R +) - - rn(F)","map":[".....~","#.....","......","..^...","......","......"],"hint":"Write n on paper and change it each time you read + or -."},{"id":"11-17","name":"Empty rounds","mode":"predict","n0":4,"prog":"r4(- rn(F) L) F F","map":["....~~","......","......","......","......","#...^."],"hint":"Keep track of n. What does Repeat n do when n is 0?"},{"id":"11-18","name":"Counted once","mode":"predict","n0":1,"prog":"rn(F +) R rn(F +) R rn(F)","map":["#.......","........",".......#","..^.....","........","........","......~~","........"],"hint":"Repeat n looks at n once, as it starts. Write n down each time."},{"id":"11-19","name":"Smart steps","mode":"predict","prog":"r4(f) L r4(f)|i(F)(j(L)(R))","map":[".#....","..~...","#.....","......","......","^....."],"hint":"Each F1 is one smart move: a step or a turn. Count them."},{"id":"11-20","name":"Master reader","mode":"predict","n0":2,"prog":"r2(f) + f g(L) r3(i(F)(L)) - rn(F)|R rn(F)","map":["........","........","..*.....","........",".<......","...*..#.","........","~~......"],"hint":"Read it in parts. Where is the robot after each part?"},{"id":"5-1","name":"Wrong turn","mode":"fix","pal":"FLR","max":8,"par":6,"sol":"F F F R F F","start":"F F F L F F","fix":1,"map":["~>.*.~","~~~~.~","~~~~G~"],"hint":"The robot turns the wrong way. Find that turn and fix it."},{"id":"5-2","name":"Count again","mode":"fix","pal":"FLRr","max":6,"par":5,"sol":"r3(F) L r4(F)","start":"r3(F) L r3(F)","fix":1,"map":["~.*.<~","~.~~~~","~*~~~~","~.~~~~","~G~~~~"],"hint":"The robot stops one square too soon. Check the Repeat numbers."},{"id":"5-3","name":"Inside or out?","mode":"fix","pal":"FLRr","max":6,"par":5,"sol":"r4(F R F L)","start":"r4(F R F) L","fix":1,"map":["~~~~~v~","~~~~..~","~~~*.~~","~~..~~~","~G*~~~~"],"hint":"One block is outside the Repeat. Should it be inside?"},{"id":"5-4","name":"Short F1","mode":"fix","pal":"FLRf","max":9,"par":8,"sol":"f R f L f|F F F","start":"f R f L f|F F","fix":1,"map":["~~~~G~","~~~~.~","~~~~*~","~.*..~","~.~~~~","~.~~~~","~^~~~~"],"hint":"F1 is one step too short. Fix F1 and every use of it gets better."},{"id":"5-5","name":"Dizzy robot","mode":"fix","pal":"FLRiu","max":5,"par":4,"sol":"u(i(F)(R))","start":"u(i(F)())","fix":1,"map":["~~~~~v~","~~~~~.~","~~~~~*~","~~~~~.~","~G.*..~"],"hint":"The robot gets dizzy at the corner. What should it do there?"},{"id":"5-6","name":"Spinning","mode":"fix","pal":"FLRr","max":6,"par":4,"sol":"r4(r3(F) R)","start":"r4(r3(F) R R)","fix":1,"map":["######","#.*..#","#.~~.#","#*~~*#","#^G..#","######"],"hint":"The robot spins too much at each corner. Take one block away."},{"id":"5-7","name":"Mixed up","mode":"fix","pal":"FLRiu","max":5,"par":4,"sol":"u(i(F)(R))","start":"u(i(R)(F))","fix":2,"map":[">.*...","#####.","##.G#*","##.##.","##.*.."],"hint":"The If is mixed up. Which block belongs on which side?"},{"id":"5-8","name":"Two bugs","mode":"fix","pal":"FLRrf","max":11,"par":9,"sol":"r2(f) F r3(f)|F R F L","start":"r2(f) F r2(f)|F R F R","fix":2,"map":[">.~~~~~","~..~~~~","~~.*.~~","~~~~..~","~~~~~*.","~~~~~~G"],"hint":"Two bugs this time: one in the program and one in F1."},{"id":"5-9","name":"Missed turning","mode":"fix","pal":"FLRjku","max":6,"par":4,"sol":"u(F k(R)())","start":"u(F j(R)())","fix":1,"map":["..*...",".~~~~.",".~~~~*",".~~~~.","^~~~~G"],"hint":"The robot walks straight past the turning and bumps."},{"id":"5-10","name":"One too few","mode":"fix","pal":"FLRr+-","max":7,"par":6,"n0":2,"sol":"+ r3(rn(F) R +)","start":"r3(rn(F) R +)","fix":1,"map":["...*.","*~~~.",".~~~.","^~~~.","~~~~.","~~~~G"],"hint":"The robot turns one square too soon and bumps."},{"id":"5-11","name":"Missing pixel","mode":"fix","pal":"FLRPr","max":8,"par":7,"sol":"r4(F P) L r3(F P)","start":"r4(F P) L r3(P F)","fix":1,"map":[".v....",".o....",".o....",".o....",".oooo.","......"],"hint":"The last square of the L stays blank."},{"id":"5-12","name":"Rock hopper","mode":"fix","pal":"FLRrf","max":15,"par":13,"sol":"F f F F f|L F R F F R F L","start":"F f F f F|L F R F F R F L","fix":1,"map":["~.*.~.*.",">.#...#G","~~~~~~~~"],"hint":"The robot's second hop bumps into the water."},{"id":"5-13","name":"Two arches","mode":"fix","pal":"FLRgu","max":6,"par":4,"sol":"u(F g(R))","start":"u(F F g(R))","fix":1,"map":["*.*~*.*",".~.~.~.","^~G~.~.","~~~~^~G"],"hint":"The second robot steps onto its gem but does not turn."},{"id":"5-14","name":"Look before you leap","mode":"fix","pal":"FLRiu","max":6,"par":4,"sol":"u(i(F)(L))","start":"u(i(F F)(L))","fix":1,"map":["*...*",".###.",".#G#.","...#.","####^"],"hint":"The robot checks the way is clear, then bumps anyway."},{"id":"5-15","name":"Four arms","mode":"fix","pal":"FLRr","max":10,"par":8,"sol":"r4(r2(F) R R r2(F) L)","start":"r4(r2(F) R R) r2(F) L","fix":2,"map":["~~*~~","~~.~~","G.^.*","~~.~~","~~*~~"],"hint":"The robot walks up and down one arm and never tries the others."},{"id":"5-16","name":"Wiggle stairs","mode":"fix","pal":"FLRru+-","max":9,"par":8,"n0":1,"sol":"u(rn(F) R rn(F) L +)","start":"u(rn(F) R rn(F) L -)","fix":1,"map":["~~~...G","~~~.~~~","~~~.~~~","~..*~~~","~.~~~~~",".*~~~~~","^~~~~~~"],"hint":"After one stair, the robot stands still and wiggles for ever."},{"id":"5-17","name":"Hand on the wall","mode":"fix","pal":"FLRiku","max":9,"par":7,"sol":"u(k(R F)(i(F)(L)))","start":"u(k(R F)(i(F)(R)))","fix":1,"map":[".*..G",".####","..*.#","###.#",".*..#",".####","^####"],"hint":"At the first left-hand corner, the robot turns round and walks back."},{"id":"5-18","name":"Paint a cup","mode":"fix","pal":"FLRPr","max":12,"par":11,"sol":"r3(F P) L r2(F P) L r2(F P)","start":"r3(F P) R r3(F P) L r2(F P)","fix":2,"map":[".v...",".o.o.",".o.o.",".ooo.","....."],"hint":"Two bugs: the robot paints outside the cup in two places."},{"id":"5-19","name":"Dizzy corners","mode":"fix","pal":"FLRiku","max":7,"par":6,"sol":"u(i(F)(k(R)(L)))","start":"u(i(F)(k(L)()))","fix":2,"map":[".*..~~~G",".~~.~~~.","^~~G~.*.","~~~~~.~~","~~~~~.~~","~~~~~^~~"],"hint":"Two bugs! Each robot gets dizzy at a different kind of corner."},{"id":"5-20","name":"Triple trouble","mode":"fix","pal":"FLRrfjku","max":13,"par":12,"sol":"r3(F) r2(f) u(F k(R)())|R F L F","start":"r4(F) r2(f) u(F j(R)())|R F R F","fix":3,"map":["~~....*","~~*~~~.","~..~~~G","*.~~~~~",".~~~~~~",".~~~~~~","^~~~~~~"],"hint":"Three bugs: the robot bumps before the stairs, on them and at the top."}];
+/* A level's mode: build (the program starts empty), fix (Debugging: it opens with a bug), order (Mixed-up Code: blocks
+   can only be moved), shrink (Shrink It: a working program to make short) or predict (Code Reader: tap the square where
+   the robot will stop). Worlds keep their ids (the ids in saved progress); WORLDS is in playing order, and the screen
+   numbers worlds and levels by that order (World 3 is Mixed-up Code, its levels 3-1, 3-2 …). */
+const WORLDS = ROBOT_WORLDS.filter((W) => ROBOT_LEVELS.some((L) => +L.id.split('-')[0] === W.id));
+const LEVELS = ROBOT_LEVELS.map((L, i) => {
+  const mode = L.mode || (L.start ? 'fix' : 'build');
+  const o = Object.assign({}, L, { i: i, w: +L.id.split('-')[0], k: +L.id.split('-')[1], mode: mode, pal: L.pal || '' });
+  o.m = Robot.parseMap(L.map, { free: mode === 'predict', n0: L.n0 });
+  if (mode === 'order') o.max = o.par = Robot.count(Robot.parse(L.start));
+  if (mode === 'shrink') o.cap = Math.max(L.max, Robot.count(Robot.parse(L.start)) + 4);   // room to work in while shrinking
+  if (mode === 'predict') { const r = Robot.run(o.m, Robot.parse(L.prog)); o.answer = r.y * o.m.w + r.x; o.max = o.par = Robot.count(Robot.parse(L.prog)); }
+  return o;
+});
 const byId = {};
 LEVELS.forEach((L) => { byId[L.id] = L; });
-const worldOf = (w) => WORLDS[w - 1];
+const worldOf = (w) => WORLDS.find((W) => W.id === w);
+const worldAt = (w) => WORLDS.findIndex((W) => W.id === w);          // its place in the playing order, 0 first
+const wNum = (w) => worldAt(w) + 1;                                     // the world's number on screen
+const prevWorld = (w) => (worldAt(w) > 0 ? WORLDS[worldAt(w) - 1].id : 0);
+const nextWorld = (w) => (worldAt(w) >= 0 && worldAt(w) < WORLDS.length - 1 ? WORLDS[worldAt(w) + 1].id : 0);
+const worldSize = (w) => LEVELS.filter((L) => L.w === w).length;
+const lvName = (L) => wNum(L.w) + '-' + L.k;                           // the level's number on screen
+const byTries = (L) => L.mode === 'order' || L.mode === 'predict';     // stars by tries, not blocks
+// levels with the robot's number n: its blocks on offer, or used in the program the level opens with
+const counters = (L) => /[+-]/.test(L.pal) || /[+-]|rn\(/.test(L.prog || L.start || '') || L.n0 !== undefined;
 
 /* ================= records =================
    code-robot.v1: levels (per level id '2-3': s = best stars 1-3, b = fewest blocks in a working program), done (levels
@@ -1323,10 +1308,11 @@ tidyRecords();
 const isDone = (id) => !!rec.levels[id];
 const worldDone = (w) => LEVELS.filter((L) => L.w === w && isDone(L.id)).length;
 const worldStars = (w) => LEVELS.filter((L) => L.w === w).reduce((s, L) => s + (rec.levels[L.id] ? rec.levels[L.id].s : 0), 0);
-const OPEN_AT = 6;   // a world opens when the world before has this many levels done
-const worldOpen = (w) => w === 1 || worldDone(w - 1) >= OPEN_AT;
+const OPEN_AT = 6;   // a world opens when the world before it (in playing order) has this many levels done
+const worldOpen = (w) => worldAt(w) === 0 || worldDone(prevWorld(w)) >= OPEN_AT || worldDone(w) > 0;
 const levelOpen = (L) => worldOpen(L.w) && (L.k === 1 || isDone(L.w + '-' + (L.k - 1)));
 const starsFor = (blocks, par) => (blocks <= par ? 3 : blocks <= par + 2 ? 2 : 1);
+const starsForTries = (misses) => (misses <= 0 ? 3 : misses === 1 ? 2 : 1);
 // the level Continue opens: the last one, or else the first open level not done yet
 function continueLevel() {
   if (rec.last && levelOpen(byId[rec.last])) return byId[rec.last];
@@ -1336,29 +1322,40 @@ function continueLevel() {
 /* ================= blocks: names, icons ================= */
 const BLOCKS = {
   F: { name: 'Forward', pal: 'Forward' }, L: { name: 'Turn left', pal: 'Left' }, R: { name: 'Turn right', pal: 'Right' },
-  r: { name: 'Repeat', pal: 'Repeat' }, f: { name: 'F1', pal: 'Use F1' }, i: { name: 'If path ahead', pal: 'If path' },
+  P: { name: 'Paint', pal: 'Paint' }, '+': { name: 'Add one to n', pal: 'n + 1' }, '-': { name: 'Take one from n', pal: 'n − 1' },
+  r: { name: 'Repeat', pal: 'Repeat' }, f: { name: 'F1', pal: 'Use F1' }, i: { name: 'If path ahead', pal: 'If ahead' },
+  j: { name: 'If path left', pal: 'If left' }, k: { name: 'If path right', pal: 'If right' },
   g: { name: 'If gem here', pal: 'If gem' }, u: { name: 'Repeat until flag', pal: 'Until flag' }
 };
+const kcls = (t) => 'k' + ({ '+': 'plus', '-': 'minus' }[t] || t);   // the colour class of a block
 const svg = (d) => '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="' + d + '"/></svg>';
 const PATH = {
   F: 'M12 20V5M6 11l6-6 6 6', L: 'M17 20v-6a5 5 0 0 0-5-5H6M10 5 6 9l4 4', R: 'M7 20v-6a5 5 0 0 1 5-5h6M14 5l4 4-4 4',
-  loop: 'M4 12a8 8 0 0 1 13.7-5.7L20 8.5M20 3.5v5h-5M20 12a8 8 0 0 1-13.7 5.7L4 15.5M4 20.5v-5h5', ahead: 'M12 19V7M7 11l5-5 5 5'
+  loop: 'M4 12a8 8 0 0 1 13.7-5.7L20 8.5M20 3.5v5h-5M20 12a8 8 0 0 1-13.7 5.7L4 15.5M4 20.5v-5h5', ahead: 'M12 19V7M7 11l5-5 5 5',
+  left: 'M19 12H6M10 7l-5 5 5 5', right: 'M5 12h13M14 7l5 5-5 5'
 };
 const ICON = {
   F: svg(PATH.F), L: svg(PATH.L), R: svg(PATH.R), r: svg(PATH.loop), f: '<span class="tx">F1</span>',
-  i: '<span class="tx">if</span>' + svg(PATH.ahead), g: '<span class="tx">if</span><i class="emo">💎</i>', u: svg(PATH.loop) + '<i class="emo">🏁</i>'
+  i: '<span class="tx">if</span>' + svg(PATH.ahead), g: '<span class="tx">if</span><i class="emo">💎</i>', u: svg(PATH.loop) + '<i class="emo">🏁</i>',
+  j: '<span class="tx">if</span>' + svg(PATH.left), k: '<span class="tx">if</span>' + svg(PATH.right),
+  P: '<i class="emo">🖌️</i>', '+': '<span class="tx">n+1</span>', '-': '<span class="tx">n−1</span>'
 };
-const TWO = { i: 1, g: 1, u: 1 };
+const TWO = { i: 1, j: 1, k: 1, g: 1, u: 1 };
 const ROBOT_SVG = '<svg viewBox="0 0 100 100" aria-hidden="true"><rect x="9" y="24" width="15" height="54" rx="7" fill="#3b4677"/><rect x="76" y="24" width="15" height="54" rx="7" fill="#3b4677"/>' +
   '<path d="M50 3 63 19H37z" fill="#ff7b86"/><rect x="19" y="17" width="62" height="66" rx="20" fill="#ffd25e" stroke="#d99f2c" stroke-width="4"/>' +
   '<rect x="29" y="26" width="42" height="27" rx="11" fill="#29345a"/><circle cx="41" cy="39" r="5.5" fill="#7ff0c8"/><circle cx="59" cy="39" r="5.5" fill="#7ff0c8"/>' +
   '<path d="M40 64q10 8 20 0" fill="none" stroke="#d99f2c" stroke-width="4" stroke-linecap="round"/><circle cx="50" cy="75" r="4" fill="#ff7b86"/></svg>';
+// a team: the yellow robot goes first, then the blue one, then the pink one
+const TEAM = [{ name: 'yellow', body: '#ffd25e', edge: '#d99f2c' }, { name: 'blue', body: '#8fd3ff', edge: '#3f8fd6' }, { name: 'pink', body: '#ffb3d9', edge: '#d9619e' }];
+const robotSvg = (k) => ROBOT_SVG.replace(/#ffd25e/g, TEAM[k || 0].body).replace(/#d99f2c/g, TEAM[k || 0].edge);
+const PAINTS = ['#ff8fab', '#ffb35c', '#6fd08c', '#6cc4ff', '#b48cff'];   // a picture's colour, by level
 
 /* ================= game state ================= */
 const SPEEDS = [{ name: 'Slow', ic: '🐢', ms: 700 }, { name: 'Normal', ic: '🚶', ms: 420 }, { name: 'Fast', ic: '🐇', ms: 170 }];
 const game = {
   state: 'menu', L: null, prog: { main: [], f1: [] }, cur: { list: 'm', i: 0 }, sel: null, undo: [],
-  mode: 'edit', trace: null, idx: 0, timer: 0, bot: null, got: [], timeScale: 1, prevMode: '', result: null, attempt: 0
+  mode: 'edit', trace: null, idx: 0, timer: 0, bots: [], got: [], timeScale: 1, prevMode: '', result: null, attempt: 0,
+  guess: -1, tries: 0, n: 1, turn: 0   // Code Reader's guess (a square), misses (Reader) or failed runs (Mixed-up Code), the robot's number, whose turn
 };
 const PLAYING = new Set(['play']);
 const calm = () => !!save.settings.calm || reduceMotion;
@@ -1405,37 +1402,53 @@ const offersF1 = () => game.L.pal.indexOf('f') >= 0 || game.prog.f1.length > 0 |
 
 /* ================= drawing: the map ================= */
 function drawBoard() {
-  const m = game.L.m;
+  const L = game.L, m = L.m;
   boardEl.style.setProperty('--cols', m.w); boardEl.style.setProperty('--rows', m.h);
+  boardEl.style.setProperty('--paint-fill', PAINTS[L.k % PAINTS.length]);
   let h = '';
   for (let i = 0; i < m.cells.length; i++) {
     const c = m.cells[i];
-    const cls = c === '#' ? 'wall' : c === '~' ? 'water' : c === '*' ? 'gem' : c === 'G' ? 'flag' : 'floor';
+    const cls = c === '#' ? 'wall' : c === '~' ? 'water' : c === '*' ? 'gem' : c === 'G' ? 'flag' : c === 'o' ? 'floor target' : 'floor';
     h += '<div class="tile ' + cls + ((i % m.w + Math.floor(i / m.w)) % 2 ? ' alt' : '') + '" data-i="' + i + '">' + (c === '*' ? '<i>💎</i>' : c === 'G' ? '<i>🏁</i>' : '') + '</div>';
   }
-  boardEl.innerHTML = h + '<div class="bot" id="bot">' + ROBOT_SVG + '</div>';
-  boardEl.setAttribute('aria-label', 'A map of ' + m.w + ' by ' + m.h + ' squares with ' + m.gems.length + (m.gems.length === 1 ? ' gem' : ' gems') + ' and a flag');
+  boardEl.innerHTML = h + m.robots.map((r, k) => '<div class="bot" id="bot' + k + '">' + robotSvg(k) + '</div>').join('');
+  boardEl.classList.toggle('team', m.robots.length > 1);
+  boardEl.classList.toggle('pick', L.mode === 'predict');
+  const parts = [m.w + ' by ' + m.h + ' squares'];
+  if (m.robots.length > 1) parts.push(m.robots.length + ' robots: ' + m.robots.map((r, k) => TEAM[k].name).join(', '));
+  if (m.gems.length) parts.push(m.gems.length + (m.gems.length === 1 ? ' gem' : ' gems'));
+  if (m.flags.length) parts.push(m.flags.length === 1 ? 'a flag' : m.flags.length + ' flags');
+  if (m.targets.length) parts.push(m.targets.length + ' squares to paint');
+  boardEl.setAttribute('aria-label', 'A map of ' + parts.join(', '));
   resetBot();
 }
 const tileEl = (i) => boardEl.children[i];
-function placeBot(ms) {
-  const b = $('#bot'), s = game.bot;
+const botEl = (k) => document.getElementById('bot' + (k || 0));
+function placeBot(ms, k) {
+  const b = botEl(k), s = game.bots[k || 0];
   b.style.setProperty('--ms', (ms || 0) + 'ms');
   b.style.setProperty('--x', s.x); b.style.setProperty('--y', s.y); b.style.setProperty('--a', s.a + 'deg');
 }
+// every robot back at its start, the map as it was (the reader's guess stays)
 function resetBot() {
-  const st = game.L.m.start;
-  game.bot = { x: st.x, y: st.y, d: st.d, a: st.d * 90 };
-  game.got = [];
+  const m = game.L.m;
+  game.bots = m.robots.map((r) => ({ x: r.x, y: r.y, d: r.d, a: r.d * 90 }));
+  game.got = []; game.n = m.n0; game.turn = 0;
   $$('#board .tile.got').forEach((t) => t.classList.remove('got'));
-  $$('#board .tile.trail').forEach((t) => t.classList.remove('trail'));
-  boardEl.classList.remove('won');
-  const b = $('#bot'); if (b) { b.classList.remove('bump', 'hop'); b.style.transition = 'none'; placeBot(0); void b.offsetWidth; b.style.transition = ''; }
+  $$('#board .tile.trail, #board .tile.painted, #board .tile.wrong, #board .tile.answer').forEach((t) => t.classList.remove('trail', 'painted', 'wrong', 'answer'));
+  boardEl.classList.remove('won', 'running');
+  game.bots.forEach((s, k) => {
+    const b = botEl(k); if (!b) return;
+    b.classList.remove('bump', 'hop'); b.classList.toggle('turn', k === 0);
+    b.style.transition = 'none'; placeBot(0, k); void b.offsetWidth; b.style.transition = '';
+  });
+  showN();
 }
+function showN() { const el = $('#nInfo'); el.hidden = !counters(game.L); el.textContent = 'n = ' + game.n; }
 
 /* ================= drawing: the program ================= */
 function gapHTML(list, i, n) {
-  const cur = game.mode !== 'run' && !game.sel && game.cur.list === list && game.cur.i === i;
+  const cur = game.mode !== 'run' && !game.sel && game.L.mode !== 'order' && game.cur.list === list && game.cur.i === i;
   return '<button type="button" class="gap' + (n === 0 ? ' only' : '') + (cur ? ' cur' : '') + '" data-gap="' + list + ':' + i + '" aria-label="' +
     (cur ? 'The next block goes here' : 'Put the next block here') + '"><i></i></button>';
 }
@@ -1445,21 +1458,23 @@ function listHTML(list, path) {
   return h;
 }
 function label(b) {
-  if (b.t === 'r') return 'Repeat ' + b.n + ' times, ' + Robot.countList(b.b) + ' blocks inside';
-  if (Robot.BOX[b.t]) return BLOCKS[b.t].name + ', ' + Robot.countList(b.b) + ' blocks inside' + (b.t === 'i' ? ', ' + Robot.countList(b.e) + ' in else' : '');
+  if (b.t === 'r') return 'Repeat ' + (b.n === 'n' ? 'n' : b.n) + ' times, ' + Robot.countList(b.b) + ' blocks inside';
+  if (Robot.BOX[b.t]) return BLOCKS[b.t].name + ', ' + Robot.countList(b.b) + ' blocks inside' + (Robot.ELSE[b.t] ? ', ' + Robot.countList(b.e) + ' in else' : '');
   return BLOCKS[b.t].name;
 }
 function blockHTML(b, p) {
-  const sel = game.sel === p ? ' sel' : '';
-  const btn = '<button type="button" class="blk k' + b.t + (TWO[b.t] ? ' two' : '') + (Robot.BOX[b.t] ? ' head' : '') + sel + '" data-path="' + p + '" aria-label="' + label(b) + '">' + ICON[b.t] + '</button>';
+  const sel = game.sel === p ? ' sel' : '', fixed = game.L.mode === 'order' || game.L.mode === 'predict';
+  const btn = '<button type="button" class="blk ' + kcls(b.t) + (TWO[b.t] ? ' two' : '') + (Robot.BOX[b.t] ? ' head' : '') + sel + '" data-path="' + p + '" aria-label="' + label(b) + '">' + ICON[b.t] + '</button>';
   if (!Robot.BOX[b.t]) return btn;
-  let h = '<div class="box k' + b.t + '" data-box="' + p + '">' + btn;
-  if (b.t === 'r') h += '<button type="button" class="num" data-num="' + p + '" aria-label="' + b.n + ' times. Tap to change the number.">' + b.n + '<small>×</small></button>';
+  let h = '<div class="box ' + kcls(b.t) + '" data-box="' + p + '">' + btn;
+  if (b.t === 'r') h += '<button type="button" class="num' + (fixed ? ' fixed' : '') + '" data-num="' + p + '" aria-label="' + (b.n === 'n' ? 'n times: the robot’s number' : b.n + ' times') + (fixed ? '' : '. Tap to change the number.') + '">' + b.n + '<small>×</small></button>';
   h += listHTML(b.b, p + '.b');
-  if (b.t === 'i') h += '<span class="else">else</span>' + listHTML(b.e, p + '.e');
+  if (Robot.ELSE[b.t]) h += '<span class="else">else</span>' + listHTML(b.e, p + '.e');
   return h + '</div>';
 }
 function drawProgram() {
+  editorEl.classList.toggle('read', game.L.mode === 'predict');
+  editorEl.classList.toggle('order', game.L.mode === 'order');
   mainEl.innerHTML = listHTML(game.prog.main, 'm');
   const f1 = offersF1();
   $('#f1Row').hidden = !f1;
@@ -1469,24 +1484,31 @@ function drawProgram() {
   if ((game.mode === 'step' || game.mode === 'end') && game.trace && game.idx) markEvent(game.trace.events[game.idx - 1]);
 }
 function updateEditor() {
-  const L = game.L, n = blocksUsed(), full = n >= L.max, busy = game.mode === 'run' || game.mode === 'won';
+  const L = game.L, n = blocksUsed(), busy = game.mode === 'run' || game.mode === 'won', fixed = L.mode === 'order' || L.mode === 'predict';
+  const full = n >= (L.mode === 'shrink' ? L.cap : L.max);
+  $('#blkChip').hidden = fixed;
   $('#blkChip').textContent = 'Blocks ' + n + ' / ' + L.max;
-  $('#capInfo').textContent = full ? 'Block limit reached' : '';
+  $('#blkChip').classList.toggle('over', n > L.max);
+  $('#capInfo').textContent = L.mode === 'predict' ? (game.guess < 0 ? 'Tap a square on the map' : 'Then press Check') : L.mode === 'order' ? 'Move the blocks' :
+    n > L.max ? (n - L.max) + ' over the limit' : full ? 'Block limit reached' : '';
   editorEl.classList.toggle('busy', busy);
-  palEl.hidden = !!game.sel; selbarEl.hidden = !game.sel;
+  palEl.hidden = !!game.sel || fixed; selbarEl.hidden = !game.sel;
+  $('#selDel').hidden = L.mode === 'order';
   $$('#palette .pal').forEach((b) => { const t = b.dataset.add; b.disabled = busy || full || (t === 'f' && game.cur.list[0] === 'f'); });
-  $('#runBtn').innerHTML = (busy ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h12v12H6z"/></svg>' : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12-7.5z"/></svg>') + '<span class="lbl">' + (busy ? 'Stop' : 'Run') + '</span>';
+  $('#runBtn').innerHTML = (busy ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h12v12H6z"/></svg>' : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12-7.5z"/></svg>') + '<span class="lbl">' + (busy ? 'Stop' : L.mode === 'predict' ? 'Check' : 'Run') + '</span>';
+  $('#runBtn').disabled = L.mode === 'predict' && game.guess < 0 && !busy;
+  $('#undoBtn').hidden = L.mode === 'predict'; $('#clearBtn').hidden = fixed;
   $('#undoBtn').disabled = busy || !game.undo.length;
   $('#clearBtn').disabled = busy || !n;
   $('#resetBtn').disabled = game.mode === 'edit';
-  $('#stepBtn').disabled = false;
+  $('#stepBtn').disabled = L.mode === 'predict' && game.tries < 2 && game.mode !== 'step';   // a reader steps through only once the robot has shown the answer
   if (game.sel) { $('#selLeft').disabled = busy || !canMove(-1); $('#selRight').disabled = busy || !canMove(1); }
   const s = SPEEDS[rec.speed];
   $('#speedBtn').innerHTML = '<i aria-hidden="true">' + s.ic + '</i>';
   $('#speedBtn').setAttribute('aria-label', 'Speed: ' + s.name + '. Tap to change.');
 }
 function drawPalette() {
-  palEl.innerHTML = game.L.pal.split('').map((t) => '<button type="button" class="pal k' + t + '" data-add="' + t + '" aria-label="Add ' + BLOCKS[t].name + '"><span class="ic' + (TWO[t] ? ' two' : '') + '">' + ICON[t] + '</span><b>' + BLOCKS[t].pal + '</b></button>').join('');
+  palEl.innerHTML = game.L.pal.split('').map((t) => '<button type="button" class="pal ' + kcls(t) + '" data-add="' + t + '" aria-label="Add ' + BLOCKS[t].name + '"><span class="ic' + (TWO[t] ? ' two' : '') + '">' + ICON[t] + '</span><b>' + BLOCKS[t].pal + '</b></button>').join('');
 }
 function say(text, kind) {
   $('#sayText').textContent = text;
@@ -1507,10 +1529,10 @@ function saveDraft() { rec.drafts[game.L.id] = Robot.print(game.prog, true); wri
 function edited() { saveDraft(); drawProgram(); }
 // any edit after a run puts the robot back at the start
 function toEdit() { if (game.mode !== 'edit') stopRun(); }
-const LIMIT_TIP = { 1: 'Try a shorter way.', 2: 'A Repeat saves blocks.', 3: 'F1 saves blocks.', 4: 'Let an If do the work.', 5: 'Fix the bug instead.' };
 function addBlock(t) {
-  if (game.mode === 'run' || !game.L || game.L.pal.indexOf(t) < 0) return;
-  if (blocksUsed() >= game.L.max) { toast('That is the most blocks here (' + game.L.max + '). ' + LIMIT_TIP[game.L.w], 'oops', 2200); return; }
+  if (game.mode === 'run' || !game.L || game.L.pal.indexOf(t) < 0 || game.L.mode === 'order' || game.L.mode === 'predict') return;
+  if (game.L.mode === 'shrink' && blocksUsed() >= game.L.cap) { toast('That is plenty of blocks. Take some away first!', 'oops', 2200); return; }
+  if (game.L.mode !== 'shrink' && blocksUsed() >= game.L.max) { toast('That is the most blocks here (' + game.L.max + '). ' + worldOf(game.L.w).tip, 'oops', 2200); return; }
   if (t === 'f' && game.cur.list[0] === 'f') { toast('F1 cannot use itself', 'oops'); return; }
   if (game.sel) game.sel = null;
   if (!listAt(game.cur.list)) game.cur = { list: 'm', i: game.prog.main.length };
@@ -1525,13 +1547,13 @@ function addBlock(t) {
   announce('Added ' + BLOCKS[t].name + (b.b ? '. The next blocks go inside it.' : '.'));
 }
 function setCursor(list, i) {
-  if (game.mode === 'run') return;
+  if (game.mode === 'run' || game.L.mode === 'order' || game.L.mode === 'predict') return;
   game.sel = null; game.cur = { list: list, i: i };
   Sound.sfx.check();
   drawProgram();
 }
 function selectBlock(p) {
-  if (game.mode === 'run') return;
+  if (game.mode === 'run' || game.L.mode === 'predict') return;
   game.sel = game.sel === p ? null : p;
   if (!game.sel) { const i = indexOf(p); game.cur = { list: parentOf(p), i: i + 1 }; }
   Sound.sfx.check();
@@ -1539,7 +1561,7 @@ function selectBlock(p) {
   if (game.sel) announce(label(blockAt(p)) + ' picked. Move it or delete it.');
 }
 function deleteSel() {
-  const p = game.sel; if (!p || game.mode === 'run') return;
+  const p = game.sel; if (!p || game.mode === 'run' || game.L.mode === 'order') return;
   toEdit(); pushUndo();
   listAt(parentOf(p)).splice(indexOf(p), 1);
   game.cur = { list: parentOf(p), i: indexOf(p) }; game.sel = null;
@@ -1561,13 +1583,15 @@ function moveSel(dir) {
   Sound.sfx.click();
   edited();
 }
+// a Repeat's number counts 2 to 9, then n (where the robot's number is on offer), then 2 again
 function cycleNumber(p) {
-  const b = blockAt(p); if (!b || b.t !== 'r' || game.mode === 'run') return;
+  const b = blockAt(p); if (!b || b.t !== 'r' || game.mode === 'run' || game.L.mode === 'order' || game.L.mode === 'predict') return;
   toEdit(); pushUndo();
-  b.n = b.n >= 9 ? 2 : b.n + 1;
+  const seq = [2, 3, 4, 5, 6, 7, 8, 9].concat(/[+-]/.test(game.L.pal) ? ['n'] : []);
+  b.n = seq[(seq.indexOf(b.n) + 1) % seq.length];
   Sound.sfx.click();
   edited();
-  announce('Repeat ' + b.n + ' times');
+  announce(b.n === 'n' ? 'Repeat n times: the robot’s number' : 'Repeat ' + b.n + ' times');
 }
 function undo() {
   if (game.mode === 'run' || !game.undo.length) return;
@@ -1579,7 +1603,7 @@ function undo() {
   edited();
 }
 function clearProgram() {
-  if (game.mode === 'run' || !blocksUsed()) return;
+  if (game.mode === 'run' || !blocksUsed() || game.L.mode === 'order' || game.L.mode === 'predict') return;
   toEdit(); pushUndo();
   game.prog = { main: [], f1: [] }; game.cur = { list: 'm', i: 0 }; game.sel = null;
   edited();
@@ -1587,39 +1611,80 @@ function clearProgram() {
 }
 function restartLevel() {
   toEdit(); pushUndo();
-  game.prog = game.L.start ? Robot.parse(game.L.start) : { main: [], f1: [] };
-  game.cur = { list: 'm', i: game.prog.main.length }; game.sel = null;
+  game.prog = startProgram(game.L);
+  game.cur = { list: 'm', i: game.prog.main.length }; game.sel = null; game.tries = 0;
+  if (game.L.mode === 'predict') { game.undo = []; clearGuess(); }
   edited();
   say(game.L.hint);
+}
+// the program a level opens with: empty, its bug, its muddle, its long version, or the program to read
+const startProgram = (L) => (L.mode === 'predict' ? Robot.parse(L.prog) : L.start ? Robot.parse(L.start) : { main: [], f1: [] });
+// the same blocks in two programs, in any order and nesting (a Mixed-up Code draft must keep the level's blocks)
+const blockBag = (p) => Robot.tokens(p).filter((t) => t !== ')').sort().join(' ');
+
+/* ================= Code Reader: the guess =================
+   The child taps the square where the robot will stop, then Check. Right: the robot runs there (3 stars first time,
+   2 the second). A first miss only says so; a second miss runs the robot to show where it really stops, and the child
+   taps that square to finish (1 star). */
+function setGuess(i) {
+  const c = game.L.m.cells[i];
+  if (game.mode === 'run' || game.mode === 'won') return;
+  if (c === '#' || c === '~') { toast(c === '#' ? 'Robots cannot stand on a wall' : 'Robots cannot stand in water', 'hello', 1400); return; }
+  if (game.mode !== 'edit') stopRun();
+  clearGuess();
+  game.guess = i;
+  tileEl(i).insertAdjacentHTML('beforeend', '<b class="pin" aria-hidden="true">📍</b>');
+  tileEl(i).classList.add('guess');
+  Sound.sfx.check();
+  updateEditor();
+  const x = i % game.L.m.w, y = Math.floor(i / game.L.m.w);
+  say('Marked! Press Check to see if you read it right.');
+  announce('Your guess: column ' + (x + 1) + ', row ' + (y + 1) + '. Press Check.');
+}
+function clearGuess() { game.guess = -1; $$('#board .pin').forEach((p) => p.remove()); $$('#board .tile.miss, #board .tile.guess').forEach((t) => t.classList.remove('miss', 'guess')); }
+// true when the robot should run now
+function predictCheck() {
+  const L = game.L;
+  if (game.guess < 0) { say('Tap the square where you think the robot will stop.'); return false; }
+  if (game.guess === L.answer || game.tries >= 2) return true;
+  game.tries++;
+  tileEl(game.guess).classList.replace('guess', 'miss');
+  Sound.sfx.wrong();
+  if (game.tries === 1) { say('Not quite. Read it again, block by block, and tap another square.', 'oops'); announce('Not quite. Try another square.'); updateEditor(); return false; }
+  say('Not there either. Watch where the robot really stops!', 'oops');
+  return true;
 }
 
 /* ================= running =================
    The whole run is worked out first (Robot.run); then each step is shown in turn: the block lights up, the robot
    moves. Step shows one step per press. */
 const stepMs = () => SPEEDS[rec.speed].ms / game.timeScale;
-const durOf = (e) => (e.k === 'fwd' || e.k === 'turn' || e.k === 'bump' ? stepMs() : stepMs() * 0.5);
+const durOf = (e) => (e.k === 'start' ? stepMs() * 1.4 : e.k === 'fwd' || e.k === 'turn' || e.k === 'bump' || e.k === 'paint' ? stepMs() : stepMs() * 0.5);
 function clearLights() { $$('#code .now, #code .yes, #code .no, #code .f1now').forEach((e) => e.classList.remove('now', 'yes', 'no', 'f1now')); $$('#code .act').forEach((e) => e.classList.remove('act')); }
 function beginRun() {
   game.trace = Robot.run(game.L.m, game.prog);
   game.idx = 0; game.result = null;
   resetBot();
+  boardEl.classList.add('running');
   game.sel = null;
   if (game.trace.why === 'empty') { game.mode = 'edit'; drawProgram(); say(outcome(game.trace), 'oops'); return false; }
   return true;
 }
 function run() {
   if (game.mode === 'won') return;
-  if (game.mode === 'run') { stopRun(); say('Stopped. Press Run to start again.'); return; }
+  if (game.mode === 'run') { stopRun(); say('Stopped. Press ' + (game.L.mode === 'predict' ? 'Check' : 'Run') + ' to start again.'); return; }
   Sound.init();
+  if (game.L.mode === 'predict' && !predictCheck()) return;
   if (game.mode !== 'step' && !beginRun()) return;
   game.mode = 'run';
   drawProgram();
-  say('Running…');
+  if (game.L.mode !== 'predict' || game.tries < 2) say(game.L.m.robots.length > 1 ? 'The yellow robot goes first…' : 'Running…');
   clearTimeout(game.timer);
   game.timer = setTimeout(nextEvent, 120 / game.timeScale);
 }
 function step() {
   Sound.init();
+  if (game.L.mode === 'predict' && game.tries < 2 && game.mode !== 'step') return;
   if (game.mode === 'run') { clearTimeout(game.timer); game.mode = 'step'; drawProgram(); markEvent(game.trace.events[game.idx - 1]); return; }
   if (game.mode === 'edit' || game.mode === 'end') { if (!beginRun()) return; game.mode = 'step'; drawProgram(); say('Step by step: press Step again for the next block.'); }
   if (game.mode !== 'step') return;
@@ -1649,16 +1714,24 @@ function markEvent(e) {
 }
 function showEvent(e) {
   markEvent(e);
-  const s = game.bot, ms = Math.round(durOf(e) * 0.85), b = $('#bot');
+  const k = e.r || 0, s = game.bots[k], ms = Math.round(durOf(e) * 0.85), b = botEl(k);
+  if (e.k === 'start') {
+    game.turn = k;
+    game.bots.forEach((x, q) => botEl(q).classList.toggle('turn', q === k));
+    if (k > 0) { say('Now the ' + TEAM[k].name + ' robot runs the same program…'); Sound.sfx.check(); }
+    return;
+  }
   b.classList.remove('bump');
   if (e.k === 'fwd') {
-    s.x = e.x; s.y = e.y; placeBot(ms);
+    s.x = e.x; s.y = e.y; placeBot(ms, k);
     const i = e.y * game.L.m.w + e.x;
     setTimeout(() => { const t = tileEl(i); if (t) t.classList.add('trail'); }, ms * 0.6);
     if (e.g >= 0) { game.got.push(e.g); setTimeout(() => { tileEl(e.g).classList.add('got'); Sound.sfx.orb(); }, ms * 0.7); }
     else Sound.sfx.check();
-  } else if (e.k === 'turn') { s.d = e.d; s.a += e.s * 90; placeBot(ms); Sound.sfx.click(); }
+  } else if (e.k === 'turn') { s.d = e.d; s.a += e.s * 90; placeBot(ms, k); Sound.sfx.click(); }
   else if (e.k === 'bump') { b.style.setProperty('--ms', ms + 'ms'); void b.offsetWidth; b.classList.add('bump'); Sound.sfx.pad(); }
+  else if (e.k === 'paint') { const t = tileEl(e.i); if (t) t.classList.add(e.ok ? 'painted' : 'wrong'); if (e.ok) Sound.sfx.orb(); else Sound.sfx.pad(); }
+  else if (e.k === 'set') { game.n = e.n; showN(); Sound.sfx.click(); }
 }
 function stopRun() {
   clearTimeout(game.timer);
@@ -1669,20 +1742,42 @@ function stopRun() {
 }
 function resetRobot() { if (game.mode === 'edit') return; stopRun(); say(game.L.hint); }
 const gemsLeft = (n) => (n === 1 ? '1 gem is' : n + ' gems are') + ' still waiting';
+// what happened, kindly; a team's message says which robot
 function outcome(r) {
-  if (r.why === 'win') return 'Hooray! The robot made it.';
-  if (r.why === 'bump') return r.what === 'water' ? 'Splash! Robots cannot swim. Try another way.' : r.what === 'edge' ? 'Bump! That is the edge of the map. Try another way.' : 'Bump! A wall is in the way. Try another way.';
-  if (r.why === 'gems') return 'So close! ' + gemsLeft(r.left) + '. Collect ' + (r.left === 1 ? 'it' : 'them') + ', then come back to the flag.';
-  if (r.why === 'end') return 'The blocks ran out before the flag' + (r.left ? ', and ' + gemsLeft(r.left).replace(' is', ' was').replace(' are', ' were') : '') + '. Add a few more!';
-  if (r.why === 'dizzy') return 'The robot got dizzy: is your loop able to finish?';
+  const who = r.team ? 'The ' + TEAM[r.robot].name + ' robot: ' : '';
+  if (r.why === 'win') return r.team ? 'Hooray! Every robot made it with one program.' : r.painted && !r.unpainted ? 'Hooray! The picture is finished.' : 'Hooray! The robot made it.';
+  if (r.why === 'bump') return who + (r.what === 'water' ? 'Splash! Robots cannot swim. Try another way.' : r.what === 'edge' ? 'Bump! That is the edge of the map. Try another way.' : 'Bump! A wall is in the way. Try another way.');
+  if (r.why === 'paint') return who + 'Careful! That square is not in the picture. Paint only the dotted squares.';
+  if (r.why === 'unpainted') return 'The blocks ran out with ' + (r.unpainted === 1 ? '1 square' : r.unpainted + ' squares') + ' still to paint. Add a few more!';
+  if (r.why === 'gems') return who + 'So close! ' + gemsLeft(r.left) + '. Collect ' + (r.left === 1 ? 'it' : 'them') + ', then come back to the flag.';
+  if (r.why === 'end') return who + 'The blocks ran out before the flag' + (r.left ? ', and ' + gemsLeft(r.left).replace(' is', ' was').replace(' are', ' were') : '') + '. Add a few more!';
+  if (r.why === 'dizzy') return who + 'The robot got dizzy: is your loop able to finish?';
   if (r.why === 'self') return 'F1 cannot use F1. Take it out of the F1 row.';
   return 'Add some blocks first, then press Run.';
 }
 function finishRun() {
   clearTimeout(game.timer);
-  const r = game.trace;
+  boardEl.classList.remove('running');
+  const r = game.trace, L = game.L;
   game.result = r;
+  if (L.mode === 'predict') {
+    if (game.guess === L.answer) { game.mode = 'won'; won(); return; }
+    game.mode = 'end';
+    drawProgram();
+    const t = tileEl(L.answer); if (t) t.classList.add('answer');
+    say('This is where it stops. Can you see why? Tap that square, then Check.', 'oops');
+    announce('The robot stopped on the lit square. Tap it, then press Check.');
+    return;
+  }
+  if (r.ok && L.mode === 'shrink' && blocksUsed() > L.max) {
+    game.mode = 'end';
+    drawProgram();
+    const msg = 'It works! But it has ' + blocksUsed() + ' blocks. Shrink it to ' + L.max + ' or fewer.';
+    say(msg, 'oops'); announce(msg);
+    return;
+  }
   if (r.ok) { game.mode = 'won'; won(); return; }
+  if (L.mode === 'order') game.tries++;
   game.mode = 'end';
   drawProgram();
   const last = r.events[r.events.length - 1];
@@ -1694,19 +1789,21 @@ function finishRun() {
 /* ================= a level done ================= */
 const CHEERS3 = ['Perfect program!', 'Brilliant coding!', 'Super smart!'];
 function won() {
-  const L = game.L, blocks = blocksUsed(), stars = starsFor(blocks, L.par), prev = rec.levels[L.id];
-  const better = !prev || stars > prev.s || blocks < prev.b;
-  rec.levels[L.id] = { s: Math.max(prev ? prev.s : 0, stars), b: prev ? Math.min(prev.b, blocks) : blocks };
+  const L = game.L, blocks = blocksUsed(), tries = byTries(L), prev = rec.levels[L.id];
+  const stars = tries ? starsForTries(game.tries) : starsFor(blocks, L.par);
+  const score = tries ? game.tries + 1 : blocks;   // b: the fewest blocks, or for Mixed-up Code and Code Reader the fewest tries
+  const better = !prev || stars > prev.s || score < prev.b;
+  rec.levels[L.id] = { s: Math.max(prev ? prev.s : 0, stars), b: prev ? Math.min(prev.b, score) : score };
   totals();
-  saveDraft();
+  if (L.mode !== 'predict') saveDraft();
   writeSave();
   drawProgram();
   boardEl.classList.add('won');
-  const b = $('#bot'); b.classList.add('hop');
-  say(outcome(game.trace), 'good');
+  game.bots.forEach((x, k) => botEl(k).classList.add('hop'));
+  say(L.mode === 'predict' ? (game.tries ? 'Yes! That is where it stops.' : 'Spot on! You read it like a real coder.') : outcome(game.trace), 'good');
   Sound.sfx.win();
-  const changes = L.start ? Robot.changes(Robot.parse(L.start), game.prog) : -1;
-  game.lastWin = { id: L.id, stars: stars, blocks: blocks, better: better, changes: changes };
+  const changes = L.mode === 'fix' ? Robot.changes(Robot.parse(L.start), game.prog) : -1;
+  game.lastWin = { id: L.id, stars: stars, blocks: blocks, tries: game.tries, better: better, changes: changes, first: !prev };
   clearTimeout(game.timer);
   game.timer = setTimeout(() => showDone(), calm() ? 500 : 1100 / Math.min(game.timeScale, 4));
 }
@@ -1715,17 +1812,23 @@ function showDone() {
   const L = game.L, w = game.lastWin, n = nextLevelOf(L);
   game.state = 'done';
   $('#doneTitle').textContent = w.stars === 3 ? pick(CHEERS3) : w.stars === 2 ? 'Level done!' : 'You did it!';
-  $('#doneLv').textContent = 'World ' + L.w + ' · Level ' + L.k + ' · ' + L.name;
+  $('#doneLv').textContent = 'World ' + wNum(L.w) + ' · Level ' + L.k + ' · ' + L.name;
   $('#doneStars').innerHTML = starRow(w.stars);
   $('#doneStars').setAttribute('aria-label', w.stars + ' of 3 stars');
-  let note = 'You used ' + w.blocks + (w.blocks === 1 ? ' block' : ' blocks') + '. ';
-  note += w.stars === 3 ? 'That is par (' + L.par + ') or better!' : '3 stars at ' + L.par + ' blocks or fewer.';
-  if (w.changes >= 0) note += ' Fixed with ' + w.changes + (w.changes === 1 ? ' change' : ' changes') + (w.changes <= L.fix ? ': a neat fix!' : ' (it can be done with ' + L.fix + ').');
+  let note;
+  if (L.mode === 'predict') note = w.tries === 0 ? 'You read the program right first time!' : w.tries === 1 ? 'Right on your second go. Right first time earns 3 stars.' : 'The robot showed you this time. Follow the next one block by block.';
+  else if (L.mode === 'order') note = w.tries === 0 ? 'Right on the first Run: a careful coder!' : 'Done in ' + (w.tries + 1) + ' runs. Right on the first Run earns 3 stars.';
+  else {
+    note = 'You used ' + w.blocks + (w.blocks === 1 ? ' block' : ' blocks') + '. ';
+    note += w.stars === 3 ? 'That is par (' + L.par + ') or better!' : '3 stars at ' + L.par + ' blocks or fewer.';
+    if (w.changes >= 0 && L.mode === 'fix') note += ' Fixed with ' + w.changes + (w.changes === 1 ? ' change' : ' changes') + (w.changes <= L.fix ? ': a neat fix!' : ' (it can be done with ' + L.fix + ').');
+  }
   $('#doneNote').textContent = note;
-  const wDone = worldDone(L.w);
+  const wDone = worldDone(L.w), nw = nextWorld(L.w);
   $('#doneNext').textContent = !n && L.i === LEVELS.length - 1 ? 'You finished every level of Code Robot!' :
-    !n ? (L.w < WORLDS.length && !worldOpen(L.w + 1) ? 'Finish ' + (OPEN_AT - wDone) + ' more in ' + worldOf(L.w).name + ' to open ' + worldOf(L.w + 1).name + '.' : '') :
-    n.w !== L.w ? 'Next: World ' + n.w + ', ' + worldOf(n.w).name + '!' : '';
+    w.first && nw && wDone === OPEN_AT ? '🎉 A new world is open: ' + worldOf(nw).name + '!' :
+    !n ? (nw && !worldOpen(nw) ? 'Finish ' + (OPEN_AT - wDone) + ' more in ' + worldOf(L.w).name + ' to open ' + worldOf(nw).name + '.' : '') :
+    n.w !== L.w ? 'Next: World ' + wNum(n.w) + ', ' + worldOf(n.w).name + '!' : '';
   $('#nextBtn').hidden = !n;
   $('#againBtn').textContent = w.stars < 3 ? 'Try for 3 stars' : 'Play it again';
   $('#hud').hidden = true; playEl.classList.add('away');
@@ -1742,32 +1845,33 @@ function openLevel(L, skipIntro, force) {
   Sound.init();
   if (!skipIntro && !rec.seen[L.w]) { showIntro(L); return; }
   clearTimeout(game.timer);
-  game.L = L; game.state = 'play'; game.mode = 'edit'; game.sel = null; game.undo = []; game.trace = null;
+  game.L = L; game.state = 'play'; game.mode = 'edit'; game.sel = null; game.undo = []; game.trace = null; game.guess = -1; game.tries = 0;
   rec.last = L.id; writeRecords();
   let prog = null;
-  try { if (rec.drafts[L.id] !== undefined) prog = Robot.parse(rec.drafts[L.id]); } catch (e) { prog = null; }
-  if (!prog) prog = L.start ? Robot.parse(L.start) : { main: [], f1: [] };
+  try { if (rec.drafts[L.id] !== undefined && L.mode !== 'predict') prog = Robot.parse(rec.drafts[L.id]); } catch (e) { prog = null; }
+  if (prog && L.mode === 'order' && blockBag(prog) !== blockBag(Robot.parse(L.start))) prog = null;   // a muddle keeps its blocks
+  if (!prog) prog = startProgram(L);
   game.prog = prog;
   game.cur = { list: 'm', i: game.prog.main.length };
   showScreen(null);
   $('#hud').hidden = false; playEl.hidden = false; playEl.classList.remove('away');
   document.body.classList.toggle('calm', calm());
-  $('#lvChip').innerHTML = '<b>' + L.id + '</b> <span class="lvname">' + L.name + '</span>';
-  $('#parChip').textContent = '⭐⭐⭐ ≤ ' + L.par;
-  $('#parChip').setAttribute('aria-label', 'Three stars at ' + L.par + ' blocks or fewer');
+  $('#lvChip').innerHTML = '<b>' + lvName(L) + '</b> <span class="lvname">' + L.name + '</span>';
+  $('#parChip').textContent = byTries(L) ? '⭐⭐⭐ first try' : '⭐⭐⭐ ≤ ' + L.par;
+  $('#parChip').setAttribute('aria-label', byTries(L) ? 'Three stars when it is right first time' : 'Three stars at ' + L.par + ' blocks or fewer');
   drawBoard(); drawPalette(); drawProgram();
   layout();
   say(L.hint);
   Sound.play('robot');
   game.attempt++;
   if (L.i > 0) { const name = Sound.remix(L.i, 0, 'robot'); if (name) toast('♪ ' + name, 'music', 1300); }
-  announce('World ' + L.w + ', level ' + L.k + ': ' + L.name + '. ' + L.hint);
+  announce('World ' + wNum(L.w) + ', level ' + L.k + ': ' + L.name + '. ' + L.hint);
 }
 function showIntro(L) {
   const W = worldOf(L.w);
   game.state = 'intro'; game.introFor = L.id;
   $('#iIcon').textContent = W.icon;
-  $('#iTitle').textContent = 'World ' + W.id + ': ' + W.name;
+  $('#iTitle').textContent = 'World ' + wNum(W.id) + ': ' + W.name;
   $('#iText').textContent = W.intro;
   $('#hud').hidden = true; playEl.hidden = true;
   showScreen('intro');
@@ -1775,16 +1879,16 @@ function showIntro(L) {
 }
 
 /* ================= menus ================= */
-const lvLine = (L) => 'World ' + L.w + ' · ' + worldOf(L.w).name + ' · Level ' + L.k;
+const lvLine = (L) => 'World ' + wNum(L.w) + ' · ' + worldOf(L.w).name + ' · Level ' + L.k;
 function renderHome() {
   const c = continueLevel(), started = Object.keys(rec.levels).length || rec.last;
   $('#contTitle').textContent = started ? 'Continue' : 'Start';
   $('#contSub').textContent = lvLine(c);
   $('#worlds').innerHTML = WORLDS.map((W) => {
-    const open = worldOpen(W.id), d = worldDone(W.id), st = worldStars(W.id);
-    const sub = open ? d + ' of 8 · ' + st + '⭐' : '🔒 Locked';
-    return '<button type="button" class="world' + (open ? '' : ' locked') + (c.w === W.id ? ' now' : '') + '" data-world="' + W.id + '" aria-label="World ' + W.id + ', ' + W.name +
-      (open ? ', ' + d + ' of 8 levels done, ' + st + ' stars' : ', locked: finish ' + (OPEN_AT - worldDone(W.id - 1)) + ' more in ' + worldOf(W.id - 1).name) + '"><i aria-hidden="true">' + W.icon + '</i><b>' + W.name + '</b><small aria-hidden="true">' + sub + '</small></button>';
+    const open = worldOpen(W.id), d = worldDone(W.id), st = worldStars(W.id), size = worldSize(W.id), pw = prevWorld(W.id);
+    const sub = open ? d + ' of ' + size + ' · ' + st + '⭐' : '🔒 Locked';
+    return '<button type="button" class="world' + (open ? '' : ' locked') + (c.w === W.id ? ' now' : '') + '" data-world="' + W.id + '" aria-label="World ' + wNum(W.id) + ', ' + W.name +
+      (open ? ', ' + d + ' of ' + size + ' levels done, ' + st + ' stars' : ', locked: finish ' + (OPEN_AT - worldDone(pw)) + ' more in ' + worldOf(pw).name) + '"><i aria-hidden="true">' + W.icon + '</i><b>' + W.name.replace(/-/g, '\u2011') + '</b><small aria-hidden="true">' + sub + '</small></button>';
   }).join('');
   const sp = $('#speakBtn');
   sp.textContent = !Speech.ok ? 'Read aloud: not here' : save.settings.speak ? 'Read aloud: on' : 'Read aloud: off';
@@ -1803,11 +1907,11 @@ function goHome() {
 }
 function showWorld(w) {
   const W = worldOf(w);
-  if (!worldOpen(w)) { toast('Finish ' + (OPEN_AT - worldDone(w - 1)) + ' more levels in ' + worldOf(w - 1).name + ' first', 'hello', 2200); return; }
+  if (!worldOpen(w)) { const pw = prevWorld(w); toast('Finish ' + (OPEN_AT - worldDone(pw)) + ' more levels in ' + worldOf(pw).name + ' first', 'hello', 2200); return; }
   clearTimeout(game.timer);
   game.state = 'world'; game.world = w;
   $('#wIcon').textContent = W.icon;
-  $('#wTitle').textContent = 'World ' + w + ': ' + W.name;
+  $('#wTitle').textContent = 'World ' + wNum(w) + ': ' + W.name;
   $('#wIntro').textContent = W.intro;
   const todo = LEVELS.find((L) => L.w === w && levelOpen(L) && !isDone(L.id));
   $('#levels').innerHTML = LEVELS.filter((L) => L.w === w).map((L) => {
@@ -1815,8 +1919,8 @@ function showWorld(w) {
     return '<button type="button" class="lvl' + (r ? ' done' : todo && todo.id === L.id ? ' next' : '') + '" data-level="' + L.id + '"' + (open ? '' : ' disabled') +
       ' aria-label="Level ' + L.k + ', ' + L.name + (r ? ', ' + r.s + ' stars' : open ? '' : ', locked') + '"><b>' + (open ? L.k : '🔒') + '</b><span class="ms" aria-hidden="true">' + starRow(r ? r.s : 0) + '</span><small aria-hidden="true">' + L.name + '</small></button>';
   }).join('');
-  const d = worldDone(w);
-  $('#wNote').textContent = w < WORLDS.length ? (worldOpen(w + 1) ? worldOf(w + 1).name + ' is open.' : (OPEN_AT - d) + ' more ' + (OPEN_AT - d === 1 ? 'level opens ' : 'levels open ') + worldOf(w + 1).name + '.') : d + ' of 8 done.';
+  const d = worldDone(w), nw = nextWorld(w);
+  $('#wNote').textContent = nw ? (worldOpen(nw) ? worldOf(nw).name + ' is open.' : (OPEN_AT - d) + ' more ' + (OPEN_AT - d === 1 ? 'level opens ' : 'levels open ') + worldOf(nw).name + '.') : d + ' of ' + worldSize(w) + ' done.';
   $('#hud').hidden = true; playEl.hidden = true;
   Sound.play('menu');
   showScreen('world');
@@ -1828,7 +1932,7 @@ function pause() {
   if (game.mode === 'run') { clearTimeout(game.timer); game.mode = 'step'; }
   game.state = 'pause';
   Speech.stop();
-  $('#pauseInfo').textContent = 'World ' + game.L.w + ' · Level ' + game.L.k + ' · ' + game.L.name + '. Your program is saved.';
+  $('#pauseInfo').textContent = 'World ' + wNum(game.L.w) + ' · Level ' + game.L.k + ' · ' + game.L.name + '.' + (game.L.mode === 'predict' ? '' : ' Your program is saved.');
   showScreen('pause');
 }
 function resume() {
@@ -1863,7 +1967,7 @@ function readCode(text) {
     if (!byId[id] || typeof d.drafts[id] !== 'string' || d.drafts[id].length > 400) continue;
     try { Robot.parse(d.drafts[id]); out.drafts[id] = d.drafts[id]; } catch (e) { /* a broken draft is left out */ }
   }
-  if (d.seen && typeof d.seen === 'object') for (const w of Object.keys(d.seen)) if (WORLDS[+w - 1]) out.seen[w] = 1;
+  if (d.seen && typeof d.seen === 'object') for (const w of Object.keys(d.seen)) if (worldOf(+w)) out.seen[w] = 1;
   out.last = byId[d.last] ? d.last : '';
   out.speed = [0, 1, 2].indexOf(d.speed) >= 0 ? d.speed : 1;
   let done = 0, stars = 0;
@@ -1935,8 +2039,8 @@ function layout() {
   st.setProperty('--say-h', sayH + 'px');
   st.setProperty('--say-max', (W < 500 ? 15 : 16.5) + 'px');
   // palette buttons: one or two rows across the editor's width
-  const ew = wide ? Math.floor(W * 0.5) : W, n = game.L.pal.length;
-  const perRow = n <= 4 ? n : Math.ceil(n / (ew >= 8 * 70 ? 1 : 2));
+  const ew = wide ? Math.floor(W * 0.5) : W, n = game.L.mode === 'predict' ? 0 : game.L.mode === 'order' ? 4 : game.L.pal.length;
+  const perRow = Math.max(1, n <= 4 ? n : Math.ceil(n / (ew >= 8 * 70 ? 1 : 2)));
   const pw = Math.floor(clamp((ew - (perRow - 1) * 8) / perRow, 56, 96));
   st.setProperty('--pw', pw + 'px'); st.setProperty('--ph', (W < 500 ? 58 : 62) + 'px'); st.setProperty('--pf', (pw < 66 ? 0.7 : 0.78) + 'rem');
   let t;
@@ -1948,8 +2052,8 @@ function layout() {
     st.setProperty('--say-w', Math.max(bw, Math.min(sw, 420)) + 'px');
   } else {
     // the editor needs its palette, its controls and at least three lines of program
-    const palRows = Math.ceil(n / Math.max(1, Math.floor((W + 8) / (pw + 8))));
-    const ed = palRows * (W < 500 ? 58 : 62) + (palRows - 1) * 8 + 52 + 8 + 8 + 3 * 60 + 36 + g;
+    const palRows = n ? Math.ceil(n / Math.max(1, Math.floor((W + 8) / (pw + 8)))) : 0;
+    const ed = palRows * (W < 500 ? 58 : 62) + Math.max(0, palRows - 1) * 8 + 52 + 8 + 8 + 3 * 60 + 36 + g;
     t = Math.floor(Math.min(W / m.w, (H - sayH - g - ed) / m.h, H * 0.46 / m.h, 84));
     st.setProperty('--say-w', '100%');
   }
@@ -1968,6 +2072,7 @@ $('#code').addEventListener('click', (e) => {
   if (blk) selectBlock(blk.dataset.path);
 });
 palEl.addEventListener('click', (e) => { const b = e.target.closest('[data-add]'); if (b && !b.disabled) addBlock(b.dataset.add); });
+boardEl.addEventListener('click', (e) => { const t = e.target.closest('.tile'); if (t && game.L && game.L.mode === 'predict' && game.state === 'play') setGuess(+t.dataset.i); });
 $('#selDel').addEventListener('click', deleteSel);
 $('#selLeft').addEventListener('click', () => moveSel(-1));
 $('#selRight').addEventListener('click', () => moveSel(1));
@@ -2038,7 +2143,7 @@ function fits() {
     const targets = $$('#palette .pal, #selbar .btn, #controls .btn, #hintBtn').filter((b) => b.offsetParent !== null);
     targets.forEach((b) => { const r = R(b); if (!in1(r)) bad.push('button outside: ' + (b.getAttribute('aria-label') || b.textContent.trim())); if (r.width < minT || r.height < minT) bad.push('button small ' + Math.round(r.width) + 'x' + Math.round(r.height) + ': ' + (b.getAttribute('aria-label') || b.textContent.trim())); });
     $$('#palette .pal b, #selbar .btn span, #controls .lbl').forEach((b) => { if (b.offsetParent !== null && b.scrollWidth > R(b.closest('button')).width) bad.push('label cut: ' + b.textContent); });
-    $$('#code .gap, #code .blk, #code .num').forEach((b) => { const r = R(b); if (r.width < minT || r.height < minT) bad.push('program target small ' + Math.round(r.width) + 'x' + Math.round(r.height)); if (r.right > code.right + 0.5 || r.left < code.left - 0.5) bad.push('program target outside its pane'); });
+    $$('#code .gap, #code .blk, #code .num').filter((b) => b.offsetParent !== null && getComputedStyle(b).pointerEvents !== 'none').forEach((b) => { const r = R(b); if (r.width < minT || r.height < minT) bad.push('program target small ' + Math.round(r.width) + 'x' + Math.round(r.height)); if (r.right > code.right + 0.5 || r.left < code.left - 0.5) bad.push('program target outside its pane'); });
   } else {
     const card = $$('#screens > .screen').find((s) => !s.hidden);
     if (card) {
@@ -2052,17 +2157,22 @@ function fits() {
   return bad;
 }
 // check a program on a level without the page: the result of a run
-function check(id, text) { const L = byId[id], r = Robot.run(L.m, Robot.parse(text)); return { ok: r.ok, why: r.why, steps: r.steps, left: r.left, blocks: Robot.count(Robot.parse(text)), message: outcome(r) }; }
+function check(id, text) {
+  const L = byId[id], p = Robot.parse(text === undefined ? L.sol || L.prog : text), r = Robot.run(L.m, p);
+  return { ok: r.ok, why: r.why, steps: r.steps, left: r.left, blocks: Robot.count(p), message: outcome(r), x: r.x, y: r.y, end: r.y * L.m.w + r.x, robot: r.robot || 0 };
+}
 window.__robot = {
   game: game, rec: rec, save: save, LEVELS: LEVELS, WORLDS: WORLDS, Robot: Robot, Sound: Sound, Speech: Speech, OPEN_AT: OPEN_AT, SPEEDS: SPEEDS,
   state: () => ({ state: game.state, mode: game.mode, level: game.L ? game.L.id : '', prog: game.L ? Robot.print(game.prog) : '', blocks: game.L ? blocksUsed() : 0,
-    cur: Object.assign({}, game.cur), sel: game.sel, idx: game.idx, events: game.trace ? game.trace.events.length : 0, why: game.trace ? game.trace.why : '', say: $('#sayText').textContent }),
+    cur: Object.assign({}, game.cur), sel: game.sel, idx: game.idx, events: game.trace ? game.trace.events.length : 0, why: game.trace ? game.trace.why : '', say: $('#sayText').textContent,
+    lmode: game.L ? game.L.mode : '', guess: game.guess, tries: game.tries, n: game.n }),
   open: (id) => { openLevel(byId[id], true, true); return game.state; },
   setProg: (text) => { game.prog = Robot.parse(text); game.cur = { list: 'm', i: game.prog.main.length }; game.sel = null; toEdit(); edited(); return Robot.print(game.prog); },
   setSpeed: (k) => { game.timeScale = k; }, check: check, outcome: outcome, starsFor: starsFor, fits: fits, layout: layout, goHome: goHome, showWorld: showWorld,
   // progress from earlier play, for the playtests: these levels done with par
-  grant: (ids) => { ids.forEach((id) => { rec.levels[id] = { s: 3, b: byId[id].par }; }); totals(); writeRecords(); return rec.done; },
-  levelOpen: (id) => levelOpen(byId[id]), worldOpen: worldOpen, saveCode: saveCode, readCode: readCode, run: run, step: step, pause: pause, resume: resume
+  grant: (ids) => { ids.forEach((id) => { rec.levels[id] = { s: 3, b: byTries(byId[id]) ? 1 : byId[id].par }; }); totals(); writeRecords(); return rec.done; },
+  levelOpen: (id) => levelOpen(byId[id]), worldOpen: worldOpen, saveCode: saveCode, readCode: readCode, run: run, step: step, pause: pause, resume: resume,
+  guess: (i) => { setGuess(i); return game.guess; }, wNum: wNum, lvName: (id) => lvName(byId[id]), nextWorld: nextWorld, prevWorld: prevWorld, worldSize: worldSize, TEAM: TEAM
 };
 })();
 </script>

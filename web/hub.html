@@ -174,8 +174,8 @@ h1 span { color: var(--sun-deep); }
   <section class="news" id="news" aria-label="New in the arcade" hidden>
     <h2>✨ New in the arcade</h2>
     <ul>
+      <li><a href="robot/"><i aria-hidden="true">🤖</i><span><b>Code Robot</b>: 11 worlds now: paint pictures, robot teams, counters, mixed-up code and code reading</span></a></li>
       <li><a href="tycoon/"><i aria-hidden="true">💼</i><span><b>Tycoon Town</b>: a living 2.5D city, best spots, rivals and scams</span></a></li>
-      <li><a href="robot/"><i aria-hidden="true">🤖</i><span><b>Code Robot</b>: a new game, program a robot with loops and functions</span></a></li>
       <li><a href="memory/"><i aria-hidden="true">🧠</i><span><b>Memory Lane</b>: a new game, remember numbers, words and squares</span></a></li>
       <li><a href="dash/"><i aria-hidden="true">🐢</i><span><b>Number Dash</b>: a slow Chill pack and new cube colours</span></a></li>
       <li><a href="quest/"><i aria-hidden="true">🗣️</i><span><b>English Quest</b>: speaking practice, chart language, word of the day, grammar notes</span></a></li>
@@ -293,9 +293,9 @@ h1 span { color: var(--sun-deep); }
       <div class="body">
         <span class="num">Game 8</span>
         <h2>Code Robot</h2>
-        <p>Program a robot with blocks: steps, turns, loops, functions and if-then. Find the bug, collect the gems, reach the flag.</p>
+        <p>Program a robot with blocks: loops, functions, if-then and counters. Paint pictures, lead a robot team, read code and fix bugs.</p>
         <div class="skills"><span>Coding</span><span>Logic</span><span>STEM</span></div>
-        <span class="meta" id="robotMeta">40 levels in 5 worlds</span>
+        <span class="meta" id="robotMeta">208 levels in 11 worlds</span>
         <span class="play">Play</span>
       </div>
     </a>
@@ -338,7 +338,7 @@ h1 span { color: var(--sun-deep); }
   if (pu.wins) document.getElementById('pairMeta').textContent = pu.wins + (pu.wins === 1 ? ' board' : ' boards') + ' cleared';
   if (popStars) document.getElementById('popMeta').textContent = popStars + ' of 48 stars';
   if (numSpan) document.getElementById('memMeta').textContent = 'Longest number span: ' + numSpan;
-  if (rbDone) document.getElementById('robotMeta').textContent = rbDone + ' of 40 levels · ' + rbStars + ' ★';
+  if (rbDone) document.getElementById('robotMeta').textContent = rbDone + ' of 208 levels · ' + rbStars + ' ★';
   if (tyBest) document.getElementById('tycoonMeta').textContent = tyBest.name + ' · worth ' + (tyNw >= 1e6 ? '$' + (tyNw / 1e6).toFixed(1) + 'M' : '$' + Math.round(tyNw).toLocaleString('en-GB'));
   if (eq.lessons) document.getElementById('questMeta').textContent = 'Now at ' + EQ[eqStage - 1];
   // daily streak from the days every game marks when it saves
@@ -360,7 +360,7 @@ h1 span { color: var(--sun-deep); }
     [{ href: 'pop/', ic: '🫧', t: 'Number Pop', d: popNext ? 'Get 3 stars in ' + (POP[popNext - 1] || 'a new world') : 'Beat a best time' },
      { href: 'ladder/', ic: '🪜', t: 'Number Ladder', d: l.best ? (l.best >= 30 ? 'Climb it again in English mode' : 'Beat your best: rung ' + l.best) : 'Climb to rung 10' },
      { href: 'dash/', ic: '🏃', t: 'Number Dash', d: done ? 'Finish a new level (' + done + ' of 50 done)' : (d.settings && d.settings.mathLevel === 'starter' ? 'Try the slow Chill pack' : 'Start with Cloud Hop') },
-     { href: 'robot/', ic: '🤖', t: 'Code Robot', d: rbDone >= 40 ? (rbStars < 120 ? 'Win more stars (' + rbStars + ' of 120)' : 'Replay a level with fewer blocks') : rbDone ? 'Solve a new level (' + rbDone + ' of 40 done)' : 'Program your first robot' }][dayNo % 4],
+     { href: 'robot/', ic: '🤖', t: 'Code Robot', d: rbDone >= 208 ? (rbStars < 624 ? 'Win more stars (' + rbStars + ' of 624)' : 'Replay a level with fewer blocks') : rbDone ? 'Solve a new level (' + rbDone + ' of 208 done)' : 'Program your first robot' }][dayNo % 4],
     [{ href: 'spell/', ic: '✏️', t: 'Spell It', d: missedSpell ? 'Practise ' + missedSpell + ' tricky ' + (missedSpell === 1 ? 'word' : 'words') : 'Learn 10 new words' },
      { href: 'pair/', ic: '🃏', t: 'Pair Up', d: pu.wins ? 'Try a new kind of cards' : 'Find 6 pairs' },
      { href: 'memory/', ic: '🧠', t: 'Memory Lane', d: numSpan ? 'Beat your number span of ' + numSpan : 'Remember 4 numbers in a row' },
@@ -376,7 +376,7 @@ h1 span { color: var(--sun-deep); }
     '<b>Spelling:</b> ' + learned + ' words spelled perfectly' + (sp.rounds ? ' in ' + sp.rounds + ' rounds' : '') + (missedSpell ? ', ' + missedSpell + ' still tricky' : ''),
     '<b>Math:</b> ' + right + ' answers right' + (tricky ? ', ' + tricky + (tricky === 1 ? ' fact' : ' facts') + ' still being practised' : ''),
     '<b>Memory:</b> ' + (pu.wins || 0) + ' Pair Up boards cleared, ' + (pu.pairs || 0) + ' pairs found' + (ml.rounds ? ', Memory Lane longest spans: numbers ' + (mlBest.number || 0) + ', words ' + (mlBest.word || 0) + ', grid ' + (mlBest.grid || 0) + ' (' + ml.rounds + (ml.rounds === 1 ? ' round' : ' rounds') + ')' : ''),
-    '<b>STEM and business:</b> Code Robot ' + rbDone + ' of 40 levels (' + rbStars + ' stars)' + (tyBest ? ', Tycoon Town: ' + esc(tyBest.name) + ' worth $' + Math.round(tyNw).toLocaleString('en-GB') + ' in month ' + (tyBest.month + 1) + ', CEO title ' + tyBest.title + ', ' + tyTraps + ' traps avoided' : ', Tycoon Town not started yet'),
+    '<b>STEM and business:</b> Code Robot ' + rbDone + ' of 208 levels (' + rbStars + ' stars)' + (tyBest ? ', Tycoon Town: ' + esc(tyBest.name) + ' worth $' + Math.round(tyNw).toLocaleString('en-GB') + ' in month ' + (tyBest.month + 1) + ', CEO title ' + tyBest.title + ', ' + tyTraps + ' traps avoided' : ', Tycoon Town not started yet'),
     '<b>Games:</b> Dash ' + stars + ' / 150 stars, Ladder best rung ' + (l.best || 0) + ' / 30, Pop ' + popStars + ' stars',
     '<b>Days played:</b> ' + week + ' of the last 7' + (streak ? ', streak ' + streak : '')
   ].map(function (t) { return '<li>' + t + '</li>'; }).join('');
@@ -417,7 +417,7 @@ h1 span { color: var(--sun-deep); }
   }).join('');
   if (freshB.length) { freshB.forEach(function (n) { seenB[n] = Date.now(); }); try { localStorage.setItem('arcade-badges.v1', JSON.stringify(seenB)); } catch (e) { /* private mode: it glows again next time */ } }
   // the news card: shown until Got it, for this batch of news only
-  var NEWS_ID = '2026-10-18c', newsBox = document.getElementById('news');
+  var NEWS_ID = '2026-10-18d', newsBox = document.getElementById('news');
   newsBox.hidden = read('arcade-news.v1').seen === NEWS_ID;
   document.getElementById('newsOk').addEventListener('click', function () {
     newsBox.hidden = true;

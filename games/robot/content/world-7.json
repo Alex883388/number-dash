@@ -1,0 +1,145 @@
+{
+  "world": 7,
+  "levels": [
+    {
+      "id": "7-1", "name": "Lift shaft", "mode": "shrink", "pal": "FLRr", "max": 3, "par": 2,
+      "sol": "r7(F)",
+      "start": "F F F F F F F",
+      "map": ["~G~", "~.~", "~*~", "~.~", "~.~", "~*~", "~.~", "~^~"],
+      "hint": "So many Forwards! Can one Repeat do the same job?"
+    },
+    {
+      "id": "7-2", "name": "Long corridor", "mode": "shrink", "pal": "FLRr", "max": 6, "par": 5,
+      "sol": "R r6(F) L F",
+      "start": "R F F F F F F L F",
+      "map": ["~~~~~~G", "^.*..*.", "~~~~~~~"],
+      "hint": "Keep the turns as they are. Which part could one Repeat squash?"
+    },
+    {
+      "id": "7-3", "name": "Two long halls", "mode": "shrink", "pal": "FLRr", "max": 6, "par": 5,
+      "sol": "r4(F) R r5(F)",
+      "start": "F F F F R F F F F F",
+      "map": [">...*", "~~~~.", "~~~~.", "~~~~*", "~~~~.", "~~~~G"],
+      "hint": "Each straight line can have its own Repeat. Count the squares!"
+    },
+    {
+      "id": "7-4", "name": "Three streets", "mode": "shrink", "pal": "FLRr", "max": 9, "par": 8,
+      "sol": "r3(F) L r3(F) R r4(F)",
+      "start": "F F F L F F F R F F F F",
+      "map": ["~~~*.*.G", "~~~.~~~~", "~~~.~~~~", ">..*~~~~"],
+      "hint": "Three straight lines and two turns. How short can you make it?"
+    },
+    {
+      "id": "7-5", "name": "Wide stairs", "mode": "shrink", "pal": "FLRr", "max": 7, "par": 6,
+      "sol": "r3(F F L F R)",
+      "start": "F F L F R F F L F R F F L F",
+      "map": ["~~~~~~G", "~~~~..*", "~~..*~~", ">.*~~~~"],
+      "hint": "Find the chunk of blocks that comes again and again."
+    },
+    {
+      "id": "7-6", "name": "Stairs and a hall", "mode": "shrink", "pal": "FLRr", "max": 8, "par": 7,
+      "sol": "r3(F L F R) r4(F)",
+      "start": "F L F R F L F R F L F R F F F F",
+      "map": ["~~~*.*.G", "~~*.~~~~", "~*.~~~~~", ">.~~~~~~"],
+      "hint": "Two jobs: climb the stairs, then walk the hall. A Repeat for each!"
+    },
+    {
+      "id": "7-7", "name": "Shepherd's crook", "mode": "shrink", "pal": "FLRr", "max": 6, "par": 5,
+      "sol": "r3(F F R F)",
+      "start": "F F R F F F R F F F",
+      "map": ["~>.*", "~~~.", "~~~.", "G..*"],
+      "hint": "Cut the list into equal chunks. The last chunk may be cut short!"
+    },
+    {
+      "id": "7-8", "name": "Magnet", "mode": "shrink", "pal": "FLRr", "max": 5, "par": 4,
+      "sol": "r3(r4(F) R)",
+      "start": "F F F F R F F F F R F F F F",
+      "map": [">...*", "~~~~.", "~~~~.", "~~~~.", "G...*"],
+      "hint": "Three sides, each a line and a turn. Can a Repeat hold a Repeat?"
+    },
+    {
+      "id": "7-9", "name": "Lightning bolt", "mode": "shrink", "pal": "FLRr", "max": 8, "par": 7,
+      "sol": "r2(r3(F) L r3(F) R)",
+      "start": "F F F L F F F R F F F L F F F",
+      "map": ["~~~~~~G", "~~~~~~.", "~~~~~~.", "~~~*..*", "~~~.~~~", "~~~.~~~", ">..*~~~"],
+      "hint": "Find one giant step, then make each line inside it short too."
+    },
+    {
+      "id": "7-10", "name": "Garden rake", "mode": "shrink", "pal": "FLRr", "max": 9, "par": 8,
+      "sol": "r3(r2(R F F R) F F)",
+      "start": "r2(R F F R) F F r2(R F F R) F F r2(R F F R) F F",
+      "map": [">.....G", ".~.~.~~", "*~*~*~~"],
+      "hint": "One tine and a walk come three times. What can hold them all?"
+    },
+    {
+      "id": "7-11", "name": "Over the hill", "mode": "shrink", "pal": "FLRr", "max": 9, "par": 8,
+      "sol": "r2(r3(F L F R) F R)",
+      "start": "r3(F L F R) F R r3(F L F R)",
+      "map": ["~~~**~~~", "~~....~~", "~*.~~.*~", ">.~~~~.G"],
+      "hint": "Both staircases use the same blocks. Can one Repeat do them both?"
+    },
+    {
+      "id": "7-12", "name": "Roller coaster", "mode": "shrink", "pal": "FLRr", "max": 12, "par": 10,
+      "sol": "R r2(r2(F F L) r2(F F R))",
+      "start": "R F F L F F L F F R F F R F F L F F L F F",
+      "map": [">~...~G", ".~.~.~.", "*.*~*.*"],
+      "hint": "Each dip turns the same way twice at the bottom. Spot more repeats!"
+    },
+    {
+      "id": "7-13", "name": "Pond patrol", "mode": "shrink", "pal": "FLRf", "max": 10, "par": 8,
+      "sol": "f f f|F F R F F",
+      "start": "F F R F F F F R F F F F R F F|F F R F F",
+      "map": ["~~>.*", "~~~~.", "G~~~.", ".~~~.", "*...*"],
+      "hint": "F1 is built already, but nobody uses it! Where do its blocks appear?"
+    },
+    {
+      "id": "7-14", "name": "Zigzag cliff", "mode": "shrink", "pal": "FLRf", "max": 11, "par": 9,
+      "sol": "f f f|F R F F L F",
+      "start": "F R F F L F F R F F L F F R F F L F",
+      "map": [">.~~~~~", "~.~~~~~", "~*..~~~", "~~~.~~~", "~~~*..~", "~~~~~.~", "~~~~~*G"],
+      "hint": "The same piece comes three times. Build it once in F1!"
+    },
+    {
+      "id": "7-15", "name": "Peekaboo", "mode": "shrink", "pal": "FLRf", "max": 14, "par": 13,
+      "sol": "f F f R f F|F L F R R F L",
+      "start": "F L F R R F L F F L F R R F L R F L F R R F L F",
+      "map": ["~*~*~", ">...~", "~~~.*", "~~~G~"],
+      "hint": "The robot peeks into every nook the same way. Even the last one?"
+    },
+    {
+      "id": "7-16", "name": "Three flights", "mode": "shrink", "pal": "FLRrf", "max": 11, "par": 10,
+      "sol": "f F f R f|r2(F R F L)",
+      "start": "r2(F R F L) F F R F L F R F L R F R F L F R F",
+      "map": [">.~~~~", "~*.~~~", "~~...~", "~~~~*.", "~~~~~.", "~~~~..", "~~~G*~"],
+      "hint": "One flight is shrunk already. Are the other flights the same piece?"
+    },
+    {
+      "id": "7-17", "name": "Bendy pipe", "mode": "shrink", "pal": "FLRrf", "max": 15, "par": 14,
+      "sol": "f F f R f R r4(F)|F F R F L F",
+      "start": "F F R F L F F F F R F L F R F F R F L F R F F F F",
+      "map": [">.*~~~~~", "~~....*~", "~~~~~~..", "~~~~~~~.", "~~~~~~.*", "~~G.*..~"],
+      "hint": "Three bends that match, then a long straight. Use F1 and a Repeat!"
+    },
+    {
+      "id": "7-18", "name": "Snake trail", "mode": "shrink", "pal": "FLRrf", "max": 14, "par": 13,
+      "sol": "r2(f R F) f L f|F R F L r2(F)",
+      "start": "F R F L F F R F F R F L F F R F F R F L F F L F R F L F F",
+      "map": ["~~~>.~~", "~~~~.*.", "~~~~~~.", "~~~~~..", "~.*.~*~", "..~...~", ".~~~~~~", "G~~~~~~"],
+      "hint": "F1 can go inside a Repeat. Which uses of F1 come with the same turn?"
+    },
+    {
+      "id": "7-19", "name": "Spiral staircase", "mode": "shrink", "pal": "FLRrf", "max": 13, "par": 12,
+      "sol": "f F F r2(L f)|F r2(F L F R)",
+      "start": "f F F L f L f|F F L F R F L F R",
+      "map": ["~....~", ".*~~.*", "G~~~~.", "~~~...", "~~*.~~", ">..~~~"],
+      "hint": "Both rows are too long. Look for a repeat in F1 and one in the program."
+    },
+    {
+      "id": "7-20", "name": "Grand spiral", "mode": "shrink", "pal": "FLRrf", "max": 12, "par": 11,
+      "sol": "f F r3(f L)|F r2(F L F R)",
+      "start": "F r2(F L F R) F F r2(F L F R) L F r2(F L F R) L F r2(F L F R)",
+      "map": ["~~~....~", "~~.*~~*.", "~~G~~~~.", "~~~~~~~.", "~~~~~~*.", "~~~....~", "~~*.~~~~", ">..~~~~~"],
+      "hint": "Four flights, one piece. What comes between the flights each time?"
+    }
+  ]
+}

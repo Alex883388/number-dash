@@ -1,0 +1,125 @@
+{
+  "world": 11,
+  "levels": [
+    {
+      "id": "11-1", "name": "Finger walk", "mode": "predict",
+      "prog": "F F R F F",
+      "map": ["....#", ".~~..", ".....", ".....", "^...."],
+      "hint": "Follow the program with your finger, one block at a time."
+    },
+    {
+      "id": "11-2", "name": "Whose left?", "mode": "predict",
+      "prog": "F F L F F",
+      "map": ["#.v..", ".....", ".....", ".....", "...~~"],
+      "hint": "Pretend you are the robot. Which way is its left now?"
+    },
+    {
+      "id": "11-3", "name": "About turn", "mode": "predict",
+      "prog": "F F F R R F",
+      "map": [".....", ".....", "#....", ".....", "...~.", "..^.."],
+      "hint": "Turns stay on the spot. Which way is the robot facing at the end?"
+    },
+    {
+      "id": "11-4", "name": "Splash stop", "mode": "predict",
+      "prog": "F F R F F L F F",
+      "map": ["......", "......", "..~~..", "..~~..", "......", "^....."],
+      "hint": "Before each step, check that the square ahead is free."
+    },
+    {
+      "id": "11-5", "name": "Times table", "mode": "predict",
+      "prog": "r2(F F) R r3(F)",
+      "map": [".....#", "......", "......", "...~~.", "......", "^....."],
+      "hint": "Count the steps inside the Repeat, then multiply."
+    },
+    {
+      "id": "11-6", "name": "Three sides", "mode": "predict",
+      "prog": "r3(F F R)",
+      "map": ["....#", ".....", ".....", "..~..", ".^..."],
+      "hint": "Each round walks one side. How many sides will there be?"
+    },
+    {
+      "id": "11-7", "name": "Stair climb", "mode": "predict",
+      "prog": "r4(F R F L)",
+      "map": [".#....", "~.....", "......", "......", "....~~", "^....."],
+      "hint": "Draw the first round with your finger, then do it again."
+    },
+    {
+      "id": "11-8", "name": "Bracket hunt", "mode": "predict",
+      "prog": "r3(F R) F F",
+      "map": ["#....", "...~.", ".....", ".....", "..^.."],
+      "hint": "Find where the Repeat ends. Blocks after it run only once."
+    },
+    {
+      "id": "11-9", "name": "Square plus one", "mode": "predict",
+      "prog": "r4(r2(F) R) F",
+      "map": [".....", ".~...", ".....", "....#", ".....", ".^..."],
+      "hint": "Draw one side, then all four. Where does the square leave the robot?"
+    },
+    {
+      "id": "11-10", "name": "Read F1 first", "mode": "predict",
+      "prog": "f R f L f|F F",
+      "map": ["......", "......", "....~.", "......", ".#....", "^....."],
+      "hint": "Read the F1 row first. Each F1 means: do that row here."
+    },
+    {
+      "id": "11-11", "name": "Nearly home", "mode": "predict",
+      "prog": "r3(f) F|F F L",
+      "map": ["......", "......", "...~..", "....^.", "......", "#....."],
+      "hint": "F1 ends with a turn, so each F1 starts facing a new way."
+    },
+    {
+      "id": "11-12", "name": "Rock says turn", "mode": "predict",
+      "prog": "r5(F) R r7(i(F)(R))",
+      "map": [".......", "....#..", ".......", ".......", ".....~.", ".....~.", ".^....."],
+      "hint": "Each round does one thing: a step or a turn. Count the rounds."
+    },
+    {
+      "id": "11-13", "name": "Round the hedge", "mode": "predict",
+      "prog": "r9(F k(R)())",
+      "map": ["......", "..#...", "..#...", "..#...", "..#..~", ".^...."],
+      "hint": "After every step, look to the robot's right. Is the way open?"
+    },
+    {
+      "id": "11-14", "name": "Gem signposts", "mode": "predict",
+      "prog": "r8(F g(R))",
+      "map": ["......#", ".......", "...*...", ".*..*..", ".......", ".......", ".^...~~"],
+      "hint": "After each step, ask: is the robot standing on a gem?"
+    },
+    {
+      "id": "11-15", "name": "Gone gem", "mode": "predict",
+      "prog": "r7(F g(R R))",
+      "map": [".......#", "........", ".*>*....", "........", "~~......"],
+      "hint": "Can the robot pick up the same gem twice?"
+    },
+    {
+      "id": "11-16", "name": "Growing lines", "mode": "predict", "n0": 1,
+      "prog": "r3(rn(F) R +) - - rn(F)",
+      "map": [".....~", "#.....", "......", "..^...", "......", "......"],
+      "hint": "Write n on paper and change it each time you read + or -."
+    },
+    {
+      "id": "11-17", "name": "Empty rounds", "mode": "predict", "n0": 4,
+      "prog": "r4(- rn(F) L) F F",
+      "map": ["....~~", "......", "......", "......", "......", "#...^."],
+      "hint": "Keep track of n. What does Repeat n do when n is 0?"
+    },
+    {
+      "id": "11-18", "name": "Counted once", "mode": "predict", "n0": 1,
+      "prog": "rn(F +) R rn(F +) R rn(F)",
+      "map": ["#.......", "........", ".......#", "..^.....", "........", "........", "......~~", "........"],
+      "hint": "Repeat n looks at n once, as it starts. Write n down each time."
+    },
+    {
+      "id": "11-19", "name": "Smart steps", "mode": "predict",
+      "prog": "r4(f) L r4(f)|i(F)(j(L)(R))",
+      "map": [".#....", "..~...", "#.....", "......", "......", "^....."],
+      "hint": "Each F1 is one smart move: a step or a turn. Count them."
+    },
+    {
+      "id": "11-20", "name": "Master reader", "mode": "predict", "n0": 2,
+      "prog": "r2(f) + f g(L) r3(i(F)(L)) - rn(F)|R rn(F)",
+      "map": ["........", "........", "..*.....", "........", ".<......", "...*..#.", "........", "~~......"],
+      "hint": "Read it in parts. Where is the robot after each part?"
+    }
+  ]
+}

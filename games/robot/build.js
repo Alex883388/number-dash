@@ -1,6 +1,6 @@
 // Builds Code Robot as one self-contained page: dist/code-robot.html (shared code, the interpreter src/engine.js and
-// the levels src/levels.js filled in), plus dist/preview.html (the same page in a full HTML skeleton for local testing).
-// The website (docs/ at the repository root) is assembled by the root build.js.
+// the worlds and levels from content/ filled in), plus dist/preview.html (the same page in a full HTML skeleton for
+// local testing). The website (docs/ at the repository root) is assembled by the root build.js.
 // Usage: node games/robot/build.js
 const fs = require('fs'), path = require('path');
 const inlineShared = require('../../shared/inline.js');
@@ -8,10 +8,16 @@ const dist = (f) => path.join(__dirname, 'dist', f);
 // a file of src/ without its header comment and its line for Node (module.exports)
 const part = (name) => fs.readFileSync(path.join(__dirname, 'src', name + '.js'), 'utf8')
   .replace(/^\/\* games\/robot\/[\s\S]*?\*\/\r?\n/, '').replace(/\r?\nif \(typeof module[^\n]*\r?\n?$/, '').replace(/\r?\n$/, '');
+// the worlds in playing order and every level, as data for the page
+function levels() {
+  const { ROBOT_WORLDS, ROBOT_LEVELS } = require('./src/levels.js').load();   // a broken file stops the build
+  const js = (v) => JSON.stringify(v).replace(/<\//g, '<\\/');
+  return 'const ROBOT_WORLDS = ' + js(ROBOT_WORLDS) + ';\nconst ROBOT_LEVELS = ' + js(ROBOT_LEVELS) + ';';
+}
 
 function build() {
   const out = inlineShared(fs.readFileSync(path.join(__dirname, 'src', 'robot.html'), 'utf8'))
-    .replace('/*__ROBOT:engine__*/', () => part('engine')).replace('/*__ROBOT:levels__*/', () => part('levels'));
+    .replace('/*__ROBOT:engine__*/', () => part('engine')).replace('/*__ROBOT:levels__*/', () => levels());
   if (out.indexOf('__ROBOT:') >= 0) throw new Error('a ROBOT marker was not filled');
   fs.mkdirSync(path.join(__dirname, 'dist'), { recursive: true });
   fs.writeFileSync(dist('code-robot.html'), out);
