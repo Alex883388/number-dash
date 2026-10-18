@@ -4,6 +4,7 @@
 // Usage: node playtest/shoot.js playtest/scenarios/<name>.js   — the scenario exports an array of steps:
 //   { viewport: [w, h, mobile?, dark?, scale?] } | { eval: 'js' } | { waitFor: 'js expr', timeout } | { sleep: ms } | { shot: 'name' } | { log: 'js expr' }
 //   { touch: [x, y, holdMs] } (a finger press in CSS pixels) | { touchEl: 'css selector' } (a finger tap on that element's middle) | { ipad: true } (iPad Safari identity + touch screen) | { offline: bool } | { reload: true }
+//   { touchAt: 'js expr giving [x, y]' } (a finger tap where the page says) | { drag: [x0, y0, x1, y1, ms] } (one finger) | { pinch: [x, y, d0, d1] } (two fingers apart or together)
 const { spawn } = require('child_process');
 const fs = require('fs'), path = require('path'), http = require('http');
 const EDGE = 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe';
@@ -78,8 +79,29 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
         await send('Network.setUserAgentOverride', { userAgent: 'Mozilla/5.0 (iPad; CPU OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1', platform: 'iPad' });
         await send('Emulation.setTouchEmulationEnabled', { enabled: true, maxTouchPoints: 5 });
         await send('Emulation.setEmitTouchEventsForMouse', { enabled: true, configuration: 'mobile' });
-      } else if (s.touch || s.touchEl) {
+      } else if (s.drag || s.pinch) {
+        // one finger dragged from a to b, or two fingers moving apart (pinch: [x, y, from distance, to distance])
+        const n = 12;
+        if (s.drag) {
+          const [x0, y0, x1, y1, ms] = s.drag;
+          await send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: x0, y: y0, id: 1 }] });
+          for (let k = 1; k <= n; k++) { await sleep((ms || 300) / n); await send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: x0 + (x1 - x0) * k / n, y: y0 + (y1 - y0) * k / n, id: 1 }] }); }
+        } else {
+          const [cx, cy, d0, d1] = s.pinch, at = (d) => [{ x: cx - d / 2, y: cy, id: 1 }, { x: cx + d / 2, y: cy, id: 2 }];
+          await send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: at(d0) });
+          for (let k = 1; k <= n; k++) { await sleep(25); await send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: at(d0 + (d1 - d0) * k / n) }); }
+        }
+        await send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+        console.log('  ' + (s.drag ? 'drag ' + s.drag.slice(0, 4).map(Math.round).join(',') : 'pinch ' + s.pinch.join(',')));
+      } else if (s.touch || s.touchEl || s.touchAt) {
         let [x, y, hold] = s.touch || [0, 0, 60];
+        if (s.touchAt) {
+          // a finger on a point the page works out (e.g. where a lot is on a map): the expression gives [x, y]
+          const c = await evaluate(s.touchAt);
+          if (!c) throw new Error('touchAt gave nothing: ' + s.touchAt);
+          [x, y] = c;
+          console.log('  finger at ' + c.map(Math.round).join(','));
+        }
         if (s.touchEl) {
           // scroll it into view first, as a finger would (a card below the fold cannot be tapped)
           const c = await evaluate('(() => { const e = document.querySelector(' + JSON.stringify(s.touchEl) + '); if (!e) return null; e.scrollIntoView({ block: "nearest" }); const r = e.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; })()');

@@ -132,3 +132,24 @@ Street-smart offers arrive from strangers, emails, suppliers, banks or investors
   agriculture, entertainment, manufacturing, hospitality, energy, sports; or `all`).
 - Not every offer is a scam: some are real opportunities where the best answer is to accept after checking
   (so the lesson is "check, then decide", not "always say no").
+
+## Where a business does well (roster.json: likes, needs)
+
+The city is one big map, and the same business sells more in a good spot. Each roster business has `likes`:
+what near its lot brings it customers, as a share of sales per thing (−0.3 to 0.4; negative = it does worse
+there). The things a lot can be near: `park`, `water`, `beach`, `school`, `station`, `hospital`, `church`,
+`tourism` (squares, the museum, the waterfront, the marina), `airport`, `harbour`, `industry` (docks, the
+runway), `avenue` (a lot on a busy avenue), `homes`, `offices`, `quiet` (no avenue, docks or station close by).
+`needs` names a thing its lot must have (the container port needs the harbour). Keep the likes true to life and
+different from business to business: the point is that a child learns to look for the right spot.
+
+## Rivals (rivals.json)
+
+A business like one of the child's can open next door and take some of its customers. `names` gives every
+roster business two rival names (≤ 18 characters, friendly and made up: no real brands). `cases` holds one case
+for each kind of business (`for`: `food`, `shop`, `service`, `property`, `big` = Downtown and Skyline
+businesses), written like a business case (4–5 options, exactly one `best`, at least one `good` and one `trap`)
+with one extra field per option: `shield` (0 to 0.6), how much of the rival's pull the choice blocks (the best
+answer shields most; a trap shields nothing). In the words, `{rival}` is the rival's name, `{biz}` the child's
+business in lower case and `{where}` where the rival opened ("right next door", "just across the street", "a few
+doors away"); the checker measures the lengths with the longest names filled in.

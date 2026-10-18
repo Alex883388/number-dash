@@ -1,0 +1,101 @@
+{
+  "_about": "Rivals in Tycoon Town: a business like one of yours opens close by and takes some of its customers. names = two rival names per business (used in turn). cases = what to do about it, one for each kind of business (for: food, shop, service, property, big = Downtown and Skyline businesses). Options follow content/FORMAT.md, plus shield (0 to 0.6): how much of the rival's pull the choice blocks; a well-shielded business also makes the rival close sooner. In the words, {rival} is the rival's name, {biz} your business (lower case), {where} where the rival opened (right next door, just across the street, a few doors away).",
+  "names": {
+    "lemonade": ["Sunny Sips", "Zesty Zone"], "dogwalk": ["Waggy Walks", "Happy Paws"], "thrift": ["Second Chance", "Retro Rack"],
+    "cupcake": ["Sprinkle Shack", "Frosty Treats"], "party": ["Party Planet", "Balloon Buddies"], "carwash": ["Bubble Bay", "Sparkle Splash"],
+    "flowers": ["Petal Palace", "Bloom Box"], "bikefix": ["Spoke Shop", "Pedal Pit Stop"], "phonecase": ["Case Craze", "Cover Corner"],
+    "bubbletea": ["Boba Blast", "Pearl Party"], "tutoring": ["Brainy Bunch", "Smart Start"], "barber": ["Snip Snip", "Fresh Cuts"],
+    "icecream": ["Scoop Shack", "Frosty Cones"], "bakery": ["Golden Crust", "Crumbs & Co"], "petshop": ["Pet Planet", "Fluffy Friends"],
+    "printshop": ["Print Pronto", "Ink Spot"], "foodtruck": ["Taco Wheels", "Street Eats"], "laundry": ["Spin City", "Bubble Wash"],
+    "gym": ["Muscle Hub", "Fit Factory"], "flats": ["Riverside Lofts", "Parkview Homes"], "appstudio": ["AppNest", "Code Comets"],
+    "restaurant": ["The Golden Fork", "Pasta Palace"], "scooters": ["Zoom Scoots", "Glide Rides"], "delivery": ["Speedy Parcels", "Rocket Post"],
+    "supermarket": ["MegaMart", "Fresh Basket"], "vfarm": ["Sky Greens", "Leafy Tower"], "cinema": ["Star Screens", "Popcorn Palace"],
+    "toyfactory": ["Toy Titans", "Playmakers"], "hotel": ["The Grand Stay", "Harbour Inn"], "office": ["Tower One", "Prime Offices"],
+    "solar": ["Sun Power Co", "Bright Fields"], "ebus": ["Volt Buses", "Green Line"], "mall": ["Mega Mall", "City Gate Centre"],
+    "datacentre": ["Cloud Castle", "Byte Bank"], "themepark": ["Funland", "Thrill Hill"], "football": ["City Rovers", "United Stars"],
+    "port": ["Ocean Gate", "Blue Harbour Co"], "skyscraper": ["Sky Needle", "Cloud Tower"], "airline": ["Fly High Air", "Jet Stream"],
+    "space": ["Star Voyages", "Orbit Tours"]
+  },
+  "cases": [
+    {
+      "id": "rival-food", "for": "food", "title": "A rival opens {where}",
+      "story": "{rival} just opened {where}, selling food just like your {biz}. Some of your customers are trying it out. What will you do?",
+      "options": [
+        { "text": "Make your food even better and greet every customer by name", "spend": "low", "rev": 1, "costs": 0, "risk": 0, "rep": 1, "timing": "now", "grade": "best", "skill": "strategy", "shield": 0.5,
+          "result": "Customers taste the difference and come back. {rival} struggles to keep up with you.", "lesson": "Beat a rival by being better, not just cheaper." },
+        { "text": "Start a stamp card: every 10th treat is free", "spend": "low", "rev": 1, "costs": 0, "risk": 0, "rep": 0, "timing": "slow", "flag": "loyal", "grade": "good", "skill": "marketing", "shield": 0.3,
+          "result": "Regulars collect stamps and keep coming to you instead of {rival}.", "lesson": "Loyal customers are hard for a rival to steal." },
+        { "text": "Cut all your prices in half to drive them out", "spend": "none", "rev": -2, "costs": 0, "risk": 0, "rep": 0, "timing": "short", "grade": "poor", "skill": "pricing", "shield": 0.1,
+          "result": "{rival} cuts prices too. You both sell lots and earn almost nothing.", "lesson": "A price war hurts everyone. Profit, not sales, pays the bills." },
+        { "text": "Tell everyone their food made people sick (it did not)", "spend": "none", "rev": 0, "costs": 0, "risk": 0, "rep": -3, "timing": "now", "penalty": "mid", "grade": "trap", "skill": "ethics", "shield": 0,
+          "result": "{rival} complains, the council fines you for spreading lies, and customers stop trusting you.", "lesson": "Lying about a rival is unfair, and it can get you fined." },
+        { "text": "Do nothing and hope they go away", "spend": "none", "rev": 0, "costs": 0, "risk": 0, "rep": 0, "timing": "now", "grade": "poor", "skill": "strategy", "shield": 0,
+          "result": "{rival} keeps taking some of your customers, month after month.", "lesson": "Ignoring competition rarely makes it disappear." }
+      ]
+    },
+    {
+      "id": "rival-shop", "for": "shop", "title": "A new shop {where}",
+      "story": "{rival} opened {where}, selling the same kinds of things as your {biz}. Fewer people are coming through your door. What is your plan?",
+      "options": [
+        { "text": "Stock things {rival} does not have and show them off", "spend": "low", "rev": 2, "costs": 0, "risk": 0, "rep": 0, "timing": "now", "grade": "best", "skill": "strategy", "shield": 0.5,
+          "result": "Shoppers come to you for things they cannot find anywhere else.", "lesson": "Be different: give customers a reason to choose you." },
+        { "text": "Give friendly expert advice and free gift wrapping", "spend": "low", "rev": 1, "costs": 0, "risk": 0, "rep": 1, "timing": "slow", "grade": "good", "skill": "people", "shield": 0.3,
+          "result": "People like how helpful you are and tell their friends.", "lesson": "Great service is something a rival cannot copy overnight." },
+        { "text": "Open an online shop as well", "spend": "low", "rev": 1, "costs": 0, "risk": 0, "rep": 0, "timing": "slow", "flag": "online", "grade": "good", "skill": "strategy", "shield": 0.25,
+          "result": "Customers who never walk past your street start ordering from you.", "lesson": "Reach customers in more than one way." },
+        { "text": "Copy everything they sell, but cheaper", "spend": "low", "rev": -1, "costs": 0, "risk": 0, "rep": 0, "timing": "short", "grade": "poor", "skill": "pricing", "shield": 0.1,
+          "result": "{rival} drops its prices again and you both earn less.", "lesson": "Copying a rival makes you the same, only poorer." },
+        { "text": "Pay someone to post fake bad reviews about them", "spend": "low", "rev": 0, "costs": 0, "risk": 0, "rep": -3, "timing": "now", "penalty": "mid", "grade": "trap", "skill": "ethics", "shield": 0,
+          "result": "The review site finds out, deletes them and names your shop. You pay a fine and lose trust.", "lesson": "Fake reviews are cheating, and they usually get found out." }
+      ]
+    },
+    {
+      "id": "rival-service", "for": "service", "title": "Competition {where}",
+      "story": "{rival} has opened {where}, offering the same service as your {biz}. Some of your regulars have gone to try them. What do you do?",
+      "options": [
+        { "text": "Ask customers what they want and make your service the best", "spend": "low", "rev": 1, "costs": 0, "risk": 0, "rep": 2, "timing": "now", "grade": "best", "skill": "people", "shield": 0.5,
+          "result": "You fix the little things customers mentioned. They notice, and stay.", "lesson": "Listen to customers: they tell you how to win." },
+        { "text": "Offer a membership deal for regular customers", "spend": "none", "rev": 1, "costs": 0, "risk": 0, "rep": 0, "timing": "slow", "flag": "loyal", "grade": "good", "skill": "marketing", "shield": 0.3,
+          "result": "Members keep coming back every month, whatever {rival} does.", "lesson": "Regular customers give you steady money." },
+        { "text": "Hand out leaflets with a one-week offer", "spend": "low", "rev": 1, "costs": 0, "risk": 0, "rep": 0, "timing": "short", "grade": "ok", "skill": "marketing", "shield": 0.1,
+          "result": "A busy week, then things go back to how they were.", "lesson": "A quick offer helps for a moment. A better service lasts." },
+        { "text": "Work much longer hours for less money to undercut them", "spend": "none", "rev": 0, "costs": 1, "risk": 0, "rep": -1, "timing": "now", "grade": "poor", "skill": "operations", "shield": 0.1,
+          "result": "Your team gets tired and grumpy, and customers notice.", "lesson": "Tired people do worse work. Compete on quality, not exhaustion." },
+        { "text": "Rip down their posters around town at night", "spend": "none", "rev": 0, "costs": 0, "risk": 0, "rep": -3, "timing": "now", "penalty": "low", "grade": "trap", "skill": "ethics", "shield": 0,
+          "result": "A camera films you. You pay for the damage and it is all over town.", "lesson": "Damaging a rival's things is wrong, and it always costs you." }
+      ]
+    },
+    {
+      "id": "rival-property", "for": "property", "title": "New building {where}",
+      "story": "{rival}, a brand-new building, opened {where}. Some of your tenants are thinking about moving there. What do you do?",
+      "options": [
+        { "text": "Fix things fast and make the shared spaces lovely", "spend": "mid", "rev": 1, "costs": 0, "risk": 0, "rep": 2, "timing": "now", "grade": "best", "skill": "operations", "shield": 0.5,
+          "result": "Tenants love living and working in your building and decide to stay.", "lesson": "Happy tenants stay. Moving out costs them time and money too." },
+        { "text": "Offer a small discount to tenants who stay two more years", "spend": "none", "rev": 0, "costs": 0, "risk": -1, "rep": 1, "timing": "now", "flag": "loyal", "grade": "good", "skill": "money", "shield": 0.35,
+          "result": "Most tenants sign up. A little less rent, but no empty rooms.", "lesson": "A full building with fair rent beats a pricey empty one." },
+        { "text": "Paint the front and put up a big new sign", "spend": "low", "rev": 1, "costs": 0, "risk": 0, "rep": 0, "timing": "short", "grade": "ok", "skill": "marketing", "shield": 0.1,
+          "result": "It looks nicer for a while, but tenants care more about what is inside.", "lesson": "Looks help, but quality keeps customers." },
+        { "text": "Raise the rent to make up for the tenants who left", "spend": "none", "rev": -1, "costs": 0, "risk": 0, "rep": -2, "timing": "now", "grade": "poor", "skill": "pricing", "shield": 0,
+          "result": "Even more tenants leave for {rival}. The building gets emptier.", "lesson": "Charging more when customers have a choice drives them away." },
+        { "text": "Tell tenants the new building is unsafe (it is not)", "spend": "none", "rev": 0, "costs": 0, "risk": 0, "rep": -3, "timing": "now", "penalty": "mid", "grade": "trap", "skill": "ethics", "shield": 0,
+          "result": "The owners of {rival} take you to court for telling lies, and you pay.", "lesson": "Scaring people with lies is wrong, and it can cost a lot." }
+      ]
+    },
+    {
+      "id": "rival-big", "for": "big", "title": "A big rival arrives",
+      "story": "{rival}, a big company, opened {where} and wants the same customers as your {biz}. Its adverts are everywhere. What is your plan?",
+      "options": [
+        { "text": "Invest in what makes you special and tell customers about it", "spend": "mid", "rev": 2, "costs": 0, "risk": 0, "rep": 1, "timing": "now", "grade": "best", "skill": "strategy", "shield": 0.5,
+          "result": "Customers see why you are worth choosing, and {rival} cannot match it.", "lesson": "Know your strengths and make them even stronger." },
+        { "text": "Sign long contracts with your best customers at a fair price", "spend": "none", "rev": 0, "costs": 0, "risk": -1, "rep": 1, "timing": "now", "flag": "loyal", "grade": "good", "skill": "money", "shield": 0.35,
+          "result": "Your biggest customers stay with you for years.", "lesson": "Long, fair deals make your income steady." },
+        { "text": "Train your staff and pay them well so the best people stay", "spend": "low", "rev": 1, "costs": 1, "risk": 0, "rep": 1, "timing": "slow", "grade": "good", "skill": "people", "shield": 0.25,
+          "result": "{rival} tries to hire your team, but they are happy where they are.", "lesson": "Great people are a company's best defence." },
+        { "text": "Sell below cost for a year to push them out", "spend": "none", "rev": -2, "costs": 0, "risk": 1, "rep": 0, "timing": "short", "grade": "poor", "skill": "pricing", "shield": 0.1,
+          "result": "{rival} has more money than you, waits it out, and you lose a fortune.", "lesson": "Never start a price war you cannot afford to finish." },
+        { "text": "Secretly agree with {rival} that you both raise prices", "spend": "none", "rev": 0, "costs": 0, "risk": 0, "rep": -3, "timing": "now", "penalty": "high", "grade": "trap", "skill": "ethics", "shield": 0,
+          "result": "That is price-fixing. The government finds out and fines you both a lot.", "lesson": "Rivals agreeing on prices is against the law. It cheats customers." }
+      ]
+    }
+  ]
+}

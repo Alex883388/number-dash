@@ -174,7 +174,7 @@ h1 span { color: var(--sun-deep); }
   <section class="news" id="news" aria-label="New in the arcade" hidden>
     <h2>✨ New in the arcade</h2>
     <ul>
-      <li><a href="tycoon/"><i aria-hidden="true">💼</i><span><b>Tycoon Town</b>: a new game, run a business empire and spot the scams</span></a></li>
+      <li><a href="tycoon/"><i aria-hidden="true">💼</i><span><b>Tycoon Town</b>: a living 2.5D city, best spots, rivals and scams</span></a></li>
       <li><a href="robot/"><i aria-hidden="true">🤖</i><span><b>Code Robot</b>: a new game, program a robot with loops and functions</span></a></li>
       <li><a href="memory/"><i aria-hidden="true">🧠</i><span><b>Memory Lane</b>: a new game, remember numbers, words and squares</span></a></li>
       <li><a href="dash/"><i aria-hidden="true">🐢</i><span><b>Number Dash</b>: a slow Chill pack and new cube colours</span></a></li>
@@ -307,7 +307,7 @@ h1 span { color: var(--sun-deep); }
       <div class="body">
         <span class="num">Game 9</span>
         <h2>Tycoon Town</h2>
-        <p>Run a business empire: open shops, buy land, solve real business problems, spot the scams and grow from a lemonade stand to a skyscraper.</p>
+        <p>Run a business empire in a living city: pick the best spots, buy land before it runs out, beat rivals, spot the scams and grow from a lemonade stand to a skyscraper.</p>
         <div class="skills"><span>Money</span><span>Street smarts</span><span>Strategy</span></div>
         <span class="meta" id="tycoonMeta">40 businesses · 4 districts</span>
         <span class="play">Play</span>
@@ -417,7 +417,7 @@ h1 span { color: var(--sun-deep); }
   }).join('');
   if (freshB.length) { freshB.forEach(function (n) { seenB[n] = Date.now(); }); try { localStorage.setItem('arcade-badges.v1', JSON.stringify(seenB)); } catch (e) { /* private mode: it glows again next time */ } }
   // the news card: shown until Got it, for this batch of news only
-  var NEWS_ID = '2026-10-18b', newsBox = document.getElementById('news');
+  var NEWS_ID = '2026-10-18c', newsBox = document.getElementById('news');
   newsBox.hidden = read('arcade-news.v1').seen === NEWS_ID;
   document.getElementById('newsOk').addEventListener('click', function () {
     newsBox.hidden = true;
