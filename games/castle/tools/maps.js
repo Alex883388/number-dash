@@ -2,7 +2,8 @@
 //   node games/castle/tools/maps.js            every map: checks, road lengths and a picture
 //   node games/castle/tools/maps.js frozen     one map
 // Checks: odd sizes; every road runs in straight lines from a gate on the map's edge to a castle door; no road
-// through the castle or off the map; room to build beside each road. Exits 1 on a problem.
+// through the castle or off the map; no water within 4 tiles of the castle; room to build beside each road. Exits 1
+// on a problem.
 global.CC = require('../src/engine.js');
 const { maps } = require('../content/maps.json');
 const only = process.argv[2];
@@ -27,6 +28,8 @@ for (const def of maps) {
     }
   });
   const m = CC.makeMap(def);
+  // dry ground round the castle: a player can always walk out of its doors
+  for (let y = cz - 4; y <= cz + 4; y++) for (let x = cx - 4; x <= cx + 4; x++) if (x >= 0 && y >= 0 && x < w && y < h && m.tiles[y * w + x] === CC.T.WATER) { fail(def.id, 'water beside the castle at ' + x + ',' + y); y = cz + 5; break; }
   // room to build: grass or sand next to each road
   let spots = 0;
   for (let i = 0; i < m.tiles.length; i++) {

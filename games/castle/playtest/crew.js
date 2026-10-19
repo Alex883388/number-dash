@@ -44,6 +44,7 @@ module.exports = [
   { sleep: 900 },
   check(`${C}.G.s.towers.length === 1 && ${C}.G.s.towers[0].by !== 'host'`, 'host has the tower the friend built'),
   check(`${F}.state().towers === 1 && ${F}.state().coins < window.__fc0`, 'friend sees it and paid for it'),
+  check(`${C}.G.s.res.wood === 12 && ${FD}.getElementById('wood').textContent === '12'`, 'the crew shares the wood: both see 12'),
   { eval: `${F}.closeTray(); 'closed'` },
   // the friend starts round 1
   { eval: `${F}.nextRound()` },

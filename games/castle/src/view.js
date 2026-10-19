@@ -886,11 +886,12 @@ const CCView = (function () {
       case 'spawn': burst(e.x, 0.3, e.y, 6, [0x4a3b6b, 0x9cff6b], 1.6, 0.1, 0.5, { glow: 1 }); break;
       case 'chop': { const x = (e.i % W) + 0.5, z = ((e.i / W) | 0) + 0.5; chopKind.set(e.i, e.kind); burst(x, 0.7, z, 6, e.kind === 'tree' ? [TH.trunk, TH.leaves[1], 0x6d4c41] : [TH.rock[0], 0x757575, TH.rock[2]], 2.2, 0.1, 0.5); if (map) { map.life[e.i] = e.left; rebuild(); } break; }
       case 'tile': {
-        const kind = chopKind.get(e.i) || (e.got > 12 ? 'rock' : 'tree');
+        if (e.grow) { if (map) { map.tiles[e.i] = e.t; map.life[e.i] = e.t === CC.T.TREE ? 3 : 4; rebuild(); } burst(e.x, 0.5, e.y, 8, [0xb9f6ca, 0xffffff], 1.2, 0.08, 0.6, { glow: 1, g: -0.5 }); break; }
+        const kind = chopKind.get(e.i) || (e.mat === 'stone' ? 'rock' : 'tree');
         chopKind.delete(e.i);
         if (map) { map.tiles[e.i] = e.t; rebuild(); }
         burst(e.x, 0.6, e.y, 12, kind === 'tree' ? [TH.trunk, TH.leaves[0]] : [TH.rock[0], TH.rock[2]], 2.4, 0.14, 0.7);
-        if (e.got) say(e.x, e.y, 1.3, '+' + e.got + ' 🪙', 1.2, '#ffd54f');
+        if (e.got) say(e.x, e.y, 1.3, '+' + e.got + (e.mat === 'stone' ? ' 🪨' : ' 🪵'), 1.2, '#fff');
         break;
       }
       case 'built': burst(e.t.tx + 0.5, 0.2, e.t.tz + 0.5, 14, [0xd7ccc8, 0xbcaaa4, 0xefebe9], 2, 0.14, 0.6, { up: 0.6 }); break;

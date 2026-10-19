@@ -1,7 +1,8 @@
 // Castle Crew, one player (run from the repo root):
 //   node games/castle/build.js && ND_CDP=9541 ND_PROFILE=edge-profile-castle ND_URL=file:///D:/Github/number-dash/games/castle/dist/preview.html ND_READY='!!window.__castle' ND_BOT=none node games/dash/playtest/shoot.js games/castle/playtest/play.js
 // By finger on an iPad held sideways: home, the map picker, a map's setup (Easy, the Crossbow), the game opens at
-// round 0; walk with the stick; build an Arrow Tower and a Spike Trap from the tray; start round 1; the tower's panel:
+// round 0; walk with the stick; build an Arrow Tower (coins and wood) and a Spike Trap (coins and stone) from the
+// tray; chop a tree for wood; walk through a tower; start round 1; the tower's panel (its upgrades cost wood too):
 // buy step 1 of a path, change its aim; the speed button; pause and resume. Then a computer player plays on fast to
 // round 20 (the Zombie King, pictured); save and leave; the map card shows the round to carry on from, and carrying on
 // starts there. Phones held sideways (HUD, tray and panel fit) and upright (the turn card, the game waits). No errors.
@@ -22,7 +23,8 @@ module.exports = [
   check(`${C}.rec.diff === 'easy' && ${C}.rec.weapon === 'crossbow'`, 'easy and the crossbow picked'),
   { touchEl: '#setupGo' },
   until(`${C}.ready() && ${C}.state().mode === 'solo'`, 40000), { sleep: 1500 },
-  check(`${C}.state().round === 0 && ${C}.state().coins === 850 && ${C}.state().lives === 200`, 'round 0, 850 coins, 200 lives'),
+  check(`${C}.state().round === 0 && ${C}.state().coins === 950 && ${C}.state().lives === 200 && ${C}.G.s.res.wood === 15 && ${C}.G.s.res.stone === 10`, 'round 0, 950 coins, 15 wood, 10 stone, 200 lives'),
+  check(`document.getElementById('wood').textContent === '15' && document.getElementById('stone').textContent === '10'`, 'the HUD shows wood and stone'),
   fits('round 0'), { shot: 'cc-p04-start' },
   // walk a little with the stick
   { drag: [200, 600, 200, 470, 600] }, { sleep: 300 },
@@ -32,10 +34,18 @@ module.exports = [
   check(`document.querySelectorAll('#cards .tc').length === 15`, 'fifteen towers in the tray'),
   { touchEl: '#cards [data-t="arrow"]' }, { sleep: 200 }, aimAt('arrow'), { sleep: 200 }, { shot: 'cc-p06-ghost' },
   { touchEl: '#placeBtn' }, { sleep: 500 },
-  check(`${C}.state().towers === 1 && ${C}.state().coins === 850 - 155`, 'arrow tower built for 155'),
+  check(`${C}.state().towers === 1 && ${C}.state().coins === 950 - 155 && ${C}.G.s.res.wood === 12`, 'arrow tower built for 155 coins and 3 wood'),
   { touchEl: '#cards [data-t="spikes"]' }, { sleep: 200 }, aimAt('spikes'), { touchEl: '#placeBtn' }, { sleep: 500 },
-  check(`${C}.state().towers === 2 && ${C}.G.s.towers[1].type === 'spikes'`, 'spike trap on the road'),
+  check(`${C}.state().towers === 2 && ${C}.G.s.towers[1].type === 'spikes' && ${C}.G.s.res.stone === 8`, 'spike trap on the road for 2 stone'),
   { touchEl: '#trayClose' }, { sleep: 200 },
+  // mining: push into the nearest tree until it falls
+  { eval: `(() => { window.__w0 = ${C}.G.s.res.wood; return ${C}.mineNearest('tree'); })()` },
+  until(`${C}.G.s.res.wood >= window.__w0 + 4`, 15000), { eval: `${C}.move(0, 0); 'stop'` }, { sleep: 600 },
+  check(`${C}.G.s.res.wood === window.__w0 + 4`, 'a tree chopped: 4 wood'), { shot: 'cc-p06b-chopped' },
+  // a player walks through towers: stand on the arrow tower's tile and walk off again
+  { eval: `(() => { const s = ${C}.G.s, t = s.towers[0], p = s.players[0]; p.x = t.x - 1.4; p.z = t.z; ${C}.move(1, 0); return t.tx + ',' + t.tz; })()` },
+  { sleep: 700 }, { eval: `${C}.move(0, 0); 'stop'` },
+  check(`(() => { const s = ${C}.G.s, t = s.towers[0], p = s.players[0]; return p.x > t.x + 0.3; })()`, 'walked through a tower'),
   // round 1, by finger
   { touchEl: '#goBtn' },
   until(`${C}.state().round === 1 && ${C}.state().zombies > 0`, 15000), { sleep: 2500 },
@@ -44,8 +54,10 @@ module.exports = [
   // the tower panel: step 1 of path a, then its aim
   { eval: `${C}.openPanel(${C}.G.s.towers[0].id)` }, { sleep: 400 }, fits('tower panel'), { shot: 'cc-p08-panel' },
   { eval: `(() => { window.__c0 = ${C}.state().coins; return window.__c0; })()` },
+  check(`/🪵/.test(document.querySelector('#pathA .btn').textContent)`, 'the upgrade button shows its wood'),
+  { eval: `(() => { window.__wu = ${C}.G.s.res.wood; return window.__wu; })()` },
   { touchEl: '#pathA .btn' }, { sleep: 500 },
-  check(`${C}.G.s.towers[0].a === 1 && ${C}.state().coins < window.__c0`, 'bought step 1 on path a'),
+  check(`${C}.G.s.towers[0].a === 1 && ${C}.state().coins < window.__c0 && ${C}.G.s.res.wood === window.__wu - 2`, 'bought step 1 on path a (coins and 2 wood)'),
   { touchEl: '#pMode' }, { sleep: 300 },
   check(`${C}.G.s.towers[0].mode === 'strong'`, 'the tower now aims at the strongest'),
   { shot: 'cc-p09-panel-up' },

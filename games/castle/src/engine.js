@@ -4,8 +4,9 @@
    woods) played round after round like a tower defence: rounds 1 to 100 come from content/rounds.json and after
    round 100 freeplay rounds are made up here, harder and harder. Zombies walk their road to the castle; each one
    that gets in costs the castle lives (hearts). The crew (1 to 4 players, each on their own device) earns coins from
-   zombies, rounds and gold mines and spends them on 15 kinds of tower, each with two upgrade paths of three steps
-   (one path may go to step 3, the other then stops at step 1). Each player fights with the weapon picked at the
+   zombies, rounds and gold mines, and wood and stone from the trees and rocks it walks into (they grow back), and
+   spends them on 15 kinds of tower, each with two upgrade paths of three steps (one path may go to step 3, the other
+   then stops at step 1). Coins are each player's own; wood and stone are the crew's. Each player fights with the weapon picked at the
    start; it levels up from the zombies that player kills and gets a new power every 5 levels.
    One host runs step() 30 times a second; each device moves its own player (moveCircle) and sends the position and
    what it wants (fire, chop, build, upgrade, sell, target, next round). step() returns events (shots, hits, deaths,
@@ -19,33 +20,34 @@ const CC = (function () {
   const ROAD_OK = [0, 1, 0, 0, 0, 0, 0, 0, 1];    // barricades and spike traps go on the road
   const CASTLE_R = 2.5;                            // the castle is 5 x 5 tiles
   const START_COINS = 650, LAST_ROUND = 100, SELL_BACK = 0.7, MAX_LEVEL = 30;
-  const PACE = 1.6, GOLD_MUL = 1.4;                                // zombie speeds below are multiplied by this (tiles a second)
+  const MAT_UP = [2, 4, 10], FELL_GOT = 4, REGROW = 4;   // wood or stone for upgrade steps 1, 2, 3; per tree or rock; rounds to grow back
+  const PACE = 1.6, GOLD_MUL = 2, TOWER_XP = 0.4, WEAPON_POWER = 0.45;                                // zombie speeds below are multiplied by this (tiles a second)
   const TIER_HP = { Beginner: 1, Intermediate: 0.92, Advanced: 0.85, Expert: 0.8 };   // shorter roads: a little softer zombies
   const DIFFS = {
-    easy: { name: 'Easy', lives: 200, cost: 0.85, speed: 0.9, hp: 0.8, start: 850, medal: '🥉', tip: 'More lives, cheaper towers, slower zombies.' },
-    medium: { name: 'Medium', lives: 150, cost: 1, speed: 1, hp: 1, start: 700, medal: '🥈', tip: 'The normal game.' },
-    hard: { name: 'Hard', lives: 100, cost: 1.08, speed: 1.04, hp: 1.08, start: 650, medal: '🥇', tip: 'Fewer lives, dearer towers, tougher zombies.' }
+    easy: { name: 'Easy', lives: 200, cost: 0.85, speed: 0.9, hp: 0.8, start: 950, wood: 15, stone: 10, medal: '🥉', tip: 'More lives, cheaper towers, slower zombies.' },
+    medium: { name: 'Medium', lives: 150, cost: 1, speed: 1, hp: 1, start: 800, wood: 10, stone: 6, medal: '🥈', tip: 'The normal game.' },
+    hard: { name: 'Hard', lives: 100, cost: 1.08, speed: 1.04, hp: 1.08, start: 700, wood: 8, stone: 4, medal: '🥇', tip: 'Fewer lives, dearer towers, tougher zombies.' }
   };
 
   /* ---- the crew's weapons. type: phys, fire, frost, blast, magic. Every 5 levels a weapon gets the next tier;
-     every level adds 4% damage. mods: see applyMods. ---- */
+     every level adds 2.5% damage (weaponStats). mods: see applyMods. ---- */
   const WEAPONS = {
-    blaster: { name: 'Blaster', icon: '🔫', kind: 'shot', type: 'phys', dmg: 4, rate: 3, range: 6, speed: 15, pierce: 1, tip: 'Quick shots at anything nearby.',
+    blaster: { name: 'Blaster', icon: '🔫', kind: 'shot', type: 'phys', dmg: 5.2, rate: 3, range: 6, speed: 15, pierce: 1, tip: 'Quick shots at anything nearby.',
       tiers: [{ name: 'Double Blaster', desc: 'Fires two shots at once.', mods: { shots: 2, spread: 8 } },
         { name: 'Laser Blaster', desc: 'Shots fly faster and go through three zombies.', mods: { pierce: 2, dmg: 1.25, speed: 1.4 } },
         { name: 'Plasma Blaster', desc: 'Shots burst and hurt zombies nearby.', mods: { splash: 0.9, dmg: 1.2 } },
         { name: 'Star Blaster', desc: 'Three shots at once, super fast.', mods: { rate: 1.6, shots: 3, spread: 14 } }] },
-    hammer: { name: 'Hammer', icon: '🔨', kind: 'melee', type: 'phys', dmg: 16, rate: 1.2, range: 1.7, arc: 130, knock: 1.1, tip: 'Big hits up close. Knocks zombies back and chops trees fast.',
+    hammer: { name: 'Hammer', icon: '🔨', kind: 'melee', type: 'phys', dmg: 9.6, rate: 1.2, range: 1.7, arc: 130, knock: 0.6, tip: 'Big hits up close. Knocks zombies back and chops trees fast.',
       tiers: [{ name: 'Iron Hammer', desc: 'Hits much harder.', mods: { dmg: 1.6 } },
         { name: 'Shockwave', desc: 'Hits all around you and knocks zombies further.', mods: { arc: 360, knock: 1.6 } },
         { name: 'Thunder Hammer', desc: 'Every hit stuns zombies for a moment.', mods: { stun: 0.6, dmg: 1.3 } },
         { name: 'Earthshaker', desc: 'Reaches further and hits like a giant.', mods: { range: 1.5, dmg: 2 } }] },
-    scatter: { name: 'Scatter Gun', icon: '💥', kind: 'shot', type: 'phys', dmg: 3, shots: 6, spread: 42, rate: 1.1, range: 4.6, speed: 14, pierce: 1, tip: 'A spray of pellets: great when zombies bunch up.',
+    scatter: { name: 'Scatter Gun', icon: '💥', kind: 'shot', type: 'phys', dmg: 3.6, shots: 6, spread: 42, rate: 1.1, range: 4.6, speed: 14, pierce: 1, tip: 'A spray of pellets: great when zombies bunch up.',
       tiers: [{ name: 'Wide Spray', desc: 'Two more pellets.', mods: { shots: 8, spread: 50 } },
         { name: 'Slug Shells', desc: 'Pellets hit harder and go through two zombies.', mods: { pierce: 1, dmg: 1.4 } },
         { name: 'Fire Pellets', desc: 'Pellets set zombies on fire.', mods: { burnDps: 6, burnT: 2 } },
         { name: 'Dragon Shotgun', desc: 'Twelve pellets, shot faster.', mods: { shots: 12, spread: 60, rate: 1.4 } }] },
-    flamer: { name: 'Flamer', icon: '🔥', kind: 'cone', type: 'fire', dmg: 1.5, rate: 10, range: 3.3, arc: 55, burnDps: 2, burnT: 3, tip: 'Burns everything in front. Knights and mummies hate it.',
+    flamer: { name: 'Flamer', icon: '🔥', kind: 'cone', type: 'fire', dmg: 1.2, rate: 10, range: 3.3, arc: 55, burnDps: 1.6, burnT: 3, tip: 'Burns everything in front. Knights and mummies hate it.',
       tiers: [{ name: 'Hot Flamer', desc: 'Fire burns longer and hotter.', mods: { burnDps: 1.6, burnT: 1.3 } },
         { name: 'Long Flamer', desc: 'Flames reach further.', mods: { range: 1.35 } },
         { name: 'Blue Flame', desc: 'So hot it even hurts fire zombies.', mods: { blue: true, dmg: 1.4 } },
@@ -55,17 +57,17 @@ const CC = (function () {
         { name: 'Repeater', desc: 'Shoots much faster.', mods: { rate: 1.6 } },
         { name: 'Armour Piercer', desc: 'Bolts go through armour and six more zombies.', mods: { armor: true, pierce: 6 } },
         { name: 'Ballista', desc: 'Giant bolts that burst on hit.', mods: { dmg: 2, splash: 0.7 } }] },
-    frost: { name: 'Frost Wand', icon: '❄️', kind: 'shot', type: 'frost', dmg: 4, rate: 2, range: 7, speed: 12, pierce: 1, splash: 0.9, slowF: 0.45, slowT: 2.5, tip: 'Slows zombies down. Fast ones hate it.',
+    frost: { name: 'Frost Wand', icon: '❄️', kind: 'shot', type: 'frost', dmg: 2.2, rate: 2, range: 7, speed: 12, pierce: 1, splash: 0.9, slowF: 0.45, slowT: 2.5, tip: 'Slows zombies down. Fast ones hate it.',
       tiers: [{ name: 'Colder Wand', desc: 'Slows zombies even more.', mods: { slowF: 0.6, dmg: 1.3 } },
         { name: 'Ice Burst', desc: 'Bigger bursts of ice.', mods: { splash: 1.4, dmg: 1.3 } },
         { name: 'Frozen Solid', desc: 'Freezes zombies still for a moment.', mods: { freeze: 0.7 } },
         { name: 'Winter Storm', desc: 'Huge icy blasts, faster.', mods: { splash: 1.5, dmg: 2, rate: 1.3 } }] },
-    bomb: { name: 'Bomb Launcher', icon: '💣', kind: 'lob', type: 'blast', dmg: 22, rate: 0.6, range: 8, speed: 9, splash: 1.6, tip: 'Lobs bombs over everything. Cracks armour.',
+    bomb: { name: 'Bomb Launcher', icon: '💣', kind: 'lob', type: 'blast', dmg: 10, rate: 0.6, range: 8, speed: 9, splash: 1.6, tip: 'Lobs bombs over everything. Cracks armour.',
       tiers: [{ name: 'Big Bombs', desc: 'Bigger blasts.', mods: { splash: 1.3, dmg: 1.2 } },
         { name: 'Fast Fuse', desc: 'Throws bombs faster.', mods: { rate: 1.5 } },
         { name: 'Cluster Bombs', desc: 'Each bomb breaks into 4 little bombs.', mods: { cluster: 4 } },
         { name: 'Mega Bomb', desc: 'Huge blasts that stun zombies.', mods: { dmg: 2, stun: 0.6, splash: 1.2 } }] },
-    lightning: { name: 'Lightning Staff', icon: '⚡', kind: 'chain', type: 'magic', dmg: 8, rate: 1, range: 6.5, jumps: 4, jumpRange: 2.6, falloff: 0.82, tip: 'Zaps one zombie, then jumps to its friends. Ghosts hate it.',
+    lightning: { name: 'Lightning Staff', icon: '⚡', kind: 'chain', type: 'magic', dmg: 7.6, rate: 1, range: 6.5, jumps: 4, jumpRange: 2.6, falloff: 0.82, tip: 'Zaps one zombie, then jumps to its friends. Ghosts hate it.',
       tiers: [{ name: 'More Jumps', desc: 'Jumps to two more zombies.', mods: { jumps: 2 } },
         { name: 'Charged Staff', desc: 'Much stronger zaps.', mods: { dmg: 1.6 } },
         { name: 'Storm Staff', desc: 'Faster zaps that jump further.', mods: { rate: 1.4, jumps: 3, jumpRange: 1.3 } },
@@ -73,110 +75,111 @@ const CC = (function () {
   };
   const WEAPON_ORDER = ['blaster', 'hammer', 'scatter', 'flamer', 'crossbow', 'frost', 'bomb', 'lightning'];
 
-  /* ---- towers: base stats and two upgrade paths (a, b) of three steps each. cost in coins on Medium. kinds: shot
+  /* ---- towers: base stats and two upgrade paths (a, b) of three steps each. cost in coins on Medium, plus matN of
+     its material (mat: wood or stone; each upgrade step takes MAT_UP of it). kinds: shot
      (arrows, stars, bolts), lob (bombs and shells), chain (lightning), cone (flames), snipe (an instant hit anywhere),
      beam (a ray through a line of zombies), aura (frost all around), support (the shrine), mine (coins each round),
      wall and trap (on the road). ---- */
   const TOWERS = {
-    arrow: { name: 'Arrow Tower', icon: '🏹', cost: 180, kind: 'shot', type: 'phys', dmg: 10, rate: 1.5, range: 5.5, pierce: 2, speed: 17, tip: 'Cheap and steady: arrows at the zombie nearest the castle.',
+    arrow: { name: 'Arrow Tower', icon: '🏹', cost: 180, mat: 'wood', matN: 3, kind: 'shot', type: 'phys', dmg: 10, rate: 1.5, range: 5.5, pierce: 2, speed: 17, tip: 'Cheap and steady: arrows at the zombie nearest the castle.',
       a: [{ name: 'Sharp Arrows', cost: 120, desc: 'Each arrow goes through 2 more zombies.', mods: { pierce: 2 } },
         { name: 'Fire Arrows', cost: 330, desc: 'Arrows set zombies on fire.', mods: { burnDps: 5, burnT: 2.5, dmg: 1.2 } },
         { name: 'Arrow Storm', cost: 1700, desc: 'Three arrows at a time, faster.', mods: { shots: 3, spread: 16, rate: 1.4 } }],
       b: [{ name: 'Long Bow', cost: 100, desc: 'Shoots further.', mods: { range: 1.3 } },
         { name: 'Eagle Eye', cost: 300, desc: 'Sees shadow zombies and shoots faster.', mods: { camo: true, rate: 1.3 } },
         { name: 'Master Archer', cost: 2500, desc: 'Huge arrows, three times as strong.', mods: { dmg: 3, pierce: 3, speed: 1.4 } }] },
-    wall: { name: 'Barricade', icon: '🧱', cost: 60, kind: 'wall', road: true, hp: 250, tip: 'Goes on the road. Zombies must stop and smash it.',
+    wall: { name: 'Barricade', icon: '🧱', cost: 60, mat: 'wood', matN: 2, kind: 'wall', road: true, hp: 250, tip: 'Goes on the road. Zombies must stop and smash it.',
       a: [{ name: 'Spiky', cost: 90, desc: 'Hurts every zombie that hits it.', mods: { thorns: 8 } },
         { name: 'Stone Wall', cost: 280, desc: 'Three times as strong.', mods: { hp: 3 } },
         { name: 'Iron Gate', cost: 1400, desc: 'Super strong, with big spikes.', mods: { hp: 4, thorns: 40 } }],
       b: [{ name: 'Patch Up', cost: 100, desc: 'Mends itself after every round.', mods: { repair: true } },
         { name: 'Sticky Tar', cost: 320, desc: 'Zombies near it walk slowly.', mods: { tarF: 0.45, tarR: 1.8 } },
         { name: 'Magic Ward', cost: 1600, desc: 'Every 3 s it pushes nearby zombies back down the road.', mods: { wardEvery: 3, wardPush: 2.5, wardR: 1.8 } }] },
-    cannon: { name: 'Cannon', icon: '💣', cost: 420, kind: 'lob', type: 'blast', dmg: 22, rate: 0.7, range: 6, speed: 10, splash: 1.3, tip: 'Explodes on groups. Cracks armour.',
+    cannon: { name: 'Cannon', icon: '💣', cost: 420, mat: 'stone', matN: 4, kind: 'lob', type: 'blast', dmg: 22, rate: 0.7, range: 6, speed: 10, splash: 1.3, tip: 'Explodes on groups. Cracks armour.',
       a: [{ name: 'Bigger Bombs', cost: 260, desc: 'Bigger blasts.', mods: { splash: 1.35, dmg: 1.2 } },
         { name: 'Heavy Shells', cost: 650, desc: 'Nearly twice the damage.', mods: { dmg: 1.9 } },
         { name: 'Cluster Bombs', cost: 2400, desc: 'Each shell breaks into 4 more bombs.', mods: { cluster: 4 } }],
       b: [{ name: 'Quick Loader', cost: 300, desc: 'Fires faster.', mods: { rate: 1.45 } },
         { name: 'Stun Shells', cost: 700, desc: 'Blasts stun zombies for a moment.', mods: { stun: 0.6 } },
         { name: 'Twin Cannon', cost: 2700, desc: 'Two barrels: two shells at a time.', mods: { shots: 2, rate: 1.25 } }] },
-    frost: { name: 'Frost Tower', icon: '❄️', cost: 320, kind: 'aura', type: 'frost', dmg: 3, range: 2.8, slowF: 0.4, slowT: 0.4, tip: 'Chills and slows every zombie near it.',
+    frost: { name: 'Frost Tower', icon: '❄️', cost: 320, mat: 'stone', matN: 4, kind: 'aura', type: 'frost', dmg: 3, range: 2.8, slowF: 0.4, slowT: 0.4, tip: 'Chills and slows every zombie near it.',
       a: [{ name: 'Deep Freeze', cost: 220, desc: 'Slows zombies even more.', mods: { slowF: 0.55 } },
         { name: 'Freeze Pulse', cost: 650, desc: 'Every 4 s, freezes everything near it.', mods: { pulseEvery: 4, pulseFreeze: 1.2 } },
         { name: 'Blizzard', cost: 2600, desc: 'A huge storm: bigger, stronger, freezes often.', mods: { range: 1.5, dmg: 4, pulseEvery: 2.5 } }],
       b: [{ name: 'Chilly', cost: 150, desc: 'Reaches further.', mods: { range: 1.25 } },
         { name: 'Ice Shards', cost: 550, desc: 'Also shoots sharp ice at zombies.', mods: { shards: true } },
         { name: 'Permafrost', cost: 2000, desc: 'Chilled zombies take 30% more damage from everything.', mods: { brittle: 2.5 } }] },
-    tesla: { name: 'Tesla Coil', icon: '⚡', cost: 650, kind: 'chain', type: 'magic', dmg: 20, rate: 0.9, range: 4.5, jumps: 4, jumpRange: 2.4, falloff: 0.85, tip: 'Lightning that jumps from zombie to zombie.',
+    tesla: { name: 'Tesla Coil', icon: '⚡', cost: 650, mat: 'stone', matN: 6, kind: 'chain', type: 'magic', dmg: 20, rate: 0.9, range: 4.5, jumps: 4, jumpRange: 2.4, falloff: 0.85, tip: 'Lightning that jumps from zombie to zombie.',
       a: [{ name: 'More Jumps', cost: 320, desc: 'Jumps to two more zombies.', mods: { jumps: 2 } },
         { name: 'Overcharge', cost: 850, desc: 'Much stronger zaps.', mods: { dmg: 1.7 } },
         { name: 'Storm Coil', cost: 3200, desc: 'Huge chains of lightning.', mods: { jumps: 6, dmg: 1.5, rate: 1.3 } }],
       b: [{ name: 'Fast Charge', cost: 380, desc: 'Zaps faster.', mods: { rate: 1.35 } },
         { name: 'Static', cost: 650, desc: 'Zapped zombies slow down.', mods: { slowF: 0.3, slowT: 1 } },
         { name: 'Thunder Dome', cost: 3600, desc: 'Every 2.5 s, zaps every zombie near it.', mods: { pulseEvery: 2.5, pulseDmg: 70 } }] },
-    flame: { name: 'Flame Tower', icon: '🔥', cost: 380, kind: 'cone', type: 'fire', dmg: 3, rate: 8, range: 2.8, arc: 70, burnDps: 4, burnT: 3, tip: 'Burns zombies that come close.',
+    flame: { name: 'Flame Tower', icon: '🔥', cost: 380, mat: 'wood', matN: 4, kind: 'cone', type: 'fire', dmg: 3, rate: 8, range: 2.8, arc: 70, burnDps: 4, burnT: 3, tip: 'Burns zombies that come close.',
       a: [{ name: 'Hotter', cost: 260, desc: 'Fire burns twice as hot.', mods: { burnDps: 2 } },
         { name: 'Napalm', cost: 700, desc: 'Sticky fire that burns longer.', mods: { burnT: 2, dmg: 1.5 } },
         { name: "Dragon's Breath", cost: 2700, desc: 'A huge, wide blast of fire.', mods: { range: 1.5, arc: 120, dmg: 2 } }],
       b: [{ name: 'Long Nozzle', cost: 200, desc: 'Flames reach further.', mods: { range: 1.3 } },
         { name: 'Blue Flame', cost: 650, desc: 'So hot it even burns fire zombies.', mods: { blue: true } },
         { name: 'Inferno Ring', cost: 2900, desc: 'Flames all the way round.', mods: { arc: 360, dmg: 1.5 } }] },
-    mortar: { name: 'Mortar', icon: '🎯', cost: 700, kind: 'lob', type: 'blast', dmg: 40, rate: 0.4, range: 9, min: 2.5, speed: 7, splash: 1.7, tip: 'Very long range and big blasts, but it cannot hit close.',
+    mortar: { name: 'Mortar', icon: '🎯', cost: 700, mat: 'stone', matN: 6, kind: 'lob', type: 'blast', dmg: 40, rate: 0.4, range: 9, min: 2.5, speed: 7, splash: 1.7, tip: 'Very long range and big blasts, but it cannot hit close.',
       a: [{ name: 'Big Shells', cost: 360, desc: 'Bigger blasts.', mods: { splash: 1.3 } },
         { name: 'Burning Ground', cost: 850, desc: 'Shells leave fire on the road.', mods: { poolDps: 10, poolT: 3, poolR: 1.4 } },
         { name: 'Earthquake', cost: 3300, desc: 'Massive shells that stun zombies.', mods: { dmg: 2.5, stun: 0.8 } }],
       b: [{ name: 'Fast Reload', cost: 420, desc: 'Fires faster.', mods: { rate: 1.4 } },
         { name: 'Long Barrel', cost: 500, desc: 'Reaches much further.', mods: { range: 1.45 } },
         { name: 'Battery', cost: 3100, desc: 'Three shells at a time.', mods: { shots: 3 } }] },
-    shrine: { name: 'Healing Shrine', icon: '💖', cost: 500, kind: 'support', range: 3, heal: 8, buffRate: 0.1, tip: 'Heals the crew and makes towers near it shoot faster.',
+    shrine: { name: 'Healing Shrine', icon: '💖', cost: 500, mat: 'stone', matN: 5, kind: 'support', range: 3, heal: 8, buffRate: 0.1, tip: 'Heals the crew and makes towers near it shoot faster.',
       a: [{ name: 'Battle Hymn', cost: 420, desc: 'Towers near it shoot even faster.', mods: { buffRate: 0.15 } },
         { name: 'Far Sight', cost: 720, desc: 'Towers near it reach further and see shadows.', mods: { buffRange: 0.15, buffCamo: true } },
         { name: 'Golden Shrine', cost: 3600, desc: 'Towers near it hit 40% harder.', mods: { buffDmg: 0.4 } }],
       b: [{ name: 'Blessing', cost: 300, desc: 'Reaches further.', mods: { range: 1.3 } },
         { name: 'Quick Revive', cost: 600, desc: 'Knocked-out players get up in 2 s.', mods: { revive: true } },
         { name: 'Castle Mender', cost: 2600, desc: 'Mends 5 of the castle’s lives after every round.', mods: { mend: 5 } }] },
-    sniper: { name: 'Sniper Nest', icon: '🔭', cost: 320, kind: 'snipe', type: 'phys', dmg: 30, rate: 0.45, range: 99, mode: 'strong', tip: 'Hits any zombie on the map. Aims at the strongest.',
+    sniper: { name: 'Sniper Nest', icon: '🔭', cost: 320, mat: 'wood', matN: 4, kind: 'snipe', type: 'phys', dmg: 30, rate: 0.45, range: 99, mode: 'strong', tip: 'Hits any zombie on the map. Aims at the strongest.',
       a: [{ name: 'Big Bullets', cost: 260, desc: 'Hits harder.', mods: { dmg: 1.7 } },
         { name: 'Armour Piercing', cost: 820, desc: 'Goes straight through armour.', mods: { armor: true, dmg: 1.3 } },
         { name: 'Deadly Aim', cost: 3100, desc: 'Four times the damage.', mods: { dmg: 4 } }],
       b: [{ name: 'Fast Reload', cost: 320, desc: 'Shoots faster.', mods: { rate: 1.5 } },
         { name: 'Night Vision', cost: 360, desc: 'Sees shadow zombies.', mods: { camo: true } },
         { name: 'Elite Sniper', cost: 3300, desc: 'Shoots two and a half times as fast.', mods: { rate: 2.5 } }] },
-    glue: { name: 'Slime Tower', icon: '🧪', cost: 250, kind: 'shot', type: 'phys', dmg: 1, rate: 1.2, range: 4.5, speed: 12, pierce: 1, slowF: 0.5, slowT: 3, tip: 'Slime slows zombies right down.',
+    glue: { name: 'Slime Tower', icon: '🧪', cost: 250, mat: 'wood', matN: 3, kind: 'shot', type: 'phys', dmg: 1, rate: 1.2, range: 4.5, speed: 12, pierce: 1, slowF: 0.5, slowT: 3, tip: 'Slime slows zombies right down.',
       a: [{ name: 'Stronger Slime', cost: 200, desc: 'Slows zombies even more.', mods: { slowF: 0.65 } },
         { name: 'Acid Slime', cost: 520, desc: 'Slimed zombies melt a little.', mods: { acidDps: 8, acidT: 3 } },
         { name: 'Slime Flood', cost: 2300, desc: 'Each splat slimes every zombie near it.', mods: { flood: 2.2 } }],
       b: [{ name: 'Splat', cost: 260, desc: 'Slime splashes on zombies next to it.', mods: { splash: 1 } },
         { name: 'Sticky', cost: 460, desc: 'Slime lasts twice as long.', mods: { slowT: 2 } },
         { name: 'Super Glue', cost: 2100, desc: 'Glued zombies stop dead for a second.', mods: { stop: 1 } }] },
-    ninja: { name: 'Ninja Dojo', icon: '🥷', cost: 450, kind: 'shot', type: 'phys', dmg: 9, rate: 2.4, range: 5, speed: 18, pierce: 2, camo: true, tip: 'Fast throwing stars. Ninjas see shadow zombies.',
+    ninja: { name: 'Ninja Dojo', icon: '🥷', cost: 450, mat: 'wood', matN: 4, kind: 'shot', type: 'phys', dmg: 9, rate: 2.4, range: 5, speed: 18, pierce: 2, camo: true, tip: 'Fast throwing stars. Ninjas see shadow zombies.',
       a: [{ name: 'Sharp Stars', cost: 260, desc: 'Stars go further through zombies and hit harder.', mods: { pierce: 2, dmg: 1.2 } },
         { name: 'Triple Star', cost: 720, desc: 'Three stars at a time.', mods: { shots: 3, spread: 20 } },
         { name: 'Grandmaster', cost: 3300, desc: 'Twice as fast and twice as strong.', mods: { rate: 2, dmg: 2 } }],
       b: [{ name: 'Quick Hands', cost: 300, desc: 'Throws faster.', mods: { rate: 1.3 } },
         { name: 'Smoke Bomb', cost: 620, desc: 'Every 5 s, a smoke bomb stuns a group.', mods: { smokeEvery: 5, smokeStun: 1.2, smokeR: 1.5 } },
         { name: 'Shadow Clone', cost: 2900, desc: 'A shadow ninja throws with it.', mods: { shots: 2, dmg: 1.4 } }] },
-    wizard: { name: 'Wizard Tower', icon: '🔮', cost: 420, kind: 'shot', type: 'magic', dmg: 14, rate: 1.2, range: 5.5, speed: 12, pierce: 1, tip: 'Magic bolts. Ghosts hate magic.',
+    wizard: { name: 'Wizard Tower', icon: '🔮', cost: 420, mat: 'stone', matN: 5, kind: 'shot', type: 'magic', dmg: 14, rate: 1.2, range: 5.5, speed: 12, pierce: 1, tip: 'Magic bolts. Ghosts hate magic.',
       a: [{ name: 'Arcane Bolt', cost: 260, desc: 'Bolts hit harder and go through 2 zombies.', mods: { dmg: 1.5, pierce: 1 } },
         { name: 'Fireball', cost: 720, desc: 'Throws a fireball every 2 s.', mods: { fireballEvery: 2, fireballDmg: 30, fireballR: 1.4 } },
         { name: 'Dragon Spirit', cost: 3500, desc: 'Huge fireballs, three times as often.', mods: { fireballEvery: 0.7, fireballDmg: 2 } }],
       b: [{ name: 'Wisdom', cost: 220, desc: 'Reaches further.', mods: { range: 1.25 } },
         { name: 'Crystal Ball', cost: 420, desc: 'Sees shadow zombies and casts faster.', mods: { camo: true, rate: 1.2 } },
         { name: 'Meteor', cost: 3100, desc: 'Every 7 s, a meteor smashes the strongest zombie.', mods: { meteorEvery: 7, meteorDmg: 700, meteorR: 2 } }] },
-    mine: { name: 'Gold Mine', icon: '🪙', cost: 800, kind: 'mine', income: 70, tip: 'Digs up 70 coins at the end of every round.',
+    mine: { name: 'Gold Mine', icon: '🪙', cost: 800, mat: 'wood', matN: 6, kind: 'mine', income: 70, tip: 'Digs up 70 coins at the end of every round.',
       a: [{ name: 'Deeper Shaft', cost: 500, desc: '40 more coins every round.', mods: { income: 40 } },
         { name: 'Gold Rush', cost: 1200, desc: '90 more coins every round.', mods: { income: 90 } },
         { name: 'Treasure Vault', cost: 3600, desc: '260 more coins every round.', mods: { income: 260 } }],
       b: [{ name: 'Lucky Coins', cost: 420, desc: 'Every zombie that falls near it drops a coin more.', mods: { killBonus: 1, killR: 3.5 } },
         { name: 'Bank', cost: 1300, desc: 'Adds 8% to your coins every round (up to 400).', mods: { bankRate: 0.08, bankCap: 400 } },
         { name: 'Royal Mint', cost: 4000, desc: '450 more coins every round.', mods: { income: 450 } }] },
-    sun: { name: 'Sun Tower', icon: '☀️', cost: 3200, kind: 'beam', type: 'magic', dmg: 7, rate: 8, range: 6, pierce: 1, tip: 'A burning ray of sunlight. Very strong, very dear.',
+    sun: { name: 'Sun Tower', icon: '☀️', cost: 3200, mat: 'stone', matN: 12, kind: 'beam', type: 'magic', dmg: 7, rate: 8, range: 6, pierce: 1, tip: 'A burning ray of sunlight. Very strong, very dear.',
       a: [{ name: 'Brighter', cost: 1600, desc: 'A much stronger ray.', mods: { dmg: 1.6 } },
         { name: 'Solar Flare', cost: 4200, desc: 'The ray goes through 5 zombies in a line.', mods: { pierce: 5 } },
         { name: 'Supernova', cost: 13000, desc: 'Three times the power, and further.', mods: { dmg: 3, range: 1.4 } }],
       b: [{ name: 'Wide Lens', cost: 1100, desc: 'Reaches further.', mods: { range: 1.3 } },
         { name: 'Sunspot', cost: 3000, desc: 'The ray sets zombies on fire.', mods: { burnDps: 8, burnT: 3 } },
         { name: 'Twin Suns', cost: 10500, desc: 'Two rays at two zombies.', mods: { beams: 2 } }] },
-    spikes: { name: 'Spike Trap', icon: '📍', cost: 120, kind: 'trap', road: true, type: 'phys', spikes: 20, spikeDmg: 15, tip: 'Goes on the road. Pokes the zombies that walk over it (20 spikes each round).',
+    spikes: { name: 'Spike Trap', icon: '📍', cost: 120, mat: 'stone', matN: 2, kind: 'trap', road: true, type: 'phys', spikes: 20, spikeDmg: 15, tip: 'Goes on the road. Pokes the zombies that walk over it (20 spikes each round).',
       a: [{ name: 'Sharper', cost: 110, desc: 'Spikes hurt twice as much.', mods: { spikeDmg: 2 } },
         { name: 'Iron Spikes', cost: 360, desc: 'Spikes go through armour.', mods: { armor: true } },
         { name: 'Spike Storm', cost: 1500, desc: 'Three times the spikes, three times the damage.', mods: { spikeDmg: 3, spikes: 3 } }],
@@ -253,7 +256,10 @@ const CC = (function () {
     if (wsCache[key]) return wsCache[key];
     const W = WEAPONS[w] || WEAPONS.blaster, st = baseStats(W), tiers = Math.min(4, Math.floor(lvl / 5));
     for (let k = 0; k < tiers; k++) applyMods(st, W.tiers[k].mods);
-    st.dmg = (st.dmg || 0) * (1 + 0.04 * (lvl - 1));
+    // a crew member helps the towers rather than replacing them: weapons hit at WEAPON_POWER, plus 2.5% a level
+    const k = WEAPON_POWER * (1 + 0.025 * (lvl - 1));
+    st.dmg = (st.dmg || 0) * k;
+    if (st.burnDps) st.burnDps *= k;
     st.tier = tiers; st.name = tiers ? W.tiers[tiers - 1].name : W.name;
     st.camo = true;   // a player can always see shadow zombies
     return (wsCache[key] = st);
@@ -283,6 +289,8 @@ const CC = (function () {
         }
       }
     }
+    // dry ground all round the castle, so a player can always walk out of its doors
+    for (let y = cz - 4; y <= cz + 4; y++) for (let x = cx - 4; x <= cx + 4; x++) if (inside(x, y) && tiles[at(x, y)] === T.WATER) tiles[at(x, y)] = T.GRASS;
     // the castle
     for (let y = cz - 2; y <= cz + 2; y++) for (let x = cx - 2; x <= cx + 2; x++) tiles[at(x, y)] = T.CASTLE;
     // roads: each path's tiles in order; over water a road is a bridge; the first tile is the gate
@@ -374,10 +382,10 @@ const CC = (function () {
     const s = {
       v: 2, mapId: o.map.id, diff: DIFFS[o.diff] ? o.diff : 'medium', D: D, rounds: o.rounds || [], seed: o.seed | 0, rng: (o.seed | 0) ^ 0x5bd1e995,
       t: 0, tick: 0, nextId: 1, map: map, occ: new Int16Array(map.w * map.h), castle: { x: map.cx + 0.5, z: map.cz + 0.5 },
-      lives: D.lives, maxLives: D.lives, tierHp: TIER_HP[o.map.tier] || 1, crewN: n, players: [], zombies: [], towers: [], shots: [], foes: [], pools: [],
+      res: { wood: D.wood, stone: D.stone }, felled: [], lives: D.lives, maxLives: D.lives, tierHp: TIER_HP[o.map.tier] || 1, crewN: n, players: [], zombies: [], towers: [], shots: [], foes: [], pools: [],
       round: 0, wave: { state: 'wait', timer: 0, groups: [] }, autoStart: true, freeplay: false, wonAt: 0, gateK: 0,
       blocks: map.paths.map(() => []), traps: map.paths.map(() => []), tmap: new Map(),
-      result: '', stats: { kills: 0, built: 0, leaked: 0, chopped: 0, spent: 0, pdmg: 0, tdmg: 0 }
+      result: '', stats: { kills: 0, built: 0, leaked: 0, chopped: 0, mined: 0, spent: 0, pdmg: 0, tdmg: 0 }
     };
     crewScale(s);
     o.crew.forEach((c, k) => s.players.push(newPlayer(s, c, c.slot != null ? c.slot : k)));
@@ -437,12 +445,12 @@ const CC = (function () {
     }
     return [x, z, hit];
   }
-  // a player's solid tiles: water, trees, rocks, the castle, towers, the map's edge
+  // a player's solid tiles: water, trees, rocks, the castle, the map's edge (a player walks through towers, so towers
+  // can never shut anyone in)
   const playerSolid = (s) => (tx, tz) => {
     const m = s.map;
     if (tx < 0 || tz < 0 || tx >= m.w || tz >= m.h) return true;
-    const i = tz * m.w + tx;
-    return !WALK[m.tiles[i]] || s.occ[i] > 0;
+    return !WALK[m.tiles[tz * m.w + tx]];
   };
   function movePlayer(s, p, dx, dz) {
     const r = moveCircle(s, p.x, p.z, dx, dz, 0.32, playerSolid(s));
@@ -556,8 +564,10 @@ const CC = (function () {
     for (const t of s.towers) if (t.st.killBonus && dist2(t.x, t.z, zb.x, zb.z) < t.st.killR * t.st.killR) gold += t.st.killBonus;
     earn(s, gold);
     ev.push({ e: 'die', id: zb.id, z: zb.type, x: r2(zb.x), y: r2(zb.z), g: gold });
-    const p = by != null && typeof by === 'string' ? s.players.find((q) => q.id === by) : null;
-    if (p) { p.kills++; gainXp(s, p, Z.xp * (1 + s.round / 100), ev); }
+    // experience for the weapon: whole for a zombie its player finished off, part for one that player's tower did
+    const own = by != null && typeof by === 'string', t = !own && by != null ? s.tmap.get(by) : null;
+    const p = own ? s.players.find((q) => q.id === by) : t ? s.players.find((q) => q.id === t.by) : null;
+    if (p) { if (own) p.kills++; gainXp(s, p, Z.xp * (1 + s.round / 100) * (own ? 1 : TOWER_XP), ev); }
     if (Z.split) spawnFrom(s, zb, Z.split.type, Z.split.n, ev, 0.3);
     if (Z.children) spawnFrom(s, zb, Z.children.type, Z.children.n, ev, 0.45);
     if (Z.explode) explode(s, zb.x, zb.z, Z.explode, ev);
@@ -730,14 +740,15 @@ const CC = (function () {
     for (const q of s.players) if (!q.down && Math.abs(q.x - (tx + 0.5)) < 0.8 && Math.abs(q.z - (tz + 0.5)) < 0.8) return { ok: false, why: 'player' };
     if (!U.road) for (const zb of s.zombies) if (!zb.fly && (zb.x | 0) === tx && (zb.z | 0) === tz) return { ok: false, why: 'blocked' };
     if (p && p.coins < price(s, type)) return { ok: false, why: 'cost' };
+    if (p && (s.res[U.mat] || 0) < U.matN) return { ok: false, why: U.mat };
     return { ok: true };
   }
   function build(s, type, tx, tz, p, ev) {
     const can = canBuild(s, type, tx, tz, p);
     if (!can.ok) { ev.push({ e: 'nobuild', id: p ? p.id : null, why: can.why }); return null; }
     const cost = price(s, type), U = TOWERS[type];
-    if (p) p.coins -= cost;
-    const t = { id: s.nextId++, type: type, tx: tx, tz: tz, x: tx + 0.5, z: tz + 0.5, a: 0, b: 0, spent: cost, mode: U.mode || 'first', by: p ? p.id : null, slot: p ? p.slot : 0, cd: 0.3, rot: 0, stun: 0, timers: {}, hp: 0, spikes: 0, st: null, done: 0 };
+    if (p) { p.coins -= cost; s.res[U.mat] -= U.matN; }
+    const t = { id: s.nextId++, type: type, tx: tx, tz: tz, x: tx + 0.5, z: tz + 0.5, a: 0, b: 0, spent: cost, mat: p ? U.matN : 0, mode: U.mode || 'first', by: p ? p.id : null, slot: p ? p.slot : 0, cd: 0.3, rot: 0, stun: 0, timers: {}, hp: 0, spikes: 0, st: null, done: 0 };
     s.towers.push(t); s.tmap.set(t.id, t);
     s.occ[tz * s.map.w + tx] = t.id;
     s.stats.built++; s.stats.spent += cost;
@@ -773,7 +784,7 @@ const CC = (function () {
     const other = path === 'a' ? t.b : t.a;
     if (tier >= 1 && other >= 2) return { ok: false, why: 'path', tier: tier };
     const up = list[tier];
-    return { ok: true, cost: Math.round(up.cost * s.D.cost / 5) * 5, up: up, tier: tier + 1 };
+    return { ok: true, cost: Math.round(up.cost * s.D.cost / 5) * 5, mat: U.mat, matN: MAT_UP[tier], up: up, tier: tier + 1 };
   }
   function upgrade(s, id, path, p, ev) {
     const t = s.towers.find((q) => q.id === id);
@@ -781,7 +792,8 @@ const CC = (function () {
     const u = upgradeInfo(s, t, path);
     if (!u.ok) return false;
     if (p && p.coins < u.cost) { ev.push({ e: 'nobuild', id: p.id, why: 'cost' }); return false; }
-    if (p) p.coins -= u.cost;
+    if (p && (s.res[u.mat] || 0) < u.matN) { ev.push({ e: 'nobuild', id: p.id, why: u.mat }); return false; }
+    if (p) { p.coins -= u.cost; s.res[u.mat] -= u.matN; t.mat = (t.mat || 0) + u.matN; }
     t[path]++; t.spent += u.cost; s.stats.spent += u.cost;
     const hpWas = t.st.hp || 0;
     if (t.type === 'shrine') refreshStats(s); else t.st = towerStats(s, t);
@@ -790,17 +802,18 @@ const CC = (function () {
     ev.push({ e: 'upgraded', t: towerInfo(t), path: path, by: p ? p.id : null });
     return true;
   }
-  const sellValue = (t) => Math.floor(t.spent * SELL_BACK);
+  const sellValue = (t) => Math.floor(t.spent * SELL_BACK), sellMat = (t) => Math.floor((t.mat || 0) / 2);
   function sell(s, id, p, ev) {
     const t = s.towers.find((q) => q.id === id);
     if (!t || (p && t.by && t.by !== p.id && s.players.some((q) => q.id === t.by))) return false;   // only your own (or a friend's who left)
-    const v = sellValue(t);
+    const v = sellValue(t), mv = sellMat(t), mat = TOWERS[t.type].mat;
     if (p) p.coins += v;
+    s.res[mat] += mv;
     removeTower(s, t);
-    ev.push({ e: 'sold', id: t.id, x: t.x, y: t.z, v: v, by: p ? p.id : null });
+    ev.push({ e: 'sold', id: t.id, x: t.x, y: t.z, v: v, m: mv, mat: mat, by: p ? p.id : null });
     return true;
   }
-  const towerInfo = (t) => ({ id: t.id, type: t.type, tx: t.tx, tz: t.tz, a: t.a, b: t.b, mode: t.mode, by: t.by, spent: t.spent, max: t.st && t.st.kind === 'wall' ? Math.round(t.st.hp) : t.st && t.st.kind === 'trap' ? Math.round(t.st.spikes) : 0 });
+  const towerInfo = (t) => ({ id: t.id, type: t.type, tx: t.tx, tz: t.tz, a: t.a, b: t.b, mode: t.mode, by: t.by, spent: t.spent, mat: t.mat || 0, max: t.st && t.st.kind === 'wall' ? Math.round(t.st.hp) : t.st && t.st.kind === 'trap' ? Math.round(t.st.spikes) : 0 });
 
   /* ---- firing: one tower's (or crew member's) attack at a target ---- */
   function effects(st, by, x, z) {
@@ -1042,7 +1055,7 @@ const CC = (function () {
     if (p.hp < p.max) p.hp = Math.min(p.max, p.hp + dt * 3);
     p.cd -= dt;
     if (p.actT > 0) p.actT -= dt;
-    // chop a tree or mine a rock the player pushes against: coins, and room to build
+    // chop a tree or mine a rock the player pushes against: wood or stone for the crew, and room to build
     if (p.gather >= 0) {
       const m = s.map, i = p.gather, tl = m.tiles[i];
       const gx = (i % m.w) + 0.5, gz = ((i / m.w) | 0) + 0.5;
@@ -1054,10 +1067,11 @@ const CC = (function () {
           ev.push({ e: 'chop', i: i, kind: tl === T.TREE ? 'tree' : 'rock', left: m.life[i], id: p.id });
           if (m.life[i] <= 0) {
             m.tiles[i] = T.GRASS;
-            const got = tl === T.TREE ? 12 : 18;
-            p.coins += got;
-            if (tl === T.TREE) s.stats.chopped++;
-            ev.push({ e: 'tile', i: i, t: T.GRASS, got: got, x: gx, y: gz, id: p.id });
+            const mat = tl === T.TREE ? 'wood' : 'stone';
+            s.res[mat] += FELL_GOT;
+            s.felled.push({ i: i, t: tl, r: s.round });
+            if (tl === T.TREE) s.stats.chopped++; else s.stats.mined++;
+            ev.push({ e: 'tile', i: i, t: T.GRASS, got: FELL_GOT, mat: mat, x: gx, y: gz, id: p.id });
           }
         }
         return;
@@ -1117,7 +1131,7 @@ const CC = (function () {
     endRound(s, ev);
   }
   function endRound(s, ev) {
-    const r = s.round, bonus = 100 + Math.round(r * 1.5);
+    const r = s.round, bonus = 100 + r * 3;
     earn(s, bonus);
     // gold mines, banks and the castle mender (one mender's worth, up to the castle's full lives); barricades mended, traps refilled
     let mend = 0;
@@ -1134,10 +1148,27 @@ const CC = (function () {
       if (st.kind === 'trap') t.spikes = Math.round(st.spikes);
     }
     if (mend && s.lives < s.maxLives) s.lives = Math.min(s.maxLives, s.lives + mend);
+    s.res.wood += 1; s.res.stone += 1;
+    regrow(s, ev);
     for (const p of s.players) if (!p.down) p.hp = p.max;
     ev.push({ e: 'cleared', r: r, bonus: bonus });
     s.wave.state = 'wait'; s.wave.timer = 2.5; s.wave.groups = [];
     if (r >= LAST_ROUND && !s.wonAt) { s.wonAt = r; s.result = 'won'; ev.push({ e: 'won', r: r }); }
+  }
+
+  // trees and rocks felled REGROW rounds ago grow back, unless a tower stands there (gone for good) or a player does
+  // (next round)
+  function regrow(s, ev) {
+    const m = s.map;
+    s.felled = s.felled.filter((f) => {
+      if (s.round - f.r < REGROW) return true;
+      if (s.occ[f.i] || (m.tiles[f.i] !== T.GRASS && m.tiles[f.i] !== T.SAND)) return false;
+      const x = f.i % m.w, z = (f.i / m.w) | 0;
+      if (s.players.some((p) => Math.abs(p.x - (x + 0.5)) < 0.95 && Math.abs(p.z - (z + 0.5)) < 0.95)) return true;
+      m.tiles[f.i] = f.t; m.life[f.i] = f.t === T.TREE ? 3 : 4;
+      ev.push({ e: 'tile', i: f.i, t: f.t, grow: 1, x: x + 0.5, y: z + 0.5 });
+      return false;
+    });
   }
 
   /* ================= one tick ================= */
@@ -1172,7 +1203,7 @@ const CC = (function () {
   // the moving things, often (about 15 times a second)
   function snapshot(s) {
     return {
-      k: s.tick, l: Math.max(0, Math.ceil(s.lives)), r: s.round, w: [s.wave.state, Math.ceil(s.wave.timer), s.wave.state === 'fight' ? s.wave.groups.reduce((n, g) => n + g.left, 0) : 0, s.autoStart ? 1 : 0, s.wave.hold ? 1 : 0],
+      k: s.tick, l: Math.max(0, Math.ceil(s.lives)), r: s.round, m: [s.res.wood, s.res.stone], w: [s.wave.state, Math.ceil(s.wave.timer), s.wave.state === 'fight' ? s.wave.groups.reduce((n, g) => n + g.left, 0) : 0, s.autoStart ? 1 : 0, s.wave.hold ? 1 : 0],
       p: s.players.map((p) => [p.id, r2(p.x), r2(p.z), r2(p.rot), Math.round(p.hp), r2(p.down), p.act && p.actT > 0 ? p.act : '', p.kills, Math.floor(p.coins), p.wlvl, Math.min(99, Math.floor(p.wxp / xpNeed(p.wlvl) * 100)), p.weapon]),
       z: s.zombies.map((zb) => [zb.id, ZOMBIE_ORDER.indexOf(zb.type), r2(zb.x), r2(zb.z), r2(zb.rot), Math.round(zb.hp / zb.max * 100), zFlags(zb)]),
       t: s.towers.map((t) => [t.id, r2(t.rot), t.stun > 0 ? 1 : 0, t.st.kind === 'wall' ? Math.round(t.hp) : t.st.kind === 'trap' ? t.spikes : -1])
@@ -1181,14 +1212,14 @@ const CC = (function () {
   // everything a device joining needs to draw the same game
   function fullState(s) {
     const m = s.map;
-    return { map: s.mapId, diff: s.diff, round: s.round, lives: Math.ceil(s.lives), maxLives: s.maxLives, crew: s.players.map((p) => ({ id: p.id, name: p.name, slot: p.slot, weapon: p.weapon })),
+    return { map: s.mapId, diff: s.diff, round: s.round, lives: Math.ceil(s.lives), maxLives: s.maxLives, res: [s.res.wood, s.res.stone], crew: s.players.map((p) => ({ id: p.id, name: p.name, slot: p.slot, weapon: p.weapon })),
       tiles: Array.from(m.tiles), life: Array.from(m.life), towers: s.towers.map(towerInfo), snap: snapshot(s) };
   }
   // a game saved between rounds (to carry on later); players are kept by their slot
   function save(s) {
     return { v: 2, map: s.mapId, diff: s.diff, seed: s.seed, rng: s.rng, round: s.round, lives: Math.ceil(s.lives), t: Math.round(s.t), wonAt: s.wonAt, freeplay: s.freeplay, nextId: s.nextId,
-      tiles: Array.from(s.map.tiles), life: Array.from(s.map.life), stats: Object.assign({}, s.stats),
-      towers: s.towers.map((t) => ({ id: t.id, type: t.type, tx: t.tx, tz: t.tz, a: t.a, b: t.b, spent: t.spent, mode: t.mode, slot: t.slot, hp: Math.round(t.hp), spikes: t.spikes })),
+      tiles: Array.from(s.map.tiles), life: Array.from(s.map.life), stats: Object.assign({}, s.stats), res: Object.assign({}, s.res), felled: s.felled.map((q) => [q.i, q.t, q.r]),
+      towers: s.towers.map((t) => ({ id: t.id, type: t.type, tx: t.tx, tz: t.tz, a: t.a, b: t.b, spent: t.spent, mat: t.mat || 0, mode: t.mode, slot: t.slot, hp: Math.round(t.hp), spikes: t.spikes })),
       players: s.players.map((p) => ({ slot: p.slot, name: p.name, weapon: p.weapon, wlvl: p.wlvl, wxp: Math.round(p.wxp * 10) / 10, coins: Math.floor(p.coins), kills: p.kills })) };
   }
   // carry on a saved game: o as for newGame (crew: the players here now; each takes the saved player of its slot)
@@ -1197,12 +1228,14 @@ const CC = (function () {
     s.rng = sv.rng; s.round = sv.round; s.lives = sv.lives; s.t = sv.t || 0; s.wonAt = sv.wonAt || 0; s.freeplay = !!sv.freeplay; s.nextId = sv.nextId || 1;
     for (let i = 0; i < s.map.tiles.length && i < sv.tiles.length; i++) { s.map.tiles[i] = sv.tiles[i]; s.map.life[i] = sv.life[i]; }
     Object.assign(s.stats, sv.stats || {});
+    if (sv.res) s.res = { wood: sv.res.wood || 0, stone: sv.res.stone || 0 };
+    s.felled = (sv.felled || []).map((q) => ({ i: q[0], t: q[1], r: q[2] }));
     s.saved = {};
     for (const q of sv.players) s.saved[q.slot] = { name: q.name, weapon: q.weapon, wlvl: q.wlvl, wxp: q.wxp, coins: q.coins, kills: q.kills };
     for (const p of s.players) if (s.saved[p.slot]) { const q = s.saved[p.slot]; Object.assign(p, { weapon: q.weapon, wlvl: q.wlvl, wxp: q.wxp, coins: q.coins, kills: q.kills, st: weaponStats(q.weapon, q.wlvl) }); delete s.saved[p.slot]; }
     for (const q of sv.towers) {
       const owner = s.players.find((p) => p.slot === q.slot);
-      const t = { id: q.id, type: q.type, tx: q.tx, tz: q.tz, x: q.tx + 0.5, z: q.tz + 0.5, a: q.a, b: q.b, spent: q.spent, mode: q.mode, by: owner ? owner.id : null, slot: q.slot, cd: 0.3, rot: 0, stun: 0, timers: {}, hp: q.hp, spikes: q.spikes, st: null, done: 0 };
+      const t = { id: q.id, type: q.type, tx: q.tx, tz: q.tz, x: q.tx + 0.5, z: q.tz + 0.5, a: q.a, b: q.b, spent: q.spent, mat: q.mat || 0, mode: q.mode, by: owner ? owner.id : null, slot: q.slot, cd: 0.3, rot: 0, stun: 0, timers: {}, hp: q.hp, spikes: q.spikes, st: null, done: 0 };
       s.towers.push(t); s.tmap.set(t.id, t);
       s.occ[t.tz * s.map.w + t.tx] = t.id;
     }
@@ -1212,12 +1245,12 @@ const CC = (function () {
   }
 
   return {
-    TICK: TICK, PACE: PACE, T: T, WALK: WALK, BUILD_OK: BUILD_OK, ROAD_OK: ROAD_OK, CASTLE_R: CASTLE_R, START_COINS: START_COINS, LAST_ROUND: LAST_ROUND, SELL_BACK: SELL_BACK, MAX_LEVEL: MAX_LEVEL,
+    TICK: TICK, PACE: PACE, MAT_UP: MAT_UP, FELL_GOT: FELL_GOT, REGROW: REGROW, T: T, WALK: WALK, BUILD_OK: BUILD_OK, ROAD_OK: ROAD_OK, CASTLE_R: CASTLE_R, START_COINS: START_COINS, LAST_ROUND: LAST_ROUND, SELL_BACK: SELL_BACK, MAX_LEVEL: MAX_LEVEL,
     DIFFS: DIFFS, TIER_HP: TIER_HP, WEAPONS: WEAPONS, WEAPON_ORDER: WEAPON_ORDER, TOWERS: TOWERS, TOWER_ORDER: TOWER_ORDER, ZOMBIES: ZOMBIES, ZOMBIE_ORDER: ZOMBIE_ORDER,
     TURRETS: TOWERS, TURRET_ORDER: TOWER_ORDER,
     makeMap: makeMap, pathAt: pathAt, newGame: newGame, addPlayer: addPlayer, removePlayer: removePlayer, step: step, startRound: startRound,
     moveCircle: moveCircle, movePlayer: movePlayer, playerSolid: playerSolid, freeSpot: freeSpot, castleDist: castleDist, gatePoint: gatePoint, tileAt: tileAt,
-    canBuild: canBuild, price: price, upgradeInfo: upgradeInfo, sellValue: sellValue, towerStats: towerStats, weaponStats: weaponStats, xpNeed: xpNeed, hpRound: hpRound,
+    canBuild: canBuild, price: price, upgradeInfo: upgradeInfo, sellValue: sellValue, sellMat: sellMat, towerStats: towerStats, weaponStats: weaponStats, xpNeed: xpNeed, hpRound: hpRound,
     roundGroups: roundGroups, snapshot: snapshot, fullState: fullState, towerInfo: towerInfo, save: save, load: load, zFlags: zFlags
   };
 })();

@@ -21,7 +21,7 @@ for (const def of maps) {
         const inputs = {};
         s.players.forEach((p, k) => {
           const inp = CCBot.think(s, p, mems[k], CC.TICK);
-          p.coins = Math.max(p.coins, 4000);   // plenty, so every tower and upgrade gets tried
+          p.coins = Math.max(p.coins, 4000); s.res.wood = Math.max(s.res.wood, 300); s.res.stone = Math.max(s.res.stone, 300);   // plenty, so every tower and upgrade gets tried
           if (t % 20 === k) {
             const r = Math.random();
             if (r < 0.35) { const type = types[Math.floor(Math.random() * types.length)], i = CCBot.spotFor(s, type, mems[k]); if (i >= 0) inp.build = { type, tx: i % s.map.w, tz: (i / s.map.w) | 0 }; }
