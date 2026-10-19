@@ -1,0 +1,1068 @@
+<title>Castle Crew</title>
+<meta name="description" content="Hold the castle together! A blocky 3D zombie defence for one to four players on their own iPads, phones or computers: chop trees, mine rocks, build towers and fight 20 levels of zombie waves.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap">
+<style>
+/*__SHARED:arcade-ui.css__*/
+/* Castle Crew: the whole screen is the 3D island (a WebGL canvas) with a 2D canvas over it for health bars and
+   pop-up words. Over those: the HUD along the top (level and wave, the castle's health, the crew's wood, stone and
+   gold, the crew), the wave banner under it, the move stick (touch, left half of the screen) and the weapons and
+   Build button in the bottom right. Building swaps the weapons for a tray of turrets. Menus are arcade cards. */
+html, body { background: #9fdcff; }
+#gl, #ov { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+#gl { z-index: 1; touch-action: none; }
+#ov { z-index: 2; pointer-events: none; }
+body.menu #hud, body.menu #banner, body.menu #controls, body.menu #tray { visibility: hidden; }
+#hud { z-index: 12; }
+.hud-left { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+.castle-bar { display: flex; align-items: center; gap: 8px; padding: 6px 12px 6px 9px; pointer-events: none; }
+.castle-bar .ic { font: 1.2rem/1 var(--emoji); }
+.castle-bar .bar { width: clamp(90px, 18vw, 200px); height: 12px; border-radius: 99px; background: rgba(41, 52, 90, .18); overflow: hidden; }
+.castle-bar .bar i { display: block; height: 100%; width: 100%; background: linear-gradient(90deg, #ff7b86, #ffc94d 40%, #4fd1a5 75%); transition: width .3s ease; }
+.castle-bar b { font: 700 .95rem/1 var(--font-display); font-variant-numeric: tabular-nums; min-width: 2.6em; }
+.res { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.res .chip { gap: 5px; font-variant-numeric: tabular-nums; }
+.res .chip i { font: 1rem/1 var(--emoji); font-style: normal; }
+.res .chip.gain { animation: gain .35s ease; }
+@keyframes gain { 50% { transform: scale(1.15); } }
+.crew { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; margin-top: 6px; }
+.crew span { display: flex; align-items: center; gap: 6px; padding: 3px 9px; border-radius: 99px; background: var(--card); box-shadow: var(--shadow-sm); font: 700 .78rem/1 var(--font-body); }
+.crew span i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.crew span u { text-decoration: none; display: inline-block; width: 34px; height: 5px; border-radius: 9px; background: rgba(41, 52, 90, .15); overflow: hidden; }
+.crew span u em { display: block; height: 100%; background: #66bb6a; }
+.hud-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.hud-right .top { display: flex; gap: 8px; align-items: center; }
+.hud-right .btns { display: flex; gap: 8px; }
+#banner {
+  position: fixed; left: 50%; top: var(--banner-top, 10px); transform: translateX(-50%); z-index: 11; display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px 8px 16px; border-radius: 999px; background: var(--card); box-shadow: var(--shadow-sm); font: 700 1rem/1.15 var(--font-display); white-space: nowrap; max-width: calc(100vw - 24px);
+}
+#banner[hidden] { display: none; }
+#banner .txt { overflow: hidden; text-overflow: ellipsis; }
+#banner .btn { min-height: 44px; padding: .45em 1em; font-size: .95rem; }
+#banner.fight { background: #fff1f1; color: #8a1f2b; }
+#banner.big { font-size: 1.25rem; padding: 12px 22px; }
+#controls { position: fixed; inset: auto 0 0 0; z-index: 10; pointer-events: none; height: 0; }
+#stick { position: fixed; z-index: 10; width: 132px; height: 132px; margin: -66px 0 0 -66px; border-radius: 50%; background: rgba(255, 255, 255, .28); border: 3px solid rgba(255, 255, 255, .7); pointer-events: none; }
+#stick i { position: absolute; left: 50%; top: 50%; width: 58px; height: 58px; margin: -29px 0 0 -29px; border-radius: 50%; background: rgba(255, 255, 255, .9); box-shadow: 0 4px 12px rgba(41, 52, 90, .25); }
+#stick[hidden] { display: none; }
+#stickHint { position: fixed; left: max(18px, env(safe-area-inset-left)); bottom: calc(18px + env(safe-area-inset-bottom)); z-index: 10; pointer-events: none; font: 700 .85rem/1.2 var(--font-body); color: rgba(255, 255, 255, .95); text-shadow: 0 1px 3px rgba(0, 0, 0, .45); max-width: 40vw; }
+.dock { position: fixed; right: max(12px, env(safe-area-inset-right)); bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 10; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; pointer-events: none; max-width: 62vw; }
+.dock > * { pointer-events: auto; }
+.weapons { display: flex; flex-wrap: wrap-reverse; gap: 6px; justify-content: flex-end; }
+.wpn {
+  width: 54px; height: 54px; border-radius: 16px; border: 3px solid var(--line); background: var(--card); box-shadow: 0 3px 0 var(--line); cursor: pointer; padding: 0;
+  display: grid; place-items: center; font: 1.45rem/1 var(--emoji); position: relative; color: var(--ink);
+}
+.wpn small { position: absolute; right: 3px; bottom: 1px; font: 800 .62rem/1 var(--font-body); color: var(--ink-soft); }
+.wpn.on { border-color: var(--sun-deep); background: var(--sun); box-shadow: 0 3px 0 var(--sun-deep); }
+.wpn:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--line); }
+.actions { display: flex; gap: 8px; align-items: flex-end; }
+.act { min-width: 64px; height: 64px; border-radius: 20px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 0 14px; font: 700 1.05rem/1 var(--font-display); }
+.act i { font: 1.4rem/1 var(--emoji); font-style: normal; }
+#fireBtn { width: 84px; height: 84px; border-radius: 50%; font-size: 1rem; }
+#fireBtn.held { transform: translateY(3px); filter: brightness(.95); }
+#ctxBtn { font-size: .95rem; height: 54px; }
+#tray { position: fixed; left: 0; right: 0; bottom: calc(10px + env(safe-area-inset-bottom)); z-index: 13; display: flex; flex-direction: column; align-items: center; gap: 8px; pointer-events: none; }
+#tray[hidden] { display: none; }
+#tray > * { pointer-events: auto; }
+.cards { display: flex; gap: 8px; overflow-x: auto; max-width: calc(100vw - 20px); padding: 4px 6px 8px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.cards::-webkit-scrollbar { display: none; }
+.tc {
+  flex: none; width: 92px; min-height: 104px; border-radius: 18px; border: 3px solid var(--line); background: var(--card); box-shadow: 0 4px 0 var(--line); cursor: pointer; padding: 6px 4px;
+  display: grid; justify-items: center; align-content: start; gap: 3px; color: var(--ink); font: inherit;
+}
+.tc i { font: 1.7rem/1.1 var(--emoji); font-style: normal; }
+.tc b { font: 700 .8rem/1.05 var(--font-display); text-align: center; }
+.tc small { font: 800 .72rem/1.1 var(--font-body); color: var(--ink-soft); white-space: nowrap; }
+.tc.on { border-color: var(--sun-deep); background: var(--sun); box-shadow: 0 4px 0 var(--sun-deep); }
+.tc:disabled { opacity: .45; cursor: default; }
+.tc .lock { font: 700 .7rem/1 var(--font-body); }
+.trayrow { display: flex; gap: 10px; align-items: center; }
+.traytip { font: 700 .9rem/1.2 var(--font-body); background: var(--card); padding: 8px 14px; border-radius: 99px; box-shadow: var(--shadow-sm); max-width: calc(100vw - 30px); text-align: center; }
+/* menus */
+.screen { width: min(100%, 680px); }
+.logo .ic { font-family: var(--emoji); }
+.levels { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.lvl { min-height: 74px; display: grid; align-content: center; justify-items: center; gap: 3px; padding: 6px 2px; border-radius: 16px; cursor: pointer; min-width: 0; background: var(--card-2); border: 2px solid var(--line); box-shadow: 0 4px 0 var(--line); color: var(--ink); font: inherit; }
+.lvl b { font: 700 1.3rem/1 var(--font-display); }
+.lvl small { font-weight: 800; font-size: .7rem; line-height: 1.1; color: var(--ink-soft); text-align: center; }
+.lvl .ms { font-size: .72rem; line-height: 1; }
+.lvl .ms .off { opacity: .25; filter: grayscale(1); }
+.lvl.done { background: var(--mint-soft); border-color: var(--mint); box-shadow: 0 4px 0 var(--mint); }
+.lvl.next { background: var(--sun); border-color: var(--sun-deep); box-shadow: 0 4px 0 var(--sun-deep); color: var(--sun-ink); }
+.lvl:disabled { opacity: .5; cursor: default; }
+.code { font: 700 3rem/1 var(--font-display); letter-spacing: .25em; padding: 10px 18px; border-radius: 18px; background: var(--card-2); border: 3px dashed var(--line); display: inline-block; }
+.codein { font: 700 2rem/1 var(--font-display); letter-spacing: .3em; text-transform: uppercase; text-align: center; width: 7.2em; padding: 10px; border-radius: 16px; border: 3px solid var(--line); background: var(--card-2); color: var(--ink); }
+.namein { font: 700 1.1rem/1 var(--font-body); padding: 10px 14px; border-radius: 14px; border: 3px solid var(--line); background: var(--card-2); color: var(--ink); width: 12em; text-align: center; }
+.crewlist { display: grid; gap: 8px; }
+.crewlist div { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 14px; background: var(--card-2); font: 700 1.05rem/1 var(--font-display); }
+.crewlist div i { width: 18px; height: 18px; border-radius: 50%; }
+.crewlist div small { margin-left: auto; color: var(--ink-soft); font: 700 .8rem/1 var(--font-body); }
+.picker { display: flex; align-items: center; gap: 10px; justify-content: center; }
+.picker b { font: 700 1.1rem/1.2 var(--font-display); min-width: 11em; text-align: center; }
+.news { display: grid; gap: 8px; text-align: left; }
+.news div { display: flex; gap: 12px; align-items: center; padding: 10px 12px; border-radius: 14px; background: var(--card-2); }
+.news div i { font: 1.8rem/1 var(--emoji); font-style: normal; flex: none; }
+.news div b { display: block; font: 700 1rem/1.2 var(--font-display); }
+.news div span { font-size: .9rem; color: var(--ink-soft); }
+.minis { display: flex; flex-wrap: wrap; gap: 8px 10px; justify-content: center; }
+.status { min-height: 1.3em; font-weight: 800; margin: 0; }
+.status.bad { color: var(--coral-deep); }
+.helplist { text-align: left; margin: 0; padding-left: 1.2em; line-height: 1.5; }
+.helplist li { margin: 4px 0; }
+/* the game is played sideways: a phone or iPad held upright asks to be turned */
+#rotate { position: fixed; inset: 0; z-index: 60; display: none; place-items: center; padding: 24px; background: linear-gradient(#8fd1fb, #e8f6ff); text-align: center; }
+#rotate .card { max-width: 420px; }
+#rotate .big { font: 4rem/1 var(--emoji); display: inline-block; animation: turn 2.2s ease-in-out infinite; }
+@keyframes turn { 0%, 30% { transform: rotate(0); } 60%, 100% { transform: rotate(-90deg); } }
+@media (orientation: portrait) and (pointer: coarse) { #rotate { display: grid; } }
+@media (prefers-reduced-motion: reduce) { #rotate .big { animation: none; transform: rotate(-90deg); } }
+.loading { position: fixed; inset: 0; z-index: 30; display: grid; place-items: center; background: rgba(159, 220, 255, .8); font: 700 1.3rem/1.3 var(--font-display); }
+.loading[hidden] { display: none; }
+@media (pointer: coarse) { .screen .btn:not(.big) { min-height: 48px; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; } }
+@media (max-width: 600px) {
+  .levels { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px; }
+  .hud-right .top { flex-direction: column; align-items: flex-end; gap: 6px; }
+  .hud-right .btns { order: -1; }
+  .hud-btn { width: 48px; height: 48px; }
+  .res { gap: 4px; flex-wrap: nowrap; }
+  .res .chip { padding: 5px 8px; font-size: .82rem; gap: 3px; }
+  .hud-left .chip { font-size: .9rem; padding: 7px 11px; }
+  .castle-bar { padding: 5px 9px 5px 7px; gap: 5px; }
+  .castle-bar .bar { width: 58px; }
+  .wpn { width: 48px; height: 48px; border-radius: 14px; font-size: 1.25rem; }
+  .act { height: 56px; min-width: 56px; padding: 0 10px; font-size: .95rem; }
+  #fireBtn { width: 72px; height: 72px; }
+  #banner { font-size: .9rem; padding: 6px 8px 6px 12px; }
+  .tc { width: 82px; min-height: 96px; }
+}
+@media (prefers-reduced-motion: reduce) { .res .chip.gain { animation: none; } }
+</style>
+<!--BODY-->
+<canvas id="gl" aria-label="The island and the castle"></canvas>
+<canvas id="ov" aria-hidden="true"></canvas>
+<div id="hud" hidden>
+  <div class="hud-top">
+    <div class="hud-left">
+      <div class="hud-chips"><span class="chip chipbox" id="lvChip">Level 1 · Wave 1/3</span></div>
+      <div class="chip chipbox castle-bar" id="castleChip" aria-label="Castle health"><span class="ic" aria-hidden="true">🏰</span><span class="bar"><i id="castleFill"></i></span><b id="castleNum">600</b></div>
+    </div>
+    <div class="hud-right">
+      <div class="top">
+        <div class="res" id="res">
+          <span class="chip soft chipbox" id="woodChip"><i aria-hidden="true">🪵</i><b id="wood">0</b></span>
+          <span class="chip soft chipbox" id="stoneChip"><i aria-hidden="true">🪨</i><b id="stone">0</b></span>
+          <span class="chip soft chipbox" id="goldChip"><i aria-hidden="true">🪙</i><b id="gold">0</b></span>
+        </div>
+        <div class="btns">
+          <button class="hud-btn" id="zoomBtn" aria-label="Zoom">🔍</button>
+          <button class="hud-btn" id="pauseBtn" aria-label="Pause">
+            <svg width="18" height="20" viewBox="0 0 16 18" aria-hidden="true"><rect x="1" y="1" width="5" height="16" rx="2" fill="currentColor"/><rect x="10" y="1" width="5" height="16" rx="2" fill="currentColor"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="crew" id="crewHud"></div>
+    </div>
+  </div>
+</div>
+<div id="banner" hidden><span class="txt" id="bannerTxt"></span><button class="btn sun" id="readyBtn" hidden>Ready!</button></div>
+<div id="controls">
+  <div id="stick" hidden><i></i></div>
+  <div id="stickHint" hidden>Drag here to walk. Walk into trees and rocks to chop them.</div>
+  <div class="dock" id="dock">
+    <button class="btn act" id="ctxBtn" hidden></button>
+    <div class="weapons" id="weapons" role="group" aria-label="Weapons"></div>
+    <div class="actions">
+      <button class="btn act sun" id="fireBtn" hidden>Fire</button>
+      <button class="btn act" id="buildBtn"><i aria-hidden="true">🔨</i><span>Build</span></button>
+    </div>
+  </div>
+</div>
+<div id="tray" hidden>
+  <div class="traytip" id="trayTip">Pick a tower, then tap the map where it should go.</div>
+  <div class="cards" id="cards" role="group" aria-label="Towers to build"></div>
+  <div class="trayrow">
+    <button class="btn sun big" id="placeBtn" hidden>✓ Build here</button>
+    <button class="btn" id="trayClose">✕ Close</button>
+  </div>
+</div>
+<div class="loading" id="loading" hidden>Loading the 3D world…</div>
+<div id="rotate" role="dialog" aria-label="Turn your device sideways"><div class="card"><div class="big" aria-hidden="true">📱</div><h2>Turn your device sideways</h2><p class="tag">Castle Crew is played with the screen sideways, like a TV.</p></div></div>
+
+<main id="screens">
+  <section class="screen" id="s-home">
+    <div class="card">
+      <h1 class="logo"><span class="ic" aria-hidden="true">🏰</span> Castle <span>Crew</span></h1>
+      <p class="tag">Hold the castle together! Chop trees, mine rocks, build towers and blast the zombie waves, on your own or with your crew.</p>
+      <div class="row"><button class="btn sun big" id="playBtn">Play</button></div>
+      <div class="row"><button class="btn" id="levelsBtn">Levels</button><button class="btn" id="crewBtn">👫 Play with friends</button><button class="btn" id="helpBtn">How to play</button></div>
+      <div class="minis">
+        <button class="btn" id="autoBtn">Auto-fire: on</button>
+        <button class="btn" id="qualityBtn">Graphics: auto</button>
+        <button class="btn" id="soundBtn">Music: on</button>
+        <a class="btn" data-hub hidden href="../">All games</a>
+      </div>
+    </div>
+  </section>
+  <section class="screen" id="s-levels" hidden>
+    <div class="card small-card">
+      <h2>Levels</h2>
+      <div class="levels" id="levelGrid"></div>
+      <p id="levelsNote"></p>
+      <div class="row"><button class="btn" id="levelsHome">Home</button></div>
+    </div>
+  </section>
+  <section class="screen" id="s-crew" hidden>
+    <div class="card small-card">
+      <h2>Play with friends</h2>
+      <p>Everyone plays on their own iPad, phone or computer. One player hosts and gets a code; the others type it in.</p>
+      <div class="row"><label for="nameIn">Your name</label><input class="namein" id="nameIn" maxlength="10" autocomplete="off" spellcheck="false"></div>
+      <div class="row"><button class="btn sun big" id="hostBtn">Host a game</button></div>
+      <div class="row"><input class="codein" id="codeIn" maxlength="4" placeholder="CODE" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Room code"><button class="btn sun" id="joinBtn">Join</button></div>
+      <p class="status" id="crewStatus" aria-live="polite"></p>
+      <div class="row"><button class="btn" id="crewHome">Home</button></div>
+    </div>
+  </section>
+  <section class="screen" id="s-lobby" hidden>
+    <div class="card small-card">
+      <h2 id="lobbyTitle">Your crew</h2>
+      <div id="lobbyCodeBox"><p id="lobbyCodeLead">Tell your crew this code:</p><div class="code" id="lobbyCode">----</div></div>
+      <div class="crewlist" id="crewList"></div>
+      <div class="picker" id="lobbyPicker"><button class="btn" id="pickPrev" aria-label="Easier level">◀</button><b id="pickName">Level 1</b><button class="btn" id="pickNext" aria-label="Harder level">▶</button></div>
+      <p class="status" id="lobbyStatus" aria-live="polite"></p>
+      <div class="row"><button class="btn sun big" id="lobbyStart">Start</button><button class="btn" id="lobbyLeave">Leave</button></div>
+    </div>
+  </section>
+  <section class="screen" id="s-brief" hidden>
+    <div class="card small-card">
+      <h2 id="briefTitle">Level 1: First Night</h2>
+      <p id="briefText"></p>
+      <div class="news" id="briefNews"></div>
+      <p class="status" id="briefStatus"></p>
+      <div class="row"><button class="btn sun big" id="briefGo">Defend!</button><button class="btn" id="briefBack">Back</button></div>
+    </div>
+  </section>
+  <section class="screen" id="s-pause" hidden>
+    <div class="card small-card">
+      <h2>Paused</h2>
+      <p id="pauseInfo"></p>
+      <div class="row"><button class="btn sun big" id="resumeBtn">Keep playing</button></div>
+      <div class="row"><button class="btn" id="restartBtn">Start the level again</button><button class="btn" id="quitBtn">Leave the level</button></div>
+    </div>
+  </section>
+  <section class="screen" id="s-result" hidden>
+    <div class="card small-card">
+      <h2 id="resTitle">Castle saved!</h2>
+      <div class="stars" id="resStars"></div>
+      <p id="resText"></p>
+      <dl class="stats" id="resStats"></dl>
+      <p class="status" id="resStatus"></p>
+      <div class="row"><button class="btn sun big" id="resNext">Next level</button></div>
+      <div class="row"><button class="btn" id="resAgain">Try again</button><button class="btn" id="resLevels">Levels</button><a class="btn" data-hub hidden href="../">All games</a></div>
+    </div>
+  </section>
+  <section class="screen" id="s-help" hidden>
+    <div class="card small-card">
+      <h2>How to play</h2>
+      <ul class="helplist">
+        <li>🏰 Zombies walk to your castle in waves. If its health runs out, the level is lost.</li>
+        <li>🕹️ Drag the left side of the screen to walk (or W A S D and the arrow keys). Your weapon fires by itself at the nearest zombie.</li>
+        <li>🪓 Walk into trees for 🪵 wood and into rocks for 🪨 stone. Zombies drop 🪙 gold.</li>
+        <li>🔨 Build towers and barricades before each wave. Stand next to a tower to upgrade it with gold.</li>
+        <li>🔫 Switch weapons for each kind of zombie: armour, ghosts, ice and fire each have a weakness.</li>
+        <li>👫 Play with friends: one hosts and shares the code, the others join on their own devices.</li>
+      </ul>
+      <div class="row"><button class="btn sun" id="helpHome">Got it</button></div>
+    </div>
+  </section>
+</main>
+<div class="toast" id="toast" hidden></div>
+<div class="sr" aria-live="polite" id="announce"></div>
+
+<script>
+(function () {
+'use strict';
+/*__SHARED:arcade-core__*/
+
+/* ================= music ================= */
+const SONGS = {
+  menu: { bpm: 84, swing: 0.1, prog: [[50, 57, 60, 65], [48, 55, 60, 64], [46, 53, 58, 62], [45, 52, 57, 60]], bass: [38, 36, 34, 33],
+          keys: [[0, 0.8, 4, 8], [8, 0.5, 3, 6]], bassPat: [[0, 0.8, 0, 8], [8, 0.4, 7, 4]], drums: true, kick: [0, 8], snare: [12], ghost: [],
+          hats: [[0, 0.2], [4, 0.12], [8, 0.2], [12, 0.12]], scale: [74, 77, 79, 81, 84, 86], density: 0.3, seed: 77 },
+  battle: { bpm: 112, swing: 0.06, prog: [[45, 52, 57, 60], [41, 48, 53, 57], [43, 50, 55, 59], [40, 47, 52, 55]], bass: [33, 29, 31, 28],
+            keys: [[0, 0.6, 2, 4], [4, 0.45, 2, 4], [8, 0.6, 2, 4], [12, 0.45, 2, 4]], bassPat: [[0, 0.85, 0, 4], [6, 0.5, 0, 2], [8, 0.8, 7, 4], [14, 0.5, 0, 2]], drums: true,
+            kick: [0, 6, 8], snare: [4, 12], ghost: [10], hats: [[0, 0.2], [2, 0.1], [4, 0.2], [6, 0.1], [8, 0.2], [10, 0.1], [12, 0.2], [14, 0.1]], scale: [69, 72, 74, 76, 79, 81], density: 0.42, seed: 911 }
+};
+/*__SHARED:music-remix__*/
+/*__SHARED:sound__*/
+
+/* ================= the game's parts ================= */
+/*__CASTLE:engine__*/
+/*__CASTLE:bot__*/
+/*__CASTLE:net__*/
+/*__CASTLE:view__*/
+const LEVELS = /*__CASTLE:levels__*/null;
+
+/* ================= records =================
+   castle-crew.v1: levels (per level number: s = best stars 1-3), done and stars (for the arcade's home page), last
+   (the level played last), name (for crew games), settings (auto: auto-fire, quality: auto / high / medium / low).
+   A level won (alone or in a crew) is saved with writeSave() (it marks the day played); settings with writeRecords(). */
+const rec = loadRecords('castle-crew.v1', { v: 1, levels: {}, done: 0, stars: 0, last: 0, name: '', settings: { auto: true, quality: 'auto' } });
+if (!rec.levels || typeof rec.levels !== 'object') rec.levels = {};
+if (!rec.settings || typeof rec.settings !== 'object') rec.settings = { auto: true, quality: 'auto' };
+function totals() { let d = 0, st = 0; for (const k of Object.keys(rec.levels)) { d++; st += rec.levels[k].s || 0; } rec.done = d; rec.stars = st; }
+totals();
+const levelOpen = (n) => n === 1 || !!rec.levels[n - 1];
+const nextLevel = () => { for (let n = 1; n <= LEVELS.length; n++) if (!rec.levels[n]) return n; return LEVELS.length; };
+function unlocksFor(n) {
+  const u = { weapons: [], turrets: [] };
+  for (const L of LEVELS) if (L.n <= n) { (L.unlock.weapons || []).forEach((w) => u.weapons.push(w)); (L.unlock.turrets || []).forEach((t) => u.turrets.push(t)); }
+  return u;
+}
+const levelOf = (n) => LEVELS[n - 1];
+
+/* ================= three.js, loaded when first needed (the arcade's offline cache keeps it) ================= */
+const THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js';
+let threeP = null, viewOn = false;
+function loadThree() { if (!threeP) threeP = import(THREE_URL); return threeP; }
+function qualityNow() {
+  const q = rec.settings.quality;
+  if (q !== 'auto') return q;
+  const small = Math.min(screen.width, screen.height) < 500, mem = navigator.deviceMemory || 4;
+  return small || mem <= 2 ? 'medium' : 'high';
+}
+async function ensureView() {
+  if (viewOn) return true;
+  $('#loading').hidden = false;
+  try {
+    const THREE = await loadThree();
+    CCView.init(THREE, $('#gl'), $('#ov'), qualityNow());
+    CCView.autoQuality(rec.settings.quality === 'auto');
+    viewOn = true;
+    return true;
+  } catch (e) {
+    toast('The 3D world needs the internet the first time. Connect and try again.', 'oops', 4000);
+    return false;
+  } finally { $('#loading').hidden = true; }
+}
+
+/* ================= the game ================= */
+const G = {
+  mode: 'menu',        // menu, solo, host, client
+  level: 1, s: null,   // the level and (host, solo) the running game
+  me: 'me', slot: 0,
+  acc: 0, last: 0, tick: 0, paused: false, over: false, raf: 0,
+  prev: new Map(),     // zombie positions one tick ago (smooth drawing between ticks)
+  remote: {},          // the latest input from each crew member's device (host)
+  pending: [],         // events to send to the crew (host)
+  crew: [],            // [{ id, name, slot }]
+  // a crew member's device (client): its copy of the world from the host
+  mirror: null, snaps: [], cs: null, meP: { x: 0, z: 0, rot: 0 }, sendT: 0, queued: {},
+  input: { mx: 0, mz: 0, fire: false, weapon: 'blaster', gather: -1 },
+  build: null,         // { type, tx, tz } while placing a turret
+  bot: null            // a test hook: a bot plays the local player
+};
+const SPEED = 4.2;
+const playerName = () => (rec.name || 'Player').slice(0, 10);
+
+function startLevel(n, mode, crew, full) {
+  const L = levelOf(n);
+  G.level = n; G.mode = mode; G.over = false; G.paused = false; G.acc = 0; G.tick = 0; G.prev.clear(); G.pending = []; G.remote = {}; G.build = null;
+  G.crew = crew || [{ id: 'me', name: playerName(), slot: 0 }];
+  rec.last = n; writeRecords();
+  if (mode === 'client') {
+    // the map from the level's seed, then everything the host has changed
+    const map = CC.genMap(L.map, L.map.seed);
+    G.cs = { map: map, occ: new Int16Array(map.w * map.h) };
+    G.mirror = { players: [], zombies: [], turrets: new Map(), castle: { hp: L.castle, max: L.castle }, res: [0, 0, 0], wave: [0, 'build', 0, 0, 0], unlocks: unlocksFor(n) };
+    G.snaps = [];
+    if (full) applyFull(full);
+    const meSlot = (G.crew.find((c) => c.id === G.me) || { slot: 0 }).slot, g = CC.gatePoint(map, meSlot);
+    G.meP = { x: g.x, z: g.z, rot: 0, down: 0 };
+    G.s = null;
+    CCView.setMap(map);
+  } else {
+    G.s = CC.newGame(L, G.crew, n * 7919 + 13, unlocksFor(n));
+    CCView.setMap(G.s.map);
+  }
+  CCView.clearFx();
+  const meNow = G.mode === 'client' ? G.meP : G.s.players.find((p) => p.id === G.me);
+  if (meNow) CCView.snapCamera(meNow.x, meNow.z);
+  G.input.weapon = 'blaster';
+  document.body.classList.remove('menu');
+  showScreen(null);
+  $('#hud').hidden = false;
+  drawWeapons(); updateHud(true); measureHud();
+  Sound.play('battle');
+  const name = Sound.remix(n - 1, 0, 'battle'); if (name && n > 1) toast('♪ ' + name, 'music', 1300);
+  $('#stickHint').hidden = !matchMedia('(pointer: coarse)').matches || rec.done > 1;
+  lockSideways();
+  G.last = performance.now();
+  cancelAnimationFrame(G.raf);
+  G.raf = requestAnimationFrame(loop);
+  announce('Level ' + n + ': ' + L.name + '. Build time before the first wave.');
+}
+
+/* ---- the frame ---- */
+function loop(now) {
+  G.raf = requestAnimationFrame(loop);
+  const dt = Math.min(0.1, (now - G.last) / 1000);
+  G.last = now;
+  if (G.mode === 'menu') return;
+  if (!G.paused || G.mode !== 'solo') {
+    if (G.mode === 'client') clientFrame(dt, now); else hostFrame(dt);
+  }
+  CCView.frame(worldNow(now), G.paused && G.mode === 'solo' ? 0 : dt);
+  updateHud();
+}
+// the host (and a solo game) runs the rules 30 times a second
+function hostFrame(dt) {
+  const s = G.s, me = s.players.find((p) => p.id === G.me);
+  if (me) moveLocal(me, dt, s);
+  G.acc += dt * (G.speed || 1);   // a test can run the rules faster
+  let guard = 0;
+  while (G.acc >= CC.TICK && guard++ < 40) {
+    G.acc -= CC.TICK;
+    for (const zb of s.zombies) G.prev.set(zb.id, [zb.x, zb.z, zb.rot]);
+    const inputs = {};
+    if (me) inputs[me.id] = localInput(me);
+    for (const id of Object.keys(G.remote)) { inputs[id] = G.remote[id]; G.remote[id] = Object.assign({}, G.remote[id], { build: null, upgrade: null, ready: false }); }
+    if (G.bot && me) { inputs[me.id] = CCBot.think(s, me, G.bot, CC.TICK); }
+    const ev = CC.step(s, CC.TICK, inputs);
+    G.tick++;
+    for (const e of ev) onEvent(e);
+    if (G.mode === 'host') {
+      for (const e of ev) G.pending.push(e);
+      if (G.tick % 2 === 0) { const snap = CC.snapshot(s); snap.t = 's'; snap.ev = G.pending; G.pending = []; CCNet.broadcast(snap); }
+    }
+    if (s.result && !G.over) { G.over = true; setTimeout(() => endLevel(s.result), 1600); break; }
+  }
+}
+// what the local player wants this tick
+function localInput(me) {
+  const inp = { x: me.x, z: me.z, rot: me.rot, fire: rec.settings.auto ? true : G.input.fire, weapon: G.input.weapon, gather: G.input.gather };
+  if (G.queued.build) { inp.build = G.queued.build; G.queued.build = null; }
+  if (G.queued.upgrade) { inp.upgrade = G.queued.upgrade; G.queued.upgrade = null; }
+  if (G.queued.ready) { inp.ready = true; G.queued.ready = false; }
+  if (G.build) inp.fire = false;   // no shooting while placing a tower
+  return inp;
+}
+// move the local player with the stick or keys; walking into a tree or rock chops or mines it
+function moveLocal(p, dt, collide) {
+  G.input.gather = -1;
+  if (p.down) { p.moving = false; return; }
+  let mx = G.input.mx, mz = G.input.mz;
+  const k = keys;
+  if (k.left) mx -= 1; if (k.right) mx += 1; if (k.up) mz -= 1; if (k.down) mz += 1;
+  const len = Math.hypot(mx, mz);
+  if (len > 1) { mx /= len; mz /= len; }
+  p.moving = len > 0.15;
+  if (!p.moving) return;
+  const hit = CC.movePlayer(collide, p, mx * SPEED * dt, mz * SPEED * dt);
+  p.rot = Math.atan2(mx, mz);
+  if (hit >= 0) {
+    const t = collide.map.tiles[hit];
+    if (t === CC.T.TREE || t === CC.T.ROCK) G.input.gather = hit;
+  }
+}
+
+/* ---- a crew member's device ---- */
+function clientFrame(dt, now) {
+  const me = G.meP;
+  const host = G.mirror.players.find((p) => p.id === G.me);
+  if (host) {
+    me.down = host.down;
+    if (host.down > 0) { me.x = host.x; me.z = host.z; }
+    else if (Math.hypot(host.x - me.x, host.z - me.z) > 2.2) { me.x = host.x; me.z = host.z; }   // the host moved us (back to the castle)
+  }
+  moveLocal(me, dt, G.cs);
+  G.sendT -= dt;
+  if (G.sendT <= 0) {
+    G.sendT = 0.05;
+    const m = { t: 'in', x: Math.round(me.x * 100) / 100, z: Math.round(me.z * 100) / 100, rot: Math.round(me.rot * 100) / 100, fire: rec.settings.auto ? !G.build : G.input.fire, weapon: G.input.weapon, gather: G.input.gather };
+    if (G.queued.build) { m.build = G.queued.build; G.queued.build = null; }
+    if (G.queued.upgrade) { m.upgrade = G.queued.upgrade; G.queued.upgrade = null; }
+    if (G.queued.ready) { m.ready = true; G.queued.ready = false; }
+    CCNet.send(m);
+  }
+}
+function applyFull(f) {
+  const m = G.cs.map;
+  for (let i = 0; i < m.tiles.length; i++) { m.tiles[i] = f.tiles[i]; m.life[i] = f.life[i]; }
+  G.cs.occ.fill(0);
+  G.mirror.turrets.clear();
+  for (const t of f.turrets) { G.mirror.turrets.set(t.id, Object.assign({ rot: 0 }, t)); G.cs.occ[t.tz * m.w + t.tx] = t.id; }
+  G.mirror.unlocks = f.unlocks;
+  onSnap(f.snap);
+}
+function onSnap(snap) {
+  G.snaps.push({ at: performance.now(), s: snap });
+  if (G.snaps.length > 4) G.snaps.shift();
+  const M = G.mirror;
+  M.castle.hp = snap.c; M.res = snap.r; M.wave = snap.w;
+  M.players = snap.p.map((q) => ({ id: q[0], x: q[1], z: q[2], rot: q[3], hp: q[4], weapon: q[5], down: q[6], act: q[7], kills: q[8] }));
+  for (const t of snap.t) { const tu = M.turrets.get(t[0]); if (tu) { tu.hp = t[1]; tu.rot = t[2]; tu.lvl = t[3]; } }
+}
+// the world to draw now: the host's own state, or the client's copy (drawn a little in the past, smoothly)
+function worldNow(now) {
+  const crewInfo = (id) => G.crew.find((c) => c.id === id) || { name: '?', slot: 0 };
+  if (G.mode !== 'client') {
+    const s = G.s, a = G.acc / CC.TICK;
+    return {
+      local: G.me, castle: s.castle,
+      players: s.players.map((p) => ({ id: p.id, slot: p.slot, name: p.name, x: p.x, z: p.z, rot: p.rot, hp: p.hp, weapon: p.weapon, down: p.down, act: p.actT > 0 ? p.act : '', moving: p.moving || (p.id !== G.me && remoteMoving(p)) })),
+      zombies: s.zombies.map((zb) => { const q = G.prev.get(zb.id); return { id: zb.id, type: zb.type, x: q ? q[0] + (zb.x - q[0]) * a : zb.x, z: q ? q[1] + (zb.z - q[1]) * a : zb.z, rot: zb.rot, hpPct: zb.hp / zb.max * 100, flags: (zb.under ? 1 : 0) | (zb.slowT > 0 ? 2 : 0) | (zb.burnT > 0 ? 4 : 0) | (zb.actT > 0 ? 8 : 0) | (zb.hitT > 0 ? 16 : 0) }; }),
+      turrets: s.turrets.map((t) => ({ id: t.id, type: t.type, tx: t.tx, tz: t.tz, lvl: t.lvl, hp: t.hp, max: t.max, rot: t.rot }))
+    };
+  }
+  // client: between the two snapshots around (now - 110 ms)
+  const rt = now - 110, S = G.snaps;
+  let a = S[S.length - 1], b = a, k = 0;
+  for (let i = S.length - 1; i > 0; i--) if (S[i - 1].at <= rt) { a = S[i - 1]; b = S[i]; k = Math.max(0, Math.min(1, (rt - a.at) / Math.max(1, b.at - a.at))); break; }
+  const zs = [], pa = new Map();
+  if (a) for (const q of a.s.z) pa.set(q[0], q);
+  if (b) for (const q of b.s.z) {
+    const o = pa.get(q[0]) || q;
+    zs.push({ id: q[0], type: CC.ZOMBIE_ORDER[q[1]], x: o[2] + (q[2] - o[2]) * k, z: o[3] + (q[3] - o[3]) * k, rot: q[4], hpPct: q[5], flags: q[6] });
+  }
+  const players = [];
+  const pmap = new Map(); if (a) for (const q of a.s.p) pmap.set(q[0], q);
+  if (b) for (const q of b.s.p) {
+    const info = crewInfo(q[0]), o = pmap.get(q[0]) || q;
+    if (q[0] === G.me) { const me = G.meP; players.push({ id: q[0], slot: info.slot, name: info.name, x: me.x, z: me.z, rot: q[7] === 'fire' ? q[3] : me.rot, hp: q[4], weapon: G.input.weapon, down: q[6], act: q[7], moving: me.moving }); }
+    else players.push({ id: q[0], slot: info.slot, name: info.name, x: o[1] + (q[1] - o[1]) * k, z: o[2] + (q[2] - o[2]) * k, rot: q[3], hp: q[4], weapon: q[5], down: q[6], act: q[7], moving: Math.hypot(q[1] - o[1], q[2] - o[2]) > 0.02 });
+  }
+  return { local: G.me, castle: G.mirror.castle, players: players, zombies: zs, turrets: Array.from(G.mirror.turrets.values()) };
+}
+const lastPos = new Map();
+function remoteMoving(p) { const q = lastPos.get(p.id); lastPos.set(p.id, [p.x, p.z]); return q ? Math.hypot(q[0] - p.x, q[1] - p.z) > 0.004 : false; }
+
+/* ---- events: pictures, sounds and words ---- */
+let castleSoundT = 0;
+function onEvent(e) {
+  CCView.fx(e, G.me);
+  switch (e.e) {
+    case 'wave':
+      if (e.state === 'fight') { const W = (G.s ? G.s.waves.length : levelOf(G.level).waves.length); banner('Wave ' + (e.idx + 1) + ' of ' + W + ' is coming!', 'fight big', 2200); Sound.sfx.wrong(); announce('Wave ' + (e.idx + 1) + ' is coming'); }
+      else { banner('Wave cleared! Build and get ready.', 'big', 2000); Sound.sfx.star(); }
+      break;
+    case 'cleared': if (e.bonus) toast('Wave bonus: +' + e.bonus + ' 🪙', 'good'); break;
+    case 'die': if (Math.random() < 0.35) Sound.sfx.orb(); break;
+    case 'boom': Sound.sfx.pad(); break;
+    case 'castle': if (performance.now() > castleSoundT) { castleSoundT = performance.now() + 600; Sound.sfx.die(); } break;
+    case 'built': Sound.sfx.check(); if (G.mode === 'client') { const t = e.t; G.mirror.turrets.set(t.id, Object.assign({ rot: 0 }, t)); G.cs.occ[t.tz * G.cs.map.w + t.tx] = t.id; } break;
+    case 'upgraded': Sound.sfx.star(); if (G.mode === 'client') { const tu = G.mirror.turrets.get(e.t.id); if (tu) Object.assign(tu, e.t); } break;
+    case 'wreck': Sound.sfx.pad(); if (G.mode === 'client') { const tu = G.mirror.turrets.get(e.id); if (tu) { G.cs.occ[tu.tz * G.cs.map.w + tu.tx] = 0; G.mirror.turrets.delete(e.id); } } break;
+    case 'tile': if (G.mode === 'client') G.cs.map.tiles[e.i] = e.t; Sound.sfx.click(); break;
+    case 'chop': if (G.mode === 'client') G.cs.map.life[e.i] = e.left; if (e.id === G.me) Sound.sfx.click(); break;
+    case 'nobuild': if (e.id === G.me) toast(e.why === 'cost' ? 'Not enough to build that yet' : e.why === 'far' ? 'Walk closer to build there' : 'You cannot build there', 'oops'); break;
+    case 'down': if (e.id === G.me) { toast('Ouch! Back on your feet in 5 seconds…', 'oops', 2400); Sound.sfx.die(); } break;
+    case 'up': if (e.id === G.me) toast('Back in action!', 'good'); break;
+    case 'won': Sound.sfx.win(); break;
+    case 'lost': Sound.sfx.die(); break;
+  }
+}
+let bannerT = 0;
+function banner(text, cls, ms) { bannerT = performance.now() + (ms || 1800); const b = $('#banner'); b.className = cls || ''; $('#bannerTxt').textContent = text; b.hidden = false; $('#readyBtn').hidden = true; measureHud(); }
+
+/* ================= the HUD ================= */
+let hudCache = {};
+function view() {
+  // what the HUD shows, from the host's state or the client's copy
+  if (G.mode === 'client') { const M = G.mirror; return { castle: M.castle, res: M.res, wave: M.wave, players: M.players, unlocks: M.unlocks, waves: levelOf(G.level).waves.length }; }
+  const s = G.s;
+  return { castle: s.castle, res: [s.res.wood, s.res.stone, s.res.gold], wave: [s.wave.idx, s.wave.state, Math.ceil(s.wave.timer), s.wave.ready || 0, s.wave.state === 'fight' ? s.wave.groups.reduce((n, g) => n + g.left, 0) : 0], players: s.players, unlocks: s.unlocks, waves: s.waves.length, zombies: s.zombies.length };
+}
+function setText(id, v) { if (hudCache[id] !== v) { hudCache[id] = v; $(id).textContent = v; return true; } return false; }
+function updateHud(force) {
+  if (force) hudCache = {};
+  if (G.mode === 'menu') return;
+  const v = view();
+  setText('#lvChip', 'Level ' + G.level + ' · Wave ' + Math.min(v.wave[0] + 1, v.waves) + '/' + v.waves);
+  const pct = Math.max(0, v.castle.hp / v.castle.max);
+  if (setText('#castleNum', String(Math.ceil(v.castle.hp)))) $('#castleFill').style.width = (pct * 100) + '%';
+  ['wood', 'stone', 'gold'].forEach((k, i) => { if (setText('#' + k, String(v.res[i])) && !force) { const c = $('#' + k + 'Chip'); c.classList.remove('gain'); void c.offsetWidth; c.classList.add('gain'); } });
+  // the crew
+  const crewKey = v.players.map((p) => p.id + ':' + Math.round(p.hp / 10) + ':' + (p.down > 0 ? 1 : 0)).join('|');
+  if (G.crew.length > 1 && hudCache.crew !== crewKey) {
+    hudCache.crew = crewKey;
+    $('#crewHud').innerHTML = v.players.map((p) => { const c = G.crew.find((q) => q.id === p.id) || { name: '?', slot: 0 }; return '<span><i style="background:#' + CCView.CREW[c.slot % 4].shirt.toString(16).padStart(6, '0') + '"></i>' + escapeHtml(c.name) + (p.down > 0 ? ' 💫' : '<u><em style="width:' + Math.max(0, p.hp) + '%"></em></u>') + '</span>'; }).join('');
+  } else if (G.crew.length <= 1 && hudCache.crew !== '') { hudCache.crew = ''; $('#crewHud').innerHTML = ''; }
+  // the banner: build time, or how many zombies are left
+  if (performance.now() > bannerT) {
+    const b = $('#banner'), state = v.wave[1];
+    if (state === 'build') {
+      const readyMask = v.wave[3], myReady = G.crew.length > 1 ? !!(readyMask & (1 << slotOf(G.me))) : false;
+      const ready = G.crew.length > 1 ? ' · ' + countBits(readyMask) + '/' + G.crew.length + ' ready' : '';
+      if (setText('#bannerTxt', 'Wave ' + (v.wave[0] + 1) + ' in ' + v.wave[2] + ' s' + ready) || b.hidden) { b.className = ''; b.hidden = false; }
+      $('#readyBtn').hidden = myReady; $('#readyBtn').textContent = v.wave[0] === 0 ? 'Start the wave' : 'Ready!';
+    } else if (state === 'fight') {
+      const left = (G.mode === 'client' ? G.snaps.length ? G.snaps[G.snaps.length - 1].s.z.length : 0 : G.s.zombies.length) + v.wave[4];
+      if (setText('#bannerTxt', '🧟 ' + left + ' zombies left') || b.hidden || b.className !== 'fight') { b.className = 'fight'; b.hidden = false; }
+      $('#readyBtn').hidden = true;
+    } else b.hidden = true;
+  }
+  // weapons unlocked, the build tray's costs, the upgrade button
+  const me = v.players.find((p) => p.id === G.me);
+  if (!G.build) ctxButton(me);
+  if (!$('#tray').hidden) updateTray(v);
+  const fireKey = rec.settings.auto ? 'auto' : 'manual';
+  if (hudCache.fire !== fireKey) { hudCache.fire = fireKey; $('#fireBtn').hidden = rec.settings.auto; }
+}
+const countBits = (m) => { let n = 0; while (m) { n += m & 1; m >>= 1; } return n; };
+const slotOf = (id) => (G.crew.find((c) => c.id === id) || { slot: 0 }).slot;
+function escapeHtml(t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+/* ---- weapons ---- */
+function drawWeapons() {
+  const u = view().unlocks.weapons;
+  $('#weapons').innerHTML = CC.WEAPON_ORDER.filter((k) => u.indexOf(k) >= 0).map((k, i) => '<button class="wpn' + (k === G.input.weapon ? ' on' : '') + '" data-w="' + k + '" aria-label="' + CC.WEAPONS[k].name + '" title="' + CC.WEAPONS[k].name + ': ' + CC.WEAPONS[k].tip + '">' + CC.WEAPONS[k].icon + '<small>' + (i + 1) + '</small></button>').join('');
+}
+function setWeapon(k) {
+  if (view().unlocks.weapons.indexOf(k) < 0) return;
+  G.input.weapon = k;
+  $$('#weapons .wpn').forEach((b) => b.classList.toggle('on', b.dataset.w === k));
+  Sound.sfx.click();
+  toast(CC.WEAPONS[k].icon + ' ' + CC.WEAPONS[k].name + ': ' + CC.WEAPONS[k].tip, 'hello', 1800);
+}
+
+/* ---- building ---- */
+function openTray() {
+  if (G.mode === 'menu') return;
+  $('#tray').hidden = false; $('#dock').hidden = true;
+  G.build = null; CCView.setGhost(null);
+  $('#placeBtn').hidden = true;
+  $('#trayTip').textContent = 'Pick a tower, then tap the map where it should go.';
+  updateTray(view(), true);
+  Sound.sfx.click();
+}
+function closeTray() { $('#tray').hidden = true; $('#dock').hidden = false; G.build = null; CCView.setGhost(null); }
+function costText(c) { return [c.wood ? c.wood + '🪵' : '', c.stone ? c.stone + '🪨' : '', c.gold ? c.gold + '🪙' : ''].filter(Boolean).join(' '); }
+let trayKey = '';
+function updateTray(v, force) {
+  const u = v.unlocks.turrets, res = { wood: v.res[0], stone: v.res[1], gold: v.res[2] };
+  const key = u.join(',') + '|' + v.res.join(',') + '|' + (G.build ? G.build.type : '');
+  if (!force && key === trayKey) return;
+  trayKey = key;
+  $('#cards').innerHTML = CC.TURRET_ORDER.filter((k) => u.indexOf(k) >= 0).map((k) => {
+    const U = CC.TURRETS[k], ok = CC.canAfford({ res: res }, U.cost);
+    return '<button class="tc' + (G.build && G.build.type === k ? ' on' : '') + '" data-t="' + k + '"' + (ok ? '' : ' disabled') + ' title="' + U.tip + '"><i aria-hidden="true">' + U.icon + '</i><b>' + U.name + '</b><small>' + costText(U.cost) + '</small></button>';
+  }).join('');
+}
+function pickTurret(type) {
+  const me = myPlayer();
+  if (!me) return;
+  const tx = Math.floor(me.x + Math.sin(me.rot) * 1.6), tz = Math.floor(me.z + Math.cos(me.rot) * 1.6);
+  G.build = { type: type, tx: tx, tz: tz };
+  $('#trayTip').textContent = CC.TURRETS[type].icon + ' ' + CC.TURRETS[type].name + ': ' + CC.TURRETS[type].tip + ' Tap the map to move it.';
+  $('#placeBtn').hidden = false;
+  updateGhost();
+  updateTray(view(), true);
+  Sound.sfx.click();
+}
+function buildCheckState() {
+  // the rules' building check, for the host's game or the client's copy
+  if (G.mode !== 'client') return G.s;
+  const M = G.mirror;
+  return { map: G.cs.map, occ: G.cs.occ, unlocks: M.unlocks, res: { wood: M.res[0], stone: M.res[1], gold: M.res[2] }, players: M.players.map((p) => ({ x: p.id === G.me ? G.meP.x : p.x, z: p.id === G.me ? G.meP.z : p.z, down: p.down })) };
+}
+function updateGhost() {
+  if (!G.build) { CCView.setGhost(null); return; }
+  const me = myPlayer(), s = buildCheckState(), U = CC.TURRETS[G.build.type];
+  const can = CC.canBuild(s, G.build.type, G.build.tx, G.build.tz, me);
+  CCView.setGhost({ type: G.build.type, tx: G.build.tx, tz: G.build.tz, ok: can.ok, range: U.range ? U.range : 0 });
+  $('#placeBtn').disabled = !can.ok;
+  $('#placeBtn').textContent = can.ok ? '✓ Build here' : can.why === 'cost' ? 'Not enough yet' : can.why === 'far' ? 'Too far: walk closer' : 'Not here';
+}
+function placeTurret() {
+  if (!G.build) return;
+  const b = G.build;
+  G.queued.build = { type: b.type, tx: b.tx, tz: b.tz };
+  // ready for the next one beside it
+  setTimeout(updateGhost, 120);
+}
+function myPlayer() { return G.mode === 'client' ? Object.assign({ id: G.me }, G.meP) : G.s && G.s.players.find((p) => p.id === G.me); }
+// the upgrade button: when standing by a turret that can grow
+function ctxButton(me) {
+  const btn = $('#ctxBtn');
+  if (!me || me.down > 0) { if (!btn.hidden) btn.hidden = true; return; }
+  const px = G.mode === 'client' ? G.meP.x : me.x, pz = G.mode === 'client' ? G.meP.z : me.z;
+  const turrets = G.mode === 'client' ? Array.from(G.mirror.turrets.values()) : G.s.turrets;
+  let best = null, bd = 2.2;
+  for (const t of turrets) { if (t.lvl >= 3 || CC.TURRETS[t.type].kind === 'wall') continue; const d = Math.hypot(t.tx + 0.5 - px, t.tz + 0.5 - pz); if (d < bd) { bd = d; best = t; } }
+  const key = best ? best.id + ':' + best.lvl : '';
+  if (hudCache.ctx === key) return;
+  hudCache.ctx = key;
+  btn.hidden = !best;
+  if (best) { const cost = CC.upgradeCost(best.type, best.lvl); btn.dataset.id = best.id; btn.setAttribute('aria-label', 'Upgrade the ' + CC.TURRETS[best.type].name + ' to level ' + (best.lvl + 1) + ' for ' + cost + ' gold'); btn.innerHTML = '<i aria-hidden="true">⬆️</i><span>Level ' + (best.lvl + 1) + ' · ' + cost + ' 🪙</span>'; }
+}
+
+/* ================= input ================= */
+const keys = { left: false, right: false, up: false, down: false };
+const KEYMAP = { ArrowLeft: 'left', KeyA: 'left', ArrowRight: 'right', KeyD: 'right', ArrowUp: 'up', KeyW: 'up', ArrowDown: 'down', KeyS: 'down' };
+window.addEventListener('keydown', (e) => {
+  if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+  if (KEYMAP[e.code]) { keys[KEYMAP[e.code]] = true; e.preventDefault(); return; }
+  if (G.mode === 'menu') return;
+  if (/^Digit[1-8]$/.test(e.code)) { const u = view().unlocks.weapons, list = CC.WEAPON_ORDER.filter((k) => u.indexOf(k) >= 0), k = list[+e.code.slice(5) - 1]; if (k) setWeapon(k); }
+  else if (e.code === 'KeyB') { if ($('#tray').hidden) openTray(); else closeTray(); }
+  else if (e.code === 'Enter' || (e.code === 'Space' && G.build)) { if (G.build) placeTurret(); e.preventDefault(); }
+  else if (e.code === 'Space' && !rec.settings.auto) { G.input.fire = true; e.preventDefault(); }
+  else if (e.code === 'KeyR') readyUp();
+  else if (e.code === 'KeyU') { const b = $('#ctxBtn'); if (!b.hidden) b.click(); }
+  else if (e.code === 'Escape') { if (G.build || !$('#tray').hidden) closeTray(); else pause(); }
+});
+window.addEventListener('keyup', (e) => { if (KEYMAP[e.code]) keys[KEYMAP[e.code]] = false; if (e.code === 'Space') G.input.fire = false; });
+// the move stick: any finger that goes down on the left half of the map
+const stick = { id: null, x: 0, y: 0 };
+const glEl = $('#gl');
+glEl.addEventListener('pointerdown', (e) => {
+  if (G.mode === 'menu') return;
+  const left = e.clientX < innerWidth * 0.45;
+  if (G.build && !(e.pointerType === 'touch' && left && stick.id === null)) {
+    // choosing a spot for the tower
+    const t = CCView.pick(e.clientX, e.clientY);
+    if (t) {
+      if (G.build.tx === t.tx && G.build.tz === t.tz && !$('#placeBtn').disabled) placeTurret();
+      else { G.build.tx = t.tx; G.build.tz = t.tz; updateGhost(); Sound.sfx.click(); }
+    }
+    return;
+  }
+  if (e.pointerType !== 'mouse' && left && stick.id === null) {
+    stick.id = e.pointerId; stick.x = e.clientX; stick.y = e.clientY;
+    const st = $('#stick'); st.style.left = e.clientX + 'px'; st.style.top = e.clientY + 'px'; st.hidden = false; st.firstElementChild.style.transform = '';
+    $('#stickHint').hidden = true;
+    glEl.setPointerCapture && glEl.setPointerCapture(e.pointerId);
+  }
+});
+glEl.addEventListener('pointermove', (e) => {
+  if (e.pointerId !== stick.id) return;
+  let dx = e.clientX - stick.x, dy = e.clientY - stick.y;
+  const d = Math.hypot(dx, dy), max = 52;
+  if (d > max) { dx = dx / d * max; dy = dy / d * max; }
+  $('#stick').firstElementChild.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
+  // the camera looks north at a slant: screen right is east, screen down is south
+  G.input.mx = dx / max; G.input.mz = dy / max;
+});
+const stickUp = (e) => { if (e.pointerId !== stick.id) return; stick.id = null; G.input.mx = 0; G.input.mz = 0; $('#stick').hidden = true; };
+glEl.addEventListener('pointerup', stickUp); glEl.addEventListener('pointercancel', stickUp);
+glEl.addEventListener('wheel', (e) => { if (G.mode !== 'menu') { CCView.zoom(CCView.camZoom * (e.deltaY > 0 ? 1.08 : 0.93)); e.preventDefault(); } }, { passive: false });
+$('#weapons').addEventListener('click', (e) => { const b = e.target.closest('[data-w]'); if (b) setWeapon(b.dataset.w); });
+$('#buildBtn').addEventListener('click', openTray);
+$('#trayClose').addEventListener('click', () => { closeTray(); Sound.sfx.click(); });
+$('#cards').addEventListener('click', (e) => { const b = e.target.closest('[data-t]'); if (b && !b.disabled) pickTurret(b.dataset.t); });
+$('#placeBtn').addEventListener('click', placeTurret);
+$('#ctxBtn').addEventListener('click', () => { const id = +$('#ctxBtn').dataset.id; if (id) { G.queued.upgrade = id; hudCache.ctx = '?'; } });
+const fireBtn = $('#fireBtn');
+fireBtn.addEventListener('pointerdown', (e) => { G.input.fire = true; fireBtn.classList.add('held'); e.preventDefault(); });
+['pointerup', 'pointercancel', 'pointerleave'].forEach((t) => fireBtn.addEventListener(t, () => { G.input.fire = false; fireBtn.classList.remove('held'); }));
+function readyUp() { if (G.mode === 'menu') return; G.queued.ready = true; $('#readyBtn').hidden = true; Sound.sfx.check(); }
+$('#readyBtn').addEventListener('click', readyUp);
+$('#zoomBtn').addEventListener('click', () => { const z = CCView.camZoom; CCView.zoom(z < 0.9 ? 1 : z < 1.2 ? 1.35 : 0.75); Sound.sfx.click(); });
+$('#pauseBtn').addEventListener('click', (e) => { e.stopPropagation(); pause(); });
+const upright = () => innerHeight > innerWidth && matchMedia('(pointer: coarse)').matches;
+window.addEventListener('resize', () => {
+  if (viewOn) CCView.resize();
+  measureHud();
+  if (upright() && G.mode === 'solo' && !G.over && !G.paused) pause();
+});
+// where the browser allows it (Android, full screen), hold the screen sideways
+function lockSideways() { try { if (screen.orientation && screen.orientation.lock) screen.orientation.lock('landscape').catch(() => {}); } catch (e) { /* not here */ } }
+// the banner goes between the HUD's two sides when there is room for it, else under the HUD
+function measureHud() {
+  const hud = $('#hud'); if (!hud || hud.hidden) return;
+  const L = $('.hud-left').getBoundingClientRect(), Rr = $('.hud-right').getBoundingClientRect(), b = $('#banner').getBoundingClientRect();
+  const room = Rr.left - L.right - 24, below = Math.max(L.bottom, $('.hud-right').getBoundingClientRect().bottom) + 8;
+  document.documentElement.style.setProperty('--banner-top', (room >= Math.max(b.width, 340) ? Math.round(L.top) : Math.round(below)) + 'px');
+}
+
+/* ================= menus ================= */
+function goHome() {
+  if (G.mode !== 'menu') leaveGame(true);
+  G.mode = 'menu';
+  document.body.classList.add('menu');
+  $('#hud').hidden = true; closeTray();
+  Sound.play('menu');
+  renderHome();
+  showScreen('home', false);
+}
+function renderHome() {
+  const n = nextLevel(), started = rec.done > 0;
+  $('#playBtn').innerHTML = (started ? 'Play level ' + n : 'Play') + '<small style="display:block;font:700 .9rem/1.2 var(--font-body)">' + escapeHtml(levelOf(n).name) + '</small>';
+  $('#autoBtn').textContent = 'Auto-fire: ' + (rec.settings.auto ? 'on' : 'off');
+  $('#qualityBtn').textContent = 'Graphics: ' + rec.settings.quality;
+  $('#soundBtn').textContent = save.settings.music > 0 ? 'Music: on' : 'Music: off';
+  arcadeLinks();
+}
+function showLevels() {
+  const next = nextLevel();
+  $('#levelGrid').innerHTML = LEVELS.map((L) => {
+    const r = rec.levels[L.n], open = levelOpen(L.n);
+    return '<button class="lvl' + (r ? ' done' : L.n === next ? ' next' : '') + '" data-n="' + L.n + '"' + (open ? '' : ' disabled') + ' aria-label="Level ' + L.n + ', ' + L.name + (r ? ', ' + r.s + ' stars' : open ? '' : ', locked') + '"><b>' + (open ? L.n : '🔒') + '</b><span class="ms" aria-hidden="true">' + starRow(r ? r.s : 0) + '</span><small aria-hidden="true">' + escapeHtml(L.name) + '</small></button>';
+  }).join('');
+  $('#levelsNote').textContent = rec.done + ' of ' + LEVELS.length + ' levels won · ' + rec.stars + ' of ' + LEVELS.length * 3 + ' stars';
+  showScreen('levels');
+}
+// the briefing before a level: its story and what is new
+function brief(n, mode) {
+  const L = levelOf(n);
+  G.briefFor = n; G.briefMode = mode;
+  $('#briefTitle').textContent = 'Level ' + n + ': ' + L.name;
+  $('#briefText').textContent = L.intro;
+  const news = [];
+  (L.unlock.zombies || []).forEach((k) => { const Z = CC.ZOMBIES[k]; news.push('<div><i aria-hidden="true">' + (Z.boss ? '👑' : '🧟') + '</i><span><b>' + Z.name + '</b>' + escapeHtml(Z.tip) + '</span></div>'); });
+  (L.unlock.weapons || []).forEach((k) => { const W = CC.WEAPONS[k]; news.push('<div><i aria-hidden="true">' + W.icon + '</i><span><b>New weapon: ' + W.name + '</b>' + escapeHtml(W.tip) + '</span></div>'); });
+  (L.unlock.turrets || []).forEach((k) => { const U = CC.TURRETS[k]; news.push('<div><i aria-hidden="true">' + U.icon + '</i><span><b>New: ' + U.name + ' (' + costText(U.cost) + ')</b>' + escapeHtml(U.tip) + '</span></div>'); });
+  $('#briefNews').innerHTML = news.join('');
+  const client = mode === 'client';
+  $('#briefGo').hidden = client; $('#briefBack').hidden = client;
+  $('#briefStatus').textContent = client ? 'The host starts the level…' : '';
+  showScreen('brief');
+  if (save.settings.speak) Speech.say(L.name + '. ' + L.intro);
+}
+async function goPlay(n, mode) {
+  if (!(await ensureView())) return;
+  if (mode === 'host') {
+    const L = levelOf(n);
+    CCNet.broadcast({ t: 'start', level: n, crew: G.crew });
+    startLevel(n, 'host', G.crew);
+    return L;
+  }
+  startLevel(n, 'solo', [{ id: 'me', name: playerName(), slot: 0 }]);
+}
+function pause() {
+  if (G.mode === 'menu' || G.over) return;
+  G.paused = true;
+  $('#pauseInfo').textContent = 'Level ' + G.level + ': ' + levelOf(G.level).name + (G.mode === 'solo' ? '' : '. The game keeps going for your crew!');
+  $('#restartBtn').hidden = G.mode === 'client';
+  showScreen('pause');
+}
+function resume() { G.paused = false; showScreen(null); G.last = performance.now(); }
+function leaveGame(quiet) {
+  cancelAnimationFrame(G.raf);
+  if (G.mode === 'host' || G.mode === 'client') { CCNet.broadcast({ t: 'bye' }); CCNet.close(); }
+  G.mode = 'menu'; G.s = null; G.mirror = null; G.bot = null;
+  closeTray();
+}
+function endLevel(result) {
+  if (G.mode === 'menu') return;
+  const L = levelOf(G.level), v = view(), pct = Math.round(v.castle.hp / v.castle.max * 100);
+  const stars = result === 'won' ? (pct >= 80 ? 3 : pct >= 50 ? 2 : 1) : 0;
+  const kills = G.mode === 'client' ? (G.mirror.players.find((p) => p.id === G.me) || { kills: 0 }).kills : (G.s.players.find((p) => p.id === G.me) || { kills: 0 }).kills;
+  if (G.mode === 'host') CCNet.broadcast({ t: 'end', result: result, stars: stars, pct: pct, stats: G.s.stats, kills: G.s.players.map((p) => [p.id, p.kills]) });
+  showResult(result, stars, pct, G.mode !== 'client' ? G.s.stats : (G.lastStats || {}), kills);
+}
+function showResult(result, stars, pct, stats, kills) {
+  const n = G.level, L = levelOf(n);
+  if (result === 'won') {
+    const prev = rec.levels[n];
+    rec.levels[n] = { s: Math.max(prev ? prev.s : 0, stars) };
+    totals(); writeSave();
+  }
+  $('#resTitle').textContent = result === 'won' ? (stars === 3 ? 'Perfect defence!' : 'Castle saved!') : 'The castle fell…';
+  $('#resStars').innerHTML = result === 'won' ? starRow(stars) : '';
+  $('#resText').textContent = result === 'won' ? 'Level ' + n + ', ' + L.name + ': the castle kept ' + pct + '% of its health. ' + (stars < 3 ? '3 stars at 80% or more.' : '') : 'Try more towers on the roads, and switch weapons for each kind of zombie.';
+  $('#resStats').innerHTML = stat('Zombies', stats.kills || 0) + stat('Your hits', kills || 0) + stat('Towers', stats.built || 0) + stat('Trees', stats.chopped || 0);
+  const client = G.mode === 'client';
+  $('#resNext').hidden = client || result !== 'won' || n >= LEVELS.length;
+  $('#resAgain').hidden = client;
+  $('#resStatus').textContent = client ? 'The host picks the next level…' : n >= LEVELS.length && result === 'won' ? 'You beat all 20 levels! More are coming.' : '';
+  G.over = true;
+  closeTray();
+  showScreen('result');
+  if (result === 'won') for (let k = 0; k < stars; k++) setTimeout(() => Sound.sfx.star(), 300 + k * 220);
+  announce(result === 'won' ? 'Castle saved. ' + stars + ' stars.' : 'The castle fell.');
+}
+
+/* ================= playing with friends ================= */
+function crewScreen() {
+  $('#nameIn').value = rec.name || '';
+  $('#crewStatus').textContent = ''; $('#crewStatus').classList.remove('bad');
+  showScreen('crew');
+}
+function saveName() { const v = $('#nameIn').value.trim().slice(0, 10); rec.name = v || rec.name || 'Player'; writeRecords(); }
+const crewColour = (slot) => '#' + CCView.CREW[slot % 4].shirt.toString(16).padStart(6, '0');
+async function hostGame(local) {
+  saveName();
+  status('Opening a room…');
+  try {
+    G.me = 'host'; G.crew = [{ id: 'host', name: playerName(), slot: 0 }];
+    G.lobbyLevel = Math.min(nextLevel(), LEVELS.length);
+    const r = await CCNet.host({ local: local }, {
+      join: (id, hello) => {
+        const used = new Set(G.crew.map((c) => c.slot));
+        if (G.crew.length >= 4) { CCNet.sendTo(id, { t: 'full' }); CCNet.drop(id); return; }
+        let slot = 1; while (used.has(slot)) slot++;
+        const c = { id: id, name: String((hello && hello.name) || 'Friend').slice(0, 10), slot: slot };
+        G.crew.push(c);
+        CCNet.sendTo(id, { t: 'welcome', you: id, crew: G.crew, level: G.lobbyLevel, host: playerName() });
+        if (G.mode === 'host' && G.s) {
+          CC.addPlayer(G.s, c);
+          CCNet.sendTo(id, { t: 'start', level: G.level, crew: G.crew, full: CC.fullState(G.s) });
+          toast(c.name + ' joined the crew!', 'good');
+        }
+        CCNet.broadcast({ t: 'lobby', crew: G.crew, level: G.lobbyLevel });
+        renderLobby();
+        Sound.sfx.check();
+      },
+      leave: (id) => {
+        const c = G.crew.find((q) => q.id === id);
+        G.crew = G.crew.filter((q) => q.id !== id);
+        if (G.s) CC.removePlayer(G.s, id);
+        delete G.remote[id];
+        CCNet.broadcast({ t: 'lobby', crew: G.crew, level: G.lobbyLevel });
+        if (c) toast(c.name + ' left', 'oops');
+        renderLobby();
+      },
+      msg: (id, d) => {
+        if (!d || typeof d !== 'object') return;
+        if (d.t === 'in') {
+          const prev = G.remote[id] || {};
+          // keep one-off wishes until a tick has used them
+          G.remote[id] = { x: +d.x, z: +d.z, rot: +d.rot, fire: !!d.fire, weapon: d.weapon, gather: typeof d.gather === 'number' ? d.gather : -1, build: d.build || prev.build || null, upgrade: d.upgrade || prev.upgrade || null, ready: !!d.ready || !!prev.ready };
+        }
+      }
+    });
+    G.mode = 'menu';
+    G.lobbyRole = 'host'; G.code = r.code;
+    renderLobby();
+    showScreen('lobby');
+  } catch (e) {
+    status(e && e.message === 'offline' ? 'Playing with friends needs the internet.' : 'Could not open a room. Check the internet and try again.', true);
+  }
+}
+async function joinGame(code, local) {
+  saveName();
+  code = String(code || '').trim().toUpperCase();
+  if (!/^[A-Z]{4}$/.test(code)) { status('Type the 4-letter code from the host.', true); return; }
+  status('Joining ' + code + '…');
+  try {
+    const r = await CCNet.join(code, { local: local, hello: { name: playerName() } }, {
+      msg: (d) => clientMsg(d),
+      lost: () => { if (G.mode !== 'menu' || G.lobbyRole === 'client') { toast('The host left the game.', 'oops', 3000); G.lobbyRole = ''; goHome(); } }
+    });
+    G.me = r.id; G.lobbyRole = 'client'; G.code = code;
+  } catch (e) {
+    status(e && e.type === 'nohost' ? 'No game with that code. Check the code with the host.' : e && e.message === 'offline' ? 'Playing with friends needs the internet.' : 'Could not join. Try again.', true);
+  }
+}
+function status(t, bad) { const s = $('#crewStatus'); s.textContent = t; s.classList.toggle('bad', !!bad); }
+async function clientMsg(d) {
+  if (!d || typeof d !== 'object') return;
+  if (d.t === 'welcome') { G.me = d.you; G.crew = d.crew; G.lobbyLevel = d.level; G.hostName = d.host; renderLobby(); showScreen('lobby'); Sound.sfx.check(); }
+  else if (d.t === 'lobby') { G.crew = d.crew; G.lobbyLevel = d.level; if (G.mode === 'menu') renderLobby(); }
+  else if (d.t === 'full') { status('That crew is full (4 players).', true); CCNet.close(); }
+  else if (d.t === 'brief') { if (G.mode === 'menu') brief(d.level, 'client'); }
+  else if (d.t === 'start') {
+    G.crew = d.crew;
+    if (!(await ensureView())) return;
+    startLevel(d.level, 'client', d.crew, d.full);
+  } else if (d.t === 's') {
+    if (G.mode !== 'client') return;
+    onSnap(d);
+    if (d.ev) for (const e of d.ev) onEvent(e);
+  } else if (d.t === 'end') {
+    if (G.mode !== 'client') return;
+    G.lastStats = d.stats;
+    const mine = (d.kills || []).find((q) => q[0] === G.me);
+    showResult(d.result, d.stars, d.pct, d.stats, mine ? mine[1] : 0);
+  } else if (d.t === 'bye') { toast('The host left the game.', 'oops', 3000); G.lobbyRole = ''; goHome(); }
+}
+function renderLobby() {
+  const host = G.lobbyRole === 'host';
+  $('#lobbyTitle').textContent = host ? 'Your crew' : 'Crew of ' + (G.hostName || 'the host');
+  $('#lobbyCodeLead').textContent = host ? 'Tell your crew this code:' : 'You joined:';
+  $('#lobbyCode').textContent = G.code || '----';
+  $('#crewList').innerHTML = G.crew.map((c) => '<div><i style="background:' + crewColour(c.slot) + '"></i>' + escapeHtml(c.name) + '<small>' + (c.slot === 0 ? 'host' : c.id === G.me ? 'you' : '') + '</small></div>').join('');
+  const L = levelOf(G.lobbyLevel || 1);
+  $('#pickName').textContent = 'Level ' + L.n + ': ' + L.name;
+  $('#pickPrev').hidden = $('#pickNext').hidden = !host;
+  $('#lobbyStart').hidden = !host;
+  $('#lobbyStatus').textContent = host ? (G.crew.length > 1 ? G.crew.length + ' in the crew. Start when everyone is here!' : 'Waiting for friends… you can also start alone.') : 'Waiting for the host to start…';
+}
+function pickLevel(d) {
+  let n = (G.lobbyLevel || 1) + d;
+  n = Math.max(1, Math.min(LEVELS.length, n));
+  if (!levelOpen(n)) { toast('Win level ' + (n - 1) + ' first', 'oops'); return; }
+  G.lobbyLevel = n;
+  CCNet.broadcast({ t: 'lobby', crew: G.crew, level: n });
+  renderLobby(); Sound.sfx.click();
+}
+
+/* ================= buttons ================= */
+$('#playBtn').addEventListener('click', () => brief(nextLevel(), 'solo'));
+$('#levelsBtn').addEventListener('click', showLevels);
+$('#levelsHome').addEventListener('click', goHome);
+$('#levelGrid').addEventListener('click', (e) => { const b = e.target.closest('[data-n]'); if (b && !b.disabled) brief(+b.dataset.n, 'solo'); });
+$('#helpBtn').addEventListener('click', () => showScreen('help'));
+$('#helpHome').addEventListener('click', goHome);
+$('#crewBtn').addEventListener('click', crewScreen);
+$('#crewHome').addEventListener('click', () => { saveName(); goHome(); });
+$('#hostBtn').addEventListener('click', () => hostGame(false));
+$('#joinBtn').addEventListener('click', () => joinGame($('#codeIn').value, false));
+$('#codeIn').addEventListener('input', (e) => { e.target.value = e.target.value.toUpperCase().replace(/[^A-Z]/g, '').slice(0, 4); });
+$('#codeIn').addEventListener('keydown', (e) => { if (e.key === 'Enter') joinGame($('#codeIn').value, false); });
+$('#pickPrev').addEventListener('click', () => pickLevel(-1));
+$('#pickNext').addEventListener('click', () => pickLevel(1));
+$('#lobbyStart').addEventListener('click', () => { CCNet.broadcast({ t: 'brief', level: G.lobbyLevel }); brief(G.lobbyLevel, 'host'); });
+$('#lobbyLeave').addEventListener('click', () => { CCNet.close(); G.lobbyRole = ''; goHome(); });
+$('#briefGo').addEventListener('click', () => { Sound.init(); goPlay(G.briefFor, G.briefMode); });
+$('#briefBack').addEventListener('click', () => { if (G.briefMode === 'host') { renderLobby(); showScreen('lobby'); } else goHome(); });
+$('#resumeBtn').addEventListener('click', resume);
+$('#restartBtn').addEventListener('click', () => { if (G.mode === 'host') { CCNet.broadcast({ t: 'start', level: G.level, crew: G.crew }); startLevel(G.level, 'host', G.crew); } else startLevel(G.level, 'solo'); });
+$('#quitBtn').addEventListener('click', () => { if (G.mode === 'host' || G.mode === 'client') { CCNet.close(); G.lobbyRole = ''; } goHome(); });
+$('#resNext').addEventListener('click', () => { const n = Math.min(G.level + 1, LEVELS.length); if (G.mode === 'host') { G.lobbyLevel = n; CCNet.broadcast({ t: 'brief', level: n }); brief(n, 'host'); } else brief(n, 'solo'); });
+$('#resAgain').addEventListener('click', () => { if (G.mode === 'host') { CCNet.broadcast({ t: 'brief', level: G.level }); brief(G.level, 'host'); } else brief(G.level, 'solo'); });
+$('#resLevels').addEventListener('click', () => { if (G.mode === 'host' || G.mode === 'client') { CCNet.close(); G.lobbyRole = ''; } G.mode = 'menu'; showLevels(); });
+$('#autoBtn').addEventListener('click', () => { rec.settings.auto = !rec.settings.auto; writeRecords(); renderHome(); });
+$('#qualityBtn').addEventListener('click', () => { const q = ['auto', 'high', 'medium', 'low'], i = q.indexOf(rec.settings.quality); rec.settings.quality = q[(i + 1) % q.length]; writeRecords(); renderHome(); if (viewOn) toast('The new graphics setting starts next time you open the game.', 'hello', 2400); });
+$('#soundBtn').addEventListener('click', () => { if (toggleMusic() && G.mode === 'menu') Sound.play('menu'); renderHome(); });
+arcadeGuards(() => { if (G.mode === 'solo') pause(); });
+document.addEventListener('pointerdown', () => { if (G.mode === 'menu' && save.settings.music > 0) Sound.play('menu'); }, { once: true });
+
+document.body.classList.add('menu');
+renderHome();
+showScreen('home', false);
+measureHud();
+// fetch the 3D engine in the background so the first level opens quickly
+setTimeout(() => { loadThree().catch(() => {}); }, 400);
+
+/* ================= test hooks ================= */
+// a layout check: nothing scrolls, HUD and buttons inside the screen, finger targets 48 px or more, nothing overlapping
+function fits() {
+  const bad = [], vw = innerWidth, vh = innerHeight, R = (el) => el.getBoundingClientRect();
+  const in1 = (r) => r.left >= -0.5 && r.right <= vw + 0.5 && r.top >= -0.5 && r.bottom <= vh + 0.5;
+  const finger = matchMedia('(pointer: coarse)').matches;
+  if (document.documentElement.scrollHeight > vh + 1 || document.documentElement.scrollWidth > vw + 1) bad.push('page scrolls');
+  if (upright()) { if (getComputedStyle($('#rotate')).display === 'none') bad.push('upright, but no turn card'); return bad; }
+  if (G.mode !== 'menu') {
+    $$('#hud .chip, #hud .hud-btn, #banner, #dock .wpn, #dock .act, #tray .tc, #tray .btn').filter((e) => e.offsetParent !== null && !e.closest('[hidden]')).forEach((el) => {
+      const r = R(el); if (!in1(r)) bad.push('outside: ' + (el.id || el.className) + ' ' + Math.round(r.left) + ',' + Math.round(r.top) + '-' + Math.round(r.right) + ',' + Math.round(r.bottom));
+      if (finger && el.matches('button') && (r.width < 44 || r.height < 44)) bad.push('small: ' + (el.id || el.className) + ' ' + Math.round(r.width) + 'x' + Math.round(r.height));
+    });
+    const hud = R($('.hud-top')), dock = R($('#dock')), hit = (a, b) => a.left < b.right - 1 && b.left < a.right - 1 && a.top < b.bottom - 1 && b.top < a.bottom - 1;
+    if (!$('#banner').hidden) { const b = R($('#banner')); $$('.hud-left > *, .hud-right .top > *, #crewHud span').forEach((el) => { if (el.offsetParent !== null && hit(b, R(el))) bad.push('banner over ' + (el.id || el.className)); }); }
+    if (!$('#dock').hidden && dock.height && dock.top < hud.bottom) bad.push('dock reaches the HUD');
+    if (!$('#tray').hidden) { const tr = R($('#tray')); if (tr.top < hud.bottom) bad.push('tray reaches the HUD'); }
+  } else {
+    const card = $$('#screens > .screen').find((s) => !s.hidden);
+    if (card) { const r = R(card.querySelector('.card')); if (r.right > vw + 1 || r.left < -1) bad.push('card wider than the screen'); card.querySelectorAll('.btn, .lvl').forEach((b) => { if (b.offsetParent === null) return; const rb = R(b); if (finger && (rb.height < 44 || rb.width < 44)) bad.push('button ' + b.textContent.trim().slice(0, 16) + ' ' + Math.round(rb.width) + 'x' + Math.round(rb.height)); }); }
+  }
+  return bad;
+}
+window.__castle = {
+  G: G, CC: CC, CCView: CCView, CCNet: CCNet, CCBot: CCBot, rec: rec, LEVELS: LEVELS, fits: fits, unlocksFor: unlocksFor,
+  ready: () => viewOn,
+  // start a level straight away (solo), with a bot playing the local player if asked
+  play: async (n, bot) => { if (!(await ensureView())) return 'no 3D'; startLevel(n, 'solo'); if (bot) G.bot = CCBot.make(bot === true ? {} : bot); return G.mode; },
+  host: (local) => hostGame(local), join: (code, local) => joinGame(code, local), startCrew: () => goPlay(G.lobbyLevel, 'host'),
+  state: () => ({ mode: G.mode, level: G.level, over: G.over, paused: G.paused, me: G.me, crew: G.crew.length, code: G.code || '', lobby: G.lobbyRole || '', wave: view && G.mode !== 'menu' ? view().wave : null, castle: G.mode !== 'menu' ? Math.round(view().castle.hp) : 0, res: G.mode !== 'menu' ? view().res : null, zombies: G.mode === 'client' ? (G.snaps.length ? G.snaps[G.snaps.length - 1].s.z.length : 0) : G.s ? G.s.zombies.length : 0, turrets: G.mode === 'client' ? G.mirror.turrets.size : G.s ? G.s.turrets.length : 0, result: G.s ? G.s.result : '', screen: ($$('#screens > .screen').find((s) => !s.hidden) || { id: '' }).id }),
+  speed: (k) => { G.speed = k; },
+  goHome: goHome, endLevel: endLevel, pickTurret: pickTurret, placeTurret: placeTurret, openTray: openTray, closeTray: closeTray, setWeapon: setWeapon, readyUp: readyUp,
+  move: (mx, mz) => { G.input.mx = mx; G.input.mz = mz; }, view: () => CCView.stats(),
+  aim: (tx, tz) => { if (!G.build) return false; G.build.tx = tx; G.build.tz = tz; updateGhost(); return !$('#placeBtn').disabled; }
+};
+})();
+</script>

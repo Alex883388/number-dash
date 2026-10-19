@@ -1,0 +1,2396 @@
+{
+  "levels": [
+    {
+      "n": 1,
+      "name": "First Night",
+      "castle": 600,
+      "intro": "Zombies are coming from the north! Chop trees for wood, build Arrow Towers by the road and shoot with your Blaster.",
+      "map": {
+        "size": 25,
+        "seed": 101,
+        "spawns": [
+          "N"
+        ],
+        "trees": 0.16,
+        "rocks": 0.04,
+        "lakes": 1
+      },
+      "start": {
+        "wood": 12,
+        "stone": 0,
+        "gold": 10
+      },
+      "unlock": {
+        "weapons": [
+          "blaster",
+          "hammer"
+        ],
+        "turrets": [
+          "arrow",
+          "wall"
+        ],
+        "zombies": [
+          "walker"
+        ]
+      },
+      "waves": [
+        {
+          "build": 40,
+          "groups": [
+            {
+              "z": "walker",
+              "n": 5,
+              "from": "N",
+              "every": 2.6
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "walker",
+              "n": 9,
+              "from": "N",
+              "every": 2
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "walker",
+              "n": 14,
+              "from": "N",
+              "every": 1.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 2,
+      "name": "Two Roads",
+      "castle": 600,
+      "intro": "Now they come from two sides. Build a tower on each road, and use the Hammer when they get close.",
+      "map": {
+        "size": 25,
+        "seed": 202,
+        "spawns": [
+          "N",
+          "E"
+        ],
+        "trees": 0.15,
+        "rocks": 0.05,
+        "lakes": 1
+      },
+      "start": {
+        "wood": 14,
+        "stone": 0,
+        "gold": 10
+      },
+      "unlock": {},
+      "waves": [
+        {
+          "build": 40,
+          "groups": [
+            {
+              "z": "walker",
+              "n": 4,
+              "from": "N",
+              "every": 2.5
+            },
+            {
+              "z": "walker",
+              "n": 4,
+              "from": "E",
+              "every": 2.5,
+              "after": 4
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "walker",
+              "n": 7,
+              "from": "N",
+              "every": 2
+            },
+            {
+              "z": "walker",
+              "n": 7,
+              "from": "E",
+              "every": 2
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "walker",
+              "n": 10,
+              "from": "N",
+              "every": 1.6
+            },
+            {
+              "z": "walker",
+              "n": 10,
+              "from": "E",
+              "every": 1.6,
+              "after": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 3,
+      "name": "Fast Feet",
+      "castle": 600,
+      "intro": "Runners! They are fast but weak. Try the Scatter Gun when they bunch up, and Barricades to slow them down.",
+      "map": {
+        "size": 25,
+        "seed": 303,
+        "spawns": [
+          "N",
+          "W"
+        ],
+        "trees": 0.15,
+        "rocks": 0.05,
+        "lakes": 1
+      },
+      "start": {
+        "wood": 14,
+        "stone": 0,
+        "gold": 15
+      },
+      "unlock": {
+        "weapons": [
+          "scatter"
+        ],
+        "zombies": [
+          "runner"
+        ]
+      },
+      "waves": [
+        {
+          "build": 40,
+          "groups": [
+            {
+              "z": "walker",
+              "n": 6,
+              "from": "N",
+              "every": 2
+            },
+            {
+              "z": "runner",
+              "n": 3,
+              "from": "W",
+              "every": 3,
+              "after": 6
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "runner",
+              "n": 8,
+              "from": "W",
+              "every": 1.6
+            },
+            {
+              "z": "walker",
+              "n": 8,
+              "from": "N",
+              "every": 1.8
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "runner",
+              "n": 10,
+              "from": "N",
+              "every": 1.2
+            },
+            {
+              "z": "walker",
+              "n": 10,
+              "from": "W",
+              "every": 1.5
+            },
+            {
+              "z": "runner",
+              "n": 6,
+              "from": "W",
+              "every": 1,
+              "after": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 4,
+      "name": "Cannon Hill",
+      "castle": 650,
+      "intro": "Big crowds today. Mine rocks for stone to build Cannons, and try the Flamer on the crowd.",
+      "map": {
+        "size": 27,
+        "seed": 404,
+        "spawns": [
+          "N",
+          "E",
+          "S"
+        ],
+        "trees": 0.14,
+        "rocks": 0.07,
+        "lakes": 1
+      },
+      "start": {
+        "wood": 14,
+        "stone": 8,
+        "gold": 20
+      },
+      "unlock": {
+        "weapons": [
+          "flamer"
+        ],
+        "turrets": [
+          "cannon"
+        ]
+      },
+      "waves": [
+        {
+          "build": 45,
+          "groups": [
+            {
+              "z": "walker",
+              "n": 8,
+              "from": "N",
+              "every": 1.6
+            },
+            {
+              "z": "walker",
+              "n": 6,
+              "from": "S",
+              "every": 2,
+              "after": 5
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "walker",
+              "n": 10,
+              "from": "E",
+              "every": 1.2
+            },
+            {
+              "z": "runner",
+              "n": 8,
+              "from": "N",
+              "every": 1.5,
+              "after": 4
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "walker",
+              "n": 12,
+              "from": "S",
+              "every": 1
+            },
+            {
+              "z": "walker",
+              "n": 12,
+              "from": "N",
+              "every": 1
+            },
+            {
+              "z": "runner",
+              "n": 6,
+              "from": "E",
+              "every": 1.5,
+              "after": 8
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "walker",
+              "n": 16,
+              "from": "any",
+              "every": 0.8
+            },
+            {
+              "z": "runner",
+              "n": 12,
+              "from": "any",
+              "every": 1,
+              "after": 6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 5,
+      "name": "Big Trouble",
+      "castle": 650,
+      "intro": "Brutes are huge and very tough. The Crossbow shoots through a whole line of zombies.",
+      "map": {
+        "size": 27,
+        "seed": 505,
+        "spawns": [
+          "N",
+          "W"
+        ],
+        "trees": 0.14,
+        "rocks": 0.07,
+        "lakes": 2
+      },
+      "start": {
+        "wood": 16,
+        "stone": 8,
+        "gold": 25
+      },
+      "unlock": {
+        "weapons": [
+          "crossbow"
+        ],
+        "zombies": [
+          "brute"
+        ]
+      },
+      "waves": [
+        {
+          "build": 45,
+          "groups": [
+            {
+              "z": "walker",
+              "n": 8,
+              "from": "N",
+              "every": 1.5
+            },
+            {
+              "z": "brute",
+              "n": 1,
+              "from": "W",
+              "after": 8
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "walker",
+              "n": 10,
+              "from": "W",
+              "every": 1.3
+            },
+            {
+              "z": "brute",
+              "n": 2,
+              "from": "N",
+              "every": 8,
+              "after": 4
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "runner",
+              "n": 10,
+              "from": "N",
+              "every": 1.1
+            },
+            {
+              "z": "brute",
+              "n": 3,
+              "from": "W",
+              "every": 7
+            },
+            {
+              "z": "walker",
+              "n": 10,
+              "from": "any",
+              "every": 1.2,
+              "after": 6
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "brute",
+              "n": 4,
+              "from": "any",
+              "every": 6
+            },
+            {
+              "z": "walker",
+              "n": 16,
+              "from": "any",
+              "every": 0.9
+            },
+            {
+              "z": "runner",
+              "n": 8,
+              "from": "any",
+              "every": 1.2,
+              "after": 10
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 6,
+      "name": "Ice Pond",
+      "castle": 650,
+      "intro": "Runners in a hurry! Freeze them with the Frost Wand, and build a Frost Tower to slow every zombie near it.",
+      "map": {
+        "size": 27,
+        "seed": 606,
+        "spawns": [
+          "NE",
+          "SW",
+          "E"
+        ],
+        "trees": 0.13,
+        "rocks": 0.07,
+        "lakes": 2
+      },
+      "start": {
+        "wood": 18,
+        "stone": 12,
+        "gold": 35
+      },
+      "unlock": {
+        "weapons": [
+          "frost"
+        ],
+        "turrets": [
+          "frost"
+        ]
+      },
+      "waves": [
+        {
+          "build": 45,
+          "groups": [
+            {
+              "z": "runner",
+              "n": 10,
+              "from": "NE",
+              "every": 1.2
+            },
+            {
+              "z": "walker",
+              "n": 6,
+              "from": "SW",
+              "every": 1.6,
+              "after": 4
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "runner",
+              "n": 14,
+              "from": "E",
+              "every": 0.9
+            },
+            {
+              "z": "brute",
+              "n": 1,
+              "from": "SW",
+              "after": 6
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "runner",
+              "n": 9,
+              "from": "SW",
+              "every": 1.1
+            },
+            {
+              "z": "runner",
+              "n": 9,
+              "from": "NE",
+              "every": 1.1,
+              "after": 6
+            },
+            {
+              "z": "walker",
+              "n": 8,
+              "from": "E",
+              "every": 1.4
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "runner",
+              "n": 16,
+              "from": "any",
+              "every": 0.8
+            },
+            {
+              "z": "brute",
+              "n": 2,
+              "from": "any",
+              "every": 8,
+              "after": 6
+            },
+            {
+              "z": "walker",
+              "n": 8,
+              "from": "any",
+              "every": 1.3,
+              "after": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 7,
+      "name": "Spit Happens",
+      "castle": 700,
+      "intro": "Spitters spit slime at your towers from far away. Go out and stop them, and keep some Barricades in front.",
+      "map": {
+        "size": 27,
+        "seed": 707,
+        "spawns": [
+          "N",
+          "S",
+          "W"
+        ],
+        "trees": 0.14,
+        "rocks": 0.08,
+        "lakes": 1
+      },
+      "start": {
+        "wood": 20,
+        "stone": 12,
+        "gold": 35
+      },
+      "unlock": {
+        "zombies": [
+          "spitter"
+        ]
+      },
+      "waves": [
+        {
+          "build": 45,
+          "groups": [
+            {
+              "z": "walker",
+              "n": 10,
+              "from": "N",
+              "every": 1.3
+            },
+            {
+              "z": "spitter",
+              "n": 3,
+              "from": "N",
+              "every": 3,
+              "after": 6
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "spitter",
+              "n": 5,
+              "from": "S",
+              "every": 2.2
+            },
+            {
+              "z": "walker",
+              "n": 12,
+              "from": "W",
+              "every": 1.1
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "spitter",
+              "n": 4,
+              "from": "any",
+              "every": 2
+            },
+            {
+              "z": "runner",
+              "n": 12,
+              "from": "any",
+              "every": 0.9
+            },
+            {
+              "z": "brute",
+              "n": 2,
+              "from": "N",
+              "every": 8,
+              "after": 6
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "spitter",
+              "n": 5,
+              "from": "any",
+              "every": 1.8
+            },
+            {
+              "z": "walker",
+              "n": 12,
+              "from": "any",
+              "every": 0.9
+            },
+            {
+              "z": "brute",
+              "n": 2,
+              "from": "any",
+              "every": 8,
+              "after": 8
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 8,
+      "name": "Tin Cans",
+      "castle": 700,
+      "intro": "Knights wear armour that stops bullets and arrows. Bombs, Cannons and fire crack them open.",
+      "map": {
+        "size": 27,
+        "seed": 808,
+        "spawns": [
+          "N",
+          "E",
+          "W"
+        ],
+        "trees": 0.13,
+        "rocks": 0.09,
+        "lakes": 1,
+        "river": "h"
+      },
+      "start": {
+        "wood": 18,
+        "stone": 14,
+        "gold": 35
+      },
+      "unlock": {
+        "weapons": [
+          "bomb"
+        ],
+        "zombies": [
+          "knight"
+        ]
+      },
+      "waves": [
+        {
+          "build": 45,
+          "groups": [
+            {
+              "z": "knight",
+              "n": 4,
+              "from": "N",
+              "every": 3
+            },
+            {
+              "z": "walker",
+              "n": 8,
+              "from": "E",
+              "every": 1.5
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "knight",
+              "n": 6,
+              "from": "W",
+              "every": 2.2
+            },
+            {
+              "z": "runner",
+              "n": 10,
+              "from": "N",
+              "every": 1
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "knight",
+              "n": 8,
+              "from": "any",
+              "every": 1.8
+            },
+            {
+              "z": "spitter",
+              "n": 4,
+              "from": "any",
+              "every": 3
+            },
+            {
+              "z": "walker",
+              "n": 12,
+              "from": "any",
+              "every": 1
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "knight",
+              "n": 12,
+              "from": "any",
+              "every": 1.3
+            },
+            {
+              "z": "brute",
+              "n": 3,
+              "from": "any",
+              "every": 6
+            },
+            {
+              "z": "runner",
+              "n": 12,
+              "from": "any",
+              "every": 0.8,
+              "after": 8
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 9,
+      "name": "Boom Boys",
+      "castle": 750,
+      "intro": "Bombers blow up when they reach something. Pop them from far away, and their blast hurts the other zombies!",
+      "map": {
+        "size": 27,
+        "seed": 909,
+        "spawns": [
+          "NW",
+          "NE",
+          "S"
+        ],
+        "trees": 0.14,
+        "rocks": 0.08,
+        "lakes": 2
+      },
+      "start": {
+        "wood": 20,
+        "stone": 14,
+        "gold": 40
+      },
+      "unlock": {
+        "zombies": [
+          "bomber"
+        ]
+      },
+      "waves": [
+        {
+          "build": 45,
+          "groups": [
+            {
+              "z": "bomber",
+              "n": 4,
+              "from": "NW",
+              "every": 3
+            },
+            {
+              "z": "walker",
+              "n": 10,
+              "from": "NE",
+              "every": 1.3
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "bomber",
+              "n": 6,
+              "from": "S",
+              "every": 2
+            },
+            {
+              "z": "knight",
+              "n": 4,
+              "from": "NW",
+              "every": 2.5
+            },
+            {
+              "z": "walker",
+              "n": 10,
+              "from": "S",
+              "every": 1.2
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "bomber",
+              "n": 8,
+              "from": "any",
+              "every": 1.6
+            },
+            {
+              "z": "runner",
+              "n": 14,
+              "from": "any",
+              "every": 0.8
+            },
+            {
+              "z": "brute",
+              "n": 2,
+              "from": "any",
+              "every": 7
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "bomber",
+              "n": 10,
+              "from": "any",
+              "every": 1.3
+            },
+            {
+              "z": "knight",
+              "n": 8,
+              "from": "any",
+              "every": 1.6
+            },
+            {
+              "z": "spitter",
+              "n": 5,
+              "from": "any",
+              "every": 2.5
+            },
+            {
+              "z": "walker",
+              "n": 16,
+              "from": "any",
+              "every": 0.7,
+              "after": 6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 10,
+      "name": "The Zombie King",
+      "castle": 800,
+      "intro": "The Zombie King is coming, and he calls walkers to help him. Build lots of towers and hit him with everything!",
+      "map": {
+        "size": 29,
+        "seed": 1010,
+        "spawns": [
+          "N",
+          "E",
+          "S",
+          "W"
+        ],
+        "trees": 0.13,
+        "rocks": 0.09,
+        "lakes": 2
+      },
+      "start": {
+        "wood": 22,
+        "stone": 16,
+        "gold": 50
+      },
+      "unlock": {
+        "zombies": [
+          "king"
+        ]
+      },
+      "waves": [
+        {
+          "build": 50,
+          "groups": [
+            {
+              "z": "walker",
+              "n": 14,
+              "from": "any",
+              "every": 1
+            },
+            {
+              "z": "knight",
+              "n": 4,
+              "from": "any",
+              "every": 3
+            }
+          ]
+        },
+        {
+          "build": 25,
+          "groups": [
+            {
+              "z": "brute",
+              "n": 3,
+              "from": "any",
+              "every": 7
+            },
+            {
+              "z": "runner",
+              "n": 14,
+              "from": "any",
+              "every": 0.8
+            },
+            {
+              "z": "bomber",
+              "n": 3,
+              "from": "any",
+              "every": 3
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "spitter",
+              "n": 6,
+              "from": "any",
+              "every": 2
+            },
+            {
+              "z": "knight",
+              "n": 8,
+              "from": "any",
+              "every": 1.6
+            },
+            {
+              "z": "walker",
+              "n": 16,
+              "from": "any",
+              "every": 0.8
+            }
+          ]
+        },
+        {
+          "build": 25,
+          "groups": [
+            {
+              "z": "king",
+              "n": 1,
+              "from": "N"
+            },
+            {
+              "z": "walker",
+              "n": 8,
+              "from": "any",
+              "every": 2,
+              "after": 6
+            },
+            {
+              "z": "brute",
+              "n": 1,
+              "from": "any",
+              "after": 14
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 11,
+      "name": "Ghost Lake",
+      "castle": 800,
+      "intro": "Ghosts float over water and walls, and bullets go right through them. Zap them with the Lightning Staff and Tesla Coils!",
+      "map": {
+        "size": 29,
+        "seed": 1111,
+        "spawns": [
+          "N",
+          "S",
+          "E"
+        ],
+        "trees": 0.12,
+        "rocks": 0.08,
+        "lakes": 3
+      },
+      "start": {
+        "wood": 22,
+        "stone": 18,
+        "gold": 60
+      },
+      "unlock": {
+        "weapons": [
+          "lightning"
+        ],
+        "turrets": [
+          "tesla"
+        ],
+        "zombies": [
+          "ghost"
+        ]
+      },
+      "waves": [
+        {
+          "build": 50,
+          "groups": [
+            {
+              "z": "ghost",
+              "n": 5,
+              "from": "N",
+              "every": 2.5
+            },
+            {
+              "z": "walker",
+              "n": 12,
+              "from": "S",
+              "every": 1.2
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "ghost",
+              "n": 8,
+              "from": "any",
+              "every": 1.8
+            },
+            {
+              "z": "knight",
+              "n": 6,
+              "from": "any",
+              "every": 2
+            },
+            {
+              "z": "runner",
+              "n": 10,
+              "from": "any",
+              "every": 1
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "ghost",
+              "n": 10,
+              "from": "any",
+              "every": 1.5
+            },
+            {
+              "z": "bomber",
+              "n": 6,
+              "from": "any",
+              "every": 2
+            },
+            {
+              "z": "walker",
+              "n": 18,
+              "from": "any",
+              "every": 0.8
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "ghost",
+              "n": 16,
+              "from": "any",
+              "every": 1.1
+            },
+            {
+              "z": "brute",
+              "n": 4,
+              "from": "any",
+              "every": 5
+            },
+            {
+              "z": "spitter",
+              "n": 6,
+              "from": "any",
+              "every": 2,
+              "after": 6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 12,
+      "name": "Cold Snap",
+      "castle": 850,
+      "intro": "Frosties are made of ice: frost does nothing to them, but fire melts them fast. Build Flame Towers!",
+      "map": {
+        "size": 29,
+        "seed": 1212,
+        "spawns": [
+          "NW",
+          "NE",
+          "S"
+        ],
+        "trees": 0.13,
+        "rocks": 0.09,
+        "lakes": 2
+      },
+      "start": {
+        "wood": 24,
+        "stone": 18,
+        "gold": 60
+      },
+      "unlock": {
+        "turrets": [
+          "flame"
+        ],
+        "zombies": [
+          "frosty"
+        ]
+      },
+      "waves": [
+        {
+          "build": 50,
+          "groups": [
+            {
+              "z": "frosty",
+              "n": 8,
+              "from": "NW",
+              "every": 1.8
+            },
+            {
+              "z": "runner",
+              "n": 10,
+              "from": "NE",
+              "every": 1
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "frosty",
+              "n": 10,
+              "from": "any",
+              "every": 1.5
+            },
+            {
+              "z": "ghost",
+              "n": 6,
+              "from": "any",
+              "every": 2
+            },
+            {
+              "z": "walker",
+              "n": 12,
+              "from": "any",
+              "every": 1
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "frosty",
+              "n": 14,
+              "from": "any",
+              "every": 1.1
+            },
+            {
+              "z": "knight",
+              "n": 8,
+              "from": "any",
+              "every": 1.6
+            },
+            {
+              "z": "bomber",
+              "n": 5,
+              "from": "any",
+              "every": 2.5
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "frosty",
+              "n": 16,
+              "from": "any",
+              "every": 0.9
+            },
+            {
+              "z": "brute",
+              "n": 5,
+              "from": "any",
+              "every": 4.5
+            },
+            {
+              "z": "runner",
+              "n": 14,
+              "from": "any",
+              "every": 0.7,
+              "after": 6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 13,
+      "name": "Hot Feet",
+      "castle": 850,
+      "intro": "Blazes are on fire: flames do nothing, but frost puts them out. Mix your towers!",
+      "map": {
+        "size": 29,
+        "seed": 1313,
+        "spawns": [
+          "N",
+          "SE",
+          "SW"
+        ],
+        "trees": 0.12,
+        "rocks": 0.09,
+        "lakes": 2,
+        "river": "v"
+      },
+      "start": {
+        "wood": 24,
+        "stone": 20,
+        "gold": 70
+      },
+      "unlock": {
+        "zombies": [
+          "blaze"
+        ]
+      },
+      "waves": [
+        {
+          "build": 50,
+          "groups": [
+            {
+              "z": "blaze",
+              "n": 8,
+              "from": "N",
+              "every": 1.8
+            },
+            {
+              "z": "frosty",
+              "n": 6,
+              "from": "SE",
+              "every": 2
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "blaze",
+              "n": 10,
+              "from": "any",
+              "every": 1.4
+            },
+            {
+              "z": "runner",
+              "n": 12,
+              "from": "any",
+              "every": 0.9
+            },
+            {
+              "z": "spitter",
+              "n": 4,
+              "from": "any",
+              "every": 3
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "blaze",
+              "n": 12,
+              "from": "any",
+              "every": 1.1
+            },
+            {
+              "z": "frosty",
+              "n": 10,
+              "from": "any",
+              "every": 1.3
+            },
+            {
+              "z": "ghost",
+              "n": 8,
+              "from": "any",
+              "every": 1.6
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "blaze",
+              "n": 14,
+              "from": "any",
+              "every": 0.9
+            },
+            {
+              "z": "frosty",
+              "n": 12,
+              "from": "any",
+              "every": 1
+            },
+            {
+              "z": "brute",
+              "n": 4,
+              "from": "any",
+              "every": 5
+            },
+            {
+              "z": "bomber",
+              "n": 6,
+              "from": "any",
+              "every": 2,
+              "after": 8
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 14,
+      "name": "Dig Dig",
+      "castle": 900,
+      "intro": "Diggers tunnel under your towers and pop up right next to the castle. Stay close to home and catch them!",
+      "map": {
+        "size": 29,
+        "seed": 1414,
+        "spawns": [
+          "N",
+          "E",
+          "S",
+          "W"
+        ],
+        "trees": 0.13,
+        "rocks": 0.1,
+        "lakes": 2
+      },
+      "start": {
+        "wood": 26,
+        "stone": 20,
+        "gold": 70
+      },
+      "unlock": {
+        "zombies": [
+          "digger"
+        ]
+      },
+      "waves": [
+        {
+          "build": 50,
+          "groups": [
+            {
+              "z": "digger",
+              "n": 5,
+              "from": "any",
+              "every": 2.5
+            },
+            {
+              "z": "walker",
+              "n": 14,
+              "from": "any",
+              "every": 1
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "digger",
+              "n": 8,
+              "from": "any",
+              "every": 1.8
+            },
+            {
+              "z": "knight",
+              "n": 8,
+              "from": "any",
+              "every": 1.6
+            },
+            {
+              "z": "runner",
+              "n": 10,
+              "from": "any",
+              "every": 1
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "digger",
+              "n": 10,
+              "from": "any",
+              "every": 1.4
+            },
+            {
+              "z": "ghost",
+              "n": 8,
+              "from": "any",
+              "every": 1.6
+            },
+            {
+              "z": "blaze",
+              "n": 8,
+              "from": "any",
+              "every": 1.6
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "digger",
+              "n": 14,
+              "from": "any",
+              "every": 1.1
+            },
+            {
+              "z": "brute",
+              "n": 5,
+              "from": "any",
+              "every": 4.5
+            },
+            {
+              "z": "bomber",
+              "n": 8,
+              "from": "any",
+              "every": 1.8
+            },
+            {
+              "z": "frosty",
+              "n": 10,
+              "from": "any",
+              "every": 1.2,
+              "after": 6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 15,
+      "name": "Witch's Swamp",
+      "castle": 900,
+      "intro": "The Swamp Witch flies over everything and calls ghosts. Lightning and Tesla Coils are your best friends here.",
+      "map": {
+        "size": 29,
+        "seed": 1515,
+        "spawns": [
+          "NW",
+          "NE",
+          "SW",
+          "SE"
+        ],
+        "trees": 0.12,
+        "rocks": 0.08,
+        "lakes": 4
+      },
+      "start": {
+        "wood": 28,
+        "stone": 24,
+        "gold": 100
+      },
+      "unlock": {
+        "zombies": [
+          "witch"
+        ]
+      },
+      "waves": [
+        {
+          "build": 50,
+          "groups": [
+            {
+              "z": "ghost",
+              "n": 10,
+              "from": "any",
+              "every": 1.5
+            },
+            {
+              "z": "walker",
+              "n": 14,
+              "from": "any",
+              "every": 0.9
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "ghost",
+              "n": 9,
+              "from": "any",
+              "every": 1.2
+            },
+            {
+              "z": "knight",
+              "n": 8,
+              "from": "any",
+              "every": 1.5
+            },
+            {
+              "z": "digger",
+              "n": 6,
+              "from": "any",
+              "every": 2
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "ghost",
+              "n": 10,
+              "from": "any",
+              "every": 1
+            },
+            {
+              "z": "frosty",
+              "n": 8,
+              "from": "any",
+              "every": 1.4
+            },
+            {
+              "z": "blaze",
+              "n": 8,
+              "from": "any",
+              "every": 1.4
+            },
+            {
+              "z": "brute",
+              "n": 3,
+              "from": "any",
+              "every": 6
+            }
+          ]
+        },
+        {
+          "build": 25,
+          "groups": [
+            {
+              "z": "witch",
+              "n": 1,
+              "from": "NE"
+            },
+            {
+              "z": "ghost",
+              "n": 6,
+              "from": "any",
+              "every": 2.5,
+              "after": 6
+            },
+            {
+              "z": "runner",
+              "n": 10,
+              "from": "any",
+              "every": 1.2,
+              "after": 10
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 16,
+      "name": "Shield Wall",
+      "castle": 950,
+      "intro": "Shield Bearers block shots from the front. Mortars and bombs drop on them from above, and lightning gets round shields.",
+      "map": {
+        "size": 31,
+        "seed": 1616,
+        "spawns": [
+          "N",
+          "E",
+          "S"
+        ],
+        "trees": 0.13,
+        "rocks": 0.1,
+        "lakes": 2
+      },
+      "start": {
+        "wood": 28,
+        "stone": 26,
+        "gold": 90
+      },
+      "unlock": {
+        "turrets": [
+          "mortar"
+        ],
+        "zombies": [
+          "shield"
+        ]
+      },
+      "waves": [
+        {
+          "build": 50,
+          "groups": [
+            {
+              "z": "shield",
+              "n": 6,
+              "from": "N",
+              "every": 2
+            },
+            {
+              "z": "walker",
+              "n": 14,
+              "from": "E",
+              "every": 0.9
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "shield",
+              "n": 10,
+              "from": "any",
+              "every": 1.5
+            },
+            {
+              "z": "spitter",
+              "n": 6,
+              "from": "any",
+              "every": 2
+            },
+            {
+              "z": "runner",
+              "n": 12,
+              "from": "any",
+              "every": 0.9
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "shield",
+              "n": 12,
+              "from": "any",
+              "every": 1.2
+            },
+            {
+              "z": "knight",
+              "n": 10,
+              "from": "any",
+              "every": 1.3
+            },
+            {
+              "z": "ghost",
+              "n": 8,
+              "from": "any",
+              "every": 1.5
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "shield",
+              "n": 16,
+              "from": "any",
+              "every": 1
+            },
+            {
+              "z": "brute",
+              "n": 6,
+              "from": "any",
+              "every": 4
+            },
+            {
+              "z": "bomber",
+              "n": 8,
+              "from": "any",
+              "every": 1.6
+            },
+            {
+              "z": "digger",
+              "n": 8,
+              "from": "any",
+              "every": 1.8,
+              "after": 8
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 17,
+      "name": "Witch Doctors",
+      "castle": 950,
+      "intro": "Shamans heal the zombies around them. Get them first! A Healing Shrine heals your crew and repairs towers.",
+      "map": {
+        "size": 31,
+        "seed": 1717,
+        "spawns": [
+          "NW",
+          "NE",
+          "S",
+          "W"
+        ],
+        "trees": 0.13,
+        "rocks": 0.1,
+        "lakes": 2,
+        "river": "h"
+      },
+      "start": {
+        "wood": 30,
+        "stone": 26,
+        "gold": 100
+      },
+      "unlock": {
+        "turrets": [
+          "shrine"
+        ],
+        "zombies": [
+          "shaman"
+        ]
+      },
+      "waves": [
+        {
+          "build": 50,
+          "groups": [
+            {
+              "z": "shaman",
+              "n": 3,
+              "from": "any",
+              "every": 4
+            },
+            {
+              "z": "walker",
+              "n": 16,
+              "from": "any",
+              "every": 0.8
+            },
+            {
+              "z": "knight",
+              "n": 4,
+              "from": "any",
+              "every": 2.5
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "shaman",
+              "n": 5,
+              "from": "any",
+              "every": 3
+            },
+            {
+              "z": "brute",
+              "n": 4,
+              "from": "any",
+              "every": 5
+            },
+            {
+              "z": "runner",
+              "n": 14,
+              "from": "any",
+              "every": 0.8
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "shaman",
+              "n": 6,
+              "from": "any",
+              "every": 2.5
+            },
+            {
+              "z": "shield",
+              "n": 10,
+              "from": "any",
+              "every": 1.3
+            },
+            {
+              "z": "frosty",
+              "n": 8,
+              "from": "any",
+              "every": 1.4
+            },
+            {
+              "z": "blaze",
+              "n": 8,
+              "from": "any",
+              "every": 1.4
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "shaman",
+              "n": 5,
+              "from": "any",
+              "every": 3
+            },
+            {
+              "z": "brute",
+              "n": 4,
+              "from": "any",
+              "every": 5
+            },
+            {
+              "z": "ghost",
+              "n": 10,
+              "from": "any",
+              "every": 1.3
+            },
+            {
+              "z": "bomber",
+              "n": 6,
+              "from": "any",
+              "every": 2,
+              "after": 6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 18,
+      "name": "Slime Time",
+      "castle": 1000,
+      "intro": "Blobs split into three little blobs when you pop them. Splash damage from Cannons and Mortars is perfect.",
+      "map": {
+        "size": 31,
+        "seed": 1818,
+        "spawns": [
+          "N",
+          "E",
+          "S",
+          "W"
+        ],
+        "trees": 0.12,
+        "rocks": 0.1,
+        "lakes": 3
+      },
+      "start": {
+        "wood": 30,
+        "stone": 28,
+        "gold": 110
+      },
+      "unlock": {
+        "zombies": [
+          "blob"
+        ]
+      },
+      "waves": [
+        {
+          "build": 50,
+          "groups": [
+            {
+              "z": "blob",
+              "n": 8,
+              "from": "any",
+              "every": 1.8
+            },
+            {
+              "z": "runner",
+              "n": 12,
+              "from": "any",
+              "every": 0.9
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "blob",
+              "n": 12,
+              "from": "any",
+              "every": 1.4
+            },
+            {
+              "z": "shield",
+              "n": 8,
+              "from": "any",
+              "every": 1.5
+            },
+            {
+              "z": "spitter",
+              "n": 6,
+              "from": "any",
+              "every": 2
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "blob",
+              "n": 16,
+              "from": "any",
+              "every": 1.1
+            },
+            {
+              "z": "shaman",
+              "n": 4,
+              "from": "any",
+              "every": 3
+            },
+            {
+              "z": "knight",
+              "n": 10,
+              "from": "any",
+              "every": 1.2
+            },
+            {
+              "z": "digger",
+              "n": 6,
+              "from": "any",
+              "every": 2
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "blob",
+              "n": 22,
+              "from": "any",
+              "every": 0.9
+            },
+            {
+              "z": "brute",
+              "n": 6,
+              "from": "any",
+              "every": 4
+            },
+            {
+              "z": "ghost",
+              "n": 10,
+              "from": "any",
+              "every": 1.2
+            },
+            {
+              "z": "bomber",
+              "n": 8,
+              "from": "any",
+              "every": 1.6,
+              "after": 6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 19,
+      "name": "The Long Night",
+      "castle": 1100,
+      "intro": "Six waves of everything. Build a strong ring of towers, upgrade them, and stick together!",
+      "map": {
+        "size": 31,
+        "seed": 1919,
+        "spawns": [
+          "N",
+          "NE",
+          "E",
+          "S",
+          "W"
+        ],
+        "trees": 0.13,
+        "rocks": 0.11,
+        "lakes": 2
+      },
+      "start": {
+        "wood": 32,
+        "stone": 30,
+        "gold": 120
+      },
+      "unlock": {},
+      "waves": [
+        {
+          "build": 55,
+          "groups": [
+            {
+              "z": "walker",
+              "n": 20,
+              "from": "any",
+              "every": 0.6
+            },
+            {
+              "z": "runner",
+              "n": 14,
+              "from": "any",
+              "every": 0.8
+            },
+            {
+              "z": "knight",
+              "n": 6,
+              "from": "any",
+              "every": 2
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "ghost",
+              "n": 10,
+              "from": "any",
+              "every": 1.2
+            },
+            {
+              "z": "spitter",
+              "n": 8,
+              "from": "any",
+              "every": 1.6
+            },
+            {
+              "z": "brute",
+              "n": 4,
+              "from": "any",
+              "every": 5
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "frosty",
+              "n": 10,
+              "from": "any",
+              "every": 1.1
+            },
+            {
+              "z": "blaze",
+              "n": 10,
+              "from": "any",
+              "every": 1.1
+            },
+            {
+              "z": "bomber",
+              "n": 8,
+              "from": "any",
+              "every": 1.5
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "digger",
+              "n": 10,
+              "from": "any",
+              "every": 1.3
+            },
+            {
+              "z": "shield",
+              "n": 12,
+              "from": "any",
+              "every": 1.1
+            },
+            {
+              "z": "shaman",
+              "n": 5,
+              "from": "any",
+              "every": 2.5
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "blob",
+              "n": 14,
+              "from": "any",
+              "every": 1
+            },
+            {
+              "z": "knight",
+              "n": 12,
+              "from": "any",
+              "every": 1
+            },
+            {
+              "z": "ghost",
+              "n": 12,
+              "from": "any",
+              "every": 1
+            }
+          ]
+        },
+        {
+          "build": 25,
+          "groups": [
+            {
+              "z": "king",
+              "n": 1,
+              "from": "N"
+            },
+            {
+              "z": "brute",
+              "n": 8,
+              "from": "any",
+              "every": 3.5
+            },
+            {
+              "z": "runner",
+              "n": 20,
+              "from": "any",
+              "every": 0.6
+            },
+            {
+              "z": "bomber",
+              "n": 10,
+              "from": "any",
+              "every": 1.4,
+              "after": 6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 20,
+      "name": "The Colossus",
+      "castle": 1200,
+      "intro": "The Colossus! It stomps on towers and calls knights and runners. This is the big one: everything you have, all together!",
+      "map": {
+        "size": 31,
+        "seed": 2020,
+        "spawns": [
+          "N",
+          "E",
+          "S",
+          "W"
+        ],
+        "trees": 0.12,
+        "rocks": 0.11,
+        "lakes": 3
+      },
+      "start": {
+        "wood": 36,
+        "stone": 34,
+        "gold": 150
+      },
+      "unlock": {
+        "zombies": [
+          "colossus"
+        ]
+      },
+      "waves": [
+        {
+          "build": 55,
+          "groups": [
+            {
+              "z": "knight",
+              "n": 12,
+              "from": "any",
+              "every": 1
+            },
+            {
+              "z": "runner",
+              "n": 16,
+              "from": "any",
+              "every": 0.7
+            },
+            {
+              "z": "shaman",
+              "n": 3,
+              "from": "any",
+              "every": 3
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "brute",
+              "n": 6,
+              "from": "any",
+              "every": 4
+            },
+            {
+              "z": "ghost",
+              "n": 12,
+              "from": "any",
+              "every": 1
+            },
+            {
+              "z": "bomber",
+              "n": 8,
+              "from": "any",
+              "every": 1.5
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "shield",
+              "n": 12,
+              "from": "any",
+              "every": 1.1
+            },
+            {
+              "z": "blob",
+              "n": 10,
+              "from": "any",
+              "every": 1.2
+            },
+            {
+              "z": "frosty",
+              "n": 8,
+              "from": "any",
+              "every": 1.3
+            },
+            {
+              "z": "blaze",
+              "n": 8,
+              "from": "any",
+              "every": 1.3
+            }
+          ]
+        },
+        {
+          "build": 20,
+          "groups": [
+            {
+              "z": "ghost",
+              "n": 10,
+              "from": "any",
+              "every": 1.3
+            },
+            {
+              "z": "digger",
+              "n": 6,
+              "from": "any",
+              "every": 1.8
+            },
+            {
+              "z": "spitter",
+              "n": 4,
+              "from": "any",
+              "every": 2.4
+            }
+          ]
+        },
+        {
+          "build": 30,
+          "groups": [
+            {
+              "z": "colossus",
+              "n": 1,
+              "from": "S"
+            },
+            {
+              "z": "knight",
+              "n": 10,
+              "from": "any",
+              "every": 2,
+              "after": 5
+            },
+            {
+              "z": "brute",
+              "n": 4,
+              "from": "any",
+              "every": 6,
+              "after": 10
+            },
+            {
+              "z": "runner",
+              "n": 16,
+              "from": "any",
+              "every": 1,
+              "after": 15
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

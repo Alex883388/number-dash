@@ -18,6 +18,7 @@ Above it, a **New in the arcade** card lists the latest additions (each a link) 
 | 8 | Code Robot | [/robot/](https://alex883388.github.io/number-dash/robot/) | Program a robot with blocks and watch it run: 208 levels in 11 worlds, from first steps to loops, functions, if-then, painting pictures, robot teams, counters, reading code and fixing bugs. Fewer blocks, more stars. |
 | 9 | Tycoon Town | [/tycoon/](https://alex883388.github.io/number-dash/tycoon/) | Grow a company from a $500 lemonade stand to a billion-dollar empire in one of four living 2.5D cities (by the sea, in the desert, on a neon strip, among cherry blossoms): 50 businesses up to an international airport, land to buy before it runs out, rivals to beat, 150 business cases to solve like a CEO, seasons, carnivals, storms and earthquakes to insure against, and scams to spot. |
 | 10 | Mech Blaster | [/mech/](https://alex883388.github.io/number-dash/mech/) | Pilot a battle mech down a 2.5D road through five worlds and 50 levels: dodge, jump and blast drones, walkers, turrets, bikes, bombers, spiders and giant bosses with eight weapons, and open every gate by shooting the right number or missing word. |
+| 11 | Castle Crew | [/castle/](https://alex883388.github.io/number-dash/castle/) | Hold the castle in a blocky 3D world like Unrailed!: chop trees, mine rocks, build towers and blast 20 levels of zombie waves with eight weapons, alone or with up to three friends on their own iPads, phones and computers. Played sideways. |
 
 ## Number Ladder
 
@@ -138,6 +139,18 @@ Above it, a **New in the arcade** card lists the latest additions (each a link) 
 - **Proof and balance** (`node games/mech/tools/check.js`): two test pilots play every level (`MB.bot` in the engine sees what is coming, picks where to stand, jumps, lines up with its target and answers with the Answer button). The good pilot must clear every level; the child-like pilot (slower, misses a third of its shots, right 80% of the time) clears every level up to 29 without going down and most of the later ones (55–65% of its armour left near the end); the bosses beat it a third to a half of the time, and it wins them on a retry.
 - **Speed**: the sky and scenery are painted once per screen size and then only copied; the boss's shield is a picture made once. In a headless browser without a graphics card a busy late-level frame takes about 9 ms and the final boss about 11 ms; if a device keeps taking longer than 26 ms a frame, the page draws fewer pixels.
 
+## Castle Crew
+
+- **The idea**: a co-op castle defence in a blocky 3D world, drawn in the voxel style of Unrailed! (three.js, every tile, tree, rock, tower, crew member and zombie made of coloured cubes). The castle stands in the middle of an island; zombies come in waves from gates at the edge and walk the roads (a flow field) to it. If its health runs out, the level is lost. The game is played sideways: a phone or iPad held upright shows a "turn your device sideways" card.
+- **The crew** (one to four players): walk with a floating stick on the left half of the screen (or W A S D / the arrows); the weapon fires by itself at the nearest zombie in range (Auto-fire, on by default; off gives a Fire button). Walking into a tree chops it (🪵 wood), into a rock mines it (🪨 stone); zombies drop 🪙 gold. A crew member knocked down gets up at the castle after 5 seconds.
+- **Eight weapons** (unlocked level by level): Blaster, Hammer (knock-back, chops faster), Scatter Gun, Flamer (burns), Crossbow (pierces four), Frost Wand (slows), Bomb Launcher (splash), Lightning Staff (chains).
+- **Eight builds** (Build: a tray of cards, then tap the map where it goes; a green or red ghost shows if it fits): Arrow Tower, Barricade (zombies walk round or break it), Cannon, Frost Tower (slows all near), Tesla Coil, Flame Tower, Mortar (long range), Healing Shrine. Standing by a tower shows Upgrade (levels 2 and 3, gold).
+- **17 kinds of zombie**, each with a weakness to learn: walkers, runners, brutes, armoured knights (bullets and arrows bounce, fire and bombs crack them), spitters (slime at towers from afar), bombers (blow up on arrival; popped early they hurt their friends), ghosts (float over water and walls, magic hurts them), frosties (frost does nothing, fire melts them), blazes (the other way round), diggers (tunnel under the towers), blobs (split in three), shield bearers (block shots from the front), shamans (heal the others), and three bosses: the Zombie King (level 10), the Swamp Witch (level 15) and the Colossus (level 20).
+- **20 levels** (`content/levels.json`: each level's island (size, seed, gates, forests, rocks, lakes, rivers), starting wood, stone and gold, what it unlocks, and its 3 to 6 waves of zombie groups), each with a briefing of what is new. Build time before every wave (Ready starts it early; in a crew, when everyone is ready). Stars by the castle's health left: 3 at 80%, 2 at 50%.
+- **Playing together**: one device hosts and shows a four-letter room code; the others tap Play with friends, type it and join (up to four, mid-level too). The host's device runs the game (`src/engine.js`, 30 ticks a second) and sends the crew what moved 15 times a second; each device moves its own player and sends where it is and what it wants (fire, weapon, chop, build, upgrade, ready). The devices talk directly over WebRTC; PeerJS (and its free public server) only introduces them, so a crew game needs the internet. In a crew the zombies have more health and come in larger numbers.
+- **Saving**: `castle-crew.v1` (stars per level, levels won, total stars, the last level, the player's name, Auto-fire and the graphics setting). A level won marks the day played. three.js and PeerJS come from the CDN and the arcade's offline cache keeps them after the first visit; the graphics drop their resolution, then their shadows, by themselves on a slow device (Graphics: auto).
+- **Balance** (`node games/castle/tools/sim.js`): computer crews (`src/bot.js`: they gather, build beside the roads, choose weapons and fight) play every level with crews of 1, 2 and 4, a child-like bot (`--skill 0.6`: slower, looks away, keeps a weapon longer, builds only simple towers and takes about 7 seconds over each build; it wins every level, the first nine with 3 stars, the King's level with 1 or 2) and lazy bots that never build (`--lazy`, which lose 13 of the 20 levels: towers are needed).
+
 ## Layout
 
 | Path | What it is |
@@ -149,6 +162,7 @@ Above it, a **New in the arcade** card lists the latest additions (each a link) 
 | `games/robot/` | Code Robot: the page (`src/robot.html`), the interpreter (`src/engine.js`), the worlds and levels (`content/`, read by `src/levels.js`), `tools/check.js` (proves every level), `tools/trace.js` (paths and corridor maps), `tools/content.js format` (tidies the level files); `build.js`; playtests in `playtest/`. |
 | `games/tycoon/` | Tycoon Town: the screens (`src/tycoon.html`), the four cities (`src/city.js`: tiles, heights, lots, landmarks, what is near each lot, parade routes, boats and trains), the pictures (`src/art-kit.js`: drawing helpers, trees in every season; `src/art-build.js`: neighbours' buildings in each city's style and every business; `src/art-land.js`: landmarks), the map (`src/map.js`: the 2.5D canvas, hills and cliffs, seasons, traffic, people, money pops, day and night, the incidents and the weather), the economy (`src/engine.js`: pure, seeded, the whole game state is plain JSON; incidents and insurance too), the content (`content/`: `roster.json` with every number and each business's likes, `biz-1..5.json` with the cases, `offers.json`, `rivals.json`, and `FORMAT.md` for writing more), `tools/check-content.js` (content rules), `tools/sim.js` (balance bots), `build.js` and playtests. |
 | `games/mech/` | Mech Blaster: the screens (`src/mech.html`), the rules (`src/engine.js`: the mech, weapons, enemies, gates, bosses and a test pilot), the pictures (`src/art.js`: the mech and the enemies; `src/art2.js`: the worlds, props, bosses and weapon icons), the 2.5D drawing (`src/render.js`), the sound (`src/audio.js`), the levels (`content/levels.json`, made by `tools/genlevels.js`, proved by `tools/check.js`) and the missing-word sentences (`content/words-0..2.json`, format in `content/FORMAT.md`, checked by `tools/check-words.js`); `build.js`; playtests in `playtest/`. |
+| `games/castle/` | Castle Crew: the screens (`src/castle.html`), the rules (`src/engine.js`: the island, the flow field, the crew, weapons, turrets, zombies, waves, snapshots for the crew), the computer player (`src/bot.js`), the link between devices (`src/net.js`), the 3D view (`src/view.js`, three.js), the levels (`content/levels.json`), the balance bots (`tools/sim.js`), `build.js` and playtests. |
 | `shared/` | Code the games share: math questions, English word facts (`english-words.js`: opposites, past tenses, same-meaning words, plurals, common misspellings), general knowledge (`knowledge.js`: capitals, animal babies, science, geography, calendar and animal facts), the music remix engine, sound effects, cube looks and drawing, `arcade-days.js` (`markPlayed()`: every game notes the day it saves, for the streak), and for the newer games `arcade-ui.css` (colours, buttons, menus, HUD, toasts) and `arcade-core.js` (helpers, the shared save, `writeSave()` which marks the day played and `writeRecords()` which does not, math bookkeeping, screens, read-aloud with a British voice where the device has one, on-device voices first). A page marks the spot with `/*__SHARED:name__*/` (or `/*__SHARED:arcade-ui.css__*/` inside its style) and the build fills it in; shared files can use markers too. |
 | `web/` | The arcade home page (`hub.html`: game cards, Today, stats, Badges, Progress for parents), the offline service worker, the app manifest and icons (`make-icons.js` redraws the icons). |
 | `build.js` | Builds every game into `games/*/dist/` and the website into `docs/`: the home page, one folder per game, the manifest, icons and an offline cache whose version changes with the content. |
@@ -270,6 +284,24 @@ node games/mech/tools/check.js
 
 ```bash
 ND_URL=file:///D:/Github/number-dash/games/mech/dist/preview.html ND_READY='!!window.__mech' ND_BOT=none node games/dash/playtest/shoot.js games/mech/playtest/play.js
+```
+
+Castle Crew: the balance bots, then the playtests: `play.js` (one player by finger, a level won, iPads and phones sideways, the turn card upright), `crew.js` (two players in one browser over the same-browser link: lobby, start, walking, building, ready, the fight, the result, leaving), `levels.js` (every level opens and its zombies walk; the boss levels played to the end) and `peer.js` (two separate browsers over the internet link, PeerJS):
+
+```bash
+node games/castle/tools/sim.js --crew 1 --skill 0.6
+```
+
+```bash
+ND_URL=file:///D:/Github/number-dash/games/castle/dist/preview.html ND_READY='!!window.__castle' ND_BOT=none node games/dash/playtest/shoot.js games/castle/playtest/play.js
+```
+
+```bash
+ND_SERVE=../castle/dist ND_PATH=preview.html ND_READY='!!window.__castle' ND_BOT=none node games/dash/playtest/shoot.js games/castle/playtest/crew.js
+```
+
+```bash
+node games/castle/playtest/peer.js
 ```
 
 Several playtests can run at once when each gets its own browser port and profile: add `ND_CDP=9371 ND_PROFILE=edge-profile-pair` (any free port and folder name).
