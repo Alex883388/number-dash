@@ -193,7 +193,7 @@ h1 span { color: var(--sun-deep); }
   <section class="news" id="news" aria-label="New in the arcade" hidden>
     <h2>✨ New in the arcade</h2>
     <ul>
-      <li><a href="castle/"><i aria-hidden="true">🏰</i><span><b>Castle Crew</b>: a new game! Hold the castle against 20 levels of zombie waves in a blocky 3D world, alone or with friends on their own devices</span></a></li>
+      <li><a href="castle/"><i aria-hidden="true">🏰</i><span><b>Castle Crew</b> is now a big tower defence: 8 maps with 100 rounds each, with 15 towers and a weapon that levels up</span></a></li>
       <li><a href="mech/"><i aria-hidden="true">🦾</i><span><b>Mech Blaster</b>: a new game! Pilot a battle mech through 5 worlds and 50 levels, blast robots and giant bosses, and open every gate with the right number or missing word</span></a></li>
       <li><a href="tycoon/"><i aria-hidden="true">💼</i><span><b>Tycoon Town</b>: four cities to choose, seasons and snow, carnival parades, storms and earthquakes, insurance, and an airport to build</span></a></li>
       <li><a href="robot/"><i aria-hidden="true">🤖</i><span><b>Code Robot</b>: 11 worlds now: paint pictures, robot teams, counters, mixed-up code and code reading</span></a></li>
@@ -398,9 +398,9 @@ h1 span { color: var(--sun-deep); }
       <div class="body">
         <span class="num">Game 11</span>
         <h2>Castle Crew</h2>
-        <p>Hold the castle in a blocky 3D world: chop trees, mine rocks, build towers and blast 20 levels of zombie waves, alone or with friends on their own iPads, phones and computers.</p>
+        <p>A blocky 3D tower defence: hold the castle for 100 rounds on 8 maps, with 15 towers to upgrade and a weapon that levels up, alone or with friends on their own iPads, phones and computers.</p>
         <div class="skills"><span>Teamwork</span><span>Strategy</span><span>Action</span></div>
-        <span class="meta" id="castleMeta">20 levels · 1 to 4 players</span>
+        <span class="meta" id="castleMeta">8 maps · 100 rounds each</span>
         <span class="play">Play</span>
       </div>
     </a>
@@ -414,7 +414,7 @@ h1 span { color: var(--sun-deep); }
 (function () {
   var read = function (key) { try { return JSON.parse(localStorage.getItem(key) || '{}') || {}; } catch (e) { return {}; } };
   var d = read('number-dash.v1'), l = read('number-ladder.v1'), pu = read('pair-up.v1'), np = read('number-pop.v1'), sp = read('spell-it.v1'), eq = read('english-quest.v1'), ml = read('memory-lane.v1'), rb = read('code-robot.v1'), ty = read('tycoon-town.v1'), mb = read('mech-blaster.v1'), cc = read('castle-crew.v1');
-  var ccDone = cc.done || 0, ccStars = cc.stars || 0;   // Castle Crew keeps its totals
+  var ccDone = cc.v === 2 ? cc.done || 0 : 0, ccStars = cc.v === 2 ? cc.stars || 0 : 0, ccBest = cc.v === 2 ? cc.best || 0 : 0;   // Castle Crew: maps won, medals, best round
   var rbDone = rb.done || 0, rbStars = rb.stars || 0;   // Code Robot keeps its totals
   var tyBest = null; (ty.slots || []).forEach(function (x) { if (x && (!tyBest || x.nw > tyBest.nw)) tyBest = x; });
   var tyGame = tyBest && tyBest.game, tyTraps = tyGame && tyGame.stats ? tyGame.stats.traps || 0 : 0, tyNw = tyBest ? tyBest.nw : 0;
@@ -437,7 +437,7 @@ h1 span { color: var(--sun-deep); }
   if (tyBest) document.getElementById('tycoonMeta').textContent = tyBest.name + ' · worth ' + (tyNw >= 1e6 ? '$' + (tyNw / 1e6).toFixed(1) + 'M' : '$' + Math.round(tyNw).toLocaleString('en-GB'));
   if (eq.lessons) document.getElementById('questMeta').textContent = 'Now at ' + EQ[eqStage - 1];
   if (mbDone) document.getElementById('mechMeta').textContent = mbDone + ' of 50 levels · ' + mbStars + ' ★';
-  if (ccDone) document.getElementById('castleMeta').textContent = ccDone + ' of 20 levels · ' + ccStars + ' ★';
+  if (ccBest) document.getElementById('castleMeta').textContent = 'Best: round ' + ccBest + (ccStars ? ' · ' + ccStars + ' medal' + (ccStars > 1 ? 's' : '') : '');
   // daily streak from the days every game marks when it saves
   var days = read('arcade-days.v1'), key = function (d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
   var d0 = new Date(), streak = 0, played = !!days[key(d0)];
@@ -463,7 +463,7 @@ h1 span { color: var(--sun-deep); }
      { href: 'pair/', ic: '🃏', t: 'Pair Up', d: pu.wins ? 'Try a new kind of cards' : 'Find 6 pairs' },
      { href: 'memory/', ic: '🧠', t: 'Memory Lane', d: numSpan ? 'Beat your number span of ' + numSpan : 'Remember 4 numbers in a row' },
      { href: 'tycoon/', ic: '💼', t: 'Tycoon Town', d: tyBest ? 'Play a few months of ' + tyBest.name : 'Start your first company' },
-     { href: 'castle/', ic: '🏰', t: 'Castle Crew', d: ccDone >= 20 ? 'Win more stars (' + ccStars + ' of 60)' : ccDone ? 'Hold the castle in level ' + (ccDone + 1) + ' (' + ccDone + ' of 20 won)' : 'Hold the castle against the first zombies' }][dayNo % 5]
+     { href: 'castle/', ic: '🏰', t: 'Castle Crew', d: ccBest ? 'Beat your best: round ' + ccBest : 'Hold the castle for 100 rounds' }][dayNo % 5]
   ];
   document.getElementById('todo').innerHTML = todo.map(function (x) { return '<a href="' + x.href + '"><span class="ic" aria-hidden="true">' + x.ic + '</span><span><b>' + esc(x.t) + '</b><span>' + esc(x.d) + '</span></span></a>'; }).join('');
   // for parents: what each skill has added up to
@@ -476,14 +476,14 @@ h1 span { color: var(--sun-deep); }
     '<b>Math:</b> ' + right + ' answers right' + (tricky ? ', ' + tricky + (tricky === 1 ? ' fact' : ' facts') + ' still being practised' : ''),
     '<b>Memory:</b> ' + (pu.wins || 0) + ' Pair Up boards cleared, ' + (pu.pairs || 0) + ' pairs found' + (ml.rounds ? ', Memory Lane longest spans: numbers ' + (mlBest.number || 0) + ', words ' + (mlBest.word || 0) + ', grid ' + (mlBest.grid || 0) + ' (' + ml.rounds + (ml.rounds === 1 ? ' round' : ' rounds') + ')' : ''),
     '<b>STEM and business:</b> Code Robot ' + rbDone + ' of 208 levels (' + rbStars + ' stars)' + (tyBest ? ', Tycoon Town: ' + esc(tyBest.name) + ' worth $' + Math.round(tyNw).toLocaleString('en-GB') + ' in month ' + (tyBest.month + 1) + ', CEO title ' + tyBest.title + ', ' + tyTraps + ' traps avoided' : ', Tycoon Town not started yet'),
-    '<b>Games:</b> Dash ' + stars + ' / 150 stars, Ladder best rung ' + (l.best || 0) + ' / 30, Pop ' + popStars + ' stars' + (mbDone ? ', Mech Blaster ' + mbDone + ' of 50 levels (' + mbStars + ' stars)' : '') + (ccDone ? ', Castle Crew ' + ccDone + ' of 20 levels (' + ccStars + ' stars)' : ''),
+    '<b>Games:</b> Dash ' + stars + ' / 150 stars, Ladder best rung ' + (l.best || 0) + ' / 30, Pop ' + popStars + ' stars' + (mbDone ? ', Mech Blaster ' + mbDone + ' of 50 levels (' + mbStars + ' stars)' : '') + (ccBest ? ', Castle Crew best round ' + ccBest + (ccStars ? ' (' + ccStars + ' medals)' : '') : ''),
     '<b>Days played:</b> ' + week + ' of the last 7' + (streak ? ', streak ' + streak : '')
   ].map(function (t) { return '<li>' + t + '</li>'; }).join('');
   // badges, in the order a child meets them; one earned since the last visit says New! once
   var eqTests = 0; for (var st in (eq.tests || {})) if (eq.tests[st] && eq.tests[st].passed) eqTests++;
   var mocks = Array.isArray(eq.mocks) ? eq.mocks : [];
   var tookL = mocks.some(function (m) { return m.k === 'L'; }), tookR = mocks.some(function (m) { return !m.k; });
-  var gamesPlayed = [Object.keys(d.levels || {}).length, l.best || l.tops, pu.wins, popStars, sp.rounds || learned, eq.lessons, ml.rounds || ml.seqs, rbDone, tyBest && tyBest.month, mbDone, ccDone].filter(Boolean).length;
+  var gamesPlayed = [Object.keys(d.levels || {}).length, l.best || l.tops, pu.wins, popStars, sp.rounds || learned, eq.lessons, ml.rounds || ml.seqs, rbDone, tyBest && tyBest.month, mbDone, ccBest].filter(Boolean).length;
   var BADGES = [
     ['🌟', 'First star', 'Get a star in Number Dash', stars >= 1],
     ['🪜', 'Halfway up', 'Reach rung 15 on the ladder', (l.best || 0) >= 15],
@@ -498,7 +498,7 @@ h1 span { color: var(--sun-deep); }
     ['💼', 'Tycoon', 'Grow a Tycoon Town company to $100,000', tyNw >= 100000],
     ['🦾', 'Mech pilot', 'Clear 10 Mech Blaster levels', mbDone >= 10],
     ['👑', 'Boss breaker', 'Beat a boss in Mech Blaster', mbBosses >= 1],
-    ['🏰', 'Castle keeper', 'Win 5 Castle Crew levels', ccDone >= 5],
+    ['🏰', 'Castle keeper', 'Reach round 30 in Castle Crew', ccBest >= 30],
     ['🌈', 'All-rounder', 'Play all eleven games', gamesPlayed >= 11],
     ['⭐', 'Star collector', 'Get 30 Dash stars', stars >= 30],
     ['🏔️', 'Top of the tower', 'Climb all 30 rungs', (l.tops || 0) >= 1],
@@ -510,7 +510,7 @@ h1 span { color: var(--sun-deep); }
     ['🗣️', 'Brave speaker', 'Finish 3 speaking practices in English Quest', ((eq.speak && eq.speak.n) || 0) >= 3],
     ['🏆', 'Dash champion', 'Get 100 Dash stars', stars >= 100],
     ['🚀', 'Star pilot', 'Clear all 50 Mech Blaster levels', mbDone >= 50],
-    ['🧟', 'Zombie hero', 'Win all 20 Castle Crew levels', ccDone >= 20]
+    ['🧟', 'Zombie hero', 'Hold a Castle Crew castle for 100 rounds', ccDone >= 1]
   ];
   var seenB = read('arcade-badges.v1'), gotB = 0, freshB = [];
   BADGES.forEach(function (b) { if (b[3]) { gotB++; if (!seenB[b[1]]) freshB.push(b[1]); } });
@@ -521,7 +521,7 @@ h1 span { color: var(--sun-deep); }
   }).join('');
   if (freshB.length) { freshB.forEach(function (n) { seenB[n] = Date.now(); }); try { localStorage.setItem('arcade-badges.v1', JSON.stringify(seenB)); } catch (e) { /* private mode: it glows again next time */ } }
   // the news card: shown until Got it, for this batch of news only
-  var NEWS_ID = '2026-10-19b', newsBox = document.getElementById('news');
+  var NEWS_ID = '2026-10-20a', newsBox = document.getElementById('news');
   newsBox.hidden = read('arcade-news.v1').seen === NEWS_ID;
   document.getElementById('newsOk').addEventListener('click', function () {
     newsBox.hidden = true;

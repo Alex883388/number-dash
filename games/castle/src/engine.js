@@ -1,69 +1,224 @@
 /* games/castle/src/engine.js — Castle Crew's world and rules, shared by the page (the host runs it) and the balance
    simulator (Node can require it). No page, no three.js, no timers.
-   The map is a square grid of tiles (1 unit each; x to the east, z to the south); the castle sits in the middle.
-   Zombies come in waves from spawn gates at the edge and walk a flow field to the castle; crew players fight them
-   with weapons, chop trees and mine rocks for wood and stone, and build turrets and barricades. One host runs step()
-   30 times a second; each player's device moves its own player (moveCircle) and sends the position and what it wants
-   to do (fire, weapon, gather, build, upgrade, ready). step() returns events (shots, hits, deaths, building...) that
-   the page turns into pictures and sounds and the host sends to the other devices. */
+   A game is one map (content/maps.json: roads from zombie gates at the edge to the castle in the middle, water and
+   woods) played round after round like a tower defence: rounds 1 to 100 come from content/rounds.json and after
+   round 100 freeplay rounds are made up here, harder and harder. Zombies walk their road to the castle; each one
+   that gets in costs the castle lives (hearts). The crew (1 to 4 players, each on their own device) earns coins from
+   zombies, rounds and gold mines and spends them on 15 kinds of tower, each with two upgrade paths of three steps
+   (one path may go to step 3, the other then stops at step 1). Each player fights with the weapon picked at the
+   start; it levels up from the zombies that player kills and gets a new power every 5 levels.
+   One host runs step() 30 times a second; each device moves its own player (moveCircle) and sends the position and
+   what it wants (fire, chop, build, upgrade, sell, target, next round). step() returns events (shots, hits, deaths,
+   building...) that the page turns into pictures and sounds and the host sends to the other devices. */
 const CC = (function () {
   const TICK = 1 / 30;
-  // tiles. Walkable: grass, dirt, sand, spawn, bridge. Trees, rocks, water and the castle block; turrets and barricades
-  // block too, but zombies may break through them.
+  // tiles. Players walk on grass, road, sand, gates and bridges; zombies keep to their road (fliers fly straight)
   const T = { GRASS: 0, DIRT: 1, SAND: 2, WATER: 3, TREE: 4, ROCK: 5, CASTLE: 6, SPAWN: 7, BRIDGE: 8 };
   const WALK = [1, 1, 1, 0, 0, 0, 0, 1, 1];
-  const BUILD_OK = [1, 1, 1, 0, 0, 0, 0, 0, 0];
+  const BUILD_OK = [1, 0, 1, 0, 0, 0, 0, 0, 0];   // towers stand on grass and sand
+  const ROAD_OK = [0, 1, 0, 0, 0, 0, 0, 0, 1];    // barricades and spike traps go on the road
+  const CASTLE_R = 2.5;                            // the castle is 5 x 5 tiles
+  const START_COINS = 650, LAST_ROUND = 100, SELL_BACK = 0.7, MAX_LEVEL = 30;
+  const PACE = 1.6, GOLD_MUL = 1.4;                                // zombie speeds below are multiplied by this (tiles a second)
+  const TIER_HP = { Beginner: 1, Intermediate: 0.92, Advanced: 0.85, Expert: 0.8 };   // shorter roads: a little softer zombies
+  const DIFFS = {
+    easy: { name: 'Easy', lives: 200, cost: 0.85, speed: 0.9, hp: 0.8, start: 850, medal: '🥉', tip: 'More lives, cheaper towers, slower zombies.' },
+    medium: { name: 'Medium', lives: 150, cost: 1, speed: 1, hp: 1, start: 700, medal: '🥈', tip: 'The normal game.' },
+    hard: { name: 'Hard', lives: 100, cost: 1.08, speed: 1.04, hp: 1.08, start: 650, medal: '🥇', tip: 'Fewer lives, dearer towers, tougher zombies.' }
+  };
 
-  /* ---- the crew's weapons. type: phys (blaster, arrows), fire, frost, blast (explosions), magic (lightning) ---- */
+  /* ---- the crew's weapons. type: phys, fire, frost, blast, magic. Every 5 levels a weapon gets the next tier;
+     every level adds 4% damage. mods: see applyMods. ---- */
   const WEAPONS = {
-    blaster: { name: 'Blaster', icon: '🔫', kind: 'shot', type: 'phys', dmg: 9, rate: 4, range: 6.5, speed: 15, unlock: 1, tip: 'Quick shots at anything nearby.' },
-    hammer: { name: 'Hammer', icon: '🔨', kind: 'melee', type: 'phys', dmg: 30, rate: 1.4, range: 1.7, arc: 130, knock: 1.4, unlock: 1, tip: 'Big hits up close. Knocks zombies back and chops trees fast.' },
-    scatter: { name: 'Scatter Gun', icon: '💥', kind: 'shot', type: 'phys', dmg: 6, pellets: 6, spread: 42, rate: 1.3, range: 4.6, speed: 14, unlock: 3, tip: 'A spray of pellets: great when zombies bunch up.' },
-    flamer: { name: 'Flamer', icon: '🔥', kind: 'cone', type: 'fire', dmg: 3, rate: 12, range: 3.3, arc: 55, burn: { dps: 4, t: 3 }, unlock: 4, tip: 'Burns everything in front. Knights hate it.' },
-    crossbow: { name: 'Crossbow', icon: '🏹', kind: 'shot', type: 'phys', dmg: 34, pierce: 4, rate: 0.9, range: 9, speed: 22, unlock: 5, tip: 'Long range. Each bolt goes through four zombies.' },
-    frost: { name: 'Frost Wand', icon: '❄️', kind: 'shot', type: 'frost', dmg: 7, rate: 2.2, range: 7, speed: 12, splash: 0.9, slow: { f: 0.45, t: 2.5 }, unlock: 6, tip: 'Slows zombies down. Fast ones hate it.' },
-    bomb: { name: 'Bomb Launcher', icon: '💣', kind: 'lob', type: 'blast', dmg: 46, rate: 0.7, range: 8, speed: 9, splash: 1.6, unlock: 8, tip: 'Lobs bombs over walls. Cracks armour.' },
-    lightning: { name: 'Lightning Staff', icon: '⚡', kind: 'chain', type: 'magic', dmg: 17, rate: 1.2, range: 6.5, jumps: 4, jumpRange: 2.6, falloff: 0.8, unlock: 11, tip: 'Zaps one zombie, then jumps to its friends. Ghosts hate it.' }
+    blaster: { name: 'Blaster', icon: '🔫', kind: 'shot', type: 'phys', dmg: 4, rate: 3, range: 6, speed: 15, pierce: 1, tip: 'Quick shots at anything nearby.',
+      tiers: [{ name: 'Double Blaster', desc: 'Fires two shots at once.', mods: { shots: 2, spread: 8 } },
+        { name: 'Laser Blaster', desc: 'Shots fly faster and go through three zombies.', mods: { pierce: 2, dmg: 1.25, speed: 1.4 } },
+        { name: 'Plasma Blaster', desc: 'Shots burst and hurt zombies nearby.', mods: { splash: 0.9, dmg: 1.2 } },
+        { name: 'Star Blaster', desc: 'Three shots at once, super fast.', mods: { rate: 1.6, shots: 3, spread: 14 } }] },
+    hammer: { name: 'Hammer', icon: '🔨', kind: 'melee', type: 'phys', dmg: 16, rate: 1.2, range: 1.7, arc: 130, knock: 1.1, tip: 'Big hits up close. Knocks zombies back and chops trees fast.',
+      tiers: [{ name: 'Iron Hammer', desc: 'Hits much harder.', mods: { dmg: 1.6 } },
+        { name: 'Shockwave', desc: 'Hits all around you and knocks zombies further.', mods: { arc: 360, knock: 1.6 } },
+        { name: 'Thunder Hammer', desc: 'Every hit stuns zombies for a moment.', mods: { stun: 0.6, dmg: 1.3 } },
+        { name: 'Earthshaker', desc: 'Reaches further and hits like a giant.', mods: { range: 1.5, dmg: 2 } }] },
+    scatter: { name: 'Scatter Gun', icon: '💥', kind: 'shot', type: 'phys', dmg: 3, shots: 6, spread: 42, rate: 1.1, range: 4.6, speed: 14, pierce: 1, tip: 'A spray of pellets: great when zombies bunch up.',
+      tiers: [{ name: 'Wide Spray', desc: 'Two more pellets.', mods: { shots: 8, spread: 50 } },
+        { name: 'Slug Shells', desc: 'Pellets hit harder and go through two zombies.', mods: { pierce: 1, dmg: 1.4 } },
+        { name: 'Fire Pellets', desc: 'Pellets set zombies on fire.', mods: { burnDps: 6, burnT: 2 } },
+        { name: 'Dragon Shotgun', desc: 'Twelve pellets, shot faster.', mods: { shots: 12, spread: 60, rate: 1.4 } }] },
+    flamer: { name: 'Flamer', icon: '🔥', kind: 'cone', type: 'fire', dmg: 1.5, rate: 10, range: 3.3, arc: 55, burnDps: 2, burnT: 3, tip: 'Burns everything in front. Knights and mummies hate it.',
+      tiers: [{ name: 'Hot Flamer', desc: 'Fire burns longer and hotter.', mods: { burnDps: 1.6, burnT: 1.3 } },
+        { name: 'Long Flamer', desc: 'Flames reach further.', mods: { range: 1.35 } },
+        { name: 'Blue Flame', desc: 'So hot it even hurts fire zombies.', mods: { blue: true, dmg: 1.4 } },
+        { name: 'Inferno', desc: 'A huge wide wall of fire.', mods: { arc: 95, dmg: 1.6 } }] },
+    crossbow: { name: 'Crossbow', icon: '🏹', kind: 'shot', type: 'phys', dmg: 16, pierce: 4, rate: 0.8, range: 9, speed: 22, tip: 'Long range. Each bolt goes through four zombies.',
+      tiers: [{ name: 'Heavy Bolts', desc: 'Bolts hit harder.', mods: { dmg: 1.4 } },
+        { name: 'Repeater', desc: 'Shoots much faster.', mods: { rate: 1.6 } },
+        { name: 'Armour Piercer', desc: 'Bolts go through armour and six more zombies.', mods: { armor: true, pierce: 6 } },
+        { name: 'Ballista', desc: 'Giant bolts that burst on hit.', mods: { dmg: 2, splash: 0.7 } }] },
+    frost: { name: 'Frost Wand', icon: '❄️', kind: 'shot', type: 'frost', dmg: 4, rate: 2, range: 7, speed: 12, pierce: 1, splash: 0.9, slowF: 0.45, slowT: 2.5, tip: 'Slows zombies down. Fast ones hate it.',
+      tiers: [{ name: 'Colder Wand', desc: 'Slows zombies even more.', mods: { slowF: 0.6, dmg: 1.3 } },
+        { name: 'Ice Burst', desc: 'Bigger bursts of ice.', mods: { splash: 1.4, dmg: 1.3 } },
+        { name: 'Frozen Solid', desc: 'Freezes zombies still for a moment.', mods: { freeze: 0.7 } },
+        { name: 'Winter Storm', desc: 'Huge icy blasts, faster.', mods: { splash: 1.5, dmg: 2, rate: 1.3 } }] },
+    bomb: { name: 'Bomb Launcher', icon: '💣', kind: 'lob', type: 'blast', dmg: 22, rate: 0.6, range: 8, speed: 9, splash: 1.6, tip: 'Lobs bombs over everything. Cracks armour.',
+      tiers: [{ name: 'Big Bombs', desc: 'Bigger blasts.', mods: { splash: 1.3, dmg: 1.2 } },
+        { name: 'Fast Fuse', desc: 'Throws bombs faster.', mods: { rate: 1.5 } },
+        { name: 'Cluster Bombs', desc: 'Each bomb breaks into 4 little bombs.', mods: { cluster: 4 } },
+        { name: 'Mega Bomb', desc: 'Huge blasts that stun zombies.', mods: { dmg: 2, stun: 0.6, splash: 1.2 } }] },
+    lightning: { name: 'Lightning Staff', icon: '⚡', kind: 'chain', type: 'magic', dmg: 8, rate: 1, range: 6.5, jumps: 4, jumpRange: 2.6, falloff: 0.82, tip: 'Zaps one zombie, then jumps to its friends. Ghosts hate it.',
+      tiers: [{ name: 'More Jumps', desc: 'Jumps to two more zombies.', mods: { jumps: 2 } },
+        { name: 'Charged Staff', desc: 'Much stronger zaps.', mods: { dmg: 1.6 } },
+        { name: 'Storm Staff', desc: 'Faster zaps that jump further.', mods: { rate: 1.4, jumps: 3, jumpRange: 1.3 } },
+        { name: 'Thunder God', desc: 'Zaps hit twice as hard and slow zombies.', mods: { dmg: 2, slowF: 0.35, slowT: 1 } }] }
   };
   const WEAPON_ORDER = ['blaster', 'hammer', 'scatter', 'flamer', 'crossbow', 'frost', 'bomb', 'lightning'];
 
-  /* ---- turrets and barricades (cost from the team's wood, stone and gold; level 2 and 3 cost gold) ---- */
-  const TURRETS = {
-    arrow: { name: 'Arrow Tower', icon: '🏹', cost: { wood: 6 }, hp: 160, kind: 'shot', type: 'phys', dmg: 8, rate: 1.6, range: 6, speed: 17, unlock: 1, tip: 'Shoots arrows at the zombie nearest the castle.' },
-    wall: { name: 'Barricade', icon: '🧱', cost: { wood: 2 }, hp: 200, kind: 'wall', unlock: 1, tip: 'Blocks the path. Zombies walk round it or have to break it.' },
-    cannon: { name: 'Cannon', icon: '💣', cost: { wood: 4, stone: 6 }, hp: 230, kind: 'lob', type: 'blast', dmg: 30, rate: 0.6, range: 6.5, speed: 10, splash: 1.4, unlock: 4, tip: 'Explodes on groups. Good against armour.' },
-    frost: { name: 'Frost Tower', icon: '❄️', cost: { stone: 6, gold: 15 }, hp: 170, kind: 'aura', type: 'frost', dps: 2, range: 3.5, slow: { f: 0.5, t: 0.4 }, unlock: 6, tip: 'Slows every zombie near it.' },
-    tesla: { name: 'Tesla Coil', icon: '⚡', cost: { stone: 8, gold: 25 }, hp: 190, kind: 'chain', type: 'magic', dmg: 18, rate: 0.9, range: 5, jumps: 4, jumpRange: 2.6, falloff: 0.8, unlock: 11, tip: 'Lightning that jumps from zombie to zombie.' },
-    flame: { name: 'Flame Tower', icon: '🔥', cost: { wood: 4, stone: 4, gold: 10 }, hp: 190, kind: 'cone', type: 'fire', dmg: 4, rate: 8, range: 3.2, arc: 70, burn: { dps: 4, t: 3 }, unlock: 12, tip: 'Burns zombies that come close.' },
-    mortar: { name: 'Mortar', icon: '🎯', cost: { stone: 10, gold: 20 }, hp: 210, kind: 'lob', type: 'blast', dmg: 46, rate: 0.35, range: 10.5, min: 3, speed: 7, splash: 1.8, unlock: 16, tip: 'Very long range and big blasts, but it cannot hit close.' },
-    shrine: { name: 'Healing Shrine', icon: '💖', cost: { wood: 6, gold: 20 }, hp: 160, kind: 'heal', heal: 7, range: 3.2, unlock: 17, tip: 'Heals the crew and repairs turrets near it.' }
+  /* ---- towers: base stats and two upgrade paths (a, b) of three steps each. cost in coins on Medium. kinds: shot
+     (arrows, stars, bolts), lob (bombs and shells), chain (lightning), cone (flames), snipe (an instant hit anywhere),
+     beam (a ray through a line of zombies), aura (frost all around), support (the shrine), mine (coins each round),
+     wall and trap (on the road). ---- */
+  const TOWERS = {
+    arrow: { name: 'Arrow Tower', icon: '🏹', cost: 180, kind: 'shot', type: 'phys', dmg: 10, rate: 1.5, range: 5.5, pierce: 2, speed: 17, tip: 'Cheap and steady: arrows at the zombie nearest the castle.',
+      a: [{ name: 'Sharp Arrows', cost: 120, desc: 'Each arrow goes through 2 more zombies.', mods: { pierce: 2 } },
+        { name: 'Fire Arrows', cost: 330, desc: 'Arrows set zombies on fire.', mods: { burnDps: 5, burnT: 2.5, dmg: 1.2 } },
+        { name: 'Arrow Storm', cost: 1700, desc: 'Three arrows at a time, faster.', mods: { shots: 3, spread: 16, rate: 1.4 } }],
+      b: [{ name: 'Long Bow', cost: 100, desc: 'Shoots further.', mods: { range: 1.3 } },
+        { name: 'Eagle Eye', cost: 300, desc: 'Sees shadow zombies and shoots faster.', mods: { camo: true, rate: 1.3 } },
+        { name: 'Master Archer', cost: 2500, desc: 'Huge arrows, three times as strong.', mods: { dmg: 3, pierce: 3, speed: 1.4 } }] },
+    wall: { name: 'Barricade', icon: '🧱', cost: 60, kind: 'wall', road: true, hp: 250, tip: 'Goes on the road. Zombies must stop and smash it.',
+      a: [{ name: 'Spiky', cost: 90, desc: 'Hurts every zombie that hits it.', mods: { thorns: 8 } },
+        { name: 'Stone Wall', cost: 280, desc: 'Three times as strong.', mods: { hp: 3 } },
+        { name: 'Iron Gate', cost: 1400, desc: 'Super strong, with big spikes.', mods: { hp: 4, thorns: 40 } }],
+      b: [{ name: 'Patch Up', cost: 100, desc: 'Mends itself after every round.', mods: { repair: true } },
+        { name: 'Sticky Tar', cost: 320, desc: 'Zombies near it walk slowly.', mods: { tarF: 0.45, tarR: 1.8 } },
+        { name: 'Magic Ward', cost: 1600, desc: 'Every 3 s it pushes nearby zombies back down the road.', mods: { wardEvery: 3, wardPush: 2.5, wardR: 1.8 } }] },
+    cannon: { name: 'Cannon', icon: '💣', cost: 420, kind: 'lob', type: 'blast', dmg: 22, rate: 0.7, range: 6, speed: 10, splash: 1.3, tip: 'Explodes on groups. Cracks armour.',
+      a: [{ name: 'Bigger Bombs', cost: 260, desc: 'Bigger blasts.', mods: { splash: 1.35, dmg: 1.2 } },
+        { name: 'Heavy Shells', cost: 650, desc: 'Nearly twice the damage.', mods: { dmg: 1.9 } },
+        { name: 'Cluster Bombs', cost: 2400, desc: 'Each shell breaks into 4 more bombs.', mods: { cluster: 4 } }],
+      b: [{ name: 'Quick Loader', cost: 300, desc: 'Fires faster.', mods: { rate: 1.45 } },
+        { name: 'Stun Shells', cost: 700, desc: 'Blasts stun zombies for a moment.', mods: { stun: 0.6 } },
+        { name: 'Twin Cannon', cost: 2700, desc: 'Two barrels: two shells at a time.', mods: { shots: 2, rate: 1.25 } }] },
+    frost: { name: 'Frost Tower', icon: '❄️', cost: 320, kind: 'aura', type: 'frost', dmg: 3, range: 2.8, slowF: 0.4, slowT: 0.4, tip: 'Chills and slows every zombie near it.',
+      a: [{ name: 'Deep Freeze', cost: 220, desc: 'Slows zombies even more.', mods: { slowF: 0.55 } },
+        { name: 'Freeze Pulse', cost: 650, desc: 'Every 4 s, freezes everything near it.', mods: { pulseEvery: 4, pulseFreeze: 1.2 } },
+        { name: 'Blizzard', cost: 2600, desc: 'A huge storm: bigger, stronger, freezes often.', mods: { range: 1.5, dmg: 4, pulseEvery: 2.5 } }],
+      b: [{ name: 'Chilly', cost: 150, desc: 'Reaches further.', mods: { range: 1.25 } },
+        { name: 'Ice Shards', cost: 550, desc: 'Also shoots sharp ice at zombies.', mods: { shards: true } },
+        { name: 'Permafrost', cost: 2000, desc: 'Chilled zombies take 30% more damage from everything.', mods: { brittle: 2.5 } }] },
+    tesla: { name: 'Tesla Coil', icon: '⚡', cost: 650, kind: 'chain', type: 'magic', dmg: 20, rate: 0.9, range: 4.5, jumps: 4, jumpRange: 2.4, falloff: 0.85, tip: 'Lightning that jumps from zombie to zombie.',
+      a: [{ name: 'More Jumps', cost: 320, desc: 'Jumps to two more zombies.', mods: { jumps: 2 } },
+        { name: 'Overcharge', cost: 850, desc: 'Much stronger zaps.', mods: { dmg: 1.7 } },
+        { name: 'Storm Coil', cost: 3200, desc: 'Huge chains of lightning.', mods: { jumps: 6, dmg: 1.5, rate: 1.3 } }],
+      b: [{ name: 'Fast Charge', cost: 380, desc: 'Zaps faster.', mods: { rate: 1.35 } },
+        { name: 'Static', cost: 650, desc: 'Zapped zombies slow down.', mods: { slowF: 0.3, slowT: 1 } },
+        { name: 'Thunder Dome', cost: 3600, desc: 'Every 2.5 s, zaps every zombie near it.', mods: { pulseEvery: 2.5, pulseDmg: 70 } }] },
+    flame: { name: 'Flame Tower', icon: '🔥', cost: 380, kind: 'cone', type: 'fire', dmg: 3, rate: 8, range: 2.8, arc: 70, burnDps: 4, burnT: 3, tip: 'Burns zombies that come close.',
+      a: [{ name: 'Hotter', cost: 260, desc: 'Fire burns twice as hot.', mods: { burnDps: 2 } },
+        { name: 'Napalm', cost: 700, desc: 'Sticky fire that burns longer.', mods: { burnT: 2, dmg: 1.5 } },
+        { name: "Dragon's Breath", cost: 2700, desc: 'A huge, wide blast of fire.', mods: { range: 1.5, arc: 120, dmg: 2 } }],
+      b: [{ name: 'Long Nozzle', cost: 200, desc: 'Flames reach further.', mods: { range: 1.3 } },
+        { name: 'Blue Flame', cost: 650, desc: 'So hot it even burns fire zombies.', mods: { blue: true } },
+        { name: 'Inferno Ring', cost: 2900, desc: 'Flames all the way round.', mods: { arc: 360, dmg: 1.5 } }] },
+    mortar: { name: 'Mortar', icon: '🎯', cost: 700, kind: 'lob', type: 'blast', dmg: 40, rate: 0.4, range: 9, min: 2.5, speed: 7, splash: 1.7, tip: 'Very long range and big blasts, but it cannot hit close.',
+      a: [{ name: 'Big Shells', cost: 360, desc: 'Bigger blasts.', mods: { splash: 1.3 } },
+        { name: 'Burning Ground', cost: 850, desc: 'Shells leave fire on the road.', mods: { poolDps: 10, poolT: 3, poolR: 1.4 } },
+        { name: 'Earthquake', cost: 3300, desc: 'Massive shells that stun zombies.', mods: { dmg: 2.5, stun: 0.8 } }],
+      b: [{ name: 'Fast Reload', cost: 420, desc: 'Fires faster.', mods: { rate: 1.4 } },
+        { name: 'Long Barrel', cost: 500, desc: 'Reaches much further.', mods: { range: 1.45 } },
+        { name: 'Battery', cost: 3100, desc: 'Three shells at a time.', mods: { shots: 3 } }] },
+    shrine: { name: 'Healing Shrine', icon: '💖', cost: 500, kind: 'support', range: 3, heal: 8, buffRate: 0.1, tip: 'Heals the crew and makes towers near it shoot faster.',
+      a: [{ name: 'Battle Hymn', cost: 420, desc: 'Towers near it shoot even faster.', mods: { buffRate: 0.15 } },
+        { name: 'Far Sight', cost: 720, desc: 'Towers near it reach further and see shadows.', mods: { buffRange: 0.15, buffCamo: true } },
+        { name: 'Golden Shrine', cost: 3600, desc: 'Towers near it hit 40% harder.', mods: { buffDmg: 0.4 } }],
+      b: [{ name: 'Blessing', cost: 300, desc: 'Reaches further.', mods: { range: 1.3 } },
+        { name: 'Quick Revive', cost: 600, desc: 'Knocked-out players get up in 2 s.', mods: { revive: true } },
+        { name: 'Castle Mender', cost: 2600, desc: 'Mends 5 of the castle’s lives after every round.', mods: { mend: 5 } }] },
+    sniper: { name: 'Sniper Nest', icon: '🔭', cost: 320, kind: 'snipe', type: 'phys', dmg: 30, rate: 0.45, range: 99, mode: 'strong', tip: 'Hits any zombie on the map. Aims at the strongest.',
+      a: [{ name: 'Big Bullets', cost: 260, desc: 'Hits harder.', mods: { dmg: 1.7 } },
+        { name: 'Armour Piercing', cost: 820, desc: 'Goes straight through armour.', mods: { armor: true, dmg: 1.3 } },
+        { name: 'Deadly Aim', cost: 3100, desc: 'Four times the damage.', mods: { dmg: 4 } }],
+      b: [{ name: 'Fast Reload', cost: 320, desc: 'Shoots faster.', mods: { rate: 1.5 } },
+        { name: 'Night Vision', cost: 360, desc: 'Sees shadow zombies.', mods: { camo: true } },
+        { name: 'Elite Sniper', cost: 3300, desc: 'Shoots two and a half times as fast.', mods: { rate: 2.5 } }] },
+    glue: { name: 'Slime Tower', icon: '🧪', cost: 250, kind: 'shot', type: 'phys', dmg: 1, rate: 1.2, range: 4.5, speed: 12, pierce: 1, slowF: 0.5, slowT: 3, tip: 'Slime slows zombies right down.',
+      a: [{ name: 'Stronger Slime', cost: 200, desc: 'Slows zombies even more.', mods: { slowF: 0.65 } },
+        { name: 'Acid Slime', cost: 520, desc: 'Slimed zombies melt a little.', mods: { acidDps: 8, acidT: 3 } },
+        { name: 'Slime Flood', cost: 2300, desc: 'Each splat slimes every zombie near it.', mods: { flood: 2.2 } }],
+      b: [{ name: 'Splat', cost: 260, desc: 'Slime splashes on zombies next to it.', mods: { splash: 1 } },
+        { name: 'Sticky', cost: 460, desc: 'Slime lasts twice as long.', mods: { slowT: 2 } },
+        { name: 'Super Glue', cost: 2100, desc: 'Glued zombies stop dead for a second.', mods: { stop: 1 } }] },
+    ninja: { name: 'Ninja Dojo', icon: '🥷', cost: 450, kind: 'shot', type: 'phys', dmg: 9, rate: 2.4, range: 5, speed: 18, pierce: 2, camo: true, tip: 'Fast throwing stars. Ninjas see shadow zombies.',
+      a: [{ name: 'Sharp Stars', cost: 260, desc: 'Stars go further through zombies and hit harder.', mods: { pierce: 2, dmg: 1.2 } },
+        { name: 'Triple Star', cost: 720, desc: 'Three stars at a time.', mods: { shots: 3, spread: 20 } },
+        { name: 'Grandmaster', cost: 3300, desc: 'Twice as fast and twice as strong.', mods: { rate: 2, dmg: 2 } }],
+      b: [{ name: 'Quick Hands', cost: 300, desc: 'Throws faster.', mods: { rate: 1.3 } },
+        { name: 'Smoke Bomb', cost: 620, desc: 'Every 5 s, a smoke bomb stuns a group.', mods: { smokeEvery: 5, smokeStun: 1.2, smokeR: 1.5 } },
+        { name: 'Shadow Clone', cost: 2900, desc: 'A shadow ninja throws with it.', mods: { shots: 2, dmg: 1.4 } }] },
+    wizard: { name: 'Wizard Tower', icon: '🔮', cost: 420, kind: 'shot', type: 'magic', dmg: 14, rate: 1.2, range: 5.5, speed: 12, pierce: 1, tip: 'Magic bolts. Ghosts hate magic.',
+      a: [{ name: 'Arcane Bolt', cost: 260, desc: 'Bolts hit harder and go through 2 zombies.', mods: { dmg: 1.5, pierce: 1 } },
+        { name: 'Fireball', cost: 720, desc: 'Throws a fireball every 2 s.', mods: { fireballEvery: 2, fireballDmg: 30, fireballR: 1.4 } },
+        { name: 'Dragon Spirit', cost: 3500, desc: 'Huge fireballs, three times as often.', mods: { fireballEvery: 0.7, fireballDmg: 2 } }],
+      b: [{ name: 'Wisdom', cost: 220, desc: 'Reaches further.', mods: { range: 1.25 } },
+        { name: 'Crystal Ball', cost: 420, desc: 'Sees shadow zombies and casts faster.', mods: { camo: true, rate: 1.2 } },
+        { name: 'Meteor', cost: 3100, desc: 'Every 7 s, a meteor smashes the strongest zombie.', mods: { meteorEvery: 7, meteorDmg: 700, meteorR: 2 } }] },
+    mine: { name: 'Gold Mine', icon: '🪙', cost: 800, kind: 'mine', income: 70, tip: 'Digs up 70 coins at the end of every round.',
+      a: [{ name: 'Deeper Shaft', cost: 500, desc: '40 more coins every round.', mods: { income: 40 } },
+        { name: 'Gold Rush', cost: 1200, desc: '90 more coins every round.', mods: { income: 90 } },
+        { name: 'Treasure Vault', cost: 3600, desc: '260 more coins every round.', mods: { income: 260 } }],
+      b: [{ name: 'Lucky Coins', cost: 420, desc: 'Every zombie that falls near it drops a coin more.', mods: { killBonus: 1, killR: 3.5 } },
+        { name: 'Bank', cost: 1300, desc: 'Adds 8% to your coins every round (up to 400).', mods: { bankRate: 0.08, bankCap: 400 } },
+        { name: 'Royal Mint', cost: 4000, desc: '450 more coins every round.', mods: { income: 450 } }] },
+    sun: { name: 'Sun Tower', icon: '☀️', cost: 3200, kind: 'beam', type: 'magic', dmg: 7, rate: 8, range: 6, pierce: 1, tip: 'A burning ray of sunlight. Very strong, very dear.',
+      a: [{ name: 'Brighter', cost: 1600, desc: 'A much stronger ray.', mods: { dmg: 1.6 } },
+        { name: 'Solar Flare', cost: 4200, desc: 'The ray goes through 5 zombies in a line.', mods: { pierce: 5 } },
+        { name: 'Supernova', cost: 13000, desc: 'Three times the power, and further.', mods: { dmg: 3, range: 1.4 } }],
+      b: [{ name: 'Wide Lens', cost: 1100, desc: 'Reaches further.', mods: { range: 1.3 } },
+        { name: 'Sunspot', cost: 3000, desc: 'The ray sets zombies on fire.', mods: { burnDps: 8, burnT: 3 } },
+        { name: 'Twin Suns', cost: 10500, desc: 'Two rays at two zombies.', mods: { beams: 2 } }] },
+    spikes: { name: 'Spike Trap', icon: '📍', cost: 120, kind: 'trap', road: true, type: 'phys', spikes: 20, spikeDmg: 15, tip: 'Goes on the road. Pokes the zombies that walk over it (20 spikes each round).',
+      a: [{ name: 'Sharper', cost: 110, desc: 'Spikes hurt twice as much.', mods: { spikeDmg: 2 } },
+        { name: 'Iron Spikes', cost: 360, desc: 'Spikes go through armour.', mods: { armor: true } },
+        { name: 'Spike Storm', cost: 1500, desc: 'Three times the spikes, three times the damage.', mods: { spikeDmg: 3, spikes: 3 } }],
+      b: [{ name: 'More Spikes', cost: 130, desc: 'Twice as many spikes.', mods: { spikes: 2 } },
+        { name: 'Glue Spikes', cost: 320, desc: 'Poked zombies slow down.', mods: { slowF: 0.4, slowT: 2 } },
+        { name: 'Exploding Spikes', cost: 1400, desc: 'Every spike goes off like a little bomb.', mods: { explode: 1.2 } }] }
   };
-  const TURRET_ORDER = ['arrow', 'wall', 'cannon', 'frost', 'tesla', 'flame', 'mortar', 'shrine'];
-  const UP_DMG = [1, 1.55, 2.2], UP_RANGE = [1, 1.1, 1.2], UP_HP = [1, 1.3, 1.6];
-  const upgradeCost = (type, lvl) => { const c = TURRETS[type].cost, sum = (c.wood || 0) + (c.stone || 0) + (c.gold || 0); return Math.round((12 + sum * 0.8) * (lvl === 1 ? 1 : 1.8)); };
+  const TOWER_ORDER = ['arrow', 'ninja', 'glue', 'sniper', 'cannon', 'frost', 'flame', 'wizard', 'tesla', 'mortar', 'shrine', 'mine', 'sun', 'wall', 'spikes'];
 
-  /* ---- zombies. res: damage taken per type (1 = normal). size scales the model and the body radius. ---- */
+  /* ---- zombies. hp at round 1 (later rounds make them tougher); gold: coins when it falls; xp: weapon experience
+     for the player whose weapon finished it; bite: lives it takes when it gets into the castle; res: damage taken
+     per type (1 = normal). ---- */
   const ZOMBIES = {
-    walker: { name: 'Walker', hp: 30, speed: 1.0, dmg: 8, gold: 1, size: 1, tip: 'Slow and steady. There are lots of them.' },
-    runner: { name: 'Runner', hp: 18, speed: 2.1, dmg: 5, gold: 1, size: 0.85, tip: 'Fast! Slow them down or hit them early.' },
-    brute: { name: 'Brute', hp: 170, speed: 0.7, dmg: 22, gold: 6, size: 1.5, heavy: true, tip: 'Huge and tough. Hit it with everything.' },
-    knight: { name: 'Knight', hp: 70, speed: 0.9, dmg: 10, gold: 4, res: { phys: 0.3, blast: 1.5, fire: 1.3 }, tip: 'Armour stops arrows and bullets. Use fire or bombs.' },
-    spitter: { name: 'Spitter', hp: 34, speed: 0.9, dmg: 7, gold: 3, ranged: { range: 4.5, rate: 0.6, speed: 7 }, tip: 'Spits slime at turrets from far away.' },
-    bomber: { name: 'Bomber', hp: 35, speed: 1.45, dmg: 45, gold: 3, explode: { r: 1.8 }, tip: 'Blows up when it gets close. Pop it from far away.' },
-    ghost: { name: 'Ghost', hp: 45, speed: 1.0, dmg: 8, gold: 4, fly: true, res: { phys: 0.3, magic: 1.6, frost: 1.2 }, tip: 'Floats over water and walls. Magic and frost hurt it.' },
-    frosty: { name: 'Frosty', hp: 65, speed: 0.95, dmg: 10, gold: 4, res: { frost: 0, fire: 2 }, noSlow: true, tip: 'Made of ice: frost does nothing, fire melts it.' },
-    blaze: { name: 'Blaze', hp: 65, speed: 1.0, dmg: 10, gold: 4, res: { fire: 0, frost: 2 }, noBurn: true, tip: 'On fire: flames do nothing, frost puts it out.' },
-    digger: { name: 'Digger', hp: 55, speed: 1.1, dmg: 10, gold: 5, dig: { speed: 2.4, pop: 4.5 }, tip: 'Tunnels under the ground and pops up near the castle.' },
-    blob: { name: 'Blob', hp: 80, speed: 0.8, dmg: 10, gold: 4, size: 1.2, split: { type: 'mini', n: 3 }, tip: 'Splits into three little blobs.' },
-    mini: { name: 'Little Blob', hp: 15, speed: 1.8, dmg: 4, gold: 0, size: 0.6, tip: 'Small and quick.' },
-    shield: { name: 'Shield Bearer', hp: 90, speed: 0.85, dmg: 12, gold: 5, shield: { arc: 140, blocks: { phys: 1, fire: 1, frost: 1 } }, tip: 'Its shield blocks shots from the front. Use bombs, lightning, or hit it from behind.' },
-    shaman: { name: 'Shaman', hp: 55, speed: 0.8, dmg: 6, gold: 6, heal: { r: 3, hps: 6 }, tip: 'Heals the zombies around it. Get it first!' },
-    king: { name: 'Zombie King', hp: 1250, speed: 0.55, dmg: 35, gold: 100, size: 2.4, heavy: true, boss: true, summon: { types: ['walker'], n: 3, every: 8 }, tip: 'The boss! It calls walkers to help.' },
-    witch: { name: 'Swamp Witch', hp: 1500, speed: 0.5, dmg: 20, gold: 150, size: 2.2, heavy: true, boss: true, fly: true, res: { phys: 0.6, magic: 1.4 }, summon: { types: ['ghost'], n: 2, every: 10 }, tip: 'A flying boss that calls ghosts. Use magic!' },
-    colossus: { name: 'Colossus', hp: 3600, speed: 0.5, dmg: 55, gold: 250, size: 3, heavy: true, boss: true, summon: { types: ['runner', 'knight'], n: 4, every: 9 }, stomp: { every: 9, r: 3, dmg: 25 }, tip: 'The biggest zombie of all. It stomps and calls knights.' }
+    walker: { name: 'Walker', hp: 18, speed: 1.0, dmg: 8, gold: 1, xp: 1, bite: 1, size: 1, tip: 'Slow and steady. There are lots of them.' },
+    runner: { name: 'Runner', hp: 12, speed: 2.1, dmg: 5, gold: 1, xp: 1, bite: 1, size: 0.85, tip: 'Fast! Slow them down or hit them early.' },
+    brute: { name: 'Brute', hp: 120, speed: 0.75, dmg: 25, gold: 6, xp: 6, bite: 5, size: 1.5, heavy: true, tip: 'Huge and tough. Hit it with everything.' },
+    knight: { name: 'Knight', hp: 45, speed: 0.95, dmg: 10, gold: 3, xp: 4, bite: 2, res: { phys: 0.4, blast: 1.5, fire: 1.3, magic: 1.2 }, tip: 'Armour stops arrows and bullets. Use bombs, fire or magic.' },
+    spitter: { name: 'Spitter', hp: 28, speed: 0.95, dmg: 8, gold: 2, xp: 3, bite: 1, ranged: { range: 4, rate: 0.5, speed: 7, stun: 1.5 }, tip: 'Spits slime that jams towers for a moment.' },
+    bomber: { name: 'Bomber', hp: 30, speed: 1.45, dmg: 12, gold: 2, xp: 3, bite: 3, explode: { r: 1.7, dmg: 40, stun: 1 }, tip: 'Blows up when it falls: it hurts its friends, but jams towers close by.' },
+    shadow: { name: 'Shadow', hp: 30, speed: 1.35, dmg: 8, gold: 2, xp: 3, bite: 2, camo: true, tip: 'Invisible to most towers! Ninjas, some upgrades and your own weapon can see it.' },
+    ghost: { name: 'Ghost', hp: 36, speed: 1.1, dmg: 8, gold: 3, xp: 3, bite: 2, fly: true, res: { phys: 0.4, magic: 1.6, frost: 1.2 }, tip: 'Floats over barricades and traps. Magic and frost hurt it.' },
+    frosty: { name: 'Frosty', hp: 50, speed: 0.95, dmg: 10, gold: 3, xp: 4, bite: 2, res: { frost: 0, fire: 2 }, noSlow: true, tip: 'Made of ice: frost does nothing, fire melts it.' },
+    blaze: { name: 'Blaze', hp: 50, speed: 1.0, dmg: 10, gold: 3, xp: 4, bite: 2, res: { fire: 0, frost: 2 }, noBurn: true, tip: 'On fire: flames do nothing, frost puts it out.' },
+    digger: { name: 'Digger', hp: 45, speed: 1.0, dmg: 10, gold: 3, xp: 4, bite: 2, dig: { speed: 2.4, pop: 6 }, tip: 'Tunnels under the road and pops up near the castle.' },
+    blob: { name: 'Blob', hp: 60, speed: 0.8, dmg: 10, gold: 2, xp: 3, bite: 3, size: 1.2, split: { type: 'mini', n: 3 }, tip: 'Splits into three little blobs.' },
+    mini: { name: 'Little Blob', hp: 12, speed: 1.7, dmg: 4, gold: 1, xp: 1, bite: 1, size: 0.6, tip: 'Small and quick.' },
+    shield: { name: 'Shield Bearer', hp: 75, speed: 0.85, dmg: 12, gold: 4, xp: 5, bite: 2, shield: { arc: 140, blocks: { phys: 1, fire: 1, frost: 1 } }, tip: 'Its shield blocks shots from the front. Use bombs, magic, or hit it from behind.' },
+    shaman: { name: 'Shaman', hp: 45, speed: 0.8, dmg: 6, gold: 4, xp: 5, bite: 2, heal: { r: 3, hps: 8 }, tip: 'Heals the zombies around it. Get it first!' },
+    bat: { name: 'Bat', hp: 10, speed: 2.7, dmg: 4, gold: 1, xp: 1, bite: 1, size: 0.6, fly: true, tip: 'Tiny, fast, and flies over barricades and traps.' },
+    mummy: { name: 'Mummy', hp: 150, speed: 0.65, dmg: 18, gold: 6, xp: 7, bite: 4, size: 1.2, heavy: true, regen: 6, res: { fire: 1.6 }, tip: 'Heals itself as it walks. Burn it!' },
+    skeleton: { name: 'Skeleton', hp: 36, speed: 1.6, dmg: 8, gold: 2, xp: 3, bite: 2, revive: 0.5, res: { phys: 0.7, blast: 1.4 }, tip: 'Falls apart, then gets up again once. Bombs break bones best.' },
+    giant: { name: 'Giant', hp: 800, speed: 0.42, dmg: 50, gold: 35, xp: 40, bite: 20, size: 2.1, heavy: true, stomp: { every: 6, r: 2.4, stun: 1 }, children: { type: 'brute', n: 2 }, tip: 'Stomps towers still. Two brutes climb out when it falls.' },
+    king: { name: 'Zombie King', hp: 1800, speed: 0.4, dmg: 40, gold: 150, xp: 120, bite: 40, size: 2.4, heavy: true, boss: true, summon: { types: ['walker', 'runner'], n: 4, every: 6 }, children: { type: 'knight', n: 6 }, tip: 'A boss! It calls zombies to help, and knights jump out when it falls.' },
+    witch: { name: 'Swamp Witch', hp: 3400, speed: 0.38, dmg: 25, gold: 250, xp: 180, bite: 60, size: 2.2, heavy: true, boss: true, fly: true, res: { phys: 0.6, magic: 1.4 }, summon: { types: ['ghost', 'bat'], n: 4, every: 7 }, children: { type: 'ghost', n: 8 }, tip: 'A flying boss that calls ghosts and bats. Use magic!' },
+    colossus: { name: 'Colossus', hp: 5200, speed: 0.32, dmg: 60, gold: 400, xp: 300, bite: 90, size: 3, heavy: true, boss: true, stomp: { every: 7, r: 2.8, stun: 1.2 }, summon: { types: ['runner', 'knight', 'shield'], n: 5, every: 8 }, children: { type: 'giant', n: 2 }, tip: 'Enormous. Its stomps stop towers, and two giants climb out when it falls.' },
+    dragon: { name: 'Bone Dragon', hp: 9000, speed: 0.36, dmg: 50, gold: 600, xp: 450, bite: 110, size: 2.6, heavy: true, boss: true, fly: true, res: { fire: 0, frost: 1.5 }, breath: { every: 6, r: 4, stun: 1.4 }, summon: { types: ['bat', 'shadow'], n: 6, every: 6 }, children: { type: 'skeleton', n: 12 }, tip: 'A flying boss. Its breath freezes towers; fire does nothing to it.' },
+    overlord: { name: 'Zombie Overlord', hp: 15000, speed: 0.26, dmg: 99, gold: 1500, xp: 1000, bite: 9999, size: 3.4, heavy: true, boss: true, stomp: { every: 8, r: 3.2, stun: 1.5 }, summon: { types: ['brute', 'mummy', 'shadow', 'knight'], n: 6, every: 6 }, children: { type: 'giant', n: 3 }, tip: 'The last boss. If it reaches the castle, the castle falls.' }
   };
   const ZOMBIE_ORDER = Object.keys(ZOMBIES);
-  const CASTLE_R = 2.5;   // the castle is 5 x 5 tiles
+  // round 1 to 30 zombies are as written above; then they get tougher round by round (and faster after round 80)
+  const hpRound = (r) => (r <= 30 ? 1 : 1 + (r - 30) * 0.024 + Math.max(0, r - 100) * 0.04);
+  const speedRound = (r) => (r <= 80 ? 1 : Math.min(1.6, 1 + (r - 80) * 0.01));
 
   /* ---- random numbers: mulberry32, the seed kept in the state so a game can be replayed ---- */
   function rngNext(s) {
@@ -74,153 +229,184 @@ const CC = (function () {
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   }
   const rnd = (s, a, b) => a + (b - a) * rngNext(s);
+  const dist2 = (ax, az, bx, bz) => (ax - bx) * (ax - bx) + (az - bz) * (az - bz);
+
+  /* ---- stats with upgrades: MUL keys multiply (or set, when the value is not there yet), ADD keys add, the rest
+     are set ---- */
+  const MUL = new Set(['dmg', 'rate', 'range', 'speed', 'splash', 'burnDps', 'burnT', 'slowT', 'hp', 'heal', 'spikes', 'spikeDmg', 'poolDps', 'pulseDmg', 'fireballDmg', 'meteorDmg', 'knock', 'jumpRange']);
+  const ADD = new Set(['pierce', 'jumps', 'income', 'buffRate', 'buffRange', 'buffDmg', 'mend', 'killBonus']);
+  function applyMods(st, mods) {
+    for (const k of Object.keys(mods)) {
+      const v = mods[k];
+      if (MUL.has(k)) st[k] = st[k] ? st[k] * v : v;
+      else if (ADD.has(k)) st[k] = (st[k] || 0) + v;
+      else st[k] = v;
+    }
+    return st;
+  }
+  const BASE_KEYS = ['kind', 'type', 'dmg', 'rate', 'range', 'min', 'pierce', 'speed', 'splash', 'shots', 'spread', 'arc', 'jumps', 'jumpRange', 'falloff', 'burnDps', 'burnT', 'slowF', 'slowT', 'camo', 'hp', 'income', 'heal', 'buffRate', 'spikes', 'spikeDmg', 'road', 'knock', 'mode'];
+  function baseStats(U) { const st = {}; for (const k of BASE_KEYS) if (U[k] != null) st[k] = U[k]; return st; }
+  // a weapon at a level: its base, the tiers it has reached (every 5 levels) and 4% more damage per level
+  const wsCache = {};
+  function weaponStats(w, lvl) {
+    const key = w + ':' + lvl;
+    if (wsCache[key]) return wsCache[key];
+    const W = WEAPONS[w] || WEAPONS.blaster, st = baseStats(W), tiers = Math.min(4, Math.floor(lvl / 5));
+    for (let k = 0; k < tiers; k++) applyMods(st, W.tiers[k].mods);
+    st.dmg = (st.dmg || 0) * (1 + 0.04 * (lvl - 1));
+    st.tier = tiers; st.name = tiers ? W.tiers[tiers - 1].name : W.name;
+    st.camo = true;   // a player can always see shadow zombies
+    return (wsCache[key] = st);
+  }
+  const xpNeed = (lvl) => Math.round(14 * Math.pow(1.18, lvl));
 
   /* ================= the map ================= */
-  const SIDES = { N: [0, -1], S: [0, 1], W: [-1, 0], E: [1, 0], NE: [1, -1], NW: [-1, -1], SE: [1, 1], SW: [-1, 1] };
-  function genMap(cfg, seed) {
-    const w = cfg.size || 29, h = w, c = (w - 1) / 2, R = { rng: seed | 0 };
-    const tiles = new Uint8Array(w * h).fill(T.GRASS), hgt = new Float32Array(w * h);
+  // def: { id, name, w, h, theme, seed, paths: [[[x, y], ...], ...], water: [{ lake: [x, y, r] } | { rect: [x0, y0, x1, y1] } |
+  //   { river: [[x, y], ...], width }], trees, rocks, woods: [[x0, y0, x1, y1, density]] }. w and h are odd; the castle
+  // fills the 5 x 5 tiles in the middle; every path runs in straight lines from a gate on the map's edge to a door
+  // tile beside the castle (the middle of one of its sides, 3 tiles out).
+  function makeMap(def) {
+    const w = def.w, h = def.h, cx = (w - 1) / 2, cz = (h - 1) / 2, R = { rng: (def.seed || 7) | 0 };
+    const tiles = new Uint8Array(w * h).fill(T.GRASS), hgt = new Float32Array(w * h), life = new Uint8Array(w * h);
     const at = (x, y) => y * w + x, inside = (x, y) => x >= 0 && y >= 0 && x < w && y < h;
     for (let i = 0; i < w * h; i++) hgt[i] = rnd(R, 0, 0.08);
-    // the sea around the island: the outer ring, with a ragged shore
-    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
-      const d = Math.min(x, y, w - 1 - x, h - 1 - y);
-      if (d === 0 || (d === 1 && rngNext(R) < 0.35)) tiles[at(x, y)] = T.WATER;
+    // water
+    const wet = (x, y) => { if (inside(x, y)) tiles[at(x, y)] = T.WATER; };
+    for (const wb of def.water || []) {
+      if (wb.lake) { const [lx, ly, lr] = wb.lake; for (let y = Math.floor(ly - lr - 1); y <= ly + lr + 1; y++) for (let x = Math.floor(lx - lr - 1); x <= lx + lr + 1; x++) if (Math.hypot(x - lx, y - ly) <= lr + rnd(R, -0.35, 0.35)) wet(x, y); }
+      if (wb.rect) { const [x0, y0, x1, y1] = wb.rect; for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) wet(x, y); }
+      if (wb.river) {
+        const wd = wb.width || 2;
+        for (let j = 1; j < wb.river.length; j++) {
+          const [ax, ay] = wb.river[j - 1], [bx, by] = wb.river[j], n = Math.max(Math.abs(bx - ax), Math.abs(by - ay));
+          for (let k = 0; k <= n; k++) { const x = Math.round(ax + (bx - ax) * k / n), y = Math.round(ay + (by - ay) * k / n); for (let a = 0; a < wd; a++) for (let b = 0; b < wd; b++) wet(x + a - (wd >> 1), y + b - (wd >> 1)); }
+        }
+      }
     }
-    // the castle: 5 x 5 in the middle
-    for (let y = c - 2; y <= c + 2; y++) for (let x = c - 2; x <= c + 2; x++) tiles[at(x, y)] = T.CASTLE;
-    // spawn gates two tiles in from the edge
-    const spawns = (cfg.spawns || ['N']).map((k) => {
-      const d = SIDES[k], off = cfg.offsets && cfg.offsets[k] ? cfg.offsets[k] : 0;
-      let x = Math.round(c + d[0] * (c - 2)), y = Math.round(c + d[1] * (c - 2));
-      if (d[0] === 0) x += off; else if (d[1] === 0) y += off;
-      return { key: k, x: x, y: y };
+    // the castle
+    for (let y = cz - 2; y <= cz + 2; y++) for (let x = cx - 2; x <= cx + 2; x++) tiles[at(x, y)] = T.CASTLE;
+    // roads: each path's tiles in order; over water a road is a bridge; the first tile is the gate
+    const keep = new Uint8Array(w * h), spawns = [], paths = [];
+    for (let y = cz - 3; y <= cz + 3; y++) for (let x = cx - 3; x <= cx + 3; x++) if (inside(x, y)) keep[at(x, y)] = 1;
+    def.paths.forEach((pts, k) => {
+      const tl = [];
+      for (let j = 0; j < pts.length; j++) {
+        if (j === 0) { tl.push(at(pts[0][0], pts[0][1])); continue; }
+        const [ax, ay] = pts[j - 1], [bx, by] = pts[j], n = Math.max(Math.abs(bx - ax), Math.abs(by - ay));
+        for (let q = 1; q <= n; q++) tl.push(at(ax + Math.sign(bx - ax) * q, ay + Math.sign(by - ay) * q));
+      }
+      for (const i of tl) {
+        tiles[i] = tiles[i] === T.WATER || tiles[i] === T.BRIDGE ? T.BRIDGE : T.DIRT;
+        const x = i % w, y = (i - x) / w;
+        for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) if (inside(x + dx, y + dy)) keep[at(x + dx, y + dy)] = 1;
+      }
+      tiles[tl[0]] = T.SPAWN;
+      const sx = pts[0][0], sy = pts[0][1];
+      spawns.push({ key: 'G' + (k + 1), x: sx, y: sy });
+      // the walk: tile centres, the last one pushed half a tile on into the castle's wall
+      const P = pts.map(([x, y]) => [x + 0.5, y + 0.5]);
+      const last = P[P.length - 1], prev = P[P.length - 2], ux = Math.sign(last[0] - prev[0]), uz = Math.sign(last[1] - prev[1]);
+      P.push([last[0] + ux * 0.5, last[1] + uz * 0.5]);
+      const road = linePath(P);
+      // where each road tile sits along the walk (barricades and traps)
+      road.tileD = new Map();
+      let d = 0;
+      for (let j = 0; j < tl.length; j++) { if (!road.tileD.has(tl[j])) road.tileD.set(tl[j], d); d += 1; }
+      road.tiles = tl;
+      // fliers go straight from the gate to the middle of the castle
+      const fly = linePath([[sx + 0.5, sy + 0.5], [cx + 0.5, cz + 0.5]]);
+      paths.push({ road: road, fly: fly });
     });
-    const keep = new Uint8Array(w * h);   // squares kept clear: roads, the castle yard, the gates
-    for (let y = c - 4; y <= c + 4; y++) for (let x = c - 4; x <= c + 4; x++) keep[at(x, y)] = 1;
-    spawns.forEach((s) => { for (let y = s.y - 1; y <= s.y + 1; y++) for (let x = s.x - 1; x <= s.x + 1; x++) if (inside(x, y)) { keep[at(x, y)] = 1; if (tiles[at(x, y)] === T.WATER) tiles[at(x, y)] = T.SAND; } });
-    // a river across the map with bridges, if asked for
-    if (cfg.river) {
-      const vertical = cfg.river === 'v';
-      let p = Math.round(c + (rngNext(R) < 0.5 ? -1 : 1) * rnd(R, 5, c - 5));
-      for (let q = 1; q < w - 1; q++) {
-        if (rngNext(R) < 0.3) p += rngNext(R) < 0.5 ? -1 : 1;
-        p = Math.max(4, Math.min(w - 5, p));
-        for (let k = 0; k < 2; k++) { const x = vertical ? p + k : q, y = vertical ? q : p + k; if (!keep[at(x, y)]) tiles[at(x, y)] = T.WATER; }
-      }
-    }
-    // lakes
-    for (let k = 0; k < (cfg.lakes || 0); k++) {
-      let x = Math.round(rnd(R, 4, w - 5)), y = Math.round(rnd(R, 4, h - 5)), tries = 0;
-      while ((Math.abs(x - c) < 7 && Math.abs(y - c) < 7) && tries++ < 20) { x = Math.round(rnd(R, 4, w - 5)); y = Math.round(rnd(R, 4, h - 5)); }
-      const size = Math.round(rnd(R, 6, 14));
-      for (let n = 0; n < size; n++) {
-        for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
-          const xx = x + dx, yy = y + dy;
-          if (inside(xx, yy) && !keep[at(xx, yy)] && Math.abs(dx) + Math.abs(dy) < 2 + (rngNext(R) < 0.4)) tiles[at(xx, yy)] = T.WATER;
-        }
-        x = Math.max(3, Math.min(w - 4, x + Math.round(rnd(R, -1, 1)))); y = Math.max(3, Math.min(h - 4, y + Math.round(rnd(R, -1, 1))));
-      }
-    }
-    // roads: from each gate to the castle, round the water (bridges where a road must cross)
-    const castleGate = (s) => {
-      const dx = s.x - c, dy = s.y - c;
-      return Math.abs(dx) >= Math.abs(dy) ? { x: c + Math.sign(dx) * 3, y: c } : { x: c, y: c + Math.sign(dy) * 3 };
-    };
-    for (const s of spawns) {
-      const g = castleGate(s), cost = new Float32Array(w * h).fill(Infinity), from = new Int32Array(w * h).fill(-1);
-      const wobble = new Float32Array(w * h); for (let i = 0; i < w * h; i++) wobble[i] = rnd(R, 0, 0.9);
-      cost[at(s.x, s.y)] = 0;
-      const open = [at(s.x, s.y)];
-      while (open.length) {
-        let bi = 0; for (let k = 1; k < open.length; k++) if (cost[open[k]] < cost[open[bi]]) bi = k;
-        const i = open.splice(bi, 1)[0], x = i % w, y = (i - x) / w;
-        if (x === g.x && y === g.y) break;
-        for (const [ddx, ddy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
-          const xx = x + ddx, yy = y + ddy;
-          if (!inside(xx, yy) || Math.min(xx, yy, w - 1 - xx, h - 1 - yy) < 1) continue;
-          const j = at(xx, yy), t = tiles[j];
-          if (t === T.CASTLE) continue;
-          const step = 1 + wobble[j] + (t === T.WATER ? 6 : 0) + (t === T.DIRT ? -0.6 : 0);
-          if (cost[i] + step < cost[j]) { if (cost[j] === Infinity) open.push(j); cost[j] = cost[i] + step; from[j] = i; }
-        }
-      }
-      for (let i = at(g.x, g.y); i >= 0; i = from[i]) { if (tiles[i] === T.WATER) tiles[i] = T.BRIDGE; else if (tiles[i] !== T.BRIDGE) tiles[i] = T.DIRT; keep[i] = 1; }
-    }
-    // sand along the water
+    // sand beside water
     for (let y = 1; y < h - 1; y++) for (let x = 1; x < w - 1; x++) {
       const i = at(x, y);
       if (tiles[i] !== T.GRASS) continue;
-      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) if (tiles[at(x + dx, y + dy)] === T.WATER && rngNext(R) < 0.7) { tiles[i] = T.SAND; break; }
+      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) if (tiles[at(x + dx, y + dy)] === T.WATER && rngNext(R) < 0.75) { tiles[i] = T.SAND; break; }
     }
-    // forests and rock fields: clusters on free grass
-    const scatter = (density, tile, cluster) => {
-      const want = Math.round(w * h * density);
+    // woods and rocks on free land, never right beside a road or the castle
+    const free = (i) => (tiles[i] === T.GRASS || tiles[i] === T.SAND) && !keep[i];
+    const scatter = (density, tile, cluster, x0, y0, x1, y1) => {
+      const room = (x1 - x0 + 1) * (y1 - y0 + 1), want = Math.round(room * density);
       let placed = 0, guard = 0;
       while (placed < want && guard++ < want * 40) {
-        let x = Math.round(rnd(R, 2, w - 3)), y = Math.round(rnd(R, 2, h - 3));
+        let x = Math.round(rnd(R, x0, x1)), y = Math.round(rnd(R, y0, y1));
         const n = Math.round(rnd(R, 2, cluster));
         for (let k = 0; k < n && placed < want; k++) {
-          const i = at(x, y);
-          if (inside(x, y) && (tiles[i] === T.GRASS || tiles[i] === T.SAND) && !keep[i]) { tiles[i] = tile; placed++; }
+          if (inside(x, y) && free(at(x, y))) { tiles[at(x, y)] = tile; placed++; }
           x += Math.round(rnd(R, -1, 1)); y += Math.round(rnd(R, -1, 1));
           if (!inside(x, y)) break;
         }
       }
     };
-    scatter(cfg.trees == null ? 0.12 : cfg.trees, T.TREE, 9);
-    scatter(cfg.rocks == null ? 0.05 : cfg.rocks, T.ROCK, 6);
-    spawns.forEach((s) => { tiles[at(s.x, s.y)] = T.SPAWN; });
-    // every gate must reach the castle on foot: open a tree or rock that blocks (never water: the roads crossed it)
-    const map = { w: w, h: h, c: c, tiles: tiles, hgt: hgt, spawns: spawns, seed: seed, life: new Uint8Array(w * h) };
-    for (let i = 0; i < w * h; i++) map.life[i] = tiles[i] === T.TREE ? 3 : tiles[i] === T.ROCK ? 4 : 0;
-    return map;
+    for (const wd of def.woods || []) scatter(wd[4], T.TREE, 9, wd[0], wd[1], wd[2], wd[3]);
+    scatter(def.trees == null ? 0.08 : def.trees, T.TREE, 8, 0, 0, w - 1, h - 1);
+    scatter(def.rocks == null ? 0.03 : def.rocks, T.ROCK, 5, 0, 0, w - 1, h - 1);
+    for (let i = 0; i < w * h; i++) life[i] = tiles[i] === T.TREE ? 3 : tiles[i] === T.ROCK ? 4 : 0;
+    return { id: def.id, name: def.name, theme: def.theme || 'meadow', w: w, h: h, cx: cx, cz: cz, c: cx, tiles: tiles, hgt: hgt, life: life, spawns: spawns, paths: paths, seed: def.seed || 7 };
+  }
+  // a walk along points: lengths and the running total, for "where is a zombie d tiles along"
+  function linePath(P) {
+    const cum = [0];
+    for (let j = 1; j < P.length; j++) cum.push(cum[j - 1] + Math.hypot(P[j][0] - P[j - 1][0], P[j][1] - P[j - 1][1]));
+    return { pts: P, cum: cum, len: cum[cum.length - 1] };
+  }
+  // the point d along a walk and the way it faces: [x, z, dirX, dirZ, segment]
+  function pathAt(L, d, hint) {
+    const P = L.pts, cum = L.cum;
+    let j = Math.max(1, Math.min(P.length - 1, hint || 1));
+    while (j < P.length - 1 && d > cum[j]) j++;
+    while (j > 1 && d < cum[j - 1]) j--;
+    const a = P[j - 1], b = P[j], sl = cum[j] - cum[j - 1] || 1, t = (d - cum[j - 1]) / sl;
+    const ux = (b[0] - a[0]) / sl, uz = (b[1] - a[1]) / sl;
+    return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, ux, uz, j];
   }
   const tileAt = (m, x, z) => (x < 0 || z < 0 || x >= m.w || z >= m.h ? T.WATER : m.tiles[(z | 0) * m.w + (x | 0)]);
+  // the door a crew member starts at and comes back to (four doors, one per player slot), just off the castle
+  function gatePoint(map, k) {
+    const x = map.cx + 0.5, z = map.cz + 0.5, d = [[0, 3.4], [0, -3.4], [3.4, 0], [-3.4, 0]][k % 4];
+    return { x: x + d[0], z: z + d[1] };
+  }
 
   /* ================= a new game ================= */
-  // level: the level's data (content/levels.json); crew: [{ id, name, slot }]; unlocks: { weapons, turrets }
-  function newGame(level, crew, seed, unlocks) {
-    const map = genMap(level.map, level.map.seed || seed || 1);
-    const n = Math.max(1, crew.length);
+  // o: { map: a map's data, rounds: content/rounds.json's list, diff, crew: [{ id, name, slot, weapon }], seed }
+  function newGame(o) {
+    const map = makeMap(o.map), D = DIFFS[o.diff] || DIFFS.medium, n = Math.max(1, o.crew.length);
     const s = {
-      v: 1, level: level.n, seed: seed | 0, rng: (seed | 0) ^ 0x5bd1e995, t: 0, tick: 0, nextId: 1,
-      map: map, occ: new Int16Array(map.w * map.h), flow: null, flyFlow: null,
-      castle: { hp: level.castle || 600, max: level.castle || 600, x: map.c + 0.5, z: map.c + 0.5 },
-      res: { wood: (level.start && level.start.wood) || 0, stone: (level.start && level.start.stone) || 0, gold: (level.start && level.start.gold) || 0 },
-      crewN: n, hpMul: 1 + 0.32 * (n - 1), countMul: 1 + 0.3 * (n - 1),
-      unlocks: unlocks || { weapons: ['blaster', 'hammer'], turrets: ['arrow', 'wall'] },
-      players: crew.map((p, k) => newPlayer(map, p, p.slot != null ? p.slot : k)),
-      zombies: [], turrets: [], shots: [], foes: [],
-      waves: level.waves, wave: { idx: 0, state: 'build', timer: level.waves[0].build || 30, groups: [], fight: 0 },
-      result: '', stats: { kills: 0, built: 0, chopped: 0, mined: 0, castleHits: 0 }
+      v: 2, mapId: o.map.id, diff: DIFFS[o.diff] ? o.diff : 'medium', D: D, rounds: o.rounds || [], seed: o.seed | 0, rng: (o.seed | 0) ^ 0x5bd1e995,
+      t: 0, tick: 0, nextId: 1, map: map, occ: new Int16Array(map.w * map.h), castle: { x: map.cx + 0.5, z: map.cz + 0.5 },
+      lives: D.lives, maxLives: D.lives, tierHp: TIER_HP[o.map.tier] || 1, crewN: n, players: [], zombies: [], towers: [], shots: [], foes: [], pools: [],
+      round: 0, wave: { state: 'wait', timer: 0, groups: [] }, autoStart: true, freeplay: false, wonAt: 0, gateK: 0,
+      blocks: map.paths.map(() => []), traps: map.paths.map(() => []), tmap: new Map(),
+      result: '', stats: { kills: 0, built: 0, leaked: 0, chopped: 0, spent: 0, pdmg: 0, tdmg: 0 }
     };
-    s.flow = flowField(s, false);
-    s.flyFlow = null;
+    crewScale(s);
+    o.crew.forEach((c, k) => s.players.push(newPlayer(s, c, c.slot != null ? c.slot : k)));
     return s;
   }
-  function newPlayer(map, p, k) {
-    const at = gatePoint(map, k);
-    return { id: p.id, slot: k, name: p.name || 'Player ' + (k + 1), x: at.x, z: at.z, rot: 0, hp: 100, max: 100, weapon: 'blaster', cd: 0, down: 0, fire: false, act: '', actT: 0, gather: -1, gatherT: 0, kills: 0, aimRot: 0 };
+  // more players: more zombies (and more coins from them), split between the crew
+  function crewScale(s) {
+    const n = Math.max(1, s.players.length || s.crewN);
+    s.crewN = n; s.countMul = 1 + 0.35 * (n - 1); s.hpMul = 1 + 0.12 * (n - 1); s.share = (1 + 0.5 * (n - 1)) / n;
+  }
+  function newPlayer(s, c, slot) {
+    const g = gatePoint(s.map, slot), f = freeSpot(s, g.x, g.z), w = WEAPONS[c.weapon] ? c.weapon : 'blaster';
+    return { id: c.id, slot: slot, name: c.name || 'Player ' + (slot + 1), x: f[0], z: f[1], rot: 0, hp: 100, max: 100, weapon: w, wlvl: 1, wxp: 0, st: weaponStats(w, 1),
+      coins: c.coins != null ? c.coins : Math.round((s.D.start || START_COINS) * (s.share || 1)), cd: 0, down: 0, fire: false, act: '', actT: 0, gather: -1, gatherT: 0, kills: 0 };
   }
   // a crew member joins a game that is already running, or leaves it
-  function addPlayer(s, p) {
-    const had = s.players.find((q) => q.id === p.id);
+  function addPlayer(s, c) {
+    const had = s.players.find((q) => q.id === c.id);
     if (had) return had;
     const used = new Set(s.players.map((q) => q.slot));
-    let slot = p.slot != null && !used.has(p.slot) ? p.slot : 0;
+    let slot = c.slot != null && !used.has(c.slot) ? c.slot : 0;
     while (used.has(slot)) slot++;
-    const np = newPlayer(s.map, p, slot), f = freeSpot(s, np.x, np.z);   // a tower may stand on the door now
-    np.x = f[0]; np.z = f[1];
-    s.players.push(np);
-    return np;
+    const p = newPlayer(s, c, slot);
+    if (s.saved && s.saved[slot]) Object.assign(p, s.saved[slot], { st: weaponStats(s.saved[slot].weapon, s.saved[slot].wlvl) }), delete s.saved[slot];
+    s.players.push(p);
+    crewScale(s);
+    return p;
   }
-  function removePlayer(s, id) { s.players = s.players.filter((q) => q.id !== id); }
-  // where a player stands at the castle's door (four doors, one per player slot)
-  function gatePoint(map, k) {
-    const c = map.c + 0.5, d = [[0, 3.4], [0, -3.4], [3.4, 0], [-3.4, 0]][k % 4];
-    return { x: c + d[0], z: c + d[1] };
-  }
+  function removePlayer(s, id) { s.players = s.players.filter((q) => q.id !== id); crewScale(s); }
 
   /* ================= movement ================= */
   // a circle of radius r moves by (dx, dz) and slides along blocked tiles. solid(x, z) tells which tiles block.
@@ -228,12 +414,12 @@ const CC = (function () {
   // Returns [x, z, the index of the tile it pushed against or -1].
   function moveCircle(s, x, z, dx, dz, r, solid) {
     let hit = -1;
-    const m = s.map, blocked = (tx, tz) => solid(tx, tz);
+    const m = s.map;
     const gap2 = (px, pz, tx, tz) => { const cx = Math.max(tx, Math.min(px, tx + 1)), cz = Math.max(tz, Math.min(pz, tz + 1)); return (px - cx) * (px - cx) + (pz - cz) * (pz - cz); };
     const tryAxis = (ox, oz, nx, nz) => {
       const x0 = Math.floor(nx - r), x1 = Math.floor(nx + r), z0 = Math.floor(nz - r), z1 = Math.floor(nz + r);
       for (let tz = z0; tz <= z1; tz++) for (let tx = x0; tx <= x1; tx++) {
-        if (!blocked(tx, tz)) continue;
+        if (!solid(tx, tz)) continue;
         const d2 = gap2(nx, nz, tx, tz);
         if (d2 >= r * r - 1e-6) continue;
         const o2 = gap2(ox, oz, tx, tz);
@@ -251,244 +437,17 @@ const CC = (function () {
     }
     return [x, z, hit];
   }
-  // a player's solid tiles: water, trees, rocks, the castle, turrets, the map's edge
+  // a player's solid tiles: water, trees, rocks, the castle, towers, the map's edge
   const playerSolid = (s) => (tx, tz) => {
     const m = s.map;
     if (tx < 0 || tz < 0 || tx >= m.w || tz >= m.h) return true;
     const i = tz * m.w + tx;
     return !WALK[m.tiles[i]] || s.occ[i] > 0;
   };
-  // move a player (the page, a client and the bots all use this)
   function movePlayer(s, p, dx, dz) {
     const r = moveCircle(s, p.x, p.z, dx, dz, 0.32, playerSolid(s));
     p.x = r[0]; p.z = r[1];
     return r[2];
-  }
-
-  /* ================= the flow field: how far each tile is from the castle, for zombies ================= */
-  // Dijkstra over walkable tiles from the castle; turrets and barricades cost extra (zombies break through them when
-  // the way round is much longer). fly: ghosts float over everything.
-  const BREAK_COST = 9;
-  function flowField(s, fly) {
-    const m = s.map, W = m.w, n = W * m.h, d = new Float64Array(n).fill(1e9);
-    const heap = [];
-    const push = (i, v) => { heap.push([v, i]); let k = heap.length - 1; while (k > 0) { const p = (k - 1) >> 1; if (heap[p][0] <= heap[k][0]) break; [heap[p], heap[k]] = [heap[k], heap[p]]; k = p; } };
-    const pop = () => { const top = heap[0], last = heap.pop(); if (heap.length) { heap[0] = last; let k = 0; for (;;) { const l = 2 * k + 1, r = l + 1; let b = k; if (l < heap.length && heap[l][0] < heap[b][0]) b = l; if (r < heap.length && heap[r][0] < heap[b][0]) b = r; if (b === k) break; [heap[b], heap[k]] = [heap[k], heap[b]]; k = b; } } return top; };
-    for (let i = 0; i < n; i++) if (m.tiles[i] === T.CASTLE) { d[i] = 0; push(i, 0); }
-    const pass = (i) => fly || WALK[m.tiles[i]];
-    while (heap.length) {
-      const [v, i] = pop();
-      if (v > d[i]) continue;
-      const x = i % W, y = (i - x) / W;
-      for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
-        if (!dx && !dy) continue;
-        const xx = x + dx, yy = y + dy;
-        if (xx < 0 || yy < 0 || xx >= W || yy >= m.h) continue;
-        const j = yy * W + xx;
-        if (m.tiles[j] === T.CASTLE || !pass(j)) continue;
-        if (dx && dy && !fly && (!pass(y * W + xx) || !pass(yy * W + x) || s.occ[y * W + xx] > 0 || s.occ[yy * W + x] > 0)) continue;   // no cutting corners
-        const c = (dx && dy ? 1.414 : 1) + (!fly && s.occ[j] > 0 ? BREAK_COST : 0);
-        if (v + c < d[j]) { d[j] = v + c; push(j, v + c); }
-      }
-    }
-    return d;
-  }
-  function refreshFlow(s) { s.flow = flowField(s, false); }
-
-  /* ================= zombies ================= */
-  function spawnZombie(s, type, x, z, ev) {
-    const Z = ZOMBIES[type], hp = Math.round(Z.hp * (Z.boss ? 1 + 0.45 * (s.crewN - 1) : s.hpMul));
-    const zb = { id: s.nextId++, type: type, x: x, z: z, rot: 0, hp: hp, max: hp, r: 0.3 * (Z.size || 1), slowT: 0, slowF: 1, burnT: 0, burnD: 0, atk: 0, act: '', actT: 0,
-      under: Z.dig ? 1 : 0, sumT: Z.summon ? Z.summon.every * 0.6 : 0, stompT: Z.stomp ? Z.stomp.every : 0, spitT: 0, next: -1, stuck: 0, kb: [0, 0], hitT: 0 };
-    s.zombies.push(zb);
-    if (ev) ev.push({ e: 'spawn', id: zb.id, z: type, x: x, y: z });
-    return zb;
-  }
-  // the tile a zombie heads for: the neighbour nearest the castle
-  function nextTile(s, zb, flow) {
-    const m = s.map, W = m.w, tx = zb.x | 0, tz = zb.z | 0;
-    const open = (x, y) => x >= 0 && y >= 0 && x < W && y < m.h && WALK[m.tiles[y * W + x]] && !s.occ[y * W + x];
-    let best = -1, bv = flow[tz * W + tx] - 1e-3;
-    for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
-      if (!dx && !dy) continue;
-      const xx = tx + dx, yy = tz + dy;
-      if (xx < 0 || yy < 0 || xx >= W || yy >= m.h) continue;
-      if (dx && dy && (!open(tx + dx, tz) || !open(tx, tz + dy))) continue;   // never cut a corner past a tree or a turret
-      const j = yy * W + xx;
-      if (flow[j] < bv) { bv = flow[j]; best = j; }
-    }
-    return best;
-  }
-  const dist2 = (ax, az, bx, bz) => (ax - bx) * (ax - bx) + (az - bz) * (az - bz);
-  // the castle's nearest point to (x, z) and the distance to it
-  function castleDist(s, x, z) {
-    const c = s.castle, nx = Math.max(c.x - CASTLE_R, Math.min(x, c.x + CASTLE_R)), nz = Math.max(c.z - CASTLE_R, Math.min(z, c.z + CASTLE_R));
-    return Math.sqrt(dist2(x, z, nx, nz));
-  }
-
-  /* ---- damage ---- */
-  function hurtZombie(s, zb, amount, type, fromX, fromZ, ev, extra) {
-    if (zb.hp <= 0 || zb.under) return 0;
-    const Z = ZOMBIES[zb.type];
-    if (Z.shield && Z.shield.blocks[type] && fromX != null) {
-      // blocked when the hit comes from the front half it faces
-      const a = Math.atan2(fromX - zb.x, fromZ - zb.z), diff = Math.abs(((a - zb.rot + Math.PI * 3) % (Math.PI * 2)) - Math.PI);
-      if (diff < (Z.shield.arc / 2) * Math.PI / 180) { if (Math.random() < 0.35) ev.push({ e: 'block', x: zb.x, y: zb.z }); return 0; }
-    }
-    const mul = Z.res && Z.res[type] != null ? Z.res[type] : 1;
-    const d = amount * mul;
-    if (d <= 0) { if (Math.random() < 0.25) ev.push({ e: 'immune', x: zb.x, y: zb.z }); return 0; }
-    zb.hp -= d;
-    if (d >= 1) zb.hitT = 0.15;
-    if (extra) {
-      if (extra.slow && !Z.noSlow && mul > 0) { zb.slowT = Math.max(zb.slowT, extra.slow.t); zb.slowF = Math.min(zb.slowF, 1 - extra.slow.f); }
-      if (extra.burn && !Z.noBurn && mul > 0) { zb.burnT = Math.max(zb.burnT, extra.burn.t); zb.burnD = Math.max(zb.burnD, extra.burn.dps * mul); }
-      if (extra.knock && !Z.heavy) { const a = Math.atan2(zb.x - fromX, zb.z - fromZ); zb.kb[0] += Math.sin(a) * extra.knock; zb.kb[1] += Math.cos(a) * extra.knock; }
-    }
-    if (zb.hp <= 0) killZombie(s, zb, ev, extra && extra.by);
-    return d;
-  }
-  function killZombie(s, zb, ev, by) {
-    const Z = ZOMBIES[zb.type];
-    zb.hp = 0;
-    s.stats.kills++;
-    const gold = Z.gold;
-    if (gold) { s.res.gold += gold; }
-    ev.push({ e: 'die', id: zb.id, z: zb.type, x: zb.x, y: zb.z, g: gold });
-    if (by != null) { const p = s.players.find((q) => q.id === by); if (p) p.kills++; }
-    if (Z.split) for (let k = 0; k < Z.split.n; k++) { const a = (k / Z.split.n) * Math.PI * 2; spawnZombie(s, Z.split.type, zb.x + Math.sin(a) * 0.4, zb.z + Math.cos(a) * 0.4, ev); }
-    if (Z.explode) explode(s, zb.x, zb.z, Z.explode.r, Z.dmg * 0.8, ev, 'zombies');   // popped early: it only hurts zombies
-  }
-  // an explosion: 'all' hurts the crew, turrets and the castle (a bomber reaching them); 'zombies' only zombies
-  function explode(s, x, z, r, dmg, ev, who) {
-    ev.push({ e: 'boom', x: x, y: z, r: r });
-    if (who === 'zombies') { for (const zb of s.zombies) if (zb.hp > 0 && dist2(zb.x, zb.z, x, z) < r * r) hurtZombie(s, zb, dmg, 'blast', x, z, ev); return; }
-    for (const p of s.players) if (!p.down && dist2(p.x, p.z, x, z) < r * r) hurtPlayer(s, p, dmg, ev);
-    for (const t of s.turrets) if (t.hp > 0 && dist2(t.x, t.z, x, z) < (r + 0.4) * (r + 0.4)) hurtTurret(s, t, dmg, ev);
-    if (castleDist(s, x, z) < r) hurtCastle(s, dmg, ev);
-  }
-  function hurtPlayer(s, p, d, ev) {
-    if (p.down) return;
-    p.hp -= d;
-    ev.push({ e: 'ouch', id: p.id, d: Math.round(d) });
-    if (p.hp <= 0) { p.hp = 0; p.down = 5; ev.push({ e: 'down', id: p.id, x: p.x, y: p.z }); }
-  }
-  function hurtTurret(s, t, d, ev) {
-    if (t.hp <= 0) return;
-    t.hp -= d;
-    if (t.hp <= 0) {
-      t.hp = 0;
-      s.occ[t.tz * s.map.w + t.tx] = 0;
-      ev.push({ e: 'wreck', id: t.id, x: t.x, y: t.z });
-      refreshFlow(s);
-    }
-  }
-  function hurtCastle(s, d, ev) {
-    if (s.castle.hp <= 0) return;
-    s.castle.hp = Math.max(0, s.castle.hp - d);
-    s.stats.castleHits += d;
-    ev.push({ e: 'castle', d: Math.round(d) });
-  }
-
-  /* ---- each zombie, each tick ---- */
-  function stepZombie(s, zb, dt, ev, near) {
-    const Z = ZOMBIES[zb.type], m = s.map;
-    if (zb.hitT > 0) zb.hitT -= dt;
-    // burning and slowed
-    if (zb.burnT > 0) { zb.burnT -= dt; hurtZombie(s, zb, zb.burnD * dt, 'fire', null, null, ev); if (zb.hp <= 0) return; }
-    if (zb.slowT > 0) { zb.slowT -= dt; if (zb.slowT <= 0) zb.slowF = 1; }
-    let speed = Z.speed * (zb.slowT > 0 ? zb.slowF : 1);
-    // knockback slides it away
-    if (zb.kb[0] || zb.kb[1]) {
-      const kx = zb.kb[0] * Math.min(1, dt * 8), kz = zb.kb[1] * Math.min(1, dt * 8);
-      const r = moveCircle(s, zb.x, zb.z, kx, kz, zb.r, zombieSolid(s, zb));
-      zb.x = r[0]; zb.z = r[1]; zb.kb[0] -= kx; zb.kb[1] -= kz;
-      if (Math.abs(zb.kb[0]) + Math.abs(zb.kb[1]) < 0.02) zb.kb = [0, 0];
-    }
-    // a digger tunnels until it is close to the castle
-    if (zb.under) {
-      const cd = castleDist(s, zb.x, zb.z);
-      if (cd < Z.dig.pop) { const f = freeSpot(s, zb.x, zb.z); zb.x = f[0]; zb.z = f[1]; zb.under = 0; zb.next = -1; ev.push({ e: 'emerge', id: zb.id, x: zb.x, y: zb.z }); }
-      else { const a = Math.atan2(s.castle.x - zb.x, s.castle.z - zb.z); zb.rot = a; zb.x += Math.sin(a) * Z.dig.speed * dt; zb.z += Math.cos(a) * Z.dig.speed * dt; return; }
-    }
-    // a shaman heals its friends; a boss calls helpers and stomps
-    if (Z.heal) for (const o of near(zb.x, zb.z, Z.heal.r)) if (o.hp > 0 && o.hp < o.max) { o.hp = Math.min(o.max, o.hp + Z.heal.hps * dt); if (Math.random() < dt * 2) ev.push({ e: 'heal', x: o.x, y: o.z }); }
-    if (Z.summon) { zb.sumT -= dt; if (zb.sumT <= 0) { zb.sumT = Z.summon.every; for (let k = 0; k < Z.summon.n; k++) { const a = rnd(s, 0, Math.PI * 2), type = Z.summon.types[k % Z.summon.types.length]; spawnZombie(s, type, zb.x + Math.sin(a) * 1.4, zb.z + Math.cos(a) * 1.4, ev); } ev.push({ e: 'summon', x: zb.x, y: zb.z }); } }
-    if (Z.stomp) { zb.stompT -= dt; if (zb.stompT <= 0) { zb.stompT = Z.stomp.every; ev.push({ e: 'stomp', x: zb.x, y: zb.z, r: Z.stomp.r }); for (const p of s.players) if (!p.down && dist2(p.x, p.z, zb.x, zb.z) < Z.stomp.r * Z.stomp.r) hurtPlayer(s, p, Z.stomp.dmg, ev); for (const t of s.turrets) if (t.hp > 0 && dist2(t.x, t.z, zb.x, zb.z) < Z.stomp.r * Z.stomp.r) hurtTurret(s, t, Z.stomp.dmg, ev); } }
-    zb.atk = Math.max(0, zb.atk - dt);
-    // what is in reach: a crew member close by, a turret in the way, the castle
-    let target = null, tdist = 1e9;
-    for (const p of s.players) {
-      if (p.down) continue;
-      const d = Math.sqrt(dist2(p.x, p.z, zb.x, zb.z));
-      if (d < 2.4 && d < tdist) { target = { kind: 'p', p: p, x: p.x, z: p.z, reach: zb.r + 0.45 }; tdist = d; }
-    }
-    // spitters spit from afar at turrets, the crew or the castle
-    if (Z.ranged) {
-      zb.spitT -= dt;
-      let aim = null, ad = Z.ranged.range;
-      const cd = castleDist(s, zb.x, zb.z);
-      const free = (x, z) => { const m = s.map, n = Math.ceil(Math.hypot(x - zb.x, z - zb.z) / 0.3); for (let k = 1; k < n; k++) { const t = tileAt(m, zb.x + (x - zb.x) * k / n, zb.z + (z - zb.z) * k / n); if (t === T.TREE || t === T.ROCK) return false; } return true; };
-      if (cd < ad) { const cx = Math.max(s.castle.x - CASTLE_R, Math.min(zb.x, s.castle.x + CASTLE_R)), cz = Math.max(s.castle.z - CASTLE_R, Math.min(zb.z, s.castle.z + CASTLE_R)); if (free(cx, cz)) { aim = { x: cx, z: cz }; ad = cd; } }
-      for (const t of s.turrets) if (t.hp > 0) { const d = Math.sqrt(dist2(t.x, t.z, zb.x, zb.z)); if (d < ad && free(t.x, t.z)) { aim = t; ad = d; } }
-      for (const p of s.players) if (!p.down) { const d = Math.sqrt(dist2(p.x, p.z, zb.x, zb.z)); if (d < ad && free(p.x, p.z)) { aim = p; ad = d; } }
-      if (aim) {
-        zb.rot = turnTo(zb.rot, Math.atan2(aim.x - zb.x, aim.z - zb.z), dt * 6);
-        if (zb.spitT <= 0) {
-          zb.spitT = 1 / Z.ranged.rate;
-          const dd = Math.max(0.1, Math.sqrt(dist2(aim.x, aim.z, zb.x, zb.z))), sp = Z.ranged.speed;
-          s.foes.push({ x: zb.x, z: zb.z, vx: (aim.x - zb.x) / dd * sp, vz: (aim.z - zb.z) / dd * sp, life: dd / sp + 0.1, dmg: Z.dmg });
-          ev.push({ e: 'spit', x: zb.x, y: zb.z, tx: aim.x, ty: aim.z, sp: sp });
-        }
-        return;
-      }
-    }
-    const cd = castleDist(s, zb.x, zb.z);
-    if (cd <= zb.r + 0.15 && (!target || cd < tdist)) target = { kind: 'c', x: s.castle.x, z: s.castle.z, reach: 99 };
-    // which way: ghosts float straight at the castle, the others follow the flow field
-    let goalX, goalZ;
-    if (Z.fly) { goalX = s.castle.x; goalZ = s.castle.z; }
-    else {
-      const ti = zb.x | 0, tj = zb.z | 0;
-      if (zb.next < 0 || ((zb.next % m.w) + 0.5 - zb.x) ** 2 + (((zb.next / m.w) | 0) + 0.5 - zb.z) ** 2 < 0.09 || s.flow[zb.next] >= s.flow[tj * m.w + ti]) zb.next = nextTile(s, zb, s.flow);
-      if (zb.next >= 0) {
-        const occ = s.occ[zb.next];
-        if (occ > 0) {
-          // a turret or barricade stands on the next tile: break it
-          const t = s.turrets.find((q) => q.id === occ);
-          if (t && t.hp > 0) { const d = Math.sqrt(dist2(t.x, t.z, zb.x, zb.z)); if (!target || d < tdist) target = { kind: 't', t: t, x: t.x, z: t.z, reach: zb.r + 0.75 }; }
-        }
-        goalX = (zb.next % m.w) + 0.5; goalZ = ((zb.next / m.w) | 0) + 0.5;
-      } else { goalX = s.castle.x; goalZ = s.castle.z; }
-    }
-    // attack what is in reach, or walk
-    if (target) {
-      const d = target.kind === 'c' ? cd : Math.sqrt(dist2(target.x, target.z, zb.x, zb.z));
-      if (target.kind === 'c' || d <= target.reach) {
-        zb.rot = turnTo(zb.rot, Math.atan2(target.x - zb.x, target.z - zb.z), dt * 8);
-        if (Z.explode) { zb.hp = 0; ev.push({ e: 'die', id: zb.id, z: zb.type, x: zb.x, y: zb.z, g: 0 }); explode(s, zb.x, zb.z, Z.explode.r, Z.dmg, ev, 'all'); return; }
-        if (zb.atk <= 0) {
-          zb.atk = 1.1; zb.act = 'hit'; zb.actT = 0.3;
-          if (target.kind === 'p') hurtPlayer(s, target.p, Z.dmg, ev);
-          else if (target.kind === 't') hurtTurret(s, target.t, Z.dmg, ev);
-          else hurtCastle(s, Z.dmg, ev);
-          ev.push({ e: 'bite', id: zb.id });
-        }
-        return;
-      }
-      if (target.kind === 'p') { goalX = target.x; goalZ = target.z; }
-    }
-    if (zb.actT > 0) zb.actT -= dt;
-    const a = Math.atan2(goalX - zb.x, goalZ - zb.z);
-    zb.rot = turnTo(zb.rot, a, dt * 7);
-    const step = speed * dt;
-    if (Z.fly) { zb.x += Math.sin(a) * step; zb.z += Math.cos(a) * step; }
-    else {
-      const r = moveCircle(s, zb.x, zb.z, Math.sin(a) * step, Math.cos(a) * step, zb.r, zombieSolid(s, zb));
-      if (Math.abs(r[0] - zb.x) + Math.abs(r[1] - zb.z) < step * 0.2) zb.stuck += dt; else zb.stuck = 0;
-      zb.x = r[0]; zb.z = r[1];
-      if (zb.stuck > 1.5) { zb.next = -1; zb.stuck = 0; zb.x += rnd(s, -0.2, 0.2); zb.z += rnd(s, -0.2, 0.2); }
-    }
   }
   // the centre of the nearest walkable, empty tile to (x, z)
   function freeSpot(s, x, z) {
@@ -502,139 +461,506 @@ const CC = (function () {
     }
     return [x, z];
   }
-  const zombieSolid = (s, zb) => (tx, tz) => {
-    const m = s.map;
-    if (tx < 0 || tz < 0 || tx >= m.w || tz >= m.h) return true;
-    const i = tz * m.w + tx;
-    return !WALK[m.tiles[i]] || s.occ[i] > 0;
-  };
+  function castleDist(s, x, z) {
+    const c = s.castle, nx = Math.max(c.x - CASTLE_R, Math.min(x, c.x + CASTLE_R)), nz = Math.max(c.z - CASTLE_R, Math.min(z, c.z + CASTLE_R));
+    return Math.sqrt(dist2(x, z, nx, nz));
+  }
   function turnTo(a, b, k) {
-    let d = ((b - a + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
+    const d = ((b - a + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
     if (Math.abs(d) < k) return b;
     return a + Math.sign(d) * k;
   }
 
-  /* ================= the crew's weapons and the turrets ================= */
-  // can a shot fly straight from one point to another? Trees, rocks and the castle stop it (the shooter's own tile and
-  // the target's do not count)
-  function clearShot(s, x0, z0, x1, z1) {
-    const m = s.map, n = Math.ceil(Math.hypot(x1 - x0, z1 - z0) / 0.25), a = (z0 | 0) * m.w + (x0 | 0), b = (z1 | 0) * m.w + (x1 | 0);
-    for (let k = 1; k < n; k++) {
-      const x = x0 + (x1 - x0) * k / n, z = z0 + (z1 - z0) * k / n, i = (z | 0) * m.w + (x | 0);
-      if (i === a || i === b) continue;
-      const t = m.tiles[i];
-      if (t === T.TREE || t === T.ROCK || t === T.CASTLE) return false;
-    }
-    return true;
+  /* ================= zombies ================= */
+  // a zombie on gate g's road (or its flying line), d tiles along it
+  function spawnZombie(s, type, g, d, ev, off) {
+    const Z = ZOMBIES[type], mul = (Z.boss ? 1 + 0.6 * (s.crewN - 1) : s.hpMul) * s.tierHp, hp = Math.max(1, Math.round(Z.hp * s.D.hp * hpRound(s.round) * mul));
+    const zb = { id: s.nextId++, type: type, g: g, fly: !!Z.fly, d: d, seg: 1, off: off != null ? off : (Z.boss ? 0 : rnd(s, -0.26, 0.26)), x: 0, z: 0, rot: 0, hp: hp, max: hp, r: 0.3 * (Z.size || 1),
+      slowT: 0, slowF: 1, burnT: 0, burnD: 0, acidT: 0, acidD: 0, stunT: 0, frozen: 0, brittleT: 0, stopCd: 0, atk: 0, act: '', actT: 0, hitT: 0,
+      under: Z.dig ? 1 : 0, sumT: Z.summon ? Z.summon.every * 0.6 : 0, stompT: Z.stomp ? Z.stomp.every * 0.7 : 0, breathT: Z.breath ? Z.breath.every * 0.7 : 0, spitT: 0, bones: 0, rev: 0, traps: null };
+    placeZombie(s, zb);
+    s.zombies.push(zb);
+    if (ev) ev.push({ e: 'spawn', id: zb.id, z: type, x: r2(zb.x), y: r2(zb.z) });
+    return zb;
   }
-  // the zombies in range, best first: players aim at the nearest; turrets at the one nearest the castle. sight: only
-  // zombies a straight shot can reach (bullets and arrows; bombs fly over, lightning and flames do not need it)
-  function pickTarget(s, x, z, range, minRange, byCastle, sight) {
-    let best = null, bv = 1e9;
-    for (const zb of s.zombies) {
-      if (zb.hp <= 0 || zb.under) continue;
+  const walkOf = (s, zb) => s.map.paths[zb.g].road;
+  function placeZombie(s, zb) {
+    const L = walkOf(s, zb), q = pathAt(L, zb.d, zb.seg);
+    zb.seg = q[4];
+    zb.x = q[0] - q[3] * zb.off; zb.z = q[1] + q[2] * zb.off;
+    zb.rot = Math.atan2(q[2], q[3]);
+  }
+  // zombies called or released by another: same gate, as far along as it (a flier's walkers go on its road)
+  function spawnFrom(s, parent, type, n, ev, spread) {
+    for (let k = 0; k < n; k++) {
+      const Z = ZOMBIES[type], d = Math.max(0, parent.d - k * (spread || 0.35));
+      const zb = spawnZombie(s, type, parent.g, d, ev);
+      if (Z.dig) zb.under = 0;
+    }
+  }
+  // the zombies in reach, best first. mode: first (nearest the castle), last, close, strong. camo: can it see shadows
+  function pickTarget(s, x, z, range, minRange, mode, camo, near, skip) {
+    let best = null, bv = -1e18;
+    const list = range > 30 ? s.zombies : near(x, z, range);
+    for (const zb of list) {
+      if (zb.hp <= 0 || zb.under || zb.bones > 0 || (ZOMBIES[zb.type].camo && !camo) || (skip && skip.has(zb))) continue;
       const d2 = dist2(zb.x, zb.z, x, z);
       if (d2 > range * range || (minRange && d2 < minRange * minRange)) continue;
-      const v = byCastle ? castleDist(s, zb.x, zb.z) : d2;
-      if (v < bv && (!sight || clearShot(s, x, z, zb.x, zb.z))) { bv = v; best = zb; }
+      const left = walkOf(s, zb).len - zb.d;
+      const v = mode === 'last' ? left : mode === 'close' ? -d2 : mode === 'strong' ? zb.hp * 1000 - left : -left;
+      if (v > bv) { bv = v; best = zb; }
     }
     return best;
   }
-  // fire one weapon (a crew member's or a turret's) at a target; owner: a player id or null (a turret)
-  function fireAt(s, W, lvl, x, z, target, owner, ev, src) {
-    const dmgMul = UP_DMG[(lvl || 1) - 1] || 1, rangeMul = UP_RANGE[(lvl || 1) - 1] || 1, by = owner;
-    const a = Math.atan2(target.x - x, target.z - z);
-    if (W.kind === 'shot') {
-      const n = W.pellets || 1;
-      for (let k = 0; k < n; k++) {
-        const aa = a + (n > 1 ? ((k / (n - 1)) - 0.5) * (W.spread * Math.PI / 180) + rnd(s, -0.05, 0.05) : 0);
-        const range = W.range * rangeMul;
-        s.shots.push({ x: x, z: z, vx: Math.sin(aa) * W.speed, vz: Math.cos(aa) * W.speed, life: range / W.speed + 0.05, dmg: W.dmg * dmgMul, type: W.type, pierce: W.pierce || 1, hits: [], splash: W.splash || 0, slow: W.slow, by: by, src: src });
+
+  /* ---- damage ---- */
+  // fx: { from: [x, z], by, burn: [dps, t], slow: [f, t], stun, freeze, brittle, acid: [dps, t], stop, armor, blue, knock }
+  function hurtZombie(s, zb, amount, type, ev, fx) {
+    if (zb.hp <= 0 || zb.under || zb.bones > 0) return 0;
+    const Z = ZOMBIES[zb.type];
+    if (Z.shield && Z.shield.blocks[type] && fx && fx.from) {
+      const a = Math.atan2(fx.from[0] - zb.x, fx.from[1] - zb.z), diff = Math.abs(((a - zb.rot + Math.PI * 3) % (Math.PI * 2)) - Math.PI);
+      if (diff < (Z.shield.arc / 2) * Math.PI / 180) { if (rngNext(s) < 0.3) ev.push({ e: 'block', x: r2(zb.x), y: r2(zb.z) }); return 0; }
+    }
+    let mul = type === 'pure' ? 1 : Z.res && Z.res[type] != null ? Z.res[type] : 1;
+    if (fx && fx.armor && type === 'phys') mul = Math.max(mul, 1);
+    if (fx && fx.blue && type === 'fire') mul = Math.max(mul, 0.6);
+    if (zb.brittleT > 0) mul *= 1.3;
+    const d = amount * mul;
+    if (d <= 0) { if (rngNext(s) < 0.2) ev.push({ e: 'immune', x: r2(zb.x), y: r2(zb.z) }); return 0; }
+    const dealt = Math.min(d, zb.hp);
+    zb.hp -= d;
+    if (fx && fx.by != null) { if (typeof fx.by === 'string') s.stats.pdmg += dealt; else { s.stats.tdmg += dealt; const t = s.tmap.get(fx.by); if (t) t.done += dealt; } }
+    if (d >= 1) zb.hitT = 0.15;
+    if (fx) {
+      const tough = Z.boss ? 0 : Z.heavy ? 0.5 : 1;
+      if (fx.slow && !Z.noSlow && mul > 0) { zb.slowT = Math.max(zb.slowT, fx.slow[1]); zb.slowF = Math.min(zb.slowF, 1 - fx.slow[0] * (Z.boss ? 0.5 : 1)); }
+      if (fx.burn && !Z.noBurn && mul > 0) { zb.burnT = Math.max(zb.burnT, fx.burn[1]); zb.burnD = Math.max(zb.burnD, fx.burn[0] * (fx.blue ? Math.max(mul, 0.6) : mul)); }
+      if (fx.acid) { zb.acidT = Math.max(zb.acidT, fx.acid[1]); zb.acidD = Math.max(zb.acidD, fx.acid[0]); }
+      if (fx.brittle) zb.brittleT = Math.max(zb.brittleT, fx.brittle);
+      if (fx.stun && tough) zb.stunT = Math.max(zb.stunT, fx.stun * tough);
+      if (fx.freeze && tough && !Z.noSlow) { zb.stunT = Math.max(zb.stunT, fx.freeze * tough); zb.frozen = Math.max(zb.frozen, fx.freeze * tough); }
+      if (fx.stop && tough && zb.stopCd <= 0) { zb.stunT = Math.max(zb.stunT, fx.stop * tough); zb.stopCd = 3; }
+      if (fx.knock && !Z.heavy && !zb.fly) zb.d = Math.max(0, zb.d - fx.knock);
+    }
+    if (zb.hp <= 0) killZombie(s, zb, ev, fx && fx.by);
+    return d;
+  }
+  function killZombie(s, zb, ev, by) {
+    const Z = ZOMBIES[zb.type];
+    if (Z.revive && !zb.rev) { zb.rev = 1; zb.hp = 0.01; zb.bones = 2; ev.push({ e: 'bones', id: zb.id, x: r2(zb.x), y: r2(zb.z) }); return; }
+    zb.hp = 0;
+    s.stats.kills++;
+    let gold = Math.round(Z.gold * GOLD_MUL);
+    // a lucky gold mine nearby adds a coin
+    for (const t of s.towers) if (t.st.killBonus && dist2(t.x, t.z, zb.x, zb.z) < t.st.killR * t.st.killR) gold += t.st.killBonus;
+    earn(s, gold);
+    ev.push({ e: 'die', id: zb.id, z: zb.type, x: r2(zb.x), y: r2(zb.z), g: gold });
+    const p = by != null && typeof by === 'string' ? s.players.find((q) => q.id === by) : null;
+    if (p) { p.kills++; gainXp(s, p, Z.xp * (1 + s.round / 100), ev); }
+    if (Z.split) spawnFrom(s, zb, Z.split.type, Z.split.n, ev, 0.3);
+    if (Z.children) spawnFrom(s, zb, Z.children.type, Z.children.n, ev, 0.45);
+    if (Z.explode) explode(s, zb.x, zb.z, Z.explode, ev);
+  }
+  // a bomber going off: hurts zombies (good), jams towers and hurts the crew close by (bad)
+  function explode(s, x, z, X, ev) {
+    ev.push({ e: 'boom', x: r2(x), y: r2(z), r: X.r });
+    for (const o of s.zombies) if (o.hp > 0 && dist2(o.x, o.z, x, z) < X.r * X.r) hurtZombie(s, o, X.dmg, 'blast', ev, { from: [x, z] });
+    for (const t of s.towers) if (dist2(t.x, t.z, x, z) < (X.r + 0.4) * (X.r + 0.4)) stunTower(s, t, X.stun, ev);
+    for (const p of s.players) if (!p.down && dist2(p.x, p.z, x, z) < X.r * X.r) hurtPlayer(s, p, 20, ev);
+  }
+  function stunTower(s, t, sec, ev) {
+    const k = t.st.kind;
+    if (k === 'wall' || k === 'trap' || k === 'mine') return;
+    if (t.stun < sec) { t.stun = sec; ev.push({ e: 'jam', id: t.id, x: t.x, y: t.z }); }
+  }
+  function hurtPlayer(s, p, d, ev) {
+    if (p.down) return;
+    p.hp -= d;
+    ev.push({ e: 'ouch', id: p.id, d: Math.round(d) });
+    if (p.hp <= 0) { p.hp = 0; p.down = s.towers.some((t) => t.st.revive) ? 2 : 5; ev.push({ e: 'down', id: p.id, x: r2(p.x), y: r2(p.z) }); }
+  }
+  // coins: zombies' gold and round bonuses go to the whole crew in equal shares; a mine pays its builder
+  function earn(s, amount, who) {
+    if (!amount) return;
+    if (who) { const p = s.players.find((q) => q.id === who); if (p) { p.coins += amount; return; } }
+    const n = s.players.length || 1, each = amount * (n > 1 ? s.share : 1);
+    for (const p of s.players) p.coins += each;
+  }
+  function gainXp(s, p, xp, ev) {
+    if (p.wlvl >= MAX_LEVEL) return;
+    p.wxp += xp;
+    while (p.wlvl < MAX_LEVEL && p.wxp >= xpNeed(p.wlvl)) {
+      p.wxp -= xpNeed(p.wlvl); p.wlvl++;
+      p.st = weaponStats(p.weapon, p.wlvl);
+      const tier = p.wlvl % 5 === 0 && p.wlvl <= 20 ? p.wlvl / 5 : 0;
+      ev.push({ e: 'lvl', id: p.id, lvl: p.wlvl, tier: tier, name: tier ? WEAPONS[p.weapon].tiers[tier - 1].name : '' });
+    }
+  }
+
+  /* ---- each zombie, each tick ---- */
+  function stepZombie(s, zb, dt, ev, near) {
+    const Z = ZOMBIES[zb.type];
+    if (zb.hitT > 0) zb.hitT -= dt;
+    if (zb.bones > 0) {
+      zb.bones -= dt;
+      if (zb.bones <= 0) { zb.hp = Math.max(1, zb.max * Z.revive); ev.push({ e: 'revive', id: zb.id, x: r2(zb.x), y: r2(zb.z) }); }
+      return;
+    }
+    // burning, melting, slowed, brittle, stuck
+    if (zb.burnT > 0) { zb.burnT -= dt; hurtZombie(s, zb, zb.burnD * dt, 'fire', ev, null); if (zb.hp <= 0 || zb.bones > 0) return; }
+    if (zb.acidT > 0) { zb.acidT -= dt; hurtZombie(s, zb, zb.acidD * dt, 'pure', ev, null); if (zb.hp <= 0 || zb.bones > 0) return; }
+    if (zb.slowT > 0) { zb.slowT -= dt; if (zb.slowT <= 0) zb.slowF = 1; }
+    if (zb.brittleT > 0) zb.brittleT -= dt;
+    if (zb.stopCd > 0) zb.stopCd -= dt;
+    if (Z.regen && zb.burnT <= 0 && zb.hp < zb.max) zb.hp = Math.min(zb.max, zb.hp + Z.regen * hpRound(s.round) * dt);
+    // a shaman heals its friends; bosses call helpers, stomp and breathe
+    if (Z.heal) for (const o of near(zb.x, zb.z, Z.heal.r)) if (o.hp > 0 && o.hp < o.max && !o.bones) { o.hp = Math.min(o.max, o.hp + Z.heal.hps * hpRound(s.round) * dt); if (rngNext(s) < dt * 2) ev.push({ e: 'heal', x: r2(o.x), y: r2(o.z) }); }
+    if (Z.summon && !zb.under) { zb.sumT -= dt; if (zb.sumT <= 0) { zb.sumT = Z.summon.every; for (let k = 0; k < Z.summon.n; k++) spawnFrom(s, zb, Z.summon.types[k % Z.summon.types.length], 1, ev, 0); ev.push({ e: 'summon', x: r2(zb.x), y: r2(zb.z) }); } }
+    if (Z.stomp) { zb.stompT -= dt; if (zb.stompT <= 0) { zb.stompT = Z.stomp.every; ev.push({ e: 'stomp', x: r2(zb.x), y: r2(zb.z), r: Z.stomp.r }); for (const t of s.towers) if (dist2(t.x, t.z, zb.x, zb.z) < Z.stomp.r * Z.stomp.r) stunTower(s, t, Z.stomp.stun, ev); for (const p of s.players) if (!p.down && dist2(p.x, p.z, zb.x, zb.z) < Z.stomp.r * Z.stomp.r) hurtPlayer(s, p, 25, ev); } }
+    if (Z.breath) { zb.breathT -= dt; if (zb.breathT <= 0) { zb.breathT = Z.breath.every; ev.push({ e: 'breath', id: zb.id, x: r2(zb.x), y: r2(zb.z), a: r2(zb.rot), r: Z.breath.r }); for (const t of s.towers) if (dist2(t.x, t.z, zb.x, zb.z) < Z.breath.r * Z.breath.r) stunTower(s, t, Z.breath.stun, ev); } }
+    // spitters spit slime at a tower (it jams) or a crew member as they walk
+    if (Z.ranged && !zb.under) {
+      zb.spitT -= dt;
+      if (zb.spitT <= 0) {
+        let aim = null, ad = Z.ranged.range * Z.ranged.range;
+        for (const t of s.towers) { const k = t.st.kind; if (k === 'wall' || k === 'trap' || k === 'mine') continue; const d2 = dist2(t.x, t.z, zb.x, zb.z); if (d2 < ad) { ad = d2; aim = t; } }
+        for (const p of s.players) { if (p.down) continue; const d2 = dist2(p.x, p.z, zb.x, zb.z); if (d2 < ad) { ad = d2; aim = p; } }
+        if (aim) {
+          zb.spitT = 1 / Z.ranged.rate;
+          const dd = Math.max(0.1, Math.sqrt(ad)), sp = Z.ranged.speed;
+          s.foes.push({ x: zb.x, z: zb.z, vx: (aim.x - zb.x) / dd * sp, vz: (aim.z - zb.z) / dd * sp, life: dd / sp + 0.15, dmg: Z.dmg, stun: Z.ranged.stun });
+          ev.push({ e: 'spit', x: r2(zb.x), y: r2(zb.z), tx: r2(aim.x), ty: r2(aim.z), sp: sp });
+        } else zb.spitT = 0.4;
       }
-      ev.push({ e: 'shot', k: src, x: x, y: z, a: a, n: n, sp: W.speed, l: W.range * rangeMul, spread: W.spread || 0 });
-    } else if (W.kind === 'lob') {
-      const d = Math.sqrt(dist2(target.x, target.z, x, z)), t = Math.max(0.35, d / W.speed);
-      s.shots.push({ lob: true, x: x, z: z, tx: target.x, tz: target.z, t: t, life: t, dmg: W.dmg * dmgMul, type: W.type, splash: W.splash, by: by, src: src });
-      ev.push({ e: 'lob', k: src, x: x, y: z, tx: target.x, ty: target.z, t: t });
-    } else if (W.kind === 'chain') {
-      const pts = [[x, z]], hit = new Set();
-      let cur = target, dmg = W.dmg * dmgMul;
-      for (let j = 0; j < W.jumps && cur; j++) {
-        hit.add(cur);
-        pts.push([cur.x, cur.z]);
-        hurtZombie(s, cur, dmg, W.type, x, z, ev, { by: by });
-        dmg *= W.falloff;
-        let nxt = null, nd = W.jumpRange * W.jumpRange;
-        for (const o of s.zombies) { if (o.hp <= 0 || o.under || hit.has(o)) continue; const d2 = dist2(o.x, o.z, cur.x, cur.z); if (d2 < nd) { nd = d2; nxt = o; } }
-        cur = nxt;
+    }
+    if (zb.frozen > 0) zb.frozen -= dt;
+    if (zb.stunT > 0) { zb.stunT -= dt; return; }
+    zb.atk = Math.max(0, zb.atk - dt);
+    if (zb.actT > 0) zb.actT -= dt;
+    const L = walkOf(s, zb);
+    let speed = (zb.under ? Z.dig.speed : Z.speed) * PACE * s.D.speed * speedRound(s.round) * (zb.slowT > 0 ? zb.slowF : 1);
+    // walkers stop for a crew member in the way, and for a barricade on their road
+    if (!zb.fly && !zb.under && !Z.boss) {
+      for (const p of s.players) {
+        if (p.down || dist2(p.x, p.z, zb.x, zb.z) > (zb.r + 0.42) * (zb.r + 0.42)) continue;
+        zb.rot = turnTo(zb.rot, Math.atan2(p.x - zb.x, p.z - zb.z), dt * 8);
+        if (zb.atk <= 0) { zb.atk = 1; zb.act = 'hit'; zb.actT = 0.3; hurtPlayer(s, p, Z.dmg, ev); ev.push({ e: 'bite', id: zb.id }); }
+        return;
       }
-      ev.push({ e: 'zap', k: src, pts: pts.map((p) => [Math.round(p[0] * 100) / 100, Math.round(p[1] * 100) / 100]) });
-    } else if (W.kind === 'cone') {
-      const range = W.range * rangeMul, half = (W.arc / 2) * Math.PI / 180;
-      for (const zb of s.zombies) {
-        if (zb.hp <= 0 || zb.under) continue;
-        const d2 = dist2(zb.x, zb.z, x, z);
-        if (d2 > range * range) continue;
-        const b = Math.atan2(zb.x - x, zb.z - z), diff = Math.abs(((b - a + Math.PI * 3) % (Math.PI * 2)) - Math.PI);
-        if (diff <= half || d2 < 0.5) hurtZombie(s, zb, W.dmg * dmgMul, W.type, x, z, ev, { burn: W.burn, by: by });
+      for (const b of s.blocks[zb.g]) {
+        const stop = b.d - 0.5 - zb.r - 0.05;
+        if (b.t.hp <= 0 || zb.d > stop + 0.6) continue;
+        if (zb.d + speed * dt < stop) break;
+        zb.d = Math.max(zb.d, stop);
+        placeZombie(s, zb);
+        if (zb.atk <= 0) {
+          zb.atk = 1; zb.act = 'hit'; zb.actT = 0.3;
+          hurtWall(s, b.t, Z.dmg * (Z.boss ? 3 : 1), ev);
+          if (b.t.st.thorns) hurtZombie(s, zb, b.t.st.thorns, 'pure', ev, null);
+          ev.push({ e: 'bite', id: zb.id });
+        }
+        return;
       }
-      if (Math.random() < 0.5) ev.push({ e: 'flame', k: src, x: x, y: z, a: a, l: range });
-    } else if (W.kind === 'melee') {
-      const half = (W.arc / 2) * Math.PI / 180;
-      for (const zb of s.zombies) {
-        if (zb.hp <= 0 || zb.under) continue;
-        const d = Math.sqrt(dist2(zb.x, zb.z, x, z));
-        if (d > W.range + zb.r) continue;
-        const b = Math.atan2(zb.x - x, zb.z - z), diff = Math.abs(((b - a + Math.PI * 3) % (Math.PI * 2)) - Math.PI);
-        if (diff <= half) hurtZombie(s, zb, W.dmg * dmgMul, W.type, x, z, ev, { knock: W.knock, by: by });
+    }
+    // walk on
+    const d0 = zb.d;
+    zb.d += speed * dt;
+    // spike traps passed this tick
+    if (!zb.fly && !zb.under) for (const tr of s.traps[zb.g]) if (tr.d > d0 && tr.d <= zb.d && tr.t.spikes > 0) springTrap(s, tr.t, zb, ev);
+    if (zb.under && L.len - zb.d <= Z.dig.pop) { zb.under = 0; ev.push({ e: 'emerge', id: zb.id, x: r2(zb.x), y: r2(zb.z) }); }
+    if (zb.d >= L.len) {
+      // into the castle
+      const bite = Z.bite;
+      s.lives -= bite; s.stats.leaked += bite;
+      zb.hp = 0;
+      ev.push({ e: 'leak', id: zb.id, z: zb.type, x: r2(zb.x), y: r2(zb.z), n: bite });
+      return;
+    }
+    placeZombie(s, zb);
+  }
+  function springTrap(s, t, zb, ev) {
+    const st = t.st;
+    t.spikes--;
+    const fx = { by: t.id, armor: st.armor, slow: st.slowF ? [st.slowF, st.slowT] : null, from: [t.x, t.z] };
+    if (st.explode) {
+      ev.push({ e: 'boom', x: r2(zb.x), y: r2(zb.z), r: st.explode });
+      for (const o of s.zombies) if (o.hp > 0 && dist2(o.x, o.z, zb.x, zb.z) < st.explode * st.explode) hurtZombie(s, o, st.spikeDmg * 1.5, 'blast', ev, fx);
+    } else hurtZombie(s, zb, st.spikeDmg, 'phys', ev, fx);
+    ev.push({ e: 'spike', id: t.id, n: t.spikes });
+  }
+  function hurtWall(s, t, d, ev) {
+    if (t.hp <= 0) return;
+    t.hp -= d;
+    if (t.hp <= 0) { t.hp = 0; removeTower(s, t); ev.push({ e: 'wreck', id: t.id, x: t.x, y: t.z }); }
+  }
+
+  /* ================= towers ================= */
+  // a tower's stats: its base, its upgrades, then the shrines near it
+  function towerStats(s, t) {
+    const U = TOWERS[t.type], st = baseStats(U);
+    for (let k = 0; k < t.a; k++) applyMods(st, U.a[k].mods);
+    for (let k = 0; k < t.b; k++) applyMods(st, U.b[k].mods);
+    if (st.kind !== 'support' && st.kind !== 'mine' && st.kind !== 'wall' && st.kind !== 'trap') {
+      let rate = 0, range = 0, dmg = 0, camo = false;
+      for (const o of s.towers) {
+        if (o === t || o.type !== 'shrine') continue;
+        const os = o.st || towerStats(s, o);
+        if (dist2(o.x, o.z, t.x, t.z) > os.range * os.range) continue;
+        rate = Math.max(rate, os.buffRate || 0); range = Math.max(range, os.buffRange || 0); dmg = Math.max(dmg, os.buffDmg || 0); camo = camo || !!os.buffCamo;
       }
-      ev.push({ e: 'swing', k: src, x: x, y: z, a: a });
+      if (st.rate) st.rate *= 1 + rate;
+      if (st.range && st.range < 50) st.range *= 1 + range;
+      if (st.dmg) st.dmg *= 1 + dmg;
+      if (camo) st.camo = true;
+    }
+    return st;
+  }
+  function refreshStats(s) { for (const t of s.towers) t.st = towerStats(s, t); for (const t of s.towers) if (t.type !== 'shrine') t.st = towerStats(s, t); }
+  const price = (s, type) => Math.round(TOWERS[type].cost * s.D.cost / 5) * 5;
+  const nearGate = (s, tx, tz) => s.map.spawns.some((sp) => Math.abs(sp.x - tx) <= 1 && Math.abs(sp.y - tz) <= 1);
+  function canBuild(s, type, tx, tz, p) {
+    const m = s.map, U = TOWERS[type];
+    if (!U) return { ok: false, why: 'locked' };
+    if (tx < 0 || tz < 0 || tx >= m.w || tz >= m.h) return { ok: false, why: 'edge' };
+    const i = tz * m.w + tx, tile = m.tiles[i];
+    if (s.occ[i] > 0) return { ok: false, why: 'blocked' };
+    if (U.road) { if (!ROAD_OK[tile]) return { ok: false, why: 'road' }; if (nearGate(s, tx, tz)) return { ok: false, why: 'gate' }; }
+    else if (!BUILD_OK[tile]) return { ok: false, why: 'blocked' };
+    for (const q of s.players) if (!q.down && Math.abs(q.x - (tx + 0.5)) < 0.8 && Math.abs(q.z - (tz + 0.5)) < 0.8) return { ok: false, why: 'player' };
+    if (!U.road) for (const zb of s.zombies) if (!zb.fly && (zb.x | 0) === tx && (zb.z | 0) === tz) return { ok: false, why: 'blocked' };
+    if (p && p.coins < price(s, type)) return { ok: false, why: 'cost' };
+    return { ok: true };
+  }
+  function build(s, type, tx, tz, p, ev) {
+    const can = canBuild(s, type, tx, tz, p);
+    if (!can.ok) { ev.push({ e: 'nobuild', id: p ? p.id : null, why: can.why }); return null; }
+    const cost = price(s, type), U = TOWERS[type];
+    if (p) p.coins -= cost;
+    const t = { id: s.nextId++, type: type, tx: tx, tz: tz, x: tx + 0.5, z: tz + 0.5, a: 0, b: 0, spent: cost, mode: U.mode || 'first', by: p ? p.id : null, slot: p ? p.slot : 0, cd: 0.3, rot: 0, stun: 0, timers: {}, hp: 0, spikes: 0, st: null, done: 0 };
+    s.towers.push(t); s.tmap.set(t.id, t);
+    s.occ[tz * s.map.w + tx] = t.id;
+    s.stats.built++; s.stats.spent += cost;
+    t.st = towerStats(s, t);
+    if (U.kind === 'wall') t.hp = t.st.hp;
+    if (U.kind === 'trap') t.spikes = Math.round(t.st.spikes);
+    if (U.road) roadIndex(s);
+    if (type === 'shrine') refreshStats(s);
+    ev.push({ e: 'built', t: towerInfo(t) });
+    return t;
+  }
+  // barricades and traps along each road, by how far along the road they sit
+  function roadIndex(s) {
+    s.blocks = s.map.paths.map(() => []); s.traps = s.map.paths.map(() => []);
+    for (const t of s.towers) {
+      if (t.st.kind !== 'wall' && t.st.kind !== 'trap') continue;
+      const i = t.tz * s.map.w + t.tx;
+      s.map.paths.forEach((P, k) => { const d = P.road.tileD.get(i); if (d != null) (t.st.kind === 'wall' ? s.blocks : s.traps)[k].push({ d: d, t: t }); });
+    }
+    for (const a of s.blocks) a.sort((x, y) => x.d - y.d);
+    for (const a of s.traps) a.sort((x, y) => x.d - y.d);
+  }
+  function removeTower(s, t) {
+    s.towers = s.towers.filter((q) => q !== t); s.tmap.delete(t.id);
+    s.occ[t.tz * s.map.w + t.tx] = 0;
+    if (t.st.kind === 'wall' || t.st.kind === 'trap') roadIndex(s);
+    if (t.type === 'shrine') refreshStats(s);
+  }
+  // the next step on path 'a' or 'b': one path may go to step 3, the other then stops at step 1
+  function upgradeInfo(s, t, path) {
+    const U = TOWERS[t.type], list = U[path], tier = t[path];
+    if (!list || tier >= 3) return { ok: false, why: 'max', tier: tier };
+    const other = path === 'a' ? t.b : t.a;
+    if (tier >= 1 && other >= 2) return { ok: false, why: 'path', tier: tier };
+    const up = list[tier];
+    return { ok: true, cost: Math.round(up.cost * s.D.cost / 5) * 5, up: up, tier: tier + 1 };
+  }
+  function upgrade(s, id, path, p, ev) {
+    const t = s.towers.find((q) => q.id === id);
+    if (!t || (path !== 'a' && path !== 'b')) return false;
+    const u = upgradeInfo(s, t, path);
+    if (!u.ok) return false;
+    if (p && p.coins < u.cost) { ev.push({ e: 'nobuild', id: p.id, why: 'cost' }); return false; }
+    if (p) p.coins -= u.cost;
+    t[path]++; t.spent += u.cost; s.stats.spent += u.cost;
+    const hpWas = t.st.hp || 0;
+    if (t.type === 'shrine') refreshStats(s); else t.st = towerStats(s, t);
+    if (t.st.kind === 'wall') t.hp += (t.st.hp || 0) - hpWas;
+    if (t.st.kind === 'trap') t.spikes = Math.round(t.st.spikes);
+    ev.push({ e: 'upgraded', t: towerInfo(t), path: path, by: p ? p.id : null });
+    return true;
+  }
+  const sellValue = (t) => Math.floor(t.spent * SELL_BACK);
+  function sell(s, id, p, ev) {
+    const t = s.towers.find((q) => q.id === id);
+    if (!t || (p && t.by && t.by !== p.id && s.players.some((q) => q.id === t.by))) return false;   // only your own (or a friend's who left)
+    const v = sellValue(t);
+    if (p) p.coins += v;
+    removeTower(s, t);
+    ev.push({ e: 'sold', id: t.id, x: t.x, y: t.z, v: v, by: p ? p.id : null });
+    return true;
+  }
+  const towerInfo = (t) => ({ id: t.id, type: t.type, tx: t.tx, tz: t.tz, a: t.a, b: t.b, mode: t.mode, by: t.by, spent: t.spent, max: t.st && t.st.kind === 'wall' ? Math.round(t.st.hp) : t.st && t.st.kind === 'trap' ? Math.round(t.st.spikes) : 0 });
+
+  /* ---- firing: one tower's (or crew member's) attack at a target ---- */
+  function effects(st, by, x, z) {
+    return { by: by, from: [x, z], burn: st.burnDps ? [st.burnDps, st.burnT || 2] : null, slow: st.slowF ? [st.slowF, st.slowT || 1] : null, stun: st.stun || 0, freeze: st.freeze || 0, brittle: st.brittle || 0,
+      acid: st.acidDps ? [st.acidDps, st.acidT || 2] : null, stop: st.stop || 0, armor: !!st.armor, blue: !!st.blue, knock: st.knock || 0, flood: st.flood || 0 };
+  }
+  function fire(s, st, x, z, target, by, src, ev, near, mode) {
+    const a = Math.atan2(target.x - x, target.z - z), fx = effects(st, by, x, z);
+    switch (st.kind) {
+      case 'shot': {
+        const n = st.shots || 1, spread = (st.spread || 0) * Math.PI / 180;
+        for (let k = 0; k < n; k++) {
+          const aa = a + (n > 1 ? ((k / (n - 1)) - 0.5) * spread : 0);
+          s.shots.push({ x: x, z: z, vx: Math.sin(aa) * st.speed, vz: Math.cos(aa) * st.speed, life: st.range / st.speed + 0.08, dmg: st.dmg, type: st.type, pierce: st.pierce || 1, hits: [], splash: st.splash || 0, fx: fx });
+        }
+        ev.push({ e: 'shot', k: src, x: r2(x), y: r2(z), a: r2(a), n: n, sp: st.speed, l: r2(st.range), spread: st.spread || 0 });
+        break;
+      }
+      case 'lob': {
+        const n = st.shots || 1, skip = new Set();
+        let tg = target;
+        for (let k = 0; k < n; k++) {
+          if (k > 0) tg = pickTarget(s, x, z, st.range, st.min, mode || 'first', st.camo, near, skip) || target;
+          skip.add(tg);
+          const d = Math.sqrt(dist2(tg.x, tg.z, x, z)), t = Math.max(0.35, d / st.speed);
+          // aim a little ahead of a walker
+          const lead = tg.fly || tg.under ? null : pathAt(walkOf(s, tg), tg.d + ZOMBIES[tg.type].speed * PACE * (tg.slowT > 0 ? tg.slowF : 1) * t * 0.8, tg.seg);
+          const ax = lead ? lead[0] : tg.x, az = lead ? lead[1] : tg.z;
+          s.shots.push({ lob: true, x: x, z: z, tx: ax, tz: az, life: t, dmg: st.dmg, type: st.type, splash: st.splash || 1, cluster: st.cluster || 0, pool: st.poolDps ? [st.poolDps, st.poolT, st.poolR] : null, fx: fx });
+          ev.push({ e: 'lob', k: src, x: r2(x), y: r2(z), tx: r2(ax), ty: r2(az), t: r2(t) });
+        }
+        break;
+      }
+      case 'chain': {
+        const pts = [[x, z]], hit = new Set();
+        let cur = target, dmg = st.dmg;
+        for (let j = 0; j < st.jumps && cur; j++) {
+          hit.add(cur);
+          pts.push([cur.x, cur.z]);
+          hurtZombie(s, cur, dmg, st.type, ev, fx);
+          dmg *= st.falloff || 0.85;
+          let nxt = null, nd = st.jumpRange * st.jumpRange;
+          for (const o of near(cur.x, cur.z, st.jumpRange)) { if (o.hp <= 0 || o.under || o.bones > 0 || hit.has(o) || (ZOMBIES[o.type].camo && !st.camo)) continue; const d2 = dist2(o.x, o.z, cur.x, cur.z); if (d2 < nd) { nd = d2; nxt = o; } }
+          cur = nxt;
+        }
+        ev.push({ e: 'zap', k: src, pts: pts.map((p) => [r2(p[0]), r2(p[1])]) });
+        break;
+      }
+      case 'cone': {
+        const half = (st.arc / 2) * Math.PI / 180;
+        for (const zb of near(x, z, st.range)) {
+          if (zb.hp <= 0 || zb.under || zb.bones > 0) continue;
+          const d2 = dist2(zb.x, zb.z, x, z);
+          if (d2 > st.range * st.range) continue;
+          const b = Math.atan2(zb.x - x, zb.z - z), diff = Math.abs(((b - a + Math.PI * 3) % (Math.PI * 2)) - Math.PI);
+          if (st.arc >= 360 || diff <= half || d2 < 0.5) hurtZombie(s, zb, st.dmg, st.type, ev, fx);
+        }
+        if (rngNext(s) < 0.6) ev.push({ e: 'flame', k: src, x: r2(x), y: r2(z), a: r2(a), l: r2(st.range), arc: st.arc });
+        break;
+      }
+      case 'snipe': {
+        hurtZombie(s, target, st.dmg, st.type, ev, fx);
+        ev.push({ e: 'snipe', k: src, x: r2(x), y: r2(z), tx: r2(target.x), ty: r2(target.z) });
+        break;
+      }
+      case 'beam': {
+        const beams = st.beams || 1, skip = new Set();
+        let tg = target;
+        for (let k = 0; k < beams; k++) {
+          if (k > 0) { tg = pickTarget(s, x, z, st.range, 0, mode || 'first', st.camo, near, skip); if (!tg) break; }
+          skip.add(tg);
+          const ba = Math.atan2(tg.x - x, tg.z - z), ux = Math.sin(ba), uz = Math.cos(ba), hits = [];
+          for (const zb of near(x, z, st.range)) {
+            if (zb.hp <= 0 || zb.under || zb.bones > 0 || (ZOMBIES[zb.type].camo && !st.camo)) continue;
+            const rx = zb.x - x, rz = zb.z - z, along = rx * ux + rz * uz, across = Math.abs(rx * uz - rz * ux);
+            if (along > 0 && along < st.range && across < zb.r + 0.25) hits.push([along, zb]);
+          }
+          hits.sort((p, q) => p[0] - q[0]);
+          for (const h of hits.slice(0, st.pierce || 1)) hurtZombie(s, h[1], st.dmg, st.type, ev, fx);
+          if (rngNext(s) < 0.5) ev.push({ e: 'beam', k: src, x: r2(x), y: r2(z), tx: r2(tg.x), ty: r2(tg.z) });
+        }
+        break;
+      }
+      case 'melee': {
+        const half = (st.arc / 2) * Math.PI / 180;
+        for (const zb of near(x, z, st.range + 0.6)) {
+          if (zb.hp <= 0 || zb.under || zb.bones > 0) continue;
+          const d = Math.sqrt(dist2(zb.x, zb.z, x, z));
+          if (d > st.range + zb.r) continue;
+          const b = Math.atan2(zb.x - x, zb.z - z), diff = Math.abs(((b - a + Math.PI * 3) % (Math.PI * 2)) - Math.PI);
+          if (st.arc >= 360 || diff <= half) hurtZombie(s, zb, st.dmg, st.type, ev, fx);
+        }
+        ev.push({ e: 'swing', k: src, x: r2(x), y: r2(z), a: r2(a) });
+        break;
+      }
     }
     return a;
   }
-  // projectiles in flight
+  // slime: a hit slimes every zombie within the flood's reach too
+  function splashFx(s, zb, sh, ev, near) {
+    if (sh.splash) {
+      ev.push({ e: 'pop', x: r2(zb.x), y: r2(zb.z), t: sh.type, r: sh.splash });
+      for (const o of near(zb.x, zb.z, sh.splash + 0.4)) if (dist2(o.x, o.z, zb.x, zb.z) < (sh.splash + o.r) ** 2) hurtZombie(s, o, sh.dmg, sh.type, ev, sh.fx);
+    } else { hurtZombie(s, zb, sh.dmg, sh.type, ev, sh.fx); ev.push({ e: 'hit', x: r2(zb.x), y: r2(zb.z), t: sh.type }); }
+    if (sh.fx.flood) {
+      const f = sh.fx.flood;
+      ev.push({ e: 'pop', x: r2(zb.x), y: r2(zb.z), t: 'slime', r: f });
+      for (const o of near(zb.x, zb.z, f)) if (o !== zb && dist2(o.x, o.z, zb.x, zb.z) < f * f) hurtZombie(s, o, 0.01, 'pure', ev, sh.fx);
+    }
+  }
+  function land(s, sh, ev, near) {
+    const hitAt = (x, z, r, dmg) => { for (const zb of near(x, z, r + 0.4)) if (dist2(zb.x, zb.z, x, z) < (r + zb.r) ** 2) hurtZombie(s, zb, dmg, sh.type, ev, sh.fx); };
+    ev.push({ e: 'boom', x: r2(sh.tx), y: r2(sh.tz), r: sh.splash });
+    hitAt(sh.tx, sh.tz, sh.splash, sh.dmg);
+    if (sh.cluster) for (let k = 0; k < sh.cluster; k++) {
+      const a = rnd(s, 0, Math.PI * 2), d = rnd(s, 0.6, sh.splash * 1.3), x = sh.tx + Math.sin(a) * d, z = sh.tz + Math.cos(a) * d;
+      ev.push({ e: 'boom', x: r2(x), y: r2(z), r: r2(sh.splash * 0.6) });
+      hitAt(x, z, sh.splash * 0.6, sh.dmg * 0.5);
+    }
+    if (sh.pool) s.pools.push({ x: sh.tx, z: sh.tz, dps: sh.pool[0], t: sh.pool[1], r: sh.pool[2], fx: sh.fx });
+  }
+  // projectiles in flight, fire on the ground and zombie spit
   function stepShots(s, dt, ev, near) {
     for (const sh of s.shots) {
       if (sh.dead) continue;
       sh.life -= dt;
-      if (sh.lob) {
-        if (sh.life <= 0) { sh.dead = true; ev.push({ e: 'boom', x: sh.tx, y: sh.tz, r: sh.splash }); for (const zb of near(sh.tx, sh.tz, sh.splash + 0.4)) if (dist2(zb.x, zb.z, sh.tx, sh.tz) < (sh.splash + zb.r) ** 2) hurtZombie(s, zb, sh.dmg, sh.type, sh.tx, sh.tz, ev, { by: sh.by }); }
-        continue;
-      }
+      if (sh.lob) { if (sh.life <= 0) { sh.dead = true; land(s, sh, ev, near); } continue; }
       const nx = sh.x + sh.vx * dt, nz = sh.z + sh.vz * dt;
-      // hit the first zombie along the way
-      let hitZ = null, ht = 2;
-      for (const zb of near((sh.x + nx) / 2, (sh.z + nz) / 2, 1.2)) {
-        if (zb.hp <= 0 || zb.under || sh.hits.indexOf(zb.id) >= 0) continue;
-        const t = segCircle(sh.x, sh.z, nx, nz, zb.x, zb.z, zb.r + 0.08);
-        if (t >= 0 && t < ht) { ht = t; hitZ = zb; }
-      }
-      if (hitZ) {
+      let guard = 0;
+      while (!sh.dead && guard++ < 8) {
+        let hitZ = null, ht = 2;
+        for (const zb of near((sh.x + nx) / 2, (sh.z + nz) / 2, 1.3)) {
+          if (zb.hp <= 0 || zb.under || zb.bones > 0 || sh.hits.indexOf(zb.id) >= 0) continue;
+          const t = segCircle(sh.x, sh.z, nx, nz, zb.x, zb.z, zb.r + 0.1);
+          if (t >= 0 && t < ht) { ht = t; hitZ = zb; }
+        }
+        if (!hitZ) break;
         sh.hits.push(hitZ.id);
-        if (sh.splash) { ev.push({ e: 'pop', x: hitZ.x, y: hitZ.z, t: sh.type }); for (const zb of near(hitZ.x, hitZ.z, sh.splash + 0.4)) if (dist2(zb.x, zb.z, hitZ.x, hitZ.z) < (sh.splash + zb.r) ** 2) hurtZombie(s, zb, sh.dmg, sh.type, sh.x, sh.z, ev, { slow: sh.slow, by: sh.by }); }
-        else { hurtZombie(s, hitZ, sh.dmg, sh.type, sh.x, sh.z, ev, { slow: sh.slow, by: sh.by }); ev.push({ e: 'hit', x: hitZ.x, y: hitZ.z, t: sh.type }); }
-        if (sh.hits.length >= sh.pierce) { sh.dead = true; continue; }
+        splashFx(s, hitZ, sh, ev, near);
+        if (sh.hits.length >= sh.pierce) sh.dead = true;
       }
       sh.x = nx; sh.z = nz;
       if (sh.life <= 0) sh.dead = true;
-      else { const t = tileAt(s.map, sh.x, sh.z); if (t === T.TREE || t === T.ROCK || t === T.CASTLE) sh.dead = true; }
     }
     s.shots = s.shots.filter((q) => !q.dead);
-    // zombie spit flies at the crew, turrets and the castle
+    for (const pl of s.pools) {
+      pl.t -= dt;
+      for (const zb of near(pl.x, pl.z, pl.r)) if (dist2(zb.x, zb.z, pl.x, pl.z) < pl.r * pl.r) hurtZombie(s, zb, pl.dps * dt, 'fire', ev, { by: pl.fx.by });
+    }
+    s.pools = s.pools.filter((q) => q.t > 0);
     for (const f of s.foes) {
       f.life -= dt;
       f.x += f.vx * dt; f.z += f.vz * dt;
       let done = f.life <= 0;
-      const ft = tileAt(s.map, f.x, f.z);
-      if (ft === T.TREE || ft === T.ROCK) done = true;
-      for (const p of s.players) if (!done && !p.down && dist2(p.x, p.z, f.x, f.z) < 0.35 * 0.35) { hurtPlayer(s, p, f.dmg, ev); done = true; }
-      for (const t of s.turrets) if (!done && t.hp > 0 && dist2(t.x, t.z, f.x, f.z) < 0.5 * 0.5) { hurtTurret(s, t, f.dmg, ev); done = true; }
-      if (!done && castleDist(s, f.x, f.z) < 0.2) { hurtCastle(s, f.dmg * 0.5, ev); done = true; }   // slime is meant for turrets: the castle shrugs off half
-      if (done) { f.dead = true; ev.push({ e: 'splat', x: f.x, y: f.z }); }
+      for (const p of s.players) if (!done && !p.down && dist2(p.x, p.z, f.x, f.z) < 0.4 * 0.4) { hurtPlayer(s, p, f.dmg, ev); done = true; }
+      for (const t of s.towers) if (!done && dist2(t.x, t.z, f.x, f.z) < 0.5 * 0.5) { stunTower(s, t, f.stun, ev); done = true; }
+      if (done) { f.dead = true; ev.push({ e: 'splat', x: r2(f.x), y: r2(f.z) }); }
     }
     s.foes = s.foes.filter((q) => !q.dead);
   }
-  // where along a segment a circle is first touched (0..1), or -1
   function segCircle(x0, z0, x1, z1, cx, cz, r) {
     const dx = x1 - x0, dz = z1 - z0, fx = x0 - cx, fz = z0 - cz;
     const a = dx * dx + dz * dz, b = 2 * (fx * dx + fz * dz), c = fx * fx + fz * fz - r * r;
@@ -645,73 +971,49 @@ const CC = (function () {
     const t = (-b - Math.sqrt(disc)) / (2 * a);
     return t >= 0 && t <= 1 ? t : -1;
   }
-
-  /* ================= building ================= */
-  const canAfford = (s, cost) => (s.res.wood >= (cost.wood || 0)) && (s.res.stone >= (cost.stone || 0)) && (s.res.gold >= (cost.gold || 0));
-  function canBuild(s, type, tx, tz, p) {
-    const m = s.map, U = TURRETS[type];
-    if (!U || s.unlocks.turrets.indexOf(type) < 0) return { ok: false, why: 'locked' };
-    if (tx < 1 || tz < 1 || tx >= m.w - 1 || tz >= m.h - 1) return { ok: false, why: 'edge' };
-    const i = tz * m.w + tx;
-    if (!BUILD_OK[m.tiles[i]] || s.occ[i] > 0) return { ok: false, why: 'blocked' };
-    for (const sp of m.spawns) if (Math.abs(sp.x - tx) <= 1 && Math.abs(sp.y - tz) <= 1) return { ok: false, why: 'gate' };
-    if (p && dist2(p.x, p.z, tx + 0.5, tz + 0.5) > 7 * 7) return { ok: false, why: 'far' };
-    for (const q of s.players) if (!q.down && Math.abs(q.x - (tx + 0.5)) < 0.8 && Math.abs(q.z - (tz + 0.5)) < 0.8) return { ok: false, why: 'player' };
-    if (!canAfford(s, U.cost)) return { ok: false, why: 'cost' };
-    return { ok: true };
-  }
-  function build(s, type, tx, tz, p, ev) {
-    const can = canBuild(s, type, tx, tz, p);
-    if (!can.ok) { ev.push({ e: 'nobuild', id: p ? p.id : null, why: can.why }); return null; }
-    const U = TURRETS[type];
-    s.res.wood -= U.cost.wood || 0; s.res.stone -= U.cost.stone || 0; s.res.gold -= U.cost.gold || 0;
-    const t = { id: s.nextId++, type: type, tx: tx, tz: tz, x: tx + 0.5, z: tz + 0.5, lvl: 1, hp: U.hp, max: U.hp, cd: 0.4, rot: 0, by: p ? p.id : null };
-    s.turrets.push(t);
-    s.occ[tz * s.map.w + tx] = t.id;
-    s.stats.built++;
-    // a zombie standing on the new turret's tile steps off
-    for (const zb of s.zombies) if ((zb.x | 0) === tx && (zb.z | 0) === tz && !ZOMBIES[zb.type].fly) { zb.x += zb.x < tx + 0.5 ? -0.6 : 0.6; zb.next = -1; }
-    refreshFlow(s);
-    ev.push({ e: 'built', t: turretInfo(t) });
-    return t;
-  }
-  const turretInfo = (t) => ({ id: t.id, type: t.type, tx: t.tx, tz: t.tz, lvl: t.lvl, hp: Math.round(t.hp), max: t.max });
-  function upgrade(s, id, p, ev) {
-    const t = s.turrets.find((q) => q.id === id);
-    if (!t || t.hp <= 0 || t.lvl >= 3 || TURRETS[t.type].kind === 'wall') return false;
-    if (p && dist2(p.x, p.z, t.x, t.z) > 3 * 3) return false;
-    const g = upgradeCost(t.type, t.lvl);
-    if (s.res.gold < g) { ev.push({ e: 'nobuild', id: p ? p.id : null, why: 'cost' }); return false; }
-    s.res.gold -= g;
-    t.lvl++;
-    const max = Math.round(TURRETS[t.type].hp * UP_HP[t.lvl - 1]);
-    t.hp += max - t.max; t.max = max;
-    ev.push({ e: 'upgraded', t: turretInfo(t) });
-    return true;
-  }
-  function stepTurret(s, t, dt, ev) {
-    const U = TURRETS[t.type];
-    if (U.kind === 'wall') return;
-    const rangeMul = UP_RANGE[t.lvl - 1], dmgMul = UP_DMG[t.lvl - 1];
-    if (U.kind === 'aura') {
-      for (const zb of s.zombies) if (zb.hp > 0 && !zb.under && dist2(zb.x, zb.z, t.x, t.z) < (U.range * rangeMul) ** 2) hurtZombie(s, zb, U.dps * dmgMul * dt, U.type, null, null, ev, { slow: U.slow });
-      t.rot += dt * 1.5;
-      return;
+  function stepTower(s, t, dt, ev, near) {
+    const st = t.st, tm = t.timers;
+    if (t.stun > 0) { t.stun -= dt; return; }
+    const src = 't:' + t.type + ':' + t.id;
+    switch (st.kind) {
+      case 'wall':
+        if (st.tarF) for (const zb of near(t.x, t.z, st.tarR)) if (!zb.fly && dist2(zb.x, zb.z, t.x, t.z) < st.tarR * st.tarR && !ZOMBIES[zb.type].noSlow) { zb.slowT = Math.max(zb.slowT, 0.3); zb.slowF = Math.min(zb.slowF, 1 - st.tarF); }
+        if (st.wardEvery) { tm.ward = (tm.ward || 0) - dt; if (tm.ward <= 0) { tm.ward = st.wardEvery; let any = false; for (const zb of near(t.x, t.z, st.wardR)) if (!zb.fly && !ZOMBIES[zb.type].heavy && dist2(zb.x, zb.z, t.x, t.z) < st.wardR * st.wardR) { zb.d = Math.max(0, zb.d - st.wardPush); any = true; } if (any) ev.push({ e: 'pulse', id: t.id, x: t.x, y: t.z, r: st.wardR, k: 'ward' }); } }
+        return;
+      case 'trap': case 'mine': return;
+      case 'support': {
+        const r2_ = st.range * st.range;
+        for (const p of s.players) if (!p.down && p.hp < p.max && dist2(p.x, p.z, t.x, t.z) < r2_) p.hp = Math.min(p.max, p.hp + st.heal * dt);
+        t.rot += dt;
+        return;
+      }
+      case 'aura': {
+        const fx = effects(st, t.id, t.x, t.z);
+        for (const zb of near(t.x, t.z, st.range)) if (zb.hp > 0 && !zb.under && dist2(zb.x, zb.z, t.x, t.z) < st.range * st.range) hurtZombie(s, zb, st.dmg * dt, st.type, ev, { by: t.id, slow: [st.slowF, Math.max(0.3, st.slowT || 0.4)], brittle: st.brittle || 0 });
+        if (st.pulseEvery) { tm.pulse = (tm.pulse || st.pulseEvery * 0.5) - dt; if (tm.pulse <= 0) { tm.pulse = st.pulseEvery; let any = false; for (const zb of near(t.x, t.z, st.range)) if (zb.hp > 0 && !zb.under && dist2(zb.x, zb.z, t.x, t.z) < st.range * st.range) { any = true; hurtZombie(s, zb, st.dmg, st.type, ev, { by: t.id, freeze: st.pulseFreeze || 0 }); } if (any) ev.push({ e: 'pulse', id: t.id, x: t.x, y: t.z, r: r2(st.range), k: 'frost' }); } }
+        if (st.shards) {
+          tm.shard = (tm.shard || 0) - dt;
+          if (tm.shard <= 0) {
+            const tg = pickTarget(s, t.x, t.z, st.range + 1.5, 0, t.mode, st.camo, near);
+            if (tg) { tm.shard = 0.5; t.rot = fire(s, { kind: 'shot', type: 'frost', dmg: 12, speed: 14, range: st.range + 1.5, pierce: 3, slowF: st.slowF, slowT: 1 }, t.x, t.z, tg, t.id, src, ev, near); }
+          }
+        }
+        t.rot += dt * 1.5;
+        void fx;
+        return;
+      }
     }
-    if (U.kind === 'heal') {
-      const r2 = (U.range * rangeMul) ** 2, h = U.heal * dmgMul * dt;
-      for (const p of s.players) if (!p.down && dist2(p.x, p.z, t.x, t.z) < r2 && p.hp < p.max) p.hp = Math.min(p.max, p.hp + h);
-      for (const o of s.turrets) if (o.hp > 0 && o !== t && dist2(o.x, o.z, t.x, t.z) < r2 && o.hp < o.max) o.hp = Math.min(o.max, o.hp + h);
-      if (castleDist(s, t.x, t.z) < U.range * rangeMul && s.castle.hp > 0) s.castle.hp = Math.min(s.castle.max, s.castle.hp + h * 0.3);
-      t.rot += dt;
-      return;
-    }
+    // a periodic power of its own: thunder, smoke, fireballs, meteors
+    if (st.pulseEvery && st.pulseDmg) { tm.pulse = (tm.pulse || st.pulseEvery) - dt; if (tm.pulse <= 0) { tm.pulse = st.pulseEvery; let any = false; for (const zb of near(t.x, t.z, st.range)) if (zb.hp > 0 && !zb.under && dist2(zb.x, zb.z, t.x, t.z) < st.range * st.range && (!ZOMBIES[zb.type].camo || st.camo)) { any = true; hurtZombie(s, zb, st.pulseDmg, st.type, ev, { by: t.id }); } if (any) ev.push({ e: 'pulse', id: t.id, x: t.x, y: t.z, r: r2(st.range), k: 'zap' }); } }
+    if (st.smokeEvery) { tm.smoke = (tm.smoke || st.smokeEvery) - dt; if (tm.smoke <= 0) { const tg = pickTarget(s, t.x, t.z, st.range, 0, 'first', st.camo, near); if (tg) { tm.smoke = st.smokeEvery; ev.push({ e: 'smoke', x: r2(tg.x), y: r2(tg.z), r: st.smokeR }); for (const zb of near(tg.x, tg.z, st.smokeR)) if (dist2(zb.x, zb.z, tg.x, tg.z) < st.smokeR * st.smokeR) hurtZombie(s, zb, 1, 'pure', ev, { by: t.id, stun: st.smokeStun }); } else tm.smoke = 0.5; } }
+    if (st.fireballEvery) { tm.fb = (tm.fb || st.fireballEvery) - dt; if (tm.fb <= 0) { const tg = pickTarget(s, t.x, t.z, st.range, 0, t.mode, st.camo, near); if (tg) { tm.fb = st.fireballEvery; fire(s, { kind: 'lob', type: 'fire', dmg: st.fireballDmg, speed: 11, splash: st.fireballR, range: st.range, camo: st.camo }, t.x, t.z, tg, t.id, 't:fireball:' + t.id, ev, near); } else tm.fb = 0.3; } }
+    if (st.meteorEvery) { tm.met = (tm.met || st.meteorEvery) - dt; if (tm.met <= 0) { const tg = pickTarget(s, t.x, t.z, st.range * 1.5, 0, 'strong', st.camo, near); if (tg) { tm.met = st.meteorEvery; ev.push({ e: 'meteor', x: r2(tg.x), y: r2(tg.z), r: st.meteorR }); for (const zb of near(tg.x, tg.z, st.meteorR + 0.4)) if (dist2(zb.x, zb.z, tg.x, tg.z) < (st.meteorR + zb.r) ** 2) hurtZombie(s, zb, zb === tg ? st.meteorDmg : st.meteorDmg * 0.3, 'magic', ev, { by: t.id }); } else tm.met = 0.5; } }
     t.cd -= dt;
-    const target = pickTarget(s, t.x, t.z, U.range * rangeMul, U.min, true, U.kind === 'shot');
-    if (target) t.rot = turnTo(t.rot, Math.atan2(target.x - t.x, target.z - t.z), dt * 7);
+    const target = pickTarget(s, t.x, t.z, st.range, st.min, t.mode, st.camo, near);
+    if (target) t.rot = turnTo(t.rot, Math.atan2(target.x - t.x, target.z - t.z), dt * 9);
     if (t.cd > 0 || !target) return;
-    t.cd = 1 / U.rate;
-    fireAt(s, U, t.lvl, t.x, t.z, target, null, ev, 't:' + t.type);
+    t.cd = 1 / st.rate;
+    fire(s, st, t.x, t.z, target, t.id, src, ev, near, t.mode);
   }
 
   /* ================= the crew ================= */
@@ -719,103 +1021,128 @@ const CC = (function () {
     if (p.down > 0) {
       p.down -= dt;
       if (p.down <= 0) { const g = gatePoint(s.map, p.slot), f = freeSpot(s, g.x, g.z); p.down = 0; p.hp = p.max; p.x = f[0]; p.z = f[1]; ev.push({ e: 'up', id: p.id }); }
-      return;
-    }
-    if (inp) {
+    } else if (inp) {
       if (typeof inp.x === 'number' && typeof inp.z === 'number' && isFinite(inp.x) && isFinite(inp.z)) {
-        // trust the device's own movement, but not through walls: snap back if it says it stands inside something
-        const tx = inp.x | 0, tz = inp.z | 0;
-        if (!playerSolid(s)(tx, tz)) { p.x = inp.x; p.z = inp.z; }
+        // trust the device's own movement, but not through walls
+        if (!playerSolid(s)(inp.x | 0, inp.z | 0)) { p.x = inp.x; p.z = inp.z; }
       }
       if (typeof inp.rot === 'number') p.rot = inp.rot;
-      if (inp.weapon && WEAPONS[inp.weapon] && s.unlocks.weapons.indexOf(inp.weapon) >= 0) p.weapon = inp.weapon;
       p.fire = !!inp.fire;
       p.gather = typeof inp.gather === 'number' ? inp.gather : -1;
-      if (inp.build) build(s, inp.build.type, inp.build.tx, inp.build.tz, p, ev);
-      if (inp.upgrade) upgrade(s, inp.upgrade, p, ev);
-      if (inp.ready && s.wave.state === 'build') s.wave.ready = (s.wave.ready || 0) | (1 << p.slot);
     }
-    if (p.hp < p.max) p.hp = Math.min(p.max, p.hp + dt * 2);   // a crew member heals slowly
+    // wishes count even while knocked out: building, upgrading, selling, aiming towers, the next round
+    if (inp) {
+      if (inp.build) build(s, inp.build.type, inp.build.tx | 0, inp.build.tz | 0, p, ev);
+      if (inp.upgrade) upgrade(s, inp.upgrade.id, inp.upgrade.path, p, ev);
+      if (inp.sell) sell(s, inp.sell, p, ev);
+      if (inp.mode && ['first', 'last', 'close', 'strong'].indexOf(inp.mode.mode) >= 0) { const t = s.towers.find((q) => q.id === inp.mode.id); if (t) { t.mode = inp.mode.mode; ev.push({ e: 'mode', id: t.id, mode: t.mode }); } }
+      if (inp.next && s.wave.state === 'wait' && !s.result) startRound(s, ev);
+    }
+    if (p.down > 0) return;
+    if (p.hp < p.max) p.hp = Math.min(p.max, p.hp + dt * 3);
     p.cd -= dt;
     if (p.actT > 0) p.actT -= dt;
-    // chop a tree or mine a rock the player pushes against
+    // chop a tree or mine a rock the player pushes against: coins, and room to build
     if (p.gather >= 0) {
-      const m = s.map, i = p.gather, t = m.tiles[i];
+      const m = s.map, i = p.gather, tl = m.tiles[i];
       const gx = (i % m.w) + 0.5, gz = ((i / m.w) | 0) + 0.5;
-      if ((t === T.TREE || t === T.ROCK) && dist2(gx, gz, p.x, p.z) < 1.3 * 1.3) {
+      if ((tl === T.TREE || tl === T.ROCK) && dist2(gx, gz, p.x, p.z) < 1.3 * 1.3) {
         p.gatherT += dt * (p.weapon === 'hammer' ? 2 : 1);
-        if (p.gatherT >= 0.45) {
-          p.gatherT = 0; p.act = t === T.TREE ? 'chop' : 'mine'; p.actT = 0.25;
+        if (p.gatherT >= 0.4) {
+          p.gatherT = 0; p.act = tl === T.TREE ? 'chop' : 'mine'; p.actT = 0.25;
           m.life[i] = Math.max(0, m.life[i] - 1);
-          ev.push({ e: 'chop', i: i, kind: t === T.TREE ? 'tree' : 'rock', left: m.life[i], id: p.id });
+          ev.push({ e: 'chop', i: i, kind: tl === T.TREE ? 'tree' : 'rock', left: m.life[i], id: p.id });
           if (m.life[i] <= 0) {
             m.tiles[i] = T.GRASS;
-            if (t === T.TREE) { s.res.wood += 3; s.stats.chopped++; } else { s.res.stone += 3; s.stats.mined++; }
-            ev.push({ e: 'tile', i: i, t: T.GRASS, got: t === T.TREE ? 'wood' : 'stone', n: 3, x: gx, y: gz });
-            refreshFlow(s);
+            const got = tl === T.TREE ? 12 : 18;
+            p.coins += got;
+            if (tl === T.TREE) s.stats.chopped++;
+            ev.push({ e: 'tile', i: i, t: T.GRASS, got: got, x: gx, y: gz, id: p.id });
           }
         }
         return;
       }
       p.gatherT = 0;
     }
-    // fire: at the nearest zombie in range (auto-aim)
+    // fire: at the nearest zombie in range (auto-aim); a player sees shadow zombies
     if (p.fire && p.cd <= 0) {
-      const W = WEAPONS[p.weapon];
-      const target = pickTarget(s, p.x, p.z, W.range, 0, false, W.kind === 'shot');
+      const st = p.st, target = pickTarget(s, p.x, p.z, st.range, 0, 'close', true, nearFn);
       if (target) {
-        p.cd = 1 / W.rate;
-        p.rot = fireAt(s, W, 1, p.x, p.z, target, p.id, ev, 'p:' + p.weapon + ':' + p.id);
+        p.cd = 1 / st.rate;
+        p.rot = fire(s, st, p.x, p.z, target, p.id, 'p:' + p.weapon + ':' + p.id, ev, nearFn, 'close');
         p.act = 'fire'; p.actT = 0.15;
-        p.aimRot = p.rot;
       }
     }
   }
 
-  /* ================= waves ================= */
-  function startWave(s, ev) {
-    const w = s.waves[s.wave.idx];
-    s.wave.state = 'fight'; s.wave.fight = 0; s.wave.ready = 0;
-    s.wave.groups = w.groups.map((g) => ({ z: g.z, left: Math.max(1, Math.round(g.n * (ZOMBIES[g.z].boss ? 1 : s.countMul))), every: g.every || 1.5, next: g.after || 0, from: g.from }));
-    ev.push({ e: 'wave', idx: s.wave.idx, state: 'fight' });
+  /* ================= rounds ================= */
+  // a round's groups: { z: zombie, n, every: seconds apart, after: seconds before the first, gate: 'cycle' | number }
+  function roundGroups(s, r) {
+    const R = s.rounds[r - 1];
+    const list = R ? R.groups : freeplayRound(s, r);
+    return list.map((g) => ({ z: g.z, left: ZOMBIES[g.z].boss ? g.n : Math.max(1, Math.round(g.n * s.countMul)), every: (g.every || 1) / Math.sqrt(s.countMul), next: g.after || 0, gate: g.gate == null ? 'cycle' : g.gate }));
   }
-  function spawnPoint(s, from) {
-    const sp = s.map.spawns;
-    let g = from === 'any' || !from ? sp[Math.floor(rnd(s, 0, sp.length))] : sp.find((q) => q.key === from) || sp[0];
-    return { x: g.x + 0.5 + rnd(s, -0.3, 0.3), z: g.y + 0.5 + rnd(s, -0.3, 0.3) };
+  // after round 100: bigger and bigger mixes, a giant every 5 rounds and a boss every 10
+  function freeplayRound(s, r) {
+    const R = { rng: (Math.imul(r, 2654435761) ^ s.seed) | 0 };
+    const pool = ['runner', 'brute', 'knight', 'shadow', 'ghost', 'frosty', 'blaze', 'digger', 'blob', 'shield', 'shaman', 'bat', 'mummy', 'skeleton', 'spitter', 'bomber'];
+    const out = [], k = 3 + (r % 3), extra = r - LAST_ROUND;
+    for (let j = 0; j < k; j++) out.push({ z: pool[Math.floor(rnd(R, 0, pool.length))], n: Math.round(18 + extra * 1.2 + rnd(R, 0, 14)), every: rnd(R, 0.2, 0.5), after: j * 2.5 });
+    if (r % 5 === 0) out.push({ z: 'giant', n: 2 + Math.floor(extra / 10), every: 3, after: 4 });
+    if (r % 10 === 0) out.push({ z: ['king', 'witch', 'colossus', 'dragon', 'overlord'][Math.floor(extra / 10) % 5], n: 1 + Math.floor(extra / 50), every: 6, after: 3 });
+    return out;
   }
-  function stepWaves(s, dt, ev) {
+  function startRound(s, ev) {
+    s.round++;
+    s.wave.state = 'fight'; s.wave.groups = roundGroups(s, s.round); s.wave.timer = 0; s.wave.hold = false;
+    ev.push({ e: 'round', r: s.round, state: 'fight' });
+  }
+  function stepRounds(s, dt, ev) {
     const W = s.wave;
-    if (W.state === 'build') {
-      W.timer -= dt;
-      const all = s.players.reduce((m, p) => m | (1 << p.slot), 0);
-      if (W.timer <= 0 || (all && (W.ready & all) === all)) startWave(s, ev);
+    if (W.state === 'wait') {
+      if (s.round > 0 && s.autoStart && !W.hold && !s.result) { W.timer -= dt; if (W.timer <= 0) startRound(s, ev); }
       return;
     }
-    if (W.state !== 'fight') return;
-    W.fight += dt;
+    const gates = s.map.spawns.length;
     for (const g of W.groups) {
       if (g.left <= 0) continue;
       g.next -= dt;
-      while (g.next <= 0 && g.left > 0) { const at = spawnPoint(s, g.from); spawnZombie(s, g.z, at.x, at.z, ev); g.left--; g.next += g.every; }
+      while (g.next <= 0 && g.left > 0) {
+        const gi = g.gate === 'cycle' ? (s.gateK++ % gates) : (g.gate | 0) % gates;
+        spawnZombie(s, g.z, gi, rnd(s, -0.3, 0), ev);
+        g.left--; g.next += g.every;
+      }
     }
-    const spawning = W.groups.some((g) => g.left > 0);
-    if (!spawning && !s.zombies.length) {
-      const bonus = s.waves[W.idx].bonus || 0;
-      if (bonus) s.res.gold += bonus;
-      ev.push({ e: 'cleared', idx: W.idx, bonus: bonus });
-      if (W.idx + 1 >= s.waves.length) { W.state = 'won'; s.result = 'won'; ev.push({ e: 'won' }); return; }
-      W.idx++;
-      W.state = 'build'; W.timer = s.waves[W.idx].build || 15; W.ready = 0;
-      // between waves: the crew is healed and turrets are patched up a little
-      for (const p of s.players) if (!p.down) p.hp = p.max;
-      for (const t of s.turrets) if (t.hp > 0) t.hp = Math.min(t.max, t.hp + t.max * 0.5);
-      ev.push({ e: 'wave', idx: W.idx, state: 'build' });
+    if (W.groups.some((g) => g.left > 0) || s.zombies.length) return;
+    endRound(s, ev);
+  }
+  function endRound(s, ev) {
+    const r = s.round, bonus = 100 + Math.round(r * 1.5);
+    earn(s, bonus);
+    // gold mines, banks and the castle mender (one mender's worth, up to the castle's full lives); barricades mended, traps refilled
+    let mend = 0;
+    for (const t of s.towers) {
+      const st = t.st;
+      if (st.kind === 'mine') {
+        const owner = s.players.find((q) => q.id === t.by);
+        earn(s, st.income || 0, owner ? owner.id : null);
+        if (st.bankRate && owner) owner.coins += Math.min(st.bankCap, Math.floor(owner.coins * st.bankRate));
+        ev.push({ e: 'income', id: t.id, x: t.x, y: t.z, n: st.income || 0 });
+      }
+      if (st.mend) mend = Math.max(mend, st.mend);
+      if (st.kind === 'wall' && st.repair) t.hp = st.hp;
+      if (st.kind === 'trap') t.spikes = Math.round(st.spikes);
     }
+    if (mend && s.lives < s.maxLives) s.lives = Math.min(s.maxLives, s.lives + mend);
+    for (const p of s.players) if (!p.down) p.hp = p.max;
+    ev.push({ e: 'cleared', r: r, bonus: bonus });
+    s.wave.state = 'wait'; s.wave.timer = 2.5; s.wave.groups = [];
+    if (r >= LAST_ROUND && !s.wonAt) { s.wonAt = r; s.result = 'won'; ev.push({ e: 'won', r: r }); }
   }
 
   /* ================= one tick ================= */
-  // inputs: { playerId: { x, z, rot, fire, weapon, gather, build: { type, tx, tz }, upgrade: turretId, ready } }
+  let nearFn = null;
+  // inputs: { playerId: { x, z, rot, fire, gather, build: { type, tx, tz }, upgrade: { id, path }, sell: id, mode: { id, mode }, next } }
   function step(s, dt, inputs) {
     const ev = [];
     if (s.result) return ev;
@@ -824,63 +1151,74 @@ const CC = (function () {
     const G = new Map();
     for (const zb of s.zombies) { if (zb.hp <= 0) continue; const k = ((zb.x / 2) | 0) + ((zb.z / 2) | 0) * 1000; let a = G.get(k); if (!a) G.set(k, a = []); a.push(zb); }
     const near = (x, z, r) => {
-      const out = [], x0 = ((x - r) / 2) | 0, x1 = ((x + r) / 2) | 0, z0 = ((z - r) / 2) | 0, z1 = ((z + r) / 2) | 0;
+      const out = [], x0 = Math.max(0, ((x - r) / 2) | 0), x1 = ((x + r) / 2) | 0, z0 = Math.max(0, ((z - r) / 2) | 0), z1 = ((z + r) / 2) | 0;
       for (let gz = z0; gz <= z1; gz++) for (let gx = x0; gx <= x1; gx++) { const a = G.get(gx + gz * 1000); if (a) for (const o of a) out.push(o); }
       return out;
     };
+    nearFn = near;
     for (const p of s.players) stepPlayer(s, p, inputs && inputs[p.id], dt, ev);
-    stepWaves(s, dt, ev);
-    for (const t of s.turrets) if (t.hp > 0) stepTurret(s, t, dt, ev);
+    stepRounds(s, dt, ev);
+    for (const t of s.towers) stepTower(s, t, dt, ev, near);
     stepShots(s, dt, ev, near);
     for (const zb of s.zombies) if (zb.hp > 0) stepZombie(s, zb, dt, ev, near);
-    // zombies keep a little apart
-    for (const zb of s.zombies) {
-      if (zb.hp <= 0 || zb.under) continue;
-      for (const o of near(zb.x, zb.z, 1)) {
-        if (o === zb || o.hp <= 0 || o.under || o.id < zb.id) continue;
-        const d2 = dist2(zb.x, zb.z, o.x, o.z), rr = (zb.r + o.r) * 0.9;
-        if (d2 > 1e-6 && d2 < rr * rr) {
-          const d = Math.sqrt(d2), push = (rr - d) * 0.5, ux = (zb.x - o.x) / d, uz = (zb.z - o.z) / d;
-          const wa = ZOMBIES[zb.type].heavy ? 0.2 : 1, wb = ZOMBIES[o.type].heavy ? 0.2 : 1;
-          const ra = moveCircle(s, zb.x, zb.z, ux * push * wa, uz * push * wa, zb.r, ZOMBIES[zb.type].fly ? () => false : zombieSolid(s, zb));
-          zb.x = ra[0]; zb.z = ra[1];
-          const rb = moveCircle(s, o.x, o.z, -ux * push * wb, -uz * push * wb, o.r, ZOMBIES[o.type].fly ? () => false : zombieSolid(s, o));
-          o.x = rb[0]; o.z = rb[1];
-        }
-      }
-    }
     s.zombies = s.zombies.filter((zb) => zb.hp > 0);
-    s.turrets = s.turrets.filter((t) => t.hp > 0);
-    if (s.castle.hp <= 0 && !s.result) { s.result = 'lost'; s.wave.state = 'lost'; ev.push({ e: 'lost' }); }
+    if (s.lives <= 0 && !s.result) { s.lives = 0; s.result = 'lost'; s.wave.state = 'lost'; ev.push({ e: 'lost', r: s.round }); }
     return ev;
   }
 
   /* ================= what the other devices need ================= */
   const r2 = (v) => Math.round(v * 100) / 100;
+  function zFlags(zb) { return (zb.under ? 1 : 0) | (zb.slowT > 0 ? 2 : 0) | (zb.burnT > 0 ? 4 : 0) | (zb.actT > 0 ? 8 : 0) | (zb.hitT > 0 ? 16 : 0) | (zb.frozen > 0 ? 32 : 0) | (zb.bones > 0 ? 64 : 0) | (zb.stunT > 0 ? 128 : 0) | (zb.acidT > 0 ? 256 : 0); }
   // the moving things, often (about 15 times a second)
   function snapshot(s) {
     return {
-      k: s.tick, c: Math.round(s.castle.hp), r: [s.res.wood, s.res.stone, s.res.gold],
-      w: [s.wave.idx, s.wave.state, Math.ceil(s.wave.timer), s.wave.ready || 0, s.wave.state === 'fight' ? s.wave.groups.reduce((n, g) => n + g.left, 0) : 0],
-      p: s.players.map((p) => [p.id, r2(p.x), r2(p.z), r2(p.rot), Math.round(p.hp), p.weapon, r2(p.down), p.act && p.actT > 0 ? p.act : '', p.kills]),
-      z: s.zombies.map((zb) => [zb.id, ZOMBIE_ORDER.indexOf(zb.type), r2(zb.x), r2(zb.z), r2(zb.rot), Math.round(zb.hp / zb.max * 100), (zb.under ? 1 : 0) | (zb.slowT > 0 ? 2 : 0) | (zb.burnT > 0 ? 4 : 0) | (zb.actT > 0 ? 8 : 0) | (zb.hitT > 0 ? 16 : 0)]),
-      t: s.turrets.map((t) => [t.id, Math.round(t.hp), r2(t.rot), t.lvl])
+      k: s.tick, l: Math.max(0, Math.ceil(s.lives)), r: s.round, w: [s.wave.state, Math.ceil(s.wave.timer), s.wave.state === 'fight' ? s.wave.groups.reduce((n, g) => n + g.left, 0) : 0, s.autoStart ? 1 : 0, s.wave.hold ? 1 : 0],
+      p: s.players.map((p) => [p.id, r2(p.x), r2(p.z), r2(p.rot), Math.round(p.hp), r2(p.down), p.act && p.actT > 0 ? p.act : '', p.kills, Math.floor(p.coins), p.wlvl, Math.min(99, Math.floor(p.wxp / xpNeed(p.wlvl) * 100)), p.weapon]),
+      z: s.zombies.map((zb) => [zb.id, ZOMBIE_ORDER.indexOf(zb.type), r2(zb.x), r2(zb.z), r2(zb.rot), Math.round(zb.hp / zb.max * 100), zFlags(zb)]),
+      t: s.towers.map((t) => [t.id, r2(t.rot), t.stun > 0 ? 1 : 0, t.st.kind === 'wall' ? Math.round(t.hp) : t.st.kind === 'trap' ? t.spikes : -1])
     };
   }
   // everything a device joining needs to draw the same game
   function fullState(s) {
     const m = s.map;
-    return {
-      level: s.level, seed: s.map.seed, crew: s.players.map((p) => ({ id: p.id, name: p.name, slot: p.slot })), unlocks: s.unlocks,
-      tiles: Array.from(m.tiles), life: Array.from(m.life), turrets: s.turrets.map(turretInfo), castle: [Math.round(s.castle.hp), s.castle.max], snap: snapshot(s)
-    };
+    return { map: s.mapId, diff: s.diff, round: s.round, lives: Math.ceil(s.lives), maxLives: s.maxLives, crew: s.players.map((p) => ({ id: p.id, name: p.name, slot: p.slot, weapon: p.weapon })),
+      tiles: Array.from(m.tiles), life: Array.from(m.life), towers: s.towers.map(towerInfo), snap: snapshot(s) };
+  }
+  // a game saved between rounds (to carry on later); players are kept by their slot
+  function save(s) {
+    return { v: 2, map: s.mapId, diff: s.diff, seed: s.seed, rng: s.rng, round: s.round, lives: Math.ceil(s.lives), t: Math.round(s.t), wonAt: s.wonAt, freeplay: s.freeplay, nextId: s.nextId,
+      tiles: Array.from(s.map.tiles), life: Array.from(s.map.life), stats: Object.assign({}, s.stats),
+      towers: s.towers.map((t) => ({ id: t.id, type: t.type, tx: t.tx, tz: t.tz, a: t.a, b: t.b, spent: t.spent, mode: t.mode, slot: t.slot, hp: Math.round(t.hp), spikes: t.spikes })),
+      players: s.players.map((p) => ({ slot: p.slot, name: p.name, weapon: p.weapon, wlvl: p.wlvl, wxp: Math.round(p.wxp * 10) / 10, coins: Math.floor(p.coins), kills: p.kills })) };
+  }
+  // carry on a saved game: o as for newGame (crew: the players here now; each takes the saved player of its slot)
+  function load(o, sv) {
+    const s = newGame({ map: o.map, rounds: o.rounds, diff: sv.diff, crew: o.crew, seed: sv.seed });
+    s.rng = sv.rng; s.round = sv.round; s.lives = sv.lives; s.t = sv.t || 0; s.wonAt = sv.wonAt || 0; s.freeplay = !!sv.freeplay; s.nextId = sv.nextId || 1;
+    for (let i = 0; i < s.map.tiles.length && i < sv.tiles.length; i++) { s.map.tiles[i] = sv.tiles[i]; s.map.life[i] = sv.life[i]; }
+    Object.assign(s.stats, sv.stats || {});
+    s.saved = {};
+    for (const q of sv.players) s.saved[q.slot] = { name: q.name, weapon: q.weapon, wlvl: q.wlvl, wxp: q.wxp, coins: q.coins, kills: q.kills };
+    for (const p of s.players) if (s.saved[p.slot]) { const q = s.saved[p.slot]; Object.assign(p, { weapon: q.weapon, wlvl: q.wlvl, wxp: q.wxp, coins: q.coins, kills: q.kills, st: weaponStats(q.weapon, q.wlvl) }); delete s.saved[p.slot]; }
+    for (const q of sv.towers) {
+      const owner = s.players.find((p) => p.slot === q.slot);
+      const t = { id: q.id, type: q.type, tx: q.tx, tz: q.tz, x: q.tx + 0.5, z: q.tz + 0.5, a: q.a, b: q.b, spent: q.spent, mode: q.mode, by: owner ? owner.id : null, slot: q.slot, cd: 0.3, rot: 0, stun: 0, timers: {}, hp: q.hp, spikes: q.spikes, st: null, done: 0 };
+      s.towers.push(t); s.tmap.set(t.id, t);
+      s.occ[t.tz * s.map.w + t.tx] = t.id;
+    }
+    refreshStats(s); roadIndex(s);
+    s.wave = { state: 'wait', timer: 0, groups: [], hold: true };   // a game carried on waits for its players
+    return s;
   }
 
   return {
-    TICK: TICK, T: T, WALK: WALK, WEAPONS: WEAPONS, WEAPON_ORDER: WEAPON_ORDER, TURRETS: TURRETS, TURRET_ORDER: TURRET_ORDER, ZOMBIES: ZOMBIES, ZOMBIE_ORDER: ZOMBIE_ORDER,
-    UP_DMG: UP_DMG, UP_RANGE: UP_RANGE, CASTLE_R: CASTLE_R, upgradeCost: upgradeCost,
-    genMap: genMap, newGame: newGame, addPlayer: addPlayer, removePlayer: removePlayer, step: step, moveCircle: moveCircle, movePlayer: movePlayer, playerSolid: playerSolid, canBuild: canBuild, canAfford: canAfford,
-    pickTarget: pickTarget, clearShot: clearShot, castleDist: castleDist, gatePoint: gatePoint, flowField: flowField, tileAt: tileAt, snapshot: snapshot, fullState: fullState, turretInfo: turretInfo
+    TICK: TICK, PACE: PACE, T: T, WALK: WALK, BUILD_OK: BUILD_OK, ROAD_OK: ROAD_OK, CASTLE_R: CASTLE_R, START_COINS: START_COINS, LAST_ROUND: LAST_ROUND, SELL_BACK: SELL_BACK, MAX_LEVEL: MAX_LEVEL,
+    DIFFS: DIFFS, TIER_HP: TIER_HP, WEAPONS: WEAPONS, WEAPON_ORDER: WEAPON_ORDER, TOWERS: TOWERS, TOWER_ORDER: TOWER_ORDER, ZOMBIES: ZOMBIES, ZOMBIE_ORDER: ZOMBIE_ORDER,
+    TURRETS: TOWERS, TURRET_ORDER: TOWER_ORDER,
+    makeMap: makeMap, pathAt: pathAt, newGame: newGame, addPlayer: addPlayer, removePlayer: removePlayer, step: step, startRound: startRound,
+    moveCircle: moveCircle, movePlayer: movePlayer, playerSolid: playerSolid, freeSpot: freeSpot, castleDist: castleDist, gatePoint: gatePoint, tileAt: tileAt,
+    canBuild: canBuild, price: price, upgradeInfo: upgradeInfo, sellValue: sellValue, towerStats: towerStats, weaponStats: weaponStats, xpNeed: xpNeed, hpRound: hpRound,
+    roundGroups: roundGroups, snapshot: snapshot, fullState: fullState, towerInfo: towerInfo, save: save, load: load, zFlags: zFlags
   };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = CC;

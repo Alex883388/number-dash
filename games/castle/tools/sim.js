@@ -1,48 +1,48 @@
-// Castle Crew balance: computer crews play every level (run from the repo root).
-//   node games/castle/tools/sim.js                 every level with crews of 1, 2 and 4 bots
-//   node games/castle/tools/sim.js --level 5 --crew 1 --seeds 3 --lazy
-// --lazy: bots that never build (they only shoot): the levels should need towers, so lazy crews should lose later on.
-// Prints per level and crew: won or lost, the castle's health left (stars: 3 at 80%, 2 at 50%), the minutes played,
-// kills, towers built and the slowest tick.
+// Castle Crew balance: computer crews play the maps round after round (run from the repo root).
+//   node games/castle/tools/sim.js                            every map on Medium with one bot
+//   node games/castle/tools/sim.js --map frozen --diff hard --crew 2 --skill 0.6 --seeds 3 --to 60
+// --skill 0.6 is a child-like bot (slower, looks away, a few seconds over each build, upgrades less, no gold mines);
+// --lazy bots never build (they only shoot); --to N stops after round N (default 100).
+// Prints per game: the round reached (won = round 100 cleared), lives left, game minutes, towers, coins spent, the
+// weapon level of each bot and the slowest tick.
 global.CC = require('../src/engine.js');
 const CCBot = require('../src/bot.js');
-const { levels } = require('../content/levels.json');
+const { maps } = require('../content/maps.json');
+const { rounds } = require('../content/rounds.json');
 const args = process.argv.slice(2), opt = (k, d) => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] : d; };
-const onlyLevel = opt('--level') ? +opt('--level') : 0, crews = opt('--crew') ? [+opt('--crew')] : [1, 2, 4], seeds = +opt('--seeds', 1), lazy = args.indexOf('--lazy') >= 0, skill = +opt('--skill', 1);
+const onlyMap = opt('--map'), diffs = (opt('--diff', 'medium')).split(','), crews = (opt('--crew', '1')).split(',').map(Number), seeds = +opt('--seeds', 1);
+const lazy = args.indexOf('--lazy') >= 0, skill = +opt('--skill', 1), upTo = +opt('--to', 100), quiet = args.indexOf('--quiet') >= 0;
+const weapons = (opt('--weapons', 'blaster,crossbow,bomb,lightning')).split(','), trace = args.indexOf('--trace') >= 0;
 
-// what the crew has by a level: every unlock up to it
-function unlocksFor(n) {
-  const u = { weapons: [], turrets: [] };
-  for (const L of levels) if (L.n <= n) { (L.unlock.weapons || []).forEach((w) => u.weapons.push(w)); (L.unlock.turrets || []).forEach((t) => u.turrets.push(t)); }
-  return u;
-}
-function play(L, crewN, seed) {
-  const crew = []; for (let k = 0; k < crewN; k++) crew.push({ id: 'p' + k, name: 'Bot ' + (k + 1) });
-  const s = CC.newGame(L, crew, seed, unlocksFor(L.n)), mems = s.players.map(() => CCBot.make({ builds: !lazy, skill: skill }));
+function play(def, diff, crewN, seed) {
+  const crew = []; for (let k = 0; k < crewN; k++) crew.push({ id: 'p' + k, name: 'Bot ' + (k + 1), weapon: weapons[(k + seed) % weapons.length] });
+  const s = CC.newGame({ map: def, rounds: rounds, diff: diff, crew: crew, seed: seed }), mems = s.players.map(() => CCBot.make({ builds: !lazy, skill: skill }));
   const dt = CC.TICK;
-  let slow = 0;
-  for (let t = 0; t < 30 * 60 * 25 && !s.result; t++) {
+  let slow = 0, peak = 0, lastR = 0, kills = 0;
+  for (let t = 0; t < 30 * 60 * 120 && !s.result && s.round <= upTo; t++) {
+    if (s.round >= upTo && s.wave.state === 'wait') break;
     const inputs = {};
     s.players.forEach((p, k) => { inputs[p.id] = CCBot.think(s, p, mems[k], dt); });
     const t0 = process.hrtime.bigint();
     CC.step(s, dt, inputs);
     const ms = Number(process.hrtime.bigint() - t0) / 1e6;
     if (ms > slow) slow = ms;
+    if (s.zombies.length > peak) peak = s.zombies.length;
+    if (trace && s.round !== lastR && s.round % 5 === 0) { lastR = s.round; console.log('   r' + s.round + ' lives ' + Math.ceil(s.lives) + ' towers ' + s.towers.length + ' [' + s.towers.map((t) => t.type + t.a + t.b).join(' ') + '] coins ' + s.players.map((p) => Math.floor(p.coins)).join('/') + ' lv ' + s.players.map((p) => p.wlvl).join('/') + ' dmg p ' + Math.round(s.stats.pdmg / Math.max(1, s.stats.pdmg + s.stats.tdmg) * 100) + '%' + ' t ' + (s.t / 60).toFixed(1)); }
   }
-  const pct = Math.round(s.castle.hp / s.castle.max * 100);
-  return { result: s.result || 'timeout', pct: pct, stars: s.result === 'won' ? (pct >= 80 ? 3 : pct >= 50 ? 2 : 1) : 0, min: (s.t / 60).toFixed(1), kills: s.stats.kills, built: s.stats.built, wave: s.wave.idx + 1, waves: s.waves.length, slow: slow.toFixed(1) };
+  const done = s.result === 'won' || (s.round >= upTo && s.wave.state === 'wait' && !s.result);
+  return { won: done, round: s.round, lives: Math.max(0, Math.ceil(s.lives)), max: s.maxLives, min: (s.t / 60).toFixed(1), towers: s.towers.length, spent: s.stats.spent, levels: s.players.map((p) => p.wlvl).join('/'), slow: slow.toFixed(1), peak: peak, leaked: s.stats.leaked, pshare: Math.round(s.stats.pdmg / Math.max(1, s.stats.pdmg + s.stats.tdmg) * 100) };
 }
-const rows = [];
-let lost = 0;
-for (const L of levels) {
-  if (onlyLevel && L.n !== onlyLevel) continue;
-  for (const n of crews) {
-    for (let k = 0; k < seeds; k++) {
-      const r = play(L, n, 1000 + k * 77);
-      if (r.result !== 'won') lost++;
-      rows.push(r);
-      console.log(String(L.n).padStart(2) + ' ' + L.name.padEnd(18) + ' crew ' + n + ': ' + r.result.padEnd(4) + ' castle ' + String(r.pct).padStart(3) + '% ' + '★'.repeat(r.stars).padEnd(3) + ' wave ' + r.wave + '/' + r.waves + ', ' + r.min + ' min, ' + r.kills + ' kills, ' + r.built + ' built, slowest tick ' + r.slow + ' ms');
-    }
+let lost = 0, games = 0;
+const reached = [];
+for (const def of maps) {
+  if (onlyMap && onlyMap.split(',').indexOf(def.id) < 0) continue;
+  for (const diff of diffs) for (const n of crews) for (let k = 0; k < seeds; k++) {
+    const r = play(def, diff, n, 1000 + k * 77);
+    games++;
+    if (!r.won) lost++;
+    reached.push(r.round);
+    console.log(def.id.padEnd(8) + ' ' + diff.padEnd(6) + ' crew ' + n + ': ' + (r.won ? 'WON ' : 'lost') + ' round ' + String(r.round).padStart(3) + ', lives ' + String(r.lives).padStart(3) + '/' + r.max + ', ' + r.min + ' min, ' + r.towers + ' towers, ' + r.spent + ' spent, weapon lv ' + r.levels + ', most zombies ' + r.peak + ', slowest tick ' + r.slow + ' ms');
   }
 }
-console.log((lost ? lost + ' lost' : 'all won') + ' of ' + rows.length + ' games' + (lazy ? ' (lazy bots)' : ''));
+console.log((lost ? lost + ' lost' : 'all won') + ' of ' + games + ' games' + (lazy ? ' (lazy bots)' : '') + (skill < 1 ? ' (skill ' + skill + ')' : '') + ', rounds reached: ' + reached.join(' '));

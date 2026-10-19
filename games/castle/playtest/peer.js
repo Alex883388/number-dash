@@ -1,8 +1,8 @@
 // Castle Crew over the internet link: two separate headless Edge browsers (two "devices") play together through
 // PeerJS (its public server introduces them; the game then flows directly between them). Run from the repo root:
 //   node games/castle/build.js && node games/castle/playtest/peer.js
-// Checks: the host gets a room code from the PeerJS server; the second browser joins with it; the level starts on
-// both; the friend's moves reach the host; both ready up and the friend sees the wave's zombies; then both leave.
+// Checks: the host gets a room code from the PeerJS server; the second browser joins with it; the game starts on
+// both; the friend's moves reach the host; the friend starts round 1 and sees its zombies; then the friend leaves.
 const { spawn } = require('child_process');
 const fs = require('fs'), path = require('path'), http = require('http');
 const EDGE = 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe';
@@ -44,7 +44,7 @@ async function browser(port, name) {
     for (const [X, name] of [[A, 'Hosty'], [B, 'Buddy']]) {
       await X.go('http://localhost:' + HTTP + '/preview.html');
       await X.until('!!window.__castle', 30000, 'the game');
-      await X.ev("localStorage.setItem('castle-crew.v1', JSON.stringify({ v: 1, levels: {}, name: '" + name + "', settings: { auto: true, quality: 'low' } })); location.reload(); 'ok'");
+      await X.ev("localStorage.setItem('castle-crew.v1', JSON.stringify({ v: 2, name: '" + name + "', settings: { auto: true, autoStart: true, quality: 'low' } })); location.reload(); 'ok'");
       await sleep(800);
       await X.until('!!window.__castle', 30000, 'the game again');
     }
@@ -61,14 +61,14 @@ async function browser(port, name) {
     await A.ev('window.__castle.startCrew()');
     await A.until("window.__castle.state().mode === 'host'", 40000, 'the host level');
     await B.until("window.__castle.state().mode === 'client'", 40000, 'the friend level');
-    check(true, 'level 1 started on both');
+    check(true, 'the game started on both');
     await sleep(1500);
     const x0 = await A.ev("window.__castle.G.s.players.find((p) => p.id !== 'host').x");
     await B.ev('window.__castle.move(-1, 0)'); await sleep(900); await B.ev('window.__castle.move(0, 0)'); await sleep(500);
     const x1 = await A.ev("window.__castle.G.s.players.find((p) => p.id !== 'host').x");
     check(x1 < x0 - 1.2, 'the host saw the friend walk west (' + x0.toFixed(1) + ' to ' + x1.toFixed(1) + ')');
-    await A.ev('window.__castle.readyUp()'); await B.ev('window.__castle.readyUp()');
-    await A.until("window.__castle.state().wave[1] === 'fight'", 10000, 'the wave');
+    await B.ev('window.__castle.nextRound()');
+    await A.until("window.__castle.state().wave[0] === 'fight'", 10000, 'round 1 (started by the friend)');
     await A.until('window.__castle.state().zombies >= 2', 30000, 'zombies on the host');
     await B.until('window.__castle.state().zombies >= 2', 10000, 'zombies on the friend');
     check(true, 'the friend sees the zombies: ' + (await B.ev('window.__castle.state().zombies')) + ' (host ' + (await A.ev('window.__castle.state().zombies')) + ')');

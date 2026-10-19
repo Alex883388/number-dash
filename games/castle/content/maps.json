@@ -1,0 +1,61 @@
+{
+  "about": "Castle Crew's maps. Each map is w x h tiles (odd numbers; the castle fills the 5 x 5 tiles in the middle). paths: one road per zombie gate, as corner points [x, y] joined by straight lines, from the gate on the map's edge to a door tile beside the castle: the middle of a side, 3 tiles out from the centre. water: lakes [x, y, r], rects [x0, y0, x1, y1] or rivers (points and a width); a road over water is a bridge. trees and rocks: how much of the free land they cover; woods: [x0, y0, x1, y1, density] for thicker forest. theme: the colours (meadow, autumn, snow, desert, haunted, lava, dusk). tier: Beginner, Intermediate, Advanced, Expert. Check with: node games/castle/tools/maps.js",
+  "maps": [
+    {
+      "id": "meadow", "name": "Meadow Loop", "tier": "Beginner", "theme": "meadow", "w": 31, "h": 21, "seed": 101,
+      "blurb": "One long, winding road. A good place to start.",
+      "paths": [[[0, 3], [5, 3], [5, 17], [9, 17], [9, 4], [24, 4], [24, 16], [20, 16], [20, 10], [18, 10]]],
+      "water": [{ "lake": [14, 15, 2.2] }, { "lake": [28, 9, 1.6] }],
+      "trees": 0.1, "rocks": 0.03, "woods": [[0, 8, 3, 20, 0.35], [26, 17, 30, 20, 0.3]]
+    },
+    {
+      "id": "bridges", "name": "Twin Bridges", "tier": "Beginner", "theme": "meadow", "w": 31, "h": 21, "seed": 202,
+      "blurb": "Two roads over two rivers, one from each side.",
+      "paths": [[[0, 4], [4, 4], [4, 16], [10, 16], [10, 10], [12, 10]], [[30, 16], [26, 16], [26, 4], [20, 4], [20, 10], [18, 10]]],
+      "water": [{ "river": [[7, 0], [7, 20]], "width": 2 }, { "river": [[23, 0], [23, 20]], "width": 2 }],
+      "trees": 0.09, "rocks": 0.03
+    },
+    {
+      "id": "pumpkin", "name": "Pumpkin Patch", "tier": "Intermediate", "theme": "autumn", "w": 31, "h": 21, "seed": 303,
+      "blurb": "Zig-zag roads from the north and the south.",
+      "paths": [[[3, 0], [3, 6], [8, 6], [8, 1], [12, 1], [12, 5], [15, 5], [15, 7]], [[27, 20], [27, 14], [22, 14], [22, 19], [18, 19], [18, 15], [15, 15], [15, 13]]],
+      "water": [{ "lake": [26, 5, 2.4] }, { "lake": [4, 15, 2.4] }],
+      "trees": 0.12, "rocks": 0.04
+    },
+    {
+      "id": "frozen", "name": "Frozen Lake", "tier": "Intermediate", "theme": "snow", "w": 31, "h": 21, "seed": 404,
+      "blurb": "Icy roads round two frozen lakes.",
+      "paths": [[[0, 16], [8, 16], [8, 12], [4, 12], [4, 7], [10, 7], [10, 10], [12, 10]], [[26, 0], [26, 6], [21, 6], [21, 2], [15, 2], [15, 7]]],
+      "water": [{ "lake": [3, 2.5, 2.2] }, { "lake": [24, 15, 3.2] }],
+      "trees": 0.09, "rocks": 0.05
+    },
+    {
+      "id": "canyon", "name": "Desert Canyon", "tier": "Advanced", "theme": "desert", "w": 31, "h": 21, "seed": 505,
+      "blurb": "Three roads through the sand. Short and fast.",
+      "paths": [[[0, 6], [6, 6], [6, 14], [10, 14], [10, 10], [12, 10]], [[8, 0], [8, 3], [15, 3], [15, 7]], [[30, 15], [24, 15], [24, 7], [21, 7], [21, 10], [18, 10]]],
+      "water": [{ "lake": [27, 3, 1.8] }],
+      "trees": 0.04, "rocks": 0.08
+    },
+    {
+      "id": "haunted", "name": "Haunted Woods", "tier": "Advanced", "theme": "haunted", "w": 31, "h": 21, "seed": 606,
+      "blurb": "Dark woods with three roads. Watch out for shadows.",
+      "paths": [[[28, 0], [28, 5], [19, 5], [19, 2], [15, 2], [15, 7]], [[3, 20], [3, 17], [10, 17], [10, 15], [15, 15], [15, 13]], [[0, 3], [3, 3], [3, 10], [12, 10]]],
+      "water": [{ "lake": [26, 14, 2.6] }],
+      "trees": 0.16, "rocks": 0.03, "woods": [[7, 0, 12, 3, 0.5], [18, 17, 30, 20, 0.45], [5, 18, 9, 20, 0.45]]
+    },
+    {
+      "id": "lava", "name": "Lava Lands", "tier": "Expert", "theme": "lava", "w": 31, "h": 21, "seed": 707,
+      "blurb": "Four roads between rivers of lava.",
+      "paths": [[[10, 0], [10, 4], [15, 4], [15, 7]], [[20, 20], [20, 16], [15, 16], [15, 13]], [[0, 14], [5, 14], [5, 10], [12, 10]], [[30, 6], [25, 6], [25, 10], [18, 10]]],
+      "water": [{ "river": [[0, 2], [7, 7]], "width": 2 }, { "river": [[23, 13], [30, 18]], "width": 2 }, { "lake": [26, 1.5, 1.8] }, { "lake": [3, 19, 1.8] }],
+      "trees": 0.03, "rocks": 0.1
+    },
+    {
+      "id": "winds", "name": "Four Winds", "tier": "Expert", "theme": "dusk", "w": 31, "h": 21, "seed": 808,
+      "blurb": "Four short roads from every side. The hardest!",
+      "paths": [[[11, 0], [11, 3], [15, 3], [15, 7]], [[19, 20], [19, 17], [15, 17], [15, 13]], [[0, 6], [4, 6], [4, 10], [12, 10]], [[30, 14], [26, 14], [26, 10], [18, 10]]],
+      "water": [{ "lake": [26, 3, 2] }, { "lake": [4, 16, 2] }],
+      "trees": 0.08, "rocks": 0.04
+    }
+  ]
+}

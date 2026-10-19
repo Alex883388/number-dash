@@ -1,17 +1,17 @@
-/* games/castle/src/bot.js — a computer crew member for Castle Crew: the balance simulator plays every level with it,
-   and the playtests use it to drive a player. Before a wave it gathers wood and stone and builds turrets beside the
-   roads near the castle; in a wave it guards the castle, keeps the zombie nearest the castle in range and picks the
-   weapon that hurts that zombie most. It moves only as a player can (CC.movePlayer, 4.2 tiles a second).
-   skill (0..1, default 1) plays like a child: below 1 it moves slower, looks away now and then (no firing), keeps the
-   same weapon for a while, builds only the turrets it knows best and stands a few seconds over each build or upgrade
-   (the tray, the card, the spot).
+/* games/castle/src/bot.js — a computer crew member for Castle Crew: the balance simulator plays every map with it,
+   and the playtests use it to drive a player. It spends its coins on towers and upgrades (a wish list that grows with
+   the rounds, each tower placed where it covers the most road, upgrades along one main path), starts round 1 when its
+   first towers stand, and fights with its weapon: it keeps the zombie nearest the castle in range.
+   skill (0..1, default 1) plays like a child: below 1 it moves slower, looks away now and then (no firing), takes a
+   few seconds over each build or upgrade, picks towers it likes rather than what is needed, upgrades less, never
+   builds gold mines and sometimes forgets about shadow zombies. It moves only as a player can (4.2 tiles a second).
    think(s, p, mem, dt) moves p and returns the input a device would send for it. */
 const CCBot = (function () {
   const SPEED = 4.2;
-  const T = CC.T;
-  function make(opts) { return Object.assign({ path: [], pathFor: '', pathT: 0, plan: null, gatherI: -1, idle: 0, skill: 1, builds: true, weaponT: 0, weapon: 'blaster', dazeT: 0, nextDaze: 1 }, opts || {}); }
+  function make(opts) { return Object.assign({ path: [], pathFor: '', pathT: 0, skill: 1, builds: true, idle: 0.5, dazeT: 0, nextDaze: 1, spentB: 0, spentU: 0, wish: 0, roads: null, likes: null }, opts || {}); }
   const tileOf = (s, x, z) => (z | 0) * s.map.w + (x | 0);
   const cx = (s, i) => (i % s.map.w) + 0.5, cz = (s, i) => ((i / s.map.w) | 0) + 0.5;
+  const rand = Math.random;
 
   // the shortest walk from tile a to the nearest tile that ok(i) accepts (8 directions, no corner cutting)
   function route(s, a, ok, maxN) {
@@ -30,7 +30,6 @@ const CCBot = (function () {
     }
     return null;
   }
-  // walk along a route; returns true when at the end
   function follow(s, p, mem, dt) {
     if (!mem.path || !mem.path.length) return true;
     const i = mem.path[0], tx = cx(s, i), tz = cz(s, i), dx = tx - p.x, dz = tz - p.z, d = Math.hypot(dx, dz);
@@ -52,149 +51,145 @@ const CCBot = (function () {
     return follow(s, p, mem, dt);
   }
 
-  // which weapon hurts the zombies in reach most
-  function bestWeapon(s, p) {
-    let best = 'blaster', bv = -1;
-    for (const k of s.unlocks.weapons) {
-      const W = CC.WEAPONS[k];
-      let v = 0;
-      for (const zb of s.zombies) {
-        if (zb.under) continue;
-        const d = Math.hypot(zb.x - p.x, zb.z - p.z);
-        if (d > W.range) continue;
-        const Z = CC.ZOMBIES[zb.type], mul = Z.res && Z.res[W.type] != null ? Z.res[W.type] : 1;
-        const dps = W.dmg * (W.pellets ? Math.min(W.pellets, 3) : 1) * W.rate * (W.kind === 'chain' ? 2 : W.kind === 'lob' || W.kind === 'cone' ? 1.6 : W.pierce ? 1.4 : 1);
-        v += dps * mul * (1 + 3 / (1 + CC.castleDist(s, zb.x, zb.z)));
-      }
-      if (v > bv) { bv = v; best = k; }
-    }
-    return best;
+  /* ---- spending ---- */
+  // how many of each tower the bot wants by round r: [first round, base, per round]
+  const WANT = {
+    arrow: [0, 2, 1 / 18], spikes: [2, 1, 1 / 40], ninja: [5, 1, 1 / 14], cannon: [6, 1, 1 / 11], glue: [9, 1, 1 / 40], sniper: [12, 1, 1 / 35], mine: [8, 1, 1 / 14],
+    frost: [14, 1, 1 / 30], wizard: [11, 1, 1 / 18], tesla: [24, 1, 1 / 28], flame: [26, 1, 1 / 35], mortar: [30, 1, 1 / 30], shrine: [34, 1, 1 / 45], sun: [55, 1, 1 / 22]
+  };
+  // the path an upgrade goes up first (to step 3); the other path gets step 1
+  const MAIN = { arrow: 'a', wall: 'a', cannon: 'a', frost: 'a', tesla: 'a', flame: 'a', mortar: 'b', shrine: 'a', sniper: 'a', glue: 'a', ninja: 'a', wizard: 'b', mine: 'a', sun: 'a', spikes: 'a' };
+  const BREAKERS = ['cannon', 'wizard', 'tesla', 'flame', 'mortar'];   // towers that get through armour
+  const KID_LIKES = ['arrow', 'arrow', 'ninja', 'cannon', 'cannon', 'frost', 'flame', 'wizard', 'tesla', 'glue', 'sniper', 'spikes', 'mortar', 'arrow', 'cannon', 'wizard'];
+  const count = (s, type) => s.towers.reduce((n, t) => n + (t.type === type ? 1 : 0), 0);
+  function roadTiles(s, mem) {
+    if (mem.roads && mem.roadsFor === s.map) return mem.roads;
+    const out = [];
+    s.map.paths.forEach((P, k) => P.road.tiles.forEach((i, j) => out.push({ i: i, x: cx(s, i), z: cz(s, i), k: k, left: P.road.len - j })));
+    mem.roads = out; mem.roadsFor = s.map;
+    return out;
   }
-
-  /* ---- what to build next, and where ---- */
-  const WANT = { arrow: 1.2, cannon: 1, tesla: 0.7, flame: 0.6, frost: 0.5, mortar: 0.5, shrine: 0.34 };
-  function nextBuild(s, skill) {
-    const roads = s.map.spawns.length, have = {};
-    for (const t of s.turrets) have[t.type] = (have[t.type] || 0) + 1;
-    const order = ['arrow', 'cannon', 'tesla', 'flame', 'frost', 'mortar', 'shrine'].filter((k) => s.unlocks.turrets.indexOf(k) >= 0 && (skill >= 0.9 || ['arrow', 'cannon', 'frost'].indexOf(k) >= 0));
-    let best = null, bv = 1e9;
-    for (const k of order) {
-      const want = Math.max(1, Math.round(WANT[k] * roads * (1 + s.wave.idx * 0.5)));
-      const v = (have[k] || 0) / want + order.indexOf(k) * 0.01;
-      if ((have[k] || 0) < want * 2 && v < bv) { bv = v; best = k; }
-    }
-    return best;
-  }
-  // a free tile beside a road, 2 to 7 tiles from the castle, covering as much road as possible
-  function spotFor(s, type) {
-    const m = s.map, U = CC.TURRETS[type], range = U.range || 3, road = [];
-    for (let i = 0; i < m.tiles.length; i++) if (m.tiles[i] === T.DIRT || m.tiles[i] === T.BRIDGE) road.push(i);
+  // where a tower covers the most road (towers nearer the castle end cover the zombies that matter most)
+  function spotFor(s, type, mem) {
+    const U = CC.TOWERS[type], m = s.map, roads = roadTiles(s, mem), st = CC.towerStats(s, { type: type, a: 0, b: 0, x: 0, z: 0 });
     let best = -1, bv = -1;
+    if (U.road) {
+      // traps and barricades: on the road, a few tiles from the castle
+      for (const rd of roads) {
+        if (rd.left < 3 || rd.left > 14) continue;
+        if (!CC.canBuild(s, type, rd.i % m.w, (rd.i / m.w) | 0, null).ok) continue;
+        const v = 20 - Math.abs(rd.left - 7) + rand() * 0.5;
+        if (v > bv) { bv = v; best = rd.i; }
+      }
+      return best;
+    }
+    const range = Math.min(st.range || 3, 12), min = st.min || 0;
     for (let i = 0; i < m.tiles.length; i++) {
+      if (!CC.BUILD_OK[m.tiles[i]] || s.occ[i]) continue;
       const x = cx(s, i), z = cz(s, i);
-      if (!CC.canBuild(s, type, i % m.w, (i / m.w) | 0, null).ok && CC.canBuild(s, type, i % m.w, (i / m.w) | 0, null).why !== 'cost') continue;
-      if (m.tiles[i] === T.DIRT) continue;   // beside the road, not on it
-      const cd = CC.castleDist(s, x, z);
-      if (cd < 1.2 || cd > 7) continue;
       let v = 0;
-      for (const r of road) { const d = Math.hypot(cx(s, r) - x, cz(s, r) - z); if (d <= range && (!U.min || d >= U.min)) v += 1 / (1 + CC.castleDist(s, cx(s, r), cz(s, r)) * 0.15); }
-      for (const t of s.turrets) { const d = Math.hypot(t.x - x, t.z - z); if (d < 1.5) v *= 0.4; }
-      if (type === 'shrine' || type === 'frost') v = 10 - cd;   // these stay close to the castle
+      if (type === 'mine') v = 10 - Math.min(10, Math.hypot(x - s.castle.x, z - s.castle.z) * 0.3) + (roads.some((rd) => Math.hypot(rd.x - x, rd.z - z) < 1.6) ? -20 : 0);
+      else if (type === 'sniper') v = 10 - Math.hypot(x - s.castle.x, z - s.castle.z) * 0.3 + (roads.some((rd) => Math.hypot(rd.x - x, rd.z - z) < 1.6) ? -5 : 0);
+      else if (type === 'shrine') { for (const t of s.towers) { const d = Math.hypot(t.x - x, t.z - z); if (d < (st.range || 3) && t.st.rate) v += 1; } }
+      else {
+        for (const rd of roads) { const d = Math.hypot(rd.x - x, rd.z - z); if (d <= range && d >= min) v += 1 + 2 / (1 + rd.left * 0.15); }
+        for (const t of s.towers) if (Math.hypot(t.x - x, t.z - z) < 1.2) v *= 0.85;
+      }
+      if (!CC.canBuild(s, type, i % m.w, (i / m.w) | 0, null).ok) continue;
+      v += rand() * (mem.skill < 0.9 ? 3 : 0.2);
       if (v > bv) { bv = v; best = i; }
     }
     return best;
   }
+  // what to buy next, best first: towers the wish list is short of, and the next step on each tower's main path
+  function options(s, p, mem) {
+    const r = Math.max(1, s.round + (s.wave.state === 'wait' ? 1 : 0)), kid = mem.skill < 0.9, out = [];
+    // upgrades take a growing share of the coins
+    const upShare = kid ? Math.min(0.45, r / 110) : Math.min(0.72, r / 70);
+    const spent = mem.spentB + mem.spentU, upMul = s.towers.length < 2 ? 0 : mem.spentU < upShare * spent ? 1.6 : 0.6;
+    const allDone = s.towers.reduce((n, t) => n + (t.done || 0), 0) || 1;
+    for (const t of s.towers) {
+      if (t.type === 'mine' && kid) continue;
+      const main = kid ? (t.kidPath || (t.kidPath = rand() < 0.5 ? 'a' : 'b')) : MAIN[t.type];
+      const other = main === 'a' ? 'b' : 'a';
+      const path = t[main] < 3 && CC.upgradeInfo(s, t, main).ok ? main : t[other] < 1 && CC.upgradeInfo(s, t, other).ok ? other : null;
+      if (!path) continue;
+      const u = CC.upgradeInfo(s, t, path);
+      if (t.type === 'mine' && path === 'a' && t.a >= 2 && r > 40) continue;
+      // the towers doing the most damage are the ones worth upgrading
+      const share = (t.done || 0) / allDone, v = upMul * (t.type === 'mine' ? (r < 40 ? 0.7 : 0.15) : t.type === 'shrine' ? 0.5 : 0.35 + 3 * share) * (kid ? 0.7 + rand() * 0.6 : 1);
+      out.push({ kind: 'up', id: t.id, path: path, cost: u.cost, v: v });
+    }
+    if (kid) {
+      if (!mem.likes) mem.likes = KID_LIKES.slice().sort(() => rand() - 0.5);
+      const type = r < 3 ? 'arrow' : r > 45 && mem.wish % 9 === 8 ? 'sun' : mem.likes[mem.wish % mem.likes.length];
+      out.push({ kind: 'build', type: type, cost: CC.price(s, type), v: r < 3 ? 2 : 1.35 });
+      // a child sometimes notices the shadow zombies
+      if (r >= 18 && !s.towers.some((t) => t.st.camo) && rand() < 0.3) out.push({ kind: 'build', type: 'ninja', cost: CC.price(s, 'ninja'), v: 1.5 });
+      // and sometimes follows the hint about armour
+      if (r >= 11 && s.towers.filter((t) => BREAKERS.indexOf(t.type) >= 0).length < 1 + r / 20 && rand() < 0.4) out.push({ kind: 'build', type: rand() < 0.6 ? 'cannon' : 'wizard', cost: 420, v: 1.45 });
+    } else {
+      const breakers = s.towers.filter((t) => BREAKERS.indexOf(t.type) >= 0).length;
+      for (const type of Object.keys(WANT)) {
+        const [from, base, per] = WANT[type];
+        if (r < from) continue;
+        const want = Math.floor(base + (r - from) * per), have = count(s, type);
+        if (have >= want) continue;
+        const v = 1 + (want - have) / want + (type === 'ninja' && r >= 16 && !have ? 3 : 0) + (type === 'arrow' && have < 2 ? 2 : 0) + (type === 'mine' && r > 60 ? -1.5 : 0) + (BREAKERS.indexOf(type) >= 0 && r >= 9 && breakers < 2 + r / 15 ? 1.5 : 0);
+        out.push({ kind: 'build', type: type, cost: CC.price(s, type), v: v });
+      }
+    }
+    return out.sort((x, y) => y.v - x.v);
+  }
+  // buy the best option; save up for it only when it is nearly affordable, else buy the best one that is
+  function spend(s, p, mem, inp, dt) {
+    if (mem.idle > 0) { mem.idle -= dt; return; }
+    mem.idle = 0.25;
+    const list = options(s, p, mem);
+    if (!list.length) return;
+    const top = list[0];
+    let pick = p.coins >= top.cost ? top : p.coins < top.cost * 0.6 ? list.slice(1, 5).find((o) => p.coins >= o.cost) : null;
+    if (!pick) return;
+    if (pick.kind === 'build') {
+      const spot = spotFor(s, pick.type, mem);
+      if (spot < 0) return;
+      inp.build = { type: pick.type, tx: spot % s.map.w, tz: (spot / s.map.w) | 0 };
+      mem.spentB += pick.cost;
+      if (mem.skill < 0.9) mem.wish++;
+    } else {
+      inp.upgrade = { id: pick.id, path: pick.path };
+      mem.spentU += pick.cost;
+    }
+    mem.idle = mem.skill >= 0.9 ? 0.3 : 2 + (1 - mem.skill) * 12;   // a child takes about 7 seconds over each
+  }
 
   function think(s, p, mem, dt) {
-    const inp = { x: p.x, z: p.z, rot: p.rot, fire: true, weapon: p.weapon };
+    const inp = { x: p.x, z: p.z, rot: p.rot, fire: true };
+    if (mem.builds) spend(s, p, mem, inp, dt);
+    // round 1 starts when the first towers stand
+    if (s.round === 0 && s.wave.state === 'wait' && s.towers.length >= 2) { mem.startT = (mem.startT || 0) + dt; if (p.coins < 200 || mem.startT > 3) inp.next = true; }
+    if (s.round === 0 && s.wave.state === 'wait' && !mem.builds) inp.next = true;
     if (p.down) return inp;
-    // a child looks away now and then, and changes weapon only now and then
-    mem.weaponT -= dt;
-    if (mem.weaponT <= 0) { mem.weapon = mem.skill >= 0.9 || Math.random() < mem.skill ? bestWeapon(s, p) : mem.weapon; mem.weaponT = mem.skill >= 0.9 ? 0 : 6; }
-    inp.weapon = mem.weapon;
+    // a child looks away now and then
     if (mem.skill < 0.9) {
       if (mem.dazeT > 0) { mem.dazeT -= dt; inp.fire = false; }
-      else { mem.nextDaze -= dt; if (mem.nextDaze <= 0) { mem.nextDaze = 1; if (Math.random() < (1 - mem.skill) * 0.5) mem.dazeT = 2; } }
-    }
-    const W = s.wave;
-    if (mem.idle > 0) mem.idle -= dt;
-    if (W.state === 'build' && mem.builds) {
-      if (mem.idle > 0) return fin(inp, p);   // still choosing in the build tray
-      // build what we can afford, gather what we lack
-      if (!mem.plan) {
-        const type = nextBuild(s, mem.skill);
-        if (type) { const at = spotFor(s, type); if (at >= 0) mem.plan = { type: type, i: at }; }
-      }
-      if (mem.plan) {
-        const U = CC.TURRETS[mem.plan.type], tx = mem.plan.i % s.map.w, tz = (mem.plan.i / s.map.w) | 0;
-        const can = CC.canBuild(s, mem.plan.type, tx, tz, null);
-        if (!can.ok && can.why !== 'cost' && can.why !== 'player') { mem.plan = null; return fin(inp, p); }
-        if (CC.canAfford(s, U.cost)) {
-          const d = Math.hypot(cx(s, mem.plan.i) - p.x, cz(s, mem.plan.i) - p.z);
-          if (d < 5 && can.ok) { inp.build = { type: mem.plan.type, tx: tx, tz: tz }; mem.plan = null; mem.idle = pause(mem); return fin(inp, p); }
-          goTo(s, p, mem, 'b' + mem.plan.i, (i) => Math.hypot(cx(s, i) - cx(s, mem.plan.i), cz(s, i) - cz(s, mem.plan.i)) < 3.5 && i !== mem.plan.i, dt);
-          return fin(inp, p);
-        }
-        // upgrades with spare gold
-        const need = { wood: (U.cost.wood || 0) - s.res.wood, stone: (U.cost.stone || 0) - s.res.stone };
-        if (need.wood > 0 || need.stone > 0) {
-          const want = need.wood > 0 ? T.TREE : T.ROCK;
-          return fin(gather(s, p, mem, want, dt, inp), p);
-        }
-        // only gold is short: upgrade nothing, wait for kills; say ready
-      }
-      // upgrade the turret nearest the castle with spare gold
-      const up = s.turrets.filter((t) => t.lvl < 3 && CC.TURRETS[t.type].kind !== 'wall' && s.res.gold >= CC.upgradeCost(t.type, t.lvl) + 10).sort((a, b) => CC.castleDist(s, a.x, a.z) - CC.castleDist(s, b.x, b.z))[0];
-      if (up) {
-        const d = Math.hypot(up.x - p.x, up.z - p.z);
-        if (d < 2.6) { inp.upgrade = up.id; mem.idle = pause(mem); return fin(inp, p); }
-        goTo(s, p, mem, 'u' + up.id, (i) => Math.hypot(cx(s, i) - up.x, cz(s, i) - up.z) < 2.2, dt);
-        return fin(inp, p);
-      }
-      if (s.res.wood < 12) return fin(gather(s, p, mem, T.TREE, dt, inp), p);
-      if (s.res.stone < 10 && s.unlocks.turrets.some((k) => (CC.TURRETS[k].cost.stone || 0) > 0)) return fin(gather(s, p, mem, T.ROCK, dt, inp), p);
-      inp.ready = true;
+      else { mem.nextDaze -= dt; if (mem.nextDaze <= 0) { mem.nextDaze = 1; if (rand() < (1 - mem.skill) * 0.5) mem.dazeT = 2; } }
     }
     // fight: guard the castle, keep the zombie nearest the castle in reach
     let target = null, tv = 1e9;
-    for (const zb of s.zombies) { if (zb.under) continue; const v = CC.castleDist(s, zb.x, zb.z); if (v < tv) { tv = v; target = zb; } }
+    for (const zb of s.zombies) { if (zb.under || zb.bones > 0) continue; const v = CC.castleDist(s, zb.x, zb.z); if (v < tv) { tv = v; target = zb; } }
     if (target) {
-      const Wp = CC.WEAPONS[inp.weapon], keep = Math.max(1.2, Wp.range * 0.7);
-      const d = Math.hypot(target.x - p.x, target.z - p.z), sight = Wp.kind !== 'shot' || CC.clearShot(s, p.x, p.z, target.x, target.z);
+      const keep = Math.max(1.2, p.st.range * 0.7), d = Math.hypot(target.x - p.x, target.z - p.z);
       if (p.hp < 30) goTo(s, p, mem, 'home', (i) => CC.castleDist(s, cx(s, i), cz(s, i)) < 1.5, dt);
-      else if (d > keep || !sight || CC.castleDist(s, p.x, p.z) > 7) {
-        const ti = tileOf(s, target.x, target.z), far = CC.castleDist(s, target.x, target.z) > 6;
-        const near = (i, r) => Math.hypot(cx(s, i) - target.x, cz(s, i) - target.z) < r, shot = (i) => Wp.kind !== 'shot' || CC.clearShot(s, cx(s, i), cz(s, i), target.x, target.z);
-        goTo(s, p, mem, 'z' + ti, [(i) => near(i, keep) && (far || CC.castleDist(s, cx(s, i), cz(s, i)) < 7.5) && shot(i), (i) => near(i, keep) && shot(i), (i) => near(i, Math.max(2, keep)), (i) => near(i, 3.5)], dt);
+      else if (d > keep || CC.castleDist(s, p.x, p.z) > 9) {
+        const ti = tileOf(s, target.x, target.z), near = (i, r) => Math.hypot(cx(s, i) - target.x, cz(s, i) - target.z) < r;
+        goTo(s, p, mem, 'z' + ti, [(i) => near(i, keep) && CC.castleDist(s, cx(s, i), cz(s, i)) < 9, (i) => near(i, keep), (i) => near(i, 3.5)], dt);
       }
-    } else if (W.state === 'fight') goTo(s, p, mem, 'home', (i) => CC.castleDist(s, cx(s, i), cz(s, i)) < 2 + p.slot, dt);
+    } else if (s.wave.state === 'fight') goTo(s, p, mem, 'home', (i) => CC.castleDist(s, cx(s, i), cz(s, i)) < 2 + p.slot, dt);
     return fin(inp, p);
   }
-  // walk to the nearest tree (or rock) and push into it
-  function gather(s, p, mem, want, dt, inp) {
-    const m = s.map;
-    if (mem.gatherI >= 0 && m.tiles[mem.gatherI] !== want) mem.gatherI = -1;
-    if (mem.gatherI < 0) {
-      const r = route(s, tileOf(s, p.x, p.z), (i) => { const x = i % m.w, z = (i / m.w) | 0; for (const [dx, dz] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const j = (z + dz) * m.w + x + dx; if (m.tiles[j] === want) { mem.gatherI = j; return true; } } return false; });
-      if (!r) { inp.ready = true; return inp; }
-      mem.path = r; mem.pathFor = 'g' + mem.gatherI; mem.pathT = 3;
-    }
-    const gx = cx(s, mem.gatherI), gz = cz(s, mem.gatherI), d = Math.hypot(gx - p.x, gz - p.z);
-    if (d < 1.15 || !mem.path.length) {   // beside it, or at the walk's end a hair short of it
-      // push against it
-      CC.movePlayer(s, p, (gx - p.x) / d * SPEED * dt, (gz - p.z) / d * SPEED * dt);
-      p.rot = Math.atan2(gx - p.x, gz - p.z);
-      inp.gather = mem.gatherI; inp.fire = false;
-      inp.weapon = s.unlocks.weapons.indexOf('hammer') >= 0 ? 'hammer' : inp.weapon;
-      return inp;
-    }
-    follow(s, p, mem, dt);
-    return inp;
-  }
-  // how long a build or an upgrade takes a player: a child (skill 0.6) about 7 seconds
-  function pause(mem) { return mem.skill >= 0.9 ? 0.6 : 2 + (1 - mem.skill) * 12; }
   function fin(inp, p) { inp.x = p.x; inp.z = p.z; inp.rot = p.rot; return inp; }
 
-  return { make: make, think: think, route: route, bestWeapon: bestWeapon, SPEED: SPEED };
+  return { make: make, think: think, route: route, spotFor: spotFor, SPEED: SPEED };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = CCBot;

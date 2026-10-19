@@ -1,0 +1,4016 @@
+{
+ "about": "Castle Crew rounds 1-100, made by tools/genrounds.js (edit that, not this). groups: z kind, n count (more in a crew), every seconds apart, after seconds before the first; each spawn takes the next gate in turn.",
+ "rounds": [
+  {
+   "n": 1,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 7,
+     "every": 0.9415,
+     "after": 0
+    }
+   ]
+  },
+  {
+   "n": 2,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 7,
+     "every": 0.9329999999999999,
+     "after": 0
+    }
+   ]
+  },
+  {
+   "n": 3,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 8,
+     "every": 0.9245,
+     "after": 0
+    }
+   ]
+  },
+  {
+   "n": 4,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 6,
+     "every": 0.9159999999999999,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 5,
+     "every": 1.4,
+     "after": 4
+    }
+   ],
+   "note": "Runners! They are fast."
+  },
+  {
+   "n": 5,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 7,
+     "every": 0.9075,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 2,
+     "every": 1.17975,
+     "after": 3
+    }
+   ]
+  },
+  {
+   "n": 6,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 7,
+     "every": 0.8989999999999999,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 2,
+     "every": 1.1686999999999999,
+     "after": 3
+    }
+   ]
+  },
+  {
+   "n": 7,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 8,
+     "every": 0.8905,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 2,
+     "every": 1.15765,
+     "after": 3
+    }
+   ]
+  },
+  {
+   "n": 8,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 8,
+     "every": 0.8819999999999999,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 3,
+     "every": 1.1465999999999998,
+     "after": 3
+    },
+    {
+     "z": "brute",
+     "n": 2,
+     "every": 1.4,
+     "after": 4
+    }
+   ],
+   "note": "A brute: big and tough."
+  },
+  {
+   "n": 9,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 8,
+     "every": 0.8734999999999999,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 3,
+     "every": 1.13555,
+     "after": 3
+    },
+    {
+     "z": "brute",
+     "n": 1,
+     "every": 2.82,
+     "after": 5
+    }
+   ]
+  },
+  {
+   "n": 10,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 9,
+     "every": 0.865,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 3,
+     "every": 1.1245,
+     "after": 3
+    },
+    {
+     "z": "brute",
+     "n": 1,
+     "every": 2.8,
+     "after": 5
+    }
+   ]
+  },
+  {
+   "n": 11,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 10,
+     "every": 0.8564999999999999,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 3,
+     "every": 1.11345,
+     "after": 3
+    },
+    {
+     "z": "knight",
+     "n": 5,
+     "every": 1.4,
+     "after": 4
+    },
+    {
+     "z": "brute",
+     "n": 1,
+     "every": 2.78,
+     "after": 5
+    }
+   ],
+   "note": "Knights wear armour: arrows bounce off. Use cannons, fire or magic."
+  },
+  {
+   "n": 12,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 10,
+     "every": 0.848,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 3,
+     "every": 1.1024,
+     "after": 3
+    },
+    {
+     "z": "knight",
+     "n": 7,
+     "every": 1.3568,
+     "after": 3
+    },
+    {
+     "z": "brute",
+     "n": 1,
+     "every": 2.76,
+     "after": 5
+    }
+   ]
+  },
+  {
+   "n": 13,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 10,
+     "every": 0.8394999999999999,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 3,
+     "every": 1.0913499999999998,
+     "after": 3
+    },
+    {
+     "z": "knight",
+     "n": 5,
+     "every": 1.3432,
+     "after": 3
+    },
+    {
+     "z": "brute",
+     "n": 1,
+     "every": 2.74,
+     "after": 5
+    }
+   ]
+  },
+  {
+   "n": 14,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 11,
+     "every": 0.831,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 4,
+     "every": 1.0803,
+     "after": 3
+    },
+    {
+     "z": "spitter",
+     "n": 5,
+     "every": 1.4,
+     "after": 4
+    },
+    {
+     "z": "knight",
+     "n": 7,
+     "every": 1.3296000000000001,
+     "after": 3
+    },
+    {
+     "z": "brute",
+     "n": 1,
+     "every": 2.7199999999999998,
+     "after": 5
+    }
+   ],
+   "note": "Spitters spit slime that jams towers."
+  },
+  {
+   "n": 15,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 12,
+     "every": 0.8225,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 6,
+     "every": 1.06925,
+     "after": 3
+    },
+    {
+     "z": "knight",
+     "n": 6,
+     "every": 1.316,
+     "after": 3
+    },
+    {
+     "z": "brute",
+     "n": 1,
+     "every": 2.7,
+     "after": 5
+    },
+    {
+     "z": "spitter",
+     "n": 13,
+     "every": 0.8225,
+     "after": 6
+    }
+   ],
+   "note": "A crowd of spitters!"
+  },
+  {
+   "n": 16,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 12,
+     "every": 0.814,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 6,
+     "every": 1.0582,
+     "after": 3
+    },
+    {
+     "z": "bomber",
+     "n": 5,
+     "every": 1.4,
+     "after": 4
+    },
+    {
+     "z": "knight",
+     "n": 8,
+     "every": 1.3024,
+     "after": 3
+    },
+    {
+     "z": "brute",
+     "n": 1,
+     "every": 2.68,
+     "after": 5
+    }
+   ],
+   "note": "Bombers blow up when they fall: towers close by get jammed."
+  },
+  {
+   "n": 17,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 12,
+     "every": 0.8054999999999999,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 7,
+     "every": 1.0471499999999998,
+     "after": 3
+    },
+    {
+     "z": "bomber",
+     "n": 6,
+     "every": 1.2888,
+     "after": 3
+    },
+    {
+     "z": "brute",
+     "n": 2,
+     "every": 2.66,
+     "after": 5
+    },
+    {
+     "z": "runner",
+     "n": 19,
+     "every": 0.15,
+     "after": 8
+    }
+   ],
+   "note": "A rush!"
+  },
+  {
+   "n": 18,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 13,
+     "every": 0.7969999999999999,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 7,
+     "every": 1.0361,
+     "after": 3
+    },
+    {
+     "z": "shadow",
+     "n": 5,
+     "every": 1.4,
+     "after": 4
+    },
+    {
+     "z": "shadow",
+     "n": 8,
+     "every": 1.2752,
+     "after": 3
+    },
+    {
+     "z": "brute",
+     "n": 2,
+     "every": 2.64,
+     "after": 5
+    }
+   ],
+   "note": "Shadow zombies! Most towers cannot see them: get a Ninja Dojo, or upgrade for shadow sight."
+  },
+  {
+   "n": 19,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 13,
+     "every": 0.7885,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 7,
+     "every": 1.02505,
+     "after": 3
+    },
+    {
+     "z": "spitter",
+     "n": 7,
+     "every": 1.2616,
+     "after": 3
+    },
+    {
+     "z": "brute",
+     "n": 2,
+     "every": 2.62,
+     "after": 5
+    }
+   ]
+  },
+  {
+   "n": 20,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 13,
+     "every": 0.7799999999999999,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 8,
+     "every": 1.014,
+     "after": 3
+    },
+    {
+     "z": "bomber",
+     "n": 6,
+     "every": 1.248,
+     "after": 3
+    },
+    {
+     "z": "brute",
+     "n": 2,
+     "every": 2.6,
+     "after": 5
+    },
+    {
+     "z": "king",
+     "n": 1,
+     "every": 12,
+     "after": 3
+    }
+   ],
+   "note": "The Zombie King is coming!"
+  },
+  {
+   "n": 21,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 14,
+     "every": 0.7715,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 8,
+     "every": 1.00295,
+     "after": 3
+    },
+    {
+     "z": "shadow",
+     "n": 8,
+     "every": 1.2344,
+     "after": 3
+    },
+    {
+     "z": "brute",
+     "n": 2,
+     "every": 2.58,
+     "after": 5
+    }
+   ]
+  },
+  {
+   "n": 22,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 14,
+     "every": 0.7629999999999999,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 8,
+     "every": 0.9918999999999999,
+     "after": 3
+    },
+    {
+     "z": "ghost",
+     "n": 5,
+     "every": 1.4,
+     "after": 4
+    },
+    {
+     "z": "knight",
+     "n": 6,
+     "every": 1.2207999999999999,
+     "after": 3
+    },
+    {
+     "z": "brute",
+     "n": 2,
+     "every": 2.56,
+     "after": 5
+    }
+   ],
+   "note": "Ghosts float straight over everything. Magic and frost hurt them."
+  },
+  {
+   "n": 23,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 15,
+     "every": 0.7545,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 8,
+     "every": 0.98085,
+     "after": 3
+    },
+    {
+     "z": "bomber",
+     "n": 8,
+     "every": 1.2072,
+     "after": 3
+    },
+    {
+     "z": "brute",
+     "n": 2,
+     "every": 2.54,
+     "after": 5
+    }
+   ]
+  },
+  {
+   "n": 24,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 15,
+     "every": 0.746,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 9,
+     "every": 0.9698,
+     "after": 3
+    },
+    {
+     "z": "frosty",
+     "n": 5,
+     "every": 1.4,
+     "after": 4
+    },
+    {
+     "z": "shadow",
+     "n": 8,
+     "every": 1.1936,
+     "after": 3
+    },
+    {
+     "z": "brute",
+     "n": 3,
+     "every": 2.52,
+     "after": 5
+    }
+   ],
+   "note": "Frosties: frost does nothing, fire melts them."
+  },
+  {
+   "n": 25,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 16,
+     "every": 0.7374999999999999,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 9,
+     "every": 0.95875,
+     "after": 3
+    },
+    {
+     "z": "knight",
+     "n": 8,
+     "every": 1.18,
+     "after": 3
+    },
+    {
+     "z": "brute",
+     "n": 3,
+     "every": 2.5,
+     "after": 5
+    },
+    {
+     "z": "spitter",
+     "n": 17,
+     "every": 0.7374999999999999,
+     "after": 6
+    }
+   ],
+   "note": "A crowd of spitters!"
+  },
+  {
+   "n": 26,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 16,
+     "every": 0.7289999999999999,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 9,
+     "every": 0.9476999999999999,
+     "after": 3
+    },
+    {
+     "z": "blaze",
+     "n": 5,
+     "every": 1.4,
+     "after": 4
+    },
+    {
+     "z": "spitter",
+     "n": 7,
+     "every": 1.1663999999999999,
+     "after": 3
+    },
+    {
+     "z": "brute",
+     "n": 3,
+     "every": 2.48,
+     "after": 5
+    }
+   ],
+   "note": "Blazes: fire does nothing, frost puts them out."
+  },
+  {
+   "n": 27,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 17,
+     "every": 0.7204999999999999,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 10,
+     "every": 0.9366499999999999,
+     "after": 3
+    },
+    {
+     "z": "shadow",
+     "n": 8,
+     "every": 1.1527999999999998,
+     "after": 3
+    },
+    {
+     "z": "brute",
+     "n": 3,
+     "every": 2.46,
+     "after": 5
+    },
+    {
+     "z": "runner",
+     "n": 24,
+     "every": 0.15,
+     "after": 8
+    }
+   ],
+   "note": "A rush!"
+  },
+  {
+   "n": 28,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 17,
+     "every": 0.712,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 10,
+     "every": 0.9256,
+     "after": 3
+    },
+    {
+     "z": "digger",
+     "n": 5,
+     "every": 1.4,
+     "after": 4
+    },
+    {
+     "z": "blaze",
+     "n": 8,
+     "every": 1.1392,
+     "after": 3
+    },
+    {
+     "z": "brute",
+     "n": 3,
+     "every": 2.44,
+     "after": 5
+    }
+   ],
+   "note": "Diggers tunnel under the road and pop up near the castle."
+  },
+  {
+   "n": 29,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 17,
+     "every": 0.7034999999999999,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 10,
+     "every": 0.9145499999999999,
+     "after": 3
+    },
+    {
+     "z": "spitter",
+     "n": 9,
+     "every": 1.1256,
+     "after": 3
+    },
+    {
+     "z": "brute",
+     "n": 3,
+     "every": 2.42,
+     "after": 5
+    }
+   ]
+  },
+  {
+   "n": 30,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 18,
+     "every": 0.695,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 10,
+     "every": 0.9035,
+     "after": 3
+    },
+    {
+     "z": "blob",
+     "n": 5,
+     "every": 1.4,
+     "after": 4
+    },
+    {
+     "z": "shadow",
+     "n": 12,
+     "every": 1.1119999999999999,
+     "after": 3
+    },
+    {
+     "z": "shadow",
+     "n": 11,
+     "every": 1.1119999999999999,
+     "after": 6
+    },
+    {
+     "z": "brute",
+     "n": 3,
+     "every": 2.4,
+     "after": 5
+    }
+   ],
+   "note": "Blobs split into three little blobs."
+  },
+  {
+   "n": 31,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 19,
+     "every": 0.6864999999999999,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 11,
+     "every": 0.8924499999999999,
+     "after": 3
+    },
+    {
+     "z": "blaze",
+     "n": 14,
+     "every": 1.0983999999999998,
+     "after": 3
+    },
+    {
+     "z": "bomber",
+     "n": 10,
+     "every": 1.0983999999999998,
+     "after": 6
+    },
+    {
+     "z": "brute",
+     "n": 4,
+     "every": 2.38,
+     "after": 5
+    }
+   ]
+  },
+  {
+   "n": 32,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 19,
+     "every": 0.6779999999999999,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 11,
+     "every": 0.8814,
+     "after": 3
+    },
+    {
+     "z": "shield",
+     "n": 5,
+     "every": 1.4,
+     "after": 4
+    },
+    {
+     "z": "knight",
+     "n": 12,
+     "every": 1.0848,
+     "after": 3
+    },
+    {
+     "z": "shadow",
+     "n": 14,
+     "every": 1.0848,
+     "after": 6
+    },
+    {
+     "z": "brute",
+     "n": 4,
+     "every": 2.36,
+     "after": 5
+    }
+   ],
+   "note": "Shield bearers block shots from the front. Bombs and magic go round."
+  },
+  {
+   "n": 33,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 19,
+     "every": 0.6695,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 11,
+     "every": 0.87035,
+     "after": 3
+    },
+    {
+     "z": "shadow",
+     "n": 12,
+     "every": 1.0712,
+     "after": 3
+    },
+    {
+     "z": "knight",
+     "n": 14,
+     "every": 1.0712,
+     "after": 6
+    },
+    {
+     "z": "brute",
+     "n": 4,
+     "every": 2.34,
+     "after": 5
+    }
+   ]
+  },
+  {
+   "n": 34,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 20,
+     "every": 0.6609999999999999,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 12,
+     "every": 0.8593,
+     "after": 3
+    },
+    {
+     "z": "shaman",
+     "n": 5,
+     "every": 1.4,
+     "after": 4
+    },
+    {
+     "z": "blaze",
+     "n": 13,
+     "every": 1.0575999999999999,
+     "after": 3
+    },
+    {
+     "z": "blaze",
+     "n": 11,
+     "every": 1.0575999999999999,
+     "after": 6
+    },
+    {
+     "z": "brute",
+     "n": 4,
+     "every": 2.32,
+     "after": 5
+    }
+   ],
+   "note": "Shamans heal the zombies near them. Get them first!"
+  },
+  {
+   "n": 35,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 21,
+     "every": 0.6524999999999999,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 12,
+     "every": 0.8482499999999998,
+     "after": 3
+    },
+    {
+     "z": "shaman",
+     "n": 11,
+     "every": 1.0439999999999998,
+     "after": 3
+    },
+    {
+     "z": "ghost",
+     "n": 12,
+     "every": 1.0439999999999998,
+     "after": 6
+    },
+    {
+     "z": "brute",
+     "n": 4,
+     "every": 2.3,
+     "after": 5
+    },
+    {
+     "z": "bomber",
+     "n": 20,
+     "every": 0.6524999999999999,
+     "after": 6
+    }
+   ],
+   "note": "A crowd of bombers!"
+  },
+  {
+   "n": 36,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 21,
+     "every": 0.6439999999999999,
+     "after": 0
+    },
+    {
+     "z": "bat",
+     "n": 12,
+     "every": 0.8371999999999999,
+     "after": 3
+    },
+    {
+     "z": "bat",
+     "n": 5,
+     "every": 1.4,
+     "after": 4
+    },
+    {
+     "z": "shadow",
+     "n": 12,
+     "every": 1.0304,
+     "after": 3
+    },
+    {
+     "z": "blaze",
+     "n": 15,
+     "every": 1.0304,
+     "after": 6
+    },
+    {
+     "z": "brute",
+     "n": 4,
+     "every": 2.2800000000000002,
+     "after": 5
+    }
+   ],
+   "note": "Bats: tiny, fast fliers."
+  },
+  {
+   "n": 37,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 21,
+     "every": 0.6355,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 12,
+     "every": 0.8261499999999999,
+     "after": 3
+    },
+    {
+     "z": "frosty",
+     "n": 12,
+     "every": 1.0168,
+     "after": 3
+    },
+    {
+     "z": "shaman",
+     "n": 15,
+     "every": 1.0168,
+     "after": 6
+    },
+    {
+     "z": "brute",
+     "n": 4,
+     "every": 2.26,
+     "after": 5
+    },
+    {
+     "z": "bat",
+     "n": 29,
+     "every": 0.15,
+     "after": 8
+    }
+   ],
+   "note": "A rush!"
+  },
+  {
+   "n": 38,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 22,
+     "every": 0.627,
+     "after": 0
+    },
+    {
+     "z": "bat",
+     "n": 13,
+     "every": 0.8151,
+     "after": 3
+    },
+    {
+     "z": "mummy",
+     "n": 2,
+     "every": 1.4,
+     "after": 4
+    },
+    {
+     "z": "blob",
+     "n": 14,
+     "every": 1.0032,
+     "after": 3
+    },
+    {
+     "z": "blob",
+     "n": 13,
+     "every": 1.0032,
+     "after": 6
+    },
+    {
+     "z": "brute",
+     "n": 5,
+     "every": 2.24,
+     "after": 5
+    }
+   ],
+   "note": "Mummies heal themselves. Burn them!"
+  },
+  {
+   "n": 39,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 22,
+     "every": 0.6184999999999999,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 13,
+     "every": 0.8040499999999999,
+     "after": 3
+    },
+    {
+     "z": "shadow",
+     "n": 12,
+     "every": 0.9895999999999999,
+     "after": 3
+    },
+    {
+     "z": "bomber",
+     "n": 13,
+     "every": 0.9895999999999999,
+     "after": 6
+    },
+    {
+     "z": "brute",
+     "n": 5,
+     "every": 2.2199999999999998,
+     "after": 5
+    }
+   ]
+  },
+  {
+   "n": 40,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 23,
+     "every": 0.6099999999999999,
+     "after": 0
+    },
+    {
+     "z": "bat",
+     "n": 13,
+     "every": 0.7929999999999998,
+     "after": 3
+    },
+    {
+     "z": "ghost",
+     "n": 15,
+     "every": 0.9759999999999999,
+     "after": 3
+    },
+    {
+     "z": "spitter",
+     "n": 15,
+     "every": 0.9759999999999999,
+     "after": 6
+    },
+    {
+     "z": "brute",
+     "n": 5,
+     "every": 2.2,
+     "after": 5
+    },
+    {
+     "z": "mummy",
+     "n": 1,
+     "every": 1.6,
+     "after": 7
+    },
+    {
+     "z": "witch",
+     "n": 1,
+     "every": 12,
+     "after": 3
+    }
+   ],
+   "note": "The Swamp Witch flies in!"
+  },
+  {
+   "n": 41,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 23,
+     "every": 0.6014999999999999,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 14,
+     "every": 0.7819499999999999,
+     "after": 3
+    },
+    {
+     "z": "digger",
+     "n": 13,
+     "every": 0.9623999999999999,
+     "after": 3
+    },
+    {
+     "z": "spitter",
+     "n": 13,
+     "every": 0.9623999999999999,
+     "after": 6
+    },
+    {
+     "z": "brute",
+     "n": 5,
+     "every": 2.1799999999999997,
+     "after": 5
+    }
+   ]
+  },
+  {
+   "n": 42,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 23,
+     "every": 0.593,
+     "after": 0
+    },
+    {
+     "z": "bat",
+     "n": 14,
+     "every": 0.7709,
+     "after": 3
+    },
+    {
+     "z": "shadow",
+     "n": 16,
+     "every": 0.9488,
+     "after": 3
+    },
+    {
+     "z": "blob",
+     "n": 16,
+     "every": 0.9488,
+     "after": 6
+    },
+    {
+     "z": "brute",
+     "n": 5,
+     "every": 2.16,
+     "after": 5
+    },
+    {
+     "z": "mummy",
+     "n": 2,
+     "every": 1.6,
+     "after": 7
+    }
+   ]
+  },
+  {
+   "n": 43,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 24,
+     "every": 0.5844999999999999,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 14,
+     "every": 0.7598499999999999,
+     "after": 3
+    },
+    {
+     "z": "skeleton",
+     "n": 5,
+     "every": 1.4,
+     "after": 4
+    },
+    {
+     "z": "shadow",
+     "n": 14,
+     "every": 0.9351999999999999,
+     "after": 3
+    },
+    {
+     "z": "frosty",
+     "n": 15,
+     "every": 0.9351999999999999,
+     "after": 6
+    },
+    {
+     "z": "brute",
+     "n": 5,
+     "every": 2.14,
+     "after": 5
+    }
+   ],
+   "note": "Skeletons get up again once. Bombs break bones."
+  },
+  {
+   "n": 44,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 25,
+     "every": 0.576,
+     "after": 0
+    },
+    {
+     "z": "bat",
+     "n": 14,
+     "every": 0.7488,
+     "after": 3
+    },
+    {
+     "z": "blaze",
+     "n": 16,
+     "every": 0.9216,
+     "after": 3
+    },
+    {
+     "z": "blaze",
+     "n": 14,
+     "every": 0.9216,
+     "after": 6
+    },
+    {
+     "z": "brute",
+     "n": 5,
+     "every": 2.12,
+     "after": 5
+    },
+    {
+     "z": "mummy",
+     "n": 2,
+     "every": 1.6,
+     "after": 7
+    }
+   ]
+  },
+  {
+   "n": 45,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 25,
+     "every": 0.5674999999999999,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 15,
+     "every": 0.7377499999999999,
+     "after": 3
+    },
+    {
+     "z": "shadow",
+     "n": 16,
+     "every": 0.9079999999999999,
+     "after": 3
+    },
+    {
+     "z": "ghost",
+     "n": 14,
+     "every": 0.9079999999999999,
+     "after": 6
+    },
+    {
+     "z": "brute",
+     "n": 6,
+     "every": 2.1,
+     "after": 5
+    },
+    {
+     "z": "blaze",
+     "n": 24,
+     "every": 0.5674999999999999,
+     "after": 6
+    }
+   ],
+   "note": "A crowd of blazes!"
+  },
+  {
+   "n": 46,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 25,
+     "every": 0.5589999999999999,
+     "after": 0
+    },
+    {
+     "z": "bat",
+     "n": 15,
+     "every": 0.7266999999999999,
+     "after": 3
+    },
+    {
+     "z": "giant",
+     "n": 1,
+     "every": 4,
+     "after": 4
+    },
+    {
+     "z": "spitter",
+     "n": 17,
+     "every": 0.8944,
+     "after": 3
+    },
+    {
+     "z": "shield",
+     "n": 16,
+     "every": 0.8944,
+     "after": 6
+    },
+    {
+     "z": "brute",
+     "n": 6,
+     "every": 2.08,
+     "after": 5
+    },
+    {
+     "z": "mummy",
+     "n": 2,
+     "every": 1.6,
+     "after": 7
+    }
+   ],
+   "note": "A giant! It stomps towers still."
+  },
+  {
+   "n": 47,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 26,
+     "every": 0.5505,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 15,
+     "every": 0.71565,
+     "after": 3
+    },
+    {
+     "z": "frosty",
+     "n": 15,
+     "every": 0.8808,
+     "after": 3
+    },
+    {
+     "z": "digger",
+     "n": 17,
+     "every": 0.8808,
+     "after": 6
+    },
+    {
+     "z": "brute",
+     "n": 6,
+     "every": 2.06,
+     "after": 5
+    },
+    {
+     "z": "bat",
+     "n": 34,
+     "every": 0.15,
+     "after": 8
+    }
+   ],
+   "note": "A rush!"
+  },
+  {
+   "n": 48,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 26,
+     "every": 0.5419999999999999,
+     "after": 0
+    },
+    {
+     "z": "bat",
+     "n": 16,
+     "every": 0.7045999999999999,
+     "after": 3
+    },
+    {
+     "z": "shadow",
+     "n": 16,
+     "every": 0.8672,
+     "after": 3
+    },
+    {
+     "z": "skeleton",
+     "n": 14,
+     "every": 0.8672,
+     "after": 6
+    },
+    {
+     "z": "brute",
+     "n": 6,
+     "every": 2.04,
+     "after": 5
+    },
+    {
+     "z": "mummy",
+     "n": 2,
+     "every": 1.6,
+     "after": 7
+    },
+    {
+     "z": "giant",
+     "n": 1,
+     "every": 5,
+     "after": 9
+    }
+   ]
+  },
+  {
+   "n": 49,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 26,
+     "every": 0.5334999999999999,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 16,
+     "every": 0.6935499999999999,
+     "after": 3
+    },
+    {
+     "z": "knight",
+     "n": 16,
+     "every": 0.8535999999999998,
+     "after": 3
+    },
+    {
+     "z": "ghost",
+     "n": 16,
+     "every": 0.8535999999999998,
+     "after": 6
+    },
+    {
+     "z": "brute",
+     "n": 6,
+     "every": 2.02,
+     "after": 5
+    }
+   ]
+  },
+  {
+   "n": 50,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 27,
+     "every": 0.5249999999999999,
+     "after": 0
+    },
+    {
+     "z": "bat",
+     "n": 16,
+     "every": 0.6824999999999999,
+     "after": 3
+    },
+    {
+     "z": "shadow",
+     "n": 14,
+     "every": 0.8399999999999999,
+     "after": 3
+    },
+    {
+     "z": "knight",
+     "n": 16,
+     "every": 0.8399999999999999,
+     "after": 6
+    },
+    {
+     "z": "brute",
+     "n": 6,
+     "every": 2,
+     "after": 5
+    },
+    {
+     "z": "mummy",
+     "n": 3,
+     "every": 1.6,
+     "after": 7
+    },
+    {
+     "z": "king",
+     "n": 2,
+     "every": 12,
+     "after": 3
+    }
+   ],
+   "note": "Two kings this time."
+  },
+  {
+   "n": 51,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 28,
+     "every": 0.5165,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 16,
+     "every": 0.67145,
+     "after": 3
+    },
+    {
+     "z": "shadow",
+     "n": 17,
+     "every": 0.8264,
+     "after": 3
+    },
+    {
+     "z": "blaze",
+     "n": 17,
+     "every": 0.8264,
+     "after": 6
+    },
+    {
+     "z": "brute",
+     "n": 6,
+     "every": 1.98,
+     "after": 5
+    }
+   ]
+  },
+  {
+   "n": 52,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 28,
+     "every": 0.5079999999999999,
+     "after": 0
+    },
+    {
+     "z": "bat",
+     "n": 16,
+     "every": 0.6603999999999999,
+     "after": 3
+    },
+    {
+     "z": "shaman",
+     "n": 15,
+     "every": 0.8127999999999999,
+     "after": 3
+    },
+    {
+     "z": "ghost",
+     "n": 18,
+     "every": 0.8127999999999999,
+     "after": 6
+    },
+    {
+     "z": "brute",
+     "n": 7,
+     "every": 1.96,
+     "after": 5
+    },
+    {
+     "z": "mummy",
+     "n": 3,
+     "every": 1.6,
+     "after": 7
+    },
+    {
+     "z": "giant",
+     "n": 1,
+     "every": 5,
+     "after": 9
+    }
+   ]
+  },
+  {
+   "n": 53,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 28,
+     "every": 0.49949999999999994,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 17,
+     "every": 0.64935,
+     "after": 3
+    },
+    {
+     "z": "bomber",
+     "n": 17,
+     "every": 0.7991999999999999,
+     "after": 3
+    },
+    {
+     "z": "bomber",
+     "n": 16,
+     "every": 0.7991999999999999,
+     "after": 6
+    },
+    {
+     "z": "brute",
+     "n": 7,
+     "every": 1.94,
+     "after": 5
+    }
+   ]
+  },
+  {
+   "n": 54,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 29,
+     "every": 0.49099999999999994,
+     "after": 0
+    },
+    {
+     "z": "bat",
+     "n": 17,
+     "every": 0.6383,
+     "after": 3
+    },
+    {
+     "z": "shadow",
+     "n": 17,
+     "every": 0.7856,
+     "after": 3
+    },
+    {
+     "z": "spitter",
+     "n": 16,
+     "every": 0.7856,
+     "after": 6
+    },
+    {
+     "z": "brute",
+     "n": 7,
+     "every": 1.92,
+     "after": 5
+    },
+    {
+     "z": "mummy",
+     "n": 3,
+     "every": 1.6,
+     "after": 7
+    }
+   ]
+  },
+  {
+   "n": 55,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 30,
+     "every": 0.48249999999999993,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 18,
+     "every": 0.62725,
+     "after": 3
+    },
+    {
+     "z": "shield",
+     "n": 18,
+     "every": 0.7719999999999999,
+     "after": 3
+    },
+    {
+     "z": "shield",
+     "n": 19,
+     "every": 0.7719999999999999,
+     "after": 6
+    },
+    {
+     "z": "brute",
+     "n": 7,
+     "every": 1.9,
+     "after": 5
+    },
+    {
+     "z": "digger",
+     "n": 27,
+     "every": 0.48249999999999993,
+     "after": 6
+    }
+   ],
+   "note": "A crowd of diggers!"
+  },
+  {
+   "n": 56,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 30,
+     "every": 0.4739999999999999,
+     "after": 0
+    },
+    {
+     "z": "bat",
+     "n": 18,
+     "every": 0.6162,
+     "after": 3
+    },
+    {
+     "z": "knight",
+     "n": 16,
+     "every": 0.7584,
+     "after": 3
+    },
+    {
+     "z": "blaze",
+     "n": 16,
+     "every": 0.7584,
+     "after": 6
+    },
+    {
+     "z": "brute",
+     "n": 7,
+     "every": 1.88,
+     "after": 5
+    },
+    {
+     "z": "mummy",
+     "n": 3,
+     "every": 1.6,
+     "after": 7
+    },
+    {
+     "z": "giant",
+     "n": 1,
+     "every": 5,
+     "after": 9
+    }
+   ]
+  },
+  {
+   "n": 57,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 30,
+     "every": 0.4654999999999999,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 18,
+     "every": 0.6051499999999999,
+     "after": 3
+    },
+    {
+     "z": "shadow",
+     "n": 17,
+     "every": 0.7447999999999999,
+     "after": 3
+    },
+    {
+     "z": "blob",
+     "n": 17,
+     "every": 0.7447999999999999,
+     "after": 6
+    },
+    {
+     "z": "brute",
+     "n": 7,
+     "every": 1.8599999999999999,
+     "after": 5
+    },
+    {
+     "z": "bat",
+     "n": 39,
+     "every": 0.15,
+     "after": 8
+    }
+   ],
+   "note": "A rush!"
+  },
+  {
+   "n": 58,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 31,
+     "every": 0.4569999999999999,
+     "after": 0
+    },
+    {
+     "z": "bat",
+     "n": 18,
+     "every": 0.5940999999999999,
+     "after": 3
+    },
+    {
+     "z": "digger",
+     "n": 17,
+     "every": 0.7311999999999999,
+     "after": 3
+    },
+    {
+     "z": "spitter",
+     "n": 20,
+     "every": 0.7311999999999999,
+     "after": 6
+    },
+    {
+     "z": "brute",
+     "n": 7,
+     "every": 1.84,
+     "after": 5
+    },
+    {
+     "z": "mummy",
+     "n": 4,
+     "every": 1.6,
+     "after": 7
+    }
+   ]
+  },
+  {
+   "n": 59,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 31,
+     "every": 0.4484999999999999,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 18,
+     "every": 0.5830499999999998,
+     "after": 3
+    },
+    {
+     "z": "skeleton",
+     "n": 19,
+     "every": 0.7175999999999999,
+     "after": 3
+    },
+    {
+     "z": "shaman",
+     "n": 17,
+     "every": 0.7175999999999999,
+     "after": 6
+    },
+    {
+     "z": "brute",
+     "n": 8,
+     "every": 1.82,
+     "after": 5
+    }
+   ]
+  },
+  {
+   "n": 60,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 32,
+     "every": 0.43999999999999995,
+     "after": 0
+    },
+    {
+     "z": "bat",
+     "n": 19,
+     "every": 0.572,
+     "after": 3
+    },
+    {
+     "z": "shadow",
+     "n": 17,
+     "every": 0.704,
+     "after": 3
+    },
+    {
+     "z": "ghost",
+     "n": 19,
+     "every": 0.704,
+     "after": 6
+    },
+    {
+     "z": "knight",
+     "n": 17,
+     "every": 0.704,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 8,
+     "every": 1.8,
+     "after": 5
+    },
+    {
+     "z": "mummy",
+     "n": 4,
+     "every": 1.6,
+     "after": 7
+    },
+    {
+     "z": "giant",
+     "n": 1,
+     "every": 5,
+     "after": 9
+    },
+    {
+     "z": "colossus",
+     "n": 1,
+     "every": 12,
+     "after": 3
+    }
+   ],
+   "note": "The Colossus!"
+  },
+  {
+   "n": 61,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 32,
+     "every": 0.4314999999999999,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 19,
+     "every": 0.5609499999999998,
+     "after": 3
+    },
+    {
+     "z": "blaze",
+     "n": 20,
+     "every": 0.6903999999999999,
+     "after": 3
+    },
+    {
+     "z": "frosty",
+     "n": 20,
+     "every": 0.6903999999999999,
+     "after": 6
+    },
+    {
+     "z": "knight",
+     "n": 17,
+     "every": 0.6903999999999999,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 8,
+     "every": 1.78,
+     "after": 5
+    }
+   ]
+  },
+  {
+   "n": 62,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 32,
+     "every": 0.42299999999999993,
+     "after": 0
+    },
+    {
+     "z": "bat",
+     "n": 19,
+     "every": 0.5498999999999999,
+     "after": 3
+    },
+    {
+     "z": "shield",
+     "n": 18,
+     "every": 0.6768,
+     "after": 3
+    },
+    {
+     "z": "shadow",
+     "n": 17,
+     "every": 0.6768,
+     "after": 6
+    },
+    {
+     "z": "shield",
+     "n": 17,
+     "every": 0.6768,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 8,
+     "every": 1.76,
+     "after": 5
+    },
+    {
+     "z": "mummy",
+     "n": 4,
+     "every": 1.6,
+     "after": 7
+    }
+   ]
+  },
+  {
+   "n": 63,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 33,
+     "every": 0.41449999999999987,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 20,
+     "every": 0.5388499999999998,
+     "after": 3
+    },
+    {
+     "z": "shadow",
+     "n": 17,
+     "every": 0.6631999999999998,
+     "after": 3
+    },
+    {
+     "z": "skeleton",
+     "n": 21,
+     "every": 0.6631999999999998,
+     "after": 6
+    },
+    {
+     "z": "skeleton",
+     "n": 19,
+     "every": 0.6631999999999998,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 8,
+     "every": 1.74,
+     "after": 5
+    }
+   ]
+  },
+  {
+   "n": 64,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 34,
+     "every": 0.4059999999999999,
+     "after": 0
+    },
+    {
+     "z": "bat",
+     "n": 20,
+     "every": 0.5277999999999999,
+     "after": 3
+    },
+    {
+     "z": "ghost",
+     "n": 19,
+     "every": 0.6496,
+     "after": 3
+    },
+    {
+     "z": "shaman",
+     "n": 20,
+     "every": 0.6496,
+     "after": 6
+    },
+    {
+     "z": "bomber",
+     "n": 20,
+     "every": 0.6496,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 8,
+     "every": 1.72,
+     "after": 5
+    },
+    {
+     "z": "mummy",
+     "n": 4,
+     "every": 1.6,
+     "after": 7
+    },
+    {
+     "z": "giant",
+     "n": 2,
+     "every": 5,
+     "after": 9
+    }
+   ]
+  },
+  {
+   "n": 65,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 34,
+     "every": 0.39749999999999996,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 20,
+     "every": 0.5167499999999999,
+     "after": 3
+    },
+    {
+     "z": "blob",
+     "n": 21,
+     "every": 0.636,
+     "after": 3
+    },
+    {
+     "z": "digger",
+     "n": 20,
+     "every": 0.636,
+     "after": 6
+    },
+    {
+     "z": "shadow",
+     "n": 21,
+     "every": 0.636,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 8,
+     "every": 1.7,
+     "after": 5
+    },
+    {
+     "z": "ghost",
+     "n": 31,
+     "every": 0.39749999999999996,
+     "after": 6
+    }
+   ],
+   "note": "A crowd of ghosts!"
+  },
+  {
+   "n": 66,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 34,
+     "every": 0.3889999999999999,
+     "after": 0
+    },
+    {
+     "z": "bat",
+     "n": 20,
+     "every": 0.5056999999999999,
+     "after": 3
+    },
+    {
+     "z": "shadow",
+     "n": 21,
+     "every": 0.6223999999999998,
+     "after": 3
+    },
+    {
+     "z": "blaze",
+     "n": 21,
+     "every": 0.6223999999999998,
+     "after": 6
+    },
+    {
+     "z": "blob",
+     "n": 20,
+     "every": 0.6223999999999998,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 9,
+     "every": 1.68,
+     "after": 5
+    },
+    {
+     "z": "mummy",
+     "n": 5,
+     "every": 1.6,
+     "after": 7
+    }
+   ]
+  },
+  {
+   "n": 67,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 35,
+     "every": 0.38049999999999995,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 21,
+     "every": 0.49465,
+     "after": 3
+    },
+    {
+     "z": "shadow",
+     "n": 18,
+     "every": 0.6088,
+     "after": 3
+    },
+    {
+     "z": "bomber",
+     "n": 20,
+     "every": 0.6088,
+     "after": 6
+    },
+    {
+     "z": "blob",
+     "n": 18,
+     "every": 0.6088,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 9,
+     "every": 1.66,
+     "after": 5
+    },
+    {
+     "z": "bat",
+     "n": 44,
+     "every": 0.15,
+     "after": 8
+    }
+   ],
+   "note": "A rush!"
+  },
+  {
+   "n": 68,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 36,
+     "every": 0.3719999999999999,
+     "after": 0
+    },
+    {
+     "z": "bat",
+     "n": 21,
+     "every": 0.48359999999999986,
+     "after": 3
+    },
+    {
+     "z": "blaze",
+     "n": 20,
+     "every": 0.5951999999999998,
+     "after": 3
+    },
+    {
+     "z": "knight",
+     "n": 18,
+     "every": 0.5951999999999998,
+     "after": 6
+    },
+    {
+     "z": "skeleton",
+     "n": 21,
+     "every": 0.5951999999999998,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 9,
+     "every": 1.64,
+     "after": 5
+    },
+    {
+     "z": "mummy",
+     "n": 5,
+     "every": 1.6,
+     "after": 7
+    },
+    {
+     "z": "giant",
+     "n": 2,
+     "every": 5,
+     "after": 9
+    }
+   ]
+  },
+  {
+   "n": 69,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 36,
+     "every": 0.36349999999999993,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 21,
+     "every": 0.4725499999999999,
+     "after": 3
+    },
+    {
+     "z": "shadow",
+     "n": 22,
+     "every": 0.5815999999999999,
+     "after": 3
+    },
+    {
+     "z": "spitter",
+     "n": 21,
+     "every": 0.5815999999999999,
+     "after": 6
+    },
+    {
+     "z": "shadow",
+     "n": 20,
+     "every": 0.5815999999999999,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 9,
+     "every": 1.6199999999999999,
+     "after": 5
+    }
+   ]
+  },
+  {
+   "n": 70,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 36,
+     "every": 0.35499999999999987,
+     "after": 0
+    },
+    {
+     "z": "bat",
+     "n": 22,
+     "every": 0.46149999999999985,
+     "after": 3
+    },
+    {
+     "z": "spitter",
+     "n": 21,
+     "every": 0.5679999999999998,
+     "after": 3
+    },
+    {
+     "z": "ghost",
+     "n": 19,
+     "every": 0.5679999999999998,
+     "after": 6
+    },
+    {
+     "z": "shield",
+     "n": 20,
+     "every": 0.5679999999999998,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 9,
+     "every": 1.5999999999999999,
+     "after": 5
+    },
+    {
+     "z": "mummy",
+     "n": 5,
+     "every": 1.6,
+     "after": 7
+    },
+    {
+     "z": "witch",
+     "n": 2,
+     "every": 12,
+     "after": 3
+    }
+   ],
+   "note": "Two witches!"
+  },
+  {
+   "n": 71,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 37,
+     "every": 0.3464999999999999,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 22,
+     "every": 0.4504499999999999,
+     "after": 3
+    },
+    {
+     "z": "frosty",
+     "n": 19,
+     "every": 0.5543999999999999,
+     "after": 3
+    },
+    {
+     "z": "ghost",
+     "n": 22,
+     "every": 0.5543999999999999,
+     "after": 6
+    },
+    {
+     "z": "shaman",
+     "n": 19,
+     "every": 0.5543999999999999,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 9,
+     "every": 1.58,
+     "after": 5
+    }
+   ]
+  },
+  {
+   "n": 72,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 37,
+     "every": 0.33799999999999986,
+     "after": 0
+    },
+    {
+     "z": "bat",
+     "n": 22,
+     "every": 0.43939999999999985,
+     "after": 3
+    },
+    {
+     "z": "shadow",
+     "n": 22,
+     "every": 0.5407999999999998,
+     "after": 3
+    },
+    {
+     "z": "blob",
+     "n": 20,
+     "every": 0.5407999999999998,
+     "after": 6
+    },
+    {
+     "z": "ghost",
+     "n": 19,
+     "every": 0.5407999999999998,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 9,
+     "every": 1.56,
+     "after": 5
+    },
+    {
+     "z": "mummy",
+     "n": 5,
+     "every": 1.6,
+     "after": 7
+    },
+    {
+     "z": "giant",
+     "n": 2,
+     "every": 5,
+     "after": 9
+    }
+   ]
+  },
+  {
+   "n": 73,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 38,
+     "every": 0.3294999999999999,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 22,
+     "every": 0.4283499999999999,
+     "after": 3
+    },
+    {
+     "z": "knight",
+     "n": 20,
+     "every": 0.5271999999999999,
+     "after": 3
+    },
+    {
+     "z": "digger",
+     "n": 22,
+     "every": 0.5271999999999999,
+     "after": 6
+    },
+    {
+     "z": "shadow",
+     "n": 21,
+     "every": 0.5271999999999999,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 10,
+     "every": 1.54,
+     "after": 5
+    }
+   ]
+  },
+  {
+   "n": 74,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 38,
+     "every": 0.32099999999999995,
+     "after": 0
+    },
+    {
+     "z": "bat",
+     "n": 23,
+     "every": 0.41729999999999995,
+     "after": 3
+    },
+    {
+     "z": "shadow",
+     "n": 22,
+     "every": 0.5136,
+     "after": 3
+    },
+    {
+     "z": "blaze",
+     "n": 21,
+     "every": 0.5136,
+     "after": 6
+    },
+    {
+     "z": "shield",
+     "n": 21,
+     "every": 0.5136,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 10,
+     "every": 1.52,
+     "after": 5
+    },
+    {
+     "z": "mummy",
+     "n": 6,
+     "every": 1.6,
+     "after": 7
+    }
+   ]
+  },
+  {
+   "n": 75,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 39,
+     "every": 0.3124999999999999,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 23,
+     "every": 0.4062499999999999,
+     "after": 3
+    },
+    {
+     "z": "shadow",
+     "n": 22,
+     "every": 0.49999999999999983,
+     "after": 3
+    },
+    {
+     "z": "shadow",
+     "n": 22,
+     "every": 0.49999999999999983,
+     "after": 6
+    },
+    {
+     "z": "shadow",
+     "n": 21,
+     "every": 0.49999999999999983,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 10,
+     "every": 1.5,
+     "after": 5
+    },
+    {
+     "z": "knight",
+     "n": 34,
+     "every": 0.3124999999999999,
+     "after": 6
+    }
+   ],
+   "note": "A crowd of knights!"
+  },
+  {
+   "n": 76,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 39,
+     "every": 0.30399999999999994,
+     "after": 0
+    },
+    {
+     "z": "bat",
+     "n": 23,
+     "every": 0.39519999999999994,
+     "after": 3
+    },
+    {
+     "z": "shaman",
+     "n": 23,
+     "every": 0.48639999999999994,
+     "after": 3
+    },
+    {
+     "z": "ghost",
+     "n": 22,
+     "every": 0.48639999999999994,
+     "after": 6
+    },
+    {
+     "z": "spitter",
+     "n": 21,
+     "every": 0.48639999999999994,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 10,
+     "every": 1.48,
+     "after": 5
+    },
+    {
+     "z": "mummy",
+     "n": 6,
+     "every": 1.6,
+     "after": 7
+    },
+    {
+     "z": "giant",
+     "n": 2,
+     "every": 5,
+     "after": 9
+    }
+   ]
+  },
+  {
+   "n": 77,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 39,
+     "every": 0.2954999999999999,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 24,
+     "every": 0.3841499999999998,
+     "after": 3
+    },
+    {
+     "z": "bomber",
+     "n": 21,
+     "every": 0.47279999999999983,
+     "after": 3
+    },
+    {
+     "z": "shaman",
+     "n": 22,
+     "every": 0.47279999999999983,
+     "after": 6
+    },
+    {
+     "z": "spitter",
+     "n": 20,
+     "every": 0.47279999999999983,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 10,
+     "every": 1.46,
+     "after": 5
+    },
+    {
+     "z": "bat",
+     "n": 49,
+     "every": 0.15,
+     "after": 8
+    }
+   ],
+   "note": "A rush!"
+  },
+  {
+   "n": 78,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 40,
+     "every": 0.2869999999999999,
+     "after": 0
+    },
+    {
+     "z": "bat",
+     "n": 24,
+     "every": 0.37309999999999993,
+     "after": 3
+    },
+    {
+     "z": "shadow",
+     "n": 22,
+     "every": 0.4591999999999999,
+     "after": 3
+    },
+    {
+     "z": "shaman",
+     "n": 23,
+     "every": 0.4591999999999999,
+     "after": 6
+    },
+    {
+     "z": "blob",
+     "n": 23,
+     "every": 0.4591999999999999,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 10,
+     "every": 1.44,
+     "after": 5
+    },
+    {
+     "z": "mummy",
+     "n": 6,
+     "every": 1.6,
+     "after": 7
+    }
+   ]
+  },
+  {
+   "n": 79,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 40,
+     "every": 0.27849999999999986,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 24,
+     "every": 0.3620499999999998,
+     "after": 3
+    },
+    {
+     "z": "shield",
+     "n": 22,
+     "every": 0.4455999999999998,
+     "after": 3
+    },
+    {
+     "z": "blob",
+     "n": 23,
+     "every": 0.4455999999999998,
+     "after": 6
+    },
+    {
+     "z": "shadow",
+     "n": 24,
+     "every": 0.4455999999999998,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 10,
+     "every": 1.42,
+     "after": 5
+    }
+   ]
+  },
+  {
+   "n": 80,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 41,
+     "every": 0.2699999999999999,
+     "after": 0
+    },
+    {
+     "z": "bat",
+     "n": 24,
+     "every": 0.35099999999999987,
+     "after": 3
+    },
+    {
+     "z": "knight",
+     "n": 24,
+     "every": 0.4319999999999999,
+     "after": 3
+    },
+    {
+     "z": "blob",
+     "n": 24,
+     "every": 0.4319999999999999,
+     "after": 6
+    },
+    {
+     "z": "knight",
+     "n": 22,
+     "every": 0.4319999999999999,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 11,
+     "every": 1.4,
+     "after": 5
+    },
+    {
+     "z": "mummy",
+     "n": 6,
+     "every": 1.6,
+     "after": 7
+    },
+    {
+     "z": "giant",
+     "n": 3,
+     "every": 5,
+     "after": 9
+    },
+    {
+     "z": "dragon",
+     "n": 1,
+     "every": 12,
+     "after": 3
+    }
+   ],
+   "note": "The Bone Dragon!"
+  },
+  {
+   "n": 81,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 41,
+     "every": 0.26149999999999995,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 25,
+     "every": 0.33995,
+     "after": 3
+    },
+    {
+     "z": "shadow",
+     "n": 22,
+     "every": 0.41839999999999994,
+     "after": 3
+    },
+    {
+     "z": "frosty",
+     "n": 21,
+     "every": 0.41839999999999994,
+     "after": 6
+    },
+    {
+     "z": "shaman",
+     "n": 22,
+     "every": 0.41839999999999994,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 11,
+     "every": 1.38,
+     "after": 5
+    }
+   ]
+  },
+  {
+   "n": 82,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 41,
+     "every": 0.2529999999999999,
+     "after": 0
+    },
+    {
+     "z": "bat",
+     "n": 25,
+     "every": 0.32889999999999986,
+     "after": 3
+    },
+    {
+     "z": "digger",
+     "n": 21,
+     "every": 0.4047999999999998,
+     "after": 3
+    },
+    {
+     "z": "knight",
+     "n": 24,
+     "every": 0.4047999999999998,
+     "after": 6
+    },
+    {
+     "z": "blaze",
+     "n": 22,
+     "every": 0.4047999999999998,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 11,
+     "every": 1.3599999999999999,
+     "after": 5
+    },
+    {
+     "z": "mummy",
+     "n": 7,
+     "every": 1.6,
+     "after": 7
+    }
+   ]
+  },
+  {
+   "n": 83,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 42,
+     "every": 0.24449999999999994,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 25,
+     "every": 0.3178499999999999,
+     "after": 3
+    },
+    {
+     "z": "skeleton",
+     "n": 23,
+     "every": 0.39119999999999994,
+     "after": 3
+    },
+    {
+     "z": "ghost",
+     "n": 22,
+     "every": 0.39119999999999994,
+     "after": 6
+    },
+    {
+     "z": "shadow",
+     "n": 24,
+     "every": 0.39119999999999994,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 11,
+     "every": 1.3399999999999999,
+     "after": 5
+    }
+   ]
+  },
+  {
+   "n": 84,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 43,
+     "every": 0.23599999999999988,
+     "after": 0
+    },
+    {
+     "z": "bat",
+     "n": 26,
+     "every": 0.30679999999999985,
+     "after": 3
+    },
+    {
+     "z": "shadow",
+     "n": 22,
+     "every": 0.3775999999999998,
+     "after": 3
+    },
+    {
+     "z": "knight",
+     "n": 23,
+     "every": 0.3775999999999998,
+     "after": 6
+    },
+    {
+     "z": "knight",
+     "n": 22,
+     "every": 0.3775999999999998,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 11,
+     "every": 1.32,
+     "after": 5
+    },
+    {
+     "z": "mummy",
+     "n": 7,
+     "every": 1.6,
+     "after": 7
+    },
+    {
+     "z": "giant",
+     "n": 3,
+     "every": 5,
+     "after": 9
+    }
+   ]
+  },
+  {
+   "n": 85,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 43,
+     "every": 0.22749999999999992,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 26,
+     "every": 0.2957499999999999,
+     "after": 3
+    },
+    {
+     "z": "blaze",
+     "n": 24,
+     "every": 0.3639999999999999,
+     "after": 3
+    },
+    {
+     "z": "skeleton",
+     "n": 25,
+     "every": 0.3639999999999999,
+     "after": 6
+    },
+    {
+     "z": "blob",
+     "n": 22,
+     "every": 0.3639999999999999,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 11,
+     "every": 1.3,
+     "after": 5
+    },
+    {
+     "z": "shaman",
+     "n": 38,
+     "every": 0.22749999999999992,
+     "after": 6
+    }
+   ],
+   "note": "A crowd of shamans!"
+  },
+  {
+   "n": 86,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 43,
+     "every": 0.21899999999999986,
+     "after": 0
+    },
+    {
+     "z": "bat",
+     "n": 26,
+     "every": 0.28469999999999984,
+     "after": 3
+    },
+    {
+     "z": "shield",
+     "n": 22,
+     "every": 0.3503999999999998,
+     "after": 3
+    },
+    {
+     "z": "shield",
+     "n": 26,
+     "every": 0.3503999999999998,
+     "after": 6
+    },
+    {
+     "z": "skeleton",
+     "n": 23,
+     "every": 0.3503999999999998,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 11,
+     "every": 1.28,
+     "after": 5
+    },
+    {
+     "z": "mummy",
+     "n": 7,
+     "every": 1.6,
+     "after": 7
+    }
+   ]
+  },
+  {
+   "n": 87,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 44,
+     "every": 0.2104999999999999,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 26,
+     "every": 0.2736499999999999,
+     "after": 3
+    },
+    {
+     "z": "shadow",
+     "n": 23,
+     "every": 0.3367999999999999,
+     "after": 3
+    },
+    {
+     "z": "digger",
+     "n": 23,
+     "every": 0.3367999999999999,
+     "after": 6
+    },
+    {
+     "z": "ghost",
+     "n": 22,
+     "every": 0.3367999999999999,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 12,
+     "every": 1.26,
+     "after": 5
+    },
+    {
+     "z": "bat",
+     "n": 54,
+     "every": 0.15,
+     "after": 8
+    }
+   ],
+   "note": "A rush!"
+  },
+  {
+   "n": 88,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 45,
+     "every": 0.20199999999999996,
+     "after": 0
+    },
+    {
+     "z": "bat",
+     "n": 27,
+     "every": 0.26259999999999994,
+     "after": 3
+    },
+    {
+     "z": "ghost",
+     "n": 23,
+     "every": 0.32319999999999993,
+     "after": 3
+    },
+    {
+     "z": "digger",
+     "n": 26,
+     "every": 0.32319999999999993,
+     "after": 6
+    },
+    {
+     "z": "blob",
+     "n": 24,
+     "every": 0.32319999999999993,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 12,
+     "every": 1.24,
+     "after": 5
+    },
+    {
+     "z": "mummy",
+     "n": 7,
+     "every": 1.6,
+     "after": 7
+    },
+    {
+     "z": "giant",
+     "n": 3,
+     "every": 5,
+     "after": 9
+    }
+   ]
+  },
+  {
+   "n": 89,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 45,
+     "every": 0.1934999999999999,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 27,
+     "every": 0.2515499999999999,
+     "after": 3
+    },
+    {
+     "z": "blob",
+     "n": 25,
+     "every": 0.3095999999999999,
+     "after": 3
+    },
+    {
+     "z": "spitter",
+     "n": 23,
+     "every": 0.3095999999999999,
+     "after": 6
+    },
+    {
+     "z": "digger",
+     "n": 23,
+     "every": 0.3095999999999999,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 12,
+     "every": 1.22,
+     "after": 5
+    }
+   ]
+  },
+  {
+   "n": 90,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 45,
+     "every": 0.18499999999999994,
+     "after": 0
+    },
+    {
+     "z": "bat",
+     "n": 27,
+     "every": 0.24049999999999994,
+     "after": 3
+    },
+    {
+     "z": "shadow",
+     "n": 27,
+     "every": 0.29599999999999993,
+     "after": 3
+    },
+    {
+     "z": "bomber",
+     "n": 27,
+     "every": 0.29599999999999993,
+     "after": 6
+    },
+    {
+     "z": "ghost",
+     "n": 25,
+     "every": 0.29599999999999993,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 12,
+     "every": 1.2,
+     "after": 5
+    },
+    {
+     "z": "mummy",
+     "n": 8,
+     "every": 1.6,
+     "after": 7
+    },
+    {
+     "z": "colossus",
+     "n": 1,
+     "every": 12,
+     "after": 3
+    }
+   ],
+   "note": "The Colossus is back, angrier!"
+  },
+  {
+   "n": 91,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 46,
+     "every": 0.17649999999999988,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 28,
+     "every": 0.22944999999999985,
+     "after": 3
+    },
+    {
+     "z": "shadow",
+     "n": 26,
+     "every": 0.2823999999999998,
+     "after": 3
+    },
+    {
+     "z": "skeleton",
+     "n": 26,
+     "every": 0.2823999999999998,
+     "after": 6
+    },
+    {
+     "z": "shadow",
+     "n": 27,
+     "every": 0.2823999999999998,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 12,
+     "every": 1.18,
+     "after": 5
+    }
+   ]
+  },
+  {
+   "n": 92,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 46,
+     "every": 0.16799999999999993,
+     "after": 0
+    },
+    {
+     "z": "bat",
+     "n": 28,
+     "every": 0.2183999999999999,
+     "after": 3
+    },
+    {
+     "z": "blaze",
+     "n": 24,
+     "every": 0.2687999999999999,
+     "after": 3
+    },
+    {
+     "z": "blaze",
+     "n": 27,
+     "every": 0.2687999999999999,
+     "after": 6
+    },
+    {
+     "z": "skeleton",
+     "n": 26,
+     "every": 0.2687999999999999,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 12,
+     "every": 1.16,
+     "after": 5
+    },
+    {
+     "z": "mummy",
+     "n": 8,
+     "every": 1.6,
+     "after": 7
+    },
+    {
+     "z": "giant",
+     "n": 3,
+     "every": 5,
+     "after": 9
+    }
+   ]
+  },
+  {
+   "n": 93,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 47,
+     "every": 0.16,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 28,
+     "every": 0.20800000000000002,
+     "after": 3
+    },
+    {
+     "z": "shadow",
+     "n": 27,
+     "every": 0.256,
+     "after": 3
+    },
+    {
+     "z": "shaman",
+     "n": 25,
+     "every": 0.256,
+     "after": 6
+    },
+    {
+     "z": "shadow",
+     "n": 26,
+     "every": 0.256,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 12,
+     "every": 1.14,
+     "after": 5
+    }
+   ]
+  },
+  {
+   "n": 94,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 47,
+     "every": 0.16,
+     "after": 0
+    },
+    {
+     "z": "bat",
+     "n": 28,
+     "every": 0.20800000000000002,
+     "after": 3
+    },
+    {
+     "z": "spitter",
+     "n": 25,
+     "every": 0.256,
+     "after": 3
+    },
+    {
+     "z": "spitter",
+     "n": 26,
+     "every": 0.256,
+     "after": 6
+    },
+    {
+     "z": "shadow",
+     "n": 26,
+     "every": 0.256,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 13,
+     "every": 1.1199999999999999,
+     "after": 5
+    },
+    {
+     "z": "mummy",
+     "n": 8,
+     "every": 1.6,
+     "after": 7
+    }
+   ]
+  },
+  {
+   "n": 95,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 48,
+     "every": 0.16,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 29,
+     "every": 0.20800000000000002,
+     "after": 3
+    },
+    {
+     "z": "frosty",
+     "n": 27,
+     "every": 0.256,
+     "after": 3
+    },
+    {
+     "z": "shaman",
+     "n": 28,
+     "every": 0.256,
+     "after": 6
+    },
+    {
+     "z": "spitter",
+     "n": 25,
+     "every": 0.256,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 13,
+     "every": 1.0999999999999999,
+     "after": 5
+    },
+    {
+     "z": "skeleton",
+     "n": 41,
+     "every": 0.2,
+     "after": 6
+    },
+    {
+     "z": "dragon",
+     "n": 1,
+     "every": 12,
+     "after": 3
+    }
+   ],
+   "note": "The Bone Dragon returns! A crowd of skeletons!"
+  },
+  {
+   "n": 96,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 48,
+     "every": 0.16,
+     "after": 0
+    },
+    {
+     "z": "bat",
+     "n": 29,
+     "every": 0.20800000000000002,
+     "after": 3
+    },
+    {
+     "z": "shadow",
+     "n": 27,
+     "every": 0.256,
+     "after": 3
+    },
+    {
+     "z": "frosty",
+     "n": 27,
+     "every": 0.256,
+     "after": 6
+    },
+    {
+     "z": "bomber",
+     "n": 28,
+     "every": 0.256,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 13,
+     "every": 1.08,
+     "after": 5
+    },
+    {
+     "z": "mummy",
+     "n": 8,
+     "every": 1.6,
+     "after": 7
+    },
+    {
+     "z": "giant",
+     "n": 4,
+     "every": 5,
+     "after": 9
+    }
+   ]
+  },
+  {
+   "n": 97,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 49,
+     "every": 0.16,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 29,
+     "every": 0.20800000000000002,
+     "after": 3
+    },
+    {
+     "z": "knight",
+     "n": 28,
+     "every": 0.256,
+     "after": 3
+    },
+    {
+     "z": "shaman",
+     "n": 27,
+     "every": 0.256,
+     "after": 6
+    },
+    {
+     "z": "blob",
+     "n": 27,
+     "every": 0.256,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 13,
+     "every": 1.06,
+     "after": 5
+    },
+    {
+     "z": "bat",
+     "n": 59,
+     "every": 0.15,
+     "after": 8
+    }
+   ],
+   "note": "A rush!"
+  },
+  {
+   "n": 98,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 49,
+     "every": 0.16,
+     "after": 0
+    },
+    {
+     "z": "bat",
+     "n": 30,
+     "every": 0.20800000000000002,
+     "after": 3
+    },
+    {
+     "z": "shadow",
+     "n": 27,
+     "every": 0.256,
+     "after": 3
+    },
+    {
+     "z": "shadow",
+     "n": 28,
+     "every": 0.256,
+     "after": 6
+    },
+    {
+     "z": "ghost",
+     "n": 28,
+     "every": 0.256,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 13,
+     "every": 1.04,
+     "after": 5
+    },
+    {
+     "z": "mummy",
+     "n": 9,
+     "every": 1.6,
+     "after": 7
+    }
+   ]
+  },
+  {
+   "n": 99,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 49,
+     "every": 0.16,
+     "after": 0
+    },
+    {
+     "z": "runner",
+     "n": 30,
+     "every": 0.20800000000000002,
+     "after": 3
+    },
+    {
+     "z": "shadow",
+     "n": 27,
+     "every": 0.256,
+     "after": 3
+    },
+    {
+     "z": "knight",
+     "n": 25,
+     "every": 0.256,
+     "after": 6
+    },
+    {
+     "z": "skeleton",
+     "n": 26,
+     "every": 0.256,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 13,
+     "every": 1.02,
+     "after": 5
+    }
+   ]
+  },
+  {
+   "n": 100,
+   "groups": [
+    {
+     "z": "walker",
+     "n": 50,
+     "every": 0.16,
+     "after": 0
+    },
+    {
+     "z": "bat",
+     "n": 30,
+     "every": 0.20800000000000002,
+     "after": 3
+    },
+    {
+     "z": "shaman",
+     "n": 27,
+     "every": 0.256,
+     "after": 3
+    },
+    {
+     "z": "shaman",
+     "n": 27,
+     "every": 0.256,
+     "after": 6
+    },
+    {
+     "z": "shaman",
+     "n": 26,
+     "every": 0.256,
+     "after": 9
+    },
+    {
+     "z": "brute",
+     "n": 13,
+     "every": 1,
+     "after": 5
+    },
+    {
+     "z": "mummy",
+     "n": 9,
+     "every": 1.6,
+     "after": 7
+    },
+    {
+     "z": "giant",
+     "n": 4,
+     "every": 5,
+     "after": 9
+    },
+    {
+     "z": "overlord",
+     "n": 1,
+     "every": 12,
+     "after": 3
+    }
+   ],
+   "note": "The Zombie Overlord. The last round!"
+  }
+ ]
+}
