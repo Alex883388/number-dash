@@ -81,6 +81,7 @@ function mathWrong(q) {
 // show one menu card (<section class="screen" id="s-NAME">) over the game, or none
 function showScreen(name, dim) {
   $$('#screens > .screen').forEach((s) => { s.hidden = s.id !== 's-' + name; });
+  $('#screens').classList.toggle('open', !!name);
   $('#screens').classList.toggle('dim', !!name && dim !== false);
 }
 let toastTimer = 0;

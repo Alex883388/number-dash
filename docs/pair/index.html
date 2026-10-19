@@ -69,12 +69,16 @@ button, label, input, .btn, a { touch-action: manipulation; }
 
 /* menu screens: cards over the game */
 #screens {
-  position: fixed; inset: 0; display: grid; place-items: center; overflow-y: auto; pointer-events: none; touch-action: pan-y; z-index: 20;
+  position: fixed; inset: 0; display: grid; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; pointer-events: none; touch-action: pan-y; z-index: 20;
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
   padding-block: calc(16px + env(safe-area-inset-top, 0px)) calc(16px + env(safe-area-inset-bottom, 0px));
 }
+/* while a card is up the whole layer takes the finger: iPad Safari will not scroll a layer that ignores touches */
+#screens.open { pointer-events: auto; }
+#screens:has(> .screen:not([hidden])) { pointer-events: auto; }
 #screens.dim { background: var(--veil); pointer-events: auto; }
-.screen { pointer-events: auto; width: min(100%, 600px); animation: rise .35s ease both; }
+/* margin: auto centres a short card and lets a tall one start at the top, where it can be scrolled from */
+.screen { pointer-events: auto; width: min(100%, 600px); margin: auto; animation: rise .35s ease both; }
 .card { background: var(--card); border-radius: 28px; box-shadow: var(--shadow); padding: clamp(18px, 4vw, 34px); display: grid; gap: 18px; text-align: center; }
 .logo { margin: 0; font: 700 clamp(2.5rem, 9vw, 4rem)/.95 var(--font-display); text-wrap: balance; }
 .logo span { color: var(--mint-deep); }
@@ -349,6 +353,7 @@ function mathWrong(q) {
 // show one menu card (<section class="screen" id="s-NAME">) over the game, or none
 function showScreen(name, dim) {
   $$('#screens > .screen').forEach((s) => { s.hidden = s.id !== 's-' + name; });
+  $('#screens').classList.toggle('open', !!name);
   $('#screens').classList.toggle('dim', !!name && dim !== false);
 }
 let toastTimer = 0;
