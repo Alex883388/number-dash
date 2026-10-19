@@ -1,6 +1,6 @@
 # Number Arcade
 
-Math, memory, English, coding and business games for kids aged 8–12, made to be gentle on the eyes, with chill lo-fi music made live in the browser. Every game is one self-contained HTML page; together they make a small website that works offline and installs on an iPad home screen.
+Math, memory, English, coding, business and action games for kids aged 8–12, made to be gentle on the eyes, with music made live in the browser. Every game is one self-contained HTML page; together they make a small website that works offline and installs on an iPad home screen.
 
 Play: https://alex883388.github.io/number-dash/ (on iPad: open in Safari, then Share > Add to Home Screen).
 
@@ -17,6 +17,7 @@ Above it, a **New in the arcade** card lists the latest additions (each a link) 
 | 7 | Memory Lane | [/memory/](https://alex883388.github.io/number-dash/memory/) | Short, calm working-memory rounds: numbers, picture words or lit squares show one at a time; the child taps them back in order, or backwards. Two right in a row adds one more, two wrong takes one off. |
 | 8 | Code Robot | [/robot/](https://alex883388.github.io/number-dash/robot/) | Program a robot with blocks and watch it run: 208 levels in 11 worlds, from first steps to loops, functions, if-then, painting pictures, robot teams, counters, reading code and fixing bugs. Fewer blocks, more stars. |
 | 9 | Tycoon Town | [/tycoon/](https://alex883388.github.io/number-dash/tycoon/) | Grow a company from a $500 lemonade stand to a billion-dollar empire in one of four living 2.5D cities (by the sea, in the desert, on a neon strip, among cherry blossoms): 50 businesses up to an international airport, land to buy before it runs out, rivals to beat, 150 business cases to solve like a CEO, seasons, carnivals, storms and earthquakes to insure against, and scams to spot. |
+| 10 | Mech Blaster | [/mech/](https://alex883388.github.io/number-dash/mech/) | Pilot a battle mech down a 2.5D road through five worlds and 50 levels: dodge, jump and blast drones, walkers, turrets, bikes, bombers, spiders and giant bosses with eight weapons, and open every gate by shooting the right number or missing word. |
 
 ## Number Ladder
 
@@ -121,6 +122,22 @@ Above it, a **New in the arcade** card lists the latest additions (each a link) 
 - **Balance** (`node games/tycoon/tools/sim.js`, 40 games per player type in each city, the careful player picking the best spots): a careful CEO opens the second district in about 7–9 months, Downtown in about 29–33, the towers in about 68–74, the Gateway in about 102–113, reaches $100 million in about 126–139 and a billion in about 165–181 (Sakura City, with its earthquakes and typhoons, is the slowest); a careful CEO who insures everything ends up about as rich as one who does not (insurance smooths the bumps); a random clicker reaches Downtown in about 99 months, and a player who falls for every trap never reaches the towers. A city sees about 2–3 incidents a year.
 - **Speed and memory**: the ground is painted in 8 × 8-tile pieces and every building once per zoom step, then copied pixel for pixel; far away, the whole island is one picture: in a headless browser without a graphics card about 6 ms a frame at normal zoom, 14 ms at the closest and well under 1 ms for the whole island, with at most about 120 MB of building pictures and 96 MB of ground.
 
+## Mech Blaster
+
+- **The idea**: an action game where the answers are the ammunition. The child pilots a battle mech seen from behind, walking down a three-lane road in 2.5D (a camera behind and above, a road that bends and climbs, scenery sliding by). Robots attack all the way; gates block the road with a question and three answer panels, one per lane: shoot the right one and the gate blows open.
+- **Questions**: numbers, missing words or both (the home card), at the age chosen there (7–8, 9–10, 11–12; the same setting as the other games), harder in later worlds. Numbers come from the arcade's shared math facts (a fact missed comes back later in every game). Missing words come from 900 sentences (`content/words-0..2.json`, 300 per age, written to `content/FORMAT.md`): verb tenses, irregular pasts, plurals, articles, pronouns, prepositions, homophones, spelling, opposites, vocabulary, comparatives, conjunctions, modals, word forms, collocations and idioms. Every sentence has exactly one right word and a tip that teaches the rule; a wrong shot shows the tip, cracks that panel and zaps the mech a little; after two wrong shots (or 16 seconds) the right panel glows. Read aloud says the question.
+- **Controls**: ◀ ▶ (or a swipe) change lanes, Jump (or a swipe up) jumps; tap an enemy to fire at it (a finger kept down keeps firing; aim help picks the enemy nearest the finger); tap a panel to answer. Keyboard: arrows, Space, click, 1–7 weapons, N nova, Z X C panels, P pause.
+- **Dodging** has three simple rules, taught in the briefings: red balls follow the mech up, so move to another lane; orange waves skim the road, so jump them; red lanes and red circles on the road (a laser, a bomb, fire) mean get out of that lane.
+- **Ten enemies**, met one by one (each gets a briefing card with its picture and how to beat it): Buzz Drone (level 1), Walker Bot (2), Turret with a warning laser (4), Hover Bike that blinks before it changes lanes (5), Shield Bot whose shield stops the blaster (12), Bomber Ship whose bombs fall on red circles (15), Spider Mech with lane-wide ground waves (22), Laser Sentinel that lights a lane, then fires down it (26), Rival Mech with homing missiles to shoot down (33) and the huge Carrier Ship that launches drones (43). Obstacles: crates (sometimes a prize inside), low barriers and laser fences to jump, mines, tall blocks to go round, rolling boulders and snowballs, lava geysers.
+- **Bosses** every tenth level: the Iron Crab, the Sand Scorpion, the Frost Titan, the Magma Dragon and the Omega Core, each with its own attacks (claw slams, tail sweeps, rolling snowballs, fire breath over two lanes, rings to jump). A question shield protects each: shoot the right answer orb and the shield breaks, then blast the boss while it is open; every third of its strength brings the shield back with a new question (a wrong orb makes it strike back). Going down in a boss fight starts again at the boss.
+- **Eight weapons**, one more after levels 4, 9, 14, 19, 24, 29 and 39: Blaster, Twin Gatling (heats up), Homing Rockets (fly over shields), Chain Lightning, Plasma Cannon (hold to charge, breaks shields), Freeze Ray, Laser Lance (a beam that heats up) and the Nova Bomb (two a level). The mech's arm cannons change with the weapon. The guns reach 72 m, so enemies far down the road come closer before they can be hit.
+- **Five worlds** with their own sky, scenery, weather and music: Neon City (night, rain), Dune Desert (mesas, cacti, palms), Frost Peaks (snowy pines, snowmen, falling snow), Volcano Forge (a smoking volcano, lava vents, embers) and Star Station (a road over space by a ringed planet).
+- **Stars**: one for clearing a level, two if the mech never went down, three if every answer was right first time too. A mech that goes down starts again from the last gate it opened, with full armour. Pickups: repair, shield, double damage, a nova bomb, gems. Points for every robot, more in a combo; eight paint colours for the mech, more with more stars.
+- **Saving**: `mech-blaster.v1` (levels and stars, best scores, the last level, the question choice, the paint, the weapon in hand, the robots met and missed sentences to ask again); a level played marks the day for the streak.
+- **Levels** (`node games/mech/tools/genlevels.js` writes `content/levels.json`): set pieces (drone flights, walker lines, turret posts, bike rushes, shield bots, bomber runs, spiders, sentinels, rivals, carriers, crate rows, barriers, fences, mine fields, blocks, boulders, geysers, pickups and gem rows) laid along the road by a seeded generator: the new thing of a level comes alone and early, and each world mixes in its own enemies. 2–4 gates a level, 65–110 seconds; bosses about two minutes.
+- **Proof and balance** (`node games/mech/tools/check.js`): two test pilots play every level (`MB.bot` in the engine sees what is coming, picks a lane, jumps, shoots and answers). The good pilot must clear every level; the child-like pilot (slower, misses a third of its shots, right 80% of the time) clears every level up to 29 without going down and most of the later ones (55–65% of its armour left near the end); the bosses beat it a third to a half of the time, and it wins them on a retry.
+- **Speed**: the sky and scenery are painted once per screen size and then only copied; the boss's shield is a picture made once. In a headless browser without a graphics card a busy late-level frame takes about 9 ms and the final boss about 11 ms; if a device keeps taking longer than 26 ms a frame, the page draws fewer pixels.
+
 ## Layout
 
 | Path | What it is |
@@ -131,12 +148,13 @@ Above it, a **New in the arcade** card lists the latest additions (each a link) 
 | `games/pair/`, `games/pop/`, `games/spell/`, `games/quest/`, `games/memory/` | Pair Up, Number Pop, Spell It, English Quest and Memory Lane: one page each in `src/`, a `build.js`, and playtests in `playtest/`. English Quest also has `content/` (the seven stages) and `tools/check-content.js`. |
 | `games/robot/` | Code Robot: the page (`src/robot.html`), the interpreter (`src/engine.js`), the worlds and levels (`content/`, read by `src/levels.js`), `tools/check.js` (proves every level), `tools/trace.js` (paths and corridor maps), `tools/content.js format` (tidies the level files); `build.js`; playtests in `playtest/`. |
 | `games/tycoon/` | Tycoon Town: the screens (`src/tycoon.html`), the four cities (`src/city.js`: tiles, heights, lots, landmarks, what is near each lot, parade routes, boats and trains), the pictures (`src/art-kit.js`: drawing helpers, trees in every season; `src/art-build.js`: neighbours' buildings in each city's style and every business; `src/art-land.js`: landmarks), the map (`src/map.js`: the 2.5D canvas, hills and cliffs, seasons, traffic, people, money pops, day and night, the incidents and the weather), the economy (`src/engine.js`: pure, seeded, the whole game state is plain JSON; incidents and insurance too), the content (`content/`: `roster.json` with every number and each business's likes, `biz-1..5.json` with the cases, `offers.json`, `rivals.json`, and `FORMAT.md` for writing more), `tools/check-content.js` (content rules), `tools/sim.js` (balance bots), `build.js` and playtests. |
+| `games/mech/` | Mech Blaster: the screens (`src/mech.html`), the rules (`src/engine.js`: the mech, weapons, enemies, gates, bosses and a test pilot), the pictures (`src/art.js`: the mech and the enemies; `src/art2.js`: the worlds, props, bosses and weapon icons), the 2.5D drawing (`src/render.js`), the sound (`src/audio.js`), the levels (`content/levels.json`, made by `tools/genlevels.js`, proved by `tools/check.js`) and the missing-word sentences (`content/words-0..2.json`, format in `content/FORMAT.md`, checked by `tools/check-words.js`); `build.js`; playtests in `playtest/`. |
 | `shared/` | Code the games share: math questions, English word facts (`english-words.js`: opposites, past tenses, same-meaning words, plurals, common misspellings), general knowledge (`knowledge.js`: capitals, animal babies, science, geography, calendar and animal facts), the music remix engine, sound effects, cube looks and drawing, `arcade-days.js` (`markPlayed()`: every game notes the day it saves, for the streak), and for the newer games `arcade-ui.css` (colours, buttons, menus, HUD, toasts) and `arcade-core.js` (helpers, the shared save, `writeSave()` which marks the day played and `writeRecords()` which does not, math bookkeeping, screens, read-aloud with a British voice where the device has one, on-device voices first). A page marks the spot with `/*__SHARED:name__*/` (or `/*__SHARED:arcade-ui.css__*/` inside its style) and the build fills it in; shared files can use markers too. |
 | `web/` | The arcade home page (`hub.html`: game cards, Today, stats, Badges, Progress for parents), the offline service worker, the app manifest and icons (`make-icons.js` redraws the icons). |
 | `build.js` | Builds every game into `games/*/dist/` and the website into `docs/`: the home page, one folder per game, the manifest, icons and an offline cache whose version changes with the content. |
 | `docs/` | The built website. GitHub Pages serves it from the `main` branch. Do not edit by hand. |
 
-Progress is saved in each browser's localStorage: `number-dash.v1` holds Number Dash levels plus the settings (level, music, read-aloud) and math record every game shares; the days played are in `arcade-days.v1`; each other game keeps its records under its own key (`number-ladder.v1`, `pair-up.v1`, `number-pop.v1`, `spell-it.v1`, `english-quest.v1`, `memory-lane.v1`, `code-robot.v1`, `tycoon-town.v1`). The home page reads them for its stats.
+Progress is saved in each browser's localStorage: `number-dash.v1` holds Number Dash levels plus the settings (level, music, read-aloud) and math record every game shares; the days played are in `arcade-days.v1`; each other game keeps its records under its own key (`number-ladder.v1`, `pair-up.v1`, `number-pop.v1`, `spell-it.v1`, `english-quest.v1`, `memory-lane.v1`, `code-robot.v1`, `tycoon-town.v1`, `mech-blaster.v1`). The home page reads them for its stats.
 
 ## Commands
 
@@ -234,6 +252,24 @@ node games/tycoon/tools/sim.js
 
 ```bash
 ND_URL=file:///D:/Github/number-dash/games/tycoon/dist/preview.html ND_READY='!!window.__tycoon' ND_BOT=none node games/dash/playtest/shoot.js games/tycoon/playtest/play.js
+```
+
+Mech Blaster: check the sentences (must print 0 errors), make the levels, prove and measure them with the test pilots, then the playtests: `play.js` (a new player by finger on an iPad: Play, the briefing, a drone shot down by a tap, the lane buttons, a swipe and a jump, a wrong and a right gate panel, pause, the done card, the level map scrolled by finger, the hangar, the weapon bar and the Iron Crab's shield opened by tapping the right orb) and `layouts.js` (phones and a portrait iPad, dark mode, how long a busy frame takes, and 18 levels with every new enemy and every boss flown by the autopilot).
+
+```bash
+node games/mech/tools/check-words.js
+```
+
+```bash
+node games/mech/tools/genlevels.js
+```
+
+```bash
+node games/mech/tools/check.js
+```
+
+```bash
+ND_URL=file:///D:/Github/number-dash/games/mech/dist/preview.html ND_READY='!!window.__mech' ND_BOT=none node games/dash/playtest/shoot.js games/mech/playtest/play.js
 ```
 
 Several playtests can run at once when each gets its own browser port and profile: add `ND_CDP=9371 ND_PROFILE=edge-profile-pair` (any free port and folder name).

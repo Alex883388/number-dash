@@ -44,7 +44,8 @@ module.exports = [
       ['quest', '!!window.__quest', '#goBtn', "window.__quest.L.kind + ' ' + !document.getElementById('lesson').hidden"],
       ['memory', '!!window.__memory', '#playBtn', "window.__memory.state()"],
       ['robot', '!!window.__robot', '#contBtn', "window.__robot.state().state"],
-      ['tycoon', '!!window.__tycoon', '[data-new="0"]', "!document.getElementById('s-new').hidden"]].flatMap(([dir, ready, btn, st]) => [
+      ['tycoon', '!!window.__tycoon', '[data-new="0"]', "!document.getElementById('s-new').hidden"],
+      ['mech', '!!window.__mech', '#playBtn', "!document.getElementById('s-brief').hidden"]].flatMap(([dir, ready, btn, st]) => [
     { eval: "location.href = '../'; 'home'" }, { waitFor: hubReady, timeout: 10000 }, { sleep: 400 },
     { touchEl: '.game[href="' + dir + '/"]' },
     { waitFor: ready + " && document.readyState === 'complete'", timeout: 10000 }, { eval: errs }, { sleep: 700 },

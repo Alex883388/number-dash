@@ -1,0 +1,958 @@
+<title>Mech Blaster</title>
+<meta name="description" content="Pilot a battle mech through five worlds: dodge, jump and blast drones, bikes, bombers and giant bosses, and open every gate by shooting the right answer: the missing word or the right number.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap">
+<style>
+/*__SHARED:arcade-ui.css__*/
+/* Mech Blaster: the whole screen is the 2.5D battlefield (a canvas). Over it: the armour and score along the top, the
+   question of the gate ahead under them, the boss's bar, the lane and jump buttons in the bottom corners and the
+   weapons along the bottom. Menus are cards over the battlefield. The battlefield keeps its own world colours in
+   dark mode; the cards follow the arcade's light and dark themes. */
+html, body { background: #120a2e; }
+#game { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; z-index: 1; }
+body.menu #play, body.menu #hud { visibility: hidden; }
+#hud { z-index: 12; }
+.armour { display: flex; align-items: center; gap: 8px; padding: 7px 14px 7px 9px; pointer-events: none; }
+.armour .ic { font: 1.15rem/1 var(--emoji); }
+.armour .bar { width: clamp(84px, 17vw, 190px); height: 13px; border-radius: 99px; background: rgba(41, 52, 90, .18); overflow: hidden; }
+.armour .bar i { display: block; height: 100%; width: 100%; border-radius: 99px; background: linear-gradient(90deg, #3fc77c, #a6f06a); transition: width .15s ease; }
+.armour .bar i.mid { background: linear-gradient(90deg, #f0a43a, #ffd23f); }
+.armour .bar i.low { background: linear-gradient(90deg, #e2414f, #ff8a6a); animation: blink .6s steps(2) infinite; }
+.armour .num { font: 700 1rem/1 var(--font-display); font-variant-numeric: tabular-nums; min-width: 2.2em; }
+@keyframes blink { 50% { opacity: .55; } }
+.combo { color: #e2a526; }
+.combo[hidden] { display: none; }
+#lvlName { max-width: 36vw; overflow: hidden; text-overflow: ellipsis; }
+#qbox {
+  position: fixed; left: 50%; top: calc(74px + env(safe-area-inset-top, 0px)); translate: -50% 0; z-index: 11; pointer-events: none;
+  width: max-content; max-width: min(92vw, 760px); padding: 10px 20px 12px; text-align: center; color: #fff;
+  background: rgba(13, 16, 48, .86); border: 3px solid #62f2ff; border-radius: 22px; box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
+  font: 700 clamp(1.25rem, 3.4vw, 2.1rem)/1.2 var(--font-display); text-wrap: balance;
+}
+#qbox .kind { display: block; font: 800 .72rem/1 var(--font-body); letter-spacing: .14em; text-transform: uppercase; color: #9ff6ff; margin-bottom: 6px; }
+#qbox .gap { display: inline-block; min-width: 2.4em; border-bottom: 4px solid #ffd23f; margin: 0 .1em; height: .9em; vertical-align: baseline; }
+#qbox .tip { display: block; margin-top: 8px; font: 700 clamp(.95rem, 2.2vw, 1.15rem)/1.3 var(--font-body); color: #ffd23f; }
+#qbox.good { border-color: #4dd68a; }
+#qbox.bad { border-color: #ff5a6a; animation: shake .4s ease; }
+#qbox.boss { border-color: #ff9ff3; }
+#bossbar { position: fixed; left: 50%; top: calc(64px + env(safe-area-inset-top, 0px)); translate: -50% 0; z-index: 11; width: min(70vw, 520px); pointer-events: none; text-align: center; }
+#bossbar b { font: 700 1rem/1 var(--font-display); color: #fff; text-shadow: 0 2px 0 #17132b; letter-spacing: .04em; }
+#bossbar .bar { margin-top: 5px; height: 14px; border-radius: 99px; background: rgba(13, 16, 48, .75); border: 2px solid rgba(255, 255, 255, .6); overflow: hidden; }
+#bossbar .bar i { display: block; height: 100%; width: 100%; background: linear-gradient(90deg, #ff4f8a, #ff9f43); transition: width .2s; }
+/* in a boss fight the question is compact, so the boss stays in sight */
+body.boss #qbox { top: calc(108px + env(safe-area-inset-top, 0px)); padding: 6px 16px 8px; font-size: clamp(1.1rem, 2.6vw, 1.55rem); }
+body.boss #qbox .kind { margin-bottom: 3px; font-size: .64rem; }
+body.boss #qbox .tip { margin-top: 4px; font-size: .95rem; }
+body.boss #bossbar { top: calc(62px + env(safe-area-inset-top, 0px)); }
+
+/* the controls on the battlefield */
+#play { position: fixed; inset: 0; z-index: 10; pointer-events: none; }
+.pad { position: absolute; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); display: flex; gap: 14px; align-items: flex-end; pointer-events: none; }
+.pad.left { left: max(16px, env(safe-area-inset-left, 0px)); }
+.pad.right { right: max(16px, env(safe-area-inset-right, 0px)); flex-direction: column; align-items: center; gap: 10px; }
+.pbtn {
+  pointer-events: auto; touch-action: none; width: 78px; height: 78px; border-radius: 50%; display: grid; place-items: center; cursor: pointer;
+  background: rgba(18, 16, 48, .34); border: 3px solid rgba(255, 255, 255, .8); color: #fff; font: 700 2.1rem/1 var(--font-display); text-shadow: 0 1px 2px rgba(0, 0, 0, .4);
+  -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); box-shadow: 0 6px 18px rgba(0, 0, 0, .25); user-select: none; -webkit-user-select: none; padding: 0;
+}
+.pbtn.on { background: rgba(255, 255, 255, .45); transform: scale(.94); }
+.pbtn.jump { width: 92px; height: 92px; background: rgba(70, 48, 0, .42); border-color: #ffd23f; font-size: 1.15rem; flex-direction: column; }
+.pbtn.jump span { font-size: 2rem; line-height: .8; }
+.pbtn.nova { width: 62px; height: 62px; background: rgba(60, 30, 110, .45); border-color: #e3c8ff; position: relative; }
+.pbtn.nova canvas { width: 70%; height: 70%; }
+.pbtn.nova b { position: absolute; right: -4px; top: -4px; background: #c18cff; color: #1a0d33; border-radius: 99px; font: 800 .8rem/1 var(--font-body); padding: 4px 7px; }
+.pbtn.nova.empty { opacity: .35; }
+#weapons { position: absolute; left: 50%; translate: -50% 0; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); display: flex; gap: 8px; pointer-events: none; }
+.wbtn {
+  pointer-events: auto; touch-action: none; position: relative; width: 56px; height: 56px; padding: 6px; border-radius: 16px; cursor: pointer;
+  background: rgba(13, 16, 48, .72); border: 3px solid rgba(255, 255, 255, .35); box-shadow: 0 4px 14px rgba(0, 0, 0, .3);
+}
+.wbtn canvas { width: 100%; height: 100%; display: block; }
+.wbtn.on { border-color: #ffd23f; background: rgba(70, 56, 10, .82); box-shadow: 0 0 0 3px rgba(255, 210, 63, .35), 0 4px 14px rgba(0, 0, 0, .3); }
+.wbtn .heat { position: absolute; left: 6px; right: 6px; bottom: 4px; height: 4px; border-radius: 2px; background: #ff7a3d; transform-origin: left; transform: scaleX(0); }
+.wbtn .heat.hot { background: #ff3d5a; }
+.wbtn .key { position: absolute; left: 5px; top: 2px; font: 800 .62rem/1 var(--font-body); color: rgba(255, 255, 255, .55); }
+@media (pointer: coarse) { .wbtn .key { display: none; } }
+@media (max-width: 760px) {
+  .pbtn { width: 66px; height: 66px; font-size: 1.8rem; }
+  .pbtn.jump { width: 78px; height: 78px; }
+  .wbtn { width: 46px; height: 46px; border-radius: 13px; padding: 4px; }
+  #weapons { gap: 6px; }
+}
+/* tall and narrow screens: the weapons stand in a column on the right */
+@media (max-aspect-ratio: 4/5), (max-width: 620px) {
+  #weapons { flex-direction: column-reverse; left: auto; translate: none; right: max(14px, env(safe-area-inset-right, 0px)); bottom: calc(190px + env(safe-area-inset-bottom, 0px)); }
+}
+@media (max-height: 460px) {
+  .pbtn { width: 58px; height: 58px; font-size: 1.6rem; }
+  .pbtn.jump { width: 68px; height: 68px; }
+  .pbtn.nova { width: 50px; height: 50px; }
+  .wbtn { width: 42px; height: 42px; padding: 3px; }
+  #qbox { top: calc(58px + env(safe-area-inset-top, 0px)); padding: 6px 14px 8px; font-size: 1.15rem; }
+  #qbox .kind { margin-bottom: 3px; }
+}
+
+/* menu cards */
+.home .logo span { color: #ff8a3d; }
+.mechview { width: min(100%, 300px); aspect-ratio: 5 / 3; margin: -6px auto -10px; display: block; }
+.big-row { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+.note { margin: 0; color: var(--ink-soft); line-height: 1.5; }
+details.others { text-align: left; background: var(--card-2); border-radius: 18px; padding: 10px 16px; }
+details.others summary { cursor: pointer; font: 600 1rem/1.3 var(--font-display); }
+details.others ul { margin: 10px 0 4px; padding-left: 20px; color: var(--ink-soft); line-height: 1.5; }
+.world { display: grid; gap: 10px; text-align: left; }
+.world h3 { margin: 6px 0 0; font: 700 1.25rem/1.1 var(--font-display); display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.world h3 small { font: 700 .95rem/1 var(--font-body); color: var(--ink-soft); }
+.lvgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 10px; }
+.lv {
+  display: grid; gap: 4px; justify-items: center; padding: 10px 6px 9px; border-radius: 16px; border: 2px solid var(--line); background: var(--card-2);
+  cursor: pointer; font: inherit; color: inherit; box-shadow: 0 3px 0 var(--line); min-height: 92px; align-content: center;
+}
+.lv b { font: 700 1.35rem/1 var(--font-display); }
+.lv span { font-size: .78rem; line-height: 1.15; color: var(--ink-soft); font-weight: 700; }
+.lv i { font-style: normal; font-size: .85rem; letter-spacing: .05em; }
+.lv i .off { opacity: .25; filter: grayscale(1); }
+.lv.boss { border-color: #ff9ff3; background: linear-gradient(var(--card-2), color-mix(in srgb, #ff9ff3 18%, var(--card-2))); }
+.lv.next { border-color: var(--sun-deep); box-shadow: 0 3px 0 var(--sun-deep), 0 0 0 3px color-mix(in srgb, var(--sun) 45%, transparent); }
+.lv:disabled { opacity: .45; cursor: default; }
+.wlist { display: grid; gap: 10px; text-align: left; }
+.witem { display: grid; grid-template-columns: 58px 1fr; gap: 12px; align-items: center; background: var(--card-2); border-radius: 16px; padding: 10px 12px; }
+.witem canvas { width: 58px; height: 58px; border-radius: 14px; background: #161a3d; }
+.witem b { font: 700 1.08rem/1.15 var(--font-display); }
+.witem p { margin: 3px 0 0; color: var(--ink-soft); font-size: .92rem; line-height: 1.35; }
+.witem.locked { opacity: .55; }
+.witem.locked canvas { filter: grayscale(1) brightness(.7); }
+.paints { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+.paint { width: 54px; height: 54px; border-radius: 50%; border: 3px solid var(--line); cursor: pointer; position: relative; padding: 0; }
+.paint.on { border-color: var(--ink); box-shadow: 0 0 0 3px var(--sun); }
+.paint:disabled { opacity: .35; cursor: default; }
+.paint small { position: absolute; inset: auto -10px -20px; font: 700 .7rem/1 var(--font-body); color: var(--ink-soft); white-space: nowrap; }
+.brief .intro { display: grid; gap: 10px; text-align: left; }
+.brief .tipline { margin: 0; color: var(--ink-soft); font-weight: 700; }
+.done .stars { font-size: 3rem; }
+.unlock { background: color-mix(in srgb, var(--sun) 22%, var(--card-2)); border: 2px dashed var(--sun-deep); border-radius: 18px; padding: 12px; display: grid; grid-template-columns: 58px 1fr; gap: 12px; align-items: center; text-align: left; }
+.unlock canvas { width: 58px; height: 58px; border-radius: 14px; background: #161a3d; }
+.toast { --toast-top: 34%; }
+</style>
+<!--BODY-->
+<canvas id="game" aria-label="The battlefield: tap an enemy to fire at it, tap the right answer on a gate"></canvas>
+
+<div id="hud" class="hud">
+  <div class="hud-top">
+    <div class="hud-chips">
+      <div class="chipbox armour"><span class="ic" aria-hidden="true">🛡️</span><span class="bar"><i id="armBar"></i></span><span class="num" id="armNum">100</span></div>
+      <div class="chipbox chip" id="scoreChip">0</div>
+      <div class="chipbox chip combo" id="comboChip" hidden>×2</div>
+      <div class="chipbox chip soft" id="lvlName">Level 1</div>
+    </div>
+    <button class="hud-btn" id="pauseBtn" aria-label="Pause"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect x="4" y="3" width="5" height="16" rx="2" fill="currentColor"/><rect x="13" y="3" width="5" height="16" rx="2" fill="currentColor"/></svg></button>
+  </div>
+</div>
+<div id="qbox" hidden><span class="kind" id="qKind">Gate question</span><span id="qText"></span><span class="tip" id="qTip" hidden></span></div>
+<div id="bossbar" hidden><b id="bossName">Iron Crab</b><div class="bar"><i id="bossHp"></i></div></div>
+
+<div id="play">
+  <div class="pad left">
+    <button class="pbtn" id="leftBtn" aria-label="Move left">◀</button>
+    <button class="pbtn" id="rightBtn" aria-label="Move right">▶</button>
+  </div>
+  <div id="weapons" aria-label="Weapons"></div>
+  <div class="pad right">
+    <button class="pbtn nova" id="novaBtn" aria-label="Nova bomb" hidden><canvas width="64" height="64"></canvas><b id="novaNum">2</b></button>
+    <button class="pbtn jump" id="jumpBtn" aria-label="Jump"><span>⤒</span>Jump</button>
+  </div>
+</div>
+
+<main id="screens">
+  <section class="screen" id="s-home">
+    <div class="card home">
+      <h1 class="logo">Mech <span>Blaster</span></h1>
+      <canvas class="mechview" id="homeMech" width="600" height="360" aria-hidden="true"></canvas>
+      <p class="tag">Pilot your battle mech through five worlds. Dodge, jump and blast the robots, and open every gate by shooting the right answer.</p>
+      <div class="big-row">
+        <button class="btn sun big" id="playBtn">Play</button>
+      </div>
+      <p class="how" id="homeNext">Level 1: First Steps</p>
+      <div class="big-row">
+        <button class="btn" id="levelsBtn">🗺️ Levels</button>
+        <button class="btn" id="hangarBtn">🔧 Hangar</button>
+      </div>
+      <div>
+        <p class="seg-title">Gate questions</p>
+        <div class="seg" id="subjectSeg">
+          <label><input type="radio" name="subject" value="numbers"><span>🔢 Numbers</span></label>
+          <label><input type="radio" name="subject" value="words"><span>🔤 Missing words</span></label>
+          <label><input type="radio" name="subject" value="mixed"><span>🎲 Both</span></label>
+        </div>
+      </div>
+      <div>
+        <p class="seg-title">How hard</p>
+        <div class="seg">
+          <label><input type="radio" name="math" value="starter"><span>Age 7–8</span></label>
+          <label><input type="radio" name="math" value="explorer"><span>Age 9–10</span></label>
+          <label><input type="radio" name="math" value="genius"><span>Age 11–12</span></label>
+        </div>
+      </div>
+      <details class="others"><summary>❓ How to play</summary>
+        <ul>
+          <li><b>Move</b> between the three lanes with ◀ ▶ (or swipe left and right). <b>Jump</b> with the Jump button (or swipe up).</li>
+          <li><b>Fire</b>: tap an enemy. Keep your finger down to keep firing.</li>
+          <li><b>Gates</b> block the road. Read the question and shoot the panel with the right answer to blow the gate open.</li>
+          <li><b>Red balls</b>: move to another lane. <b>Orange waves along the ground</b>: jump. <b>Red lanes and circles</b> on the road: get out of them!</li>
+          <li>Finish levels to unlock new <b>weapons</b>. Every tenth level has a <b>boss</b>: answer its shield questions, then blast it.</li>
+          <li>Keyboard: ← → move, ↑ or Space jump, click to fire, 1–7 weapons, N nova, Z X C answer the left, middle or right panel, P pause.</li>
+          <li>⭐ Finish the level. ⭐⭐ Without your mech going down. ⭐⭐⭐ And every answer right first time.</li>
+        </ul>
+      </details>
+      <div class="row">
+        <button class="btn" id="musicBtn">Music on</button>
+        <button class="btn" id="speakBtn">Read aloud on</button>
+        <a class="btn" data-hub hidden href="../">All games</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" id="s-levels" hidden>
+    <div class="card">
+      <h2 class="logo" style="font-size:2.3rem">Levels</h2>
+      <p class="note" id="starTotal">0 of 150 stars</p>
+      <div id="worlds" style="display:grid;gap:18px"></div>
+      <div class="row"><button class="btn sun" id="levelsBack">Back</button></div>
+    </div>
+  </section>
+
+  <section class="screen" id="s-hangar" hidden>
+    <div class="card">
+      <h2 class="logo" style="font-size:2.3rem">Hangar</h2>
+      <canvas class="mechview" id="hangarMech" width="600" height="360" aria-hidden="true"></canvas>
+      <div>
+        <p class="seg-title">Paint your mech (more colours with more stars)</p>
+        <div class="paints" id="paints"></div>
+      </div>
+      <p class="seg-title" style="margin-top:14px">Weapons</p>
+      <div class="wlist" id="wlist"></div>
+      <p class="seg-title">Enemies you have met</p>
+      <div class="wlist" id="elist"></div>
+      <div class="row"><button class="btn sun" id="hangarBack">Back</button></div>
+    </div>
+  </section>
+
+  <section class="screen" id="s-brief" hidden>
+    <div class="card brief">
+      <p class="how" id="briefWorld">Neon City · Level 1</p>
+      <h2 class="logo" style="font-size:2.4rem" id="briefName">First Steps</h2>
+      <div class="intro" id="briefIntro"></div>
+      <p class="tipline" id="briefTip"></p>
+      <div class="big-row"><button class="btn sun big" id="startBtn">Go!</button></div>
+      <div class="row"><button class="btn" id="briefBack">Levels</button></div>
+    </div>
+  </section>
+
+  <section class="screen" id="s-pause" hidden>
+    <div class="card small-card">
+      <h2>Paused</h2>
+      <p id="pauseInfo">Level 1</p>
+      <div class="big-row"><button class="btn sun big" id="resumeBtn">Keep going</button></div>
+      <div class="row">
+        <button class="btn" id="restartBtn">Start again</button>
+        <button class="btn" id="pauseLevels">Levels</button>
+        <button class="btn" id="pauseMusic">Music on</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" id="s-down" hidden>
+    <div class="card small-card">
+      <h2>Mech down!</h2>
+      <p id="downInfo">Your mech needs a repair. Try again from the last gate you opened.</p>
+      <div class="big-row"><button class="btn sun big" id="retryBtn">Try again</button></div>
+      <div class="row">
+        <button class="btn" id="downRestart">Start the level again</button>
+        <button class="btn" id="downLevels">Levels</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" id="s-done" hidden>
+    <div class="card small-card done">
+      <h2 id="doneTitle">Level clear!</h2>
+      <div class="stars" id="doneStars"></div>
+      <p id="doneWhy"></p>
+      <dl class="stats" id="doneStats"></dl>
+      <div id="doneUnlock" style="display:grid;gap:10px"></div>
+      <div class="big-row"><button class="btn sun big" id="nextBtn">Next level</button></div>
+      <div class="row">
+        <button class="btn" id="replayBtn">Play again</button>
+        <button class="btn" id="doneLevels">Levels</button>
+      </div>
+    </div>
+  </section>
+</main>
+<div class="toast" id="toast" hidden></div>
+<div class="sr" aria-live="polite" id="announce"></div>
+
+<script>
+(function () {
+'use strict';
+/*__SHARED:arcade-core__*/
+/*__SHARED:math__*/
+/*__AUDIO__*/
+/*__ENGINE__*/
+const MB = window.MB;
+/*__ART__*/
+const LEVELS = (/*__LEVELS__*/null || { levels: [] }).levels;
+const WORDS = /*__WORDS__*/null || [[], [], []];
+
+/* ================= records =================
+   mech-blaster.v1: { levels: { n: { s: stars, b: best score } }, last, subject, paint, weapon, seen: { enemy kinds met },
+   missed: [word sentences to ask again], stats: { kills, right, wrong, bosses } }. A level played saves with writeSave(). */
+const rec = loadRecords('mech-blaster.v1', { levels: {}, last: 1, subject: 'mixed', paint: 0, weapon: 'blaster', seen: {}, missed: [], stats: { kills: 0, right: 0, wrong: 0, bosses: 0 } });
+const done = () => { let m = 0; for (const k of Object.keys(rec.levels)) if (rec.levels[k] && rec.levels[k].s > 0) m = Math.max(m, +k); return m; };
+const starsOf = (n) => (rec.levels[n] ? rec.levels[n].s || 0 : 0);
+const totalStars = () => Object.values(rec.levels).reduce((t, v) => t + (v && v.s ? v.s : 0), 0);
+const WORLD_NAMES = ['Neon City', 'Dune Desert', 'Frost Peaks', 'Volcano Forge', 'Star Station'];
+const SONG_OF = ['city', 'desert', 'ice', 'volcano', 'space'];
+
+/* ================= what each thing is, for the briefings and the hangar ================= */
+const GUIDE = {
+  drone: ['Buzz Drone', 'Hovers ahead and fires red balls. Tap it to shoot it down. Move to another lane to dodge a red ball.'],
+  crate: ['Crates', 'Shoot them open (there may be a prize inside) or go round them.'],
+  walker: ['Walker Bot', 'Walks at you and fires. Two hits stop it, or jump right over it!'],
+  barrier: ['Barrier', 'A low wall. Jump over it or change lanes.'],
+  fence: ['Laser Fence', 'It covers every lane, so jump!'],
+  turret: ['Turret', 'Its red laser shows where three shots will go. Change lanes, or blow it up first.'],
+  bike: ['Hover Bike', 'Zooms at you and may switch lanes (watch its blinker). Shoot it, dodge it or jump it.'],
+  mine: ['Mines', 'Blinking mines on the road. Shoot them or step round them.'],
+  block: ['Big Block', 'Too tall to jump. Change lanes!'],
+  boulder: ['Rolling Boulder', 'Rolls down a lane at you. Shoot it or dodge.'],
+  shield: ['Shield Bot', 'Its shield stops the blaster. Hit it when it drops the shield to fire, or use rockets.'],
+  bomber: ['Bomber Ship', 'Drops bombs. A red circle on the road shows where: get out of that lane!'],
+  spider: ['Spider Mech', 'Hops between lanes and sends orange waves along the ground in every lane: jump them!'],
+  sentinel: ['Laser Sentinel', 'A tall tower that lights up your lane, then fires a beam down it. Move out of the red lane.'],
+  geyser: ['Lava Geyser', 'Bubbles, then blasts lava. Do not stand on it when it blows.'],
+  rival: ['Rival Mech', 'A mech like yours! It dodges and fires homing missiles. Shoot the missiles down.'],
+  carrier: ['Carrier Ship', 'A huge ship that sends out drones and fires at two lanes. Find the safe lane.']
+};
+const OBST_EMOJI = { crate: '📦', barrier: '🚧', fence: '⚡', mine: '💣', block: '🧱', boulder: '🪨', geyser: '🌋' };
+const WEAPON_INFO = {
+  blaster: ['Blaster', 'Tap to fire. Hold to keep firing.'],
+  gatling: ['Twin Gatling', 'Hold to spray bullets. It gets hot, so let it cool.'],
+  rockets: ['Homing Rockets', 'Two rockets that chase the target and fly over shields.'],
+  lightning: ['Chain Lightning', 'Zaps one enemy and jumps to three more nearby.'],
+  plasma: ['Plasma Cannon', 'Hold to charge, let go to fire. It goes through everything and breaks shields.'],
+  freeze: ['Freeze Ray', 'Freezes enemies near the hit, so they cannot move or fire.'],
+  laser: ['Laser Lance', 'Hold for a steady beam. Very strong, but it gets hot.'],
+  nova: ['Nova Bomb', 'Clears the screen of shots and small enemies. Two in every level.']
+};
+const BOSS_INFO = {
+  crab: ['Iron Crab', 'Its claws slam a lane and send a shockwave: jump it or move. Watch for bubble volleys.'],
+  scorpion: ['Sand Scorpion', 'Its tail sweeps a laser along the ground: jump it! Sand bombs fall where the red circles are.'],
+  titan: ['Frost Titan', 'Throws rolling snowballs and breathes frost over two lanes: find the third lane.'],
+  dragon: ['Magma Dragon', 'Breathes fire over two lanes, rains meteors and dives down a lane.'],
+  omega: ['Omega Core', 'The final boss. Jump its rings, dodge its beams and shoot down its missiles.']
+};
+
+/* ================= questions ================= */
+// numbers get harder through the game, and with the age chosen on the home card (like Number Ladder)
+const TIERS = {
+  starter: [['add20', 'sub20', 'make10', 'double'], ['add20', 'sub20', 'make10', 'double', 'table2510'], ['table2510', 'table2510', 'sub20', 'add20', 'double']],
+  explorer: [['add100', 'sub100', 'table2510', 'missing'], ['table10', 'div10', 'add100', 'sub100', 'missing'], ['table10', 'div10', 'table12', 'div12', 'missing']],
+  genius: [['table10', 'div10', 'big', 'missing'], ['table12', 'div12', 'fraction', 'percent', 'big', 'missingMul'], ['order', 'order', 'table12', 'div12', 'fraction', 'percent', 'missingMul']]
+};
+const ENGLISH_TIER = { starter: [0, 0, 1], explorer: [0, 1, 2], genius: [1, 2, 2] };
+const stageOf = (n) => (n <= 17 ? 0 : n <= 34 ? 1 : 2);
+let askN = 0, lastMath = '';
+const recentWords = [];
+function numberQuestion(n) {
+  const kinds = (TIERS[save.settings.mathLevel] || TIERS.explorer)[stageOf(n)];
+  let q = null;
+  const tricky = (save.math.tricky || []).filter((t) => t.t !== lastMath && typeof t.a === 'number');
+  if (tricky.length && Math.random() < 0.25) q = Object.assign({}, pick(tricky), { again: true });
+  for (let i = 0; !q || (q.t === lastMath && i < 6); i++) q = KINDS[pick(kinds)]();
+  lastMath = q.t;
+  const choices = shuffle([q.a].concat(wrongAnswers(q, 2)));
+  const text = q.t.indexOf('?') >= 0 ? q.t : q.t + ' = ?';
+  return { text: text, choices: choices.map(String), correct: choices.indexOf(q.a), tip: q.t.indexOf('?') >= 0 ? q.t.replace('?', q.a) : q.t + ' = ' + q.a, raw: q, kind: 'numbers' };
+}
+function wordQuestion(n) {
+  const tier = (ENGLISH_TIER[save.settings.mathLevel] || ENGLISH_TIER.explorer)[stageOf(n)];
+  const bank = WORDS[tier] && WORDS[tier].length ? WORDS[tier] : WORDS.find((b) => b && b.length);
+  if (!bank) return null;
+  let it = null;
+  const again = (rec.missed || []).filter((m) => m.t === tier && recentWords.indexOf(m.s) < 0);
+  if (again.length && Math.random() < 0.25) it = bank.find((x) => x.s === pick(again).s) || null;
+  for (let i = 0; !it || (recentWords.indexOf(it.s) >= 0 && i < 12); i++) it = pick(bank);
+  recentWords.push(it.s); if (recentWords.length > 40) recentWords.shift();
+  const choices = shuffle([it.a].concat(shuffle(it.w.slice()).slice(0, 2)));
+  return { text: it.s, choices: choices, correct: choices.indexOf(it.a), tip: it.h, raw: it, tier: tier, kind: 'words' };
+}
+function ask(kind, S) {
+  let sub = rec.subject || 'mixed';
+  if (sub === 'mixed') sub = (askN++ + (S.n % 2)) % 2 ? 'words' : 'numbers';
+  const q = sub === 'words' ? wordQuestion(S.n) : null;
+  return q || numberQuestion(S.n);
+}
+function spokenMath(t) { return t.replace(/×/g, ' times ').replace(/÷/g, ' divided by ').replace(/−/g, ' minus ').replace(/\+/g, ' plus ').replace(/=\s*\?/, '').replace(/\?/g, 'what').replace(/%/g, ' percent'); }
+
+/* ================= the battlefield ================= */
+const cv = $('#game');
+let S = null, run = null, paused = true, last = performance.now(), acc = 0, anim = 0, autopilot = null, speedMul = 1;
+let slowAvg = 17, slowN = 0;
+let lastStepAt = 0, lastHitSfx = 0, lastEfireSfx = 0, gatTick = 0, laserOn = false, stepPhase = 0;
+const DT = 1 / 60;
+function fitCanvas() { MR.resize(cv); }
+window.addEventListener('resize', fitCanvas);
+fitCanvas();
+
+function arsenal() { return MB.arsenal(done()); }
+function startLevel(n, from) {
+  const L = LEVELS[n - 1];
+  if (!L) return;
+  const fresh = !from;
+  if (fresh) run = { n: n, downs: 0, cp: 0, cpScore: 0, cpStats: null, startT: Date.now() };
+  const weapons = arsenal();
+  S = MB.start(L, { seed: (Date.now() & 0xffff) + n * 7, ask: ask, weapons: weapons, weapon: rec.weapon, nova: done() >= MB.NOVA_UNLOCK ? MB.NOVA_CHARGES : 0, from: from || 0 });
+  S.paint = rec.paint || 0;
+  if (from && run.cpStats) { S.score = run.cpScore; S.stats = Object.assign({}, run.cpStats); }
+  MR.setLevel(L);
+  rec.last = n; writeRecords();
+  showScreen(null);
+  document.body.classList.remove('menu', 'asking', 'boss');
+  $('#qbox').hidden = true; $('#bossbar').hidden = true;
+  $('#lvlName').textContent = 'Level ' + n + ' · ' + L.name;
+  buildWeapons();
+  Sound.init(); Sound.play(SONG_OF[L.w] || 'city');
+  paused = false; acc = 0; last = performance.now();
+  if (fresh && n === 1) setTimeout(() => toast('Tap the drones to shoot them!', 'hello', 2600), 900);
+}
+function frame(now) {
+  requestAnimationFrame(frame);
+  const real = Math.min(0.05, Math.max(0, (now - last) / 1000));
+  last = now;
+  if (!S) return;
+  anim += real;
+  if (!paused) {
+    const slow = S.slow > 0 ? 0.35 : 1;
+    if (S.slow > 0) S.slow = Math.max(0, S.slow - real);
+    acc += real * slow * speedMul;
+    let n = 0;
+    while (acc >= DT && n < 240) {
+      if (autopilot) MB.bot(S, autopilot);
+      MB.step(S, DT);
+      handle(S.ev);
+      acc -= DT; n++;
+    }
+    MR.tick(S, real * slow);
+    footsteps();
+    // a slow device: if frames keep taking longer than 26 ms, draw fewer pixels
+    if (real > 0) {
+      slowAvg = slowAvg * 0.96 + real * 1000 * 0.04;
+      if (slowAvg > 26) { if (++slowN > 120 && MR.quality > 0.55) { MR.setQuality(MR.quality * 0.82); slowN = 0; slowAvg = 17; } } else slowN = 0;
+    }
+  }
+  MR.draw(S, anim);
+  hud();
+}
+requestAnimationFrame(frame);
+
+function footsteps() {
+  const M = S.mech;
+  if (M.air || S.v < 1) return;
+  const ph = Math.floor(M.walk * 0.82 / Math.PI);
+  if (ph !== stepPhase) { stepPhase = ph; Sound.sfx('step'); }
+}
+
+/* ================= what happened: sounds, sparks and words ================= */
+function handle(evs) {
+  const now = performance.now();
+  for (const ev of evs) {
+    MR.fx(ev, S);
+    switch (ev.e) {
+      case 'fire':
+        if (ev.w === 'gatling') { if ((gatTick++ & 1) === 0) Sound.sfx('gatling'); }
+        else if (ev.w !== 'laser') Sound.sfx(ev.w, ev.f);
+        break;
+      case 'ashot': Sound.sfx('blaster'); break;
+      case 'efire': if (now - lastEfireSfx > 120) { lastEfireSfx = now; Sound.sfx('efire'); } break;
+      case 'hit': if (now - lastHitSfx > 60 && ev.w !== 'laser') { lastHitSfx = now; Sound.sfx('hit'); } break;
+      case 'block': if (now - lastHitSfx > 80) { lastHitSfx = now; Sound.sfx('block'); } break;
+      case 'boom': Sound.sfx('boom', ev.big); break;
+      case 'blast': Sound.sfx('boom', false); break;
+      case 'bump': Sound.sfx('boom', false); break;
+      case 'freeze': Sound.sfx('freeze'); break;
+      case 'hurt': Sound.sfx('hurt'); break;
+      case 'shieldhit': Sound.sfx('shieldhit'); break;
+      case 'jump': Sound.sfx('jump'); break;
+      case 'land': Sound.sfx('land'); break;
+      case 'overheat': Sound.sfx('overheat'); toast('Too hot! Cooling down…', 'oops', 1100); break;
+      case 'weapon': Sound.sfx('weapon'); rec.weapon = ev.w; writeRecords(); break;
+      case 'nova': Sound.sfx('nova'); break;
+      case 'pick': {
+        Sound.sfx('pick');
+        const msg = { repair: '🔧 Repaired!', shield: '🛡️ Shield on!', power: '⚡ Double damage!', nova: '💥 +1 Nova bomb' }[ev.p];
+        if (msg) toast(msg, 'good', 1200);
+        break;
+      }
+      case 'gate': showQuestion(ev.q, false); Sound.sfx('gate'); break;
+      case 'bshield': showQuestion(ev.q, true); break;
+      case 'right': answered(true, ev); break;
+      case 'wrong': answered(false, ev); break;
+      case 'pass':
+        run.cp = S.cp; run.cpScore = S.score; run.cpStats = Object.assign({}, S.stats);
+        hideQuestion();
+        toast('Checkpoint!', 'good', 900);
+        break;
+      case 'boss': {
+        const B = BOSS_INFO[ev.b] || ['Boss', ''];
+        Sound.sfx('alarm'); Sound.play('boss');
+        $('#bossName').textContent = '⚠️ ' + B[0];
+        $('#bossbar').hidden = false; document.body.classList.add('boss');
+        toast('Warning: ' + B[0] + '!', 'oops', 2200);
+        break;
+      }
+      case 'bphase': toast('Its shield is back! Answer again.', 'hello', 1500); break;
+      case 'bossdown': hideQuestion(); Sound.sfx('boom', true); setTimeout(() => Sound.sfx('boom', true), 400); setTimeout(() => Sound.sfx('boom', true), 900); break;
+      case 'down': Sound.sfx('down'); Sound.laser(false); setTimeout(mechDown, 1300); break;
+      case 'won': Sound.sfx('won'); Sound.laser(false); setTimeout(levelWon, 1500); break;
+      case 'beam': break;
+      default: break;
+    }
+  }
+  const beam = !!S.beam && S.state === 'play' && !paused;
+  if (beam !== laserOn) { laserOn = beam; Sound.laser(beam); }
+}
+function showQuestion(q, boss) {
+  const box = $('#qbox');
+  box.className = boss ? 'boss' : '';
+  $('#qKind').textContent = boss ? 'Break the shield: shoot the right answer' : q.kind === 'words' ? 'Missing word: shoot the right one' : 'Gate: shoot the right answer';
+  const t = $('#qText');
+  t.textContent = '';
+  if (q.kind === 'words') {
+    const parts = q.text.split('___');
+    t.append(parts[0]); const gap = document.createElement('span'); gap.className = 'gap'; t.append(gap); t.append(parts[1] || '');
+  } else t.textContent = q.text;
+  $('#qTip').hidden = true;
+  box.hidden = false;
+  document.body.classList.add('asking');
+  announce(q.kind === 'words' ? q.text.replace('___', 'blank') : spokenMath(q.text));
+  if (save.settings.speak) Speech.say(q.kind === 'words' ? q.text.replace('___', '… blank …') : spokenMath(q.text));
+}
+function hideQuestion() { $('#qbox').hidden = true; document.body.classList.remove('asking'); }
+function answered(ok, ev) {
+  const q = ev.q, box = $('#qbox');
+  box.classList.remove('good', 'bad'); void box.offsetWidth;
+  if (ok) {
+    Sound.sfx('right');
+    box.classList.add('good');
+    const t = $('#qText');
+    if (q.kind === 'words') t.textContent = q.text.replace('___', q.choices[q.correct]);
+    else t.textContent = q.tip;
+    $('#qTip').hidden = true;
+    if (ev.first) {
+      if (q.kind === 'numbers') mathRight(q.raw);
+      else { rec.missed = (rec.missed || []).filter((m) => m.s !== q.raw.s); }
+    }
+    rec.stats.right++;
+    setTimeout(() => { if (S && !S.gate && !(S.boss && S.boss.mode === 'shield')) hideQuestion(); }, 1100);
+    if (ev.boss) setTimeout(() => toast('Shield down! Blast it!', 'good', 1300), 300);
+  } else {
+    Sound.sfx('wrong');
+    box.classList.add('bad');
+    const tip = $('#qTip');
+    tip.textContent = q.kind === 'words' ? '💡 ' + q.tip : '💡 Not ' + ev.pick + '. Try another one!';
+    tip.hidden = false;
+    if (!q.missed) {
+      q.missed = true;
+      if (q.kind === 'numbers') mathWrong(q.raw);
+      else { rec.missed = (rec.missed || []).filter((m) => m.s !== q.raw.s).concat([{ s: q.raw.s, t: q.tier }]).slice(-24); writeRecords(); }
+    }
+    rec.stats.wrong++;
+  }
+}
+
+/* ================= the HUD ================= */
+let hudKey = '';
+function hud() {
+  if (!S) return;
+  const M = S.mech, hp = Math.round(M.hp);
+  const key = hp + '|' + S.score + '|' + S.combo + '|' + S.weapon + '|' + Math.round(M.heat * 20) + '|' + (M.hot > 0) + '|' + S.nova + '|' + (S.boss ? Math.round(S.boss.hp) : '') + '|' + M.shield.toFixed(0);
+  if (key === hudKey) return;
+  hudKey = key;
+  const bar = $('#armBar');
+  bar.style.width = Math.max(0, hp) + '%';
+  bar.className = hp <= 30 ? 'low' : hp <= 60 ? 'mid' : '';
+  $('#armNum').textContent = hp;
+  $('#scoreChip').textContent = S.score.toLocaleString('en-GB');
+  const mult = S.combo >= 10 ? 4 : S.combo >= 6 ? 3 : S.combo >= 3 ? 2 : 1;
+  $('#comboChip').hidden = mult < 2;
+  $('#comboChip').textContent = '×' + mult + ' combo';
+  $$('#weapons .wbtn').forEach((b) => {
+    const on = b.dataset.w === S.weapon;
+    b.classList.toggle('on', on);
+    const h = b.querySelector('.heat');
+    if (h) { const hot = on && (S.weapon === 'gatling' || S.weapon === 'laser'); h.style.transform = 'scaleX(' + (hot ? M.heat : 0) + ')'; h.classList.toggle('hot', M.hot > 0); }
+  });
+  const nb = $('#novaBtn');
+  nb.hidden = done() < MB.NOVA_UNLOCK;
+  $('#novaNum').textContent = S.nova;
+  nb.classList.toggle('empty', S.nova <= 0);
+  if (S.boss) $('#bossHp').style.width = Math.max(0, S.boss.hp / S.boss.max * 100) + '%';
+}
+function iconCanvas(w, size) {
+  const c = document.createElement('canvas'); c.width = c.height = size;
+  ART2.weaponIcon(c.getContext('2d'), w, size);
+  return c;
+}
+function buildWeapons() {
+  const box = $('#weapons');
+  box.textContent = '';
+  if (!S) return;
+  S.weapons.forEach((w, i) => {
+    const b = document.createElement('button');
+    b.className = 'wbtn'; b.dataset.w = w; b.setAttribute('aria-label', WEAPON_INFO[w][0]);
+    b.append(iconCanvas(w, 96));
+    const k = document.createElement('span'); k.className = 'key'; k.textContent = String(i + 1); b.append(k);
+    const h = document.createElement('i'); h.className = 'heat'; b.append(h);
+    b.addEventListener('pointerdown', (e) => { e.preventDefault(); e.stopPropagation(); Sound.init(); MB.setWeapon(S, w); });
+    box.append(b);
+  });
+  box.hidden = S.weapons.length < 2;
+  const nc = $('#novaBtn canvas');
+  ART2.weaponIcon(nc.getContext('2d'), 'nova', 64);
+  hudKey = '';
+}
+
+/* ================= fingers, mouse and keys ================= */
+let firePtr = null, swipe = null;
+function local(e) { const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; }
+cv.addEventListener('pointerdown', (e) => {
+  if (!S || paused || S.state !== 'play') return;
+  e.preventDefault();
+  Sound.init();
+  const [x, y] = local(e);
+  swipe = { id: e.pointerId, x: x, y: y, t: performance.now(), used: false };
+  const hit = MR.pick(x, y);
+  if (hit.panel != null) { MB.answer(S, hit.panel); return; }
+  firePtr = e.pointerId;
+  try { cv.setPointerCapture(e.pointerId); } catch (err) { /* old browsers */ }
+  MB.press(S, hit.id, hit.aim);
+});
+cv.addEventListener('pointermove', (e) => {
+  if (!S) return;
+  const [x, y] = local(e);
+  if (swipe && swipe.id === e.pointerId && !swipe.used && performance.now() - swipe.t < 320) {
+    const dx = x - swipe.x, dy = y - swipe.y;
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.6) { swipe.used = true; MB.move(S, dx > 0 ? 1 : -1); }
+    else if (dy < -60 && Math.abs(dy) > Math.abs(dx) * 1.6) { swipe.used = true; MB.jump(S); }
+  }
+  if (firePtr === e.pointerId) { const hit = MR.pick(x, y); MB.hold(S, hit.id, hit.aim); }
+});
+function lift(e) { if (firePtr === e.pointerId) { firePtr = null; if (S) MB.release(S); } if (swipe && swipe.id === e.pointerId) swipe = null; }
+cv.addEventListener('pointerup', lift);
+cv.addEventListener('pointercancel', lift);
+function holdBtn(id, fn) {
+  const b = $(id);
+  b.addEventListener('pointerdown', (e) => { e.preventDefault(); Sound.init(); b.classList.add('on'); if (S && !paused) fn(); });
+  for (const t of ['pointerup', 'pointercancel', 'pointerleave']) b.addEventListener(t, () => b.classList.remove('on'));
+  b.addEventListener('contextmenu', (e) => e.preventDefault());
+}
+holdBtn('#leftBtn', () => MB.move(S, -1));
+holdBtn('#rightBtn', () => MB.move(S, 1));
+holdBtn('#jumpBtn', () => MB.jump(S));
+holdBtn('#novaBtn', () => MB.nova(S));
+document.addEventListener('keydown', (e) => {
+  if (!S || e.repeat && !['ArrowLeft', 'ArrowRight'].includes(e.key)) return;
+  const k = e.key.toLowerCase();
+  if (k === 'p' || k === 'escape') { if (!paused) pause(); else if ($('#s-pause') && !$('#s-pause').hidden) resume(); return; }
+  if (paused || S.state !== 'play') return;
+  if (k === 'arrowleft' || k === 'a') MB.move(S, -1);
+  else if (k === 'arrowright' || k === 'd') MB.move(S, 1);
+  else if (k === 'arrowup' || k === 'w' || k === ' ') { e.preventDefault(); MB.jump(S); }
+  else if (k === 'n' || k === 'q') MB.nova(S);
+  else if (k === 'z' || k === 'x' || k === 'c') MB.answer(S, 'zxc'.indexOf(k));
+  else if (k === 'f' || k === 'enter') { const t = MB.nearest(S, null); MB.press(S, t ? t.id : 0, null); MB.release(S); }
+  else if (/^[1-7]$/.test(k)) { const w = S.weapons[+k - 1]; if (w) MB.setWeapon(S, w); }
+});
+
+/* ================= pause, down, done ================= */
+function pause() {
+  if (!S || paused) return;
+  paused = true; MB.release(S); Sound.laser(false);
+  $('#pauseInfo').textContent = 'Level ' + S.n + ': ' + S.L.name;
+  $('#pauseMusic').textContent = save.settings.music > 0 ? 'Music on' : 'Music off';
+  document.body.classList.add('menu');
+  showScreen('pause');
+}
+function resume() { showScreen(null); document.body.classList.remove('menu'); paused = false; last = performance.now(); }
+$('#pauseBtn').addEventListener('click', pause);
+$('#resumeBtn').addEventListener('click', resume);
+$('#restartBtn').addEventListener('click', () => startLevel(S.n));
+$('#pauseLevels').addEventListener('click', () => openLevels());
+$('#pauseMusic').addEventListener('click', () => { $('#pauseMusic').textContent = toggleMusic() ? 'Music on' : 'Music off'; });
+function mechDown() {
+  if (!S || S.state !== 'down') return;
+  run.downs++;
+  paused = true; document.body.classList.add('menu');
+  $('#downInfo').textContent = run.cp > 0 ? 'Your mech needs a repair. Try again from the last gate you opened, with full armour.' : 'Your mech needs a repair. Try again with full armour!';
+  $('#retryBtn').textContent = run.cp > 0 ? 'Try again from the gate' : 'Try again';
+  showScreen('down');
+}
+$('#retryBtn').addEventListener('click', () => startLevel(run.n, run.cp || 0));
+$('#downRestart').addEventListener('click', () => startLevel(run.n));
+$('#downLevels').addEventListener('click', () => openLevels());
+function levelWon() {
+  if (!S || S.state !== 'won') return;
+  paused = true; document.body.classList.add('menu');
+  const n = S.n, before = done(), oldStars = starsOf(n);
+  const allFirst = S.stats.right > 0 && S.stats.first === S.stats.right;
+  const stars = run.downs > 0 ? 1 : allFirst ? 3 : 2;
+  const r = rec.levels[n] || { s: 0, b: 0 };
+  r.s = Math.max(r.s || 0, stars); r.b = Math.max(r.b || 0, S.score);
+  rec.levels[n] = r;
+  rec.stats.kills += S.stats.kills;
+  if (S.L.boss) rec.stats.bosses = (rec.stats.bosses || 0) + 1;
+  writeSave();
+  $('#doneTitle').textContent = S.L.boss ? (BOSS_INFO[S.L.boss] || ['Boss'])[0] + ' beaten!' : 'Level clear!';
+  $('#doneStars').innerHTML = starRow(stars);
+  $('#doneWhy').textContent = stars === 3 ? 'Perfect: every answer right first time, and your mech never went down!' : stars === 2 ? 'Your mech never went down. Get every answer right first time for the third star.' : 'You made it! Finish without your mech going down for more stars.';
+  $('#doneStats').innerHTML = stat('Score', S.score.toLocaleString('en-GB')) + stat('Right first time', S.stats.first + ' of ' + S.stats.right) + stat('Robots', S.stats.kills) + stat('Best', r.b.toLocaleString('en-GB'));
+  const un = $('#doneUnlock');
+  un.textContent = '';
+  const now = done();
+  if (now > before) {
+    for (const w of MB.ORDER) if (MB.WEAPONS[w].unlock > before && MB.WEAPONS[w].unlock <= now) un.append(unlockCard(w, 'New weapon: ' + WEAPON_INFO[w][0], WEAPON_INFO[w][1]));
+    if (before < MB.NOVA_UNLOCK && now >= MB.NOVA_UNLOCK) un.append(unlockCard('nova', 'New: ' + WEAPON_INFO.nova[0], WEAPON_INFO.nova[1]));
+    if (n % 10 === 0 && n < 50) un.append(textCard('🌍', 'New world: ' + WORLD_NAMES[n / 10], 'A new land with new robots to meet.'));
+  }
+  const newPaint = ART.PAINTS.findIndex((p, i) => i > 0 && paintNeeds(i) > totalStars() - (r.s - oldStars) && paintNeeds(i) <= totalStars());
+  if (newPaint > 0) un.append(textCard('🎨', 'New paint: ' + ART.PAINTS[newPaint].name, 'Try it on in the Hangar.'));
+  $('#nextBtn').hidden = n >= 50;
+  if (n >= 50) $('#doneWhy').textContent += ' You beat the whole game!';
+  showScreen('done');
+}
+function unlockCard(w, title, text) {
+  const d = document.createElement('div'); d.className = 'unlock';
+  d.append(iconCanvas(w, 116));
+  const t = document.createElement('div'); t.innerHTML = '<b></b><p class="note"></p>'; t.querySelector('b').textContent = title; t.querySelector('p').textContent = text; d.append(t);
+  return d;
+}
+function textCard(emoji, title, text) {
+  const d = document.createElement('div'); d.className = 'unlock';
+  const e = document.createElement('div'); e.style.cssText = 'font:2.2rem/58px var(--emoji);text-align:center'; e.textContent = emoji; d.append(e);
+  const t = document.createElement('div'); t.innerHTML = '<b></b><p class="note"></p>'; t.querySelector('b').textContent = title; t.querySelector('p').textContent = text; d.append(t);
+  return d;
+}
+$('#nextBtn').addEventListener('click', () => openBrief(Math.min(50, S.n + 1)));
+$('#replayBtn').addEventListener('click', () => openBrief(S.n));
+$('#doneLevels').addEventListener('click', () => openLevels());
+
+/* ================= home, levels, hangar and briefings ================= */
+function paintNeeds(i) { return i * 12; }
+function goHome() {
+  if (S) { paused = true; MB.release(S); }
+  Sound.laser(false);
+  Sound.init(); Sound.play('menu');
+  document.body.classList.add('menu');
+  renderHome();
+  showScreen('home', false);
+}
+function nextLevel() { const d = done(); return Math.min(50, d + 1); }
+function renderHome() {
+  const n = nextLevel(), L = LEVELS[n - 1];
+  $('#homeNext').textContent = done() >= 50 ? 'All 50 levels cleared! Play any level for more stars.' : 'Next: Level ' + n + ', ' + (L ? L.name : '') + ' (' + WORLD_NAMES[Math.floor((n - 1) / 10)] + ')';
+  $('#musicBtn').textContent = save.settings.music > 0 ? 'Music on' : 'Music off';
+  $('#speakBtn').textContent = save.settings.speak ? 'Read aloud on' : 'Read aloud off';
+  const sub = document.querySelector('input[name="subject"][value="' + (rec.subject || 'mixed') + '"]'); if (sub) sub.checked = true;
+  const lv = document.querySelector('input[name="math"][value="' + save.settings.mathLevel + '"]'); if (lv) lv.checked = true;
+}
+document.addEventListener('change', (e) => {
+  if (e.target.name === 'subject') { rec.subject = e.target.value; writeRecords(); }
+  else if (e.target.name === 'math') { save.settings.mathLevel = e.target.value; writeRecords(); try { const cur = JSON.parse(localStorage.getItem('number-dash.v1') || '{}'); cur.settings = save.settings; localStorage.setItem('number-dash.v1', JSON.stringify(cur)); } catch (err) { /* ignore */ } }
+});
+$('#playBtn').addEventListener('click', () => openBrief(done() >= 50 ? rec.last || 50 : nextLevel()));
+$('#levelsBtn').addEventListener('click', () => openLevels());
+$('#hangarBtn').addEventListener('click', () => openHangar());
+$('#levelsBack').addEventListener('click', goHome);
+$('#hangarBack').addEventListener('click', goHome);
+$('#briefBack').addEventListener('click', () => openLevels());
+$('#musicBtn').addEventListener('click', () => { $('#musicBtn').textContent = toggleMusic() ? 'Music on' : 'Music off'; Sound.play('menu'); });
+$('#speakBtn').addEventListener('click', () => { save.settings.speak = !save.settings.speak; writeRecords(); try { const cur = JSON.parse(localStorage.getItem('number-dash.v1') || '{}'); cur.settings = save.settings; localStorage.setItem('number-dash.v1', JSON.stringify(cur)); } catch (err) { /* ignore */ } $('#speakBtn').textContent = save.settings.speak ? 'Read aloud on' : 'Read aloud off'; });
+function openLevels() {
+  if (S) { paused = true; MB.release(S); }
+  Sound.laser(false); Sound.play('menu');
+  document.body.classList.add('menu');
+  const box = $('#worlds'), d = done();
+  box.textContent = '';
+  for (let w = 0; w < 5; w++) {
+    const sec = document.createElement('section'); sec.className = 'world';
+    let st = 0; for (let i = 1; i <= 10; i++) st += starsOf(w * 10 + i);
+    sec.innerHTML = '<h3><span></span><small>⭐ ' + st + ' / 30</small></h3><div class="lvgrid"></div>';
+    sec.querySelector('h3 span').textContent = ['🌃', '🏜️', '🏔️', '🌋', '🚀'][w] + ' ' + WORLD_NAMES[w];
+    const grid = sec.querySelector('.lvgrid');
+    for (let i = 1; i <= 10; i++) {
+      const n = w * 10 + i, L = LEVELS[n - 1], b = document.createElement('button');
+      b.className = 'lv' + (L && L.boss ? ' boss' : '') + (n === d + 1 ? ' next' : '');
+      b.disabled = n > d + 1;
+      const s = starsOf(n);
+      b.innerHTML = '<b></b><span></span><i></i>';
+      b.querySelector('b').textContent = n > d + 1 ? '🔒' : String(n);
+      b.querySelector('span').textContent = L ? (L.boss ? '👑 ' : '') + L.name : '';
+      b.querySelector('i').innerHTML = n > d + 1 ? '' : starRow(s);
+      b.setAttribute('aria-label', 'Level ' + n + ', ' + (L ? L.name : '') + (n > d + 1 ? ', locked' : ', ' + s + ' stars'));
+      b.addEventListener('click', () => openBrief(n));
+      grid.append(b);
+    }
+    box.append(sec);
+  }
+  $('#starTotal').textContent = totalStars() + ' of 150 stars · ' + Math.min(50, d) + ' of 50 levels cleared';
+  showScreen('levels');
+  const nx = box.querySelector('.lv.next');
+  if (nx) requestAnimationFrame(() => { try { nx.scrollIntoView({ block: 'center' }); } catch (e) { /* ignore */ } });
+}
+function portrait(kind, size) {
+  const c = document.createElement('canvas'); c.width = c.height = size;
+  const g = c.getContext('2d');
+  g.fillStyle = '#161a3d'; g.fillRect(0, 0, size, size);
+  if (OBST_EMOJI[kind]) { g.font = (size * 0.56) + 'px ' + '"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(OBST_EMOJI[kind], size / 2, size / 2 + size * 0.04); return c; }
+  const base = MB.EN[kind] || { h: 2, r: 1 };
+  const e = { k: kind, id: 1, x: 0, y: 0, z: 0, h: base.h, r: base.r, t: 0, cd: 9, tel: 0.5, st: 'hold', shieldUp: true, sc: 9, ph: 0, scd: 9, turns: [], tl: 1, nl: 1, drift: 0 };
+  const tall = kind === 'sentinel' ? 5.8 : kind === 'carrier' ? 4.2 : kind === 'bomber' ? 2.2 : kind === 'drone' ? 1.6 : (base.h || 2) + 0.6;
+  const wide = kind === 'carrier' ? 8.4 : kind === 'bomber' ? 6 : kind === 'spider' ? 3.4 : kind === 'drone' ? 2.3 : 2.8;
+  const s = Math.min(size * 0.86 / tall, size * 0.9 / wide);
+  g.save(); g.translate(size / 2, size * 0.5 + tall * s * 0.5); g.scale(s, s);
+  ART.begin(g, s, 0);
+  try { ART[kind === 'shield' ? 'shield' : kind](g, e, 0.4); } catch (err) { /* a picture must never stop the menu */ }
+  g.restore();
+  return c;
+}
+function bossPortrait(b, size) {
+  const c = document.createElement('canvas'); c.width = c.height = size;
+  const g = c.getContext('2d'), D = MB.BOSSES[b];
+  g.fillStyle = '#161a3d'; g.fillRect(0, 0, size, size);
+  const B = { b: b, mode: 'open', t: 0, x: 0, y: 0, z: 0, h: D.h, r: D.r, pose: null, poseT: 0 };
+  const tall = b === 'titan' ? 10 : b === 'omega' ? 8.5 : b === 'dragon' ? 7.5 : 6.5, wide = b === 'dragon' ? 13.5 : b === 'omega' ? 9.8 : 9;
+  const s = Math.min(size * 0.88 / tall, size * 0.92 / wide);
+  g.save(); g.translate(size / 2, size * 0.5 + tall * s * 0.45); g.scale(s, s);
+  ART.begin(g, s, 0);
+  try { ART2.boss(g, B, 0.5); } catch (err) { /* ignore */ }
+  g.restore();
+  return c;
+}
+function guideItem(canvas, title, text, locked) {
+  const d = document.createElement('div'); d.className = 'witem' + (locked ? ' locked' : '');
+  d.append(canvas);
+  const t = document.createElement('div'); t.innerHTML = '<b></b><p></p>'; t.querySelector('b').textContent = title; t.querySelector('p').textContent = text; d.append(t);
+  return d;
+}
+function openBrief(n) {
+  const L = LEVELS[n - 1];
+  if (!L) return;
+  if (S) { paused = true; MB.release(S); }
+  Sound.laser(false); Sound.init(); Sound.play('menu');
+  document.body.classList.add('menu');
+  $('#briefWorld').textContent = ['🌃', '🏜️', '🏔️', '🌋', '🚀'][L.w] + ' ' + WORLD_NAMES[L.w] + ' · Level ' + n;
+  $('#briefName').textContent = L.boss ? 'Boss: ' + L.name : L.name;
+  const box = $('#briefIntro');
+  box.textContent = '';
+  if (L.boss) box.append(guideItem(bossPortrait(L.boss, 116), (BOSS_INFO[L.boss] || [L.name])[0], (BOSS_INFO[L.boss] || ['', ''])[1] + ' Its shield shows a question: shoot the right answer orb, then blast the boss while the shield is down.'));
+  for (const thing of L.intro || []) if (GUIDE[thing]) box.append(guideItem(portrait(thing, 116), 'New: ' + GUIDE[thing][0], GUIDE[thing][1]));
+  const d = done();
+  for (const w of MB.ORDER) if (MB.WEAPONS[w].unlock > 0 && MB.WEAPONS[w].unlock === n - 1 && d >= n - 1) box.append(guideItem(iconCanvas(w, 116), 'New weapon: ' + WEAPON_INFO[w][0], WEAPON_INFO[w][1]));
+  if (n === 1) box.append(guideItem(iconCanvas('blaster', 116), 'How to fight', 'Tap an enemy to fire at it. Move with ◀ ▶ and jump with the Jump button. At a gate, tap the panel with the right answer.'));
+  const tips = ['Red balls: move to another lane.', 'Low walls and orange waves: jump!', 'Grab 🔧 to repair your mech.', 'Shoot crates: some have prizes inside.', 'Hit lots of robots in a row for a combo.', 'Switch weapons with the buttons at the bottom.', 'Tall blocks cannot be jumped: change lanes.'];
+  $('#briefTip').textContent = '💡 ' + tips[n % tips.length];
+  $('#startBtn').onclick = () => startLevel(n);
+  showScreen('brief');
+}
+let viewMech = null;
+function drawMechView(c, t) {
+  const g = c.getContext('2d'), W = c.width, H = c.height;
+  g.clearRect(0, 0, W, H);
+  const gr = g.createLinearGradient(0, 0, 0, H); gr.addColorStop(0, '#2a1d52'); gr.addColorStop(1, '#ff6fb1');
+  g.fillStyle = gr; rrPath(g, 0, 0, W, H, 28); g.fill();
+  g.fillStyle = 'rgba(20,10,40,0.35)'; g.beginPath(); g.ellipse(W / 2, H * 0.9, W * 0.3, H * 0.06, 0, 0, Math.PI * 2); g.fill();
+  const M = { walk: t * 2.2, air: false, land: 0, recoil: 0, power: 0, hurt: 0, shield: 0, side: 1, charge: 0, heat: 0, holding: false, vy: 0 };
+  const s = H / 4.1;
+  g.save(); g.translate(W / 2, H * 0.9); g.scale(s, s);
+  ART.begin(g, s, 0);
+  ART.mech(g, M, t, ART.PAINTS[rec.paint || 0], rec.weapon || 'blaster');
+  g.restore();
+}
+function rrPath(g, x, y, w, h, r) { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); }
+function viewLoop(t) {
+  requestAnimationFrame(viewLoop);
+  const home = !$('#s-home').hidden, hang = !$('#s-hangar').hidden;
+  if (home) drawMechView($('#homeMech'), t / 1000);
+  if (hang) drawMechView($('#hangarMech'), t / 1000);
+}
+requestAnimationFrame(viewLoop);
+function openHangar() {
+  document.body.classList.add('menu');
+  const paints = $('#paints'), total = totalStars();
+  paints.textContent = '';
+  ART.PAINTS.forEach((p, i) => {
+    const b = document.createElement('button');
+    b.className = 'paint' + ((rec.paint || 0) === i ? ' on' : '');
+    b.style.background = 'linear-gradient(135deg, ' + p.main + ' 0 55%, ' + p.accent + ' 55%)';
+    b.disabled = paintNeeds(i) > total;
+    b.setAttribute('aria-label', p.name + (b.disabled ? ', needs ' + paintNeeds(i) + ' stars' : ''));
+    if (b.disabled) { const s = document.createElement('small'); s.textContent = '⭐' + paintNeeds(i); b.append(s); }
+    b.addEventListener('click', () => { rec.paint = i; writeRecords(); openHangar(); });
+    paints.append(b);
+  });
+  const d = done(), wl = $('#wlist');
+  wl.textContent = '';
+  for (const w of MB.ORDER.concat(['nova'])) {
+    const need = w === 'nova' ? MB.NOVA_UNLOCK : MB.WEAPONS[w].unlock;
+    wl.append(guideItem(iconCanvas(w, 116), WEAPON_INFO[w][0] + (need > d ? ' 🔒' : ''), need > d ? 'Finish level ' + need + ' to unlock. ' + WEAPON_INFO[w][1] : WEAPON_INFO[w][1], need > d));
+  }
+  const el = $('#elist');
+  el.textContent = '';
+  const met = MB.ENEMY_ORDER.filter((k) => rec.seen && rec.seen[k]);
+  if (!met.length) el.append(Object.assign(document.createElement('p'), { className: 'note', textContent: 'Play a level to meet your first robots.' }));
+  for (const k of met) el.append(guideItem(portrait(k, 116), GUIDE[k][0], GUIDE[k][1]));
+  showScreen('hangar');
+}
+// remember which enemies the child has met (for the hangar's guide)
+setInterval(() => { if (!S || paused) return; let ch = false; for (const e of S.ents) if (e.c === 'enemy' && GUIDE[e.k] && !(rec.seen || {})[e.k] && e.z < 60) { rec.seen = rec.seen || {}; rec.seen[e.k] = 1; ch = true; } if (ch) writeRecords(); }, 1000);
+
+/* ================= start ================= */
+arcadeLinks();
+arcadeGuards(() => { if (S && !paused && S.state === 'play') pause(); });
+goHome();
+// a level ready behind the menu, so the battlefield is never empty
+(function idle() {
+  const L = LEVELS[Math.max(0, nextLevel() - 1)] || LEVELS[0];
+  if (!L) return;
+  S = MB.start(L, { seed: 5, weapons: ['blaster'] });
+  MR.setLevel(L);
+  paused = true;
+})();
+
+// for the playtests
+window.__mech = {
+  MB: MB, MR: MR, ART: ART, ART2: ART2, rec: rec, save: save, LEVELS: LEVELS, WORDS: WORDS, ask: ask,
+  get S() { return S; }, get paused() { return paused; }, get run() { return run; },
+  start: startLevel, brief: openBrief, levels: openLevels, hangar: openHangar, home: goHome, pause: pause, resume: resume,
+  auto(p) { autopilot = p === false ? null : Object.assign({ react: 0.2, right: 0.9 }, p || {}); return !!autopilot; },
+  speed(x) { speedMul = x || 1; return speedMul; },
+  done: done, fits: fits
+};
+// layout check for the playtests: the HUD, buttons and question stay on the screen and do not cover each other
+function fits() {
+  const out = [], W = innerWidth, H = innerHeight;
+  const box = (el) => (el && !el.hidden && el.offsetParent !== null ? el.getBoundingClientRect() : null);
+  for (const sel of ['#leftBtn', '#rightBtn', '#jumpBtn', '#pauseBtn', '#qbox', '#weapons', '.armour']) {
+    const r = box($(sel)); if (!r || !r.width) continue;
+    if (r.left < -1 || r.top < -1 || r.right > W + 1 || r.bottom > H + 1) out.push(sel + ' off screen');
+  }
+  const pairs = [['#leftBtn', '#weapons'], ['#jumpBtn', '#weapons'], ['#qbox', '#pauseBtn'], ['#qbox', '.armour'], ['#rightBtn', '#jumpBtn']];
+  for (const [a, b] of pairs) {
+    const A = box($(a)), B = box($(b));
+    if (A && B && A.width && B.width && A.left < B.right - 2 && B.left < A.right - 2 && A.top < B.bottom - 2 && B.top < A.bottom - 2) out.push(a + ' covers ' + b);
+  }
+  return out;
+}
+})();
+</script>

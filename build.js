@@ -5,7 +5,7 @@
 const fs = require('fs'), path = require('path'), crypto = require('crypto');
 const root = (...p) => path.join(__dirname, ...p);
 
-const GAMES = ['dash', 'ladder', 'pair', 'pop', 'spell', 'quest', 'memory', 'robot', 'tycoon'].map((dir) => ({ dir: dir, html: require('./games/' + dir + '/build.js')() }));
+const GAMES = ['dash', 'ladder', 'pair', 'pop', 'spell', 'quest', 'memory', 'robot', 'tycoon', 'mech'].map((dir) => ({ dir: dir, html: require('./games/' + dir + '/build.js')() }));
 const hub = fs.readFileSync(root('web', 'hub.html'), 'utf8');
 
 // one page of the site: a real <head> for iPad home-screen use around a game's own head and body
@@ -47,7 +47,8 @@ const pages = [['index.html', sitePage(hub, './')]];
 for (const g of GAMES) { fs.mkdirSync(path.join(docs, g.dir), { recursive: true }); pages.push([g.dir + '/index.html', sitePage(g.html, '../')]); }
 for (const [file, html] of pages) fs.writeFileSync(path.join(docs, file), html);
 const version = crypto.createHash('sha1').update(pages.map((p) => p[1]).join('')).digest('hex').slice(0, 10);
-fs.writeFileSync(path.join(docs, 'sw.js'), fs.readFileSync(root('web', 'sw.js'), 'utf8').replace('__VERSION__', version));
+// every __VERSION__ (the cache name, and the note about it) gets the hash, so each new build is a new cache
+fs.writeFileSync(path.join(docs, 'sw.js'), fs.readFileSync(root('web', 'sw.js'), 'utf8').replace(/__VERSION__/g, version));
 for (const f of ['manifest.webmanifest', 'icon-180.png', 'icon-192.png', 'icon-512.png']) fs.copyFileSync(root('web', f), path.join(docs, f));
 fs.writeFileSync(path.join(docs, '.nojekyll'), '');
 console.log('built docs/: home + ' + GAMES.map((g) => g.dir).join(', ') + ' (version ' + version + ')');

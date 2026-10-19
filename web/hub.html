@@ -1,5 +1,5 @@
 <title>Number Arcade</title>
-<meta name="description" content="Math, memory and English games for kids: Number Dash, Number Ladder, Pair Up, Number Pop, Spell It, English Quest, Memory Lane, Code Robot and Tycoon Town.">
+<meta name="description" content="Math, memory and English games for kids: Number Dash, Number Ladder, Pair Up, Number Pop, Spell It, English Quest, Memory Lane, Code Robot, Tycoon Town and Mech Blaster.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap">
@@ -114,6 +114,8 @@ h1 span { color: var(--sun-deep); }
 .tycoon-art .sky { position: absolute; left: 6%; right: 6%; bottom: 14px; display: flex; align-items: flex-end; justify-content: space-between; font-family: var(--emoji); }
 .tycoon-art .sky span:nth-child(1) { font-size: 1.7rem; } .tycoon-art .sky span:nth-child(2) { font-size: 2.3rem; } .tycoon-art .sky span:nth-child(3) { font-size: 2.9rem; } .tycoon-art .sky span:nth-child(4) { font-size: 3.6rem; }
 .tycoon-art .coins { position: absolute; left: 50%; top: 14px; translate: -50% 0; background: #ffc94d; border: 3px solid #e2a526; color: #4a3500; border-radius: 99px; padding: 6px 14px; font: 700 1.05rem/1 var(--font-display); white-space: nowrap; }
+.mech-art { background: #2a1652; }
+.mech-art svg { display: block; width: 100%; height: 100%; }
 .quest-art .cup { position: absolute; right: 7%; top: 14px; font: 2.6rem/1 var(--emoji); }
 .skills { display: flex; flex-wrap: wrap; gap: 6px; }
 .skills span { font: 800 .7rem/1 var(--font-body); text-transform: uppercase; letter-spacing: .07em; padding: 6px 9px; border-radius: 99px; background: var(--card-2); color: var(--ink-soft); }
@@ -169,11 +171,12 @@ h1 span { color: var(--sun-deep); }
   <header>
     <div class="glyphs" aria-hidden="true"><span>+</span><span>&minus;</span><span>&times;</span><span>&divide;</span></div>
     <h1>Number <span>Arcade</span></h1>
-    <p class="lead">Math, English, memory, coding and business games for curious kids. Pick one!</p>
+    <p class="lead">Math, English, memory, coding, business and action games for curious kids. Pick one!</p>
   </header>
   <section class="news" id="news" aria-label="New in the arcade" hidden>
     <h2>✨ New in the arcade</h2>
     <ul>
+      <li><a href="mech/"><i aria-hidden="true">🦾</i><span><b>Mech Blaster</b>: a new game! Pilot a battle mech through 5 worlds and 50 levels, blast robots and giant bosses, and open every gate with the right number or missing word</span></a></li>
       <li><a href="tycoon/"><i aria-hidden="true">💼</i><span><b>Tycoon Town</b>: four cities to choose, seasons and snow, carnival parades, storms and earthquakes, insurance, and an airport to build</span></a></li>
       <li><a href="robot/"><i aria-hidden="true">🤖</i><span><b>Code Robot</b>: 11 worlds now: paint pictures, robot teams, counters, mixed-up code and code reading</span></a></li>
       <li><a href="memory/"><i aria-hidden="true">🧠</i><span><b>Memory Lane</b>: a new game, remember numbers, words and squares</span></a></li>
@@ -313,6 +316,44 @@ h1 span { color: var(--sun-deep); }
         <span class="play">Play</span>
       </div>
     </a>
+    <a class="game" href="mech/">
+      <div class="art mech-art" aria-hidden="true">
+        <svg viewBox="0 0 340 170" preserveAspectRatio="xMidYMid slice">
+          <defs><linearGradient id="mbSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b0b3a"/><stop offset="1" stop-color="#ff5fa2"/></linearGradient></defs>
+          <rect width="340" height="170" fill="url(#mbSky)"/>
+          <circle cx="280" cy="30" r="14" fill="#fff0fa"/>
+          <path d="M0 78h22v-26h18v26h14v-40h20v40h16v-22h24v22h150v-30h18v30h16v-46h22v46h20v-18h20v18v92H0z" fill="#2a1652"/>
+          <polygon points="150,78 190,78 345,170 -5,170" fill="#2b2547"/>
+          <polygon points="150,78 156,78 30,170 -5,170" fill="#ff4fd8"/><polygon points="184,78 190,78 345,170 310,170" fill="#ff4fd8"/>
+          <polygon points="164,80 166,80 128,170 118,170" fill="#5ff3ff"/><polygon points="174,80 176,80 222,170 212,170" fill="#5ff3ff"/>
+          <rect x="126" y="50" width="6" height="30" fill="#3d3560"/><rect x="208" y="50" width="6" height="30" fill="#3d3560"/><rect x="126" y="46" width="88" height="7" rx="2" fill="#3d3560"/>
+          <g font-family="Fredoka, Arial Rounded MT Bold, sans-serif" font-weight="700" font-size="9" text-anchor="middle">
+            <rect x="134" y="57" width="22" height="16" rx="5" fill="#121838" stroke="#5ff3ff" stroke-width="1.5"/><text x="145" y="68" fill="#fff">56</text>
+            <rect x="159" y="57" width="22" height="16" rx="5" fill="#121838" stroke="#5ff3ff" stroke-width="1.5"/><text x="170" y="68" fill="#fff">48</text>
+            <rect x="184" y="57" width="22" height="16" rx="5" fill="#121838" stroke="#5ff3ff" stroke-width="1.5"/><text x="195" y="68" fill="#fff">54</text>
+          </g>
+          <g transform="translate(92 40)"><circle r="9" fill="#ffc928" stroke="#17132b" stroke-width="1.5"/><circle r="4.5" fill="#fff"/><circle r="2.5" fill="#ff3d5a"/><path d="M-6 -8l-8 -4M6 -8l8 -4" stroke="#3a3f5a" stroke-width="2"/></g>
+          <circle cx="112" cy="70" r="4" fill="#ff3d6a"/><circle cx="112" cy="70" r="7" fill="#ff3d6a" opacity=".3"/>
+          <g transform="translate(170 166)" stroke="#17132b" stroke-width="1.6" stroke-linejoin="round">
+            <rect x="-17" y="-34" width="11" height="24" rx="3" fill="#8a93b0"/><rect x="6" y="-34" width="11" height="24" rx="3" fill="#8a93b0"/>
+            <path d="M-20 -14h16l2 14h-20z M4 -14h16l2 14h-20z" fill="#ff8a3d"/>
+            <path d="M-28 -78h56l3 14l-9 26h-44l-9 -26z" fill="#ff8a3d"/>
+            <circle cx="0" cy="-58" r="8" fill="#1b1f3c"/><circle cx="0" cy="-58" r="4.5" fill="#62f2ff" stroke="none"/>
+            <rect x="-46" y="-84" width="22" height="17" rx="5" fill="#ff8a3d"/><rect x="24" y="-84" width="22" height="17" rx="5" fill="#ff8a3d"/>
+            <rect x="-42" y="-66" width="10" height="22" rx="3" fill="#3a3f5a"/><rect x="32" y="-66" width="10" height="22" rx="3" fill="#3a3f5a"/>
+            <rect x="-11" y="-91" width="22" height="13" rx="5" fill="#e0742f"/>
+          </g>
+        </svg>
+      </div>
+      <div class="body">
+        <span class="num">Game 10</span>
+        <h2>Mech Blaster</h2>
+        <p>Pilot a battle mech down a 2.5D road through five worlds: dodge, jump and blast drones, bikes, bombers and giant bosses with eight weapons, and open every gate by shooting the right number or the missing word.</p>
+        <div class="skills"><span>Math</span><span>English</span><span>Action</span></div>
+        <span class="meta" id="mechMeta">50 levels · 5 worlds · 5 bosses</span>
+        <span class="play">Play</span>
+      </div>
+    </a>
   </div>
   <dl class="stats" id="stats"></dl>
   <section class="badges" aria-label="Badges"><div class="today-head"><h2>Badges</h2><span class="streak" id="badgeCount"></span></div><div class="shelf" id="shelf" role="list"></div></section>
@@ -322,11 +363,14 @@ h1 span { color: var(--sun-deep); }
 <script>
 (function () {
   var read = function (key) { try { return JSON.parse(localStorage.getItem(key) || '{}') || {}; } catch (e) { return {}; } };
-  var d = read('number-dash.v1'), l = read('number-ladder.v1'), pu = read('pair-up.v1'), np = read('number-pop.v1'), sp = read('spell-it.v1'), eq = read('english-quest.v1'), ml = read('memory-lane.v1'), rb = read('code-robot.v1'), ty = read('tycoon-town.v1');
+  var d = read('number-dash.v1'), l = read('number-ladder.v1'), pu = read('pair-up.v1'), np = read('number-pop.v1'), sp = read('spell-it.v1'), eq = read('english-quest.v1'), ml = read('memory-lane.v1'), rb = read('code-robot.v1'), ty = read('tycoon-town.v1'), mb = read('mech-blaster.v1');
   var rbDone = rb.done || 0, rbStars = rb.stars || 0;   // Code Robot keeps its totals
   var tyBest = null; (ty.slots || []).forEach(function (x) { if (x && (!tyBest || x.nw > tyBest.nw)) tyBest = x; });
   var tyGame = tyBest && tyBest.game, tyTraps = tyGame && tyGame.stats ? tyGame.stats.traps || 0 : 0, tyNw = tyBest ? tyBest.nw : 0;
   var mlBest = ml.best || {}, numSpan = mlBest.number || 0;
+  // Mech Blaster: levels cleared (the highest one finished) and stars
+  var mbDone = 0, mbStars = 0; for (var mk in (mb.levels || {})) { var mv = mb.levels[mk]; if (mv && mv.s > 0) { mbDone = Math.max(mbDone, +mk); mbStars += mv.s; } }
+  var mbBosses = (mb.stats && mb.stats.bosses) || 0;
   var EQ = ['Starter · Pre-A1', 'Mover · A1', 'Flyer · A2', 'Explorer · B1', 'Achiever · B2', 'Expert · C1', 'Band 8 · C1+'], eqStage = Math.min(7, eq.unlocked || 1);
   var popStars = 0; for (var w in (np.worlds || {})) popStars += np.worlds[w].stars || 0;
   var learned = Array.isArray(sp.learned) ? sp.learned.length : 0;
@@ -341,6 +385,7 @@ h1 span { color: var(--sun-deep); }
   if (rbDone) document.getElementById('robotMeta').textContent = rbDone + ' of 208 levels · ' + rbStars + ' ★';
   if (tyBest) document.getElementById('tycoonMeta').textContent = tyBest.name + ' · worth ' + (tyNw >= 1e6 ? '$' + (tyNw / 1e6).toFixed(1) + 'M' : '$' + Math.round(tyNw).toLocaleString('en-GB'));
   if (eq.lessons) document.getElementById('questMeta').textContent = 'Now at ' + EQ[eqStage - 1];
+  if (mbDone) document.getElementById('mechMeta').textContent = mbDone + ' of 50 levels · ' + mbStars + ' ★';
   // daily streak from the days every game marks when it saves
   var days = read('arcade-days.v1'), key = function (d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
   var d0 = new Date(), streak = 0, played = !!days[key(d0)];
@@ -360,7 +405,8 @@ h1 span { color: var(--sun-deep); }
     [{ href: 'pop/', ic: '🫧', t: 'Number Pop', d: popNext ? 'Get 3 stars in ' + (POP[popNext - 1] || 'a new world') : 'Beat a best time' },
      { href: 'ladder/', ic: '🪜', t: 'Number Ladder', d: l.best ? (l.best >= 30 ? 'Climb it again in English mode' : 'Beat your best: rung ' + l.best) : 'Climb to rung 10' },
      { href: 'dash/', ic: '🏃', t: 'Number Dash', d: done ? 'Finish a new level (' + done + ' of 50 done)' : (d.settings && d.settings.mathLevel === 'starter' ? 'Try the slow Chill pack' : 'Start with Cloud Hop') },
-     { href: 'robot/', ic: '🤖', t: 'Code Robot', d: rbDone >= 208 ? (rbStars < 624 ? 'Win more stars (' + rbStars + ' of 624)' : 'Replay a level with fewer blocks') : rbDone ? 'Solve a new level (' + rbDone + ' of 208 done)' : 'Program your first robot' }][dayNo % 4],
+     { href: 'robot/', ic: '🤖', t: 'Code Robot', d: rbDone >= 208 ? (rbStars < 624 ? 'Win more stars (' + rbStars + ' of 624)' : 'Replay a level with fewer blocks') : rbDone ? 'Solve a new level (' + rbDone + ' of 208 done)' : 'Program your first robot' },
+     { href: 'mech/', ic: '🦾', t: 'Mech Blaster', d: mbDone >= 50 ? 'Win more stars (' + mbStars + ' of 150)' : mbDone ? 'Clear level ' + (mbDone + 1) + ' (' + mbDone + ' of 50 done)' : 'Blast your first robots' }][dayNo % 5],
     [{ href: 'spell/', ic: '✏️', t: 'Spell It', d: missedSpell ? 'Practise ' + missedSpell + ' tricky ' + (missedSpell === 1 ? 'word' : 'words') : 'Learn 10 new words' },
      { href: 'pair/', ic: '🃏', t: 'Pair Up', d: pu.wins ? 'Try a new kind of cards' : 'Find 6 pairs' },
      { href: 'memory/', ic: '🧠', t: 'Memory Lane', d: numSpan ? 'Beat your number span of ' + numSpan : 'Remember 4 numbers in a row' },
@@ -377,14 +423,14 @@ h1 span { color: var(--sun-deep); }
     '<b>Math:</b> ' + right + ' answers right' + (tricky ? ', ' + tricky + (tricky === 1 ? ' fact' : ' facts') + ' still being practised' : ''),
     '<b>Memory:</b> ' + (pu.wins || 0) + ' Pair Up boards cleared, ' + (pu.pairs || 0) + ' pairs found' + (ml.rounds ? ', Memory Lane longest spans: numbers ' + (mlBest.number || 0) + ', words ' + (mlBest.word || 0) + ', grid ' + (mlBest.grid || 0) + ' (' + ml.rounds + (ml.rounds === 1 ? ' round' : ' rounds') + ')' : ''),
     '<b>STEM and business:</b> Code Robot ' + rbDone + ' of 208 levels (' + rbStars + ' stars)' + (tyBest ? ', Tycoon Town: ' + esc(tyBest.name) + ' worth $' + Math.round(tyNw).toLocaleString('en-GB') + ' in month ' + (tyBest.month + 1) + ', CEO title ' + tyBest.title + ', ' + tyTraps + ' traps avoided' : ', Tycoon Town not started yet'),
-    '<b>Games:</b> Dash ' + stars + ' / 150 stars, Ladder best rung ' + (l.best || 0) + ' / 30, Pop ' + popStars + ' stars',
+    '<b>Games:</b> Dash ' + stars + ' / 150 stars, Ladder best rung ' + (l.best || 0) + ' / 30, Pop ' + popStars + ' stars' + (mbDone ? ', Mech Blaster ' + mbDone + ' of 50 levels (' + mbStars + ' stars)' : ''),
     '<b>Days played:</b> ' + week + ' of the last 7' + (streak ? ', streak ' + streak : '')
   ].map(function (t) { return '<li>' + t + '</li>'; }).join('');
   // badges, in the order a child meets them; one earned since the last visit says New! once
   var eqTests = 0; for (var st in (eq.tests || {})) if (eq.tests[st] && eq.tests[st].passed) eqTests++;
   var mocks = Array.isArray(eq.mocks) ? eq.mocks : [];
   var tookL = mocks.some(function (m) { return m.k === 'L'; }), tookR = mocks.some(function (m) { return !m.k; });
-  var gamesPlayed = [Object.keys(d.levels || {}).length, l.best || l.tops, pu.wins, popStars, sp.rounds || learned, eq.lessons, ml.rounds || ml.seqs, rbDone, tyBest && tyBest.month].filter(Boolean).length;
+  var gamesPlayed = [Object.keys(d.levels || {}).length, l.best || l.tops, pu.wins, popStars, sp.rounds || learned, eq.lessons, ml.rounds || ml.seqs, rbDone, tyBest && tyBest.month, mbDone].filter(Boolean).length;
   var BADGES = [
     ['🌟', 'First star', 'Get a star in Number Dash', stars >= 1],
     ['🪜', 'Halfway up', 'Reach rung 15 on the ladder', (l.best || 0) >= 15],
@@ -397,7 +443,9 @@ h1 span { color: var(--sun-deep); }
     ['🤖', 'Young coder', 'Solve 10 Code Robot levels', rbDone >= 10],
     ['🕵️', 'Street smart', 'Avoid 5 traps in Tycoon Town', tyTraps >= 5],
     ['💼', 'Tycoon', 'Grow a Tycoon Town company to $100,000', tyNw >= 100000],
-    ['🌈', 'All-rounder', 'Play all nine games', gamesPlayed >= 9],
+    ['🦾', 'Mech pilot', 'Clear 10 Mech Blaster levels', mbDone >= 10],
+    ['👑', 'Boss breaker', 'Beat a boss in Mech Blaster', mbBosses >= 1],
+    ['🌈', 'All-rounder', 'Play all ten games', gamesPlayed >= 10],
     ['⭐', 'Star collector', 'Get 30 Dash stars', stars >= 30],
     ['🏔️', 'Top of the tower', 'Climb all 30 rungs', (l.tops || 0) >= 1],
     ['🔢', 'Math whiz', 'Get 500 answers right', right >= 500],
@@ -406,7 +454,8 @@ h1 span { color: var(--sun-deep); }
     ['📚', 'Bookworm', 'Spell 200 words perfectly', learned >= 200],
     ['📝', 'Test ready', 'Try both IELTS practice tests', tookL && tookR],
     ['🗣️', 'Brave speaker', 'Finish 3 speaking practices in English Quest', ((eq.speak && eq.speak.n) || 0) >= 3],
-    ['🏆', 'Dash champion', 'Get 100 Dash stars', stars >= 100]
+    ['🏆', 'Dash champion', 'Get 100 Dash stars', stars >= 100],
+    ['🚀', 'Star pilot', 'Clear all 50 Mech Blaster levels', mbDone >= 50]
   ];
   var seenB = read('arcade-badges.v1'), gotB = 0, freshB = [];
   BADGES.forEach(function (b) { if (b[3]) { gotB++; if (!seenB[b[1]]) freshB.push(b[1]); } });
@@ -417,7 +466,7 @@ h1 span { color: var(--sun-deep); }
   }).join('');
   if (freshB.length) { freshB.forEach(function (n) { seenB[n] = Date.now(); }); try { localStorage.setItem('arcade-badges.v1', JSON.stringify(seenB)); } catch (e) { /* private mode: it glows again next time */ } }
   // the news card: shown until Got it, for this batch of news only
-  var NEWS_ID = '2026-10-18e', newsBox = document.getElementById('news');
+  var NEWS_ID = '2026-10-19a', newsBox = document.getElementById('news');
   newsBox.hidden = read('arcade-news.v1').seen === NEWS_ID;
   document.getElementById('newsOk').addEventListener('click', function () {
     newsBox.hidden = true;

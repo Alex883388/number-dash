@@ -2,11 +2,12 @@
   "name": "number-arcade",
   "version": "2.0.0",
   "private": true,
-  "description": "Math games for kids: Number Dash and Number Ladder",
+  "description": "Number Arcade: math, English, memory, coding, business and action games for kids",
   "scripts": {
     "build": "node build.js",
     "check:dash": "node games/dash/tools/check.js",
     "check:dash:quick": "node games/dash/tools/check.js --quick",
+    "check:mech": "node games/mech/tools/check-words.js && node games/mech/tools/check.js",
     "playtest": "node games/dash/playtest/shoot.js",
     "icons": "node web/make-icons.js"
   }
