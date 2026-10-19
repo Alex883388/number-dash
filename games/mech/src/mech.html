@@ -63,6 +63,10 @@ body.boss #bossbar { top: calc(62px + env(safe-area-inset-top, 0px)); }
 .pbtn.nova canvas { width: 70%; height: 70%; }
 .pbtn.nova b { position: absolute; right: -4px; top: -4px; background: #c18cff; color: #1a0d33; border-radius: 99px; font: 800 .8rem/1 var(--font-body); padding: 4px 7px; }
 .pbtn.nova.empty { opacity: .35; }
+.pbtn.answer { width: 92px; height: 92px; background: rgba(70, 48, 0, .5); border-color: #ffd23f; font-size: .95rem; flex-direction: column; gap: 3px; opacity: .6; }
+.pbtn.answer span { font: 1.8rem/1 var(--emoji); }
+.pbtn.answer.ready { opacity: 1; background: #ffc531; color: #3d2a00; border-color: #fff3b0; text-shadow: none; box-shadow: 0 0 0 4px rgba(255, 210, 63, .45), 0 6px 18px rgba(0, 0, 0, .3); animation: ready 1s ease-in-out infinite; }
+@keyframes ready { 50% { transform: scale(1.07); } }
 #weapons { position: absolute; left: 50%; translate: -50% 0; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); display: flex; gap: 8px; pointer-events: none; }
 .wbtn {
   pointer-events: auto; touch-action: none; position: relative; width: 56px; height: 56px; padding: 6px; border-radius: 16px; cursor: pointer;
@@ -70,13 +74,11 @@ body.boss #bossbar { top: calc(62px + env(safe-area-inset-top, 0px)); }
 }
 .wbtn canvas { width: 100%; height: 100%; display: block; }
 .wbtn.on { border-color: #ffd23f; background: rgba(70, 56, 10, .82); box-shadow: 0 0 0 3px rgba(255, 210, 63, .35), 0 4px 14px rgba(0, 0, 0, .3); }
-.wbtn .heat { position: absolute; left: 6px; right: 6px; bottom: 4px; height: 4px; border-radius: 2px; background: #ff7a3d; transform-origin: left; transform: scaleX(0); }
-.wbtn .heat.hot { background: #ff3d5a; }
 .wbtn .key { position: absolute; left: 5px; top: 2px; font: 800 .62rem/1 var(--font-body); color: rgba(255, 255, 255, .55); }
 @media (pointer: coarse) { .wbtn .key { display: none; } }
 @media (max-width: 760px) {
   .pbtn { width: 66px; height: 66px; font-size: 1.8rem; }
-  .pbtn.jump { width: 78px; height: 78px; }
+  .pbtn.jump, .pbtn.answer { width: 78px; height: 78px; }
   .wbtn { width: 46px; height: 46px; border-radius: 13px; padding: 4px; }
   #weapons { gap: 6px; }
 }
@@ -86,7 +88,8 @@ body.boss #bossbar { top: calc(62px + env(safe-area-inset-top, 0px)); }
 }
 @media (max-height: 460px) {
   .pbtn { width: 58px; height: 58px; font-size: 1.6rem; }
-  .pbtn.jump { width: 68px; height: 68px; }
+  .pbtn.jump, .pbtn.answer { width: 64px; height: 64px; font-size: .8rem; }
+  .pbtn.answer span { font-size: 1.4rem; }
   .pbtn.nova { width: 50px; height: 50px; }
   .wbtn { width: 42px; height: 42px; padding: 3px; }
   #qbox { top: calc(58px + env(safe-area-inset-top, 0px)); padding: 6px 14px 8px; font-size: 1.15rem; }
@@ -136,7 +139,7 @@ details.others ul { margin: 10px 0 4px; padding-left: 20px; color: var(--ink-sof
 .toast { --toast-top: 34%; }
 </style>
 <!--BODY-->
-<canvas id="game" aria-label="The battlefield: tap an enemy to fire at it, tap the right answer on a gate"></canvas>
+<canvas id="game" aria-label="The battlefield: drag left and right to move the mech; its guns fire straight ahead"></canvas>
 
 <div id="hud" class="hud">
   <div class="hud-top">
@@ -160,6 +163,7 @@ details.others ul { margin: 10px 0 4px; padding-left: 20px; color: var(--ink-sof
   <div id="weapons" aria-label="Weapons"></div>
   <div class="pad right">
     <button class="pbtn nova" id="novaBtn" aria-label="Nova bomb" hidden><canvas width="64" height="64"></canvas><b id="novaNum">2</b></button>
+    <button class="pbtn answer" id="answerBtn" aria-label="Answer: shoot the answer you stand under" hidden><span>🎯</span>Answer</button>
     <button class="pbtn jump" id="jumpBtn" aria-label="Jump"><span>⤒</span>Jump</button>
   </div>
 </div>
@@ -196,12 +200,12 @@ details.others ul { margin: 10px 0 4px; padding-left: 20px; color: var(--ink-sof
       </div>
       <details class="others"><summary>❓ How to play</summary>
         <ul>
-          <li><b>Move</b> between the three lanes with ◀ ▶ (or swipe left and right). <b>Jump</b> with the Jump button (or swipe up).</li>
-          <li><b>Fire</b>: tap an enemy. Keep your finger down to keep firing.</li>
-          <li><b>Gates</b> block the road. Read the question and shoot the panel with the right answer to blow the gate open.</li>
-          <li><b>Red balls</b>: move to another lane. <b>Orange waves along the ground</b>: jump. <b>Red lanes and circles</b> on the road: get out of them!</li>
-          <li>Finish levels to unlock new <b>weapons</b>. Every tenth level has a <b>boss</b>: answer its shield questions, then blast it.</li>
-          <li>Keyboard: ← → move, ↑ or Space jump, click to fire, 1–7 weapons, N nova, Z X C answer the left, middle or right panel, P pause.</li>
+          <li><b>Move</b> left and right: drag your finger across the screen, or hold ◀ ▶. <b>Jump</b> with the Jump button (or flick up).</li>
+          <li><b>Your guns fire straight ahead by themselves</b> when a robot is in front of you: line up with it to hit it.</li>
+          <li><b>Gates</b> block the road. Read the question, stand under the panel with the right answer (it lights up gold) and press the gold <b>Answer</b> button.</li>
+          <li><b>Red balls</b>: move aside. <b>Orange waves along the ground</b>: jump. <b>Red lanes and circles</b> on the road: get out of them!</li>
+          <li>Finish levels to unlock new <b>weapons</b>. Every tenth level has a <b>boss</b>: stand under the right answer orb and press Answer to break its shield, then blast it.</li>
+          <li>Keyboard: ← → move, ↑ or Space jump, F or Enter answer, 1–7 weapons, N nova, P pause.</li>
           <li>⭐ Finish the level. ⭐⭐ Without your mech going down. ⭐⭐⭐ And every answer right first time.</li>
         </ul>
       </details>
@@ -316,7 +320,7 @@ const SONG_OF = ['city', 'desert', 'ice', 'volcano', 'space'];
 
 /* ================= what each thing is, for the briefings and the hangar ================= */
 const GUIDE = {
-  drone: ['Buzz Drone', 'Hovers ahead and fires red balls. Tap it to shoot it down. Move to another lane to dodge a red ball.'],
+  drone: ['Buzz Drone', 'Hovers ahead and fires red balls. Line up with it: your guns fire straight ahead. Move aside to dodge a red ball.'],
   crate: ['Crates', 'Shoot them open (there may be a prize inside) or go round them.'],
   walker: ['Walker Bot', 'Walks at you and fires. Two hits stop it, or jump right over it!'],
   barrier: ['Barrier', 'A low wall. Jump over it or change lanes.'],
@@ -336,13 +340,13 @@ const GUIDE = {
 };
 const OBST_EMOJI = { crate: '📦', barrier: '🚧', fence: '⚡', mine: '💣', block: '🧱', boulder: '🪨', geyser: '🌋' };
 const WEAPON_INFO = {
-  blaster: ['Blaster', 'Tap to fire. Hold to keep firing.'],
-  gatling: ['Twin Gatling', 'Hold to spray bullets. It gets hot, so let it cool.'],
-  rockets: ['Homing Rockets', 'Two rockets that chase the target and fly over shields.'],
-  lightning: ['Chain Lightning', 'Zaps one enemy and jumps to three more nearby.'],
-  plasma: ['Plasma Cannon', 'Hold to charge, let go to fire. It goes through everything and breaks shields.'],
+  blaster: ['Blaster', 'Quick shots straight ahead.'],
+  gatling: ['Twin Gatling', 'A fast spray of bullets: great against swarms.'],
+  rockets: ['Homing Rockets', 'Two rockets that chase the robot nearest your line and fly over shields.'],
+  lightning: ['Chain Lightning', 'Zaps the robot in front of you and jumps to three more nearby.'],
+  plasma: ['Plasma Cannon', 'Big glowing shots that go through everything and break shields.'],
   freeze: ['Freeze Ray', 'Freezes enemies near the hit, so they cannot move or fire.'],
-  laser: ['Laser Lance', 'Hold for a steady beam. Very strong, but it gets hot.'],
+  laser: ['Laser Lance', 'A steady beam that burns whatever is in front of you.'],
   nova: ['Nova Bomb', 'Clears the screen of shots and small enemies. Two in every level.']
 };
 const BOSS_INFO = {
@@ -424,7 +428,7 @@ function startLevel(n, from) {
   buildWeapons();
   Sound.init(); Sound.play(SONG_OF[L.w] || 'city');
   paused = false; acc = 0; last = performance.now();
-  if (fresh && n === 1) setTimeout(() => toast('Tap the drones to shoot them!', 'hello', 2600), 900);
+  if (fresh && n === 1) setTimeout(() => toast('Drag to move: line up with the drones!', 'hello', 2600), 900);
 }
 function frame(now) {
   requestAnimationFrame(frame);
@@ -525,7 +529,7 @@ function handle(evs) {
 function showQuestion(q, boss) {
   const box = $('#qbox');
   box.className = boss ? 'boss' : '';
-  $('#qKind').textContent = boss ? 'Break the shield: shoot the right answer' : q.kind === 'words' ? 'Missing word: shoot the right one' : 'Gate: shoot the right answer';
+  $('#qKind').textContent = (boss ? 'Break the shield: ' : q.kind === 'words' ? 'Missing word: ' : 'Gate: ') + 'stand under the answer, press 🎯';
   const t = $('#qText');
   t.textContent = '';
   if (q.kind === 'words') {
@@ -576,7 +580,9 @@ let hudKey = '';
 function hud() {
   if (!S) return;
   const M = S.mech, hp = Math.round(M.hp);
-  const key = hp + '|' + S.score + '|' + S.combo + '|' + S.weapon + '|' + Math.round(M.heat * 20) + '|' + (M.hot > 0) + '|' + S.nova + '|' + (S.boss ? Math.round(S.boss.hp) : '') + '|' + M.shield.toFixed(0);
+  const q = (S.gate && !S.gate.open && S.gate.z < MB.RANGE) || (S.boss && S.boss.mode === 'shield');
+  const aimed = q && !S.shells.length && S.state === 'play' ? MB.aimedAnswer(S) : -1;
+  const key = hp + '|' + S.score + '|' + S.combo + '|' + S.weapon + '|' + S.nova + '|' + (S.boss ? Math.round(S.boss.hp) : '') + '|' + M.shield.toFixed(0) + '|' + (q ? 1 : 0) + '|' + aimed;
   if (key === hudKey) return;
   hudKey = key;
   const bar = $('#armBar');
@@ -590,9 +596,10 @@ function hud() {
   $$('#weapons .wbtn').forEach((b) => {
     const on = b.dataset.w === S.weapon;
     b.classList.toggle('on', on);
-    const h = b.querySelector('.heat');
-    if (h) { const hot = on && (S.weapon === 'gatling' || S.weapon === 'laser'); h.style.transform = 'scaleX(' + (hot ? M.heat : 0) + ')'; h.classList.toggle('hot', M.hot > 0); }
   });
+  const ab = $('#answerBtn');
+  ab.hidden = !q;
+  ab.classList.toggle('ready', aimed >= 0);
   const nb = $('#novaBtn');
   nb.hidden = done() < MB.NOVA_UNLOCK;
   $('#novaNum').textContent = S.nova;
@@ -613,7 +620,6 @@ function buildWeapons() {
     b.className = 'wbtn'; b.dataset.w = w; b.setAttribute('aria-label', WEAPON_INFO[w][0]);
     b.append(iconCanvas(w, 96));
     const k = document.createElement('span'); k.className = 'key'; k.textContent = String(i + 1); b.append(k);
-    const h = document.createElement('i'); h.className = 'heat'; b.append(h);
     b.addEventListener('pointerdown', (e) => { e.preventDefault(); e.stopPropagation(); Sound.init(); MB.setWeapon(S, w); });
     box.append(b);
   });
@@ -623,32 +629,26 @@ function buildWeapons() {
   hudKey = '';
 }
 
-/* ================= fingers, mouse and keys ================= */
-let firePtr = null, swipe = null;
+/* ================= fingers, mouse and keys =================
+   A finger dragged across the battlefield slides the mech after it (half the screen's width crosses the whole road); a
+   quick flick up jumps. ◀ ▶ slide it while held; a quick tap moves one lane. The guns fire by themselves. */
+let drag = null;
 function local(e) { const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; }
 cv.addEventListener('pointerdown', (e) => {
   if (!S || paused || S.state !== 'play') return;
   e.preventDefault();
   Sound.init();
   const [x, y] = local(e);
-  swipe = { id: e.pointerId, x: x, y: y, t: performance.now(), used: false };
-  const hit = MR.pick(x, y);
-  if (hit.panel != null) { MB.answer(S, hit.panel); return; }
-  firePtr = e.pointerId;
+  drag = { id: e.pointerId, x0: x, y0: y, t0: performance.now(), mx: S.mech.tx, jumped: false };
   try { cv.setPointerCapture(e.pointerId); } catch (err) { /* old browsers */ }
-  MB.press(S, hit.id, hit.aim);
 });
 cv.addEventListener('pointermove', (e) => {
-  if (!S) return;
-  const [x, y] = local(e);
-  if (swipe && swipe.id === e.pointerId && !swipe.used && performance.now() - swipe.t < 320) {
-    const dx = x - swipe.x, dy = y - swipe.y;
-    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.6) { swipe.used = true; MB.move(S, dx > 0 ? 1 : -1); }
-    else if (dy < -60 && Math.abs(dy) > Math.abs(dx) * 1.6) { swipe.used = true; MB.jump(S); }
-  }
-  if (firePtr === e.pointerId) { const hit = MR.pick(x, y); MB.hold(S, hit.id, hit.aim); }
+  if (!S || !drag || drag.id !== e.pointerId) return;
+  const [x, y] = local(e), dx = x - drag.x0, dy = y - drag.y0;
+  if (!drag.jumped && dy < -55 && Math.abs(dy) > Math.abs(dx) * 1.4 && performance.now() - drag.t0 < 350) { drag.jumped = true; MB.jump(S); }
+  MB.steerTo(S, drag.mx + dx * (MB.XMAX * 2) / Math.max(200, MR.W * 0.5));
 });
-function lift(e) { if (firePtr === e.pointerId) { firePtr = null; if (S) MB.release(S); } if (swipe && swipe.id === e.pointerId) swipe = null; }
+function lift(e) { if (drag && drag.id === e.pointerId) drag = null; }
 cv.addEventListener('pointerup', lift);
 cv.addEventListener('pointercancel', lift);
 function holdBtn(id, fn) {
@@ -657,22 +657,52 @@ function holdBtn(id, fn) {
   for (const t of ['pointerup', 'pointercancel', 'pointerleave']) b.addEventListener(t, () => b.classList.remove('on'));
   b.addEventListener('contextmenu', (e) => e.preventDefault());
 }
-holdBtn('#leftBtn', () => MB.move(S, -1));
-holdBtn('#rightBtn', () => MB.move(S, 1));
+// ◀ ▶: slide while held; a quick tap moves one lane
+function steerBtn(id, dir) {
+  const b = $(id);
+  let t0 = 0, x0 = 0, down = false;
+  const up = () => {
+    if (!down) return;
+    down = false; b.classList.remove('on');
+    if (!S) return;
+    if (S.mech.dir === dir) MB.steer(S, 0);
+    if (performance.now() - t0 < 180) { MB.steerTo(S, x0); MB.stepLane(S, dir); }
+  };
+  b.addEventListener('pointerdown', (e) => {
+    e.preventDefault(); Sound.init();
+    if (!S || paused) return;
+    down = true; t0 = performance.now(); x0 = S.mech.tx;
+    b.classList.add('on'); MB.steer(S, dir);
+    try { b.setPointerCapture(e.pointerId); } catch (err) { /* old browsers */ }
+  });
+  for (const t of ['pointerup', 'pointercancel', 'lostpointercapture']) b.addEventListener(t, up);
+  b.addEventListener('contextmenu', (e) => e.preventDefault());
+}
+steerBtn('#leftBtn', -1);
+steerBtn('#rightBtn', 1);
 holdBtn('#jumpBtn', () => MB.jump(S));
 holdBtn('#novaBtn', () => MB.nova(S));
+holdBtn('#answerBtn', () => { if (MB.shootAnswer(S) < 0) toast('Stand under an answer first!', 'oops', 1100); });
+const keyDir = { arrowleft: -1, a: -1, arrowright: 1, d: 1 };
+const keyDown = {};
 document.addEventListener('keydown', (e) => {
-  if (!S || e.repeat && !['ArrowLeft', 'ArrowRight'].includes(e.key)) return;
+  if (!S) return;
   const k = e.key.toLowerCase();
+  if (keyDir[k]) { e.preventDefault(); if (e.repeat || paused || S.state !== 'play') return; keyDown[k] = { t: performance.now(), x: S.mech.tx }; MB.steer(S, keyDir[k]); return; }
+  if (e.repeat) return;
   if (k === 'p' || k === 'escape') { if (!paused) pause(); else if ($('#s-pause') && !$('#s-pause').hidden) resume(); return; }
   if (paused || S.state !== 'play') return;
-  if (k === 'arrowleft' || k === 'a') MB.move(S, -1);
-  else if (k === 'arrowright' || k === 'd') MB.move(S, 1);
-  else if (k === 'arrowup' || k === 'w' || k === ' ') { e.preventDefault(); MB.jump(S); }
+  if (k === 'arrowup' || k === 'w' || k === ' ') { e.preventDefault(); MB.jump(S); }
   else if (k === 'n' || k === 'q') MB.nova(S);
-  else if (k === 'z' || k === 'x' || k === 'c') MB.answer(S, 'zxc'.indexOf(k));
-  else if (k === 'f' || k === 'enter') { const t = MB.nearest(S, null); MB.press(S, t ? t.id : 0, null); MB.release(S); }
+  else if (k === 'f' || k === 'enter') MB.shootAnswer(S);
   else if (/^[1-7]$/.test(k)) { const w = S.weapons[+k - 1]; if (w) MB.setWeapon(S, w); }
+});
+document.addEventListener('keyup', (e) => {
+  const k = e.key.toLowerCase(), d = keyDown[k];
+  if (!d || !S) return;
+  delete keyDown[k];
+  if (S.mech.dir === keyDir[k]) MB.steer(S, 0);
+  if (performance.now() - d.t < 160) { MB.steerTo(S, d.x); MB.stepLane(S, keyDir[k]); }
 });
 
 /* ================= pause, down, done ================= */
@@ -855,12 +885,12 @@ function openBrief(n) {
   $('#briefName').textContent = L.boss ? 'Boss: ' + L.name : L.name;
   const box = $('#briefIntro');
   box.textContent = '';
-  if (L.boss) box.append(guideItem(bossPortrait(L.boss, 116), (BOSS_INFO[L.boss] || [L.name])[0], (BOSS_INFO[L.boss] || ['', ''])[1] + ' Its shield shows a question: shoot the right answer orb, then blast the boss while the shield is down.'));
+  if (L.boss) box.append(guideItem(bossPortrait(L.boss, 116), (BOSS_INFO[L.boss] || [L.name])[0], (BOSS_INFO[L.boss] || ['', ''])[1] + ' Its shield shows a question: stand under the right answer orb and press Answer, then blast the boss while the shield is down.'));
   for (const thing of L.intro || []) if (GUIDE[thing]) box.append(guideItem(portrait(thing, 116), 'New: ' + GUIDE[thing][0], GUIDE[thing][1]));
   const d = done();
   for (const w of MB.ORDER) if (MB.WEAPONS[w].unlock > 0 && MB.WEAPONS[w].unlock === n - 1 && d >= n - 1) box.append(guideItem(iconCanvas(w, 116), 'New weapon: ' + WEAPON_INFO[w][0], WEAPON_INFO[w][1]));
-  if (n === 1) box.append(guideItem(iconCanvas('blaster', 116), 'How to fight', 'Tap an enemy to fire at it. Move with ◀ ▶ and jump with the Jump button. At a gate, tap the panel with the right answer.'));
-  const tips = ['Red balls: move to another lane.', 'Low walls and orange waves: jump!', 'Grab 🔧 to repair your mech.', 'Shoot crates: some have prizes inside.', 'Hit lots of robots in a row for a combo.', 'Switch weapons with the buttons at the bottom.', 'Tall blocks cannot be jumped: change lanes.'];
+  if (n === 1) box.append(guideItem(iconCanvas('blaster', 116), 'How to fight', 'Drag across the screen (or hold ◀ ▶) to move. Your guns fire straight ahead by themselves: line up with the robots. At a gate, stand under the right answer and press the gold Answer button.'));
+  const tips = ['Red balls: move aside.', 'Low walls and orange waves: jump!', 'Grab 🔧 to repair your mech.', 'Shoot crates: some have prizes inside.', 'Hit lots of robots in a row for a combo.', 'Switch weapons with the buttons at the bottom.', 'Tall blocks cannot be jumped: move aside.'];
   $('#briefTip').textContent = '💡 ' + tips[n % tips.length];
   $('#startBtn').onclick = () => startLevel(n);
   showScreen('brief');
@@ -943,11 +973,11 @@ window.__mech = {
 function fits() {
   const out = [], W = innerWidth, H = innerHeight;
   const box = (el) => (el && !el.hidden && el.offsetParent !== null ? el.getBoundingClientRect() : null);
-  for (const sel of ['#leftBtn', '#rightBtn', '#jumpBtn', '#pauseBtn', '#qbox', '#weapons', '.armour']) {
+  for (const sel of ['#leftBtn', '#rightBtn', '#jumpBtn', '#answerBtn', '#novaBtn', '#pauseBtn', '#qbox', '#weapons', '.armour']) {
     const r = box($(sel)); if (!r || !r.width) continue;
     if (r.left < -1 || r.top < -1 || r.right > W + 1 || r.bottom > H + 1) out.push(sel + ' off screen');
   }
-  const pairs = [['#leftBtn', '#weapons'], ['#jumpBtn', '#weapons'], ['#qbox', '#pauseBtn'], ['#qbox', '.armour'], ['#rightBtn', '#jumpBtn']];
+  const pairs = [['#leftBtn', '#weapons'], ['#jumpBtn', '#weapons'], ['#answerBtn', '#weapons'], ['#answerBtn', '#jumpBtn'], ['#novaBtn', '#answerBtn'], ['#qbox', '#pauseBtn'], ['#qbox', '.armour'], ['#rightBtn', '#jumpBtn']];
   for (const [a, b] of pairs) {
     const A = box($(a)), B = box($(b));
     if (A && B && A.width && B.width && A.left < B.right - 2 && B.left < A.right - 2 && A.top < B.bottom - 2 && B.top < A.bottom - 2) out.push(a + ' covers ' + b);

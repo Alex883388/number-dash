@@ -5,15 +5,24 @@
    distance ahead of it, x is sideways (lane centres at -3.2, 0 and 3.2) and y is height above the road. Things on the
    ground slide towards the mech as it walks; flying things keep their own pace.
 
-   MB.start(level, options) makes a state S; MB.step(S, dt) moves it on by dt (the page uses 1/60 s steps). The page
-   sends the child's input with MB.move, jump, press, hold, release, answer, nova and setWeapon, draws S, and empties
-   S.ev (what just happened: shots, hits, booms, right and wrong answers) to play sounds and throw sparks.
-   MB.bot(S, profile) is a test pilot that plays like a child: it dodges what it sees, jumps over low things, shoots
-   the nearest danger and answers gates right with a set chance. */
+   MB.start(level, options) makes a state S; MB.step(S, dt) moves it on by dt (the page uses 1/60 s steps). The child
+   steers the mech left and right (MB.steer while a button is held, MB.steerTo to follow a finger), jumps, picks a
+   weapon and sets off the nova; the guns fire straight ahead by themselves whenever something is lined up with the
+   mech (or, if the page asks for it, while a Fire button is held: press, release). To answer a gate or a boss's shield
+   the child stands under the answer and fires the answer shot (MB.shootAnswer, the gold Answer button): nothing is
+   ever answered by accident. The page draws S and empties S.ev (what just happened: shots, hits, booms, right and
+   wrong answers) to play sounds and throw sparks. MB.bot(S, profile) is a test pilot that plays like a child: it
+   dodges what it sees, jumps over low things, lines up with the enemy it wants to hit and goes for the answer it
+   picked. */
 (function (root) {
 'use strict';
 // RANGE: the mech's guns reach this far; enemies further down the road cannot be hit yet
-const RANGE = 72, LANE = 3.2, SIDE = 7.4, SPAWN = 118, HOLD = 12, MECH_R = 0.95, JUMP_V = 10.4, GRAV = 21, SHIFT = 16;
+// XMAX: how far the mech can slide from the middle; STEER: its speed while a button is held; SLIDE: the fastest it
+// slides to where a finger leads it; AIM: how far from an answer's middle the mech may stand to shoot it (half the
+// gap between two answers, so the mech always stands under one of them)
+const XMAX = 3.9, STEER = 11, SLIDE = 16, AIM = 1.61;
+// SIDE: roadside enemies stand on the kerb, close enough to hit from the outer lane
+const RANGE = 72, LANE = 3.2, SIDE = 5.8, SPAWN = 118, HOLD = 12, MECH_R = 0.95, JUMP_V = 10.4, GRAV = 21;
 const laneX = (l) => (l - 1) * LANE;
 const laneOf = (x) => Math.max(0, Math.min(2, Math.round(x / LANE) + 1));
 const lerp = (a, b, t) => a + (b - a) * t;
@@ -32,17 +41,18 @@ function mulberry(seed) {
 }
 
 /* ================= weapons =================
-   unlock: the level to finish first (0 = from the start). cd: seconds between shots on taps, hold: between shots while
-   the finger stays down. Front shields (Shield Bots) stop the weapons marked blocked; rockets fly over them and plasma
-   breaks them. */
+   The guns fire straight ahead, by themselves (or while the Fire button is held, if the child chose that): every is the
+   time between shots. Aiming help is gentle: a shot bends a little towards an enemy it is already lined up with, and
+   rockets and lightning look a little to the side (seek, metres). unlock: the level to finish first. Front shields
+   (Shield Bots) stop the weapons marked blocked; rockets fly over them and plasma breaks them. */
 const WEAPONS = {
-  blaster: { unlock: 0, cd: 0.15, hold: 0.21, dmg: 1, speed: 92, home: 3.2, r: 0.4, blocked: true },
-  gatling: { unlock: 4, cd: 0.07, hold: 0.07, dmg: 0.42, speed: 96, spread: 0.022, heat: 0.03, r: 0.3, blocked: true },
-  rockets: { unlock: 9, cd: 0.78, hold: 0.78, dmg: 2.4, n: 2, speed: 34, home: 9, splash: 2.0, r: 0.45 },
-  lightning: { unlock: 14, cd: 0.55, hold: 0.55, dmg: 2, chain: 3, range: 13, fall: 0.75, blocked: true },
-  plasma: { unlock: 19, charge: 1.1, dmg: 2, dmgMax: 9, speed: 62, r: 0.75, pierce: true, breaks: true },
-  freeze: { unlock: 24, cd: 0.6, hold: 0.6, dmg: 0.8, speed: 76, home: 4, freeze: 3, splash: 2.7, r: 0.5, blocked: true },
-  laser: { unlock: 29, dps: 6.5, heat: 0.34, blocked: true }
+  blaster: { unlock: 0, every: 0.2, dmg: 1, speed: 92, home: 3.5, r: 0.45, blocked: true },
+  gatling: { unlock: 4, every: 0.08, dmg: 0.42, speed: 96, spread: 0.018, r: 0.35, blocked: true },
+  rockets: { unlock: 9, every: 0.85, dmg: 2.4, n: 2, speed: 34, home: 9, splash: 2.0, r: 0.45, seek: 4.2 },
+  lightning: { unlock: 14, every: 0.6, dmg: 2, chain: 3, range: 13, fall: 0.75, seek: 2.6, blocked: true },
+  plasma: { unlock: 19, every: 1.05, dmg: 6, speed: 62, r: 0.95, pierce: true, breaks: true },
+  freeze: { unlock: 24, every: 0.6, dmg: 0.8, speed: 76, home: 3.5, freeze: 3, splash: 2.7, r: 0.55, blocked: true },
+  laser: { unlock: 29, dps: 6, blocked: true }
 };
 const ORDER = ['blaster', 'gatling', 'rockets', 'lightning', 'plasma', 'freeze', 'laser'];
 const NOVA_UNLOCK = 39, NOVA_CHARGES = 2;
@@ -77,11 +87,11 @@ const ENEMY_ORDER = ['drone', 'walker', 'turret', 'bike', 'shield', 'bomber', 's
 /* ================= bosses =================
    Three question shields each: shoot the right answer orb to break the shield, then hit the boss while it is open. */
 const BOSSES = {
-  crab: { hp: 150, scale: 2.0, r: 4.4, h: 4.2, y: 0, z: 28, sway: 2.6, gap: 2.9, atk: ['slam', 'bubbles', 'slam', 'summon'], minion: 'drone', punish: 'bubbles' },
-  scorpion: { hp: 210, scale: 1.9, r: 4.6, h: 4.6, y: 0, z: 31, sway: 2.8, gap: 2.7, atk: ['sweep', 'bombs', 'sting', 'sweep', 'summon'], minion: 'walker', punish: 'bombs' },
-  titan: { hp: 270, scale: 1.6, r: 4.8, h: 8.6, y: 0, z: 33, sway: 1.8, gap: 2.6, atk: ['boulder', 'breath', 'icicles', 'boulder', 'summon'], minion: 'shield', punish: 'breath' },
-  dragon: { hp: 330, scale: 1.55, r: 5.2, h: 4.2, y: 1.4, z: 32, sway: 3.4, gap: 2.4, atk: ['breath', 'meteors', 'dive', 'missiles', 'breath'], minion: 'drone', punish: 'meteors' },
-  omega: { hp: 420, scale: 1.7, r: 5.6, h: 7.5, y: 3.0, z: 35, sway: 2.2, gap: 2.2, atk: ['ring', 'arms', 'missiles', 'volley', 'summon', 'ring'], minion: 'drone', punish: 'arms' }
+  crab: { hp: 120, scale: 2.0, r: 4.4, h: 4.2, y: 0, z: 28, sway: 2.6, gap: 2.9, atk: ['slam', 'bubbles', 'slam', 'summon'], minion: 'drone', punish: 'bubbles' },
+  scorpion: { hp: 170, scale: 1.9, r: 4.6, h: 4.6, y: 0, z: 31, sway: 2.8, gap: 2.7, atk: ['sweep', 'bombs', 'sting', 'sweep', 'summon'], minion: 'walker', punish: 'bombs' },
+  titan: { hp: 210, scale: 1.6, r: 4.8, h: 8.6, y: 0, z: 33, sway: 1.8, gap: 2.6, atk: ['boulder', 'breath', 'icicles', 'boulder', 'summon'], minion: 'shield', punish: 'breath' },
+  dragon: { hp: 210, scale: 1.55, r: 5.2, h: 4.2, y: 1.4, z: 32, sway: 3.4, gap: 2.9, atk: ['breath', 'meteors', 'dive', 'missiles', 'breath'], minion: 'drone', punish: 'meteors' },
+  omega: { hp: 300, scale: 1.7, r: 5.6, h: 7.5, y: 3.0, z: 35, sway: 2.2, gap: 2.2, atk: ['ring', 'arms', 'missiles', 'volley', 'summon', 'ring'], minion: 'drone', punish: 'arms' }
 };
 
 /* ================= a level starts ================= */
@@ -92,10 +102,11 @@ function start(level, o) {
   const g = clampN((level.id - 1) / 49, 0, 1), weapons = (o.weapons && o.weapons.length ? o.weapons : ['blaster']).slice();
   const S = {
     L: level, n: level.id, rnd: mulberry(o.seed || 1), ask: o.ask || null, g: g,
-    fireMul: lerp(1.25, 0.8, g), bsp: lerp(14, 22, g), hpm: 1 + 0.6 * g, dmgm: lerp(0.9, 1.2, g),
+    fireMul: lerp(1.3, 0.95, g), bsp: lerp(14, 21, g), hpm: 1 + 0.4 * g, dmgm: lerp(0.85, 1.05, g),
     t: 0, d: o.from || 0, v: level.v, len: level.len,
-    mech: { lane: 1, x: 0, tx: 0, y: 0, vy: 0, air: false, hp: o.hp || 100, max: 100, inv: 0, shield: 0, power: 0, heat: 0, hot: 0,
+    mech: { lane: 1, x: 0, tx: 0, dir: 0, vx: 0, y: 0, vy: 0, air: false, hp: o.hp || 100, max: 100, inv: 0, shield: 0, power: 0, heat: 0, hot: 0,
       cd: 0, charge: 0, holding: false, aimId: 0, aim: null, walk: 0, lean: 0, hurt: 0, recoil: 0, land: 0, side: 1 },
+    autoFire: o.autoFire !== false,
     weapons: weapons, weapon: o.weapon && weapons.indexOf(o.weapon) >= 0 ? o.weapon : weapons[0],
     nova: o.nova || 0, ents: [], shots: [], bullets: [], marks: [], zaps: [], shells: [], ev: [], beam: null,
     next: 0, gate: null, boss: null, cp: o.from || 0, id: 1, minions: 0,
@@ -420,7 +431,7 @@ const AI = {
     if (fireReady(S, e, dt, e.z > 18 && e.z < 75, 3.0)) {
       const lane = laneOf(S.mech.x);
       e.beamLane = lane;
-      laneMark(S, [lane], 1.3, 0.45, 20, { src: e.id, sx: e.x, sz: e.z, style: 'beam' });
+      laneMark(S, [lane], 1.5, 0.45, 20, { src: e.id, sx: e.x, sz: e.z, style: 'beam' });
     }
   },
   rival(S, e, dt) {
@@ -541,21 +552,30 @@ function bossStep(S, B, dt) {
   }
   B.atkT -= dt * (B.mode === 'shield' ? 0.62 : 1);
   if (B.atkT <= 0) {
-    B.atkT = D.gap * lerp(1.15, 0.85, S.g) * (0.85 + S.rnd() * 0.3);
+    B.atkT = D.gap * lerp(1.3, 1.0, S.g) * (0.85 + S.rnd() * 0.3);
     attack(S, B, D.atk[B.cycle++ % D.atk.length]);
   }
 }
 
-/* ================= the child's controls ================= */
+/* ================= the child's controls =================
+   steer(S, -1 | 0 | 1) while a button or a key is held; steerTo(S, x) to follow a finger; stepLane(S, dir) goes to the
+   next lane centre that way (a quick tap); move(S, dir) slides one lane's width (tests). press / release: the Fire button, when the guns do not fire by themselves. */
 function move(S, dir) {
   const M = S.mech;
   if (S.state !== 'play') return false;
-  const l = clampN(M.lane + dir, 0, 2);
-  if (l === M.lane) return false;
-  M.lane = l; M.tx = laneX(l);
+  M.dir = 0; M.tx = clampN(M.tx + dir * LANE, -XMAX, XMAX);
   S.ev.push({ e: 'move', dir: dir });
   return true;
 }
+function steer(S, dir) { S.mech.dir = dir; }
+// the next lane centre in that direction from where the mech is heading
+function stepLane(S, dir) {
+  const x = S.mech.tx;
+  let l = laneOf(x);
+  if (dir > 0 ? laneX(l) <= x + 0.3 : laneX(l) >= x - 0.3) l += dir;
+  steerTo(S, laneX(clampN(l, 0, 2)));
+}
+function steerTo(S, x) { const M = S.mech; M.dir = 0; M.tx = clampN(x, -XMAX, XMAX); }
 function jump(S) {
   const M = S.mech;
   if (S.state !== 'play' || M.air) return false;
@@ -565,22 +585,12 @@ function jump(S) {
 }
 function setWeapon(S, w) {
   if (S.weapons.indexOf(w) < 0) return false;
-  if (S.weapon !== w) { S.weapon = w; S.mech.charge = 0; S.beam = null; S.ev.push({ e: 'weapon', w: w }); }
+  if (S.weapon !== w) { S.weapon = w; S.beam = null; S.ev.push({ e: 'weapon', w: w }); }
   return true;
 }
-// a finger goes down on the battlefield: id = what it touched (0 for nothing), aim = the world point under it
-// A quick tap still fires (it waits up to 0.15 s for the gun to be ready); a finger kept down keeps firing.
-function press(S, id, aim) {
-  const M = S.mech;
-  M.holding = true; M.aimId = id || 0; M.aim = aim || null; M.tapT = 0.15;
-}
-function hold(S, id, aim) { const M = S.mech; if (!M.holding) return; if (id) M.aimId = id; M.aim = aim || M.aim; }
-function release(S) {
-  const M = S.mech;
-  // plasma fires when the finger lifts: a tap makes a small shot, a long press a big one
-  if (M.holding && S.weapon === 'plasma' && S.state === 'play' && S.t - (M.last || -9) >= 0.3) { firePlasma(S); M.last = S.t; M.tapT = 0; }
-  M.holding = false; M.charge = 0; S.beam = null;
-}
+function press(S) { S.mech.holding = true; }
+function hold() { /* aiming by finger is gone: the guns fire straight ahead */ }
+function release(S) { S.mech.holding = false; S.beam = null; }
 function nova(S) {
   if (S.nova <= 0 || S.state !== 'play') return false;
   S.nova--;
@@ -600,7 +610,7 @@ function nova(S) {
 function byId(S, id) { if (!id) return null; for (const e of S.ents) if (e.id === id && !e.dead) return e; return null; }
 function shootable(e) { return !e.dead && e.z <= RANGE + 4 && (e.c === 'enemy' || e.c === 'boss' || (e.c === 'obs' && e.hp > 0)); }
 function centre(e) { return [e.x, e.y + (e.h || 1) * (e.vs || 1) * 0.5, e.z]; }
-// the enemy nearest a point in the world (the finger missed by a little), or the nearest one ahead
+// the nearest enemy ahead (or the one nearest a point in the world)
 function nearest(S, aim, skip) {
   let best = null, bd = 1e9;
   for (const e of S.ents) {
@@ -610,39 +620,68 @@ function nearest(S, aim, skip) {
   }
   return best;
 }
+// the enemy the mech is lined up with: the nearest one ahead within w metres to the side (its size counts)
+function inLine(S, w) {
+  const M = S.mech;
+  let best = null, bz = 1e9;
+  for (const e of S.ents) {
+    if (!shootable(e) || e.z < 2.5 || e.z > RANGE) continue;
+    if (Math.abs(e.x - M.x) > (e.hr || e.r) + w) continue;
+    if (e.c === 'boss' && e.mode !== 'open' && e.mode !== 'stagger') continue;
+    if (e.z < bz) { bz = e.z; best = e; }
+  }
+  return best;
+}
+// the guns fire by themselves when something is lined up with the mech (or, with a Fire button, while it is held)
+function firing(S) { return S.state === 'play' && (S.autoFire ? !!inLine(S, 1.6) : S.mech.holding); }
+// The answer the mech stands under: a gate panel or a boss's shield orb (-1 when there is no question or it stands between two)
+function aimedAnswer(S) {
+  const M = S.mech, G = S.gate && !S.gate.open && S.gate.z < RANGE ? S.gate : null;
+  const B = !G && S.boss && S.boss.mode === 'shield' ? S.boss : null;
+  const items = G ? G.panels : B ? B.orbs : null;
+  if (!items) return -1;
+  let best = -1, bd = AIM;
+  items.forEach((p, i) => { const d = Math.abs(M.x - (G ? laneX(i) : p.x)); if (!p.gone && !p.bad && d < bd) { bd = d; best = i; } });
+  return best;
+}
+// the gold Answer button: a golden shot straight ahead at the answer the mech stands under
+function shootAnswer(S) {
+  const i = aimedAnswer(S);
+  if (i < 0) return -1;
+  return answer(S, i) ? i : -1;
+}
 function muzzle(S) { const M = S.mech; M.side = -M.side; return [M.x + M.side * 1.05, M.y + 2.2, 0.9]; }
-function bolt(S, w, from, tgt, aim, o) {
-  const W = WEAPONS[w];
-  let tx, ty, tz;
+// a shot straight ahead (towards the middle of the mech's line); a lined-up enemy pulls it to its height and middle
+function bolt(S, w, from, tgt, o) {
+  const W = WEAPONS[w], M = S.mech;
+  let tx = M.x, ty = M.y + 2.2, tz = 45;
   if (tgt) { const c = centre(tgt); tx = c[0]; ty = c[1]; tz = c[2]; }
-  else if (aim) { tx = aim.x; ty = aim.y; tz = aim.z; }
-  else { tx = S.mech.x; ty = 2; tz = 60; }
   let dx = tx - from[0], dy = ty - from[1], dz = tz - from[2];
   const L = Math.hypot(dx, dy, dz) || 1;
   dx /= L; dy /= L; dz /= L;
   if (W.spread) { dx += (S.rnd() - 0.5) * W.spread * 2; dy += (S.rnd() - 0.5) * W.spread * 2; }
   const sp = (o && o.speed) || W.speed;
   const s = { k: w, x: from[0], y: from[1], z: from[2], vx: dx * sp, vy: dy * sp, vz: dz * sp, sp: sp, tgt: tgt ? tgt.id : 0,
-    home: W.home || 0, dmg: (o && o.dmg) || W.dmg, r: (o && o.r) || W.r, life: 2.4, hits: [], pierce: !!W.pierce };
+    home: tgt ? W.home || 0 : 0, dmg: (o && o.dmg) || W.dmg, r: (o && o.r) || W.r, life: 2.4, hits: [], pierce: !!W.pierce };
   if (o && o.lift) s.vy += o.lift;
   if (o && o.side) s.vx += o.side;
   S.shots.push(s);
   return s;
 }
-function fireOnce(S, tgt, aim) {
+function fireOnce(S) {
   const M = S.mech, w = S.weapon, W = WEAPONS[w];
   S.stats.fired++;
-  M.recoil = 0.12;
-  if (w === 'lightning') { zapChain(S, tgt || nearest(S, aim)); S.ev.push({ e: 'fire', w: w }); return; }
+  M.recoil = w === 'plasma' ? 0.25 : 0.12;
+  if (w === 'lightning') { zapChain(S, inLine(S, W.seek)); S.ev.push({ e: 'fire', w: w }); return; }
   if (w === 'rockets') {
-    const t = tgt || nearest(S, aim);
-    for (let i = 0; i < W.n; i++) bolt(S, w, [M.x + (i ? 1.3 : -1.3), M.y + 3, 0.2], t, aim, { lift: 9, side: i ? 4 : -4 });
-  } else bolt(S, w, muzzle(S), tgt, aim);
-  S.ev.push({ e: 'fire', w: w });
+    const t = inLine(S, W.seek);
+    for (let i = 0; i < W.n; i++) bolt(S, w, [M.x + (i ? 1.3 : -1.3), M.y + 3, 0.2], t, { lift: 9, side: i ? 4 : -4 });
+  } else bolt(S, w, w === 'plasma' ? [M.x, M.y + 2.3, 1] : muzzle(S), inLine(S, 1.3));
+  S.ev.push({ e: 'fire', w: w, f: w === 'plasma' ? 1 : undefined });
 }
 function zapChain(S, first) {
   const W = WEAPONS.lightning, M = S.mech;
-  if (!first) { S.zaps.push({ pts: [[M.x, M.y + 2.4, 1], [M.x + (S.rnd() - 0.5) * 4, 3 + S.rnd() * 3, 30]], t: 0.18 }); return; }
+  if (!first) { S.zaps.push({ pts: [[M.x, M.y + 2.4, 1], [M.x + (S.rnd() - 0.5) * 2, 3 + S.rnd() * 2, 22]], t: 0.12 }); return; }
   const pts = [[M.x + 1, M.y + 2.4, 1]], hit = [];
   let cur = first, dmg = W.dmg;
   for (let i = 0; i <= W.chain && cur; i++) {
@@ -661,45 +700,23 @@ function zapChain(S, first) {
   }
   S.zaps.push({ pts: pts, t: 0.2 });
 }
-function firePlasma(S) {
-  const M = S.mech, W = WEAPONS.plasma, f = clampN(M.charge / W.charge, 0, 1);
-  const tgt = byId(S, M.aimId) || nearest(S, M.aim);
-  bolt(S, 'plasma', [M.x, M.y + 2.3, 1], tgt, M.aim, { dmg: lerp(W.dmg, W.dmgMax, f), r: lerp(0.45, 1.1, f) }).home = 0;
-  S.stats.fired++; M.recoil = 0.25;
-  S.ev.push({ e: 'fire', w: 'plasma', f: f });
-}
 function gunStep(S, dt) {
   const M = S.mech, w = S.weapon, W = WEAPONS[w];
-  if (M.tapT > 0) M.tapT -= dt;
-  // the gatling and the laser heat up; overheated, they rest for a moment
-  if (M.hot > 0) { M.hot -= dt; if (M.hot <= 0) { M.hot = 0; M.heat = 0.3; } }
-  else if (!(M.holding && (w === 'gatling' || w === 'laser'))) M.heat = Math.max(0, M.heat - 0.5 * dt);
-  const want = S.state === 'play' && (M.holding || M.tapT > 0);
-  if (!want) { S.beam = null; return; }
-  let tgt = byId(S, M.aimId);
-  if (tgt && !shootable(tgt)) tgt = null;
-  // the target died while the finger is still down: the gun moves on to the nearest enemy
-  if (!tgt && M.aimId && M.holding) { tgt = nearest(S, M.aim); M.aimId = tgt ? tgt.id : 0; }
-  if (w === 'plasma') { if (M.holding) M.charge = Math.min(W.charge, M.charge + dt); return; }
+  M.firing = firing(S);
+  // the plasma cannon glows brighter until its next shot
+  M.charge = w === 'plasma' ? Math.min(1.1, (S.t - (M.last || 0)) / W.every * 1.1) : 0;
+  if (!M.firing) { S.beam = null; return; }
   if (w === 'laser') {
-    if (M.hot > 0 || !M.holding) { S.beam = null; return; }
-    M.heat += W.heat * dt;
-    if (M.heat >= 1) { M.hot = 1.8; M.heat = 1; S.beam = null; S.ev.push({ e: 'overheat' }); return; }
-    const end = tgt ? centre(tgt) : M.aim ? [M.aim.x, M.aim.y, M.aim.z] : [M.x, 2, 60];
+    // a steady beam straight ahead: it burns the first thing in its way
+    const t = inLine(S, 0.6);
     if (!S.beam) S.ev.push({ e: 'fire', w: 'laser' });
-    S.beam = { x: M.x, y: M.y + 2.3, z: 1, ex: end[0], ey: end[1], ez: end[2], on: !!tgt };
-    if (tgt) damage(S, tgt, W.dps * dt, 'laser');
+    S.beam = { x: M.x, y: M.y + 2.3, z: 1, ex: t ? t.x : M.x, ey: t ? centre(t)[1] : 2.4, ez: t ? t.z : RANGE * 0.6, on: !!t };
+    if (t) damage(S, t, W.dps * dt, 'laser');
     return;
   }
-  const gap = M.tapT > 0 ? W.cd : W.hold;
-  if (S.t - (M.last || -9) < gap - 1e-6) return;
-  if (w === 'gatling') {
-    if (M.hot > 0) return;
-    M.heat += W.heat;
-    if (M.heat >= 1) { M.hot = 1.4; M.heat = 1; S.ev.push({ e: 'overheat' }); return; }
-  }
-  fireOnce(S, tgt, M.aim);
-  M.last = S.t; M.tapT = 0;
+  if (S.t - (M.last || -9) < W.every - 1e-6) return;
+  M.last = S.t;
+  fireOnce(S);
 }
 function shotStep(S, dt) {
   for (const s of S.shots) {
@@ -740,7 +757,6 @@ function shotStep(S, dt) {
   }
   S.shots = S.shots.filter((s) => !s.dead);
 }
-
 /* ================= the world moves on ================= */
 function step(S, dt) {
   const M = S.mech;
@@ -755,10 +771,13 @@ function step(S, dt) {
     return S;
   }
   S.t += dt;
-  // the mech: lanes, jumps and timers
-  const dx = M.tx - M.x, sx = SHIFT * dt;
+  // the mech: sliding across the road, jumps and timers
+  if (M.dir) M.tx = clampN(M.tx + M.dir * STEER * dt, -XMAX, XMAX);
+  const dx = M.tx - M.x, sx = SLIDE * dt, mx0 = M.x;
   M.x += Math.abs(dx) <= sx ? dx : Math.sign(dx) * sx;
-  M.lean += ((dx > 0.05 ? 1 : dx < -0.05 ? -1 : 0) - M.lean) * Math.min(1, 12 * dt);
+  M.vx = (M.x - mx0) / dt;
+  M.lane = laneOf(M.x);
+  M.lean += (clampN(M.vx / 9, -1, 1) - M.lean) * Math.min(1, 10 * dt);
   if (M.air) {
     M.vy -= GRAV * dt; M.y += M.vy * dt;
     if (M.y <= 0) { M.y = 0; M.vy = 0; M.air = false; M.land = 0.22; S.ev.push({ e: 'land' }); }
@@ -900,107 +919,106 @@ function contactStep(S) {
 }
 
 /* ================= a test pilot =================
-   Plays like a child at a set skill: every `react` seconds it looks at what is coming, picks the safest lane, jumps
-   over low things, fires at the nearest danger (taps `taps` times a second) and answers gates after `think` seconds,
-   right with chance `right`. Used by tools/check.js and the page's autopilot. */
+   Plays like a child at a set skill. Every `react` seconds it looks at what is coming and picks where to stand: away
+   from shots, bombs and red lanes (when it notices them: `dodge`), under the enemy it wants to hit (a little off when it
+   `miss`es), or, after `think` seconds, under the answer it picked (the right one with chance `right`). It jumps low
+   things on time (`jump`). The guns fire by themselves; with the Fire button it keeps the button down. Used by
+   tools/check.js and the page's autopilot. */
 function bot(S, P) {
-  P = Object.assign({ react: 0.24, right: 0.85, think: 1.6, taps: 4.5, jump: 0.92, dodge: 0.95 }, P || {});
-  const M = S.mech, B = S.bot || (S.bot = { look: 0, tap: 0, thinkT: 0, plan: M.lane, rng: mulberry((S.n * 7919) ^ 0x5bd1) });
+  P = Object.assign({ react: 0.24, right: 0.85, think: 1.6, jump: 0.92, dodge: 0.95, miss: 0.12 }, P || {});
+  const M = S.mech, B = S.bot || (S.bot = { look: 0, rng: mulberry((S.n * 7919) ^ 0x5bd1), q: null, pickI: -1, thinkT: 0, wT: 0, x: M.x });
   if (S.state !== 'play') return;
   const R = B.rng;
-  B.look -= 1 / 60; B.tap -= 1 / 60;
-  if (B.look <= 0) {
-    B.look = P.react * (0.7 + R() * 0.6);
-    const danger = [0, 0, 0], low = [9, 9, 9], H = 1.8;
-    const ttcOf = (z, vz) => (vz < -0.1 ? z / -vz : 99);
-    for (const b of S.bullets) {
-      if (b.done) continue;
-      const ttc = ttcOf(b.z, b.vz);
-      if (ttc > H) continue;
-      for (let l = 0; l < 3; l++) {
-        const xa = b.x + b.vx * ttc;
-        if (!b.wide && Math.abs(xa - laneX(l)) > MECH_R + b.r + 0.25) continue;
-        if (b.low) low[l] = Math.min(low[l], ttc); else danger[l] += 3 / (0.25 + ttc);
-      }
+  if (!S.autoFire && !M.holding) press(S);
+  // the answer to go for: picked once per question, and again after a wrong one
+  const G = S.gate && !S.gate.open && S.gate.z < RANGE ? S.gate : null, Bo = !G && S.boss && S.boss.mode === 'shield' ? S.boss : null;
+  const items = G ? G.panels : Bo ? Bo.orbs : null;
+  if (items) {
+    const key = (G ? 'g' + G.id : 'b' + Bo.id + ':' + Bo.q.text) + ':' + items.filter((p) => p.bad).length;
+    if (B.q !== key) {
+      B.q = key; B.thinkT = P.think * (0.6 + R() * 0.8);
+      const ok = items.findIndex((p) => p.ok), wrong = items.map((p, i) => i).filter((i) => i !== ok && !items[i].bad);
+      B.pickI = R() < P.right || !wrong.length || (G && G.hint) || (Bo && Bo.hint) ? ok : wrong[Math.floor(R() * wrong.length)];
     }
-    for (const e of S.ents) {
-      if (e.dead || e.c === 'gate' || e.c === 'boss') continue;
-      const ttc = ttcOf(e.z, e.dz);
-      if (ttc > H + 0.4) continue;
-      if (e.c === 'pick') { const l = laneOf(e.x); if (Math.abs(e.x - laneX(l)) < 1) danger[l] -= 0.4; continue; }
-      if (e.k === 'geyser') { const l = laneOf(e.x); if (e.phase !== 'idle' || ttc < 0.8) danger[l] += 2.5; continue; }
-      const base = EN[e.k];
-      if (!base || (base.fly && e.k !== 'missile')) continue;
-      for (let l = 0; l < 3; l++) {
-        if (e.k !== 'fence' && Math.abs(e.x - laneX(l)) > e.r + MECH_R - 0.3) continue;
-        if (e.h * 0.82 < 2.3 && e.k !== 'missile') low[l] = Math.min(low[l], ttc); else danger[l] += 4 / (0.25 + ttc);
-      }
-    }
-    for (const m of S.marks) {
-      if (m.k === 'lane') { const left = m.tel - m.t; if (left < H && m.act > 0) for (const l of m.lanes) danger[l] += 6 / (0.3 + Math.max(0, left)); }
-      else if (m.k === 'bomb') { const left = m.tel - m.t, zAt = m.z - S.v * left; if (left < H && Math.abs(zAt) < 3) danger[m.lane] += 6 / (0.3 + left); }
-      else if (m.k === 'sweep') { const reach = Math.abs(m.x - M.x) / m.speed + Math.max(0, m.tel - m.t); for (let l = 0; l < 3; l++) low[l] = Math.min(low[l], reach); }
-    }
-    // a low threat that cannot be jumped in time counts as danger
-    const cur = M.lane;
-    let best = cur, bc = 1e9;
-    for (let l = 0; l < 3; l++) {
-      const via = Math.abs(l - cur) === 2 ? danger[1] * 0.6 : 0;
-      const lowCost = low[l] < 0.25 && M.air === false && l !== cur ? 2 : 0;
-      const c = danger[l] + via + lowCost + Math.abs(l - cur) * 0.35;
-      if (c < bc) { bc = c; best = l; }
-    }
-    if (R() < P.dodge && best !== cur) move(S, best > cur ? 1 : -1);
-    const ml = laneOf(M.tx);
-    if (!M.air && low[ml] < 0.42 && low[ml] > 0.08 && R() < P.jump) jump(S);
-    B.lowNow = low[ml];
-  } else if (!M.air && B.lowNow !== undefined) {
-    // between looks the pilot still jumps on time for what it saw
-    B.lowNow -= 1 / 60;
-    if (B.lowNow < 0.3 && B.lowNow > 0.05) { if (R() < P.jump) jump(S); B.lowNow = undefined; }
+    B.thinkT -= 1 / 60;
+  } else B.q = null;
+  if (items && B.thinkT <= 0 && B.pickI >= 0 && aimedAnswer(S) === B.pickI && !S.shells.length) shootAnswer(S);
+  B.look -= 1 / 60;
+  if (B.look > 0) {
+    // between looks it still jumps on time for what it saw
+    if (!M.air && B.lowNow !== undefined) { B.lowNow -= 1 / 60; if (B.lowNow < 0.3 && B.lowNow > 0.05) { if (R() < P.jump) jump(S); B.lowNow = undefined; } }
+    return;
   }
-  // answers
-  const G = S.gate && !S.gate.open && S.gate.z < 75 ? S.gate : null, Bo = S.boss && S.boss.mode === 'shield' ? S.boss : null;
-  if ((G || Bo) && !S.shells.length) {
-    B.thinkT += 1 / 60;
-    if (B.thinkT > P.think) {
-      B.thinkT = P.think * 0.4;
-      const items = G ? G.panels : Bo.orbs, ok = items.findIndex((p) => p.ok);
-      const wrong = items.map((p, i) => i).filter((i) => i !== ok && !items[i].bad);
-      const hinted = (G && G.hint) || (Bo && Bo.hint);
-      answer(S, (R() < P.right || !wrong.length || hinted) ? ok : wrong[Math.floor(R() * wrong.length)]);
-    }
-  } else B.thinkT = 0;
-  // weapons: rockets or plasma for shields and bosses, the gatling or lightning for crowds
-  const foes = S.ents.filter((e) => shootable(e) && e.z > 4 && (e.c === 'obs' ? e.z < 40 && Math.abs(e.x - M.x) < 2 : e.z <= RANGE));
-  if (S.bot.wT === undefined || S.t > S.bot.wT) {
-    S.bot.wT = S.t + 1.5;
+  B.look = P.react * (0.7 + R() * 0.6);
+  const XS = []; for (let x = -XMAX; x <= XMAX + 0.01; x += 0.65) XS.push(x);
+  const danger = XS.map(() => 0), low = XS.map(() => 9), H = 1.8;
+  const ttcOf = (z, vz) => (vz < -0.1 ? z / -vz : 99);
+  for (const b of S.bullets) {
+    if (b.done) continue;
+    const ttc = ttcOf(b.z, b.vz);
+    if (ttc > H) continue;
+    const xa = b.x + b.vx * ttc;
+    XS.forEach((x, i) => { if (!b.wide && Math.abs(xa - x) > MECH_R + b.r + 0.3) return; if (b.low) low[i] = Math.min(low[i], ttc); else danger[i] += 3 / (0.25 + ttc); });
+  }
+  for (const e of S.ents) {
+    if (e.dead || e.c === 'gate' || e.c === 'boss') continue;
+    const ttc = ttcOf(e.z, e.dz);
+    if (ttc > H + 0.4) continue;
+    if (e.c === 'pick') { XS.forEach((x, i) => { if (Math.abs(e.x - x) < 1.2) danger[i] -= 0.4; }); continue; }
+    if (e.k === 'geyser') { XS.forEach((x, i) => { if (Math.abs(e.x - x) < 1.6 && (e.phase !== 'idle' || ttc < 0.8)) danger[i] += 2.5; }); continue; }
+    const base = EN[e.k];
+    if (!base || (base.fly && e.k !== 'missile')) continue;
+    XS.forEach((x, i) => {
+      if (e.k !== 'fence' && Math.abs(e.x - x) > e.r + MECH_R - 0.3) return;
+      if (e.h * 0.82 < 2.3 && e.k !== 'missile') low[i] = Math.min(low[i], ttc); else danger[i] += 4 / (0.25 + ttc);
+    });
+  }
+  for (const m of S.marks) {
+    if (m.k === 'lane') { const left = m.tel - m.t; if (left < H && m.act > 0) XS.forEach((x, i) => { if (m.lanes.some((l) => inLane(x, l))) danger[i] += 6 / (0.3 + Math.max(0, left)); }); }
+    else if (m.k === 'bomb') { const left = m.tel - m.t, zAt = m.z - S.v * left; if (left < H && Math.abs(zAt) < 3) XS.forEach((x, i) => { if (inLane(x, m.lane)) danger[i] += 6 / (0.3 + left); }); }
+    else if (m.k === 'sweep') { const reach = Math.abs(m.x - M.x) / m.speed + Math.max(0, m.tel - m.t); XS.forEach((x, i) => { low[i] = Math.min(low[i], reach); }); }
+  }
+  // where it wants to be: under its answer, or lined up with the enemy it is shooting
+  let want = B.x;
+  if (items && B.thinkT <= 0 && B.pickI >= 0) want = G ? laneX(B.pickI) : items[B.pickI].x;
+  else {
+    const foes = S.ents.filter((e) => shootable(e) && e.z > 4 && e.z <= RANGE && (e.c !== 'obs' || e.z < 40) && (e.c !== 'boss' || e.mode === 'open' || e.mode === 'stagger'));
+    const prio = (e) => (e.k === 'missile' ? 0 : e.k === 'bike' ? 5 : e.c === 'boss' ? 30 : 10) + e.z * 0.3 + Math.abs(e.x - M.x) * 0.8;
+    const t = foes.sort((a, b) => prio(a) - prio(b))[0];
+    if (t) want = t.x + (R() < P.miss ? (R() < 0.5 ? -1 : 1) * (1.6 + R() * 1.2) : 0);
+  }
+  const notice = R() < P.dodge;
+  let best = want, bc = 1e9;
+  XS.forEach((x, i) => {
+    const late = low[i] < 0.3 && !M.air ? 1.5 : 0;
+    const c = (notice ? danger[i] + late : 0) + Math.abs(x - want) * 0.35 + Math.abs(x - M.x) * 0.08;
+    if (c < bc) { bc = c; best = x; }
+  });
+  B.x = best;
+  steerTo(S, best);
+  let iNow = 0; XS.forEach((x, i) => { if (Math.abs(x - M.x) < Math.abs(XS[iNow] - M.x)) iNow = i; });
+  if (!M.air && low[iNow] < 0.42 && low[iNow] > 0.08 && R() < P.jump) jump(S);
+  B.lowNow = low[iNow] < 9 ? low[iNow] : undefined;
+  // weapons: rockets for shields and bosses, lightning or the gatling for crowds
+  if (S.t > B.wT) {
+    B.wT = S.t + 1.5;
     const has = (w) => S.weapons.indexOf(w) >= 0;
+    const foes = S.ents.filter((e) => shootable(e) && e.z > 4 && e.z <= RANGE && e.c === 'enemy');
     const boss = S.boss && (S.boss.mode === 'open' || S.boss.mode === 'stagger');
     const shields = foes.some((e) => e.k === 'shield' && e.shieldUp && !e.broken);
     let w = 'blaster';
-    if (boss) w = has('laser') ? 'laser' : has('rockets') ? 'rockets' : has('gatling') ? 'gatling' : 'blaster';
+    if (boss) w = has('laser') ? 'laser' : has('plasma') ? 'plasma' : has('rockets') ? 'rockets' : has('gatling') ? 'gatling' : 'blaster';
     else if (shields && has('rockets')) w = 'rockets';
     else if (foes.length >= 3 && has('lightning')) w = 'lightning';
-    else if (foes.length >= 2 && has('gatling')) w = 'gatling';
     else if (has('rockets') && foes.some((e) => e.hp >= 4)) w = 'rockets';
+    else if (has('gatling')) w = 'gatling';
     setWeapon(S, w);
   }
-  if (S.nova > 0 && (S.bullets.filter((b) => b.z < 20).length >= 4 || (S.mech.hp < 30 && foes.length >= 3))) nova(S);
-  const prio = (e) => (e.k === 'missile' ? 0 : e.k === 'bike' ? 5 : e.c === 'boss' ? 30 : 10) + e.z * 0.3 + Math.abs(e.x - M.x) * 1.5;
-  const target = foes.filter((e) => e.c !== 'boss' || e.mode === 'open' || e.mode === 'stagger').sort((a, b) => prio(a) - prio(b))[0];
-  const holdW = S.weapon === 'gatling' || S.weapon === 'laser';
-  if (target) {
-    const c = centre(target), miss = R() < (P.miss || 0.12);
-    const aim = { x: c[0] + (miss ? (R() - 0.5) * 6 : 0), y: c[1], z: c[2] };
-    if (holdW) { if (!M.holding) press(S, miss ? 0 : target.id, aim); else hold(S, miss ? 0 : target.id, aim); }
-    else if (S.weapon === 'plasma') { if (!M.holding) press(S, target.id, aim); else if (M.charge > 0.8) release(S); }
-    else if (B.tap <= 0) { B.tap = 1 / P.taps; press(S, miss ? 0 : target.id, aim); release(S); }
-  } else if (M.holding) release(S);
+  if (S.nova > 0 && (S.bullets.filter((b) => b.z < 20).length >= 4 || (M.hp < 30 && S.ents.filter((e) => e.c === 'enemy' && e.z < RANGE).length >= 3))) nova(S);
 }
 
 root.MB = { RANGE: RANGE, LANE: LANE, SIDE: SIDE, SPAWN: SPAWN, HOLD: HOLD, WEAPONS: WEAPONS, ORDER: ORDER, NOVA_UNLOCK: NOVA_UNLOCK, NOVA_CHARGES: NOVA_CHARGES,
   EN: EN, ENEMY_ORDER: ENEMY_ORDER, BOSSES: BOSSES, laneX: laneX, laneOf: laneOf, arsenal: arsenal, mulberry: mulberry,
-  start: start, step: step, move: move, jump: jump, press: press, hold: hold, release: release, setWeapon: setWeapon, nova: nova,
+  XMAX: XMAX, AIM: AIM, start: start, step: step, move: move, steer: steer, steerTo: steerTo, stepLane: stepLane, jump: jump, press: press, hold: hold, release: release, setWeapon: setWeapon, nova: nova, inLine: inLine, aimedAnswer: aimedAnswer, shootAnswer: shootAnswer,
   answer: answer, bot: bot, byId: byId, shootable: shootable, nearest: nearest, centre: centre };
 })(typeof window !== 'undefined' ? window : globalThis);

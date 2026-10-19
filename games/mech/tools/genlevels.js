@@ -113,7 +113,7 @@ function makeLevel(n, tune) {
   return L;
 }
 
-const TUNE = { gap0: 24, gap1: 12, pickEvery: 6 };
+const TUNE = { gap0: 24, gap1: 15, pickEvery: 6 };
 function build(tune) {
   const levels = [];
   for (let n = 1; n <= 50; n++) levels.push(makeLevel(n, Object.assign({}, TUNE, tune || {})));

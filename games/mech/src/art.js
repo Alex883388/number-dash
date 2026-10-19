@@ -103,7 +103,7 @@ const ART = (function () {
     rr(c, x - 0.27, -2.12 + rec * 0.5, 0.54, 0.6, 0.13); fs(c, P.main);
     poly(c, [x - 0.27, -2.12 + rec * 0.5, x - 0.1, -2.12 + rec * 0.5, x - 0.12, -1.52 + rec * 0.5, x - 0.27, -1.52 + rec * 0.5]); fl(c, lit(P.main, 0.25));
     if (w === 'gatling') {
-      const spin = M.holding ? t * 30 : 0;
+      const spin = M.firing ? t * 30 : 0;
       for (let i = 0; i < 3; i++) {
         const a = spin + i * TAU / 3, ox = Math.cos(a) * 0.1;
         rr(c, x + ox - 0.05, top, 0.1, y0 - top, 0.04); fs(c, i === 0 ? '#c9d1e8' : METAL, 0.7);

@@ -26,6 +26,8 @@ const MR = (function () {
   const P = { x: 0, y: 0, s: 1 };
   const parts = [];
   let hits = [], panels = [], orbs = [];
+  // this frame: the enemy lined up with the guns, and the answer the mech stands under (-1 for none)
+  let linedId = 0, aimedI = -1;
   const fogMemo = new Map();
   // set MR.profile = {} to collect how long each part of a frame takes (for tuning)
   let timing = null;
@@ -171,6 +173,9 @@ const MR = (function () {
     if (!ART.dbg.noRoad) road(S);
     const T2 = timing ? performance.now() : 0;
     hits = []; panels = []; orbs = [];
+    const lined = S.state === 'play' ? MB.inLine(S, 1.6) : null;
+    linedId = lined ? lined.id : 0;
+    aimedI = S.state === 'play' && !S.shells.length ? MB.aimedAnswer(S) : -1;
     decals(S, t);
     // everything with a depth, far to near
     const list = [];
@@ -253,6 +258,7 @@ const MR = (function () {
     else if (e.c === 'enemy' && k !== 'missile') hits.push({ id: e.id, x: x, y: y - e.h * s * 0.5 - (k === 'drone' ? 0.3 * s : 0), r: Math.max(e.r * s * 1.15, 18), z: e.z });
     else if (e.c === 'obs' && e.hp > 0) hits.push({ id: e.id, x: x, y: y - e.h * s * 0.5, r: Math.max(e.r * s, 14), z: e.z });
     else if (k === 'missile') hits.push({ id: e.id, x: x, y: y - 0.3 * s, r: Math.max(0.8 * s, 20), z: e.z });
+    if (e.id === linedId) reticle(x, y - e.h * s * 0.5 - (k === 'drone' ? 0.3 * s : 0), Math.max(e.r * s * 1.25, 20), t);
     if ((e.c === 'enemy' && e.max > 2 && e.hp < e.max && k !== 'missile') && s > 5) bar(x, y - (e.h + (e.y ? 0.4 : 0.6)) * s - 10, Math.max(28, e.r * s * 1.6), e.hp / e.max);
     // the turret's aiming laser: a warning line to where it will shoot
     if (k === 'turret' && e.cd < e.tel && e.z > 14 && e.z < 70 && !e.frz) {
@@ -260,6 +266,15 @@ const MR = (function () {
       g.save(); g.globalAlpha = 0.35 + 0.4 * (1 - e.cd / e.tel); g.strokeStyle = '#ff3d3d'; g.lineWidth = 2; g.setLineDash([8, 6]);
       g.beginPath(); g.moveTo(ax, ay); g.lineTo(P.x, P.y); g.stroke(); g.restore();
     }
+  }
+  // brackets round the enemy the guns are hitting
+  function reticle(x, y, r, t) {
+    const a = r * 0.42, spin = Math.sin(t * 5) * 0.08;
+    g.save(); g.translate(x, y); g.rotate(spin);
+    g.strokeStyle = 'rgba(255,230,120,0.95)'; g.lineWidth = Math.max(2, r * 0.07); g.lineCap = 'round';
+    g.beginPath();
+    for (const [sx, sy] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) { g.moveTo(sx * r, sy * (r - a)); g.lineTo(sx * r, sy * r); g.lineTo(sx * (r - a), sy * r); }
+    g.stroke(); g.restore();
   }
   function drawBlock(S, e, t) {
     const k = e.k, wd = ART2.blockStyle(wIdx);
@@ -315,13 +330,14 @@ const MR = (function () {
         if (p.gone) return;
         proj(MB.laneX(i), 2.5, z - 0.2);
         const s2 = P.s, cx = P.x, cy = P.y, w = 2.75 * s2, h = 2.35 * s2;
-        const hint = e.hint && p.ok, bad = p.bad, pulse = 0.5 + 0.5 * Math.sin(t * 6);
+        const hint = e.hint && p.ok, bad = p.bad, pulse = 0.5 + 0.5 * Math.sin(t * 6), aimed = i === aimedI && !open;
         g.save(); g.globalAlpha *= a;
         g.translate(cx, cy);
         const hx = w / 2, hy = h / 2;
         g.beginPath(); g.moveTo(-hx * 0.55, -hy); g.lineTo(hx * 0.55, -hy); g.lineTo(hx, 0); g.lineTo(hx * 0.55, hy); g.lineTo(-hx * 0.55, hy); g.lineTo(-hx, 0); g.closePath();
         g.fillStyle = bad ? 'rgba(80,20,40,0.82)' : hint ? 'rgba(255,214,90,' + (0.75 + pulse * 0.2) + ')' : 'rgba(18,24,60,0.86)'; g.fill();
-        g.lineWidth = Math.max(2, s2 * 0.12); g.strokeStyle = bad ? '#ff5a6a' : hint ? '#fff3b0' : cols.edge; g.stroke();
+        g.lineWidth = Math.max(2, s2 * (aimed ? 0.22 : 0.12)); g.strokeStyle = bad ? '#ff5a6a' : aimed ? '#ffd23f' : hint ? '#fff3b0' : cols.edge; g.stroke();
+        if (aimed) { g.save(); g.globalCompositeOperation = 'lighter'; g.globalAlpha = 0.45 + pulse * 0.35; g.lineWidth = Math.max(6, s2 * 0.5); g.strokeStyle = '#ffd23f'; g.stroke(); g.restore(); }
         if (!bad) { g.save(); g.globalCompositeOperation = 'lighter'; g.globalAlpha = 0.35 + (hint ? pulse * 0.4 : 0); g.lineWidth = Math.max(4, s2 * 0.35); g.strokeStyle = hint ? '#ffd23f' : cols.edge; g.stroke(); g.restore(); }
         const txt = p.text, fsz = Math.min(h * 0.46, w * 0.92 / Math.max(2.2, txt.length * 0.58));
         g.font = '700 ' + fsz + 'px ' + 'Fredoka, "Arial Rounded MT Bold", system-ui, sans-serif';
@@ -330,6 +346,7 @@ const MR = (function () {
         g.fillText(txt, 0, fsz * 0.04);
         if (bad) { g.strokeStyle = '#ff5a6a'; g.lineWidth = Math.max(2, s2 * 0.14); g.beginPath(); g.moveTo(-hx * 0.4, -hy * 0.55); g.lineTo(hx * 0.4, hy * 0.55); g.moveTo(hx * 0.4, -hy * 0.55); g.lineTo(-hx * 0.4, hy * 0.55); g.stroke(); }
         g.restore();
+        if (aimed) { g.save(); g.fillStyle = '#ffd23f'; g.beginPath(); g.moveTo(cx - 9, cy + h / 2 + 6); g.lineTo(cx + 9, cy + h / 2 + 6); g.lineTo(cx, cy + h / 2 - 4); g.closePath(); g.fill(); g.restore(); }
         if (!open && !bad && z < 95) panels.push({ i: i, x: cx - w / 2, y: cy - h / 2, w: w, h: h });
       });
     }
@@ -368,11 +385,12 @@ const MR = (function () {
     {
       if (o.gone) return;
       proj(o.x, o.y, o.z);
-      const r = 1.55 * P.s, hint = B.hint && o.ok, pulse = 0.5 + 0.5 * Math.sin(t * 6 + i);
+      const r = 1.55 * P.s, hint = B.hint && o.ok, pulse = 0.5 + 0.5 * Math.sin(t * 6 + i), aimed = i === aimedI;
       ART.glow(g, P.x, P.y, r * 2.2, o.bad ? '#ff5a6a' : hint ? '#ffd23f' : '#62f2ff', o.bad ? 0.3 : 0.65 + (hint ? pulse * 0.3 : 0));
       g.beginPath(); g.arc(P.x, P.y, r, 0, Math.PI * 2);
       g.fillStyle = o.bad ? 'rgba(80,20,40,0.85)' : hint ? 'rgba(255,214,90,0.95)' : 'rgba(18,24,60,0.9)'; g.fill();
-      g.lineWidth = Math.max(2, P.s * 0.12); g.strokeStyle = o.bad ? '#ff5a6a' : hint ? '#fff3b0' : '#9ff6ff'; g.stroke();
+      g.lineWidth = Math.max(2, P.s * (aimed ? 0.24 : 0.12)); g.strokeStyle = o.bad ? '#ff5a6a' : aimed ? '#ffd23f' : hint ? '#fff3b0' : '#9ff6ff'; g.stroke();
+      if (aimed) ART.glow(g, P.x, P.y, r * 2.4, '#ffd23f', 0.55 + pulse * 0.3);
       const fsz = Math.min(r * 0.95, r * 1.9 / Math.max(2, o.text.length * 0.55));
       g.font = '700 ' + fsz + 'px Fredoka, system-ui, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
       g.fillStyle = o.bad ? 'rgba(255,170,180,0.6)' : hint ? '#3d2a00' : '#ffffff'; g.fillText(o.text, P.x, P.y + fsz * 0.04);
@@ -466,6 +484,16 @@ const MR = (function () {
       const hot = e.phase === 'warn' ? 0.5 + 0.5 * Math.sin(t * 25) : e.phase === 'blow' ? 1 : 0.25;
       g.fillStyle = 'rgba(255,110,40,' + (0.35 + hot * 0.5) + ')'; g.beginPath(); g.ellipse(P.x, P.y, 0.9 * s, 0.26 * s, 0, 0, Math.PI * 2); g.fill();
       if (e.phase === 'warn') ART.glow(g, P.x, P.y - 0.3 * s, 1.5 * s, '#ff7a2a', 0.6);
+    }
+    // the line of fire: where the guns shoot, brighter when something is lined up
+    if (S.state === 'play') {
+      const lit = !!linedId, far = 44, col = lit ? '255,226,120' : '125,252,255';
+      for (let z = 1.2; z < far; z += 2.2) {
+        const a = (lit ? 0.42 : 0.24) * (1 - z / far);
+        proj(M.x - 0.5, 0.02, z); const ax = P.x, ay = P.y; proj(M.x + 0.5, 0.02, z); const bx = P.x;
+        proj(M.x + 0.5, 0.02, z + 1.4); const cx2 = P.x, cy2 = P.y; proj(M.x - 0.5, 0.02, z + 1.4);
+        quad(ax, ay, bx, ay, cx2, cy2, P.x, P.y, 'rgba(' + col + ',' + a.toFixed(3) + ')');
+      }
     }
     shadow(M.x, M.y, 0.15, 1.5, 0.38);
   }
@@ -654,5 +682,5 @@ const MR = (function () {
   }
   function panelsNow() { return panels.slice(); }
   function hitsNow() { return hits.slice(); }
-  return { get quality() { return quality; }, setQuality(q) { quality = Math.max(0.5, Math.min(1, q)); if (cv) resize(cv); }, set profile(o) { timing = o ? Object.assign(o, { bg: 0, road: 0, sprites: 0, fx: 0, n: 0 }) : null; }, WORLDS, resize, setLevel, draw, tick, fx, pick, proj, panelsNow, hitsNow, get W() { return W; }, get H() { return H; }, get parts() { return parts; } };
+  return { get quality() { return quality; }, setQuality(q) { quality = Math.max(0.5, Math.min(1, q)); if (cv) resize(cv); }, set profile(o) { timing = o ? Object.assign(o, { bg: 0, road: 0, sprites: 0, fx: 0, n: 0 }) : null; }, WORLDS, resize, setLevel, draw, tick, fx, pick, proj, panelsNow, hitsNow, get W() { return W; }, get H() { return H; }, get parts() { return parts; }, get aimed() { return aimedI; }, get lined() { return linedId; } };
 })();
