@@ -30,14 +30,14 @@ function mulberry(seed) {
 
 /* ================= the family =================
    combo: three blows in a row (t: how long each takes; a: when it hits; dmg; kb: knockback; down: knocks the zombie
-   over). Bin fights with fists and feet and spins a bamboo pole; Bơ swings a bánh mì and bounces on his belly; Bố
+   over). Bee fights with fists and feet and spins a bamboo pole; Bo swings a bánh mì and bounces on his belly; Bố
    swings hardest and drives through the crowd; Mẹ swings her handbag and throws her slipper. A special
    costs one bar of energy (hitting zombies and right answers fill it, up to three bars). Bố plays golf: he fights with a
    golf club (the longest reach) and charges in his golf cart; Mẹ, in hip-hop fashion, swings her handbag. */
 const HEROES = {
-  bin: { name: 'Bin', who: 'Big brother', hp: 100, speed: 215, power: 1.0, reach: 66, w: 30, h: 98, special: 'whirl', specName: 'Bamboo whirl',
+  bin: { name: 'Bee', who: 'Big brother', hp: 100, speed: 215, power: 1.0, reach: 66, w: 30, h: 98, special: 'whirl', specName: 'Bamboo whirl',
     combo: [{ t: 0.26, a: [0.07, 0.15], dmg: 8, kb: 70 }, { t: 0.28, a: [0.07, 0.16], dmg: 9, kb: 90 }, { t: 0.44, a: [0.12, 0.23], dmg: 16, kb: 300, down: true, reach: 76 }] },
-  bo: { name: 'Bơ', who: 'Little brother', hp: 125, speed: 185, power: 1.15, reach: 62, w: 40, h: 84, special: 'bounce', specName: 'Belly bounce',
+  bo: { name: 'Bo', who: 'Little brother', hp: 125, speed: 185, power: 1.15, reach: 62, w: 40, h: 84, special: 'bounce', specName: 'Belly bounce',
     combo: [{ t: 0.3, a: [0.09, 0.17], dmg: 9, kb: 70 }, { t: 0.32, a: [0.09, 0.18], dmg: 10, kb: 90 }, { t: 0.5, a: [0.15, 0.27], dmg: 18, kb: 340, down: true, reach: 70 }] },
   dad: { name: 'Bố', who: 'Dad', hp: 140, speed: 195, power: 1.25, reach: 84, w: 34, h: 124, special: 'cart', specName: 'Golf cart dash',
     combo: [{ t: 0.3, a: [0.09, 0.17], dmg: 9, kb: 80 }, { t: 0.32, a: [0.09, 0.18], dmg: 10, kb: 100 }, { t: 0.54, a: [0.2, 0.3], dmg: 19, kb: 380, down: true, reach: 96 }] },
@@ -345,7 +345,7 @@ function specialStep(S, P, dt, lo, hi) {
     attackHits(S, P, 70, 26 * P.power, 380, true, true);
   } else if (P.sk === 'bounce') {
     P.x = clamp(P.x + P.face * 120 * dt, lo, hi);
-    return;    // it ends when Bơ lands (see playerStep)
+    return;    // it ends when Bo lands (see playerStep)
   }
   if (P.t >= SPECIALS[P.sk]) { P.st = 'idle'; P.t = 0; P.inv = Math.max(P.inv, 0.3); }
 }

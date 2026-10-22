@@ -1,5 +1,5 @@
-/* games/family/src/art.js — FFArt: every drawing in Family Fighters, made of shapes (no image files): the family (Bin,
-   Bơ, Bố and Mẹ), nine zombies, ten bosses, things to smash, food and coins, shots, and the question drums, gongs and
+/* games/family/src/art.js — FFArt: every drawing in Family Fighters, made of shapes (no image files): the family (Bee,
+   Bo, Bố and Mẹ), nine zombies, ten bosses, things to smash, food and coins, shots, and the question drums, gongs and
    gates. Cartoon style: thick dark outlines, flat colours, big heads. Each character is a "rig" (legs, body, arms,
    head) posed for its state; drawCharacter-style functions draw at the feet, facing right when face is 1.
    FFArt.use(ctx) picks the canvas; FFArt.flash(on) draws the next shapes white (a hit). */
@@ -230,7 +230,7 @@ function body(R, bw, bh, p, extra) {
     c.beginPath(); c.arc(4, y + 1, 8, 0.1, PI - 0.1); ink(3); c.stroke();
     c.font = '700 11px Fredoka, sans-serif'; c.fillStyle = INK; c.textAlign = 'center'; c.fillText('8', bw * 0.12, y + bh * 0.42 - 1);
   } else if (k === 'bo') {
-    // an avocado on his t-shirt (bơ means avocado)
+    // an avocado on his t-shirt, his favourite fruit
     ell(bw * 0.12, -bh * 0.52, 7, 9.5, '#c5e1a5', 2); circ(bw * 0.12, -bh * 0.47, 3.5, '#8d6e63', 1.5);
   } else if (k === 'dad') {
     // a golf polo: a white collar, two buttons and a little golf flag on the chest; a brown belt

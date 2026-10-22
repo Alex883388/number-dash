@@ -1,5 +1,5 @@
 <title>Family Fighters</title>
-<meta name="description" content="Bin, Bơ, Bố and Mẹ against the zombies of Vietnam! A side-scrolling brawler for 1 to 4 players on one device or on their own iPads, phones and computers: punch through 10 places, beat a boss in each, and smash the right answer (maths, English or the world) to open the gates.">
+<meta name="description" content="Bee, Bo, Bố and Mẹ against the zombies of Vietnam! A side-scrolling brawler for 1 to 4 players on one device or on their own iPads, phones and computers: punch through 10 places, beat a boss in each, and smash the right answer (maths, English or the world) to open the gates.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap">
@@ -277,7 +277,7 @@ body.menu #hud, body.menu #qbar, body.menu #tip, body.menu #bossbar, body.menu #
     <div class="card">
       <h1 class="logo">Family <span>Fighters</span></h1>
       <canvas class="homepic" id="homePic" width="1040" height="340" aria-hidden="true"></canvas>
-      <p class="tag">Bin, Bơ, Bố and Mẹ against the zombies of Vietnam! Punch your way through 10 places, beat the boss in each, and smash the right answer to open the gates.</p>
+      <p class="tag">Bee, Bo, Bố and Mẹ against the zombies of Vietnam! Punch your way through 10 places, beat the boss in each, and smash the right answer to open the gates.</p>
       <div class="row"><button class="btn sun big" id="playBtn">Play</button></div>
       <div class="row"><button class="btn" id="crewBtn">👫 Play with friends</button><button class="btn" id="helpBtn">How to play</button><button class="btn" id="namesBtn">✏️ Names</button></div>
       <div><p class="seg-title">Questions about</p>
@@ -377,7 +377,7 @@ body.menu #hud, body.menu #qbar, body.menu #tip, body.menu #bossbar, body.menu #
       <h2>✏️ Names</h2>
       <p>Give the fighters your own family's names.</p>
       <div class="names" id="namesBox"></div>
-      <div class="row"><button class="btn sun" id="namesDone">Done</button><button class="btn" id="namesReset">Back to Bin, Bơ, Bố and Mẹ</button></div>
+      <div class="row"><button class="btn sun" id="namesDone">Done</button><button class="btn" id="namesReset">Back to Bee, Bo, Bố and Mẹ</button></div>
     </div>
   </section>
   <section class="screen" id="s-help" hidden>
@@ -386,7 +386,7 @@ body.menu #hud, body.menu #qbar, body.menu #tip, body.menu #bossbar, body.menu #
       <ul class="helplist">
         <li>🧟 Zombies have taken over Vietnam! Walk right along the street. When zombies come, the screen stops until they are all beaten.</li>
         <li>👊 Punch three times in a row for a combo: the third blow knocks zombies over. Jump and punch in the air for a flying kick (that is how to reach the bats).</li>
-        <li>⭐ Hitting zombies fills your energy. A full bar lets you do your special: Bin's bamboo whirl, Bơ's belly bounce, Bố's golf cart dash and Mẹ's slipper storm.</li>
+        <li>⭐ Hitting zombies fills your energy. A full bar lets you do your special: Bee's bamboo whirl, Bo's belly bounce, Bố's golf cart dash and Mẹ's slipper storm.</li>
         <li>❗ A zombie with a yellow ! is about to bite: step away, or hit it first. Two zombies bite at a time; the others wait their turn.</li>
         <li>🥁 A gate blocks the street with a question. Read it at the top, then smash the drum with the right answer. A wrong drum lets out two zombies and shows a tip.</li>
         <li>👑 Every place ends with a boss. Twice in the fight its question shield comes up: smash the right gong to break it, and the boss is dizzy for a moment.</li>
@@ -836,14 +836,14 @@ function mulberry(seed) {
 
 /* ================= the family =================
    combo: three blows in a row (t: how long each takes; a: when it hits; dmg; kb: knockback; down: knocks the zombie
-   over). Bin fights with fists and feet and spins a bamboo pole; Bơ swings a bánh mì and bounces on his belly; Bố
+   over). Bee fights with fists and feet and spins a bamboo pole; Bo swings a bánh mì and bounces on his belly; Bố
    swings hardest and drives through the crowd; Mẹ swings her handbag and throws her slipper. A special
    costs one bar of energy (hitting zombies and right answers fill it, up to three bars). Bố plays golf: he fights with a
    golf club (the longest reach) and charges in his golf cart; Mẹ, in hip-hop fashion, swings her handbag. */
 const HEROES = {
-  bin: { name: 'Bin', who: 'Big brother', hp: 100, speed: 215, power: 1.0, reach: 66, w: 30, h: 98, special: 'whirl', specName: 'Bamboo whirl',
+  bin: { name: 'Bee', who: 'Big brother', hp: 100, speed: 215, power: 1.0, reach: 66, w: 30, h: 98, special: 'whirl', specName: 'Bamboo whirl',
     combo: [{ t: 0.26, a: [0.07, 0.15], dmg: 8, kb: 70 }, { t: 0.28, a: [0.07, 0.16], dmg: 9, kb: 90 }, { t: 0.44, a: [0.12, 0.23], dmg: 16, kb: 300, down: true, reach: 76 }] },
-  bo: { name: 'Bơ', who: 'Little brother', hp: 125, speed: 185, power: 1.15, reach: 62, w: 40, h: 84, special: 'bounce', specName: 'Belly bounce',
+  bo: { name: 'Bo', who: 'Little brother', hp: 125, speed: 185, power: 1.15, reach: 62, w: 40, h: 84, special: 'bounce', specName: 'Belly bounce',
     combo: [{ t: 0.3, a: [0.09, 0.17], dmg: 9, kb: 70 }, { t: 0.32, a: [0.09, 0.18], dmg: 10, kb: 90 }, { t: 0.5, a: [0.15, 0.27], dmg: 18, kb: 340, down: true, reach: 70 }] },
   dad: { name: 'Bố', who: 'Dad', hp: 140, speed: 195, power: 1.25, reach: 84, w: 34, h: 124, special: 'cart', specName: 'Golf cart dash',
     combo: [{ t: 0.3, a: [0.09, 0.17], dmg: 9, kb: 80 }, { t: 0.32, a: [0.09, 0.18], dmg: 10, kb: 100 }, { t: 0.54, a: [0.2, 0.3], dmg: 19, kb: 380, down: true, reach: 96 }] },
@@ -1151,7 +1151,7 @@ function specialStep(S, P, dt, lo, hi) {
     attackHits(S, P, 70, 26 * P.power, 380, true, true);
   } else if (P.sk === 'bounce') {
     P.x = clamp(P.x + P.face * 120 * dt, lo, hi);
-    return;    // it ends when Bơ lands (see playerStep)
+    return;    // it ends when Bo lands (see playerStep)
   }
   if (P.t >= SPECIALS[P.sk]) { P.st = 'idle'; P.t = 0; P.inv = Math.max(P.inv, 0.3); }
 }
@@ -2087,7 +2087,7 @@ function body(R, bw, bh, p, extra) {
     c.beginPath(); c.arc(4, y + 1, 8, 0.1, PI - 0.1); ink(3); c.stroke();
     c.font = '700 11px Fredoka, sans-serif'; c.fillStyle = INK; c.textAlign = 'center'; c.fillText('8', bw * 0.12, y + bh * 0.42 - 1);
   } else if (k === 'bo') {
-    // an avocado on his t-shirt (bơ means avocado)
+    // an avocado on his t-shirt, his favourite fruit
     ell(bw * 0.12, -bh * 0.52, 7, 9.5, '#c5e1a5', 2); circ(bw * 0.12, -bh * 0.47, 3.5, '#8d6e63', 1.5);
   } else if (k === 'dad') {
     // a golf polo: a white collar, two buttons and a little golf flag on the chest; a brown belt

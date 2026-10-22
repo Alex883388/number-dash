@@ -63,7 +63,7 @@ async function browser(port, name) {
     await A.until(F + '.G.crew.length === 2', 30000, 'the friend to join');
     check(true, 'the friend joined over WebRTC in ' + (Date.now() - t1) + ' ms');
     await B.until("!document.getElementById('s-lobby').hidden", 10000, 'the friend lobby');
-    check((await A.ev(F + '.G.crew[1].hero')) === 'bo', 'the friend came as Bơ');
+    check((await A.ev(F + '.G.crew[1].hero')) === 'bo', 'the friend came as Bo');
     await A.ev("document.getElementById('lobbyStart').click(); 'start'");
     await A.until(F + ".G.mode === 'host'", 40000, 'the host place');
     await B.until(F + ".G.mode === 'client'", 40000, 'the friend place');
