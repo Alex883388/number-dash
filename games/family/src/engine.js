@@ -31,9 +31,9 @@ function mulberry(seed) {
 /* ================= the family =================
    combo: three blows in a row (t: how long each takes; a: when it hits; dmg; kb: knockback; down: knocks the zombie
    over). Bee fights with fists and feet and spins a bamboo pole; Bo swings a bánh mì and bounces on his belly; Bố
-   swings hardest and drives through the crowd; Mẹ swings her handbag and throws her slipper. A special
+   swings hardest and drives through the crowd; Mẹ swings her iced coffee and throws her slipper. A special
    costs one bar of energy (hitting zombies and right answers fill it, up to three bars). Bố plays golf: he fights with a
-   golf club (the longest reach) and charges in his golf cart; Mẹ, in hip-hop fashion, swings her handbag. */
+   golf club (the longest reach) and charges in his golf cart; Mẹ, in hip-hop style, swings her iced coffee. */
 const HEROES = {
   bin: { name: 'Bee', who: 'Big brother', hp: 100, speed: 215, power: 1.0, reach: 66, w: 30, h: 98, special: 'whirl', specName: 'Bamboo whirl',
     combo: [{ t: 0.26, a: [0.07, 0.15], dmg: 8, kb: 70 }, { t: 0.28, a: [0.07, 0.16], dmg: 9, kb: 90 }, { t: 0.44, a: [0.12, 0.23], dmg: 16, kb: 300, down: true, reach: 76 }] },

@@ -853,9 +853,9 @@ function mulberry(seed) {
 /* ================= the family =================
    combo: three blows in a row (t: how long each takes; a: when it hits; dmg; kb: knockback; down: knocks the zombie
    over). Bee fights with fists and feet and spins a bamboo pole; Bo swings a bánh mì and bounces on his belly; Bố
-   swings hardest and drives through the crowd; Mẹ swings her handbag and throws her slipper. A special
+   swings hardest and drives through the crowd; Mẹ swings her iced coffee and throws her slipper. A special
    costs one bar of energy (hitting zombies and right answers fill it, up to three bars). Bố plays golf: he fights with a
-   golf club (the longest reach) and charges in his golf cart; Mẹ, in hip-hop fashion, swings her handbag. */
+   golf club (the longest reach) and charges in his golf cart; Mẹ, in hip-hop style, swings her iced coffee. */
 const HEROES = {
   bin: { name: 'Bee', who: 'Big brother', hp: 100, speed: 215, power: 1.0, reach: 66, w: 30, h: 98, special: 'whirl', specName: 'Bamboo whirl',
     combo: [{ t: 0.26, a: [0.07, 0.15], dmg: 8, kb: 70 }, { t: 0.28, a: [0.07, 0.16], dmg: 9, kb: 90 }, { t: 0.44, a: [0.12, 0.23], dmg: 16, kb: 300, down: true, reach: 76 }] },
@@ -1919,9 +1919,9 @@ const RIGS = {
   bo: { legL: 15, legW: 11, bodyW: 40, bodyH: 30, headR: 22, armL: 17, armW: 10, skin: '#f6cfa8', top: '#58b947', top2: '#2f7d32', legs: '#8a5a33', shoe: '#ff7043', hair: '#231a14', cut: 'bowl', eyes: 'kid', round: true, cheeks: true, shorts: true },
   // Bố plays golf: a sky-blue polo, khaki trousers, white golf shoes, a golf glove and a cap
   dad: { legL: 34, legW: 12, bodyW: 34, bodyH: 42, headR: 20, armL: 27, armW: 10, skin: '#e7b88d', top: '#4fc3f7', top2: '#ffffff', legs: '#d8c39a', shoe: '#fafafa', hair: '#171313', cut: 'side', eyes: 'adult', tash: true, golfCap: '#ffffff', glove: true, saddle: '#8d6e63' },
-  // Mẹ in hip-hop fashion: a pink bomber jacket, a gold chain, black track pants with a white stripe, chunky sneakers,
-  // a high ponytail, sunglasses pushed up and big gold hoops
-  mum: { legL: 32, legW: 10, bodyW: 30, bodyH: 38, headR: 19, armL: 25, armW: 9, skin: '#f4cba3', top: '#ec407a', top2: '#ffffff', legs: '#212121', shoe: '#fafafa', hair: '#151010', cut: 'hightail', eyes: 'adult', lashes: true, shades: true, hoops: true, legStripe: '#ffffff', chunky: '#f06292', sleeve: 0.82, cuff: '#ffffff' },
+  // Mẹ in hip-hop style: an oversized purple hoodie with a big gold chain, baggy jeans with turn-ups, white high-top
+  // sneakers, a black cap worn backwards, sunglasses, gold hoops and long braids
+  mum: { legL: 32, legW: 12, bodyW: 34, bodyH: 40, headR: 19, armL: 25, armW: 10, skin: '#f4cba3', top: '#8e24aa', top2: '#ffffff', legs: '#3f6fb5', shoe: '#fafafa', hair: '#151010', cut: 'braids', eyes: 'adult', lashes: true, shades: true, hoops: true, snapback: '#212121', hightop: '#e53935', legCuff: '#2c4f8a', sleeve: 0.86, cuff: '#7b1fa2', hood: true },
   // zombies
   walker: { legL: 26, legW: 10, bodyW: 30, bodyH: 34, headR: 19, armL: 24, armW: 9, skin: '#9cc47a', top: '#8d6e63', top2: '#6d4c41', legs: '#3f51b5', shoe: '#5d4037', hair: '#3e4a26', cut: 'messy', zombie: true, torn: true },
   runner: { legL: 30, legW: 8, bodyW: 24, bodyH: 30, headR: 17, armL: 24, armW: 8, skin: '#a8cf86', top: '#e53935', top2: '#ffffff', legs: '#263238', shoe: '#eeeeee', hair: '#5d4037', cut: 'band', zombie: true, stripe: true },
@@ -1945,7 +1945,7 @@ function heroPose(P, H, now) {
   const p = basePose(), t = P.t || 0, k = P.hero;
   p.face = 'fight';
   if (k === 'bo') p.held = 'banhmi';
-  if (k === 'mum') p.held = 'bag';
+  if (k === 'mum') p.held = 'coffee';
   if (k === 'dad') p.held = 'club';
   const idleArms = () => { const b = Math.sin(now * 4 + (P.slot || 0) * 1.3); p.bob = b * 1.1; p.aa = [1.0 + b * 0.05, 1.35 + b * 0.05]; p.la = [-0.14, 0.16]; };
   switch (P.st) {
@@ -1972,7 +1972,7 @@ function heroPose(P, H, now) {
         if (n === 2) { p.bob = -Math.sin(hit * PI) * 10; p.sq = f < w1 ? 1 : lerp(0.85, 1, back); }
       } else if (k === 'mum') {
         if (n < 2) { p.aa = [0.8, n === 0 ? strike(2.4, 1.0) : strike(0.4, 1.9)]; p.lean = 0.1; }
-        else { p.aa = [0.9, strike(3.6, 1.1)]; p.held = f < w0 ? 'slipper' : 'bag'; p.lean = lerp(-0.2, 0.2, hit); }
+        else { p.aa = [0.9, strike(3.6, 1.1)]; p.held = f < w0 ? 'slipper' : 'coffee'; p.lean = lerp(-0.2, 0.2, hit); }
       } else if (n === 2 && k === 'bin') {
         // a high kick
         p.la = [-0.25, f < w0 ? lerp(0.3, 0.9, wind) : f < w1 ? lerp(0.9, 1.75, ease(hit)) : lerp(1.75, 0.2, back)];
@@ -1997,7 +1997,7 @@ function heroPose(P, H, now) {
       if (P.sk === 'whirl') { p.held = 'pole'; p.heldA = t * 26; p.aa = [1.6, 1.6]; p.la = [-0.4, 0.4]; p.bob = -3; }
       else if (P.sk === 'bounce') { p.rot = t * 14; p.la = [1.6, 1.4]; p.aa = [2.2, 2.0]; p.sq = 0.9; p.held = null; p.lift = 18; }
       else if (P.sk === 'cart') { p.cart = true; p.held = null; p.la = [1.35, 1.15]; p.aa = [1.55, 1.6]; p.lean = 0.22; p.lift = 24; p.face = 'happy'; }
-      else if (P.sk === 'slippers') { const w = (t * 10) % 1; p.aa = [0.8, lerp(3.4, 1.0, w)]; p.held = w < 0.5 ? 'slipper' : 'bag'; p.lean = 0.15; }
+      else if (P.sk === 'slippers') { const w = (t * 10) % 1; p.aa = [0.8, lerp(3.4, 1.0, w)]; p.held = w < 0.5 ? 'slipper' : 'coffee'; p.lean = 0.15; }
       break;
     }
     case 'hurt': p.lean = -0.35; p.aa = [2.3, 2.6]; p.la = [-0.3, 0.4]; p.face = 'hurt'; break;
@@ -2041,8 +2041,13 @@ function rig(R, x, y, s, f, p, extra) {
   // legs: back then front
   const shoe = (lx, ly, a, col) => {
     c.save(); c.translate(lx, ly); c.rotate(-a * 0.6);
-    if (R.chunky) { ell(R.legW * 0.5, 0, R.legW * 1.2, R.legW * 0.72, col); line(R.legW * -0.6, R.legW * 0.42, R.legW * 1.6, R.legW * 0.42, 3, R.chunky); }
-    else { ell(R.legW * 0.45, 1, R.legW * 0.95, R.legW * 0.55, col); if (R.saddle) ell(R.legW * 0.3, -1, R.legW * 0.4, R.legW * 0.4, R.saddle, 0); }
+    if (R.hightop) {
+      // a high-top: the ankle part, the foot, a red flash and a white sole
+      rr(-R.legW * 0.55, -R.legW * 1.15, R.legW * 1.1, R.legW * 1.2, 3, col, 2.4);
+      ell(R.legW * 0.45, 0, R.legW * 1.1, R.legW * 0.62, col);
+      line(-R.legW * 0.42, -R.legW * 0.62, R.legW * 0.55, -R.legW * 0.32, 2.6, R.hightop);
+      line(-R.legW * 0.5, R.legW * 0.42, R.legW * 1.45, R.legW * 0.42, 2.2, '#bdbdbd');
+    } else { ell(R.legW * 0.45, 1, R.legW * 0.95, R.legW * 0.55, col); if (R.saddle) ell(R.legW * 0.3, -1, R.legW * 0.4, R.legW * 0.4, R.saddle, 0); }
     c.restore();
   };
   const legCol = R.legs, skinLeg = R.shorts ? R.skin : R.legs;
@@ -2050,7 +2055,7 @@ function rig(R, x, y, s, f, p, extra) {
     const a = p.la[i], lx = i ? 3 : -3, col = i ? skinLeg : shade(skinLeg, 0.85);
     const [fx, fy] = limb(lx, hipY, a, R.legL, R.legW, col);
     if (R.shorts) limb(lx, hipY, a, R.legL * 0.42, R.legW + 3, i ? legCol : shade(legCol, 0.85));
-    if (R.legStripe && !flashOn) { const ox = Math.cos(a) * R.legW * 0.32, oy = -Math.sin(a) * R.legW * 0.32; line(lx + ox, hipY + oy + 2, fx + ox, fy + oy - 3, 2.2, R.legStripe); }
+    if (R.legCuff) limb(lx + Math.sin(a) * R.legL * 0.8, hipY + Math.cos(a) * R.legL * 0.8, a, R.legL * 0.2, R.legW + 2, i ? R.legCuff : shade(R.legCuff, 0.85));
     shoe(fx, fy, a, i ? R.shoe : shade(R.shoe, 0.85));
   }
   c.save();
@@ -2083,6 +2088,8 @@ function arm(R, x, y, a, back, held, heldA, p) {
 }
 function body(R, bw, bh, p, extra) {
   const x = -bw / 2, y = -bh;
+  // a hood lying on the back of the shoulders
+  if (R.hood) ell(x + bw * 0.2, y + 5, bw * 0.3, 10, shade(R.top, 0.82), 2.5);
   if (R.round) { c.beginPath(); c.ellipse(0, -bh * 0.5, bw / 2, bh * 0.56, 0, 0, TAU); fs(R.top); }
   else rr(x, y, bw, bh + 4, Math.min(12, bw * 0.4), R.top);
   if (R.torn) {
@@ -2113,31 +2120,39 @@ function body(R, bw, bh, p, extra) {
     line(fx, y + 13, fx, y + 25, 1.5); poly([fx, y + 13, fx + 7, y + 15.5, fx, y + 18], '#e53935', 0);
     c.fillStyle = flashOn ? '#fff' : '#6d4c41'; c.fillRect(x, -5, bw, 5); rr(2, -6, 7, 6, 1, '#ffd54f', 1.2);
   } else if (k === 'mum') {
-    // a pink bomber jacket: a white band at the hem, a zip, a gold chain with a heart
-    c.fillStyle = flashOn ? '#fff' : '#ffffff'; c.fillRect(x + 1, -6, bw - 2, 6);
-    line(bw * 0.16, y + 6, bw * 0.16, -6, 1.8, '#ad1457');
-    c.beginPath(); c.arc(bw * 0.1, y + 3, 9, 0.2, PI - 0.2); c.lineWidth = 2.6; c.strokeStyle = flashOn ? '#fff' : '#ffc107'; c.stroke();
-    c.beginPath(); c.moveTo(bw * 0.1, y + 16); c.bezierCurveTo(bw * 0.1 - 5, y + 11, bw * 0.1 - 3, y + 8, bw * 0.1, y + 11); c.bezierCurveTo(bw * 0.1 + 3, y + 8, bw * 0.1 + 5, y + 11, bw * 0.1, y + 16); fs('#ffc107', 1.4);
+    // an oversized hoodie: a pocket at the front, white strings, a band at the hem, and a big gold chain with an M
+    rr(x + bw * 0.38, -bh * 0.45, bw * 0.55, bh * 0.3, 6, shade(R.top, 1.18), 2);
+    c.fillStyle = flashOn ? '#fff' : shade(R.top, 0.8); c.fillRect(x + 1, -5, bw - 2, 5);
+    line(bw * 0.04, y + 4, bw * 0.0, y + 17, 2, '#ffffff'); line(bw * 0.22, y + 4, bw * 0.26, y + 16, 2, '#ffffff');
+    c.beginPath(); c.arc(bw * 0.13, y + 1, 11, 0.25, PI - 0.25); c.lineWidth = 3.6; c.strokeStyle = flashOn ? '#fff' : '#ffc107'; c.stroke();
+    circ(bw * 0.13, y + 15, 5.6, '#ffc107', 1.6);
+    c.font = '800 8px Fredoka, sans-serif'; c.fillStyle = '#7a5300'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('M', bw * 0.13, y + 15.5);
   }
 }
 
 /* ---------- heads ---------- */
 function head(R, p, extra) {
   const r = R.headR;
-  if (R.cut === 'pony') { ell(-r * 0.95, r * 0.25, r * 0.38, r * 0.62, R.hair, 3, 0.3); circ(-r * 0.7, -r * 0.1, r * 0.22, '#e91e63', 2); }
   if (R.cut === 'hood') { ell(-r * 0.1, -r * 0.05, r * 1.25, r * 1.2, R.top, 3); }
-  if (R.cut === 'hightail') { ell(-r * 0.85, -r * 0.95, r * 0.36, r * 0.82, R.hair, 3, 0.7); circ(-r * 0.5, -r * 0.88, r * 0.22, '#ff4081', 2.2); }
+  if (R.cut === 'braids') {
+    // two long braids down her back, with gold beads at the ends
+    for (const [bx, rot] of [[-0.8, 0.16], [-1.04, 0.34]]) {
+      ell(r * bx, r * 0.8, r * 0.17, r * 0.84, R.hair, 2.4, rot);
+      circ(r * bx - Math.sin(rot) * r * 0.86, r * 0.8 + Math.cos(rot) * r * 0.86, r * 0.12, '#ffc107', 1.4);
+    }
+  }
   circ(0, 0, r, R.skin);
   // ear
   ell(-r * 0.18, r * 0.08, r * 0.17, r * 0.24, shade(R.skin, 0.92), 2.5);
   hair(R, r);
   if (R.hoops) { c.beginPath(); c.arc(-r * 0.16, r * 0.5, r * 0.24, 0, TAU); c.lineWidth = 3.2; c.strokeStyle = flashOn ? '#fff' : '#ffc107'; c.stroke(); }
   face(R, p.face, r, p);
-  if (R.shades) shades(r);
+  if (R.shades && p.face !== 'ko') shades(r);
   if (R.cheeks) { c.globalAlpha = 0.5; circ(r * 0.52, r * 0.4, r * 0.16, '#ff8a80', 0); c.globalAlpha = 1; }
   if (R.tash) { c.beginPath(); c.moveTo(r * 0.38, r * 0.36); c.quadraticCurveTo(r * 0.65, r * 0.22, r * 0.95, r * 0.4); c.quadraticCurveTo(r * 0.65, r * 0.38, r * 0.38, r * 0.36); fs(R.hair, 2.5); }
   if (R.helmet && !(extra && extra.noHat)) helmet(r, R.helmet);
   if (R.golfCap && !(extra && extra.noHat)) golfCap(r, R.golfCap);
+  if (R.snapback && !(extra && extra.noHat)) snapback(r, R.snapback);
   if (R.nonla && !(extra && extra.noHat)) nonla(r);
   if (R.pot) pot(r, extra && extra.potOff);
 }
@@ -2150,7 +2165,7 @@ function hair(R, r) {
     c.lineTo(r * 0.92, -r * 0.3); c.quadraticCurveTo(r * 0.4, -r * 0.42, r * 0.1, -r * 0.18); c.quadraticCurveTo(-r * 0.3, -r * 0.4, -r * 0.55, -r * 0.05); c.lineTo(-r * 0.7, r * 0.3); c.closePath();
   } else if (R.cut === 'bowl') {
     c.moveTo(-r * 1.04, r * 0.3); c.arc(0, 0, r * 1.08, PI * 0.92, PI * 2.04); c.lineTo(r * 0.98, -r * 0.18); c.lineTo(-r * 0.25, -r * 0.24); c.lineTo(-r * 0.55, r * 0.3); c.closePath();
-  } else if (R.cut === 'side' || R.cut === 'pony' || R.cut === 'hightail') {
+  } else if (R.cut === 'side' || R.cut === 'braids') {
     c.moveTo(-r * 1.02, r * 0.35); c.arc(0, 0, r * 1.05, PI * 0.9, PI * 1.98); c.quadraticCurveTo(r * 0.5, -r * 0.55, -r * 0.1, -r * 0.42); c.quadraticCurveTo(-r * 0.5, -r * 0.1, -r * 0.55, r * 0.35); c.closePath();
   } else if (R.cut === 'messy') {
     c.moveTo(-r * 0.95, r * 0.05);
@@ -2220,9 +2235,20 @@ function golfCap(r, col) {
   line(-r * 0.55, -r * 0.62, r * 0.4, -r * 0.62, 1.4, '#4fc3f7');
 }
 function shades(r) {
-  // sunglasses pushed up on her head
-  ell(r * 0.12, -r * 0.82, r * 0.28, r * 0.17, '#212121', 2.2, -0.15); ell(r * 0.68, -r * 0.72, r * 0.25, r * 0.16, '#212121', 2.2, -0.15);
-  line(r * 0.38, -r * 0.8, r * 0.44, -r * 0.78, 2.2); circ(r * 0.04, -r * 0.86, r * 0.06, '#ffffff', 0);
+  // sunglasses: two dark lenses, a bridge, the arm back to the ear and a glint
+  const ey = -r * 0.06;
+  rr(r * 0.0, ey - r * 0.15, r * 0.4, r * 0.28, r * 0.1, '#212121', 2.2);
+  rr(r * 0.48, ey - r * 0.13, r * 0.36, r * 0.26, r * 0.1, '#212121', 2.2);
+  line(r * 0.4, ey - r * 0.04, r * 0.48, ey - r * 0.04, 2.2);
+  line(r * 0.0, ey - r * 0.07, -r * 0.3, ey - r * 0.1, 2);
+  c.globalAlpha = 0.75; line(r * 0.07, ey - r * 0.07, r * 0.17, ey - r * 0.11, 2, '#ffffff'); c.globalAlpha = 1;
+}
+function snapback(r, col) {
+  // a cap worn backwards: its peak sticks out behind, a gold button on top and a gold stripe
+  c.beginPath(); c.arc(0, -r * 0.2, r * 1.04, PI * 1.02, PI * 1.98); c.closePath(); fs(col, 3);
+  c.beginPath(); c.ellipse(-r * 1.02, -r * 0.34, r * 0.55, r * 0.15, 0.15, 0, TAU); fs(col, 2.6);
+  circ(0, -r * 1.23, r * 0.11, '#ffc107', 1.4);
+  line(-r * 0.25, -r * 0.62, r * 0.6, -r * 0.62, 1.8, '#ffc107');
 }
 function golfCart(x, y) {
   // Bố's golf cart: a canopy on two posts, a seat, his golf bag at the back, small wheels
@@ -2288,15 +2314,18 @@ function holdThing(k, x, y, a, spin, p) {
     line(-4, 0, 12, 0, 6, INK); line(-4, 0, 12, 0, 3.5, '#212121');
     line(12, 0, 58, 0, 4, INK); line(12, 0, 58, 0, 2.2, '#cfd8dc');
     c.save(); c.translate(60, 2); c.rotate(0.35); rr(-4, -5, 18, 11, 5, '#1a237e', 2.4); line(12, -3, 12, 4, 2, '#e0e0e0'); c.restore();
-  } else if (k === 'bag') {
-    // a pink designer handbag on its strap, with a gold clasp
-    c.beginPath(); c.arc(9, 0, 9, PI * 0.9, PI * 2.1); c.lineWidth = 2.6; c.strokeStyle = INK; c.stroke();
-    c.beginPath(); c.moveTo(4, 4); c.lineTo(26, 0); c.lineTo(30, 18); c.lineTo(2, 22); c.closePath(); fs('#f48fb1', 2.6);
-    line(6, 12, 28, 9, 1.6, '#ad1457'); rr(13, 6, 7, 5, 1.5, '#ffc107', 1.4);
-  } else if (k === 'fan') {
-    c.rotate(-0.9);
-    c.beginPath(); c.moveTo(0, 0); c.arc(0, 0, 22, -0.7, 0.7); c.closePath(); fs('#e53935', 2.4);
-    for (let i = -2; i <= 2; i++) line(0, 0, Math.cos(i * 0.32) * 21, Math.sin(i * 0.32) * 21, 1.2, '#ffd54f');
+  } else if (k === 'coffee') {
+    // an iced coffee in a clear cup, held about upright: coffee, a lighter top, cream under a dome lid, a green straw
+    // and a round green badge with a white star
+    c.rotate(a - PI / 2 + Math.sin(a) * 0.3);
+    c.translate(5, -2);
+    c.beginPath(); c.moveTo(-9, -12); c.lineTo(9, -12); c.lineTo(6.5, 16); c.lineTo(-6.5, 16); c.closePath(); fs('#b97a48', 2.4);
+    c.beginPath(); c.moveTo(-8.6, -10); c.lineTo(8.6, -10); c.lineTo(8.1, -3); c.lineTo(-8.1, -3); c.closePath(); fs('#e8cba6', 0);
+    c.beginPath(); c.ellipse(0, -12, 10, 7, 0, PI, 0); c.closePath(); fs('#ffffff', 2.2);
+    line(-11, -12, 11, -12, 2.6);
+    line(2, -18, 7, -31, 5, INK); line(2, -18, 7, -31, 3, '#2e7d32');
+    circ(0, 4, 5, '#00704a', 1.4);
+    c.beginPath(); for (let i = 0; i < 10; i++) { const ang = -PI / 2 + i * PI / 5, rad = i % 2 ? 1.3 : 3.1; c.lineTo(Math.cos(ang) * rad, 4 + Math.sin(ang) * rad); } c.closePath(); c.fillStyle = flashOn ? '#00704a' : '#ffffff'; c.fill();
   } else if (k === 'slipper') {
     slipperShape(10, 0, 0.6);
   } else if (k === 'pole') {
