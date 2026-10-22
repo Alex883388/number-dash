@@ -1,6 +1,7 @@
 // Family Fighters over the internet link: two separate headless Edge browsers (two "devices") play together through
 // PeerJS (its public server introduces them; the game then flows directly between them). Run from the repo root:
 //   node games/family/build.js && node games/family/playtest/peer.js
+// FF_URL=https://alex883388.github.io/number-dash/family/ runs the same against the live site (with its offline cache).
 // Checks: the host gets a room code from the PeerJS server; the second browser joins with it; the game starts on
 // both; the friend's walking reaches the host; with both autopilots on, the friend's punches beat zombies on the host
 // and both see the same zombies; then the friend leaves.
@@ -45,7 +46,7 @@ async function browser(port, name) {
   const F = 'window.__family';
   try {
     for (const [X, name, hero] of [[A, 'Hosty', 'dad'], [B, 'Buddy', 'bo']]) {
-      await X.go('http://localhost:' + HTTP + '/preview.html');
+      await X.go(process.env.FF_URL || 'http://localhost:' + HTTP + '/preview.html');
       await X.until('!!window.__family', 30000, 'the game');
       await X.ev("localStorage.setItem('family-fighters.v1', JSON.stringify({ v: 1, name: '" + name + "', hero: '" + hero + "', settings: { quality: 'low' } })); location.reload(); 'ok'");
       await sleep(800);

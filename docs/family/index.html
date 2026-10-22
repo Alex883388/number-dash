@@ -3564,6 +3564,7 @@ window.addEventListener('touchstart', () => { if (!touchSeen) { touchSeen = true
 /* ---------- starting a place ---------- */
 function players() { return G.seats.map((s) => ({ id: s.id, hero: s.hero, name: heroName(s.hero), lvl: heroLvl(s.hero) })); }
 function startLocal(n, from) {
+  if (!G.seats.length) G.seats = [{ id: 'p1', hero: rec.hero, devs: 'p1' }];
   G.mode = 'solo'; G.level = n; G.from = from || 0;
   G.me = G.seats.map((s) => s.id);
   G.S = FF.start(LEVELS[n - 1], { players: players(), seed: (Date.now() & 0xffff) + 1, ask: ask, from: G.from });
