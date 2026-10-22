@@ -1,0 +1,1144 @@
+<title>Family Fighters</title>
+<meta name="description" content="Bin, Bơ, Bố and Mẹ against the zombies of Vietnam! A side-scrolling brawler for 1 to 4 players on one device or on their own iPads, phones and computers: punch through 10 places, beat a boss in each, and smash the right answer (maths, English or the world) to open the gates.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap">
+<style>
+/*__SHARED:arcade-ui.css__*/
+/* Family Fighters: the whole screen is one canvas (the street, the family, the zombies). Over it: the family's cards
+   along the top left (hearts of health, energy for specials), the family hearts in the middle, the score and pause on
+   the right; the question banner under them when a gate or a boss asks; the boss's bar at the bottom; on a touch
+   screen a stick that appears under the left thumb and three buttons for the right one. Menus are arcade cards. */
+html, body { background: #20263a; }
+#game { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+body.menu #hud, body.menu #qbar, body.menu #tip, body.menu #bossbar, body.menu #touch { visibility: hidden; }
+#hud { z-index: 12; }
+.hud-top { align-items: flex-start; }
+.pcards { display: flex; gap: 6px; flex-wrap: wrap; max-width: 46vw; }
+.pcard { display: grid; grid-template-columns: 40px auto; gap: 2px 7px; align-items: center; padding: 5px 9px 5px 5px; border-radius: 16px; background: rgba(253, 254, 255, .92); box-shadow: var(--shadow-sm); border: 3px solid var(--hc, #ef5350); min-width: 118px; }
+.pcard canvas { grid-row: span 2; width: 40px; height: 40px; border-radius: 50%; background: #fff3e0; }
+.pcard b { font: 700 .9rem/1 var(--font-display); white-space: nowrap; display: flex; gap: 5px; align-items: baseline; }
+.pcard b small { font: 800 .62rem/1 var(--font-body); color: var(--ink-soft); }
+.pcard .bars { display: grid; gap: 3px; }
+.pcard .hp { height: 8px; border-radius: 6px; background: rgba(41, 52, 90, .15); overflow: hidden; width: 86px; }
+.pcard .hp i { display: block; height: 100%; width: 100%; background: #4caf50; border-radius: 6px; transition: width .15s; }
+.pcard .hp i.low { background: #ef5350; }
+.pcard .en { display: flex; gap: 3px; }
+.pcard .en i { width: 26px; height: 6px; border-radius: 4px; background: rgba(41, 52, 90, .15); overflow: hidden; position: relative; }
+.pcard .en i em { position: absolute; inset: 0; width: var(--f, 0%); background: #ffc107; }
+.pcard.ko { filter: grayscale(.8); opacity: .75; }
+.hud-mid { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.hearts { font: 1.35rem/1 var(--emoji); letter-spacing: .05em; padding: 6px 12px; border-radius: 99px; background: rgba(253, 254, 255, .85); box-shadow: var(--shadow-sm); }
+.hearts .off { opacity: .25; filter: grayscale(1); }
+.hud-right { display: flex; gap: 8px; align-items: center; }
+.hud-right .chip i { font: 1rem/1 var(--emoji); font-style: normal; }
+#qbar { position: fixed; left: 50%; top: var(--qtop, 64px); transform: translateX(-50%); z-index: 13; width: min(680px, calc(100vw - 24px)); pointer-events: none;
+  background: #fffdf5; border: 4px solid #2a1c14; border-radius: 22px; box-shadow: 0 6px 0 rgba(42, 28, 20, .35); padding: 8px 16px 9px; text-align: center; }
+#qbar .qk { display: inline-block; font: 800 .72rem/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; padding: 4px 10px; border-radius: 99px; background: #ffe082; color: #5d4037; }
+#qbar .qk.english { background: #c8e6c9; color: #1b5e20; } #qbar .qk.world { background: #bbdefb; color: #0d47a1; }
+#qbar .qt { font: 700 clamp(1.15rem, 2.6vw, 1.6rem)/1.2 var(--font-display); color: #2a1c14; margin: 4px 0 2px; text-wrap: balance; }
+#qbar .qh { font: 700 .82rem/1.2 var(--font-body); color: #8d6e63; }
+#qbar.pop { animation: qpop .35s ease; }
+@keyframes qpop { 0% { transform: translateX(-50%) scale(.85); } 60% { transform: translateX(-50%) scale(1.04); } 100% { transform: translateX(-50%) scale(1); } }
+#tip { position: fixed; left: 50%; transform: translateX(-50%); top: var(--tiptop, 160px); z-index: 13; width: min(560px, calc(100vw - 30px)); pointer-events: none; background: #fff8e1; border: 3px solid #ffb300; border-radius: 16px; padding: 8px 14px; font: 700 .98rem/1.3 var(--font-body); color: #5d4037; text-align: center; box-shadow: var(--shadow-sm); }
+#bossbar { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(14px + env(safe-area-inset-bottom)); z-index: 11; width: min(460px, 52vw); pointer-events: none; display: grid; gap: 4px; justify-items: center; }
+#bossbar b { font: 700 1rem/1 var(--font-display); color: #fff; text-shadow: 0 2px 0 #2a1c14, 0 0 6px #2a1c14; }
+#bossbar .bb { position: relative; width: 100%; height: 16px; border-radius: 10px; background: #2a1c14; border: 3px solid #2a1c14; overflow: hidden; }
+#bossbar .bb i { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(#ff7043, #e53935); width: 100%; transition: width .2s; }
+#bossbar .bb u { position: absolute; top: 0; bottom: 0; width: 3px; background: #fff59d; }
+#bossbar.shield .bb i { background: linear-gradient(#81d4fa, #29b6f6); }
+/* touch controls */
+#touch { position: fixed; inset: 0; z-index: 9; pointer-events: none; }
+#stickZone { position: fixed; left: 0; top: 22%; bottom: 0; width: 46%; pointer-events: auto; touch-action: none; }
+#stick { position: fixed; z-index: 10; width: 128px; height: 128px; margin: -64px 0 0 -64px; border-radius: 50%; background: rgba(255, 255, 255, .22); border: 3px solid rgba(255, 255, 255, .7); pointer-events: none; }
+#stick i { position: absolute; left: 50%; top: 50%; width: 56px; height: 56px; margin: -28px 0 0 -28px; border-radius: 50%; background: rgba(255, 255, 255, .9); box-shadow: 0 4px 12px rgba(0, 0, 0, .25); }
+#stick.idle { opacity: .5; }
+.tbtns { position: fixed; right: max(14px, env(safe-area-inset-right)); bottom: calc(14px + env(safe-area-inset-bottom)); width: 238px; height: 226px; pointer-events: none; }
+.tb { position: absolute; pointer-events: auto; touch-action: none; opacity: .88; border-radius: 50%; border: 4px solid rgba(42, 28, 20, .85); display: grid; place-items: center; font: 1.9rem/1 var(--emoji); box-shadow: 0 5px 0 rgba(42, 28, 20, .45); -webkit-user-select: none; user-select: none; color: #2a1c14; }
+.tb small { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); font: 800 .72rem/1 var(--font-body); color: #fff; text-shadow: 0 1px 2px #000; white-space: nowrap; }
+.tb.held { opacity: 1; transform: translateY(4px); box-shadow: 0 1px 0 rgba(42, 28, 20, .45); filter: brightness(.92); }
+#bAtk { right: 0; bottom: 30px; width: 104px; height: 104px; background: #ffca28; font-size: 2.6rem; }
+#bJump { right: 122px; bottom: 22px; width: 78px; height: 78px; background: #81d4fa; }
+#bSpec { right: 112px; bottom: 128px; width: 78px; height: 78px; background: #ce93d8; }
+#bSpec b { position: absolute; top: -6px; right: -6px; min-width: 26px; height: 26px; border-radius: 13px; background: #2a1c14; color: #fff; font: 700 .9rem/26px var(--font-display); }
+#bSpec.empty { filter: grayscale(1); opacity: .55; }
+#bSpec.ready { animation: ready 1s ease-in-out infinite; }
+@keyframes ready { 50% { box-shadow: 0 5px 0 rgba(42, 28, 20, .45), 0 0 0 8px rgba(255, 213, 79, .55); } }
+/* the game is played sideways: a phone or iPad held upright asks to be turned */
+#rotate { position: fixed; inset: 0; z-index: 60; display: none; place-items: center; padding: 24px; background: linear-gradient(#8fd1fb, #e8f6ff); text-align: center; }
+#rotate .card { max-width: 420px; }
+#rotate .big { font: 4rem/1 var(--emoji); display: inline-block; animation: turn 2.2s ease-in-out infinite; }
+@keyframes turn { 0%, 30% { transform: rotate(0); } 60%, 100% { transform: rotate(-90deg); } }
+@media (orientation: portrait) and (pointer: coarse) { #rotate { display: grid; } }
+/* menus */
+.screen { width: min(100%, 760px); }
+.logo .ic { font-family: var(--emoji); }
+.homepic { width: min(100%, 520px); aspect-ratio: 520 / 170; margin: -6px auto -10px; display: block; }
+.minis { display: flex; flex-wrap: wrap; gap: 8px 10px; justify-content: center; }
+.heroes { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.hcard { position: relative; display: grid; justify-items: center; gap: 2px; padding: 6px 4px 10px; border-radius: 18px; background: var(--card-2); border: 3px solid var(--line); box-shadow: 0 4px 0 var(--line); cursor: pointer; color: var(--ink); font: inherit; min-width: 0; }
+.hcard canvas { width: 100%; max-width: 150px; aspect-ratio: 3 / 4; }
+.hcard b { font: 700 1.15rem/1.1 var(--font-display); }
+.hcard small { font: 700 .74rem/1.2 var(--font-body); color: var(--ink-soft); }
+.hcard .lv { font: 800 .7rem/1 var(--font-body); background: var(--ink); color: #fff; border-radius: 99px; padding: 3px 7px; }
+.hcard.on { border-color: var(--hc); box-shadow: 0 4px 0 var(--hc); background: #fffdf3; }
+.hcard.taken { opacity: .45; cursor: default; }
+.hcard .seat { position: absolute; top: 6px; left: 6px; font: 800 .8rem/1 var(--font-display); color: #fff; background: var(--hc); border-radius: 99px; padding: 4px 8px; }
+.seats { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; font: 700 .9rem/1.3 var(--font-body); color: var(--ink-soft); }
+.seats span { background: var(--card-2); border-radius: 12px; padding: 6px 10px; }
+.lvgrid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+.lvcard { position: relative; display: grid; gap: 3px; padding: 6px 6px 8px; border-radius: 16px; background: var(--card-2); border: 2px solid var(--line); box-shadow: 0 4px 0 var(--line); cursor: pointer; color: var(--ink); font: inherit; min-width: 0; text-align: center; }
+.lvcard canvas { width: 100%; aspect-ratio: 16 / 9; border-radius: 10px; display: block; background: #cfe8f7; }
+.lvcard b { font: 700 .86rem/1.1 var(--font-display); }
+.lvcard small { font: 800 .68rem/1.1 var(--font-body); color: var(--ink-soft); }
+.lvcard .st { font: .9rem/1 var(--emoji); letter-spacing: .04em; }
+.lvcard .st .off { opacity: .2; filter: grayscale(1); }
+.lvcard .num { position: absolute; z-index: 1; top: 4px; left: 4px; font: 800 .8rem/1 var(--font-display); background: var(--ink); color: #fff; border-radius: 99px; padding: 3px 7px; }
+.lvcard.locked { opacity: .5; cursor: default; }
+.lvcard.locked canvas { filter: grayscale(1) brightness(.8); }
+.lvcard.locked .num::after { content: ' 🔒'; font-family: var(--emoji); }
+.code { font: 700 3rem/1 var(--font-display); letter-spacing: .25em; padding: 10px 18px; border-radius: 18px; background: var(--card-2); border: 3px dashed var(--line); display: inline-block; }
+.codein { font: 700 2rem/1 var(--font-display); letter-spacing: .3em; text-transform: uppercase; text-align: center; width: 7.2em; padding: 10px; border-radius: 16px; border: 3px solid var(--line); background: var(--card-2); color: var(--ink); }
+.namein { font: 700 1.1rem/1 var(--font-body); padding: 10px 14px; border-radius: 14px; border: 3px solid var(--line); background: var(--card-2); color: var(--ink); width: 11em; text-align: center; }
+.crewlist { display: grid; gap: 8px; }
+.crewlist div { display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-radius: 14px; background: var(--card-2); font: 700 1.05rem/1 var(--font-display); border-left: 8px solid var(--hc); text-align: left; }
+.crewlist div small { margin-left: auto; color: var(--ink-soft); font: 700 .8rem/1 var(--font-body); }
+.picker { display: flex; align-items: center; gap: 10px; justify-content: center; }
+.picker b { font: 700 1.1rem/1.2 var(--font-display); min-width: 12em; text-align: center; }
+.status { min-height: 1.3em; font-weight: 800; margin: 0; }
+.status.bad { color: var(--coral-deep); }
+.helplist { text-align: left; margin: 0; padding-left: 1.2em; line-height: 1.5; }
+.helplist li { margin: 4px 0; }
+.medal { font: 3rem/1 var(--emoji); }
+.gains { display: grid; gap: 4px; font: 700 .95rem/1.3 var(--font-body); color: var(--ink-soft); }
+.names { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.names label { display: grid; gap: 4px; font: 700 .85rem/1 var(--font-body); color: var(--ink-soft); }
+.loading { position: fixed; inset: 0; z-index: 30; display: grid; place-items: center; background: rgba(32, 38, 58, .7); color: #fff; font: 700 1.3rem/1.3 var(--font-display); }
+.loading[hidden] { display: none; }
+@media (pointer: coarse) { .screen .btn:not(.big) { min-height: 48px; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; } }
+@media (max-width: 760px) { .lvgrid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-height: 520px) {
+  .hud-top { padding-top: calc(6px + env(safe-area-inset-top, 0px)); }
+  .pcard { grid-template-columns: 30px auto; min-width: 96px; padding: 3px 7px 3px 3px; }
+  .pcard canvas { width: 30px; height: 30px; }
+  .pcard .hp { width: 64px; } .pcard .en i { width: 19px; }
+  .hearts { font-size: 1.05rem; padding: 4px 9px; }
+  #qbar { padding: 5px 12px 6px; border-width: 3px; }
+  #qbar .qt { font-size: 1.1rem; }
+  #qbar .qh { display: none; }
+  .tbtns { transform: scale(.84); transform-origin: right bottom; }
+  #stick { transform: scale(.85); }
+  #bossbar { bottom: calc(6px + env(safe-area-inset-bottom)); }
+  .heroes { gap: 6px; } .hcard canvas { max-width: 96px; }
+}
+@media (prefers-reduced-motion: reduce) { #rotate .big, #bSpec.ready, #qbar.pop { animation: none; } }
+</style>
+<!--BODY-->
+<canvas id="game" aria-label="The street, the family and the zombies"></canvas>
+<div id="hud" hidden>
+  <div class="hud-top">
+    <div class="pcards" id="pcards"></div>
+    <div class="hud-mid"><div class="hearts" id="hearts" aria-label="Family hearts"></div></div>
+    <div class="hud-right">
+      <span class="chip chipbox" id="scoreChip" aria-label="Score"><i aria-hidden="true">⭐</i> <b id="score">0</b></span>
+      <button class="hud-btn" id="pauseBtn" aria-label="Pause">
+        <svg width="18" height="20" viewBox="0 0 16 18" aria-hidden="true"><rect x="1" y="1" width="5" height="16" rx="2" fill="currentColor"/><rect x="10" y="1" width="5" height="16" rx="2" fill="currentColor"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+<div id="qbar" hidden aria-live="polite"><span class="qk" id="qKind">Maths</span><div class="qt" id="qText"></div><div class="qh" id="qHint">Smash the right drum!</div></div>
+<div id="tip" hidden></div>
+<div id="bossbar" hidden><b id="bossName">Boss</b><div class="bb"><i id="bossFill"></i><u style="left:33.3%"></u><u style="left:66.6%"></u></div></div>
+<div id="touch" hidden>
+  <div id="stickZone"></div>
+  <div id="stick" class="idle"><i></i></div>
+  <div class="tbtns">
+    <div class="tb" id="bSpec" role="button" aria-label="Special">⭐<b id="specN">1</b><small id="specName">Special</small></div>
+    <div class="tb" id="bJump" role="button" aria-label="Jump">⤴️<small>Jump</small></div>
+    <div class="tb" id="bAtk" role="button" aria-label="Punch">👊<small>Punch</small></div>
+  </div>
+</div>
+<div class="loading" id="loading" hidden>Connecting…</div>
+<div id="rotate" role="dialog" aria-label="Turn your device sideways"><div class="card"><div class="big" aria-hidden="true">📱</div><h2>Turn your device sideways</h2><p class="tag">Family Fighters is played with the screen sideways, like a TV.</p></div></div>
+
+<main id="screens">
+  <section class="screen" id="s-home">
+    <div class="card">
+      <h1 class="logo">Family <span>Fighters</span></h1>
+      <canvas class="homepic" id="homePic" width="1040" height="340" aria-hidden="true"></canvas>
+      <p class="tag">Bin, Bơ, Bố and Mẹ against the zombies of Vietnam! Punch your way through 10 places, beat the boss in each, and smash the right answer to open the gates.</p>
+      <div class="row"><button class="btn sun big" id="playBtn">Play</button></div>
+      <div class="row"><button class="btn" id="crewBtn">👫 Play with friends</button><button class="btn" id="helpBtn">How to play</button><button class="btn" id="namesBtn">✏️ Names</button></div>
+      <div><p class="seg-title">Questions about</p>
+        <div class="seg" role="radiogroup" aria-label="Questions about">
+          <label><input type="radio" name="subject" value="mixed"><span>Everything</span></label>
+          <label><input type="radio" name="subject" value="maths"><span>Maths</span></label>
+          <label><input type="radio" name="subject" value="english"><span>English</span></label>
+          <label><input type="radio" name="subject" value="world"><span>The world</span></label>
+        </div></div>
+      <div><p class="seg-title">Age</p>
+        <div class="seg" role="radiogroup" aria-label="Age">
+          <label><input type="radio" name="math" value="starter"><span>Age 7–8</span></label>
+          <label><input type="radio" name="math" value="explorer"><span>Age 9–10</span></label>
+          <label><input type="radio" name="math" value="genius"><span>Age 11–12</span></label>
+        </div></div>
+      <div class="minis">
+        <button class="btn" id="speakBtn">Read aloud: on</button>
+        <button class="btn" id="soundBtn">Music: on</button>
+        <button class="btn" id="qualityBtn">Graphics: auto</button>
+        <a class="btn" data-hub hidden href="../">All games</a>
+      </div>
+    </div>
+  </section>
+  <section class="screen" id="s-pick" hidden>
+    <div class="card small-card">
+      <h2>Who's playing?</h2>
+      <p id="pickLead">Tap a fighter to play as them.</p>
+      <div class="heroes" id="heroes"></div>
+      <div class="seats" id="seats"></div>
+      <div class="row"><button class="btn sun big" id="pickGo">Next</button></div>
+      <div class="row"><button class="btn" id="pickBack">Back</button></div>
+    </div>
+  </section>
+  <section class="screen" id="s-levels" hidden>
+    <div class="card small-card">
+      <h2>Pick a place</h2>
+      <div class="lvgrid" id="lvgrid"></div>
+      <p id="lvNote"></p>
+      <div class="row"><button class="btn" id="lvBack">Back</button></div>
+    </div>
+  </section>
+  <section class="screen" id="s-crew" hidden>
+    <div class="card small-card">
+      <h2>Play with friends</h2>
+      <p>Everyone plays on their own iPad, phone or computer. One player hosts and gets a code; the others type it in.</p>
+      <div class="row"><label for="nameIn">Your name</label><input class="namein" id="nameIn" maxlength="10" autocomplete="off" spellcheck="false"></div>
+      <div class="row"><button class="btn sun big" id="hostBtn">Host a game</button></div>
+      <div class="row"><input class="codein" id="codeIn" maxlength="4" placeholder="CODE" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Room code"><button class="btn sun" id="joinBtn">Join</button></div>
+      <p class="status" id="crewStatus" aria-live="polite"></p>
+      <div class="row"><button class="btn" id="crewHome">Home</button></div>
+    </div>
+  </section>
+  <section class="screen" id="s-lobby" hidden>
+    <div class="card small-card">
+      <h2 id="lobbyTitle">Your crew</h2>
+      <div id="lobbyCodeBox"><p id="lobbyCodeLead">Tell your crew this code:</p><div class="code" id="lobbyCode">----</div></div>
+      <div class="crewlist" id="crewList"></div>
+      <div><p class="seg-title">Your fighter</p><div class="heroes" id="lobbyHeroes"></div></div>
+      <div class="picker" id="lobbyPicker"><button class="btn" id="lvPrev" aria-label="Previous place">◀</button><b id="lvName">1. Market Morning</b><button class="btn" id="lvNext" aria-label="Next place">▶</button></div>
+      <p class="status" id="lobbyStatus" aria-live="polite"></p>
+      <div class="row"><button class="btn sun big" id="lobbyStart">Start</button><button class="btn" id="lobbyLeave">Leave</button></div>
+    </div>
+  </section>
+  <section class="screen" id="s-pause" hidden>
+    <div class="card small-card">
+      <h2>Paused</h2>
+      <p id="pauseInfo"></p>
+      <div class="row"><button class="btn sun big" id="resumeBtn">Keep fighting</button></div>
+      <div class="row"><button class="btn" id="restartBtn">Start the place again</button><button class="btn" id="quitBtn">Leave</button><button class="btn" id="pauseSound">Music: on</button></div>
+    </div>
+  </section>
+  <section class="screen" id="s-result" hidden>
+    <div class="card small-card">
+      <div class="medal" id="resMedal" aria-hidden="true">🏆</div>
+      <h2 id="resTitle">Place cleared!</h2>
+      <div class="stars" id="resStars"></div>
+      <p id="resText"></p>
+      <dl class="stats" id="resStats"></dl>
+      <div class="gains" id="resGains"></div>
+      <p class="status" id="resStatus"></p>
+      <div class="row"><button class="btn sun big" id="resNext">Next place</button></div>
+      <div class="row"><button class="btn" id="resAgain">Play again</button><button class="btn" id="resLevels">Places</button><a class="btn" data-hub hidden href="../">All games</a></div>
+    </div>
+  </section>
+  <section class="screen" id="s-wipe" hidden>
+    <div class="card small-card">
+      <div class="medal" aria-hidden="true">😵</div>
+      <h2>The family needs a rest!</h2>
+      <p id="wipeText">Everyone is down and the family hearts are used up. Try again from the last gate: the zombies there are waiting.</p>
+      <p class="status" id="wipeStatus"></p>
+      <div class="row"><button class="btn sun big" id="wipeRetry">Try again</button></div>
+      <div class="row"><button class="btn" id="wipeLevels">Places</button></div>
+    </div>
+  </section>
+  <section class="screen" id="s-names" hidden>
+    <div class="card small-card">
+      <h2>✏️ Names</h2>
+      <p>Give the fighters your own family's names.</p>
+      <div class="names" id="namesBox"></div>
+      <div class="row"><button class="btn sun" id="namesDone">Done</button><button class="btn" id="namesReset">Back to Bin, Bơ, Bố and Mẹ</button></div>
+    </div>
+  </section>
+  <section class="screen" id="s-help" hidden>
+    <div class="card small-card">
+      <h2>How to play</h2>
+      <ul class="helplist">
+        <li>🧟 Zombies have taken over Vietnam! Walk right along the street. When zombies come, the screen stops until they are all beaten.</li>
+        <li>👊 Punch three times in a row for a combo: the third blow knocks zombies over. Jump and punch in the air for a flying kick (that is how to reach the bats).</li>
+        <li>⭐ Hitting zombies fills your energy. A full bar lets you do your special: Bin's bamboo whirl, Bơ's belly bounce, Bố's golf cart dash and Mẹ's slipper storm.</li>
+        <li>❗ A zombie with a yellow ! is about to bite: step away, or hit it first. Two zombies bite at a time; the others wait their turn.</li>
+        <li>🥁 A gate blocks the street with a question. Read it at the top, then smash the drum with the right answer. A wrong drum lets out two zombies and shows a tip.</li>
+        <li>👑 Every place ends with a boss. Twice in the fight its question shield comes up: smash the right gong to break it, and the boss is dizzy for a moment.</li>
+        <li>🥖 Bánh mì and phở make you strong again, chè fills energy, and coins add to your score. Smash crates and stalls to find them.</li>
+        <li>❤️ Knocked out? A teammate standing next to you helps you up. Otherwise a family heart does (three each place).</li>
+        <li>🎮 Touch: drag on the left to walk, buttons on the right. Keyboard: W A S D, J punch, K jump, L special; a second player uses the arrow keys with 1, 2, 3. Controllers: stick, A punch, B jump, X special.</li>
+      </ul>
+      <div class="row"><button class="btn sun" id="helpHome">Got it</button></div>
+    </div>
+  </section>
+</main>
+<div class="toast" id="toast" hidden></div>
+<div class="sr" aria-live="polite" id="announce"></div>
+
+<script>
+(function () {
+'use strict';
+/*__SHARED:arcade-core__*/
+/*__SHARED:math__*/
+/*__FF:audio__*/
+/*__FF:engine__*/
+/*__FF:art__*/
+/*__FF:scene__*/
+/*__FF:net__*/
+const LEVELS = /*__FF:levels__*/null;
+const WORLD = /*__FF:world__*/null;     // world-knowledge questions, by age: [7–8, 9–10, 11–12]
+const WORDS = /*__FF:words__*/null;     // missing-word sentences (shared with Mech Blaster), by age
+const FFA = FFArt, SC = FFScene;
+const STEP = 1 / 60;
+
+/* ================= records =================
+   family-fighters.v1: levels (per place: won, stars, best score), xp (per fighter: experience, which gives its level),
+   names (the fighters' names, if changed), hero (the last fighter picked), last (the last place played), subject
+   (questions about: mixed, maths, english, world), name (for crew games), settings (quality). A place cleared marks the
+   day played (writeSave); everything else uses writeRecords. */
+const rec = loadRecords('family-fighters.v1', { v: 1, levels: {}, xp: {}, names: {}, hero: 'bin', last: 1, subject: 'mixed', name: '', settings: { quality: 'auto' } });
+for (const k of ['levels', 'xp', 'names', 'settings']) if (!rec[k] || typeof rec[k] !== 'object') rec[k] = {};
+if (!FF.HEROES[rec.hero]) rec.hero = 'bin';
+if (['mixed', 'maths', 'english', 'world'].indexOf(rec.subject) < 0) rec.subject = 'mixed';
+if (!rec.settings.quality) rec.settings.quality = 'auto';
+const heroName = (k) => String(rec.names[k] || FF.HEROES[k].name).slice(0, 10);
+const heroLvl = (k) => FF.heroLevel(rec.xp[k] || 0);
+const unlocked = (n) => n <= 1 || !!(rec.levels[n - 1] && rec.levels[n - 1].won);
+const starsOf = (n) => (rec.levels[n] && rec.levels[n].stars) || 0;
+const playerName = () => (rec.name || 'Player').slice(0, 10);
+const firstOpen = () => { for (let n = 1; n <= LEVELS.length; n++) if (!(rec.levels[n] && rec.levels[n].won)) return n; return LEVELS.length; };
+
+/* ================= questions =================
+   Maths from the arcade's shared facts, English from the missing-word sentences, the world from Family Fighters' own
+   questions; harder with the age chosen on the home card and through the ten places. */
+const AGES = ['starter', 'explorer', 'genius'];
+const age = () => (AGES.indexOf(save.settings.mathLevel) >= 0 ? save.settings.mathLevel : 'explorer');
+const stageOf = (n) => (n <= 3 ? 0 : n <= 7 ? 1 : 2);
+const NUM_TIERS = {
+  starter: [['add20', 'sub20', 'make10', 'double'], ['add20', 'sub20', 'make10', 'double', 'table2510'], ['table2510', 'table2510', 'sub20', 'add20', 'double']],
+  explorer: [['add100', 'sub100', 'table2510', 'missing'], ['table10', 'div10', 'add100', 'sub100', 'missing'], ['table10', 'div10', 'table12', 'div12', 'missing']],
+  genius: [['table10', 'div10', 'big', 'missing'], ['table12', 'div12', 'fraction', 'percent', 'big', 'missingMul'], ['order', 'order', 'table12', 'div12', 'fraction', 'percent', 'missingMul']]
+};
+const BANK_TIER = { starter: [0, 0, 1], explorer: [0, 1, 2], genius: [1, 2, 2] };
+let askN = 0, lastMath = '';
+const recent = [];
+function numberQuestion(n) {
+  const kinds = NUM_TIERS[age()][stageOf(n)];
+  let q = null;
+  const tricky = (save.math.tricky || []).filter((t) => t.t !== lastMath && typeof t.a === 'number');
+  if (tricky.length && Math.random() < 0.25) q = Object.assign({}, pick(tricky), { again: true });
+  for (let i = 0; !q || (q.t === lastMath && i < 6); i++) q = KINDS[pick(kinds)]();
+  lastMath = q.t;
+  const choices = shuffle([q.a].concat(wrongAnswers(q, 2)));
+  const text = q.t.indexOf('?') >= 0 ? q.t : q.t + ' = ?';
+  return { text: text, choices: choices.map(String), correct: choices.indexOf(q.a), tip: q.t.indexOf('?') >= 0 ? q.t.replace('?', q.a) : q.t + ' = ' + q.a, kind: 'maths', raw: q };
+}
+function bankQuestion(banks, n, kind) {
+  if (!banks) return null;
+  const tier = BANK_TIER[age()][stageOf(n)];
+  const bank = banks[tier] && banks[tier].length ? banks[tier] : banks.find((b) => b && b.length);
+  if (!bank) return null;
+  let it = null;
+  for (let i = 0; !it || (recent.indexOf(it.s || it.q) >= 0 && i < 14); i++) it = pick(bank);
+  recent.push(it.s || it.q); if (recent.length > 60) recent.shift();
+  const choices = shuffle([it.a].concat(shuffle(it.w.slice()).slice(0, 2)));
+  return { text: it.s || it.q, choices: choices, correct: choices.indexOf(it.a), tip: it.h, kind: kind };
+}
+function ask(kindOf, S) {
+  let sub = rec.subject;
+  if (sub === 'mixed') sub = ['maths', 'english', 'world'][(askN++ + S.n) % 3];
+  const q = sub === 'english' ? bankQuestion(WORDS, S.n, 'english') : sub === 'world' ? bankQuestion(WORLD, S.n, 'world') : null;
+  return q || numberQuestion(S.n);
+}
+const spokenMath = (t) => t.replace(/×/g, ' times ').replace(/÷/g, ' divided by ').replace(/−/g, ' minus ').replace(/\+/g, ' plus ').replace(/=\s*\?/, '').replace(/\?/g, 'what').replace(/%/g, ' percent');
+function sayQuestion(q) {
+  if (!q) return;
+  const words = q.kind === 'maths' ? spokenMath(q.text) : q.text.replace(/_{2,}/g, ' blank ');
+  Speech.say(words + '. ' + q.choices.join(', or ') + '?');
+}
+
+/* ================= the game ================= */
+const G = {
+  mode: 'menu',        // menu, solo, host, client
+  S: null, level: 1, from: 0,
+  seats: [],           // the players on this device: [{ id, hero, devs }]
+  crew: [],            // a crew game's players: [{ id, name, hero, lvl }]
+  me: [],              // the ids of the heroes this device drives
+  myId: 'host', role: '', code: '', lobbyLevel: 1,
+  acc: 0, last: 0, raf: 0, paused: false, over: false, endShown: false,
+  pending: [], snapT: 0, sendT: 0, snaps: [],
+  autopilot: null,     // a test hook: the bot plays this device's heroes
+  hudT: 0, slow: 0, slowN: 0, lastWind: 0, lastHit: 0
+};
+const cv = $('#game');
+SC.init(cv);
+const QUAL = { auto: 1, high: 1, low: 0.6 };
+SC.setQuality(QUAL[rec.settings.quality] || 1);
+window.addEventListener('resize', () => { SC.resize(); placeHud(); placeStick(); });
+window.addEventListener('orientationchange', () => setTimeout(() => { SC.resize(); placeHud(); }, 200));
+
+/* ---------- input: touch, two keyboard players, controllers ---------- */
+const KEYS = new Set();
+const edges = {};
+const edge = (dev, k) => { (edges[dev] = edges[dev] || {})[k] = true; };
+const SETS = {
+  kbA: { up: ['KeyW'], down: ['KeyS'], left: ['KeyA'], right: ['KeyD'], atk: ['KeyJ', 'KeyF'], jump: ['KeyK', 'Space'], spec: ['KeyL', 'KeyE'] },
+  kbB: { up: ['ArrowUp'], down: ['ArrowDown'], left: ['ArrowLeft'], right: ['ArrowRight'], atk: ['Digit1', 'Numpad1', 'KeyZ', 'Comma'], jump: ['Digit2', 'Numpad2', 'KeyX', 'Period'], spec: ['Digit3', 'Numpad3', 'KeyC', 'Slash'] }
+};
+const T = { mx: 0, my: 0, atk: false, jump: false, stickId: null, cx: 0, cy: 0 };
+const pads = [];      // [{ held: {atk, jump, spec, start}, mx, my }]
+function devInput(dev) {
+  const o = { mx: 0, my: 0, atk: false, jump: false, spec: false };
+  if (dev === 'touch') { o.mx = T.mx; o.my = T.my; o.atk = T.atk; o.jump = T.jump; }
+  else if (SETS[dev]) {
+    const s = SETS[dev], h = (arr) => arr.some((k) => KEYS.has(k));
+    o.mx = (h(s.right) ? 1 : 0) - (h(s.left) ? 1 : 0); o.my = (h(s.up) ? 1 : 0) - (h(s.down) ? 1 : 0); o.atk = h(s.atk); o.jump = h(s.jump);
+  } else if (dev.indexOf('pad') === 0) {
+    const p = pads[+dev.slice(3)];
+    if (p) { o.mx = p.mx; o.my = p.my; o.atk = p.held.atk; o.jump = p.held.jump; }
+  }
+  const e = edges[dev];
+  if (e) { o.atk = o.atk || !!e.atk; o.jump = o.jump || !!e.jump; o.spec = !!e.spec; }
+  return o;
+}
+function seatDevs(seat) {
+  if (seat.devs !== 'p1') return seat.devs;
+  // the first player has every device nobody else took
+  const taken = new Set(); for (const s of G.seats) if (s.devs !== 'p1') for (const d of s.devs) taken.add(d);
+  const out = ['touch', 'kbA'];
+  if (!taken.has('kbB')) out.push('kbB');
+  for (let i = 0; i < 4; i++) if (!taken.has('pad' + i)) out.push('pad' + i);
+  return out;
+}
+function seatInput(seat) {
+  const o = { mx: 0, my: 0, atk: false, jump: false, spec: false };
+  for (const d of seatDevs(seat)) { const i = devInput(d); o.mx += i.mx; o.my += i.my; o.atk = o.atk || i.atk; o.jump = o.jump || i.jump; o.spec = o.spec || i.spec; }
+  const len = Math.hypot(o.mx, o.my); if (len > 1) { o.mx /= len; o.my /= len; }
+  return o;
+}
+function clearEdges() { for (const k of Object.keys(edges)) edges[k] = {}; }
+function keyDev(code) { for (const dev of ['kbA', 'kbB']) for (const act of ['atk', 'jump', 'spec']) if (SETS[dev][act].indexOf(code) >= 0) return [dev, act]; return null; }
+document.addEventListener('keydown', (e) => {
+  if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+  if (e.code === 'Escape' || e.code === 'KeyP') { if (G.mode !== 'menu') { e.preventDefault(); togglePause(); } return; }
+  const k = keyDev(e.code);
+  if (G.mode !== 'menu' || k) { if (e.code.indexOf('Arrow') === 0 || e.code === 'Space') e.preventDefault(); }
+  if (!e.repeat && k) { edge(k[0], k[1]); if (G.mode === 'menu') menuKey(k[0], k[1]); }
+  if (G.mode === 'menu' && !e.repeat) { const m = { KeyA: ['kbA', -1], KeyD: ['kbA', 1], ArrowLeft: ['kbB', -1], ArrowRight: ['kbB', 1] }[e.code]; if (m) menuMove(m[0], m[1]); }
+  KEYS.add(e.code);
+});
+document.addEventListener('keyup', (e) => KEYS.delete(e.code));
+window.addEventListener('blur', () => KEYS.clear());
+function readPads() {
+  const list = navigator.getGamepads ? navigator.getGamepads() : [];
+  for (let i = 0; i < 4; i++) {
+    const gp = list && list[i];
+    if (!gp || !gp.connected) { pads[i] = null; continue; }
+    const b = (n) => !!(gp.buttons[n] && gp.buttons[n].pressed);
+    const prev = (pads[i] && pads[i].held) || {};
+    const held = { atk: b(0) || b(7), jump: b(1) || b(4), spec: b(2) || b(3) || b(5), start: b(9), left: b(14), right: b(15) };
+    let mx = gp.axes[0] || 0, my = -(gp.axes[1] || 0);
+    if (Math.abs(mx) < 0.22) mx = 0; if (Math.abs(my) < 0.22) my = 0;
+    if (b(14)) mx = -1; if (b(15)) mx = 1; if (b(12)) my = 1; if (b(13)) my = -1;
+    pads[i] = { held: held, mx: mx, my: my };
+    const dev = 'pad' + i;
+    for (const k of ['atk', 'jump', 'spec']) if (held[k] && !prev[k]) { edge(dev, k); if (G.mode === 'menu') menuKey(dev, k); }
+    if (held.start && !prev.start && G.mode !== 'menu') togglePause();
+    if (G.mode === 'menu') { if ((mx < -0.5 || held.left) && !(prev.mxL)) menuMove(dev, -1); if ((mx > 0.5 || held.right) && !(prev.mxR)) menuMove(dev, 1); }
+    held.mxL = mx < -0.5 || held.left; held.mxR = mx > 0.5 || held.right;
+  }
+}
+// the touch stick (appears under the thumb) and the three buttons
+const stickEl = $('#stick'), zone = $('#stickZone');
+function stickMove(x, y) {
+  const dx = x - T.cx, dy = y - T.cy, d = Math.hypot(dx, dy), R = 56;
+  const k = d > R ? R / d : 1;
+  stickEl.firstElementChild.style.transform = 'translate(' + dx * k + 'px,' + dy * k + 'px)';
+  const n = Math.min(1, d / R);
+  T.mx = d > 6 ? dx / d * n : 0; T.my = d > 6 ? -dy / d * n : 0;
+}
+zone.addEventListener('pointerdown', (e) => {
+  if (T.stickId !== null) return;
+  e.preventDefault(); Sound.init();
+  T.stickId = e.pointerId; T.cx = e.clientX; T.cy = e.clientY;
+  stickEl.style.left = e.clientX + 'px'; stickEl.style.top = e.clientY + 'px'; stickEl.classList.remove('idle');
+  try { zone.setPointerCapture(e.pointerId); } catch (err) { /* fine */ }
+  stickMove(e.clientX, e.clientY);
+});
+zone.addEventListener('pointermove', (e) => { if (e.pointerId === T.stickId) stickMove(e.clientX, e.clientY); });
+const stickUp = (e) => { if (e.pointerId !== T.stickId) return; T.stickId = null; T.mx = 0; T.my = 0; stickEl.classList.add('idle'); stickEl.firstElementChild.style.transform = ''; placeStick(); };
+zone.addEventListener('pointerup', stickUp); zone.addEventListener('pointercancel', stickUp);
+function placeStick() { if (T.stickId !== null) return; const r = zone.getBoundingClientRect(); stickEl.style.left = (r.left + Math.min(150, r.width * 0.4)) + 'px'; stickEl.style.top = (innerHeight - Math.min(150, innerHeight * 0.28)) + 'px'; }
+function touchButton(el, key) {
+  const ids = new Set();
+  const down = (e) => { e.preventDefault(); Sound.init(); ids.add(e.pointerId); try { el.setPointerCapture(e.pointerId); } catch (err) { /* fine */ } el.classList.add('held'); if (key === 'spec') edge('touch', 'spec'); else { T[key] = true; edge('touch', key); } };
+  const up = (e) => { ids.delete(e.pointerId); if (!ids.size) { el.classList.remove('held'); if (key !== 'spec') T[key] = false; } };
+  el.addEventListener('pointerdown', down); el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up); el.addEventListener('lostpointercapture', up);
+}
+touchButton($('#bAtk'), 'atk'); touchButton($('#bJump'), 'jump'); touchButton($('#bSpec'), 'spec');
+const coarse = () => matchMedia('(pointer: coarse)').matches;
+let touchSeen = false;
+window.addEventListener('touchstart', () => { if (!touchSeen) { touchSeen = true; if (G.mode !== 'menu') $('#touch').hidden = false; } }, { passive: true });
+
+/* ---------- starting a place ---------- */
+function players() { return G.seats.map((s) => ({ id: s.id, hero: s.hero, name: heroName(s.hero), lvl: heroLvl(s.hero) })); }
+function startLocal(n, from) {
+  G.mode = 'solo'; G.level = n; G.from = from || 0;
+  G.me = G.seats.map((s) => s.id);
+  G.S = FF.start(LEVELS[n - 1], { players: players(), seed: (Date.now() & 0xffff) + 1, ask: ask, from: G.from });
+  begin();
+}
+function begin() {
+  const L = LEVELS[G.level - 1];
+  rec.last = G.level; writeRecords();
+  G.acc = 0; G.over = false; G.endShown = false; G.paused = false; G.pending = []; G.snaps = []; G.slow = 0; G.slowN = 0;
+  SC.setPlace(L.place); SC.clearFx();
+  document.body.classList.remove('menu');
+  showScreen(null);
+  $('#hud').hidden = false; $('#touch').hidden = !(coarse() || touchSeen);
+  hideQuestion(); $('#bossbar').hidden = true;
+  buildCards(); placeHud(); placeStick();
+  Sound.init(); Sound.play(SONG_OF[L.place] || 'street');
+  lockSideways();
+  toast(G.level + '. ' + L.name, 'hello', 2200);
+  announce(L.name + '. Walk right and beat the zombies.');
+  G.last = performance.now();
+  cancelAnimationFrame(G.raf); G.raf = requestAnimationFrame(loop);
+}
+const SONG_OF = { market: 'street', oldquarter: 'street', ricefield: 'fields', school: 'fields', beach: 'sea', bay: 'sea', cave: 'cave', mountain: 'fields', rooftop: 'night', lab: 'night' };
+function lockSideways() { try { if (screen.orientation && screen.orientation.lock) screen.orientation.lock('landscape').catch(() => {}); } catch (e) { /* not here */ } }
+
+/* ---------- the frame ---------- */
+function loop(nowMs) {
+  G.raf = requestAnimationFrame(loop);
+  const dt = Math.min(0.1, (nowMs - G.last) / 1000);
+  G.last = nowMs;
+  readPads();
+  if (G.mode === 'menu') { menuFrame(nowMs / 1000); clearEdges(); return; }
+  const t0 = performance.now();
+  if (G.mode === 'client') clientFrame(dt, nowMs);
+  else if (!(G.paused && G.mode === 'solo')) hostFrame(dt, nowMs);
+  if (!(G.paused && G.mode === 'solo')) SC.tick(dt);
+  SC.frame(G.S, { now: nowMs / 1000, rings: G.S.players.length > 1 || G.mode !== 'solo', me: G.me, names: nameMap(), crew: G.S.players.length, calm: save.settings.calm });
+  G.hudT -= dt; if (G.hudT <= 0) { G.hudT = 0.1; hud(); }
+  autoQuality(dt * 1000);
+  void t0;
+}
+function nameMap() { const m = {}; if (G.mode === 'solo') for (const s of G.seats) m[s.id] = heroName(s.hero); else for (const c of G.crew) m[c.id] = c.name; return m; }
+// solo and host: the rules, 60 steps a second
+function hostFrame(dt, nowMs) {
+  const S = G.S;
+  G.acc += dt;
+  let guard = 0;
+  while (G.acc >= STEP && guard++ < 8) {
+    G.acc -= STEP;
+    const inputs = {};
+    for (const s of G.seats) if (G.me.indexOf(s.id) >= 0) inputs[s.id] = G.autopilot ? FF.bot(S, s.id, G.autopilot) : seatInput(s);
+    FF.step(S, STEP, inputs);
+    clearEdges();
+    for (const e of S.ev) onEvent(e, false);
+    if (G.mode === 'host') for (const e of S.ev) G.pending.push(e);
+    if (S.state !== 'play' && !G.over) { G.over = true; const st = S.state; setTimeout(() => endPlace(st), st === 'won' ? 2200 : 1600); if (G.mode === 'host') sendEnd(st); }
+  }
+  if (G.acc > STEP * 6) G.acc = STEP * 6;
+  if (G.mode === 'host' && nowMs - G.snapT > 50) {
+    G.snapT = nowMs;
+    const snap = FF.snapshot(S); snap.t = 's'; snap.ev = G.pending; G.pending = [];
+    FFNet.broadcast(snap);
+  }
+}
+
+/* ---------- a crew member's device ---------- */
+// its own hero moves here at once; the rest of the world comes from the host and is drawn a tenth of a second late
+function myHero() { return G.S && G.S.players.find((p) => p.id === G.myId); }
+function clientFrame(dt, nowMs) {
+  const S = G.S, me = myHero();
+  clientView(nowMs);
+  G.acc += dt;
+  let guard = 0;
+  while (G.acc >= STEP && guard++ < 8) {
+    G.acc -= STEP;
+    if (!me || S.state !== 'play') { clearEdges(); continue; }
+    const inp = G.autopilot ? FF.bot(S, G.myId, G.autopilot) : seatInput(G.seats[0]);
+    S.ev.length = 0;
+    FF.playerStep(S, me, inp, STEP);
+    clearEdges();
+    for (const e of S.ev) {
+      onEvent(e, false);
+      if (e.e === 'swing') FFNet.send({ t: 'act', k: e.n === 3 ? 'jatk' : 'atk', n: e.n, x: r1(me.x), y: r1(me.y), z: r1(me.z), f: me.face });
+      else if (e.e === 'special') FFNet.send({ t: 'act', k: 'spec', x: r1(me.x), y: r1(me.y), z: r1(me.z), f: me.face });
+    }
+    S.ev.length = 0;
+  }
+  if (G.acc > STEP * 6) G.acc = STEP * 6;
+  G.sendT -= dt;
+  if (me && G.sendT <= 0) { G.sendT = 0.05; FFNet.send({ t: 'me', x: r1(me.x), y: r1(me.y), z: r1(me.z), f: me.face, s: me.st, w: Math.round(me.walk) }); }
+}
+const r1 = (v) => Math.round(v * 10) / 10;
+function onSnap(d) {
+  if (G.mode !== 'client' || !G.S) return;
+  const u = FF.unsnap(d);
+  G.snaps.push({ at: performance.now(), u: u });
+  if (G.snaps.length > 6) G.snaps.shift();
+  const S = G.S;
+  S.state = u.state; S.hearts = u.hearts; S.score = u.score; S.bi = u.bi; S.cp = u.cp;
+  const me = myHero(), mine = u.players.find((p) => p.id === G.myId);
+  if (me && mine) {
+    me.hp = mine.hp; me.max = mine.max; me.energy = mine.energy; me.koT = mine.koT; me.rev = mine.rev;
+    if (mine.st === 'ko' && me.st !== 'ko') { me.st = 'ko'; me.t = 0; me.z = 0; me.vz = 0; }
+    else if (mine.st !== 'ko' && me.st === 'ko') { me.st = 'idle'; me.t = 0; me.inv = 2; me.x = mine.x; me.y = mine.y; }
+    if (mine.st === 'win' && me.st !== 'win') { me.st = 'win'; me.t = 0; }
+    // far from where the host thinks: the host knows best (a gate, a revive)
+    if (Math.abs(me.x - mine.x) > 160 && me.st !== 'spec') { me.x = mine.x; me.y = mine.y; }
+  }
+  for (const e of d.ev || []) {
+    const own = e.id === G.myId && ['swing', 'jump', 'land', 'throw', 'special', 'quake'].indexOf(e.e) >= 0;
+    if (e.e === 'hurt' && e.id === G.myId && me) { FF.feel(S, me, e); if (me.hp > 0) { /* hp from the snapshot */ } }
+    if (!own) onEvent(e, true);
+  }
+  if (u.state !== 'play' && !G.over) { G.over = true; }
+}
+function clientView(nowMs) {
+  const S = G.S, L = G.snaps;
+  if (!L.length) return;
+  const rt = nowMs - 100;
+  let a = L[L.length - 1], b = a, k = 0;
+  for (let i = L.length - 1; i > 0; i--) if (L[i - 1].at <= rt) { a = L[i - 1]; b = L[i]; k = clamp((rt - a.at) / Math.max(1, b.at - a.at), 0, 1); break; }
+  const mix = (la, lb) => {
+    const m = new Map(); for (const o of la) m.set(o.id, o);
+    return lb.map((o) => { const p = m.get(o.id); return p ? Object.assign({}, o, { x: p.x + (o.x - p.x) * k, y: p.y + (o.y - p.y) * k, z: p.z + (o.z - p.z) * k }) : o; });
+  };
+  const A = a.u, B = b.u;
+  S.cam = A.cam + (B.cam - A.cam) * k;
+  S.zs = mix(A.zs, B.zs); S.shots = mix(A.shots, B.shots);
+  S.picks = B.picks; S.props = B.props; S.marks = B.marks; S.gate = B.gate; S.shake = B.shake; S.go = B.go; S.lock = B.lockK ? { k: B.lockK } : null;
+  S.boss = B.boss ? (A.boss ? Object.assign({}, B.boss, { x: A.boss.x + (B.boss.x - A.boss.x) * k, y: A.boss.y + (B.boss.y - A.boss.y) * k, z: A.boss.z + (B.boss.z - A.boss.z) * k }) : B.boss) : null;
+  const others = mix(A.players, B.players);
+  for (const o of others) {
+    if (o.id === G.myId) continue;
+    const p = S.players.find((q) => q.id === o.id);
+    if (p) { for (const key of ['x', 'y', 'z', 'face', 'st', 't', 'combo', 'hp', 'max', 'energy', 'sk', 'koT', 'rev', 'walk', 'inv']) p[key] = o[key]; }
+  }
+  // players who left
+  S.players = S.players.filter((p) => p.id === G.myId || B.players.some((o) => o.id === p.id));
+}
+
+/* ---------- what happened: sounds, sparks and words ---------- */
+const SPECIAL_WORD = { whirl: 'WHOOSH!', bounce: 'BOING!', cart: 'FORE!', slippers: 'SLIPPERS!' };
+const PICK_WORD = { banhmi: 'Yum!', pho: 'Phở! Full health!', che: '+1 energy', coin: '+5' };
+function onEvent(e, remote) {
+  const S = G.S, now = performance.now();
+  const mine = G.me.indexOf(e.id) >= 0;
+  switch (e.e) {
+    case 'swing': Sound.sfx('swing'); break;
+    case 'hit':
+      SC.fx('hit', e.x, e.y, e.z, { heavy: e.heavy, dmg: e.dmg, boss: e.boss });
+      if (now - G.lastHit > 50) { G.lastHit = now; Sound.sfx('punch', e.heavy ? 2 : 0); }
+      break;
+    case 'block': SC.fx('block', e.x, e.y, e.z); Sound.sfx('block'); break;
+    case 'clang': SC.fx('hit', e.x, e.y, e.z, {}); Sound.sfx('clang'); break;
+    case 'pot': SC.fx('pot', e.x, e.y, e.z, { face: e.face }); break;
+    case 'tray': SC.fx('tray', e.x, e.y, 50, { face: e.face }); Sound.sfx('crack'); break;
+    case 'ko': SC.fx('poof', e.x, e.y, e.z || 0); Sound.sfx('poof'); break;
+    case 'boom': SC.fx('boom', e.x, e.y, 0, { r: e.r }); Sound.sfx('boom'); break;
+    case 'hurt': SC.fx('hit', e.x, e.y, 60, {}); Sound.sfx('hurt'); if (mine && navigator.vibrate) { try { navigator.vibrate(25); } catch (err) { /* fine */ } } break;
+    case 'down': Sound.sfx('down'); if (S.players.length > 1) toast(nameOf(e.id) + ' needs help! Stand next to them.', 'oops', 2200); break;
+    case 'revive': Sound.sfx('revive'); SC.fx('ring', e.x, e.y, 0, { r: 50, col: '#69f0ae' }); break;
+    case 'heart': SC.fx('heart', e.x || pos(e.id).x, e.y != null ? e.y : pos(e.id).y, 40); Sound.sfx('heart'); toast('❤️ A family heart helps ' + nameOf(e.id) + ' up! (' + e.left + ' left)', 'hello', 2200); break;
+    case 'helped': toast(nameOf(e.by) + ' helped ' + nameOf(e.id) + ' up!', 'good', 1800); break;
+    case 'jump': Sound.sfx('jump'); break;
+    case 'land': SC.fx('dust', e.x, e.y, 0); Sound.sfx('land'); break;
+    case 'throw': Sound.sfx('throw'); break;
+    case 'special': { const p = pos(e.id); SC.fx('word', p.x, p.y, 120, { text: SPECIAL_WORD[e.k] || 'WOW!', col: '#ffd54f', life: 1.1 }); Sound.sfx(e.k); break; }
+    case 'quake': SC.fx('ring', e.x, e.y, 0, { r: 150 }); SC.fx('dust', e.x, e.y, 0); Sound.sfx('quake'); break;
+    case 'crack': SC.fx('hit', e.x, e.y, 30, {}); Sound.sfx('crack'); break;
+    case 'smash': SC.fx('bits', e.x, e.y, 20, {}); Sound.sfx('smash'); break;
+    case 'pick':
+      Sound.sfx(e.k === 'coin' ? 'coin' : e.k === 'che' ? 'sparkle' : 'eat');
+      if (e.k !== 'coin' || mine) SC.fx('word', e.x, e.y, 60, { text: PICK_WORD[e.k], col: e.k === 'coin' ? '#ffd54f' : '#69f0ae', size: e.k === 'coin' ? 18 : 22 });
+      break;
+    case 'wind': if (now - G.lastWind > 700) { G.lastWind = now; Sound.sfx('groan'); } break;
+    case 'bite': Sound.sfx('bite'); break;
+    case 'spit': Sound.sfx('spit'); break;
+    case 'splat': SC.fx('splat', e.x, e.y, 50, {}); break;
+    case 'leap': Sound.sfx('jump'); break;
+    case 'thud': SC.fx('dust', e.x, e.y, 0); Sound.sfx('land'); break;
+    case 'gate': showQuestion(e.q, 'gate'); Sound.sfx('gate'); break;
+    case 'bshield': showQuestion(e.q, 'boss'); Sound.sfx('gong'); toast('Shield up! Smash the right gong.', 'hello', 2000); break;
+    case 'right':
+      hideQuestion(); SC.fx('conf', e.x, e.y, 40); Sound.sfx('right');
+      toast(e.boss ? '✓ Shield broken! Get the boss!' : e.first ? '✓ Right! The gate opens.' : '✓ Right!', 'good', 1800);
+      if (e.q && e.q.kind === 'maths' && e.q.raw && !remote) mathRight(e.q.raw);
+      if (!e.boss) Sound.sfx('open');
+      break;
+    case 'wrong':
+      Sound.sfx('wrong'); SC.fx('splat', e.x, e.y, 40, { col: '#9e9e9e' });
+      showTip(e.q);
+      if (e.q && e.q.kind === 'maths' && e.q.raw && !remote) mathWrong(e.q.raw);
+      break;
+    case 'boss': {
+      const D = FF.BOSSES[e.b];
+      Sound.sfx('alarm'); setTimeout(() => Sound.sfx('roar'), 700); Sound.play('boss');
+      toast('👑 ' + D.name + '!', 'hello', 2400); announce('The boss: ' + D.name);
+      $('#bossName').textContent = D.name; $('#bossbar').hidden = false;
+      break;
+    }
+    case 'battack': if (Math.random() < 0.4) Sound.sfx('roar'); break;
+    case 'slam': SC.fx('ring', e.x, e.y, 0, { r: 110, col: '#ff5252' }); Sound.sfx('slam'); break;
+    case 'beam': Sound.sfx('beam'); break;
+    case 'burst': SC.fx('ring', e.x, e.y, 0, { r: 90 }); SC.fx('bits', e.x, e.y, 0, { col: '#e0c48a' }); Sound.sfx('boom'); break;
+    case 'splash': SC.fx('splat', e.x, e.y, 0, { col: e.k === 'potion' ? '#ce93d8' : e.k === 'snowball' ? '#ffffff' : '#90a4ae' }); SC.fx('ring', e.x, e.y, 0, { r: e.r || 50, col: '#ffffff' }); Sound.sfx('bonk'); break;
+    case 'bossdown':
+      hideQuestion(); SC.fx('conf', e.x, e.y, 60); Sound.sfx('boom'); setTimeout(() => Sound.sfx('boom'), 400); setTimeout(() => Sound.sfx('boom'), 900);
+      toast('👑 ' + FF.BOSSES[e.b].name + ' is beaten!', 'good', 2400);
+      break;
+    case 'won': Sound.sfx('won'); Sound.play('win'); $('#bossbar').hidden = true; break;
+    case 'wipe': Sound.sfx('wipe'); break;
+    case 'go': Sound.sfx('go'); break;
+  }
+}
+function nameOf(id) { if (G.mode === 'solo') { const s = G.seats.find((q) => q.id === id); return s ? heroName(s.hero) : '?'; } const c = G.crew.find((q) => q.id === id); return c ? c.name : '?'; }
+function pos(id) { const p = G.S && G.S.players.find((q) => q.id === id); return p || { x: G.S ? G.S.cam + 480 : 0, y: 70 }; }
+
+/* ---------- the question banner ---------- */
+let tipTimer = 0;
+const KIND_NAME = { maths: 'Maths', english: 'English', world: 'The world' };
+function showQuestion(q, where) {
+  if (!q) return;
+  $('#qKind').textContent = KIND_NAME[q.kind] || 'Question'; $('#qKind').className = 'qk ' + (q.kind || '');
+  $('#qText').textContent = q.text;
+  $('#qHint').textContent = where === 'boss' ? 'Smash the right gong to break the shield!' : 'Smash the drum with the right answer!';
+  const b = $('#qbar'); b.hidden = false; b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop');
+  $('#tip').hidden = true;
+  placeHud();
+  sayQuestion(q);
+  announce(q.text + ' ' + q.choices.join(', '));
+}
+function hideQuestion() { $('#qbar').hidden = true; $('#tip').hidden = true; clearTimeout(tipTimer); }
+function showTip(q) {
+  if (!q || !q.tip) return;
+  const t = $('#tip'); t.textContent = '💡 ' + q.tip; t.hidden = false; placeHud();
+  clearTimeout(tipTimer); tipTimer = setTimeout(() => { t.hidden = true; }, 6000);
+}
+// the banner and the tip sit under the HUD's top row
+function placeHud() {
+  const top = $('#hud').hidden ? 10 : ($('.hud-top').getBoundingClientRect().bottom || 60) + 6;
+  document.documentElement.style.setProperty('--qtop', Math.round(top) + 'px');
+  const qb = $('#qbar').hidden ? top : $('#qbar').getBoundingClientRect().bottom + 6;
+  document.documentElement.style.setProperty('--tiptop', Math.round(qb) + 'px');
+}
+
+/* ---------- the HUD ---------- */
+const portraits = {};
+function portrait(k, size) {
+  const key = k + size;
+  if (!portraits[key]) { const c = document.createElement('canvas'); c.width = size * 2; c.height = size * 2; FFA.portrait(c.getContext('2d'), k, size * 2); FFA.use(cv.getContext('2d')); portraits[key] = c; }
+  return portraits[key];
+}
+function buildCards() {
+  const box = $('#pcards'); box.innerHTML = '';
+  for (const p of G.S.players) {
+    const d = document.createElement('div'); d.className = 'pcard'; d.dataset.id = p.id; d.style.setProperty('--hc', FFA.HERO_COL[p.hero]);
+    const c = document.createElement('canvas'); c.width = 80; c.height = 80; c.getContext('2d').drawImage(portrait(p.hero, 40), 0, 0);
+    d.appendChild(c);
+    d.insertAdjacentHTML('beforeend', '<b>' + escapeHtml(nameMap()[p.id] || heroName(p.hero)) + ' <small>Lv ' + (p.lvl || 1) + '</small></b><div class="bars"><div class="hp"><i></i></div><div class="en"><i><em></em></i><i><em></em></i><i><em></em></i></div></div>');
+    box.appendChild(d);
+  }
+}
+function escapeHtml(s) { return String(s).replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch])); }
+function hud() {
+  const S = G.S; if (!S) return;
+  for (const p of S.players) {
+    const d = $('.pcard[data-id="' + CSS.escape(p.id) + '"]'); if (!d) continue;
+    const f = clamp(p.hp / p.max, 0, 1), bar = d.querySelector('.hp i');
+    bar.style.width = (f * 100).toFixed(1) + '%'; bar.classList.toggle('low', f < 0.3);
+    d.querySelectorAll('.en em').forEach((em, i) => em.style.setProperty('--f', (clamp(p.energy - i, 0, 1) * 100).toFixed(0) + '%'));
+    d.classList.toggle('ko', p.st === 'ko');
+  }
+  const h = S.hearts != null ? S.hearts : FF.HEARTS;
+  $('#hearts').innerHTML = Array.from({ length: FF.HEARTS }, (_, i) => '<span' + (i < h ? '' : ' class="off"') + '>❤️</span>').join('');
+  $('#score').textContent = S.score || 0;
+  const B = S.boss;
+  if (B && !$('#bossbar').hidden) { $('#bossFill').style.width = (clamp(B.hp / B.max, 0, 1) * 100).toFixed(1) + '%'; $('#bossbar').classList.toggle('shield', !!B.shield); }
+  const me = S.players.find((p) => G.me.indexOf(p.id) >= 0);
+  if (me) {
+    const n = Math.floor(me.energy || 0), el = $('#bSpec');
+    $('#specN').textContent = n; el.classList.toggle('empty', n < 1); el.classList.toggle('ready', n >= 1);
+    $('#specName').textContent = FF.HEROES[me.hero].specName;
+  }
+}
+// a slow device draws fewer pixels: when frames keep coming slower than 26 ms apart (about 38 a second), the canvas
+// drops to three quarters of its pixels, then to 60%
+let qNow = 1;
+function autoQuality(ms) {
+  if (rec.settings.quality !== 'auto' || G.mode === 'menu' || G.paused || ms > 200) return;
+  G.slow = G.slowN ? G.slow * 0.97 + ms * 0.03 : ms; G.slowN++;
+  if (G.slowN > 180 && G.slow > 26 && qNow > 0.6) { qNow = qNow > 0.75 ? 0.75 : 0.6; SC.setQuality(qNow); G.slowN = 0; }
+}
+
+/* ---------- the end of a place ---------- */
+function endPlace(state) {
+  if (G.endShown || G.mode === 'menu') return;
+  G.endShown = true;
+  if (state === 'won') placeWon(null); else showWipe();
+}
+function placeWon(fromHost) {
+  const S = G.S, n = G.level;
+  const stars = fromHost ? fromHost.stars : FF.stars(S);
+  const st = fromHost ? fromHost.stats : S.stats, score = fromHost ? fromHost.score : S.score;
+  const prev = rec.levels[n] || {};
+  rec.levels[n] = { won: true, stars: Math.max(prev.stars || 0, stars), best: Math.max(prev.best || 0, score) };
+  // experience for this device's fighters
+  const gains = [];
+  const mine = fromHost ? fromHost.players.filter((p) => G.me.indexOf(p.id) >= 0) : S.players.filter((p) => G.me.indexOf(p.id) >= 0).map((p) => ({ id: p.id, hero: p.hero, xp: p.stats.xp }));
+  for (const p of mine) {
+    const before = heroLvl(p.hero);
+    rec.xp[p.hero] = (rec.xp[p.hero] || 0) + p.xp;
+    const after = heroLvl(p.hero);
+    gains.push(heroName(p.hero) + ': +' + p.xp + ' experience' + (after > before ? ' · ⬆️ level ' + after + '!' : ''));
+  }
+  writeSave();
+  $('#resTitle').textContent = LEVELS[n - 1].name + ': cleared!';
+  $('#resStars').innerHTML = starRow(stars);
+  $('#resText').textContent = stars === 3 ? 'Three stars! Questions right first time, and no family hearts used.' : stars === 2 ? (st.hearts ? 'Great answers! Next time, try to keep all three family hearts.' : 'No hearts used! Next time, try to get more answers right first time.') : 'The boss is beaten! Answer right first time and keep the family hearts for more stars.';
+  $('#resStats').innerHTML = stat('Zombies', st.kills) + stat('Right first time', st.first + '/' + st.asked) + stat('Hearts used', st.hearts) + stat('Score', score);
+  $('#resGains').innerHTML = gains.map((g) => '<div>' + escapeHtml(g) + '</div>').join('');
+  const last = n >= LEVELS.length, client = G.mode === 'client';
+  $('#resNext').hidden = last || client; $('#resAgain').hidden = client; $('#resNext').textContent = 'Next: ' + (last ? '' : LEVELS[n].name);
+  $('#resStatus').textContent = client ? 'Waiting for the host to pick what is next…' : last ? '🎉 You have beaten all ten places! More are coming.' : '';
+  $('#resMedal').textContent = last ? '🏆' : stars === 3 ? '🌟' : '🎉';
+  showScreen('result');
+  if (stars === 3) setTimeout(() => Sound.sfx('heart'), 400);
+}
+function showWipe() {
+  const client = G.mode === 'client';
+  $('#wipeRetry').hidden = client;
+  $('#wipeStatus').textContent = client ? 'Waiting for the host to try again…' : '';
+  showScreen('wipe');
+}
+function sendEnd(state) {
+  const S = G.S;
+  FFNet.broadcast({ t: 'end', state: state, stars: FF.stars(S), score: S.score, stats: S.stats, players: S.players.map((p) => ({ id: p.id, hero: p.hero, xp: p.stats.xp })) });
+}
+function onEnd(d) {
+  if (G.mode !== 'client') return;
+  G.endShown = true;
+  setTimeout(() => { if (d.state === 'won') placeWon(d); else showWipe(); }, d.state === 'won' ? 2200 : 1600);
+}
+$('#resNext').addEventListener('click', () => { const n = Math.min(LEVELS.length, G.level + 1); if (G.mode === 'host') hostStart(n, 0); else startLocal(n, 0); });
+$('#resAgain').addEventListener('click', () => { if (G.mode === 'host') hostStart(G.level, 0); else startLocal(G.level, 0); });
+$('#resLevels').addEventListener('click', () => { if (G.mode === 'host') { backToLobby(); return; } if (G.mode === 'client') { leaveCrew(); return; } leaveGame(); showLevels(); });
+$('#wipeRetry').addEventListener('click', () => { const cp = G.S ? G.S.cp : 0; if (G.mode === 'host') hostStart(G.level, cp); else startLocal(G.level, cp); });
+$('#wipeLevels').addEventListener('click', () => { if (G.mode === 'host') { backToLobby(); return; } if (G.mode === 'client') { leaveCrew(); return; } leaveGame(); showLevels(); });
+
+/* ---------- pause ---------- */
+function togglePause() {
+  if (G.mode === 'menu') return;
+  if (!$('#s-pause').hidden) { resume(); return; }
+  if (!$('#screens').classList.contains('open')) {
+    G.paused = true;
+    $('#pauseInfo').textContent = G.mode === 'solo' ? LEVELS[G.level - 1].name : 'The crew keeps playing while you are here.';
+    $('#restartBtn').hidden = G.mode === 'client';
+    $('#pauseSound').textContent = 'Music: ' + (save.settings.music > 0 ? 'on' : 'off');
+    showScreen('pause');
+  }
+}
+function resume() { G.paused = false; showScreen(null); G.last = performance.now(); }
+$('#pauseBtn').addEventListener('click', togglePause);
+$('#resumeBtn').addEventListener('click', resume);
+$('#restartBtn').addEventListener('click', () => { if (G.mode === 'host') hostStart(G.level, 0); else startLocal(G.level, 0); });
+$('#quitBtn').addEventListener('click', () => { if (G.mode === 'host') { backToLobby(); return; } if (G.mode === 'client') { leaveCrew(); return; } leaveGame(); showLevels(); });
+$('#pauseSound').addEventListener('click', () => { const on = toggleMusic(); $('#pauseSound').textContent = 'Music: ' + (on ? 'on' : 'off'); renderHome(); });
+function leaveGame() {
+  G.mode = 'menu'; G.S = null; G.paused = false; G.autopilot = G.autopilot && G.keepAuto ? G.autopilot : null;
+  document.body.classList.add('menu'); $('#hud').hidden = true; $('#touch').hidden = true; hideQuestion(); $('#bossbar').hidden = true;
+  Sound.play('menu');
+}
+
+/* ================= menus ================= */
+function goHome() { leaveGame(); renderHome(); showScreen('home'); }
+function renderHome() {
+  const r1b = document.querySelector('input[name="subject"][value="' + rec.subject + '"]'); if (r1b) r1b.checked = true;
+  const r2 = document.querySelector('input[name="math"][value="' + age() + '"]'); if (r2) r2.checked = true;
+  $('#speakBtn').textContent = 'Read aloud: ' + (save.settings.speak ? 'on' : 'off');
+  $('#soundBtn').textContent = 'Music: ' + (save.settings.music > 0 ? 'on' : 'off');
+  $('#qualityBtn').textContent = 'Graphics: ' + rec.settings.quality;
+  drawHomePic();
+}
+function drawHomePic() {
+  const c = $('#homePic'), k = c.getContext('2d');
+  k.setTransform(1, 0, 0, 1, 0, 0); k.clearRect(0, 0, c.width, c.height);
+  FFA.use(k);
+  const now = performance.now() / 1000;
+  k.save(); k.scale(2, 2);
+  FF.HERO_ORDER.forEach((h, i) => {
+    const P = { hero: h, st: 'idle', t: now, slot: i, face: 1, walk: 0 };
+    FFA.hero(P, FF.HEROES[h], 80 + i * 120, 160, 1.15, now);
+  });
+  k.restore();
+  FFA.use(cv.getContext('2d'));
+}
+$$('input[name="subject"]').forEach((r) => r.addEventListener('change', () => { rec.subject = r.value; writeRecords(); }));
+$$('input[name="math"]').forEach((r) => r.addEventListener('change', () => { save.settings.mathLevel = r.value; try { const cur = JSON.parse(localStorage.getItem('number-dash.v1') || '{}'); cur.settings = save.settings; localStorage.setItem('number-dash.v1', JSON.stringify(cur)); } catch (err) { /* ignore */ } }));
+$('#speakBtn').addEventListener('click', () => { save.settings.speak = !save.settings.speak; try { const cur = JSON.parse(localStorage.getItem('number-dash.v1') || '{}'); cur.settings = save.settings; localStorage.setItem('number-dash.v1', JSON.stringify(cur)); } catch (err) { /* ignore */ } renderHome(); });
+$('#soundBtn').addEventListener('click', () => { toggleMusic(); renderHome(); });
+$('#qualityBtn').addEventListener('click', () => { const q = ['auto', 'high', 'low'], i = q.indexOf(rec.settings.quality); rec.settings.quality = q[(i + 1) % q.length]; writeRecords(); qNow = QUAL[rec.settings.quality]; SC.setQuality(qNow); renderHome(); });
+$('#playBtn').addEventListener('click', () => { Sound.init(); showPick(); });
+$('#helpBtn').addEventListener('click', () => showScreen('help'));
+$('#helpHome').addEventListener('click', () => showScreen('home'));
+$('#namesBtn').addEventListener('click', showNames);
+$('#crewBtn').addEventListener('click', () => { Sound.init(); $('#nameIn').value = rec.name || ''; crewStatus(''); showScreen('crew'); });
+$('#crewHome').addEventListener('click', () => { FFNet.close(); G.role = ''; showScreen('home'); });
+
+/* ---------- names ---------- */
+function showNames() {
+  $('#namesBox').innerHTML = FF.HERO_ORDER.map((h) => '<label>' + FF.HEROES[h].who + '<input class="namein" maxlength="10" data-h="' + h + '" value="' + escapeHtml(heroName(h)) + '" autocomplete="off" spellcheck="false"></label>').join('');
+  showScreen('names');
+}
+$('#namesDone').addEventListener('click', () => { $$('#namesBox input').forEach((i) => { const v = i.value.trim().slice(0, 10); if (v && v !== FF.HEROES[i.dataset.h].name) rec.names[i.dataset.h] = v; else delete rec.names[i.dataset.h]; }); writeRecords(); showScreen('home'); });
+$('#namesReset').addEventListener('click', () => { rec.names = {}; writeRecords(); showNames(); });
+
+/* ---------- who's playing ---------- */
+function showPick() {
+  if (!G.seats.length) G.seats = [{ id: 'p1', hero: rec.hero, devs: 'p1' }];
+  renderPick(); showScreen('pick');
+}
+function heroCard(h, cls, seat) {
+  const H = FF.HEROES[h];
+  return '<button class="hcard ' + cls + '" data-h="' + h + '" style="--hc:' + FFA.HERO_COL[h] + '">' + (seat ? '<span class="seat">' + seat + '</span>' : '') +
+    '<canvas width="240" height="320" data-hero="' + h + '"></canvas><b>' + escapeHtml(heroName(h)) + '</b><small>' + H.who + ' · ' + H.specName + '</small><span class="lv">Level ' + heroLvl(h) + '</span></button>';
+}
+function drawHeroCanvases(root) {
+  const now = performance.now() / 1000;
+  root.querySelectorAll('canvas[data-hero]').forEach((c) => {
+    const k = c.getContext('2d'), h = c.dataset.hero;
+    k.setTransform(1, 0, 0, 1, 0, 0); k.clearRect(0, 0, c.width, c.height);
+    k.fillStyle = 'rgba(0,0,0,0.12)'; k.beginPath(); k.ellipse(120, 292, 54, 12, 0, 0, Math.PI * 2); k.fill();
+    FFA.use(k);
+    FFA.hero({ hero: h, st: 'idle', t: now, slot: FF.HERO_ORDER.indexOf(h), face: 1, walk: 0 }, FF.HEROES[h], 110, 290, h === 'dad' ? 1.65 : h === 'mum' ? 1.75 : 1.95, now);
+  });
+  FFA.use(cv.getContext('2d'));
+}
+function renderPick() {
+  const seatOf = (h) => { const i = G.seats.findIndex((s) => s.hero === h); return i >= 0 ? 'P' + (i + 1) : ''; };
+  $('#heroes').innerHTML = FF.HERO_ORDER.map((h) => heroCard(h, seatOf(h) ? 'on' : '', seatOf(h))).join('');
+  drawHeroCanvases($('#heroes'));
+  const lines = G.seats.map((s, i) => '<span>P' + (i + 1) + ': ' + escapeHtml(heroName(s.hero)) + (i ? ' (' + devName(s.devs[0]) + ')' : '') + '</span>');
+  if (G.seats.length < 4) lines.push('<span>More players: press 1 on the keyboard (arrow keys) or A on a controller to join</span>');
+  $('#seats').innerHTML = lines.join('');
+  $('#pickLead').textContent = G.seats.length > 1 ? 'Each player picks a different fighter (left and right to change; their special key or button to leave).' : 'Tap a fighter to play as them.';
+}
+const devName = (d) => (d === 'kbB' ? 'arrow keys' : d && d.indexOf('pad') === 0 ? 'controller ' + (+d.slice(3) + 1) : 'keyboard');
+$('#heroes').addEventListener('click', (e) => {
+  const b = e.target.closest('.hcard'); if (!b) return;
+  const h = b.dataset.h, other = G.seats.find((s) => s.hero === h);
+  if (other && other !== G.seats[0]) other.hero = G.seats[0].hero;
+  G.seats[0].hero = h; rec.hero = h; writeRecords(); Sound.sfx('click'); renderPick();
+});
+function freeHero(after) { const used = new Set(G.seats.map((s) => s.hero)); let i = FF.HERO_ORDER.indexOf(after || 'bin'); for (let k = 0; k < 4; k++) { const h = FF.HERO_ORDER[(i + k) % 4]; if (!used.has(h)) return h; } return after; }
+// keys and buttons on the menus: a new player joins on the pick screen
+function menuKey(dev, act) {
+  if ($('#s-pick').hidden) return;
+  const seat = G.seats.find((s) => s.devs !== 'p1' && s.devs.indexOf(dev) >= 0);
+  if (act === 'atk' && !seat && dev !== 'kbA' && G.seats.length < 4) {
+    G.seats.push({ id: 'p' + (G.seats.length + 1) + dev, hero: freeHero(G.seats[G.seats.length - 1].hero), devs: [dev] });
+    Sound.sfx('join'); renderPick();
+  } else if (act === 'spec' && seat) { G.seats = G.seats.filter((s) => s !== seat); renderPick(); }
+  else if (act === 'atk' && dev === 'kbA' && !seat) $('#pickGo').click();
+}
+function menuMove(dev, dir) {
+  if ($('#s-pick').hidden) return;
+  const seat = dev === 'kbA' ? G.seats[0] : G.seats.find((s) => s.devs !== 'p1' && s.devs.indexOf(dev) >= 0);
+  if (!seat) return;
+  const used = new Set(G.seats.filter((s) => s !== seat).map((s) => s.hero));
+  let i = FF.HERO_ORDER.indexOf(seat.hero);
+  for (let k = 0; k < 4; k++) { i = (i + dir + 4) % 4; if (!used.has(FF.HERO_ORDER[i])) break; }
+  seat.hero = FF.HERO_ORDER[i];
+  if (seat === G.seats[0]) { rec.hero = seat.hero; writeRecords(); }
+  Sound.sfx('click'); renderPick();
+}
+$('#pickGo').addEventListener('click', () => { Sound.init(); showLevels(); });
+$('#pickBack').addEventListener('click', () => showScreen('home'));
+let menuT = 0;
+function menuFrame(now) {
+  // the menu's fighters breathe
+  menuT += 1;
+  if (menuT % 3) return;
+  if (!$('#s-home').hidden) drawHomePic();
+  else if (!$('#s-pick').hidden) drawHeroCanvases($('#heroes'));
+  else if (!$('#s-lobby').hidden) drawHeroCanvases($('#lobbyHeroes'));
+}
+
+/* ---------- places ---------- */
+function showLevels() {
+  $('#lvgrid').innerHTML = LEVELS.map((L) => {
+    const s = starsOf(L.id), lock = !unlocked(L.id);
+    return '<button class="lvcard' + (lock ? ' locked' : '') + '" data-n="' + L.id + '"' + (lock ? ' aria-disabled="true"' : '') + '><span class="num">' + L.id + '</span><canvas width="320" height="180" data-place="' + L.place + '"></canvas><b>' + escapeHtml(L.name) + '</b>' +
+      '<small>Boss: ' + FF.BOSSES[L.boss].name + '</small><span class="st">' + [0, 1, 2].map((i) => '<span' + (i < s ? '' : ' class="off"') + '>⭐</span>').join('') + '</span></button>';
+  }).join('');
+  showScreen('levels');
+  $('#lvNote').textContent = 'Beat a place to open the next one.';
+  // the pictures, one at a time so the screen opens at once
+  const cs = Array.from($$('#lvgrid canvas'));
+  let i = 0;
+  const one = () => { if (i >= cs.length || $('#s-levels').hidden) return; SC.postcard(cs[i], cs[i].dataset.place); i++; setTimeout(one, 0); };
+  setTimeout(one, 30);
+}
+$('#lvgrid').addEventListener('click', (e) => {
+  const b = e.target.closest('.lvcard'); if (!b) return;
+  const n = +b.dataset.n;
+  if (!unlocked(n)) { toast('Beat place ' + (n - 1) + ' first!', 'oops'); return; }
+  startLocal(n, 0);
+});
+$('#lvBack').addEventListener('click', () => showPick());
+
+/* ================= crew games ================= */
+function crewStatus(t, bad) { const s = $('#crewStatus'); s.textContent = t; s.classList.toggle('bad', !!bad); }
+function saveName() { if ($('#s-crew').hidden) return; rec.name = $('#nameIn').value.trim().slice(0, 10); writeRecords(); }
+async function hostCrew(local) {
+  saveName(); crewStatus('Opening a room…'); $('#loading').hidden = false;
+  try {
+    const r = await FFNet.host({ local: local }, { join: onJoin, leave: onLeave, msg: onHostMsg });
+    G.role = 'host'; G.code = r.code; G.myId = 'host';
+    G.crew = [{ id: 'host', name: playerName(), hero: rec.hero, lvl: heroLvl(rec.hero) }];
+    G.lobbyLevel = firstOpen();
+    renderLobby(); showScreen('lobby');
+  } catch (e) { crewStatus('Could not open a room. Check the internet and try again.', true); }
+  finally { $('#loading').hidden = true; }
+}
+function onJoin(id, hello) {
+  if (G.crew.length >= 4) { FFNet.sendTo(id, { t: 'full' }); FFNet.drop(id); return; }
+  if (G.mode !== 'menu') { FFNet.sendTo(id, { t: 'busy' }); FFNet.drop(id); return; }
+  const used = new Set(G.crew.map((c) => c.hero));
+  let hero = FF.HEROES[hello.hero] && !used.has(hello.hero) ? hello.hero : FF.HERO_ORDER.find((h) => !used.has(h));
+  G.crew.push({ id: id, name: String(hello.name || 'Player').slice(0, 10), hero: hero, lvl: clamp(hello.lvl | 0, 1, 10) });
+  FFNet.sendTo(id, { t: 'welcome', you: id, crew: G.crew, level: G.lobbyLevel, code: G.code });
+  lobbyBroadcast(); Sound.sfx('join');
+}
+function onLeave(id) {
+  const c = G.crew.find((q) => q.id === id);
+  G.crew = G.crew.filter((q) => q.id !== id);
+  if (G.S && G.mode === 'host') { FF.removePlayer(G.S, id); buildCards(); }
+  if (c) toast(c.name + ' left the game', 'oops', 2000);
+  lobbyBroadcast();
+}
+function onHostMsg(id, d) {
+  if (!d) return;
+  if (d.t === 'me') { if (G.mode === 'host' && G.S) FF.remote(G.S, id, d); }
+  else if (d.t === 'act') { if (G.mode === 'host' && G.S) FF.act(G.S, id, d); }
+  else if (d.t === 'pick') {
+    const c = G.crew.find((q) => q.id === id);
+    if (c && FF.HEROES[d.hero] && !G.crew.some((o) => o !== c && o.hero === d.hero)) { c.hero = d.hero; c.lvl = clamp(d.lvl | 0, 1, 10); }
+    lobbyBroadcast();
+  } else if (d.t === 'bye') onLeave(id);
+}
+function lobbyBroadcast() { FFNet.broadcast({ t: 'lobby', crew: G.crew, level: G.lobbyLevel }); if (G.mode === 'menu' && !$('#s-lobby').hidden) renderLobby(); }
+async function joinCrew(code, local) {
+  saveName();
+  code = String(code || '').trim().toUpperCase();
+  if (!/^[A-Z]{4}$/.test(code)) { crewStatus('The code is four letters.', true); return; }
+  crewStatus('Joining ' + code + '…'); $('#loading').hidden = false;
+  try {
+    await FFNet.join(code, { local: local, hello: { name: playerName(), hero: rec.hero, lvl: heroLvl(rec.hero) } }, { msg: onClientMsg, lost: onLost });
+    G.role = 'client'; G.code = code;
+    crewStatus('Joined! Waiting for the host…');
+  } catch (e) { crewStatus(e && e.type === 'nohost' ? 'No game with that code. Check the code with your host.' : 'Could not connect. Check the internet and try again.', true); }
+  finally { $('#loading').hidden = true; }
+}
+function onClientMsg(d) {
+  if (!d) return;
+  if (d.t === 's') { onSnap(d); return; }
+  if (d.t === 'welcome') { G.myId = d.you; G.crew = d.crew; G.lobbyLevel = d.level; renderLobby(); showScreen('lobby'); }
+  else if (d.t === 'lobby') { G.crew = d.crew; G.lobbyLevel = d.level; if (G.mode === 'client' && G.endShown) { leaveGame(); renderLobby(); showScreen('lobby'); } else if (!$('#s-lobby').hidden) renderLobby(); }
+  else if (d.t === 'start') startClient(d);
+  else if (d.t === 'end') onEnd(d);
+  else if (d.t === 'full') { crewStatus('That game is full (4 players).', true); FFNet.close(); }
+  else if (d.t === 'busy') { crewStatus('That crew is in the middle of a place. Try again when they are back in the lobby.', true); FFNet.close(); }
+  else if (d.t === 'bye') onLost();
+}
+function onLost() {
+  if (G.role !== 'client') return;
+  G.role = ''; FFNet.close();
+  if (G.mode !== 'menu') leaveGame();
+  renderHome(); showScreen('home');
+  toast('The host has left the game.', 'oops', 2600);
+}
+function renderLobby() {
+  const host = G.role === 'host', me = G.crew.find((c) => c.id === G.myId);
+  $('#lobbyCodeBox').hidden = false;
+  $('#lobbyCodeLead').textContent = host ? 'Tell your crew this code:' : 'You are in the crew of:';
+  $('#lobbyCode').textContent = G.code || '----';
+  $('#crewList').innerHTML = G.crew.map((c) => '<div style="--hc:' + FFA.HERO_COL[c.hero] + '">' + escapeHtml(c.name) + ' <span>' + escapeHtml(heroName(c.hero)) + '</span><small>' + (c.id === G.myId ? 'you' : c.id === 'host' ? 'host' : '') + '</small></div>').join('');
+  $('#lobbyHeroes').innerHTML = FF.HERO_ORDER.map((h) => { const taker = G.crew.find((c) => c.hero === h); return heroCard(h, taker ? (taker.id === G.myId ? 'on' : 'taken') : '', taker ? taker.name.slice(0, 6) : ''); }).join('');
+  drawHeroCanvases($('#lobbyHeroes'));
+  const L = LEVELS[G.lobbyLevel - 1];
+  $('#lvName').textContent = G.lobbyLevel + '. ' + L.name;
+  $('#lvPrev').hidden = !host; $('#lvNext').hidden = !host;
+  $('#lobbyStart').hidden = !host;
+  $('#lobbyStatus').textContent = host ? (G.crew.length < 2 ? 'Waiting for the crew to join with the code…' : G.crew.length + ' players. Press Start when everyone is ready!') : 'Waiting for the host to start…';
+  void me;
+}
+$('#lobbyHeroes').addEventListener('click', (e) => {
+  const b = e.target.closest('.hcard'); if (!b || b.classList.contains('taken')) return;
+  rec.hero = b.dataset.h; writeRecords(); Sound.sfx('click');
+  if (G.role === 'host') { const c = G.crew.find((q) => q.id === 'host'); c.hero = rec.hero; c.lvl = heroLvl(rec.hero); lobbyBroadcast(); renderLobby(); }
+  else FFNet.send({ t: 'pick', hero: rec.hero, lvl: heroLvl(rec.hero) });
+});
+$('#lvPrev').addEventListener('click', () => { let n = G.lobbyLevel - 1; if (n < 1) n = LEVELS.length; while (!unlocked(n) && n > 1) n--; G.lobbyLevel = n; lobbyBroadcast(); renderLobby(); });
+$('#lvNext').addEventListener('click', () => { let n = G.lobbyLevel + 1; if (n > LEVELS.length || !unlocked(n)) n = 1; G.lobbyLevel = n; lobbyBroadcast(); renderLobby(); });
+$('#lobbyStart').addEventListener('click', () => { Sound.init(); hostStart(G.lobbyLevel, 0); });
+$('#lobbyLeave').addEventListener('click', () => leaveCrew());
+$('#hostBtn').addEventListener('click', () => hostCrew(false));
+$('#joinBtn').addEventListener('click', () => joinCrew($('#codeIn').value, false));
+$('#codeIn').addEventListener('keydown', (e) => { if (e.key === 'Enter') joinCrew($('#codeIn').value, false); });
+function hostStart(n, from) {
+  G.level = n; G.lobbyLevel = n;
+  const seed = (Date.now() & 0xffff) + 7;
+  FFNet.broadcast({ t: 'start', level: n, crew: G.crew, from: from || 0 });
+  G.mode = 'host'; G.me = ['host']; G.myId = 'host';
+  G.seats = [{ id: 'host', hero: G.crew[0].hero, devs: 'p1' }];
+  G.S = FF.start(LEVELS[n - 1], { players: G.crew.map((c) => ({ id: c.id, hero: c.hero, name: c.name, lvl: c.lvl, remote: c.id !== 'host' })), seed: seed, ask: ask, from: from || 0 });
+  begin();
+}
+function startClient(d) {
+  G.mode = 'client'; G.level = d.level; G.crew = d.crew; G.me = [G.myId];
+  G.seats = [{ id: G.myId, hero: (d.crew.find((c) => c.id === G.myId) || { hero: rec.hero }).hero, devs: 'p1' }];
+  G.S = FF.start(LEVELS[d.level - 1], { players: d.crew.map((c) => ({ id: c.id, hero: c.hero, name: c.name, lvl: c.lvl })), seed: 1, from: d.from || 0, mirror: true });
+  G.S.props = []; G.S.ask = null;
+  begin();
+}
+function backToLobby() { leaveGame(); G.endShown = false; lobbyBroadcast(); renderLobby(); showScreen('lobby'); }
+function leaveCrew() { FFNet.broadcast({ t: 'bye' }); FFNet.close(); G.role = ''; G.crew = []; leaveGame(); renderHome(); showScreen('home'); }
+
+/* ================= start ================= */
+document.body.classList.add('menu');
+arcadeLinks();
+arcadeGuards(() => { if (G.mode === 'solo' && $('#screens').classList.contains('open') === false) togglePause(); });
+renderHome(); showScreen('home');
+Sound.play('menu');
+G.last = performance.now(); G.raf = requestAnimationFrame(loop);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { renderHome(); });
+// for the playtests
+window.__family = {
+  G: G, FF: FF, FFA: FFA, rec: rec, LEVELS: LEVELS, WORLD: WORLD, WORDS: WORDS, SC: SC, FFNet: FFNet, ask: ask, edges: edges, T: T,
+  startLocal: startLocal, hostCrew: hostCrew, joinCrew: joinCrew, hostStart: hostStart, showPick: showPick, showLevels: showLevels,
+  auto: (prof) => { G.autopilot = prof || { right: 0.9, react: 0.2, dodge: 0.8 }; }
+};
+})();
+</script>

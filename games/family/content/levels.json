@@ -1,0 +1,2274 @@
+{
+ "levels": [
+  {
+   "id": 1,
+   "name": "Market Morning",
+   "place": "market",
+   "blurb": "Zombies in the market! Push through the stalls to the noodle shop of the Zombie Chef.",
+   "boss": "chef",
+   "zombies": [
+    "walker",
+    "runner"
+   ],
+   "len": 7280,
+   "beats": [
+    {
+     "k": "fight",
+     "x": 420,
+     "waves": [
+      [
+       [
+        "walker",
+        2
+       ]
+      ],
+      [
+       [
+        "walker",
+        3
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "fight",
+     "x": 1570,
+     "waves": [
+      [
+       [
+        "walker",
+        3
+       ],
+       [
+        "runner",
+        1
+       ]
+      ],
+      [
+       [
+        "walker",
+        3
+       ],
+       [
+        "runner",
+        1
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "gate",
+     "x": 2470
+    },
+    {
+     "k": "fight",
+     "x": 3370,
+     "waves": [
+      [
+       [
+        "walker",
+        3
+       ],
+       [
+        "runner",
+        2
+       ]
+      ],
+      [
+       [
+        "walker",
+        4
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "gate",
+     "x": 4270
+    },
+    {
+     "k": "fight",
+     "x": 5170,
+     "waves": [
+      [
+       [
+        "runner",
+        3
+       ],
+       [
+        "walker",
+        2
+       ]
+      ],
+      [
+       [
+        "walker",
+        3
+       ],
+       [
+        "runner",
+        2
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "boss",
+     "x": 6320,
+     "b": "chef"
+    }
+   ],
+   "props": [
+    {
+     "k": "basket",
+     "x": 1306,
+     "y": 114
+    },
+    {
+     "k": "stall",
+     "x": 1562,
+     "y": 47
+    },
+    {
+     "k": "stall",
+     "x": 1888,
+     "y": 93
+    },
+    {
+     "k": "stall",
+     "x": 2421,
+     "y": 70
+    },
+    {
+     "k": "crate",
+     "x": 2559,
+     "y": 39
+    },
+    {
+     "k": "stall",
+     "x": 2806,
+     "y": 107
+    },
+    {
+     "k": "crate",
+     "x": 3381,
+     "y": 47
+    },
+    {
+     "k": "stall",
+     "x": 3606,
+     "y": 34
+    },
+    {
+     "k": "basket",
+     "x": 4209,
+     "y": 66
+    },
+    {
+     "k": "basket",
+     "x": 4389,
+     "y": 121
+    },
+    {
+     "k": "basket",
+     "x": 4570,
+     "y": 53
+    },
+    {
+     "k": "crate",
+     "x": 5069,
+     "y": 15
+    },
+    {
+     "k": "stall",
+     "x": 5312,
+     "y": 94
+    },
+    {
+     "k": "basket",
+     "x": 5516,
+     "y": 21
+    },
+    {
+     "k": "basket",
+     "x": 5992,
+     "y": 19
+    },
+    {
+     "k": "crate",
+     "x": 6362,
+     "y": 74
+    },
+    {
+     "k": "stall",
+     "x": 6610,
+     "y": 33
+    }
+   ]
+  },
+  {
+   "id": 2,
+   "name": "Old Quarter Rush",
+   "place": "oldquarter",
+   "blurb": "The narrow streets of the Old Quarter in Hà Nội, and the Scooter King who never stops for a red light.",
+   "boss": "scooter",
+   "zombies": [
+    "walker",
+    "runner",
+    "bucket"
+   ],
+   "len": 7280,
+   "beats": [
+    {
+     "k": "fight",
+     "x": 420,
+     "waves": [
+      [
+       [
+        "walker",
+        3
+       ]
+      ],
+      [
+       [
+        "walker",
+        2
+       ],
+       [
+        "bucket",
+        1
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "fight",
+     "x": 1570,
+     "waves": [
+      [
+       [
+        "runner",
+        3
+       ],
+       [
+        "bucket",
+        1
+       ]
+      ],
+      [
+       [
+        "walker",
+        3
+       ],
+       [
+        "bucket",
+        1
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "gate",
+     "x": 2470
+    },
+    {
+     "k": "fight",
+     "x": 3370,
+     "waves": [
+      [
+       [
+        "walker",
+        3
+       ],
+       [
+        "runner",
+        2
+       ]
+      ],
+      [
+       [
+        "bucket",
+        2
+       ],
+       [
+        "runner",
+        2
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "gate",
+     "x": 4270
+    },
+    {
+     "k": "fight",
+     "x": 5170,
+     "waves": [
+      [
+       [
+        "bucket",
+        2
+       ],
+       [
+        "walker",
+        3
+       ]
+      ],
+      [
+       [
+        "runner",
+        4
+       ],
+       [
+        "bucket",
+        1
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "boss",
+     "x": 6320,
+     "b": "scooter"
+    }
+   ],
+   "props": [
+    {
+     "k": "barrel",
+     "x": 1240,
+     "y": 48
+    },
+    {
+     "k": "stall",
+     "x": 1561,
+     "y": 54
+    },
+    {
+     "k": "stall",
+     "x": 1894,
+     "y": 88
+    },
+    {
+     "k": "stall",
+     "x": 2423,
+     "y": 70
+    },
+    {
+     "k": "stall",
+     "x": 2716,
+     "y": 22
+    },
+    {
+     "k": "barrel",
+     "x": 3403,
+     "y": 59
+    },
+    {
+     "k": "stall",
+     "x": 3621,
+     "y": 100
+    },
+    {
+     "k": "stall",
+     "x": 4272,
+     "y": 108
+    },
+    {
+     "k": "barrel",
+     "x": 4552,
+     "y": 43
+    },
+    {
+     "k": "barrel",
+     "x": 5140,
+     "y": 15
+    },
+    {
+     "k": "barrel",
+     "x": 5393,
+     "y": 73
+    },
+    {
+     "k": "crate",
+     "x": 6006,
+     "y": 66
+    },
+    {
+     "k": "barrel",
+     "x": 6281,
+     "y": 123
+    },
+    {
+     "k": "crate",
+     "x": 6561,
+     "y": 94
+    }
+   ]
+  },
+  {
+   "id": 3,
+   "name": "Rice Field Ruckus",
+   "place": "ricefield",
+   "blurb": "Green rice fields as far as you can see, zom-bats in the sky, and the Scarecrow King in the middle of it all.",
+   "boss": "scarecrow",
+   "zombies": [
+    "walker",
+    "runner",
+    "bucket",
+    "bat",
+    "jumper"
+   ],
+   "len": 7280,
+   "beats": [
+    {
+     "k": "fight",
+     "x": 420,
+     "waves": [
+      [
+       [
+        "walker",
+        3
+       ],
+       [
+        "bat",
+        1
+       ]
+      ],
+      [
+       [
+        "walker",
+        2
+       ],
+       [
+        "bat",
+        2
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "fight",
+     "x": 1570,
+     "waves": [
+      [
+       [
+        "jumper",
+        1
+       ],
+       [
+        "walker",
+        3
+       ]
+      ],
+      [
+       [
+        "bucket",
+        2
+       ],
+       [
+        "bat",
+        2
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "gate",
+     "x": 2470
+    },
+    {
+     "k": "fight",
+     "x": 3370,
+     "waves": [
+      [
+       [
+        "jumper",
+        2
+       ],
+       [
+        "runner",
+        2
+       ]
+      ],
+      [
+       [
+        "walker",
+        3
+       ],
+       [
+        "bat",
+        3
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "gate",
+     "x": 4270
+    },
+    {
+     "k": "fight",
+     "x": 5170,
+     "waves": [
+      [
+       [
+        "bucket",
+        2
+       ],
+       [
+        "jumper",
+        2
+       ]
+      ],
+      [
+       [
+        "walker",
+        3
+       ],
+       [
+        "runner",
+        2
+       ],
+       [
+        "bat",
+        2
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "boss",
+     "x": 6320,
+     "b": "scarecrow"
+    }
+   ],
+   "props": [
+    {
+     "k": "basket",
+     "x": 1343,
+     "y": 63
+    },
+    {
+     "k": "hay",
+     "x": 1816,
+     "y": 85
+    },
+    {
+     "k": "crate",
+     "x": 2364,
+     "y": 117
+    },
+    {
+     "k": "basket",
+     "x": 2636,
+     "y": 93
+    },
+    {
+     "k": "crate",
+     "x": 2826,
+     "y": 82
+    },
+    {
+     "k": "crate",
+     "x": 3290,
+     "y": 113
+    },
+    {
+     "k": "crate",
+     "x": 3457,
+     "y": 17
+    },
+    {
+     "k": "hay",
+     "x": 3729,
+     "y": 106
+    },
+    {
+     "k": "crate",
+     "x": 4278,
+     "y": 74
+    },
+    {
+     "k": "crate",
+     "x": 4609,
+     "y": 108
+    },
+    {
+     "k": "crate",
+     "x": 5175,
+     "y": 60
+    },
+    {
+     "k": "crate",
+     "x": 5476,
+     "y": 52
+    },
+    {
+     "k": "basket",
+     "x": 6028,
+     "y": 95
+    },
+    {
+     "k": "basket",
+     "x": 6503,
+     "y": 79
+    }
+   ]
+  },
+  {
+   "id": 4,
+   "name": "School Scramble",
+   "place": "school",
+   "blurb": "The zombies have taken over the school. Run the playground and the corridors to the Zombie Headmaster.",
+   "boss": "headmaster",
+   "zombies": [
+    "walker",
+    "runner",
+    "bucket",
+    "spitter",
+    "jumper"
+   ],
+   "len": 7280,
+   "beats": [
+    {
+     "k": "fight",
+     "x": 420,
+     "waves": [
+      [
+       [
+        "walker",
+        3
+       ],
+       [
+        "spitter",
+        1
+       ]
+      ],
+      [
+       [
+        "runner",
+        3
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "fight",
+     "x": 1570,
+     "waves": [
+      [
+       [
+        "bucket",
+        2
+       ],
+       [
+        "spitter",
+        1
+       ]
+      ],
+      [
+       [
+        "walker",
+        3
+       ],
+       [
+        "jumper",
+        1
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "gate",
+     "x": 2470
+    },
+    {
+     "k": "fight",
+     "x": 3370,
+     "waves": [
+      [
+       [
+        "runner",
+        3
+       ],
+       [
+        "spitter",
+        2
+       ]
+      ],
+      [
+       [
+        "bucket",
+        2
+       ],
+       [
+        "jumper",
+        2
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "gate",
+     "x": 4270
+    },
+    {
+     "k": "fight",
+     "x": 5170,
+     "waves": [
+      [
+       [
+        "walker",
+        4
+       ],
+       [
+        "spitter",
+        1
+       ]
+      ],
+      [
+       [
+        "bucket",
+        3
+       ],
+       [
+        "runner",
+        2
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "boss",
+     "x": 6320,
+     "b": "headmaster"
+    }
+   ],
+   "props": [
+    {
+     "k": "basket",
+     "x": 1372,
+     "y": 118
+    },
+    {
+     "k": "basket",
+     "x": 1869,
+     "y": 104
+    },
+    {
+     "k": "basket",
+     "x": 2470,
+     "y": 70
+    },
+    {
+     "k": "crate",
+     "x": 2746,
+     "y": 119
+    },
+    {
+     "k": "crate",
+     "x": 3365,
+     "y": 84
+    },
+    {
+     "k": "crate",
+     "x": 3639,
+     "y": 109
+    },
+    {
+     "k": "crate",
+     "x": 4253,
+     "y": 48
+    },
+    {
+     "k": "desk",
+     "x": 4601,
+     "y": 28
+    },
+    {
+     "k": "basket",
+     "x": 5082,
+     "y": 94
+    },
+    {
+     "k": "basket",
+     "x": 5296,
+     "y": 55
+    },
+    {
+     "k": "basket",
+     "x": 5462,
+     "y": 58
+    },
+    {
+     "k": "crate",
+     "x": 6020,
+     "y": 61
+    },
+    {
+     "k": "basket",
+     "x": 6321,
+     "y": 57
+    },
+    {
+     "k": "desk",
+     "x": 6579,
+     "y": 76
+    }
+   ]
+  },
+  {
+   "id": 5,
+   "name": "Beach Brawl",
+   "place": "beach",
+   "blurb": "Sun, sand and zombies on the beach at Nha Trang. Something very big is hiding under the sand…",
+   "boss": "crab",
+   "zombies": [
+    "walker",
+    "runner",
+    "fat",
+    "bucket",
+    "bat"
+   ],
+   "len": 7280,
+   "beats": [
+    {
+     "k": "fight",
+     "x": 420,
+     "waves": [
+      [
+       [
+        "walker",
+        3
+       ],
+       [
+        "runner",
+        1
+       ]
+      ],
+      [
+       [
+        "fat",
+        1
+       ],
+       [
+        "walker",
+        2
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "fight",
+     "x": 1570,
+     "waves": [
+      [
+       [
+        "bat",
+        3
+       ],
+       [
+        "runner",
+        2
+       ]
+      ],
+      [
+       [
+        "bucket",
+        2
+       ],
+       [
+        "fat",
+        1
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "gate",
+     "x": 2470
+    },
+    {
+     "k": "fight",
+     "x": 3370,
+     "waves": [
+      [
+       [
+        "fat",
+        1
+       ],
+       [
+        "walker",
+        3
+       ]
+      ],
+      [
+       [
+        "runner",
+        3
+       ],
+       [
+        "bat",
+        2
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "gate",
+     "x": 4270
+    },
+    {
+     "k": "fight",
+     "x": 5170,
+     "waves": [
+      [
+       [
+        "fat",
+        2
+       ],
+       [
+        "bucket",
+        2
+       ]
+      ],
+      [
+       [
+        "walker",
+        3
+       ],
+       [
+        "runner",
+        2
+       ],
+       [
+        "bat",
+        2
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "boss",
+     "x": 6320,
+     "b": "crab"
+    }
+   ],
+   "props": [
+    {
+     "k": "chair",
+     "x": 1440,
+     "y": 124
+    },
+    {
+     "k": "basket",
+     "x": 1857,
+     "y": 96
+    },
+    {
+     "k": "basket",
+     "x": 2376,
+     "y": 103
+    },
+    {
+     "k": "basket",
+     "x": 2579,
+     "y": 104
+    },
+    {
+     "k": "chair",
+     "x": 2774,
+     "y": 102
+    },
+    {
+     "k": "chair",
+     "x": 3309,
+     "y": 42
+    },
+    {
+     "k": "basket",
+     "x": 3494,
+     "y": 49
+    },
+    {
+     "k": "barrel",
+     "x": 3689,
+     "y": 78
+    },
+    {
+     "k": "chair",
+     "x": 4165,
+     "y": 73
+    },
+    {
+     "k": "barrel",
+     "x": 4394,
+     "y": 99
+    },
+    {
+     "k": "barrel",
+     "x": 4607,
+     "y": 103
+    },
+    {
+     "k": "basket",
+     "x": 5092,
+     "y": 72
+    },
+    {
+     "k": "chair",
+     "x": 5276,
+     "y": 16
+    },
+    {
+     "k": "chair",
+     "x": 5521,
+     "y": 58
+    },
+    {
+     "k": "barrel",
+     "x": 5988,
+     "y": 104
+    },
+    {
+     "k": "basket",
+     "x": 6331,
+     "y": 68
+    },
+    {
+     "k": "chair",
+     "x": 6589,
+     "y": 114
+    }
+   ]
+  },
+  {
+   "id": 6,
+   "name": "Hạ Long Bay Boat",
+   "place": "bay",
+   "blurb": "A boat trip between the stone islands of Hạ Long Bay, until zombie pirates climb aboard.",
+   "boss": "pirate",
+   "zombies": [
+    "walker",
+    "spitter",
+    "bucket",
+    "bat",
+    "fat"
+   ],
+   "len": 7930,
+   "beats": [
+    {
+     "k": "fight",
+     "x": 420,
+     "waves": [
+      [
+       [
+        "walker",
+        3
+       ],
+       [
+        "spitter",
+        1
+       ]
+      ],
+      [
+       [
+        "bucket",
+        2
+       ],
+       [
+        "bat",
+        2
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "fight",
+     "x": 1570,
+     "waves": [
+      [
+       [
+        "spitter",
+        2
+       ],
+       [
+        "walker",
+        2
+       ]
+      ],
+      [
+       [
+        "fat",
+        1
+       ],
+       [
+        "bucket",
+        2
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "gate",
+     "x": 2470
+    },
+    {
+     "k": "fight",
+     "x": 3370,
+     "waves": [
+      [
+       [
+        "bat",
+        3
+       ],
+       [
+        "spitter",
+        1
+       ]
+      ],
+      [
+       [
+        "walker",
+        4
+       ],
+       [
+        "fat",
+        1
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "gate",
+     "x": 4270
+    },
+    {
+     "k": "fight",
+     "x": 5170,
+     "waves": [
+      [
+       [
+        "bucket",
+        3
+       ],
+       [
+        "spitter",
+        2
+       ]
+      ],
+      [
+       [
+        "fat",
+        2
+       ],
+       [
+        "walker",
+        3
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "gate",
+     "x": 6070
+    },
+    {
+     "k": "boss",
+     "x": 6970,
+     "b": "pirate"
+    }
+   ],
+   "props": [
+    {
+     "k": "basket",
+     "x": 1398,
+     "y": 53
+    },
+    {
+     "k": "barrel",
+     "x": 1829,
+     "y": 35
+    },
+    {
+     "k": "crate",
+     "x": 2431,
+     "y": 21
+    },
+    {
+     "k": "crate",
+     "x": 2597,
+     "y": 41
+    },
+    {
+     "k": "crate",
+     "x": 2838,
+     "y": 17
+    },
+    {
+     "k": "barrel",
+     "x": 3271,
+     "y": 36
+    },
+    {
+     "k": "crate",
+     "x": 3457,
+     "y": 39
+    },
+    {
+     "k": "barrel",
+     "x": 3679,
+     "y": 79
+    },
+    {
+     "k": "crate",
+     "x": 4156,
+     "y": 127
+    },
+    {
+     "k": "barrel",
+     "x": 4428,
+     "y": 47
+    },
+    {
+     "k": "crate",
+     "x": 4582,
+     "y": 48
+    },
+    {
+     "k": "barrel",
+     "x": 5100,
+     "y": 124
+    },
+    {
+     "k": "crate",
+     "x": 5299,
+     "y": 29
+    },
+    {
+     "k": "barrel",
+     "x": 5505,
+     "y": 56
+    },
+    {
+     "k": "crate",
+     "x": 6029,
+     "y": 47
+    },
+    {
+     "k": "barrel",
+     "x": 6180,
+     "y": 19
+    },
+    {
+     "k": "basket",
+     "x": 6433,
+     "y": 86
+    },
+    {
+     "k": "basket",
+     "x": 6943,
+     "y": 20
+    },
+    {
+     "k": "basket",
+     "x": 7240,
+     "y": 92
+    }
+   ]
+  },
+  {
+   "id": 7,
+   "name": "Crystal Caves",
+   "place": "cave",
+   "blurb": "Deep in the giant caves of Phong Nha, where the crystals glow and the Bat Queen rules the dark.",
+   "boss": "batqueen",
+   "zombies": [
+    "bat",
+    "jumper",
+    "shield",
+    "walker",
+    "runner"
+   ],
+   "len": 7930,
+   "beats": [
+    {
+     "k": "fight",
+     "x": 420,
+     "waves": [
+      [
+       [
+        "bat",
+        3
+       ],
+       [
+        "walker",
+        2
+       ]
+      ],
+      [
+       [
+        "shield",
+        1
+       ],
+       [
+        "walker",
+        3
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "fight",
+     "x": 1570,
+     "waves": [
+      [
+       [
+        "jumper",
+        2
+       ],
+       [
+        "bat",
+        2
+       ]
+      ],
+      [
+       [
+        "shield",
+        2
+       ],
+       [
+        "runner",
+        2
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "gate",
+     "x": 2470
+    },
+    {
+     "k": "fight",
+     "x": 3370,
+     "waves": [
+      [
+       [
+        "bat",
+        4
+       ],
+       [
+        "jumper",
+        1
+       ]
+      ],
+      [
+       [
+        "walker",
+        3
+       ],
+       [
+        "shield",
+        2
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "gate",
+     "x": 4270
+    },
+    {
+     "k": "fight",
+     "x": 5170,
+     "waves": [
+      [
+       [
+        "shield",
+        2
+       ],
+       [
+        "jumper",
+        2
+       ]
+      ],
+      [
+       [
+        "bat",
+        3
+       ],
+       [
+        "runner",
+        3
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "gate",
+     "x": 6070
+    },
+    {
+     "k": "boss",
+     "x": 6970,
+     "b": "batqueen"
+    }
+   ],
+   "props": [
+    {
+     "k": "barrel",
+     "x": 1313,
+     "y": 42
+    },
+    {
+     "k": "crystal",
+     "x": 1849,
+     "y": 25
+    },
+    {
+     "k": "crystal",
+     "x": 2486,
+     "y": 15
+    },
+    {
+     "k": "barrel",
+     "x": 2760,
+     "y": 16
+    },
+    {
+     "k": "crystal",
+     "x": 3330,
+     "y": 111
+    },
+    {
+     "k": "barrel",
+     "x": 3474,
+     "y": 17
+    },
+    {
+     "k": "crystal",
+     "x": 3691,
+     "y": 114
+    },
+    {
+     "k": "crystal",
+     "x": 4199,
+     "y": 76
+    },
+    {
+     "k": "crate",
+     "x": 4420,
+     "y": 34
+    },
+    {
+     "k": "crate",
+     "x": 4596,
+     "y": 31
+    },
+    {
+     "k": "barrel",
+     "x": 5123,
+     "y": 15
+    },
+    {
+     "k": "crystal",
+     "x": 5257,
+     "y": 105
+    },
+    {
+     "k": "crate",
+     "x": 5510,
+     "y": 31
+    },
+    {
+     "k": "crystal",
+     "x": 6032,
+     "y": 60
+    },
+    {
+     "k": "barrel",
+     "x": 6209,
+     "y": 16
+    },
+    {
+     "k": "crystal",
+     "x": 6401,
+     "y": 87
+    },
+    {
+     "k": "barrel",
+     "x": 6867,
+     "y": 15
+    },
+    {
+     "k": "crystal",
+     "x": 7115,
+     "y": 64
+    },
+    {
+     "k": "crate",
+     "x": 7281,
+     "y": 51
+    }
+   ]
+  },
+  {
+   "id": 8,
+   "name": "Sa Pa Snow",
+   "place": "mountain",
+   "blurb": "Up the terraced mountains of Sa Pa into the snow, where a very hairy zombie is waiting.",
+   "boss": "yeti",
+   "zombies": [
+    "shield",
+    "fat",
+    "jumper",
+    "walker",
+    "bucket"
+   ],
+   "len": 7930,
+   "beats": [
+    {
+     "k": "fight",
+     "x": 420,
+     "waves": [
+      [
+       [
+        "walker",
+        3
+       ],
+       [
+        "shield",
+        1
+       ]
+      ],
+      [
+       [
+        "fat",
+        1
+       ],
+       [
+        "jumper",
+        2
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "fight",
+     "x": 1570,
+     "waves": [
+      [
+       [
+        "bucket",
+        3
+       ],
+       [
+        "shield",
+        1
+       ]
+      ],
+      [
+       [
+        "fat",
+        2
+       ],
+       [
+        "walker",
+        2
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "gate",
+     "x": 2470
+    },
+    {
+     "k": "fight",
+     "x": 3370,
+     "waves": [
+      [
+       [
+        "jumper",
+        3
+       ],
+       [
+        "shield",
+        2
+       ]
+      ],
+      [
+       [
+        "walker",
+        3
+       ],
+       [
+        "bucket",
+        2
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "gate",
+     "x": 4270
+    },
+    {
+     "k": "fight",
+     "x": 5170,
+     "waves": [
+      [
+       [
+        "fat",
+        2
+       ],
+       [
+        "shield",
+        2
+       ]
+      ],
+      [
+       [
+        "jumper",
+        2
+       ],
+       [
+        "walker",
+        3
+       ],
+       [
+        "bucket",
+        1
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "gate",
+     "x": 6070
+    },
+    {
+     "k": "boss",
+     "x": 6970,
+     "b": "yeti"
+    }
+   ],
+   "props": [
+    {
+     "k": "basket",
+     "x": 1309,
+     "y": 73
+    },
+    {
+     "k": "snowman",
+     "x": 1539,
+     "y": 124
+    },
+    {
+     "k": "basket",
+     "x": 1847,
+     "y": 128
+    },
+    {
+     "k": "basket",
+     "x": 2395,
+     "y": 28
+    },
+    {
+     "k": "snowman",
+     "x": 2727,
+     "y": 85
+    },
+    {
+     "k": "snowman",
+     "x": 3378,
+     "y": 30
+    },
+    {
+     "k": "snowman",
+     "x": 3592,
+     "y": 114
+    },
+    {
+     "k": "basket",
+     "x": 4203,
+     "y": 86
+    },
+    {
+     "k": "snowman",
+     "x": 4510,
+     "y": 25
+    },
+    {
+     "k": "crate",
+     "x": 5197,
+     "y": 73
+    },
+    {
+     "k": "snowman",
+     "x": 5496,
+     "y": 48
+    },
+    {
+     "k": "basket",
+     "x": 6032,
+     "y": 81
+    },
+    {
+     "k": "crate",
+     "x": 6321,
+     "y": 29
+    },
+    {
+     "k": "snowman",
+     "x": 6881,
+     "y": 30
+    },
+    {
+     "k": "crate",
+     "x": 7110,
+     "y": 61
+    },
+    {
+     "k": "snowman",
+     "x": 7298,
+     "y": 85
+    }
+   ]
+  },
+  {
+   "id": 9,
+   "name": "Saigon Rooftops",
+   "place": "rooftop",
+   "blurb": "Night over Saigon. Leap the rooftops after Doctor Zom, the zombie who makes the zombies.",
+   "boss": "doctor",
+   "zombies": [
+    "bloater",
+    "runner",
+    "spitter",
+    "walker",
+    "bat"
+   ],
+   "len": 7930,
+   "beats": [
+    {
+     "k": "fight",
+     "x": 420,
+     "waves": [
+      [
+       [
+        "walker",
+        3
+       ],
+       [
+        "bloater",
+        1
+       ]
+      ],
+      [
+       [
+        "runner",
+        3
+       ],
+       [
+        "spitter",
+        1
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "fight",
+     "x": 1570,
+     "waves": [
+      [
+       [
+        "bloater",
+        2
+       ],
+       [
+        "walker",
+        2
+       ]
+      ],
+      [
+       [
+        "bat",
+        3
+       ],
+       [
+        "spitter",
+        2
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "gate",
+     "x": 2470
+    },
+    {
+     "k": "fight",
+     "x": 3370,
+     "waves": [
+      [
+       [
+        "runner",
+        4
+       ],
+       [
+        "bloater",
+        1
+       ]
+      ],
+      [
+       [
+        "walker",
+        3
+       ],
+       [
+        "spitter",
+        2
+       ],
+       [
+        "bat",
+        1
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "gate",
+     "x": 4270
+    },
+    {
+     "k": "fight",
+     "x": 5170,
+     "waves": [
+      [
+       [
+        "bloater",
+        2
+       ],
+       [
+        "runner",
+        3
+       ]
+      ],
+      [
+       [
+        "spitter",
+        2
+       ],
+       [
+        "walker",
+        3
+       ],
+       [
+        "bat",
+        2
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "gate",
+     "x": 6070
+    },
+    {
+     "k": "boss",
+     "x": 6970,
+     "b": "doctor"
+    }
+   ],
+   "props": [
+    {
+     "k": "barrel",
+     "x": 1356,
+     "y": 115
+    },
+    {
+     "k": "crate",
+     "x": 1724,
+     "y": 80
+    },
+    {
+     "k": "barrel",
+     "x": 2355,
+     "y": 121
+    },
+    {
+     "k": "crate",
+     "x": 2624,
+     "y": 56
+    },
+    {
+     "k": "pot",
+     "x": 2777,
+     "y": 58
+    },
+    {
+     "k": "barrel",
+     "x": 3348,
+     "y": 92
+    },
+    {
+     "k": "crate",
+     "x": 3597,
+     "y": 107
+    },
+    {
+     "k": "pot",
+     "x": 4208,
+     "y": 52
+    },
+    {
+     "k": "crate",
+     "x": 4383,
+     "y": 91
+    },
+    {
+     "k": "pot",
+     "x": 4624,
+     "y": 84
+    },
+    {
+     "k": "pot",
+     "x": 5159,
+     "y": 115
+    },
+    {
+     "k": "crate",
+     "x": 5477,
+     "y": 62
+    },
+    {
+     "k": "barrel",
+     "x": 6016,
+     "y": 78
+    },
+    {
+     "k": "crate",
+     "x": 6223,
+     "y": 74
+    },
+    {
+     "k": "pot",
+     "x": 6438,
+     "y": 98
+    },
+    {
+     "k": "crate",
+     "x": 6892,
+     "y": 49
+    },
+    {
+     "k": "pot",
+     "x": 7099,
+     "y": 121
+    },
+    {
+     "k": "barrel",
+     "x": 7296,
+     "y": 97
+    }
+   ]
+  },
+  {
+   "id": 10,
+   "name": "The Secret Lab",
+   "place": "lab",
+   "blurb": "Under the city: the secret lab where it all began, and the biggest zombie of them all.",
+   "boss": "mega",
+   "zombies": [
+    "walker",
+    "runner",
+    "bucket",
+    "fat",
+    "spitter",
+    "jumper",
+    "bat",
+    "shield",
+    "bloater"
+   ],
+   "len": 9080,
+   "beats": [
+    {
+     "k": "fight",
+     "x": 420,
+     "waves": [
+      [
+       [
+        "walker",
+        3
+       ],
+       [
+        "runner",
+        2
+       ]
+      ],
+      [
+       [
+        "bucket",
+        2
+       ],
+       [
+        "spitter",
+        1
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "fight",
+     "x": 1570,
+     "waves": [
+      [
+       [
+        "fat",
+        1
+       ],
+       [
+        "jumper",
+        2
+       ],
+       [
+        "bat",
+        2
+       ]
+      ],
+      [
+       [
+        "shield",
+        2
+       ],
+       [
+        "bloater",
+        1
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "gate",
+     "x": 2470
+    },
+    {
+     "k": "fight",
+     "x": 3370,
+     "waves": [
+      [
+       [
+        "runner",
+        3
+       ],
+       [
+        "bucket",
+        2
+       ],
+       [
+        "spitter",
+        1
+       ]
+      ],
+      [
+       [
+        "fat",
+        2
+       ],
+       [
+        "bat",
+        3
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "gate",
+     "x": 4270
+    },
+    {
+     "k": "fight",
+     "x": 5170,
+     "waves": [
+      [
+       [
+        "shield",
+        2
+       ],
+       [
+        "jumper",
+        2
+       ],
+       [
+        "bloater",
+        1
+       ]
+      ],
+      [
+       [
+        "walker",
+        4
+       ],
+       [
+        "runner",
+        2
+       ],
+       [
+        "spitter",
+        2
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "gate",
+     "x": 6070
+    },
+    {
+     "k": "fight",
+     "x": 6970,
+     "waves": [
+      [
+       [
+        "bucket",
+        3
+       ],
+       [
+        "fat",
+        1
+       ]
+      ],
+      [
+       [
+        "bat",
+        3
+       ],
+       [
+        "jumper",
+        2
+       ],
+       [
+        "shield",
+        1
+       ]
+      ]
+     ]
+    },
+    {
+     "k": "boss",
+     "x": 8120,
+     "b": "mega"
+    }
+   ],
+   "props": [
+    {
+     "k": "canister",
+     "x": 1227,
+     "y": 42
+    },
+    {
+     "k": "canister",
+     "x": 1540,
+     "y": 31
+    },
+    {
+     "k": "crate",
+     "x": 1874,
+     "y": 73
+    },
+    {
+     "k": "canister",
+     "x": 2371,
+     "y": 35
+    },
+    {
+     "k": "barrel",
+     "x": 2626,
+     "y": 91
+    },
+    {
+     "k": "crate",
+     "x": 2798,
+     "y": 122
+    },
+    {
+     "k": "barrel",
+     "x": 3296,
+     "y": 32
+    },
+    {
+     "k": "canister",
+     "x": 3618,
+     "y": 24
+    },
+    {
+     "k": "canister",
+     "x": 4202,
+     "y": 119
+    },
+    {
+     "k": "canister",
+     "x": 4414,
+     "y": 107
+    },
+    {
+     "k": "crate",
+     "x": 4586,
+     "y": 44
+    },
+    {
+     "k": "crate",
+     "x": 5084,
+     "y": 112
+    },
+    {
+     "k": "barrel",
+     "x": 5510,
+     "y": 125
+    },
+    {
+     "k": "barrel",
+     "x": 5962,
+     "y": 67
+    },
+    {
+     "k": "barrel",
+     "x": 6174,
+     "y": 12
+    },
+    {
+     "k": "barrel",
+     "x": 6439,
+     "y": 30
+    },
+    {
+     "k": "canister",
+     "x": 6896,
+     "y": 83
+    },
+    {
+     "k": "canister",
+     "x": 7065,
+     "y": 64
+    },
+    {
+     "k": "crate",
+     "x": 7303,
+     "y": 14
+    },
+    {
+     "k": "crate",
+     "x": 7879,
+     "y": 99
+    },
+    {
+     "k": "crate",
+     "x": 8412,
+     "y": 64
+    }
+   ]
+  }
+ ]
+}

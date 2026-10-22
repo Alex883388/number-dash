@@ -1,0 +1,62 @@
+<!doctype html>
+<!-- A gallery of Family Fighters' drawings for checking the art by eye (playtest/gallery.js takes the pictures).
+     gallery.html?place=market&boss=chef&set=heroes|zombies|bosses|things -->
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap">
+<style>html,body{margin:0;height:100%;background:#000}canvas{position:fixed;inset:0;width:100%;height:100%}</style></head>
+<body><canvas id="c"></canvas>
+<script src="../src/engine.js"></script>
+<script src="../src/art.js"></script>
+<script src="../src/scene.js"></script>
+<script>
+const qs = new URLSearchParams(location.search), place = qs.get('place') || 'market', set = qs.get('set') || 'heroes', bossK = qs.get('boss') || 'chef';
+FFScene.init(document.getElementById('c'));
+FFScene.setPlace(place);
+const hero = (id, k, x, y, st, t, extra) => Object.assign({ id: id, hero: k, x: x, y: y, z: 0, face: 1, st: st, t: t || 0, combo: 0, walk: 40, hp: 80, max: 100, slot: 0 }, extra || {});
+const zom = (k, x, y, st, t, extra) => Object.assign({ id: x, k: k, x: x, y: y, z: k === 'bat' ? 70 : 0, face: -1, st: st, t: t || 0, hp: 30, max: 34, armor: k === 'bucket' ? 10 : 0, shieldOn: k === 'shield', hit: 0 }, extra || {});
+let V = { cam: 0, players: [], zs: [], boss: null, shots: [], picks: [], props: [], marks: [], gate: null, shake: 0, go: false };
+if (set === 'heroes') {
+  const ks = FF.HERO_ORDER;
+  ks.forEach((k, i) => {
+    V.players.push(hero('a' + i, k, 90 + i * 230, 120, 'idle'));
+    V.players.push(hero('b' + i, k, 150 + i * 230, 70, 'walk', 0, { walk: 30 + i * 9 }));
+    V.players.push(hero('c' + i, k, 60 + i * 230, 20, 'atk', 0.14, { combo: i % 3 }));
+    V.players.push(hero('d' + i, k, 180 + i * 230, 20, 'atk', 0.2, { combo: 2 }));
+  });
+} else if (set === 'poses') {
+  const ks = FF.HERO_ORDER;
+  ks.forEach((k, i) => {
+    const H = FF.HEROES[k];
+    V.players.push(hero('a' + i, k, 80 + i * 230, 120, 'jump', 0, { z: 60 }));
+    V.players.push(hero('b' + i, k, 170 + i * 230, 90, 'hurt', 0.1));
+    V.players.push(hero('c' + i, k, 90 + i * 230, 40, 'spec', 0.3, { sk: H.special, z: H.special === 'bounce' ? 50 : 0 }));
+    V.players.push(hero('d' + i, k, 180 + i * 230, 10, i % 2 ? 'ko' : 'win', 0.2, { rev: 0.6 }));
+  });
+} else if (set === 'zombies') {
+  FF.ZOMBIE_ORDER.forEach((k, i) => {
+    V.zs.push(zom(k, 60 + i * 102, 110, 'move', 0.2));
+    V.zs.push(zom(k, 110 + i * 102, 30, i % 2 ? 'wind' : 'hurt', 0.3, { hp: 20 }));
+  });
+} else if (set === 'bosses') {
+  const B = { id: 99, b: bossK, x: 640, y: 60, z: FF.BOSSES[bossK].fly || 0, face: -1, st: 'fight', t: 1, hp: 300, max: 420, shield: qs.get('shield') === '1', poseT: +(qs.get('pose') || 0), hit: 0, hide: 0, daze: 0, drums: [] };
+  V.boss = B;
+  V.players.push(hero('p', 'bin', 250, 60, 'idle'));
+  if (B.shield) { B.drums = [0, 1, 2].map((i) => ({ x: 260 + i * 90, y: 26 + i * 44, text: ['Hà Nội', '42', 'Pacific'][i], ok: i === 1, bad: i === 0, lock: 0 })); B.hint = true; }
+} else if (set === 'things') {
+  const ks = ['stall', 'crate', 'basket', 'barrel', 'hay', 'desk', 'chair', 'crystal', 'snowman', 'pot', 'canister'];
+  ks.forEach((k, i) => V.props.push({ id: i, k: k, x: 50 + i * 82, y: 120, hp: 2, max: 2, hit: 0 }));
+  ['coin', 'banhmi', 'pho', 'che'].forEach((k, i) => V.picks.push({ id: 50 + i, k: k, x: 80 + i * 90, y: 60, z: 0 }));
+  ['slipper', 'spit', 'dumpling', 'chalk', 'bubble', 'snowball', 'cannonball', 'potion'].forEach((k, i) => V.shots.push({ id: 70 + i, k: k, x: 480 + i * 56, y: 60, z: 40, vx: 1, spin: 0.5 }));
+  V.gate = { x: 900, open: false, openT: 0, hint: true, drums: [{ x: 300, y: 26, text: 'Hà Nội', ok: true, bad: false, lock: 0 }, { x: 390, y: 70, text: '7 × 8 = 54', ok: false, bad: true, lock: 0 }, { x: 480, y: 114, text: 'went', ok: false, bad: false, lock: 1 }] };
+  V.gate.drums.forEach((d) => { d.y = d.y; });
+  V.marks = [{ k: 'zone', x: 700, y: 30, w: 200, d: 60, t: 0.3, dur: 0.85 }, { k: 'aim', x: 150, y: 20, r: 60, t: 0.5, dur: 1.2 }];
+}
+let t0 = performance.now();
+function draw() {
+  const now = (performance.now() - t0) / 1000;
+  FFScene.frame(V, { now: now, rings: true, me: ['a0'], names: {}, crew: 1 });
+  requestAnimationFrame(draw);
+}
+document.fonts.ready.then(() => { draw(); window.ready = true; });
+setTimeout(() => { if (!window.ready) { draw(); window.ready = true; } }, 1500);
+</script></body></html>
