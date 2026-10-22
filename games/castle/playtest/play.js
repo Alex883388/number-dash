@@ -1,9 +1,10 @@
 // Castle Crew, one player (run from the repo root):
 //   node games/castle/build.js && ND_CDP=9541 ND_PROFILE=edge-profile-castle ND_URL=file:///D:/Github/number-dash/games/castle/dist/preview.html ND_READY='!!window.__castle' ND_BOT=none node games/dash/playtest/shoot.js games/castle/playtest/play.js
-// By finger on an iPad held sideways: home, the map picker, a map's setup (Easy, the Crossbow), the game opens at
-// round 0; walk with the stick; build an Arrow Tower (coins and wood) and a Spike Trap (coins and stone) from the
-// tray; chop a tree for wood; walk through a tower; start round 1; the tower's panel (its upgrades cost wood too):
-// buy step 1 of a path, change its aim; the speed button; pause and resume. Then a computer player plays on fast to
+// By finger on an iPad held sideways: home, the zombie book, the map picker, a map's setup (Easy, the Boxing Gloves),
+// the game opens at round 0; walk with the stick; the tray (every tower, AIR and GROUND badges, the blast tab); build
+// an Arrow Tower (coins and wood) and a Spike Trap (coins and stone); chop a tree for wood; walk through a tower; start
+// round 1; the tower's panel (its element and matches; its upgrades cost wood too): buy step 1 of a path, change its
+// aim; the speed button; pause and resume. Then a computer player plays on fast to
 // round 20 (the Zombie King, pictured); save and leave; the map card shows the round to carry on from, and carrying on
 // starts there. Phones held sideways (HUD, tray and panel fit) and upright (the turn card, the game waits). No errors.
 const C = 'window.__castle';
@@ -16,11 +17,16 @@ module.exports = [
   { viewport: [1180, 820, true, false, 2] },
   { eval: "localStorage.clear(); window.__P = []; 'cleared'" }, { reload: true }, { sleep: 700 },
   fits('home'), { shot: 'cc-p01-home' },
+  // the zombie book: every zombie, what hurts it and what it shrugs off
+  { touchEl: '#bookBtn' }, { sleep: 500 }, fits('zombie book'), { shot: 'cc-p01b-book' },
+  check(`document.querySelectorAll('#bookGrid .zb').length === ${C}.CC.ZOMBIE_ORDER.length && document.querySelectorAll('#bookLegend span').length === 9`, 'the book shows every zombie and the nine elements'),
+  check(`/Hurt by/.test(document.querySelector('#bookGrid .zb:nth-child(9)').textContent) && /Flier/.test(document.querySelector('#bookGrid').textContent)`, 'the book says what hurts a zombie and which ones fly'),
+  { touchEl: '#bookBack' }, { sleep: 400 },
   { touchEl: '#playBtn' }, { sleep: 500 }, fits('maps'), { shot: 'cc-p02-maps' },
   check(`document.querySelectorAll('#mapGrid .mapcard').length === 8`, 'eight map cards'),
   { touchEl: '#mapGrid [data-map="meadow"]' }, { sleep: 400 }, fits('setup'),
-  { touchEl: '#diffPick [data-diff="easy"]' }, { touchEl: '#weaponPick [data-weapon="crossbow"]' }, { sleep: 300 }, { shot: 'cc-p03-setup' },
-  check(`${C}.rec.diff === 'easy' && ${C}.rec.weapon === 'crossbow'`, 'easy and the crossbow picked'),
+  { touchEl: '#diffPick [data-diff="easy"]' }, { touchEl: '#weaponPick [data-weapon="punch"]' }, { sleep: 300 }, { shot: 'cc-p03-setup' },
+  check(`${C}.rec.diff === 'easy' && ${C}.rec.weapon === 'punch' && /Boxing Gloves|punches/.test(document.getElementById('weaponTip').textContent)`, 'easy and the boxing gloves picked'),
   { touchEl: '#setupGo' },
   until(`${C}.ready() && ${C}.state().mode === 'solo'`, 40000), { sleep: 1500 },
   check(`${C}.state().round === 0 && ${C}.state().coins === 950 && ${C}.state().lives === 200 && ${C}.G.s.res.wood === 15 && ${C}.G.s.res.stone === 10`, 'round 0, 950 coins, 15 wood, 10 stone, 200 lives'),
@@ -31,7 +37,12 @@ module.exports = [
   { log: `(() => { const p = ${C}.G.s.players[0]; return [Math.round(p.x * 10) / 10, Math.round(p.z * 10) / 10]; })()` },
   // the build tray: an Arrow Tower beside the road and a Spike Trap on it
   { touchEl: '#buildBtn' }, { sleep: 300 }, fits('build tray'), { shot: 'cc-p05-tray' },
-  check(`document.querySelectorAll('#cards .tc').length === 15`, 'fifteen towers in the tray'),
+  check(`document.querySelectorAll('#cards .tc').length === ${C}.CC.TOWER_ORDER.length`, 'every tower in the tray'),
+  check(`/AIR/.test(document.querySelector('#cards [data-t="rocket"]').textContent) && /GROUND/.test(document.querySelector('#cards [data-t="cannon"]').textContent)`, 'rockets say AIR, cannons say GROUND'),
+  // the element tabs: blast towers only, then all again
+  { touchEl: '#etabs [data-el="blast"]' }, { sleep: 250 }, { shot: 'cc-p05b-tray-blast' },
+  check(`[...document.querySelectorAll('#cards .tc')].every((b) => ${C}.CC.TOWERS[b.dataset.t].type === 'blast') && document.querySelectorAll('#cards .tc').length >= 3`, 'the blast tab shows only blast towers'),
+  { touchEl: '#etabs [data-el="all"]' }, { sleep: 250 },
   { touchEl: '#cards [data-t="arrow"]' }, { sleep: 200 }, aimAt('arrow'), { sleep: 200 }, { shot: 'cc-p06-ghost' },
   { touchEl: '#placeBtn' }, { sleep: 500 },
   check(`${C}.state().towers === 1 && ${C}.state().coins === 950 - 155 && ${C}.G.s.res.wood === 12`, 'arrow tower built for 155 coins and 3 wood'),
@@ -53,6 +64,7 @@ module.exports = [
   until(`${C}.state().round >= 1 && ${C}.state().wave[0] === 'wait' || ${C}.state().round >= 2`, 90000),
   // the tower panel: step 1 of path a, then its aim
   { eval: `${C}.openPanel(${C}.G.s.towers[0].id)` }, { sleep: 400 }, fits('tower panel'), { shot: 'cc-p08-panel' },
+  check(`/Physical · walkers and fliers/.test(document.getElementById('pInfo').textContent) && /Weak vs/.test(document.getElementById('pInfo').textContent)`, 'the panel shows the element, who it hits and what it is weak against'),
   { eval: `(() => { window.__c0 = ${C}.state().coins; return window.__c0; })()` },
   check(`/🪵/.test(document.querySelector('#pathA .btn').textContent)`, 'the upgrade button shows its wood'),
   { eval: `(() => { window.__wu = ${C}.G.s.res.wood; return window.__wu; })()` },

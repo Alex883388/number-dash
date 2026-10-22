@@ -56,12 +56,17 @@ const CCBot = (function () {
   // how many of each tower the bot wants by round r: [first round, base, per round]
   const WANT = {
     arrow: [0, 2, 1 / 18], spikes: [2, 1, 1 / 40], ninja: [5, 1, 1 / 14], cannon: [6, 1, 1 / 11], glue: [9, 1, 1 / 40], sniper: [12, 1, 1 / 35], mine: [8, 1, 1 / 14],
-    frost: [14, 1, 1 / 30], wizard: [11, 1, 1 / 18], tesla: [24, 1, 1 / 28], flame: [26, 1, 1 / 35], mortar: [30, 1, 1 / 30], shrine: [34, 1, 1 / 45], sun: [55, 1, 1 / 22]
+    frost: [14, 1, 1 / 30], wizard: [11, 1, 1 / 18], tesla: [24, 1, 1 / 28], flame: [26, 1, 1 / 35], mortar: [30, 1, 1 / 30], shrine: [34, 1, 1 / 45], sun: [55, 1, 1 / 22],
+    rocket: [19, 1, 1 / 14], lantern: [18, 1, 1 / 45], mill: [12, 1, 1 / 80], bees: [16, 1, 1 / 60], geyser: [28, 1, 1 / 60], mushroom: [36, 1, 1 / 70], wind: [40, 1, 1 / 70]
   };
   // the path an upgrade goes up first (to step 3); the other path gets step 1
-  const MAIN = { arrow: 'a', wall: 'a', cannon: 'a', frost: 'a', tesla: 'a', flame: 'a', mortar: 'b', shrine: 'a', sniper: 'a', glue: 'a', ninja: 'a', wizard: 'b', mine: 'a', sun: 'a', spikes: 'a' };
+  const MAIN = { arrow: 'a', wall: 'a', cannon: 'a', frost: 'a', tesla: 'a', flame: 'a', mortar: 'b', shrine: 'a', sniper: 'a', glue: 'a', ninja: 'a', wizard: 'b', mine: 'a', sun: 'a', spikes: 'a',
+    rocket: 'a', geyser: 'a', mushroom: 'a', bees: 'a', lantern: 'a', wind: 'b', mill: 'b' };
   const BREAKERS = ['cannon', 'wizard', 'tesla', 'flame', 'mortar'];   // towers that get through armour
-  const KID_LIKES = ['arrow', 'arrow', 'ninja', 'cannon', 'cannon', 'frost', 'flame', 'wizard', 'tesla', 'glue', 'sniper', 'spikes', 'mortar', 'arrow', 'cannon', 'wizard'];
+  const SKY = ['rocket', 'tesla', 'wizard', 'lantern', 'sun'];          // towers that are good at fliers (the flying bosses come on rounds 40, 70, 80, 95)
+  const KID_LIKES = ['arrow', 'arrow', 'ninja', 'cannon', 'cannon', 'frost', 'flame', 'wizard', 'tesla', 'glue', 'sniper', 'spikes', 'mortar', 'arrow', 'cannon', 'wizard',
+    'rocket', 'bees', 'mushroom', 'lantern', 'wind', 'geyser', 'rocket'];
+  const ECONOMY = { mine: 1, mill: 1 };
   const count = (s, type) => s.towers.reduce((n, t) => n + (t.type === type ? 1 : 0), 0);
   function roadTiles(s, mem) {
     if (mem.roads && mem.roadsFor === s.map) return mem.roads;
@@ -88,17 +93,19 @@ const CCBot = (function () {
     const range = Math.min(st.range || 3, 12), min = st.min || 0;
     // how well each road is covered already
     const cov = s.map.paths.map(() => 0);
-    for (const t of s.towers) { const r = Math.min(t.st.range || 0, 12); if (!r || t.st.kind === 'support' || t.st.kind === 'mine') continue; for (const rd of roads) if (Math.hypot(rd.x - t.x, rd.z - t.z) <= r) cov[rd.k]++; }
+    for (const t of s.towers) { const r = Math.min(t.st.range || 0, 12); if (!r || t.st.kind === 'support' || ECONOMY[t.st.kind]) continue; for (const rd of roads) if (Math.hypot(rd.x - t.x, rd.z - t.z) <= r) cov[rd.k]++; }
     const wRoad = cov.map((c) => 1 / (1 + c * 0.08));
     for (let i = 0; i < m.tiles.length; i++) {
       if (!CC.BUILD_OK[m.tiles[i]] || s.occ[i]) continue;
       const x = cx(s, i), z = cz(s, i);
       let v = 0;
-      if (type === 'mine') v = 10 - Math.min(10, Math.hypot(x - s.castle.x, z - s.castle.z) * 0.3) + (roads.some((rd) => Math.hypot(rd.x - x, rd.z - z) < 1.6) ? -20 : 0);
+      if (ECONOMY[type]) v = 10 - Math.min(10, Math.hypot(x - s.castle.x, z - s.castle.z) * 0.3) + (roads.some((rd) => Math.hypot(rd.x - x, rd.z - z) < 1.6) ? -20 : 0);
       else if (type === 'sniper') v = 10 - Math.hypot(x - s.castle.x, z - s.castle.z) * 0.3 + (roads.some((rd) => Math.hypot(rd.x - x, rd.z - z) < 1.6) ? -5 : 0);
       else if (type === 'shrine') { for (const t of s.towers) { const d = Math.hypot(t.x - x, t.z - z); if (d < (st.range || 3) && t.st.rate) v += 1; } }
       else {
         for (const rd of roads) { const d = Math.hypot(rd.x - x, rd.z - z); if (d <= range && d >= min) v += (1 + 2 / (1 + rd.left * 0.15)) * wRoad[rd.k]; }
+        // a lantern also lights up the towers round it (shadow sight)
+        if (type === 'lantern') for (const t of s.towers) if (Math.hypot(t.x - x, t.z - z) < range && t.st.rate && !t.st.camo) v += 2;
         for (const t of s.towers) if (Math.hypot(t.x - x, t.z - z) < 1.2) v *= 0.85;
       }
       if (!CC.canBuild(s, type, i % m.w, (i / m.w) | 0, null).ok) continue;
@@ -123,7 +130,9 @@ const CCBot = (function () {
       const u = CC.upgradeInfo(s, t, path);
       if (t.type === 'mine' && path === 'a' && t.a >= 2 && r > 40) continue;
       // the towers doing the most damage are the ones worth upgrading
-      const share = (t.done || 0) / allDone, v = upMul * (t.type === 'mine' ? (r < 40 ? 0.7 : 0.15) : t.type === 'shrine' ? 0.5 : 0.35 + 3 * share) * (kid ? 0.7 + rand() * 0.6 : 1);
+      // (and before the flying bosses, the towers that reach fliers; and a mill's stone when stone runs short)
+      const share = (t.done || 0) / allDone, v = upMul * (t.type === 'mine' ? (r < 40 ? 0.7 : 0.15) : t.type === 'mill' ? (r < 50 ? 0.45 : 0.15) : t.type === 'shrine' ? 0.5 : 0.35 + 3 * share) * (kid ? 0.7 + rand() * 0.6 : 1) *
+        (!kid && r >= 30 && SKY.indexOf(t.type) >= 0 ? 1.6 : 1) + (!kid && t.type === 'mill' && path === 'b' && s.res.stone < 12 ? 2.5 : 0);
       out.push({ kind: 'up', id: t.id, path: path, cost: u.cost, mat: u.mat, matN: u.matN, v: v });
     }
     if (kid) {
@@ -132,16 +141,21 @@ const CCBot = (function () {
       out.push({ kind: 'build', type: type, cost: CC.price(s, type), mat: CC.TOWERS[type].mat, matN: CC.TOWERS[type].matN, v: r < 3 ? 2 : 1.35 });
       // a child sometimes notices the shadow zombies
       if (r >= 18 && !s.towers.some((t) => t.st.camo) && rand() < 0.3) out.push({ kind: 'build', type: 'ninja', cost: CC.price(s, 'ninja'), mat: 'wood', matN: CC.TOWERS.ninja.matN, v: 1.5 });
-      // and sometimes follows the hint about armour
+      // and sometimes follows the hints about armour and fliers
       if (r >= 11 && s.towers.filter((t) => BREAKERS.indexOf(t.type) >= 0).length < 1 + r / 20 && rand() < 0.4) { const k = rand() < 0.6 ? 'cannon' : 'wizard'; out.push({ kind: 'build', type: k, cost: CC.price(s, k), mat: CC.TOWERS[k].mat, matN: CC.TOWERS[k].matN, v: 1.45 }); }
+      // (the game warns a round ahead of a flying boss; a child often listens)
+      const R = s.rounds[r - 1], flyBoss = R && R.groups.some((g) => CC.ZOMBIES[g.z].boss && CC.ZOMBIES[g.z].fly);
+      if (r >= 22 && s.towers.filter((t) => SKY.indexOf(t.type) >= 0).length < (flyBoss ? 2 + r / 12 : 1 + r / 20) && rand() < (flyBoss ? 0.7 : 0.35)) { const k = rand() < 0.6 ? 'rocket' : 'tesla'; out.push({ kind: 'build', type: k, cost: CC.price(s, k), mat: CC.TOWERS[k].mat, matN: CC.TOWERS[k].matN, v: 1.45 }); }
     } else {
-      const breakers = s.towers.filter((t) => BREAKERS.indexOf(t.type) >= 0).length;
+      const breakers = s.towers.filter((t) => BREAKERS.indexOf(t.type) >= 0).length, sky = s.towers.filter((t) => SKY.indexOf(t.type) >= 0).length;
       for (const type of Object.keys(WANT)) {
         const [from, base, per] = WANT[type];
         if (r < from) continue;
         const want = Math.floor(base + (r - from) * per), have = count(s, type);
         if (have >= want) continue;
-        const v = 1 + (want - have) / want + (type === 'ninja' && r >= 16 && !have ? 3 : 0) + (type === 'arrow' && have < 2 ? 2 : 0) + (type === 'mine' && r > 60 ? -1.5 : 0) + (BREAKERS.indexOf(type) >= 0 && r >= 9 && breakers < 2 + r / 15 ? 1.5 : 0);
+        const v = 1 + (want - have) / want + (type === 'ninja' && r >= 16 && !have ? 3 : 0) + (type === 'arrow' && have < 2 ? 2 : 0) + (type === 'mine' && r > 60 ? -1.5 : 0) + (BREAKERS.indexOf(type) >= 0 && r >= 9 && breakers < 2 + r / 15 ? 1.5 : 0) +
+          (type === 'mill' && s.res.stone < 12 && r > 15 ? 1.5 : 0) +
+          (SKY.indexOf(type) >= 0 && r >= 18 && sky < 1 + r / 12 ? 1.4 : 0);
         out.push({ kind: 'build', type: type, cost: CC.price(s, type), mat: CC.TOWERS[type].mat, matN: CC.TOWERS[type].matN, v: v });
       }
     }
@@ -156,7 +170,8 @@ const CCBot = (function () {
     const top = list[0], ok = (o) => p.coins >= o.cost && s.res[o.mat] >= o.matN;
     // the coins are there but not the wood or stone: mine it
     if (p.coins >= top.cost && s.res[top.mat] < top.matN) mem.need = { mat: top.mat, n: top.matN };
-    let pick = ok(top) ? top : p.coins < top.cost * 0.6 || mem.need ? list.slice(1, 5).find(ok) : null;
+    // (rich but short of wood or stone: anything it can pay for)
+    let pick = ok(top) ? top : p.coins < top.cost * 0.6 || mem.need ? list.slice(1, mem.skill >= 0.9 && p.coins > 2500 ? list.length : 5).find(ok) : null;
     if (!pick) return;
     if (pick.kind === 'build') {
       const spot = spotFor(s, pick.type, mem);
@@ -209,7 +224,8 @@ const CCBot = (function () {
     // fight: guard the castle, keep the zombie nearest the castle in reach (or mine, when none is near it)
     let target = null, tv = 1e9;
     for (const zb of s.zombies) { if (zb.under || zb.bones > 0) continue; const v = CC.castleDist(s, zb.x, zb.z); if (v < tv) { tv = v; target = zb; } }
-    if (mem.need && (tv > 2.5 || !target) && p.hp > 40) {
+    // (a strong player with coins to spare and nothing to spend them on goes for the stone even in a fight)
+    if (mem.need && (tv > 2.5 || !target || (mem.skill >= 0.9 && p.coins > 1500)) && p.hp > 40) {
       if (gather(s, p, mem, mem.need.mat === 'wood' ? CC.T.TREE : CC.T.ROCK, dt, inp)) return fin(inp, p);
       mem.need = null;   // none left to reach: wait for them to grow back
     }

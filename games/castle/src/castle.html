@@ -1,5 +1,5 @@
 <title>Castle Crew</title>
-<meta name="description" content="Hold the castle! A blocky 3D zombie tower defence: 8 maps with 100 rounds each, 15 towers with two upgrade paths, and a weapon that levels up as you fight, alone or with up to three friends on their own iPads, phones or computers.">
+<meta name="description" content="Hold the castle! A blocky 3D zombie tower defence: 8 maps with 100 rounds each, 22 towers with elements and two upgrade paths, walkers, fliers and diggers, and a weapon that levels up as you fight, alone or with up to three friends on their own iPads, phones or computers.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap">
@@ -68,11 +68,21 @@ body.menu #hud, body.menu #banner, body.menu #controls, body.menu #tray, body.me
   flex: none; width: 88px; min-height: 96px; border-radius: 18px; border: 3px solid var(--line); background: var(--card); box-shadow: 0 4px 0 var(--line); cursor: pointer; padding: 6px 4px;
   display: grid; justify-items: center; align-content: start; gap: 3px; color: var(--ink); font: inherit;
 }
-.tc i { font: 1.6rem/1.1 var(--emoji); font-style: normal; }
+.tc > i { font: 1.6rem/1.1 var(--emoji); font-style: normal; }
 .tc b { font: 700 .76rem/1.05 var(--font-display); text-align: center; }
 .tc small { font: 800 .72rem/1.1 var(--font-body); color: var(--ink-soft); white-space: nowrap; }
 .tc.on { border-color: var(--sun-deep); background: var(--sun); box-shadow: 0 4px 0 var(--sun-deep); }
 .tc.poor { opacity: .5; }
+/* a card's top line: its element, and AIR or GROUND when it hits only fliers or only walkers */
+.tc .tl { display: flex; justify-content: space-between; align-items: center; width: 100%; min-height: 14px; padding: 0 2px; box-sizing: border-box; }
+.tc .tl i { font: .85rem/1 var(--emoji); }
+.tc .tl em { font: 800 .56rem/1 var(--font-body); font-style: normal; padding: 2px 4px; border-radius: 6px; background: #e3f2fd; color: #1f5fa8; letter-spacing: .03em; }
+.tc .tl em.g { background: #f1e6d6; color: #7a5326; }
+.etabs { display: flex; gap: 6px; overflow-x: auto; max-width: calc(100vw - 20px); padding: 2px 6px 5px; scrollbar-width: none; -webkit-overflow-scrolling: touch; touch-action: pan-x; }
+.etabs::-webkit-scrollbar { display: none; }
+.etab { flex: none; min-width: 44px; height: 44px; padding: 0 10px; border-radius: 99px; border: 3px solid var(--line); background: var(--card); box-shadow: 0 3px 0 var(--line); font: 700 .85rem/1 var(--font-display); color: var(--ink); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 4px; }
+.etab i { font: 1.15rem/1 var(--emoji); font-style: normal; }
+.etab.on { background: var(--sun); border-color: var(--sun-deep); box-shadow: 0 3px 0 var(--sun-deep); color: var(--sun-ink); }
 .trayrow { display: flex; gap: 10px; align-items: center; }
 .traytip { font: 700 .88rem/1.2 var(--font-body); background: var(--card); padding: 8px 14px; border-radius: 18px; box-shadow: var(--shadow-sm); max-width: calc(100vw - 30px); text-align: center; }
 /* the tower panel */
@@ -91,6 +101,23 @@ body.menu #hud, body.menu #banner, body.menu #controls, body.menu #tray, body.me
 .path span { font: 600 .8rem/1.25 var(--font-body); color: var(--ink-soft); }
 .path .btn { padding: .45em .6em; font-size: .9rem; min-height: 44px; margin-top: 2px; }
 .path.done b { color: var(--mint-deep); }
+.pinfo { font: 700 .82rem/1.35 var(--font-body); color: var(--ink-soft); text-align: left; display: flex; flex-wrap: wrap; gap: 2px 12px; }
+.pinfo .em, .ew .em { font-family: var(--emoji); letter-spacing: .08em; }
+.pinfo .good, .ew.good { color: var(--mint-deep); } .pinfo .bad, .ew.bad { color: var(--coral-deep); }
+/* the zombie book */
+#s-book { width: min(100%, 880px); }
+.zbook { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; text-align: left; }
+.zb { background: var(--card-2); border-radius: 16px; padding: 8px 10px; display: grid; gap: 3px; align-content: start; }
+.zb .zh { display: flex; align-items: center; gap: 8px; }
+.zb .zh i { font: 1.5rem/1 var(--emoji); font-style: normal; }
+.zb .zh b { font: 700 .98rem/1.1 var(--font-display); }
+.zb .tags { display: flex; flex-wrap: wrap; gap: 4px; }
+.zb .tags em { font: 800 .66rem/1 var(--font-body); font-style: normal; padding: 3px 6px; border-radius: 8px; background: rgba(41, 52, 90, .08); color: var(--ink); }
+.zb .tags em.fly { background: #e3f2fd; color: #1f5fa8; } .zb .tags em.boss { background: #fde7e9; color: #8a1f2b; } .zb .tags em.dig { background: #f1e6d6; color: #7a5326; }
+.zb .ew { font: 700 .78rem/1.3 var(--font-body); }
+.zb p { margin: 0; font: 600 .76rem/1.3 var(--font-body); color: var(--ink-soft); }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 12px; justify-content: center; font: 700 .82rem/1.3 var(--font-body); color: var(--ink-soft); }
+.legend span { white-space: nowrap; }
 /* menus */
 .screen { width: min(100%, 720px); }
 .logo .ic { font-family: var(--emoji); }
@@ -137,7 +164,7 @@ body.menu #hud, body.menu #banner, body.menu #controls, body.menu #tray, body.me
 .loading { position: fixed; inset: 0; z-index: 30; display: grid; place-items: center; background: rgba(159, 220, 255, .8); font: 700 1.3rem/1.3 var(--font-display); }
 .loading[hidden] { display: none; }
 @media (pointer: coarse) { .screen .btn:not(.big) { min-height: 48px; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; } }
-@media (max-width: 760px) { .mapgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 760px) { .mapgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .zbook { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-height: 520px) {
   .hud-top { padding-top: calc(6px + env(safe-area-inset-top, 0px)); }
   .hud-btn { width: 46px; height: 46px; }
@@ -148,8 +175,11 @@ body.menu #hud, body.menu #banner, body.menu #controls, body.menu #tray, body.me
   #fireBtn { width: 70px; height: 70px; }
   #banner { font-size: .88rem; padding: 6px 12px; }
   #banner.big { font-size: 1rem; padding: 8px 16px; }
-  .tc { width: 78px; min-height: 86px; padding: 4px 3px; } .tc i { font-size: 1.35rem; }
+  .tc { width: 78px; min-height: 86px; padding: 4px 3px; gap: 2px; } .tc > i { font-size: 1.35rem; }
   .traytip { font-size: .8rem; padding: 6px 12px; }
+  .etab { height: 38px; min-width: 40px; padding: 0 8px; } .etab i { font-size: 1rem; }
+  .pinfo { font-size: .74rem; }
+  body.trayopen #banner { display: none; }   /* a short screen has no room for the banner over an open tray */
   #panel { padding: 8px 10px 10px; gap: 6px; }
   .path { padding: 6px 8px; } .path span { font-size: .74rem; }
   .crew span { font-size: .7rem; }
@@ -193,6 +223,7 @@ body.menu #hud, body.menu #banner, body.menu #controls, body.menu #tray, body.me
 </div>
 <div id="tray" hidden>
   <div class="traytip" id="trayTip">Pick a tower, then tap the map where it should go.</div>
+  <div class="etabs" id="etabs" role="group" aria-label="Show towers of one element"></div>
   <div class="cards" id="cards" role="group" aria-label="Towers to build"></div>
   <div class="trayrow">
     <button class="btn sun" id="placeBtn" hidden>✓ Build here</button>
@@ -201,6 +232,7 @@ body.menu #hud, body.menu #banner, body.menu #controls, body.menu #tray, body.me
 </div>
 <div id="panel" hidden role="dialog" aria-label="Tower">
   <div class="ph"><span class="ic" id="pIcon" aria-hidden="true">🏹</span><h3 id="pName">Arrow Tower</h3><button class="btn" id="pMode">🎯 First</button><button class="btn" id="pSell">Sell</button><button class="btn" id="pClose" aria-label="Close">✕</button></div>
+  <div class="pinfo" id="pInfo"></div>
   <div class="paths">
     <div class="path pa" id="pathA"></div>
     <div class="path pb" id="pathB"></div>
@@ -215,7 +247,7 @@ body.menu #hud, body.menu #banner, body.menu #controls, body.menu #tray, body.me
       <h1 class="logo"><span class="ic" aria-hidden="true">🏰</span> Castle <span>Crew</span></h1>
       <p class="tag">Hold the castle against round after round of zombies! Build towers, upgrade them, and level up your weapon, on your own or with your crew.</p>
       <div class="row"><button class="btn sun big" id="playBtn">Play</button></div>
-      <div class="row"><button class="btn" id="crewBtn">👫 Play with friends</button><button class="btn" id="helpBtn">How to play</button></div>
+      <div class="row"><button class="btn" id="crewBtn">👫 Play with friends</button><button class="btn" id="helpBtn">How to play</button><button class="btn" id="bookBtn">📖 Zombie book</button></div>
       <div class="minis">
         <button class="btn" id="autoBtn">Auto-fire: on</button>
         <button class="btn" id="autoStartBtn">Next round: by itself</button>
@@ -272,7 +304,7 @@ body.menu #hud, body.menu #banner, body.menu #controls, body.menu #tray, body.me
       <h2>Paused</h2>
       <p id="pauseInfo"></p>
       <div class="row"><button class="btn sun big" id="resumeBtn">Keep playing</button></div>
-      <div class="row"><button class="btn" id="restartBtn">Start the map again</button><button class="btn" id="quitBtn">Save and leave</button></div>
+      <div class="row"><button class="btn" id="pauseBook">📖 Zombie book</button><button class="btn" id="restartBtn">Start the map again</button><button class="btn" id="quitBtn">Save and leave</button></div>
     </div>
   </section>
   <section class="screen" id="s-result" hidden>
@@ -294,12 +326,23 @@ body.menu #hud, body.menu #banner, body.menu #controls, body.menu #tray, body.me
         <li>🔨 Build towers beside the roads with your coins (🪙) and wood (🪵) or stone (🪨). Barricades and spike traps go on the road itself.</li>
         <li>🪓 Walk into trees to chop wood and into rocks to mine stone (your crew shares them). Upgrades need them too. Trees and rocks grow back after a few rounds.</li>
         <li>⬆️ Tap a tower to upgrade it. Each tower has two paths: one path can go all the way to step 3, the other then stops at step 1. You can also change what it aims at, or sell it.</li>
-        <li>🔫 Your weapon fires by itself. It levels up from the zombies you finish off, and every 5 levels it becomes something new.</li>
+        <li>🔥 Every tower and weapon hits with an element: 💪 physical, 🔥 fire, ❄️ ice, 💧 water, ⚡ lightning, 💥 blast, ✨ light, ☠️ poison or 🌪️ wind. Zombies are hurt more by some and shrug off others: fire melts frosties, water puts out blazes, light burns ghosts and shadows, bombs and lightning get through armour. Tap a zombie, or look in the 📖 Zombie book.</li>
+        <li>🦇 Fliers (ghosts, bats, balloons, gargoyles, vultures) float over barricades and traps. Cannons, mortars, glue, mushrooms and geysers hit only walkers (GROUND); rockets hit only fliers (AIR). Diggers tunnel under the road: a geyser flushes them out. Shadows need a Ninja, a Lantern or shadow sight.</li>
+        <li>🔫 Your weapon fires by itself (🥊 boxing gloves punch!). It levels up from the zombies you finish off, and every 5 levels it becomes something new.</li>
+        <li>⭐ From round 50 zombies come as glowing elites, and from round 80 as golden champions: fewer of them, but much tougher, and worth more coins.</li>
         <li>🕹️ Drag the left part of the screen to walk (or W A S D and the arrow keys). You can walk through your towers.</li>
-        <li>🛡️ Learn the zombies: knights need bombs, fire or magic; shadows need a Ninja or a tower that can see them; ghosts and bats fly over barricades.</li>
         <li>▶ Speed the game up with the 1× button. 👫 Play with friends: one hosts and shares the code.</li>
       </ul>
       <div class="row"><button class="btn sun" id="helpHome">Got it</button></div>
+    </div>
+  </section>
+  <section class="screen" id="s-book" hidden>
+    <div class="card small-card">
+      <h2>📖 Zombie book</h2>
+      <p>Every tower and weapon hits with an element. Each zombie is <b class="ew good">hurt by</b> some and <b class="ew bad">tough</b> against others.</p>
+      <div class="legend" id="bookLegend"></div>
+      <div class="zbook" id="bookGrid"></div>
+      <div class="row"><button class="btn sun" id="bookBack">Back</button></div>
     </div>
   </section>
 </main>
@@ -593,7 +636,7 @@ function onEvent(e) {
       if (e.state === 'fight') {
         const R = ROUNDS[e.r - 1], note = R && R.note ? ': ' + R.note : e.r > CC.LAST_ROUND ? ' (freeplay)' : '';
         const boss = R && R.groups.some((g) => CC.ZOMBIES[g.z].boss);
-        banner('Round ' + e.r + note, boss ? 'fight big' : note ? 'big' : 'fight', note ? 3000 : 1300);
+        banner('Round ' + e.r + note, boss ? 'fight big' : note ? 'big' : 'fight', note ? Math.min(7000, 2000 + note.length * 40) : 1300);   // long notes stay longer
         if (boss || note) Sound.sfx.wrong(); else Sound.sfx.click();
         announce('Round ' + e.r + note);
         closeTrayIfIdle();
@@ -634,6 +677,9 @@ function onEvent(e) {
 // a round done: the record, the saved game and a word
 function roundCleared(e) {
   if (e.bonus) toast('Round ' + e.r + ' done! +' + e.bonus + ' 🪙', 'good', 1300);
+  // a heads-up a round before a boss, so there is time to build for it
+  const N = ROUNDS[e.r], boss = N && N.groups.map((g) => CC.ZOMBIES[g.z]).find((Z) => Z.boss);
+  if (boss && G.mode !== 'menu') banner('Next round: ' + boss.icon + ' ' + boss.name + '! ' + boss.tip + (boss.fly ? ' Only towers that hit fliers can reach it.' : ''), 'big', 4500);
   const m = rec.maps[G.mapId] || (rec.maps[G.mapId] = {});
   m[G.diff] = Math.max(m[G.diff] || 0, e.r);
   if (G.mode !== 'client') rec.saves[G.mapId] = Object.assign(CC.save(G.s), { crew: G.mode === 'host' });   // a friend's device keeps the record, the host keeps the game
@@ -656,6 +702,37 @@ const myCoins = () => { const p = myInfo(); return p ? Math.floor(p.coins) : 0; 
 const crewRes = () => { const r = view().res || [0, 0]; return { wood: r[0], stone: r[1] }; };
 const MAT_ICON = { wood: '🪵', stone: '🪨' };
 const costText = (coins, mat, n) => coins + ' 🪙' + (n ? ' · ' + n + ' ' + MAT_ICON[mat] : '');
+
+/* ---- elements: what beats which zombie ---- */
+const EL = CC.ELEMENTS;
+const elIcon = (k) => (EL[k] ? EL[k].icon : '');
+const resOf = (Z, k) => (Z.res && Z.res[k] != null ? Z.res[k] : 1);
+// a tower's or weapon's reach in words
+const hitsText = (U) => (U.hits === 'ground' ? 'walkers only' : U.hits === 'air' ? 'fliers only' : 'walkers and fliers');
+// the zombies (it can reach) that element k hurts more, and the ones it hurts less (or a shield stops from the front)
+function matchups(k, hits) {
+  const good = [], bad = [];
+  for (const z of CC.ZOMBIE_ORDER) {
+    const Z = CC.ZOMBIES[z], r = resOf(Z, k);
+    if (z === 'mini' || (hits === 'ground' && Z.fly) || (hits === 'air' && !Z.fly)) continue;
+    if (r >= 1.4) good.push(Z.icon); else if (r <= 0.6 || (Z.shield && Z.shield.blocks[k])) bad.push(Z.icon);
+  }
+  return { good: good, bad: bad };
+}
+function towerInfoHtml(U) {
+  if (!EL[U.type]) return '<span>' + escapeHtml(U.tip) + '</span>';
+  const m = matchups(U.type, U.hits);
+  return '<span><span class="em">' + elIcon(U.type) + '</span> ' + EL[U.type].name + ' · ' + hitsText(U) + (U.digs ? ' · reaches diggers' : '') + (U.camo || U.camoAura ? ' · sees shadows' : '') + '</span>' +
+    (m.good.length ? '<span class="good">Strong vs <span class="em">' + m.good.join('') + '</span></span>' : '') +
+    (m.bad.length ? '<span class="bad">Weak vs <span class="em">' + m.bad.join('') + '</span></span>' : '');
+}
+// a zombie's elements: hurt by (1.4 and more), tough vs (0.6 and less), none at all (0)
+function zombieElements(Z) {
+  const o = { hurt: [], tough: [], none: [] };
+  for (const k of CC.ELEMENT_ORDER) { const r = resOf(Z, k); if (r === 0) o.none.push(k); else if (r >= 1.4) o.hurt.push(k); else if (r <= 0.6) o.tough.push(k); }
+  return o;
+}
+const zombieKind = (Z) => (Z.fly ? 'flier' : Z.dig ? 'digger' : 'walker');
 const myWeapon = () => { const p = myInfo(); return p ? p.weapon : rec.weapon; };
 function updateHud(force) {
   if (force) hudCache = {};
@@ -734,26 +811,32 @@ function myPlayer() { return G.mode === 'client' ? Object.assign({ id: G.me }, G
 function openTray() {
   if (G.mode === 'menu') return;
   closePanel();
-  $('#tray').hidden = false; $('#dock').hidden = true;
+  $('#tray').hidden = false; $('#dock').hidden = true; document.body.classList.add('trayopen');
   G.build = null; CCView.setGhost(null);
   $('#placeBtn').hidden = true;
   $('#trayTip').textContent = 'Pick a tower, then tap the map where it should go.';
   updateTray(true);
   Sound.sfx.click();
 }
-function closeTray() { $('#tray').hidden = true; $('#dock').hidden = false; G.build = null; if (viewOn) CCView.setGhost(null); hudCache.go = ''; }
+function closeTray() { $('#tray').hidden = true; $('#dock').hidden = false; document.body.classList.remove('trayopen'); G.build = null; if (viewOn) CCView.setGhost(null); hudCache.go = ''; }
 function closeTrayIfIdle() { if (!$('#tray').hidden && !G.build) closeTray(); }
 let trayKey = '';
+// the tray's element tabs: all towers, one element's, or the helpers (no element: barricade, shrine, gold mine, mill)
+const TRAY_TABS = ['all'].concat(CC.ELEMENT_ORDER.filter((k) => CC.TOWER_ORDER.some((t) => CC.TOWERS[t].type === k)), ['help']);
+const inTab = (U, tab) => tab === 'all' || (tab === 'help' ? !EL[U.type] : U.type === tab);
 function updateTray(force) {
-  const coins = myCoins(), st = checkState(), res = crewRes();
-  const key = coins + '|' + res.wood + '|' + res.stone + '|' + (G.build ? G.build.type : '');
+  const coins = myCoins(), st = checkState(), res = crewRes(), tab = G.trayEl || 'all';
+  const key = coins + '|' + res.wood + '|' + res.stone + '|' + (G.build ? G.build.type : '') + '|' + tab;
   if (!force && key === trayKey) return;
   trayKey = key;
-  $('#cards').innerHTML = CC.TOWER_ORDER.map((k) => {
+  $('#etabs').innerHTML = TRAY_TABS.map((k) => '<button class="etab' + (k === tab ? ' on' : '') + '" data-el="' + k + '" aria-pressed="' + (k === tab) + '" title="' + (k === 'all' ? 'All towers' : k === 'help' ? 'Helpers' : EL[k].name) + '">' + (k === 'all' ? 'All' : k === 'help' ? '<i aria-hidden="true">🛠️</i>' : '<i aria-hidden="true">' + elIcon(k) + '</i>') + '<span class="sr">' + (k === 'all' ? '' : k === 'help' ? 'Helpers' : EL[k].name) + '</span></button>').join('');
+  $('#cards').innerHTML = CC.TOWER_ORDER.filter((k) => inTab(CC.TOWERS[k], tab)).map((k) => {
     const U = CC.TOWERS[k], cost = CC.price(st, k), poor = coins < cost || res[U.mat] < U.matN;
-    return '<button class="tc' + (G.build && G.build.type === k ? ' on' : '') + (poor ? ' poor' : '') + '" data-t="' + k + '" title="' + escapeHtml(U.tip) + '"><i aria-hidden="true">' + U.icon + '</i><b>' + U.name + '</b><small>' + cost + ' 🪙</small><small>' + U.matN + ' ' + MAT_ICON[U.mat] + '</small></button>';
+    const top = '<span class="tl"><i aria-hidden="true">' + elIcon(U.type) + '</i>' + (U.hits === 'air' ? '<em>AIR</em>' : U.hits === 'ground' ? '<em class="g">GROUND</em>' : '') + '</span>';
+    return '<button class="tc' + (G.build && G.build.type === k ? ' on' : '') + (poor ? ' poor' : '') + '" data-t="' + k + '" title="' + escapeHtml(U.tip) + '" aria-label="' + escapeHtml(U.name + (EL[U.type] ? ', ' + EL[U.type].name + ', ' + hitsText(U) : '')) + ', ' + cost + ' coins">' + top + '<i aria-hidden="true">' + U.icon + '</i><b>' + U.name + '</b><small>' + cost + ' 🪙</small><small>' + U.matN + ' ' + MAT_ICON[U.mat] + '</small></button>';
   }).join('');
 }
+function pickTab(k) { G.trayEl = k; $('#cards').scrollLeft = 0; updateTray(true); Sound.sfx.click(); }
 function pickTower(type) {
   const me = myPlayer();
   if (!me) return;
@@ -762,7 +845,7 @@ function pickTower(type) {
   if (U.road) { const sp = nearestRoad(me.x, me.z); if (sp) { tx = sp[0]; tz = sp[1]; } }
   else if (G.build && !CC.TOWERS[G.build.type].road) { tx = G.build.tx; tz = G.build.tz; }
   G.build = { type: type, tx: tx, tz: tz };
-  $('#trayTip').textContent = U.icon + ' ' + U.name + ' (' + costText(CC.price(checkState(), type), U.mat, U.matN) + '): ' + U.tip + ' Tap the map to move it.';
+  $('#trayTip').textContent = U.icon + ' ' + U.name + ' (' + costText(CC.price(checkState(), type), U.mat, U.matN) + '): ' + (EL[U.type] ? elIcon(U.type) + ' ' + EL[U.type].name + ', ' + hitsText(U) + '. ' : '') + U.tip + ' Tap the map to move it.';
   $('#placeBtn').hidden = false;
   updateGhost();
   updateTray(true);
@@ -814,7 +897,8 @@ function renderPanel(force) {
   const U = CC.TOWERS[t.type], stats = CC.towerStats(G.mode === 'client' ? { towers: [] } : G.s, t);
   if (CCView.setSelected) CCView.setSelected({ id: t.id, tx: t.tx, tz: t.tz, range: stats.range && stats.range < 50 ? stats.range : 0 });
   $('#pIcon').textContent = U.icon; $('#pName').textContent = U.name;
-  const aims = ['shot', 'lob', 'chain', 'snipe', 'beam'].indexOf(U.kind) >= 0;
+  if (hudCache.pinfo !== t.type) { hudCache.pinfo = t.type; $('#pInfo').innerHTML = towerInfoHtml(U); }
+  const aims = ['shot', 'lob', 'chain', 'snipe', 'beam', 'cloud', 'erupt'].indexOf(U.kind) >= 0;
   $('#pMode').hidden = !aims; $('#pMode').textContent = '🎯 ' + MODE_NAME[t.mode || 'first'];
   const mine = !t.by || t.by === G.me || !(G.mode === 'client' ? G.mirror.players : G.s.players).some((p) => p.id === t.by);
   const back = CC.sellMat(t);
@@ -864,7 +948,23 @@ function tapAt(x, y) {
     return;
   }
   const tw = towerAt(t.tx, t.tz);
-  if (tw) openPanel(tw); else if (G.sel) closePanel();
+  if (tw) { openPanel(tw); return; }
+  if (G.sel) closePanel();
+  // a tap on a zombie says what it is and what beats it
+  const zq = zombieNear(t.tx + 0.5, t.tz + 0.5);
+  if (zq) zombieToast(zq);
+}
+function zombieNear(x, z) {
+  const list = G.mode === 'client' ? (G.snaps.length ? G.snaps[G.snaps.length - 1].s.z.map((q) => ({ type: CC.ZOMBIE_ORDER[q[1]], x: q[2], z: q[3], flags: q[6] })) : [])
+    : G.s ? G.s.zombies.map((zb) => ({ type: zb.type, x: zb.x, z: zb.z, flags: CC.zFlags(zb) })) : [];
+  let best = null, bd = 1.3;
+  // a flier is drawn up in the air, so a tap lands a little north of it on the ground
+  for (const q of list) { const fly = CC.ZOMBIES[q.type].fly, d = Math.hypot(q.x - x, q.z - (fly ? z + 0.7 : z)); if (d < bd) { bd = d; best = q; } }
+  return best;
+}
+function zombieToast(q) {
+  const Z = CC.ZOMBIES[q.type], E = zombieElements(Z), icons = (list) => list.map(elIcon).join('');
+  toast(Z.icon + ' ' + Z.name + (q.flags & 1024 ? ' (champion)' : q.flags & 512 ? ' (elite)' : '') + ': ' + zombieKind(Z) + (Z.camo ? ', shadow' : '') + (E.hurt.length ? ' · hurt by ' + icons(E.hurt) : '') + (E.tough.length + E.none.length ? ' · tough vs ' + icons(E.tough.concat(E.none)) : ''), 'hello', 2800);
 }
 glEl.addEventListener('pointerdown', (e) => {
   if (G.mode === 'menu') return;
@@ -899,6 +999,7 @@ glEl.addEventListener('wheel', (e) => { if (G.mode !== 'menu') { CCView.zoom(CCV
 $('#buildBtn').addEventListener('click', openTray);
 $('#trayClose').addEventListener('click', () => { closeTray(); Sound.sfx.click(); });
 $('#cards').addEventListener('click', (e) => { const b = e.target.closest('[data-t]'); if (b) pickTower(b.dataset.t); });
+$('#etabs').addEventListener('click', (e) => { const b = e.target.closest('[data-el]'); if (b) pickTab(b.dataset.el); });
 $('#placeBtn').addEventListener('click', placeTower);
 $('#goBtn').addEventListener('click', nextRound);
 $('#pClose').addEventListener('click', () => { closePanel(); Sound.sfx.click(); });
@@ -983,7 +1084,24 @@ function choiceButtons(box, items, on, attr) {
 }
 const diffItems = () => DIFF_KEYS.map((k) => ({ k: k, name: CC.DIFFS[k].name, small: CC.DIFFS[k].lives + ' lives', title: CC.DIFFS[k].tip }));
 const weaponItems = () => CC.WEAPON_ORDER.map((k) => ({ k: k, icon: CC.WEAPONS[k].icon, name: CC.WEAPONS[k].name, title: CC.WEAPONS[k].tip }));
-function weaponTip(k) { const W = CC.WEAPONS[k]; return W.icon + ' ' + W.tip + ' Levels 5, 10, 15, 20: ' + W.tiers.map((t) => t.name).join(' → ') + '.'; }
+function weaponTip(k) { const W = CC.WEAPONS[k]; return W.icon + ' ' + W.tip + ' (' + elIcon(W.type) + ' ' + EL[W.type].name + (W.hits === 'ground' ? ', walkers only' : '') + ') Levels 5, 10, 15, 20: ' + W.tiers.map((t) => t.name).join(' → ') + '.'; }
+// the zombie book: every zombie, what it is, the round it first comes, what hurts it and what it shrugs off
+const FIRST_ROUND = {};
+ROUNDS.forEach((R) => R.groups.forEach((g) => { if (!FIRST_ROUND[g.z]) FIRST_ROUND[g.z] = R.n; }));
+function openBook(from) {
+  G.bookFrom = from;
+  $('#bookLegend').innerHTML = CC.ELEMENT_ORDER.map((k) => '<span>' + elIcon(k) + ' ' + EL[k].name + '</span>').join('');
+  $('#bookGrid').innerHTML = CC.ZOMBIE_ORDER.map((k) => {
+    const Z = CC.ZOMBIES[k], E = zombieElements(Z), icons = (list) => '<span class="em">' + list.map(elIcon).join(' ') + '</span>';
+    const tags = (Z.boss ? '<em class="boss">Boss</em>' : '') + (Z.fly ? '<em class="fly">Flier</em>' : Z.dig ? '<em class="dig">Digger</em>' : '<em>Walker</em>') + (Z.camo ? '<em>Shadow</em>' : '') + (Z.heavy && !Z.boss ? '<em>Heavy</em>' : '') + (FIRST_ROUND[k] ? '<em>Round ' + FIRST_ROUND[k] + '</em>' : '');
+    return '<div class="zb"><div class="zh"><i aria-hidden="true">' + Z.icon + '</i><b>' + escapeHtml(Z.name) + '</b></div><div class="tags">' + tags + '</div>' +
+      (E.hurt.length ? '<div class="ew good">Hurt by ' + icons(E.hurt) + '</div>' : '') + (E.tough.length ? '<div class="ew bad">Tough vs ' + icons(E.tough) + '</div>' : '') + (E.none.length ? '<div class="ew bad">No effect: ' + icons(E.none) + '</div>' : '') +
+      '<p>' + escapeHtml(Z.tip) + '</p></div>';
+  }).join('');
+  showScreen('book');
+  Sound.sfx.click();
+}
+function closeBook() { if (G.bookFrom === 'pause' && G.mode !== 'menu') showScreen('pause'); else goHome(); Sound.sfx.click(); }
 // a map's setup: how hard, which weapon, start or carry on
 function setup(id) {
   G.setupMap = id;
@@ -1195,6 +1313,9 @@ $('#setupCont').addEventListener('click', () => goPlay(G.setupMap, true));
 $('#setupBack').addEventListener('click', showMaps);
 $('#helpBtn').addEventListener('click', () => showScreen('help'));
 $('#helpHome').addEventListener('click', goHome);
+$('#bookBtn').addEventListener('click', () => openBook('home'));
+$('#pauseBook').addEventListener('click', () => openBook('pause'));
+$('#bookBack').addEventListener('click', closeBook);
 $('#crewBtn').addEventListener('click', crewScreen);
 $('#crewHome').addEventListener('click', () => { saveName(); goHome(); });
 $('#hostBtn').addEventListener('click', () => hostGame(false));
@@ -1255,6 +1376,9 @@ function fits() {
     if (!$('#banner').hidden) { const b = R($('#banner')); $$('.hud-left > *, .hud-right .top > *, #crewHud span').forEach((el) => { if (el.offsetParent !== null && hit(b, R(el))) bad.push('banner over ' + (el.id || el.className)); }); }
     if (!$('#dock').hidden) { const dock = R($('#dock')); if (dock.height && dock.top < hud.bottom) bad.push('dock reaches the HUD'); }
     if (!$('#tray').hidden) { const tr = R($('#tray')); if (tr.top < hud.bottom) bad.push('tray reaches the HUD'); }
+    // the round banner never covers the tray or the panel
+    const bn = R($('#banner'));
+    if (!$('#banner').hidden && bn.height) [...$$('#tray > *'), $('#panel')].forEach((el) => { const r = R(el); if (!el.closest('[hidden]') && r.height && hit(bn, r)) bad.push('banner over ' + (el.id || el.className)); });
     if (!$('#panel').hidden) { const pr = R($('#panel')); if (pr.top < hud.bottom) bad.push('panel reaches the HUD'); if (!in1(pr)) bad.push('panel outside'); }
   } else {
     const card = $$('#screens > .screen').find((s) => !s.hidden);

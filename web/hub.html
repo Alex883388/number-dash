@@ -178,7 +178,7 @@ h1 span { color: var(--sun-deep); }
   <section class="news" id="news" aria-label="New in the arcade" hidden>
     <h2>✨ New in the arcade</h2>
     <ul>
-      <li><a href="castle/"><i aria-hidden="true">🏰</i><span><b>Castle Crew</b> is now a big tower defence: 8 maps with 100 rounds each, with 15 towers and a weapon that levels up</span></a></li>
+      <li><a href="castle/"><i aria-hidden="true">🏰</i><span><b>Castle Crew</b>: boxing gloves 🥊, 7 new towers (rockets, geysers, mushrooms, bees, lanterns, wind and a lumber mill), elements, flying zombies, a zombie book, and smooth late rounds</span></a></li>
       <li><a href="mech/"><i aria-hidden="true">🦾</i><span><b>Mech Blaster</b>: a new game! Pilot a battle mech through 5 worlds and 50 levels, blast robots and giant bosses, and open every gate with the right number or missing word</span></a></li>
       <li><a href="tycoon/"><i aria-hidden="true">💼</i><span><b>Tycoon Town</b>: four cities to choose, seasons and snow, carnival parades, storms and earthquakes, insurance, and an airport to build</span></a></li>
       <li><a href="robot/"><i aria-hidden="true">🤖</i><span><b>Code Robot</b>: 11 worlds now: paint pictures, robot teams, counters, mixed-up code and code reading</span></a></li>
@@ -383,7 +383,7 @@ h1 span { color: var(--sun-deep); }
       <div class="body">
         <span class="num">Game 11</span>
         <h2>Castle Crew</h2>
-        <p>A blocky 3D tower defence: hold the castle for 100 rounds on 8 maps, with 15 towers to upgrade and a weapon that levels up, alone or with friends on their own iPads, phones and computers.</p>
+        <p>A blocky 3D tower defence: hold the castle for 100 rounds on 8 maps against walkers, fliers and diggers, with 22 towers of fire, ice, lightning and more, and a weapon that levels up, alone or with friends on their own iPads, phones and computers.</p>
         <div class="skills"><span>Teamwork</span><span>Strategy</span><span>Action</span></div>
         <span class="meta" id="castleMeta">8 maps · 100 rounds each</span>
         <span class="play">Play</span>
@@ -506,7 +506,7 @@ h1 span { color: var(--sun-deep); }
   }).join('');
   if (freshB.length) { freshB.forEach(function (n) { seenB[n] = Date.now(); }); try { localStorage.setItem('arcade-badges.v1', JSON.stringify(seenB)); } catch (e) { /* private mode: it glows again next time */ } }
   // the news card: shown until Got it, for this batch of news only
-  var NEWS_ID = '2026-10-20a', newsBox = document.getElementById('news');
+  var NEWS_ID = '2026-10-22a', newsBox = document.getElementById('news');
   newsBox.hidden = read('arcade-news.v1').seen === NEWS_ID;
   document.getElementById('newsOk').addEventListener('click', function () {
     newsBox.hidden = true;
