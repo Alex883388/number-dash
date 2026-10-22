@@ -42,7 +42,8 @@ const shade = (hex, k) => {
    legL, legW: legs; bodyW, bodyH: the body above the hips; headR: the head; armL, armW: arms. Colours: skin, top, top2
    (trim), legs, shoe, hair. hair: the haircut; extra bits draw the rest. */
 const RIGS = {
-  bin: { legL: 24, legW: 10, bodyW: 30, bodyH: 30, headR: 21, armL: 21, armW: 9, skin: '#f3c79c', top: '#e63b2e', top2: '#ffffff', legs: '#2c5fa8', shoe: '#f4f4f4', hair: '#1d1a1a', cut: 'spiky', eyes: 'kid', shorts: true },
+  // Bee: round glasses and his iPad
+  bin: { legL: 24, legW: 10, bodyW: 30, bodyH: 30, headR: 21, armL: 21, armW: 9, skin: '#f3c79c', top: '#e63b2e', top2: '#ffffff', legs: '#2c5fa8', shoe: '#f4f4f4', hair: '#1d1a1a', cut: 'spiky', eyes: 'kid', shorts: true, glasses: '#1a237e' },
   bo: { legL: 15, legW: 11, bodyW: 40, bodyH: 30, headR: 22, armL: 17, armW: 10, skin: '#f6cfa8', top: '#58b947', top2: '#2f7d32', legs: '#8a5a33', shoe: '#ff7043', hair: '#231a14', cut: 'bowl', eyes: 'kid', round: true, cheeks: true, shorts: true },
   // Bố plays golf: a sky-blue polo, khaki trousers, white golf shoes, a golf glove and a cap
   dad: { legL: 34, legW: 12, bodyW: 34, bodyH: 42, headR: 20, armL: 27, armW: 10, skin: '#e7b88d', top: '#4fc3f7', top2: '#ffffff', legs: '#d8c39a', shoe: '#fafafa', hair: '#171313', cut: 'side', eyes: 'adult', tash: true, golfCap: '#ffffff', glove: true, saddle: '#8d6e63' },
@@ -72,11 +73,12 @@ function heroPose(P, H, now) {
   const p = basePose(), t = P.t || 0, k = P.hero;
   p.face = 'fight';
   if (k === 'bo') p.held = 'banhmi';
+  if (k === 'bin') p.held = 'ipad';
   if (k === 'mum') p.held = 'coffee';
   if (k === 'dad') p.held = 'club';
   const idleArms = () => { const b = Math.sin(now * 4 + (P.slot || 0) * 1.3); p.bob = b * 1.1; p.aa = [1.0 + b * 0.05, 1.35 + b * 0.05]; p.la = [-0.14, 0.16]; };
   switch (P.st) {
-    case 'idle': idleArms(); if (k === 'bo') p.aa[1] = 1.9; if (k === 'dad') { p.aa = [0.45, 0.6 + Math.sin(now * 2) * 0.04]; p.lean = 0.12; } break;
+    case 'idle': idleArms(); if (k === 'bo') p.aa[1] = 1.9; if (k === 'bin') p.aa[1] = 1.15; if (k === 'dad') { p.aa = [0.45, 0.6 + Math.sin(now * 2) * 0.04]; p.lean = 0.12; } break;
     case 'walk': {
       const w = (P.walk || 0) / 13;
       p.la = [Math.sin(w) * 0.62, -Math.sin(w) * 0.62]; p.aa = [0.7 - Math.sin(w) * 0.55, 1.0 + Math.sin(w) * 0.55];
@@ -100,10 +102,12 @@ function heroPose(P, H, now) {
       } else if (k === 'mum') {
         if (n < 2) { p.aa = [0.8, n === 0 ? strike(2.4, 1.0) : strike(0.4, 1.9)]; p.lean = 0.1; }
         else { p.aa = [0.9, strike(3.6, 1.1)]; p.held = f < w0 ? 'slipper' : 'coffee'; p.lean = lerp(-0.2, 0.2, hit); }
-      } else if (n === 2 && k === 'bin') {
-        // a high kick
-        p.la = [-0.25, f < w0 ? lerp(0.3, 0.9, wind) : f < w1 ? lerp(0.9, 1.75, ease(hit)) : lerp(1.75, 0.2, back)];
-        p.aa = [1.6, 1.2]; p.lean = -0.2;
+      } else if (k === 'bin') {
+        // the iPad: a swing down, a swing up, then a big two-handed smash
+        const a1 = n === 0 ? strike(2.5, 0.9) : n === 1 ? strike(0.5, 2.3) : strike(3.1, 0.85);
+        p.aa = [n === 2 ? a1 - 0.2 : 0.9, a1];
+        p.lean = n === 2 ? lerp(-0.2, 0.25, hit) : 0.12;
+        if (n === 2) p.bob = -Math.sin(hit * PI) * 8;
       } else if (k === 'dad') {
         // golf swings, both hands on the club: a half swing, a swing back, then a full swing (FORE!)
         const a1 = n === 0 ? strike(-0.5, 1.9) : n === 1 ? strike(2.5, 0.1) : f < w0 ? lerp(0.5, -1.9, ease(wind)) : f < w1 ? lerp(-1.9, 3.5, ease(hit)) : lerp(3.5, 0.7, ease(back));
@@ -121,7 +125,7 @@ function heroPose(P, H, now) {
     }
     case 'spec': {
       p.face = 'shout';
-      if (P.sk === 'whirl') { p.held = 'pole'; p.heldA = t * 26; p.aa = [1.6, 1.6]; p.la = [-0.4, 0.4]; p.bob = -3; }
+      if (P.sk === 'whirl') { p.held = 'ipad'; p.spin = true; p.aa = [1.65, 1.6]; p.la = [-0.4, 0.4]; p.bob = -3; }
       else if (P.sk === 'bounce') { p.rot = t * 14; p.la = [1.6, 1.4]; p.aa = [2.2, 2.0]; p.sq = 0.9; p.held = null; p.lift = 18; }
       else if (P.sk === 'cart') { p.cart = true; p.held = null; p.la = [1.35, 1.15]; p.aa = [1.55, 1.6]; p.lean = 0.22; p.lift = 24; p.face = 'happy'; }
       else if (P.sk === 'slippers') { const w = (t * 10) % 1; p.aa = [0.8, lerp(3.4, 1.0, w)]; p.held = w < 0.5 ? 'slipper' : 'coffee'; p.lean = 0.15; }
@@ -275,6 +279,7 @@ function head(R, p, extra) {
   if (R.hoops) { c.beginPath(); c.arc(-r * 0.16, r * 0.5, r * 0.24, 0, TAU); c.lineWidth = 3.2; c.strokeStyle = flashOn ? '#fff' : '#ffc107'; c.stroke(); }
   face(R, p.face, r, p);
   if (R.shades && p.face !== 'ko') shades(r);
+  if (R.glasses) glasses(r, R.glasses);
   if (R.cheeks) { c.globalAlpha = 0.5; circ(r * 0.52, r * 0.4, r * 0.16, '#ff8a80', 0); c.globalAlpha = 1; }
   if (R.tash) { c.beginPath(); c.moveTo(r * 0.38, r * 0.36); c.quadraticCurveTo(r * 0.65, r * 0.22, r * 0.95, r * 0.4); c.quadraticCurveTo(r * 0.65, r * 0.38, r * 0.38, r * 0.36); fs(R.hair, 2.5); }
   if (R.helmet && !(extra && extra.noHat)) helmet(r, R.helmet);
@@ -370,6 +375,17 @@ function shades(r) {
   line(r * 0.0, ey - r * 0.07, -r * 0.3, ey - r * 0.1, 2);
   c.globalAlpha = 0.75; line(r * 0.07, ey - r * 0.07, r * 0.17, ey - r * 0.11, 2, '#ffffff'); c.globalAlpha = 1;
 }
+function glasses(r, col) {
+  // round glasses: two frames over the eyes (a little shine on the lenses), a bridge and the arm back to the ear
+  const ey = -r * 0.05;
+  for (const ex of [r * 0.2, r * 0.64]) {
+    c.beginPath(); c.arc(ex, ey, r * 0.215, 0, TAU);
+    c.fillStyle = 'rgba(255,255,255,0.18)'; c.fill();
+    c.lineWidth = 2.8; c.strokeStyle = flashOn ? '#fff' : col; c.stroke();
+  }
+  line(r * 0.4, ey - r * 0.06, r * 0.44, ey - r * 0.06, 2.4, col);
+  line(-r * 0.015, ey - r * 0.04, -r * 0.3, ey - r * 0.13, 2.2, col);
+}
 function snapback(r, col) {
   // a cap worn backwards: its peak sticks out behind, a gold button on top and a gold stripe
   c.beginPath(); c.arc(0, -r * 0.2, r * 1.04, PI * 1.02, PI * 1.98); c.closePath(); fs(col, 3);
@@ -441,6 +457,14 @@ function holdThing(k, x, y, a, spin, p) {
     line(-4, 0, 12, 0, 6, INK); line(-4, 0, 12, 0, 3.5, '#212121');
     line(12, 0, 58, 0, 4, INK); line(12, 0, 58, 0, 2.2, '#cfd8dc');
     c.save(); c.translate(60, 2); c.rotate(0.35); rr(-4, -5, 18, 11, 5, '#1a237e', 2.4); line(12, -3, 12, 4, 2, '#e0e0e0'); c.restore();
+  } else if (k === 'ipad') {
+    // an iPad: a silver frame, a dark screen with bright app squares, a camera dot
+    c.rotate(-0.25);
+    rr(-2, -13, 42, 28, 5, '#cfd8dc', 2.6);
+    rr(2.5, -9.5, 33, 21, 2.5, '#263238', 0);
+    const apps = ['#ef5350', '#ffca28', '#66bb6a', '#42a5f5', '#ab47bc', '#ff7043'];
+    for (let i = 0; i < 6; i++) { c.fillStyle = flashOn ? '#fff' : apps[i]; c.fillRect(5.5 + (i % 3) * 10.3, -6.5 + Math.floor(i / 3) * 8.5, 7, 6.5); }
+    circ(38.6, 1, 1.2, '#455a64', 0);
   } else if (k === 'coffee') {
     // an iced coffee in a clear cup, held about upright: coffee, a lighter top, cream under a dome lid, a green straw
     // and a round green badge with a white star
@@ -497,8 +521,9 @@ function slipperShape(x, y, s) {
 const HERO_COL = { bin: '#ef5350', bo: '#66bb6a', dad: '#42a5f5', mum: '#ab47bc' };
 function hero(P, H, x, y, s, now) {
   const p = heroPose(P, H, now), R = RIGS[P.hero];
+  const f = p.spin ? (Math.cos((P.t || 0) * 26) >= 0 ? 1 : -1) : (P.face || 1);
   flash(P.hitFlash);
-  rig(R, x, y, s, P.face || 1, p, { who: P.hero, noHat: p.rot !== 0 && P.st !== 'spec' });
+  rig(R, x, y, s, f, p, { who: P.hero, noHat: p.rot !== 0 && P.st !== 'spec' });
   flash(false);
   return p;
 }

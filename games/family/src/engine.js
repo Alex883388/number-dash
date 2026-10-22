@@ -30,12 +30,12 @@ function mulberry(seed) {
 
 /* ================= the family =================
    combo: three blows in a row (t: how long each takes; a: when it hits; dmg; kb: knockback; down: knocks the zombie
-   over). Bee fights with fists and feet and spins a bamboo pole; Bo swings a bánh mì and bounces on his belly; Bố
+   over). Bee, in his glasses, swings his iPad and spins round with it; Bo swings a bánh mì and bounces on his belly; Bố
    swings hardest and drives through the crowd; Mẹ swings her iced coffee and throws her slipper. A special
    costs one bar of energy (hitting zombies and right answers fill it, up to three bars). Bố plays golf: he fights with a
    golf club (the longest reach) and charges in his golf cart; Mẹ, in hip-hop style, swings her iced coffee. */
 const HEROES = {
-  bin: { name: 'Bee', who: 'Big brother', hp: 100, speed: 215, power: 1.0, reach: 66, w: 30, h: 98, special: 'whirl', specName: 'Bamboo whirl',
+  bin: { name: 'Bee', who: 'Big brother', hp: 100, speed: 215, power: 1.0, reach: 70, w: 30, h: 98, special: 'whirl', specName: 'iPad spin',
     combo: [{ t: 0.26, a: [0.07, 0.15], dmg: 8, kb: 70 }, { t: 0.28, a: [0.07, 0.16], dmg: 9, kb: 90 }, { t: 0.44, a: [0.12, 0.23], dmg: 16, kb: 300, down: true, reach: 76 }] },
   bo: { name: 'Bo', who: 'Little brother', hp: 125, speed: 185, power: 1.15, reach: 62, w: 40, h: 84, special: 'bounce', specName: 'Belly bounce',
     combo: [{ t: 0.3, a: [0.09, 0.17], dmg: 9, kb: 70 }, { t: 0.32, a: [0.09, 0.18], dmg: 10, kb: 90 }, { t: 0.5, a: [0.15, 0.27], dmg: 18, kb: 340, down: true, reach: 70 }] },
@@ -335,7 +335,7 @@ function startSpecial(S, P) {
 }
 function specialStep(S, P, dt, lo, hi) {
   if (P.sk === 'whirl') {
-    // spinning the bamboo pole: a sweep all round every fifth of a second
+    // spinning round with the iPad held out: a sweep all round every fifth of a second
     P.tick -= dt;
     if (P.tick <= 0) { P.tick = 0.2; whirlHit(S, P); }
     P.x = clamp(P.x + P.face * 60 * dt, lo, hi);
@@ -817,7 +817,8 @@ function pickStep(S, dt) {
       }
     }
   }
-  S.picks = S.picks.filter((k) => !k.dead && k.x > S.cam - 100 && (k.k !== 'coin' || k.t < 40));
+  // food and coins left behind off the left of the screen can never be reached: they go
+  S.picks = S.picks.filter((k) => !k.dead && k.x > S.cam + 10 && (k.k !== 'coin' || k.t < 40));
 }
 function gateStep(S, dt) {
   const G = S.gate;
@@ -996,7 +997,7 @@ function bot(S, id, prof) {
   const down = S.players.find((p) => p !== me && p.st === 'ko');
   if (down && S.zs.filter((z) => !z.dead && Math.abs(z.x - down.x) < 120).length < 3) { go(down.x + 24, down.y, 10); return keep(out); }
   // hungry: food first
-  if (me.hp < me.max * 0.45) { const f = S.picks.filter((k) => k.k === 'banhmi' || k.k === 'pho').sort((a, b) => Math.abs(a.x - me.x) - Math.abs(b.x - me.x))[0]; if (f) { go(f.x, f.y, 6); return keep(out); } }
+  if (me.hp < me.max * 0.45) { const [lo0, hi0] = bounds(S), f = S.picks.filter((k) => (k.k === 'banhmi' || k.k === 'pho') && k.x > lo0 - 20 && k.x < hi0 + 20).sort((a, b) => Math.abs(a.x - me.x) - Math.abs(b.x - me.x))[0]; if (f) { go(f.x, f.y, 6); return keep(out); } }
   // a question: pick a drum (once per question and wrong answer) and smash it
   const owner = asking(S);
   if (owner) {
