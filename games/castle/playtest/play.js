@@ -1,6 +1,6 @@
 // Castle Crew, one player (run from the repo root):
 //   node games/castle/build.js && ND_CDP=9541 ND_PROFILE=edge-profile-castle ND_URL=file:///D:/Github/number-dash/games/castle/dist/preview.html ND_READY='!!window.__castle' ND_BOT=none node games/dash/playtest/shoot.js games/castle/playtest/play.js
-// By finger on an iPad held sideways: home, the zombie book, the map picker, a map's setup (Easy, the Boxing Gloves),
+// By finger on an iPad held sideways: home, the zombie book, the map picker, a map's setup (Easy, the Muay Thai Wraps),
 // the game opens at round 0; walk with the stick; the tray (every tower, AIR and GROUND badges, the blast tab); build
 // an Arrow Tower (coins and wood) and a Spike Trap (coins and stone); chop a tree for wood; walk through a tower; start
 // round 1; the tower's panel (its element and matches; its upgrades cost wood too): buy step 1 of a path, change its
@@ -26,7 +26,7 @@ module.exports = [
   check(`document.querySelectorAll('#mapGrid .mapcard').length === 8`, 'eight map cards'),
   { touchEl: '#mapGrid [data-map="meadow"]' }, { sleep: 400 }, fits('setup'),
   { touchEl: '#diffPick [data-diff="easy"]' }, { touchEl: '#weaponPick [data-weapon="punch"]' }, { sleep: 300 }, { shot: 'cc-p03-setup' },
-  check(`${C}.rec.diff === 'easy' && ${C}.rec.weapon === 'punch' && /Boxing Gloves|punches/.test(document.getElementById('weaponTip').textContent)`, 'easy and the boxing gloves picked'),
+  check(`${C}.rec.diff === 'easy' && ${C}.rec.weapon === 'punch' && /Muay Thai/.test(document.getElementById('weaponTip').textContent) && /Muay Thai Wraps/.test(document.querySelector('#weaponPick [data-weapon="punch"]').textContent)`, 'easy and the Muay Thai wraps picked'),
   { touchEl: '#setupGo' },
   until(`${C}.ready() && ${C}.state().mode === 'solo'`, 40000), { sleep: 1500 },
   check(`${C}.state().round === 0 && ${C}.state().coins === 950 && ${C}.state().lives === 200 && ${C}.G.s.res.wood === 15 && ${C}.G.s.res.stone === 10`, 'round 0, 950 coins, 15 wood, 10 stone, 200 lives'),

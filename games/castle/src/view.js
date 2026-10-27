@@ -351,16 +351,25 @@ const CCView = (function () {
   // box, a boxer's arms (fistPose)
   const WEAPON_LOOK = {
     blaster: (a, g, tc) => { put(0.2, 0.52, 0.32, 0.1, 0.12, 0.3, g ? COL.gold : 0x5b6573); put(0.2, 0.55, 0.5, 0.06, 0.06, 0.16, tc || 0xffc94d); },
-    // a red boxing glove on each fist, a thumb on its inside and a white cuff (a gold cuff and giant gloves for the top
-    // tier, a little bigger from the first)
-    punch: (a, g, tc, box) => {
+    // wrapped fists, Muay Thai style: cloth wrapped from the wrist up each bare forearm (cream, with a band in the
+    // player's own colour), a wrapped fist with the fingers showing at the front and a thumb on its inside, and a loose
+    // end of cloth flapping from the wrist. Each tier wraps further up the arm and the fist grows; the top tier is
+    // golden rope with giant fists (look: the player's colours; tier and t: how far up, and the flutter)
+    punch: (a, g, tc, box, tier, t, look) => {
       if (!box) return;
-      const gs = g ? 0.25 : tc ? 0.19 : 0.17;
+      const fs = fistOf(tier), cl = g ? WRAP.rope : WRAP.cloth, ac = g ? 0xd32f2f : look.hat;
       for (const s of [0, 1]) {
-        const x = s ? 0.27 : -0.27, an = box.a[s], y = 0.66 - box.len[s];
-        putSwing(x, 0.66, 0, an, x, y - gs * 0.45, 0, gs, gs * 1.1, gs * 1.05, 0xe53935);
-        putSwing(x, 0.66, 0, an, x + (s ? -gs : gs) * 0.5, y - gs * 0.3, 0.02, gs * 0.3, gs * 0.55, gs * 0.6, 0xb71c1c);
-        putSwing(x, 0.66, 0, an, x, y + 0.02, 0, gs * 0.86, 0.07, gs * 0.86, g ? COL.gold : 0xfafafa);
+        const x = s ? 0.27 : -0.27, an = box.a[s], len = box.len[s], y = (d) => 0.66 - d, inn = s ? -1 : 1;
+        // the wraps up the forearm from the wrist, a band of the player's colour near the wrist
+        for (let k = 0; k < 3 + tier; k++) { const d = len - 0.025 - k * 0.04; if (d < 0.1) break; putSwing(x, 0.66, 0, an, x, y(d), 0, 0.138, 0.044, 0.16, k === 1 ? ac : cl[k & 1]); }
+        // the fist: the wrapped back of the hand, a band over the knuckles, the fingers at the front, a thumb on the inside
+        putSwing(x, 0.66, 0, an, x, y(len + fs * 0.3), 0, fs, fs * 0.7, fs, cl[0]);
+        putSwing(x, 0.66, 0, an, x, y(len + fs * 0.55), 0, fs * 1.07, fs * 0.16, fs * 1.07, ac);
+        putSwing(x, 0.66, 0, an, x, y(len + fs * 0.82), 0, fs * 0.86, fs * 0.38, fs * 0.86, SKIN);
+        putSwing(x, 0.66, 0, an, x + inn * fs * 0.56, y(len + fs * 0.5), 0, fs * 0.28, fs * 0.5, fs * 0.42, SKIN);
+        // the loose end of the wrap, hanging from the wrist on the outside and fluttering
+        const w = len - 0.05, wy = 0.66 - w * Math.cos(an), wz = -w * Math.sin(an), xo = x - inn * 0.075;
+        putRoll(xo, wy, wz, Math.sin(t * 7 + s * 2.3) * 0.3 - inn * 0.25 * box.e, xo, wy - 0.06, wz, 0.032, 0.12, 0.024, cl[0]);
       }
     },
     hammer: (a, g, tc) => { putSwing(0.22, 0.55, 0.2, a, 0.22, 0.75, 0.2, 0.06, 0.5, 0.06, COL.wood); putSwing(0.22, 0.55, 0.2, a, 0.22, 1.0, 0.2, 0.28, 0.16, 0.16, g ? COL.gold : 0x7b8794); if (tc) putSwing(0.22, 0.55, 0.2, a, 0.22, 1.0, 0.2, 0.3, 0.05, 0.18, tc); },
@@ -372,11 +381,14 @@ const CCView = (function () {
     lightning: (a, g, tc) => { put(0.22, 0.6, 0.25, 0.05, 0.75, 0.05, g ? COL.gold : 0x8d6e63); put(0.22, 1.0, 0.25, 0.14, 0.14, 0.14, tc || 0xffeb3b); }
   };
   const TIER_GLOW = [0, 0x80d8ff, 0x69f0ae, 0xea80fc, 0xffd740];
-  // where a weapon of a higher tier glows: [x, y, z] by the player, or for boxing gloves (which move) one spot on the
-  // knuckles of each glove, wherever the pose has them
+  // the cloth of wrapped fists (and the golden rope of the top tier) and how big a fist is by tier
+  const WRAP = { cloth: [0xf6efdc, 0xe3d6b8], rope: [0xffd54f, 0xc79100] };
+  const fistOf = (tier) => (tier >= 4 ? 0.25 : tier ? 0.18 : 0.165);
+  // where a weapon of a higher tier glows: [x, y, z] by the player, or for wrapped fists (which move) one spot on the
+  // knuckles of each fist, wherever the pose has them
   const TIP = { blaster: [0.2, 0.55, 0.6], scatter: [0.2, 0.56, 0.6], flamer: [0.2, 0.5, 0.57], crossbow: [0.2, 0.57, 0.6], frost: [0.22, 0.58, 0.52], bomb: [0.2, 0.55, 0.54], lightning: [0.22, 1.0, 0.25],
-    punch: (box) => (box ? [0, 1].map((s) => { const d = box.len[s] + 0.22, an = box.a[s]; return [s ? 0.27 : -0.27, 0.66 - d * Math.cos(an), -d * Math.sin(an)]; }) : null) };
-  // a boxer holds both gloves up by the chin and jabs as each punch lands (a swing event): left, then right, then
+    punch: (box, tier) => (box ? [0, 1].map((s) => { const d = box.len[s] + fistOf(tier) * 1.02, an = box.a[s]; return [s ? 0.27 : -0.27, 0.66 - d * Math.cos(an), -d * Math.sin(an)]; }) : null) };
+  // a fighter holds both fists up by the chin and jabs as each punch lands (a swing event): left, then right, then
   // left. The snapshot's 'fire' with no punch seen holds a jab out. Gives each arm's angle and length, the jab's hand
   // and how far out it is (e, 0 to 1)
   function fistPose(p, t, sw) {
@@ -406,10 +418,11 @@ const CCView = (function () {
       if (tier >= 4) putSwing(0, 0.68, -0.15, ca, 0, 0.23, -0.17, 0.38, 0.05, 0.045, COL.gold);
       put(0.1, 0.56, 0.145, 0.08, 0.08, 0.02, COL.gold);
     }
-    // arms: forward when firing, swinging when walking; a boxer's up in a guard, jabbing (fistPose)
+    // arms: forward when firing, swinging when walking; a fighter's up in a guard, jabbing (fistPose), with a short
+    // sleeve and a bare forearm under the wraps
     const gather = act === 'chop' || act === 'mine', box = p.weapon === 'punch' && !gather ? fistPose(p, t, sw) : null;
     const armA = act === 'fire' || p.fireHold ? -1.35 : gather ? -1.7 + Math.sin(t * 30) * 0.8 : -sw * 0.8;
-    if (box) for (const s of [0, 1]) { const x = s ? 0.27 : -0.27, L = box.len[s]; putSwing(x, 0.66, 0, box.a[s], x, 0.66 - L / 2, 0, 0.1, L, 0.12, look.shirt); }
+    if (box) for (const s of [0, 1]) { const x = s ? 0.27 : -0.27, L = box.len[s]; putSwing(x, 0.66, 0, box.a[s], x, 0.61, 0, 0.1, 0.1, 0.12, look.shirt); putSwing(x, 0.66, 0, box.a[s], x, 0.56 - (L - 0.1) / 2, 0, 0.088, L - 0.1, 0.108, SKIN); }
     else {
       putSwing(-0.27, 0.66, 0, armA, -0.27, 0.5, 0, 0.1, 0.3, 0.12, look.shirt);
       putSwing(0.27, 0.66, 0, act === 'fire' || p.fireHold ? -1.35 : sw * 0.8, 0.27, 0.5, 0, 0.1, 0.3, 0.12, look.shirt);
@@ -417,9 +430,9 @@ const CCView = (function () {
     if (gather) { putSwing(0.27, 0.66, 0, armA, 0.27, 0.4, 0.15, 0.05, 0.4, 0.05, COL.wood); putSwing(0.27, 0.66, 0, armA, 0.27, 0.25, 0.22, 0.25, 0.08, 0.08, 0x7b8794); }
     else {
       const L = WEAPON_LOOK[p.weapon];
-      if (L) L(act === 'fire' ? -1.2 : 0, tier >= 4, TIER_GLOW[tier], box);
-      // a weapon of a higher tier glows at its tip (gloves on their knuckles; thunder fists crackle as they jab)
-      const q = TIP[p.weapon], tips = typeof q === 'function' ? q(box) : q ? [q] : null;
+      if (L) L(act === 'fire' ? -1.2 : 0, tier >= 4, TIER_GLOW[tier], box, tier, t, look);
+      // a weapon of a higher tier glows at its tip (wrapped fists on their knuckles; thunder fists crackle as they jab)
+      const q = TIP[p.weapon], tips = typeof q === 'function' ? q(box, tier) : q ? [q] : null;
       if (tier && tips && !p.down) {
         const s = 0.07 + Math.sin(t * 8 + p.slot) * 0.02;
         for (const u of tips) shine(u[0], u[1], u[2], s, s, s, TIER_GLOW[tier]);

@@ -58,7 +58,7 @@ const CC = (function () {
         { name: 'Laser Blaster', desc: 'Shots fly faster and go through three zombies.', mods: { pierce: 2, dmg: 1.25, speed: 1.4 } },
         { name: 'Plasma Blaster', desc: 'Shots burst and hurt zombies nearby.', mods: { splash: 0.9, dmg: 1.2 } },
         { name: 'Star Blaster', desc: 'Three shots at once, super fast.', mods: { rate: 1.6, shots: 3, spread: 14 } }] },
-    punch: { name: 'Boxing Gloves', icon: '🥊', kind: 'melee', type: 'phys', dmg: 5.6, rate: 2.6, range: 1.4, arc: 110, knock: 0.35, tip: 'Super fast punches up close. Knocks zombies back.',
+    punch: { name: 'Muay Thai Wraps', icon: '👊', kind: 'melee', type: 'phys', dmg: 5.6, rate: 2.6, range: 1.4, arc: 110, knock: 0.35, tip: 'Wrapped fists, Muay Thai style: super fast punches up close. Knocks zombies back.',
       tiers: [{ name: 'Power Punch', desc: 'Harder punches that knock zombies further.', mods: { dmg: 1.5, knock: 2 } },
         { name: 'Combo Punch', desc: 'Faster punches, and every third one stuns.', mods: { rate: 1.4, combo: 3, stun: 0.6 } },
         { name: 'Thunder Fist', desc: 'Every third punch also sends lightning jumping to two more zombies.', mods: { zap: 2, dmg: 1.2 } },
