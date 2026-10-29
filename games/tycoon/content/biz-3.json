@@ -2212,6 +2212,237 @@
           ]
         }
       ]
+    },
+    {
+      "id": "splashpark",
+      "pitch": "A colourful kids' splash park with a splash pad, small slides and shallow pools.",
+      "earns": "Entry tickets and family passes, plus ice lollies, snacks, party packages and school swim afternoons in summer.",
+      "costs": "Lifeguards and gate staff, water and pool chemicals, pumps, parasols, insurance and repairs.",
+      "risks": "Rainy or cold weeks, over-full hot days, a child getting hurt, dirty water, and a rival park with bigger slides.",
+      "tip": "You sell safe, happy days for families: watch the water and the children first, and the profit follows.",
+      "cases": [
+        {
+          "id": "splashpark-1",
+          "title": "Who watches the water?",
+          "story": "Your splash park opens in three weeks with four shallow pools, all knee-deep. A lifeguard costs about $2,800 a month. A friend says: 'The water is so shallow that parents can watch their own children.'",
+          "options": [
+            {
+              "text": "Skip lifeguards: the water is shallow and parents are watching",
+              "spend": "none",
+              "rev": 1,
+              "costs": -2,
+              "risk": 1,
+              "rep": -3,
+              "timing": "now",
+              "penalty": "mid",
+              "grade": "trap",
+              "skill": "safety",
+              "result": "On a busy day a toddler slips under unseen. A parent grabs her in seconds and she is fine, but the council shuts the park for a month and fines you.",
+              "lesson": "Shallow water can still be dangerous: lifeguards are never a cost you cut."
+            },
+            {
+              "text": "Hire four trained lifeguards, one per pool, and train all staff in first aid",
+              "spend": "low",
+              "rev": 1,
+              "costs": 1,
+              "risk": -1,
+              "rep": 2,
+              "timing": "slow",
+              "grade": "best",
+              "skill": "safety",
+              "result": "Whistles stay quiet because the lifeguards spot trouble early. Parents tell each other, 'It feels properly looked after,' and visits climb.",
+              "lesson": "Safety costs money every month, and it is the reason families trust you."
+            },
+            {
+              "text": "Pay a pool-safety expert to check the pools before opening",
+              "spend": "low",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "safety",
+              "result": "The expert finds a drain cover that is a little loose and a slippery step. Both are fixed before a single child arrives.",
+              "lesson": "A fresh pair of expert eyes sees what a busy boss misses."
+            },
+            {
+              "text": "Add clear rules: adults stay with under-8s, wristbands show a phone number",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "operations",
+              "result": "A little boy wanders off on day one, but his wristband gets him back to his dad in two minutes. Parents love the idea.",
+              "lesson": "Simple rules and cheap tools make a safe place safer, but they never replace trained people."
+            },
+            {
+              "text": "Buy a giant bucket tower first and hire lifeguards later",
+              "spend": "mid",
+              "rev": 1,
+              "costs": 0,
+              "risk": 1,
+              "rep": -1,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "strategy",
+              "result": "The bucket tower looks great in photos, but the inspector will not let you open until lifeguards are hired. Opening day slips by a month.",
+              "lesson": "Do the must-haves first, such as safety, and the fun extras second."
+            }
+          ]
+        },
+        {
+          "id": "splashpark-2",
+          "title": "Heatwave at the gate",
+          "story": "It is 36 degrees. The park is safe for 600 guests at once, but 1,400 people are queuing in the sun. Your cashier says: 'Let everyone in. Think of the money!'",
+          "options": [
+            {
+              "text": "Let everyone in: more guests, more money today",
+              "spend": "none",
+              "rev": 2,
+              "costs": 0,
+              "risk": 1,
+              "rep": -2,
+              "timing": "now",
+              "penalty": "low",
+              "grade": "poor",
+              "skill": "safety",
+              "result": "The pools are so packed that children cannot swim safely. Lifeguards blow whistles all day, and the health officer fines you.",
+              "lesson": "A safe limit is a promise to every family already inside."
+            },
+            {
+              "text": "Keep the safe limit and text each family when their turn comes",
+              "spend": "low",
+              "rev": 1,
+              "costs": 0,
+              "risk": -1,
+              "rep": 2,
+              "timing": "now",
+              "grade": "best",
+              "skill": "operations",
+              "result": "Families wait in the shade of the park next door and come back when their phone buzzes. Nobody is squashed, and many buy lollies on the way in.",
+              "lesson": "Say 'not yet' kindly and give people a way to wait, and they stay your customers."
+            },
+            {
+              "text": "Put shade, parasols and free water taps in the queue",
+              "spend": "low",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "safety",
+              "result": "The queue is still long, but nobody gets sunburnt or dizzy. Mums and dads say, 'At least they care about us.'",
+              "lesson": "When customers must wait, make the wait safe and comfortable."
+            },
+            {
+              "text": "Sell timed tickets online for morning or afternoon slots",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": -1,
+              "rep": 0,
+              "timing": "slow",
+              "flag": "online",
+              "grade": "good",
+              "skill": "strategy",
+              "result": "Families book ahead and arrive at their time slot. Queues shrink, and the quiet afternoons fill up too.",
+              "lesson": "Spread busy days across the day with booking, and the same park earns more."
+            },
+            {
+              "text": "Charge $3 extra on the hottest days",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": -1,
+              "timing": "now",
+              "grade": "ok",
+              "skill": "pricing",
+              "result": "Some families grumble, but the queue gets shorter and the money buys more shade. A few say it feels unfair.",
+              "lesson": "Higher prices when it is busy can work, but explain them kindly."
+            }
+          ]
+        },
+        {
+          "id": "splashpark-3",
+          "title": "Passes, parties and a drinks deal",
+          "story": "A school wants swim afternoons on school days at $6 a child. Parents ask about birthday parties. A fizzy-drink company offers $20,000 a year if you sell only its drinks and remove the free water taps.",
+          "options": [
+            {
+              "text": "Sign the drinks deal and take out the free water taps",
+              "spend": "none",
+              "rev": 1,
+              "costs": -1,
+              "risk": 0,
+              "rep": -2,
+              "timing": "now",
+              "penalty": "low",
+              "grade": "trap",
+              "skill": "ethics",
+              "result": "On a hot day children get thirsty and only fizzy drinks are left. The health officer orders the taps back, and you pay to fit them again.",
+              "lesson": "Never sell away something people need for their health, not even for easy money."
+            },
+            {
+              "text": "Say yes to the school: swim afternoons on school days at $6 a child",
+              "spend": "none",
+              "rev": 2,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "slow",
+              "grade": "best",
+              "skill": "strategy",
+              "result": "Weekday afternoons were quiet anyway. Three schools book regular slots, and the children tell their parents, who come back at the weekend.",
+              "lesson": "Fill your quiet times with a steady customer, and the busy times take care of themselves."
+            },
+            {
+              "text": "Add birthday party packages with a party host and a shady table",
+              "spend": "low",
+              "rev": 2,
+              "costs": 1,
+              "risk": 0,
+              "rep": 1,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "marketing",
+              "result": "Every Saturday has two parties. The host sets up a cake table, and each birthday child invites a dozen new families.",
+              "lesson": "A package that makes one special day easy can be worth much more than a ticket."
+            },
+            {
+              "text": "Sell a summer family pass: $100 for four, paid back after three visits",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "slow",
+              "flag": "loyal",
+              "grade": "good",
+              "skill": "pricing",
+              "result": "Two hundred families buy passes in May, so cash arrives early. Many come on average days when the park would be half empty.",
+              "lesson": "Passes bring money in early and make families come back."
+            },
+            {
+              "text": "Cut all tickets to $5 for the whole summer so the park is always full",
+              "spend": "none",
+              "rev": -1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 0,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "pricing",
+              "result": "The park is full, but each ticket earns so little that the lifeguards and the water bill eat the profit.",
+              "lesson": "A full park is not the goal: profit is. Check that each guest pays for what they cost you."
+            }
+          ]
+        }
+      ]
     }
   ]
 }

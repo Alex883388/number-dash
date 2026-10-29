@@ -17,7 +17,10 @@
     "space": ["Star Voyages", "Orbit Tours"],
     "intairport": ["Sky Gate Airport", "Cloud Port"], "cruiseport": ["Sea Breeze Cruises", "Wave Line"], "shipyard": ["Iron Keel Yard", "Harbour Works"],
     "bullettrain": ["Lightning Rail", "Star Express"], "filmstudio": ["Silver Screen Co", "Big Picture"], "megaresort": ["Paradise Palms", "Sunset Shores"],
-    "arena": ["Star Dome", "Thunder Hall"], "robotfactory": ["Robo Works", "Gear Minds"], "satellite": ["Space Link", "Star Beam"], "cleanpower": ["Green Spark", "Bright Wave"]
+    "arena": ["Star Dome", "Thunder Hall"], "robotfactory": ["Robo Works", "Gear Minds"], "satellite": ["Space Link", "Star Beam"], "cleanpower": ["Green Spark", "Bright Wave"],
+    "splashpark": ["Puddle Jumpers", "Splashtastic"], "golf": ["Fairway Pines", "Hole In Fun"], "amusement": ["Thrill Town", "Whirl World"],
+    "wavepark": ["Wave Cove", "Lagoon Rush"], "racetrack": ["Turbo Circuit", "Apex Raceway"], "aquadome": ["Crystal Aquadome", "Blue Lagoon Dome"],
+    "bigstadium": ["Victory Stadium", "Champions Park"]
   },
   "cases": [
     {

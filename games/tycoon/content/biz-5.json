@@ -349,6 +349,466 @@
           {"text":"Report the broker's idea to the certificate register","spend":"none","rev":0,"costs":0,"risk":-1,"rep":2,"timing":"now","grade":"good","skill":"ethics","result":"The register thanks you: he had tried the same trick on other power plants. Your honest name makes buyers trust your certificates.","lesson":"Reporting a cheat protects your business and everyone else's."},
           {"text":"Say no: 20 more turbines sounds like too much work","spend":"none","rev":-1,"costs":0,"risk":0,"rep":0,"timing":"now","grade":"poor","skill":"strategy","result":"A rival power company builds the turbines and signs the 15-year deal. Your plant stays the same size while the city's need for power grows.","lesson":"A big, safe deal with a trusted customer is worth the extra work."}
         ] }
-      ] }
+      ] },
+    {
+      "id": "aquadome",
+      "pitch": "A giant glass dome with heated pools, a spiral slide and palms, open all year round.",
+      "earns": "Tickets, family season passes, school lessons, hotel holiday packages, plus cafés and shops under the dome, in any weather.",
+      "costs": "Energy to heat the water and the air, pool chemicals, safety checks, hundreds of staff and repayments on a huge loan.",
+      "risks": "Energy prices jumping, a safety fault, a long closure for repairs, tricky contracts and a rival dome opening nearby.",
+      "tip": "Energy and safety are your two big numbers: cut the energy bill with clever design, and never save money on safety checks.",
+      "cases": [
+        {
+          "id": "aquadome-1",
+          "title": "The $450,000 energy bill",
+          "story": "Heating the water and the air under the glass costs $450,000 a month. An energy seller offers a 10-year price '30% cheaper' if you sign today. An engineer proposes heat pumps (machines that move heat instead of burning fuel) and solar panels.",
+          "options": [
+            {
+              "text": "Sign the 10-year 'cheaper' energy deal today",
+              "spend": "none",
+              "rev": 0,
+              "costs": -1,
+              "risk": 1,
+              "rep": -1,
+              "timing": "now",
+              "penalty": "low",
+              "grade": "trap",
+              "skill": "safety",
+              "result": "Page 14 says the price jumps after two years, with a $6 million fee to leave early. By year three the bill is bigger than before, and you are stuck.",
+              "lesson": "'Sign today to save lots' is how people get locked in. Read every page."
+            },
+            {
+              "text": "Fit heat pumps and rooftop solar panels with the engineer's plan",
+              "spend": "mid",
+              "rev": 0,
+              "costs": -2,
+              "risk": -1,
+              "rep": 1,
+              "timing": "slow",
+              "flag": "eco",
+              "grade": "best",
+              "skill": "strategy",
+              "result": "Over a year the dome makes much of its own power and wastes far less heat. The energy bill falls by a third, and the green plan makes the news.",
+              "lesson": "A big, one-off investment that cuts your biggest cost for years can beat any discount."
+            },
+            {
+              "text": "Ask three energy firms for bids and have a lawyer read every contract",
+              "spend": "low",
+              "rev": 0,
+              "costs": -1,
+              "risk": -1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "good",
+              "skill": "money",
+              "result": "The lawyer spots a hidden clause in two of the bids. The third firm gives a fair, flexible deal for five years.",
+              "lesson": "Compare offers and pay an expert to read the small print before signing."
+            },
+            {
+              "text": "Cover the pools at night and set the air one degree cooler",
+              "spend": "none",
+              "rev": 0,
+              "costs": -1,
+              "risk": 0,
+              "rep": 0,
+              "timing": "now",
+              "grade": "good",
+              "skill": "operations",
+              "result": "Night covers keep the heat in, and nobody notices one degree. The bill shrinks a little straight away, for free.",
+              "lesson": "Small habits that save energy every day add up to a lot over a year."
+            },
+            {
+              "text": "Turn the heating way down to save money",
+              "spend": "none",
+              "rev": -2,
+              "costs": -2,
+              "risk": 0,
+              "rep": -1,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "pricing",
+              "result": "The water turns chilly, families leave early and write that the 'tropical' dome is cold. The lost tickets cost more than the energy you saved.",
+              "lesson": "Do not save money on the thing customers came for."
+            }
+          ]
+        },
+        {
+          "id": "aquadome-2",
+          "title": "A crack in the spiral slide",
+          "story": "At the yearly national safety check, the inspector finds a hairline crack in the spiral slide's support. The slide must stay closed until it passes a new check. A contractor whispers: 'For $50,000 cash I'll patch it tonight and hand you a stamped pass.'",
+          "options": [
+            {
+              "text": "Pay the contractor $50,000 cash for a quick patch and a pass paper",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 1,
+              "rep": -3,
+              "timing": "now",
+              "penalty": "low",
+              "grade": "trap",
+              "skill": "ethics",
+              "result": "The inspector sees that the paper is not real. The dome is closed for weeks, the contractor disappears, and the fines are huge.",
+              "lesson": "A fake safety paper puts families in danger. Safety is never for sale."
+            },
+            {
+              "text": "Close the slide and let its maker's engineers rebuild the support",
+              "spend": "low",
+              "rev": 1,
+              "costs": 0,
+              "risk": -1,
+              "rep": 2,
+              "timing": "slow",
+              "grade": "best",
+              "skill": "safety",
+              "result": "The slide reopens after three weeks with a real pass and a party. The rest of the dome stayed open, so most guests hardly noticed.",
+              "lesson": "Fix the cause properly: a real pass is worth far more than the days you lose."
+            },
+            {
+              "text": "Hire an independent engineer to check every structure in the dome each year",
+              "spend": "low",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "safety",
+              "result": "The engineer finds two more small problems in the roof and a pool ladder. All are repaired before they matter.",
+              "lesson": "Checks by someone who does not work for you give you the truth."
+            },
+            {
+              "text": "Start a daily check: two staff sign off every slide and pool before opening",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "operations",
+              "result": "Each morning two people walk the slides with a list and sign it. A loose bolt is found and fixed within the first week.",
+              "lesson": "Two people signing a checklist every day stops small faults becoming big ones."
+            },
+            {
+              "text": "Close the whole dome for a month to be extra safe",
+              "spend": "none",
+              "rev": -3,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "strategy",
+              "result": "Hundreds of staff are paid to wait, season-pass holders are cross, and only one slide had a problem.",
+              "lesson": "Close what is really unsafe. Shutting everything costs a fortune and fixes nothing more."
+            }
+          ]
+        },
+        {
+          "id": "aquadome-3",
+          "title": "Swim lessons and a fast loan",
+          "story": "The government offers $3 million a year to teach every 9-year-old in the region to swim on quiet weekday mornings. A fast-cash lender offers $30 million for a second dome at 1% a month (about 13% a year), to be signed today.",
+          "options": [
+            {
+              "text": "Accept the swim-lesson contract and teach on quiet weekday mornings",
+              "spend": "low",
+              "rev": 2,
+              "costs": 1,
+              "risk": -1,
+              "rep": 2,
+              "timing": "slow",
+              "grade": "best",
+              "skill": "strategy",
+              "result": "Certified teachers run lessons while the pools were empty anyway. Thousands of children learn to swim, and their families return at weekends.",
+              "lesson": "Use your quiet hours for a reliable customer, and you can do good while earning well."
+            },
+            {
+              "text": "Ask your bank for a smaller, cheaper loan to add a toddler pool and café",
+              "spend": "low",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 0,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "money",
+              "result": "The bank charges about 6% a year. The new pool is full of toddlers and parents, who buy lunch in the café.",
+              "lesson": "Compare what each loan really costs in a year, and borrow only what you can repay."
+            },
+            {
+              "text": "Offer lesson families a cheaper off-peak family pass",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "slow",
+              "flag": "loyal",
+              "grade": "good",
+              "skill": "marketing",
+              "result": "Many parents of the new swimmers buy the pass and visit on quiet weekday afternoons. Those hours were once empty.",
+              "lesson": "Turn a first-time visitor into a regular one with a pass that suits them."
+            },
+            {
+              "text": "Say no to both and keep the dome just as it is",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": 0,
+              "rep": 0,
+              "timing": "now",
+              "grade": "ok",
+              "skill": "strategy",
+              "result": "Nothing goes wrong, and nothing grows. A rival dome signs the swim-lesson contract instead.",
+              "lesson": "Saying no to everything is safe, but good chances rarely come twice."
+            },
+            {
+              "text": "Take the fast lender's $30 million now and build a second dome",
+              "spend": "mid",
+              "rev": 2,
+              "costs": 1,
+              "risk": 1,
+              "rep": 0,
+              "timing": "slow",
+              "penalty": "low",
+              "grade": "poor",
+              "skill": "money",
+              "result": "Fees hidden in the small print make the loan dearer than it looked. The repayments squeeze the first dome, and the second is late.",
+              "lesson": "A huge loan signed in a hurry can sink a business: add up everything you will pay back."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bigstadium",
+      "pitch": "A giant stadium for league matches, cup finals and concerts, with a big screen.",
+      "earns": "Clubs and promoters pay to use it, and you earn from tickets, food, drinks, corporate boxes, TV rights and the stadium's name.",
+      "costs": "Stewards and safety staff, pitch care, floodlight and energy bills, cleaning, repairs, insurance and the huge loan on the building.",
+      "risks": "A crowd safety problem, empty weekends, a cancelled event, ticket scams aimed at fans, a damaged pitch and angry neighbours.",
+      "tip": "Fill the calendar with different events, but never let a crowd grow past the safe limit: safety comes before every ticket sold.",
+      "cases": [
+        {
+          "id": "bigstadium-1",
+          "title": "The empty weekends",
+          "story": "Your 60,000-seat stadium opens soon. League clubs will play here on only 20 weekends a year, but the loan bill arrives every month. A concert promoter, a bank that wants to buy the stadium's name, and the city's schools all want dates.",
+          "options": [
+            {
+              "text": "Mix league games, concerts and school finals, each with its own safety plan",
+              "spend": "mid",
+              "rev": 3,
+              "costs": 1,
+              "risk": -1,
+              "rep": 2,
+              "timing": "slow",
+              "grade": "best",
+              "skill": "strategy",
+              "result": "The calendar fills with league games, big concerts and the schools' cup day. Every event has a tested plan for exits, stewards and first aid, so crowds get home safely.",
+              "lesson": "Many kinds of events fill the calendar, and a safety plan for each one keeps crowds safe."
+            },
+            {
+              "text": "Hire the stadium to the concert promoter for ten big weekends",
+              "spend": "none",
+              "rev": 2,
+              "costs": 1,
+              "risk": 0,
+              "rep": 0,
+              "timing": "now",
+              "grade": "good",
+              "skill": "money",
+              "result": "Ten sold-out concerts bring in millions, and the contract makes the promoter pay for repairing the pitch afterwards.",
+              "lesson": "A big hire deal is great when the contract covers the damage it can cause."
+            },
+            {
+              "text": "Sell the stadium's name, after checking who the sponsor is",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 0,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "marketing",
+              "result": "The bank has a clean record and a good name with fans. The naming deal pays millions a year, and soon everyone uses the new name.",
+              "lesson": "Your name will be linked to a sponsor's name, so check them before you sign."
+            },
+            {
+              "text": "Open stadium tours and a museum on quiet days",
+              "spend": "low",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "marketing",
+              "result": "Visitors walk down the tunnel, stand by the pitch and see the trophy room. The tours earn a little every day and make fans of people who never came to a match.",
+              "lesson": "Empty days can earn money too, if you give people a reason to visit."
+            },
+            {
+              "text": "Let any group hire the stadium without asking what they plan to do",
+              "spend": "none",
+              "rev": 1,
+              "costs": 1,
+              "risk": 1,
+              "rep": -2,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "operations",
+              "result": "A crowded event with no plan blocks the exits and upsets the neighbours. The city warns you that your licence to hold big events is at risk.",
+              "lesson": "Saying yes to everyone can cost you the licence that lets you earn at all."
+            }
+          ]
+        },
+        {
+          "id": "bigstadium-2",
+          "title": "Cup final fever",
+          "story": "Cup final week! The safe limit is 60,000 people, but 90,000 fans want tickets. Online resellers already sell fake tickets at five times the price, and a club director says: 'Just sell 5,000 extra. Who will count?'",
+          "options": [
+            {
+              "text": "Keep to 60,000, name every ticket and open a face-price swap page",
+              "spend": "low",
+              "rev": 2,
+              "costs": 0,
+              "risk": -1,
+              "rep": 3,
+              "timing": "slow",
+              "grade": "best",
+              "skill": "safety",
+              "result": "Only real fans get in, and those who cannot come swap their tickets safely at the printed price. Resellers lose their business and fans thank you online.",
+              "lesson": "Protect fans from scammers by making the real way easy and the fake way useless."
+            },
+            {
+              "text": "Sell 5,000 extra tickets: some fans will not turn up anyway",
+              "spend": "none",
+              "rev": 2,
+              "costs": 0,
+              "risk": 1,
+              "rep": -3,
+              "timing": "now",
+              "penalty": "mid",
+              "grade": "trap",
+              "skill": "safety",
+              "result": "Everyone turns up. The stairways jam, stewards cannot reach some seats and the safety officer delays the match. You refund thousands of fans and pay a fine.",
+              "lesson": "The safe limit is set so everyone gets out safely, so it is never a target to beat."
+            },
+            {
+              "text": "Ask the railway for extra trains and the council for match-day bus lanes",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "operations",
+              "result": "Fans stream to and from the stadium by train and bus. The nearby streets stay calm and the neighbours stop complaining about parked cars.",
+              "lesson": "Getting fans to and from the stadium is part of the show."
+            },
+            {
+              "text": "Warn fans in every message to buy only from the official website",
+              "spend": "low",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "ethics",
+              "result": "Many fans learn to check the web address, so fewer are caught by fakes. Your helpline answers hundreds of calls from fans checking a ticket.",
+              "lesson": "Teaching customers to spot fakes protects them and protects your name."
+            },
+            {
+              "text": "Ignore the resellers: fake tickets are not your problem",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": 0,
+              "rep": -2,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "people",
+              "result": "Hundreds of fans with fake tickets are turned away at the gates, in tears. They blame the stadium, not the scammers.",
+              "lesson": "Protecting your customers from scams is part of your job, even when you are not the cheat."
+            }
+          ]
+        },
+        {
+          "id": "bigstadium-3",
+          "title": "The new roof",
+          "story": "Rain soaks 20,000 seats and fans leave early. A new roof costs $12 million. A lender offers the whole loan tonight at a very low rate, but the contract is 90 pages long. Your floodlights also cost $90,000 a month in power.",
+          "options": [
+            {
+              "text": "Have a lawyer read the loan, ask for a fixed rate and apply for a city grant",
+              "spend": "low",
+              "rev": 2,
+              "costs": 1,
+              "risk": -1,
+              "rep": 1,
+              "timing": "slow",
+              "grade": "best",
+              "skill": "money",
+              "result": "The lawyer finds the rate would have jumped after two years. You win a fixed rate, and the city adds a grant because the roof also shelters fans in storms.",
+              "lesson": "Read the contract, negotiate it and look for help before you borrow big."
+            },
+            {
+              "text": "Sign the loan tonight before the offer disappears",
+              "spend": "none",
+              "rev": 1,
+              "costs": 2,
+              "risk": 1,
+              "rep": 0,
+              "timing": "now",
+              "penalty": "mid",
+              "grade": "trap",
+              "skill": "safety",
+              "result": "On page 74 the rate triples after two years, and the bank may take the stadium if one payment is late. The repayments swallow your profit.",
+              "lesson": "A deal that cannot wait until tomorrow is a deal to be wary of."
+            },
+            {
+              "text": "Swap the floodlights for LEDs so the power bill shrinks",
+              "spend": "mid",
+              "rev": 1,
+              "costs": -2,
+              "risk": 0,
+              "rep": 0,
+              "timing": "slow",
+              "flag": "eco",
+              "grade": "good",
+              "skill": "operations",
+              "result": "The new lights use far less power, switch on instantly and look sharper on TV. The saving pays back their cost in about four years.",
+              "lesson": "A cost that pays itself back in a few years is an investment, not just a spend."
+            },
+            {
+              "text": "Roof the busiest stands first and the rest later",
+              "spend": "mid",
+              "rev": 1,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "strategy",
+              "result": "Fans in the covered stands stay dry, and the smaller loan is easier to repay. You can build the rest when the money is ready.",
+              "lesson": "Building a big project in steps keeps the debt small and the risk lower."
+            },
+            {
+              "text": "Skip the roof and hand out rain ponchos",
+              "spend": "none",
+              "rev": -1,
+              "costs": 0,
+              "risk": 0,
+              "rep": -1,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "strategy",
+              "result": "Fans in the wet stands call it a joke, and fewer buy seats there. The leaks get worse and the repair bill grows.",
+              "lesson": "Putting off a big repair usually makes the repair bigger."
+            }
+          ]
+        }
+      ]
+    }
   ]
 }

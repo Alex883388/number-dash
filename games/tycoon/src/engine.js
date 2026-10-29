@@ -435,12 +435,12 @@
   // months: calendar months (0 = January), or per climate ('snowy' cities have real winters, 'dry' ones are deserts)
   const EVENTS = [
     { id: 'heatwave', title: 'Heatwave!', text: 'Hot, sunny weeks: cold drinks and outdoor fun sell fast.', months: { snowy: [5, 6, 7], dry: [4, 5, 6, 7, 8] }, chance: 0.3, len: 1,
-      ids: { lemonade: 1.5, bubbletea: 1.4, icecream: 1.5, carwash: 1.25, themepark: 1.25, scooters: 1.25, solar: 1.15 } },
+      ids: { lemonade: 1.5, bubbletea: 1.4, icecream: 1.5, carwash: 1.25, themepark: 1.25, scooters: 1.25, solar: 1.15, splashpark: 1.5, wavepark: 1.5, amusement: 1.25, golf: 1.15, racetrack: 1.1 } },
     { id: 'rain', title: 'A rainy month', text: 'Grey skies and puddles: people stay indoors.', months: { snowy: [1, 2, 9, 10] }, chance: 0.25, len: 1,
-      ids: { lemonade: 0.5, carwash: 0.45, icecream: 0.6, bubbletea: 0.7, scooters: 0.6, themepark: 0.6, dogwalk: 0.8, foodtruck: 0.7 },
+      ids: { lemonade: 0.5, carwash: 0.45, icecream: 0.6, bubbletea: 0.7, scooters: 0.6, themepark: 0.6, dogwalk: 0.8, foodtruck: 0.7, splashpark: 0.55, wavepark: 0.6, amusement: 0.6, golf: 0.5, racetrack: 0.7 },
       mult: { entertainment: 1.1, logistics: 1.15 } },
     { id: 'snow', title: 'Snow everywhere!', text: 'A white, frosty month: hot food and indoor fun sell, outdoor stalls are quiet.', months: { snowy: [11, 0, 1] }, chance: 0.35, len: 1,
-      ids: { lemonade: 0.4, icecream: 0.5, carwash: 0.5, scooters: 0.5, bikefix: 0.6, foodtruck: 0.7, themepark: 0.6, dogwalk: 0.8, cupcake: 1.15, bakery: 1.15, cinema: 1.15 },
+      ids: { lemonade: 0.4, icecream: 0.5, carwash: 0.5, scooters: 0.5, bikefix: 0.6, foodtruck: 0.7, themepark: 0.6, dogwalk: 0.8, cupcake: 1.15, bakery: 1.15, cinema: 1.15, splashpark: 0.3, wavepark: 0.3, amusement: 0.6, golf: 0.3, racetrack: 0.7, aquadome: 1.25 },
       mult: { entertainment: 1.08, hospitality: 1.05 } },
     { id: 'festival', title: 'Town festival', text: 'Crowds fill the streets for the summer festival.', months: [6, 7], chance: 0.3, len: 1,
       mult: { food: 1.25, retail: 1.15, hospitality: 1.3, entertainment: 1.15 } },
@@ -449,7 +449,7 @@
     { id: 'school', title: 'Back to school', text: 'A new school year: tutoring, printing and phone shops are busy.', months: [8], chance: 1, len: 1,
       ids: { tutoring: 1.25, printshop: 1.2, phonecase: 1.15 } },
     { id: 'final', title: 'Cup final!', text: 'The whole city watches the big match.', months: [4], chance: 0.6, len: 1,
-      ids: { football: 1.6, restaurant: 1.15, ebus: 1.1, foodtruck: 1.2 } },
+      ids: { football: 1.6, bigstadium: 1.5, restaurant: 1.15, ebus: 1.1, foodtruck: 1.2 } },
     { id: 'recession', title: 'Money is tight', text: 'Prices rise and families spend less for a while. Regular customers stay loyal.', chance: 0.025, len: 4, loyal: true,
       mult: { retail: 0.85, food: 0.9, entertainment: 0.75, hospitality: 0.75, sports: 0.8, transport: 0.9, tech: 0.88, services: 0.92, fitness: 0.85, manufacturing: 0.88 } },
     { id: 'techboom', title: 'Tech boom', text: 'Everyone wants new apps and gadgets.', chance: 0.035, len: 3, mult: { tech: 1.45 }, ids: { phonecase: 1.25, office: 1.08 } },
@@ -526,7 +526,7 @@
   const PARADE = { bay: 'Carnival', desert: 'Desert Festival', neon: 'Neon Parade', sakura: 'Matsuri' };
   TY.RISK = RISK; TY.INC = INC;
   // businesses that are mostly outdoors, what a parade crowd wants, and what a closed street hurts
-  const OUTDOOR = new Set(['lemonade', 'dogwalk', 'carwash', 'bikefix', 'icecream', 'foodtruck', 'scooters', 'themepark', 'football', 'megaresort', 'cruiseport', 'solar']);
+  const OUTDOOR = new Set(['lemonade', 'dogwalk', 'carwash', 'bikefix', 'icecream', 'foodtruck', 'scooters', 'themepark', 'football', 'megaresort', 'cruiseport', 'solar', 'splashpark', 'wavepark', 'amusement', 'golf', 'racetrack', 'bigstadium']);
   const CROWD = new Set(['food', 'retail', 'entertainment', 'hospitality']);
   const QUIET = new Set(['services', 'education', 'tech', 'logistics', 'transport', 'fitness', 'manufacturing']);
   function tilesNear(lot, tiles) {   // the shortest distance (in tiles) from a lot to a list of tiles

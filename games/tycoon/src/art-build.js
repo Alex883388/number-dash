@@ -5,7 +5,7 @@
 (function (root) {
   'use strict';
   const A = root.TYART;
-  const { HW, HH, shade, pick, P, poly, line, circle, ellipse, diamond, box, boxC, onL, onR, windows, glassBox, snowTop, roof, pyramid, curvedRoof, awning, door, shadowBox, pad, cyl, dome, faceText, drawPlane } = A;
+  const { HW, HH, shade, mix, pick, P, poly, line, circle, ellipse, diamond, box, boxC, onL, onR, windows, glassBox, snowTop, roof, pyramid, curvedRoof, awning, door, shadowBox, pad, cyl, dome, faceText, drawPlane } = A;
   const WALLS = ['#f6ecd8', '#f5d7c3', '#d9ecdf', '#dde8f4', '#f7e4ac', '#e8dcf2', '#f3c9b9', '#ece6da', '#cfe4ea', '#fbe0e0'];
   const ROOFS = ['#d9846a', '#c96e5a', '#8fa0b6', '#6f8098', '#b07a5c', '#7fae6d', '#5f7189', '#e0a15e'];
   const BRICK = ['#d08b6a', '#c97f63', '#b9735c', '#dba07e'];
@@ -413,6 +413,75 @@
     g.fillStyle = '#d9534a'; g.font = '700 6.2px sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('SALE', p[0], p[1] - 16.6);
   }
 
+  /* ---------- small helpers for the leisure pictures (parks, golf, circuits, stadiums) ---------- */
+  // a closed outline round (c0, r0): a long along c, b along r (n = 2 an ellipse, 3 a rounded square), as screen points at height z
+  function ovalPts(c0, r0, a, b, z, n, steps) {
+    n = n || 2; steps = steps || 60;
+    const pw = (v) => Math.sign(v) * Math.pow(Math.abs(v), 2 / n), pts = [];
+    for (let i = 0; i < steps; i++) { const t = (i / steps) * Math.PI * 2; pts.push(P(c0 + a * pw(Math.cos(t)), r0 + b * pw(Math.sin(t)), z)); }
+    return pts;
+  }
+  const closed = (pts) => pts.concat([pts[0]]);
+  function disc(g, c, r, rad, z, fill) { const p = P(c, r, z); ellipse(g, p[0], p[1], rad * 1.414 * HW, rad * 1.414 * HH, fill); }   // a round patch of ground, rad in tiles
+  function smooth(g, pts) {   // a smooth path through screen points
+    g.beginPath(); g.moveTo(pts[0][0], pts[0][1]);
+    for (let i = 1; i < pts.length - 1; i++) g.quadraticCurveTo(pts[i][0], pts[i][1], (pts[i][0] + pts[i + 1][0]) / 2, (pts[i][1] + pts[i + 1][1]) / 2);
+    g.lineTo(pts[pts.length - 1][0], pts[pts.length - 1][1]);
+  }
+  function ribbon(g, pts, col, w, edge) {   // a tube slide or a track: dark edge, colour, bright highlight
+    g.save(); g.lineCap = 'round'; g.lineJoin = 'round';
+    smooth(g, pts); g.strokeStyle = edge || shade(col, -0.35); g.lineWidth = w + 1.5; g.stroke();
+    smooth(g, pts); g.strokeStyle = col; g.lineWidth = w; g.stroke();
+    g.translate(0, -w * 0.22); smooth(g, pts); g.strokeStyle = shade(col, 0.5); g.lineWidth = Math.max(0.5, w * 0.22); g.stroke();
+    g.restore();
+  }
+  // a tree or a palm from the kit, standing on (c, r) at scale k (bare and snowy in a snowy winter)
+  function put(g, kind, c, r, k, v, z) {
+    const q = P(c, r, z || 0); g.save(); g.translate(q[0], q[1]); g.scale(k, k);
+    A.drawPoint(g, kind, v || 0, 1, A.flags.snow ? { season: 'winter', snow: true } : { season: 'summer' }); g.restore();
+  }
+  function parasol(g, c, r, col, z) {   // a beach parasol; furled when it is snowing
+    const p = P(c, r, z || 0), sn = A.flags.snow;
+    ellipse(g, p[0] + 2, p[1] + 0.5, 6, 2, 'rgba(40,60,40,.16)');
+    line(g, [p, [p[0], p[1] - 13]], '#7a5a3e', 1);
+    if (sn) { poly(g, [[p[0] - 1.6, p[1] - 12], [p[0] + 1.6, p[1] - 12], [p[0] + 0.6, p[1] - 4], [p[0] - 0.6, p[1] - 4]], col); return; }
+    ellipse(g, p[0], p[1] - 11, 6.6, 2.4, shade(col, -0.22));
+    poly(g, [[p[0] - 6.6, p[1] - 11], [p[0] + 6.6, p[1] - 11], [p[0], p[1] - 17]], col);
+    poly(g, [[p[0] - 2.2, p[1] - 11], [p[0] + 2.2, p[1] - 11], [p[0], p[1] - 17]], '#ffffff');
+  }
+  function flagPole(g, c, r, z, h, col) {   // a pole with a little pennant on top
+    const p = P(c, r, z); line(g, [p, [p[0], p[1] - h]], '#eef1f4', 1);
+    poly(g, [[p[0], p[1] - h], [p[0] + 6, p[1] - h + 2], [p[0], p[1] - h + 4]], col);
+  }
+  function racer(g, c, r, along, col) {   // a little open-wheel racing car on the track
+    const L = along === 'c';
+    box(g, c, r, L ? 0.22 : 0.08, L ? 0.08 : 0.22, 0.5, 2.4, shade(col, 0.2), col, shade(col, -0.2));
+    box(g, L ? c + 0.08 : c + 0.02, L ? r + 0.02 : r + 0.07, L ? 0.07 : 0.04, L ? 0.04 : 0.07, 2.9, 1.8, '#26303c', '#1d252f', '#161c24');
+    box(g, L ? c - 0.025 : c - 0.005, L ? r - 0.005 : r - 0.025, L ? 0.03 : 0.09, L ? 0.09 : 0.03, 0.5, 4.2, shade(col, -0.1), shade(col, -0.2), shade(col, -0.35));
+    box(g, L ? c + 0.2 : c - 0.005, L ? r - 0.005 : r + 0.2, L ? 0.04 : 0.09, L ? 0.09 : 0.04, 0.5, 1.2, '#2a323c', '#222a33', '#1a2027');
+  }
+
+  // a glass dome over the screen point (x, y): see-through, with ribs and rings, so what is inside shows
+  function glassDome(g, x, y, rx, h, tint) {
+    const ry = rx / 2, sil = () => { g.beginPath(); g.moveTo(x - rx, y); g.ellipse(x, y, rx, ry, 0, Math.PI, 0, true); g.bezierCurveTo(x + rx, y - h * 0.8, x + rx * 0.55, y - h, x, y - h); g.bezierCurveTo(x - rx * 0.55, y - h, x - rx, y - h * 0.8, x - rx, y); g.closePath(); };
+    const gr = g.createLinearGradient(x - rx * 0.8, y - h, x + rx * 0.9, y);
+    gr.addColorStop(0, 'rgba(235,248,255,.62)'); gr.addColorStop(0.45, mix(tint, '#ffffff', 0.55) + '44'); gr.addColorStop(1, shade(tint, -0.3) + '55');
+    sil(); g.fillStyle = gr; g.fill();
+    g.save(); sil(); g.clip(); g.lineWidth = 0.8; g.strokeStyle = 'rgba(255,255,255,.75)';
+    for (let k = -3; k <= 3; k++) { const f = k / 4, yb = y + ry * Math.sqrt(1 - f * f); g.beginPath(); g.moveTo(x + rx * f, yb); g.bezierCurveTo(x + rx * f, yb - h * 0.8, x + rx * 0.55 * f, yb - h * 0.97, x, y - h); g.stroke(); }
+    [[0.27, 0.96], [0.52, 0.85], [0.75, 0.66]].forEach(([t, fr]) => { g.beginPath(); g.ellipse(x, y - t * h, rx * fr, ry * fr, 0, 0, Math.PI); g.stroke(); });
+    g.restore();
+    sil(); g.lineWidth = 1.3; g.strokeStyle = 'rgba(120,150,175,.8)'; g.stroke();
+    g.beginPath(); g.ellipse(x, y, rx, ry, 0, 0, Math.PI); g.lineWidth = 1.8; g.strokeStyle = '#f4f8fb'; g.stroke();
+    g.beginPath(); g.moveTo(x - rx * 0.78, y - h * 0.5); g.bezierCurveTo(x - rx * 0.7, y - h * 0.8, x - rx * 0.4, y - h * 0.95, x - rx * 0.1, y - h * 0.97); g.lineWidth = 2.2; g.strokeStyle = 'rgba(255,255,255,.5)'; g.stroke();
+  }
+  // the front arc of a closed outline (leftmost point to rightmost, the lower way round): what you see of a wall that stands on it
+  function lowerArc(pts) {
+    let i0 = 0, i1 = 0; pts.forEach((p, i) => { if (p[0] < pts[i0][0]) i0 = i; if (p[0] > pts[i1][0]) i1 = i; });
+    const walk = (a, b) => { const o = []; for (let i = a; ; i = (i + 1) % pts.length) { o.push(pts[i]); if (i === b) break; } return o; };
+    const A1 = walk(i0, i1), A2 = walk(i1, i0).reverse(), avg = (arr) => arr.reduce((t, p) => t + p[1], 0) / arr.length;
+    return avg(A1) > avg(A2) ? A1 : A2;
+  }
   /* ---------- the company's businesses (and rivals: the same buildings in other colours) ---------- */
   const BIZ_STYLE = {
     lemonade: ['stand', '#f7d24a'], dogwalk: ['kennel', '#c98f5a'], thrift: ['tent', '#e98bb0'], cupcake: ['kiosk', '#f39ab8'], party: ['tent', '#9b7ee0'],
@@ -424,15 +493,18 @@
     solar: ['solar', '#3a6fb0'], ebus: ['busdepot', '#3fb07a'], mall: ['mall', '#e98bb0'], datacentre: ['datacentre', '#5a6c8c'], themepark: ['themepark', '#f25a7a'],
     football: ['stadium', '#3f7fd0'], port: ['port', '#e2803e'], skyscraper: ['supertower', '#7fb8e0'], airline: ['airhangar', '#5aa6dd'], space: ['launchpad', '#e8ecf2'],
     intairport: ['intairport', '#3f8fd8'], cruiseport: ['cruiseport', '#2fa0c8'], shipyard: ['shipyard', '#e2803e'], bullettrain: ['bullettrain', '#3fb0a8'], filmstudio: ['filmstudio', '#f2c14e'],
-    megaresort: ['megaresort', '#f08aa8'], arena: ['arena', '#9b6fe0'], robotfactory: ['robotfactory', '#f08a3c'], satellite: ['satellite', '#5a7ad8'], cleanpower: ['cleanpower', '#4fbf7a']
+    megaresort: ['megaresort', '#f08aa8'], arena: ['arena', '#9b6fe0'], robotfactory: ['robotfactory', '#f08a3c'], satellite: ['satellite', '#5a7ad8'], cleanpower: ['cleanpower', '#4fbf7a'],
+    splashpark: ['splashpark', '#35b8e8'], golf: ['golf', '#4caf50'], amusement: ['amusement', '#ff7043'], wavepark: ['wavepark', '#1fb5c9'], racetrack: ['racetrack', '#e53935'],
+    aquadome: ['aquadome', '#29b6f6'], bigstadium: ['bigstadium', '#1e88e5']
   };
   // how tall each kind of business stands (for its picture, its badge and taps)
   const BIZ_TOP = { stand: 22, kiosk: 30, tent: 30, kennel: 22, garage: 20, carwash: 24, shop: 36, shop3: 48, truck: 20, flats: 62, glass: 66, vfarm: 84, tower: 128, tower2: 140, hub: 16, depot: 26, market: 28, cinema: 34, factory: 46,
     solar: 10, busdepot: 24, mall: 50, datacentre: 34, themepark: 70, stadium: 32, port: 50, supertower: 300, airhangar: 40, launchpad: 112,
-    intairport: 80, cruiseport: 64, shipyard: 112, bullettrain: 52, filmstudio: 74, megaresort: 168, arena: 62, robotfactory: 92, satellite: 96, cleanpower: 150 };
+    intairport: 80, cruiseport: 64, shipyard: 112, bullettrain: 52, filmstudio: 74, megaresort: 168, arena: 62, robotfactory: 92, satellite: 96, cleanpower: 150,
+    splashpark: 52, golf: 39, amusement: 94, wavepark: 92, racetrack: 52, aquadome: 98, bigstadium: 94 };
   function bizBuilding(g, id, w, face, accent, rival) {
     const st = BIZ_STYLE[id] || ['shop', '#f2c14e'], col = rival ? shade(accent, -0.15) : accent, fl = face === 'S' || face === 'W' ? 'L' : 'R';
-    const s = st[0];
+    const s = st[0], mt = (c) => (rival ? mix(c, '#9aa1ab', 0.7) : c);   // a rival's bright colours turn grey
     if (s === 'stand' || s === 'kiosk' || s === 'tent' || s === 'kennel' || s === 'garage' || s === 'carwash') {
       pad(g, 0, 0, 1, 1, '#f1e8d6', 'rgba(0,0,0,.06)');
       if (s === 'stand') {
@@ -545,6 +617,41 @@
       }
       return;
     }
+    if (s === 'splashpark') {   // a kids' splash park on one tile: a shallow pool, three slides on a tower, a tipping bucket
+      const sn = A.flags.snow, wat = sn ? '#cfe6ef' : mt('#4fc8ee'), wat2 = sn ? '#e6f3f8' : mt('#8fe3f7'), red = mt('#ef4b4b'), yel = mt('#f7c53a'), blu = mt('#3f86e0');
+      pad(g, 0, 0, 1, 1, sn ? '#f1f5f8' : '#e4f1ee', 'rgba(0,0,0,.06)');
+      shadowBox(g, 0.4, 0.06, 0.3, 0.3, 34);
+      poly(g, diamond(0.1, 0.46, 0.8, 0.48, 0), '#ffffff');   // the pool, with a white kerb
+      poly(g, diamond(0.14, 0.5, 0.72, 0.4, 0.5), wat);
+      poly(g, diamond(0.24, 0.55, 0.52, 0.3, 0.6), wat2);
+      if (!sn) { [[0.3, 0.66], [0.66, 0.82], [0.75, 0.6], [0.4, 0.82]].forEach(([c, r]) => { const p = P(c, r, 0.7); ellipse(g, p[0], p[1], 3.2, 1.2, 'rgba(255,255,255,.7)'); }); }
+      // the ticket hut at the right corner
+      boxC(g, 0.8, 0.08, 0.15, 0.17, 0, 10, '#fff4cf');
+      poly(g, onL(0.8, 0.08, 0.15, 0.17, 0, 10, 0.2, 0.8, 0.35, 0.8), '#7fc4e8');
+      roof(g, 0.77, 0.05, 0.21, 0.23, 10, 6, red, 'c');
+      // the slide tower: a little house with a pointed roof
+      boxC(g, 0.4, 0.06, 0.3, 0.3, 0, 26, '#fff4cf');
+      poly(g, onL(0.4, 0.06, 0.3, 0.3, 0, 26, 0, 1, 0.42, 0.52), blu); poly(g, onR(0.4, 0.06, 0.3, 0.3, 0, 26, 0, 1, 0.42, 0.52), shade(blu, -0.17));
+      poly(g, onL(0.4, 0.06, 0.3, 0.3, 0, 26, 0.38, 0.62, 0, 0.3), '#8a6a4a');
+      pyramid(g, 0.36, 0.02, 0.38, 0.38, 26, 13, mt(col));
+      const top = P(0.55, 0.21, 39); line(g, [top, [top[0], top[1] - 7]], '#eef1f4', 1); poly(g, [[top[0], top[1] - 7], [top[0] + 5, top[1] - 5], [top[0], top[1] - 3]], yel);
+      // three slides into the pool: red to the left, yellow to the front, blue to the right
+      ribbon(g, [P(0.42, 0.3, 21), P(0.3, 0.42, 14), P(0.24, 0.54, 6), P(0.26, 0.64, 1)], red, 3);
+      ribbon(g, [P(0.56, 0.36, 18), P(0.56, 0.46, 11), P(0.5, 0.54, 5), P(0.46, 0.6, 1)], yel, 3);
+      ribbon(g, [P(0.68, 0.24, 21), P(0.82, 0.3, 14), P(0.86, 0.44, 6), P(0.78, 0.56, 1)], blu, 3);
+      // the mushroom fountain in the pool, and kids with swim rings
+      const f = P(0.56, 0.72, 0.6); g.fillStyle = '#e9eef2'; g.fillRect(f[0] - 1, f[1] - 9, 2, 9);
+      ellipse(g, f[0], f[1] - 9, 6.6, 2.6, shade(mt(col), -0.2)); poly(g, [[f[0] - 6.6, f[1] - 9], [f[0] + 6.6, f[1] - 9], [f[0], f[1] - 13]], mt(col));
+      if (!sn) { for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2; circle(g, f[0] + Math.cos(a) * 8, f[1] - 4 + Math.sin(a) * 2.6, 0.9, 'rgba(255,255,255,.95)'); line(g, [[f[0] + Math.cos(a) * 6.2, f[1] - 9 + Math.sin(a) * 2], [f[0] + Math.cos(a) * 8, f[1] - 3 + Math.sin(a) * 2.6]], 'rgba(255,255,255,.8)', 0.7); } }
+      [[0.26, 0.8, red], [0.78, 0.72, yel]].forEach(([c, r, k]) => { const p = P(c, r, 0.7); ellipse(g, p[0], p[1], 3.4, 1.5, k); ellipse(g, p[0], p[1], 1.6, 0.7, wat); circle(g, p[0], p[1] - 2.2, 1.5, '#f3c9a0'); });
+      // the tipping bucket on a post at the left corner, pouring into the pool
+      const b = P(0.1, 0.7, 0); line(g, [b, [b[0], b[1] - 20]], '#8a8f9a', 1.4);
+      poly(g, [[b[0] - 4, b[1] - 25], [b[0] + 3.4, b[1] - 22.6], [b[0] + 2, b[1] - 17.6], [b[0] - 2.8, b[1] - 19]], yel);
+      poly(g, [[b[0] - 4, b[1] - 25], [b[0] + 3.4, b[1] - 22.6], [b[0] + 2.9, b[1] - 24], [b[0] - 4.4, b[1] - 26.4]], shade(yel, -0.25)); line(g, [[b[0] - 4, b[1] - 25], [b[0] - 5.6, b[1] - 20.6], [b[0] - 2.8, b[1] - 19]], '#c9951c', 0.8);
+      if (!sn) { line(g, [[b[0] + 3.4, b[1] - 19], [b[0] + 4.4, b[1] - 9], [b[0] + 6, b[1] - 1]], 'rgba(120,215,245,.95)', 1.6); circle(g, b[0] + 6, b[1] - 0.5, 1.8, 'rgba(255,255,255,.8)'); }
+      parasol(g, 0.94, 0.4, red);
+      return;
+    }
     if (w >= 3) return megaBuilding(g, s, col, fl, rival);
     // Skyline: 2 x 2 lots
     pad(g, 0, 0, 2, 2, '#e3e0d8');
@@ -587,6 +694,167 @@
       ellipse(g, 0, -14, 40, 20, A.flags.snow ? '#e8f0f4' : '#59ad4a'); if (!A.flags.snow) for (let i = -3; i <= 3; i++) ellipse(g, i * 10, -14, 4, 18 - Math.abs(i) * 2, i % 2 ? '#6bbd57' : '#59ad4a');
       g.strokeStyle = 'rgba(255,255,255,.8)'; g.lineWidth = 0.8; g.beginPath(); g.ellipse(0, -14, 12, 6, 0, 0, 7); g.stroke();
       g.restore();
+    } else if (s === 'golf') {   // a golf course: striped fairways, greens with flags, bunkers, a pond, a cart path, a clubhouse
+      const sn = A.flags.snow, fw = sn ? ['#f8fbfd', '#e9f0f6'] : ['#a6dc72', '#92ce5c'], gr = sn ? ['#f2f7fa', '#e3ecf3'] : ['#7fd05c', '#68bb4b'], sand = sn ? '#ebe7da' : '#f1dfae';
+      pad(g, 0, 0, 2, 2, '#bfe293', 'rgba(0,0,0,.06)');
+      const fair = (pts, wd) => {   // a mown fairway: a wide band with stripes across it
+        const sp = pts.map(([c, r]) => P(c, r, 0.3));
+        g.save(); g.lineJoin = 'round'; g.lineCap = 'round';
+        smooth(g, sp); g.strokeStyle = fw[1]; g.lineWidth = wd; g.stroke();
+        g.lineCap = 'butt'; g.setLineDash([wd * 0.42, wd * 0.42]); smooth(g, sp); g.strokeStyle = fw[0]; g.lineWidth = wd; g.stroke();
+        g.restore();
+      };
+      const green = (c, r, rad, fc) => {   // a green with a darker fringe, a hole and a flag
+        disc(g, c, r, rad * 1.22, 0.3, fw[1]); disc(g, c, r, rad, 0.4, gr[1]); disc(g, c + rad * 0.12, r - rad * 0.1, rad * 0.78, 0.5, gr[0]);
+        const p = P(c + rad * 0.25, r - rad * 0.1, 0.5); ellipse(g, p[0], p[1], 1.6, 0.8, '#2b3a2b');
+        line(g, [p, [p[0], p[1] - 15]], '#f4f6f8', 0.9); poly(g, [[p[0], p[1] - 15], [p[0] + 6, p[1] - 13], [p[0], p[1] - 11]], fc);
+      };
+      const bunker = (c, r, rad) => { disc(g, c, r, rad * 1.1, 0.4, shade(sand, -0.12)); disc(g, c + 0.01, r - 0.01, rad * 0.9, 0.5, sand); };
+      // the pond with a sandy shore
+      poly(g, ovalPts(1.08, 1.0, 0.42, 0.3, 0.2, 2.2, 40), sn ? '#f4f8fb' : '#dcd3a0');
+      poly(g, ovalPts(1.08, 1.0, 0.36, 0.25, 0.3, 2.2, 40), sn ? '#dbeef6' : mt('#58bde3'));
+      line(g, [P(0.88, 0.95, 0.4), P(1.0, 0.88, 0.4), P(1.18, 0.9, 0.4)], 'rgba(255,255,255,.75)', 0.8); line(g, [P(1.0, 1.1, 0.4), P(1.14, 1.04, 0.4), P(1.28, 1.08, 0.4)], 'rgba(255,255,255,.6)', 0.8);
+      // the cart path, the fairways, and tee boxes
+      fair([[0.62, 1.78], [0.6, 1.4], [0.5, 1.0], [0.42, 0.7], [0.5, 0.52]], 9);
+      fair([[1.3, 1.7], [1.55, 1.5], [1.7, 1.2], [1.74, 0.85]], 8);
+      fair([[1.15, 0.28], [1.4, 0.34], [1.62, 0.42]], 7);
+      ribbon(g, [P(0.3, 1.7, 0.4), P(0.95, 1.55, 0.4), P(1.3, 1.35, 0.4), P(1.45, 1.0, 0.4), P(1.35, 0.7, 0.4), P(0.9, 0.55, 0.4)], sn ? '#e7ebee' : '#e2d8bf', 2.2, sn ? '#d3d9de' : '#cfc3a4');
+      [[0.62, 1.8], [1.3, 1.72], [1.1, 0.26]].forEach(([c, r]) => poly(g, diamond(c - 0.07, r - 0.05, 0.14, 0.1, 0.5), shade(fw[1], -0.14)));
+      green(0.5, 0.48, 0.2, mt('#e84a4a'));
+      green(1.76, 0.82, 0.19, mt('#f7c53a'));
+      green(1.7, 0.42, 0.14, mt('#3f86e0'));
+      bunker(0.74, 0.62, 0.1); bunker(0.32, 0.42, 0.08); bunker(1.55, 1.0, 0.1); bunker(1.9, 0.62, 0.07); bunker(0.58, 1.22, 0.08);
+      // the clubhouse at the left corner, with a terrace and a golfer
+      poly(g, diamond(0.12, 1.32, 0.5, 0.5, 0.5), sn ? '#eef2f5' : '#e8e0cc');
+      shadowBox(g, 0.18, 1.38, 0.34, 0.3, 20);
+      boxC(g, 0.18, 1.38, 0.34, 0.3, 0, 10, '#fbf3e0');
+      windows(g, 0.18, 1.38, 0.34, 0.3, 0, 10, 1, 2, 2, '#8fb6d6', '#7a9fbf', 0.4, 0.5);
+      roof(g, 0.14, 1.34, 0.42, 0.38, 10, 7, mt('#b9503e'), 'c');
+      flagPole(g, 0.46, 1.52, 16, 9, mt('#e84a4a'));
+      const gp = P(0.82, 1.45); line(g, [[gp[0], gp[1] - 1], [gp[0], gp[1] - 6]], mt('#3f86e0'), 1.8); circle(g, gp[0], gp[1] - 7.4, 1.2, '#f3c9a0'); line(g, [[gp[0], gp[1] - 5], [gp[0] + 4, gp[1] - 1.5]], '#c9ced4', 0.7);
+      // trees round the edges
+      [[0.12, 0.95, 0.4, 1], [0.16, 0.2, 0.42, 2], [0.95, 0.1, 0.4, 3], [1.45, 0.1, 0.4, 4], [1.92, 0.12, 0.42, 5], [1.9, 1.3, 0.4, 6], [1.2, 1.88, 0.4, 7], [0.3, 1.12, 0.4, 8], [0.9, 1.6, 0.36, 9], [1.78, 1.5, 0.4, 10]].forEach(([c, r, k, v]) => put(g, v % 3 === 0 ? 'pine' : 'tree', c, r, k, v));
+    } else if (s === 'amusement') {   // a classic amusement park: a striped carousel, a tall drop tower, a looping coaster and a gate
+      const sn = A.flags.snow, K = mt(col), red = mt('#e5483f'), cream = '#fff3d8', steel = '#8a8f9a';
+      pad(g, 0, 0, 2, 2, sn ? '#eef3f7' : '#f3e6cf', 'rgba(0,0,0,.06)');
+      poly(g, diamond(0.45, 1.15, 1.3, 0.75, 0.3), sn ? '#f8fafc' : '#f9f0e0');   // the plaza inside the gate
+      shadowBox(g, 1.62, 0.26, 0.16, 0.16, 40);
+      // the looping coaster: a lift hill, a drop, a loop and a lap back to the station
+      const track = [[0.45, 1.05, 4], [0.32, 0.85, 16], [0.28, 0.6, 38], [0.32, 0.35, 56], [0.5, 0.3, 46], [0.68, 0.32, 22], [0.8, 0.34, 6]];
+      const LC = 1.08, LR = 0.36, LZ = 23, RZ = 20, RC = 0.36;
+      for (let i = 0; i <= 28; i++) { const t = (i / 28) * Math.PI * 2; track.push([LC + RC * Math.sin(t) * (1 - 0.15 * Math.cos(t)), LR + 0.14 * (i / 28), LZ - RZ * Math.cos(t) + (i === 0 ? 0 : 0)]); }
+      track.push([1.4, 0.55, 5], [1.62, 0.8, 8], [1.58, 1.05, 16], [1.32, 1.12, 10], [0.95, 1.08, 5], [0.62, 1.06, 4], [0.45, 1.05, 4]);
+      const pts = track.map(([c, r, z]) => P(c, r, z));
+      track.forEach(([c, r, z], i) => { if (z > 8 && (i < 7 || i > 32) && i % 2 === 0) line(g, [P(c, r, 0), P(c, r, z - 1)], '#9aa1ab', 0.9); });
+      
+      
+      ribbon(g, pts, K, 2.4, shade(K, -0.4));
+      // the station
+      box(g, 0.5, 1.02, 0.3, 0.2, 0, 7, '#fff3d8', '#efe2c4', '#d8c8a6'); roof(g, 0.48, 1.0, 0.34, 0.24, 7, 4, red, 'c');
+      // the drop tower: red and white stripes, a gondola ring that falls
+      for (let k = 0; k < 8; k++) boxC(g, 1.62, 0.26, 0.16, 0.16, k * 9, 9, k % 2 ? '#ffffff' : red);
+      boxC(g, 1.56, 0.2, 0.28, 0.28, 72, 5, shade(red, -0.2)); pyramid(g, 1.6, 0.24, 0.2, 0.2, 77, 7, '#ffffff');
+      boxC(g, 1.53, 0.17, 0.34, 0.34, 36, 6, K);
+      [[1.58, 0.54], [1.84, 0.54], [1.84, 0.28]].forEach(([c, r]) => line(g, [P(c, r, 36), P(c, r, 31)], '#3a4660', 1));
+      flagPole(g, 1.7, 0.34, 84, 9, mt('#f7c53a'));
+      // the carousel: a striped canopy over a turning floor, poles and horses
+      const cc = 1.3, cr = 1.38, rad = 0.34, cb = P(cc, cr, 4), rx = rad * 1.414 * HW, ry = rad * 1.414 * HH;
+      cyl(g, cc, cr, rad, 0, 4, '#f6e8cc', '#e8d3a6');
+      const poles = []; for (let k = 0; k < 8; k++) { const a = (k / 8) * Math.PI * 2 + 0.2; poles.push([cb[0] + Math.cos(a) * rx * 0.8, cb[1] + Math.sin(a) * ry * 0.8, k]); }
+      poles.sort((a, b) => a[1] - b[1]);
+      poles.forEach(([x, y, k]) => { line(g, [[x, y], [x, y - 17]], '#e6c15a', 0.9); ellipse(g, x, y - 8 - (k % 2) * 3, 2.1, 1.5, k % 3 ? '#ffffff' : '#f2c9a0'); circle(g, x + 1.6, y - 10.4 - (k % 2) * 3, 0.9, '#ffffff'); });
+      line(g, [cb, [cb[0], cb[1] - 21]], '#e6c15a', 2.4);
+      const wedges = []; for (let k = 0; k < 10; k++) { const a0 = (k / 10) * Math.PI * 2 + 0.3, a1 = ((k + 1) / 10) * Math.PI * 2 + 0.3; wedges.push([k, (a0 + a1) / 2, a0, a1]); }
+      wedges.sort((a, b) => Math.sin(a[1]) - Math.sin(b[1]));
+      const ap = [cb[0], cb[1] - 31], ce = P(cc, cr, 21);
+      wedges.forEach(([k, m, a0, a1]) => poly(g, [ap, [ce[0] + Math.cos(a0) * rx * 1.1, ce[1] + Math.sin(a0) * ry * 1.1], [ce[0] + Math.cos(a1) * rx * 1.1, ce[1] + Math.sin(a1) * ry * 1.1]], shade(k % 2 ? cream : K, -0.16 * Math.cos(m))));
+      circle(g, ap[0], ap[1], 1.8, '#f7c53a'); line(g, [ap, [ap[0], ap[1] - 5]], '#eef1f4', 0.8); poly(g, [[ap[0], ap[1] - 5], [ap[0] + 4.5, ap[1] - 3.6], [ap[0], ap[1] - 2.2]], red);
+      // the gate: striped pillars, a sign over the top, balloons
+      [0.62, 1.34].forEach((c) => { for (let k = 0; k < 4; k++) boxC(g, c, 1.8, 0.1, 0.1, k * 5.5, 5.5, k % 2 ? '#ffffff' : red); circle(g, ...P(c + 0.05, 1.86, 24), 2, '#f7c53a'); });
+      box(g, 0.62, 1.82, 0.82, 0.07, 17, 9, shade(K, 0.25), K, shade(K, -0.2));
+      faceText(g, 'L', 0.62, 1.82, 0.82, 0.07, 17, 9, 'FUN', K, '#ffffff', 6.5);
+      for (let k = 0; k < 6; k++) circle(g, ...P(0.7 + k * 0.13, 1.9, 26.4), 0.8, '#fff3b0');
+      [[0.46, 1.72, '#e5483f'], [0.54, 1.66, '#f7c53a'], [0.4, 1.62, '#3f86e0']].forEach(([c, r, b], i) => { const p = P(c, r, 0), top = [p[0] + (i - 1) * 2, p[1] - 17 - i * 2]; line(g, [p, top], '#9aa1ab', 0.5); ellipse(g, top[0], top[1] - 3, 2.6, 3.2, mt(b)); });
+    } else if (s === 'wavepark') {   // a tropical water park: a wave lagoon, a lazy river, two tube slides off a tall tower, palms and a bamboo hut
+      const sn = A.flags.snow, K = mt(col), pink = mt('#ff5a8a'), sun = mt('#ffc83d');
+      const wat = sn ? '#7db9cf' : mt('#2db8d8'), wat2 = sn ? '#9fd0e0' : mt('#6fd6e8');
+      pad(g, 0, 0, 2, 2, sn ? '#eef3f7' : '#f3e5c0', 'rgba(0,0,0,.06)');
+      shadowBox(g, 0.88, 0.22, 0.24, 0.24, 40);
+      // the wave lagoon in front, with white wave curves rolling in from the back
+      poly(g, ovalPts(1.35, 1.3, 0.6, 0.52, 0.2, 2.3, 44), '#ffffff');
+      poly(g, ovalPts(1.35, 1.3, 0.55, 0.47, 0.4, 2.3, 44), wat);
+      poly(g, ovalPts(1.35, 1.34, 0.42, 0.34, 0.5, 2.3, 44), wat2);
+      if (!sn) [[0.95, 0.98, 1.2, 0.93, 1.5, 0.93, 1.78, 0.98], [0.9, 1.15, 1.2, 1.08, 1.55, 1.08, 1.85, 1.15], [0.95, 1.34, 1.25, 1.27, 1.6, 1.27, 1.84, 1.34]].forEach((w8) => {
+        const wp = [0, 2, 4, 6].map((i) => P(w8[i], w8[i + 1], 0.7)); smooth(g, wp); g.strokeStyle = 'rgba(255,255,255,.95)'; g.lineWidth = 1.2; g.stroke();
+        wp.forEach((p, i) => { if (i % 3 === 1) ellipse(g, p[0], p[1] + 1, 2.6, 0.9, 'rgba(255,255,255,.7)'); });
+      });
+      // the lazy river: a ring round a little sand island with a palm
+      poly(g, ovalPts(0.5, 1.28, 0.42, 0.42, 0.2, 2, 36), '#ffffff');
+      poly(g, ovalPts(0.5, 1.28, 0.38, 0.38, 0.4, 2, 36), wat);
+      poly(g, ovalPts(0.5, 1.28, 0.2, 0.2, 0.7, 2, 28), sn ? '#f4f7fa' : '#f1dfae');
+      if (!sn) [[0.5, 0.95, '#ff5a8a'], [0.8, 1.35, '#ffc83d'], [0.3, 1.58, '#3f86e0']].forEach(([c, r, k]) => { const p = P(c, r, 0.6); ellipse(g, p[0], p[1], 3.6, 1.6, mt(k)); ellipse(g, p[0], p[1], 1.7, 0.7, wat); });
+      put(g, 'palm', 0.5, 1.28, 0.5, 1, 0.7);
+      if (sn) { const q = P(0.5, 1.28, 0.7); ellipse(g, q[0] + 1, q[1] - 17, 5, 1.8, 'rgba(255,255,255,.92)'); }
+      // the bamboo bar at the right corner, with a palm-thatch roof
+      boxC(g, 1.55, 0.22, 0.34, 0.3, 0, 11, '#e2c47a');
+      for (let k = 0; k < 6; k++) poly(g, onL(1.55, 0.22, 0.34, 0.3, 0, 11, 0.06 + k * 0.16, 0.12 + k * 0.16, 0, 1), '#b99444');
+      poly(g, onR(1.55, 0.22, 0.34, 0.3, 0, 11, 0.2, 0.8, 0.3, 0.75), '#7a5a3a'); poly(g, onL(1.55, 0.22, 0.34, 0.3, 0, 11, 0.2, 0.8, 0.3, 0.75), '#8fd0e0');
+      roof(g, 1.49, 0.16, 0.46, 0.42, 11, 9, '#b98f3c', 'c');
+      // the slide tower: a tall bamboo-and-teal tower with a platform and a roof
+      boxC(g, 0.9, 0.24, 0.2, 0.2, 0, 50, '#f6f1e2');
+      for (let k = 0; k < 4; k++) { poly(g, onL(0.9, 0.24, 0.2, 0.2, 0, 50, 0, 1, 0.1 + k * 0.24, 0.2 + k * 0.24), K); poly(g, onR(0.9, 0.24, 0.2, 0.2, 0, 50, 0, 1, 0.1 + k * 0.24, 0.2 + k * 0.24), shade(K, -0.17)); }
+      boxC(g, 0.8, 0.14, 0.4, 0.4, 50, 4, '#d4a45c');
+      [[0.82, 0.16], [1.16, 0.16], [1.16, 0.5], [0.82, 0.5]].forEach(([c, r]) => line(g, [P(c, r, 54), P(c, r, 62)], '#b98f44', 1));
+      pyramid(g, 0.78, 0.12, 0.44, 0.44, 62, 11, K);
+      flagPole(g, 1.0, 0.34, 73, 8, pink);
+      // two tube slides that wind down into the lazy river and the lagoon
+      const sA = [P(0.92, 0.56, 51), P(0.66, 0.66, 45), P(0.42, 0.82, 34), P(0.3, 1.04, 22), P(0.4, 1.2, 10), P(0.55, 1.3, 2)];
+      const sB = [P(1.2, 0.38, 51), P(1.42, 0.5, 44), P(1.64, 0.74, 32), P(1.7, 1.0, 20), P(1.5, 1.18, 9), P(1.32, 1.28, 2)];
+      [[[0.66, 0.66, 45], [0.42, 0.82, 34], [0.3, 1.04, 22]], [[1.64, 0.74, 32], [1.7, 1.0, 20]]].forEach((sup) => sup.forEach(([c, r, z]) => line(g, [P(c, r, 0.5), P(c, r, z - 1)], '#c9b98a', 0.9)));
+      ribbon(g, sA, pink, 3.4); ribbon(g, sB, sun, 3.4);
+      if (sn) [sA, sB].forEach((sl) => sl.forEach((p, i) => { if (i % 2 === 0) ellipse(g, p[0], p[1] - 2, 3, 1.1, 'rgba(255,255,255,.95)'); }));
+      // palms, parasols and loungers on the sand
+      [[0.2, 0.2, 0], [1.9, 0.62, 2], [0.06, 1.7, 1], [1.84, 1.84, 0]].forEach(([c, r, v]) => { put(g, 'palm', c, r, 0.62, v + 1); if (sn) { const q = P(c, r); ellipse(g, q[0] + 1, q[1] - 21, 7, 2.2, 'rgba(255,255,255,.92)'); } });
+      parasol(g, 0.8, 1.84, mt('#ff5a8a')); parasol(g, 1.92, 1.42, mt('#ffc83d'));
+      box(g, 1.0, 1.84, 0.2, 0.08, 0.4, 2, '#ffffff', '#f4f6f8', '#d9dfe6'); box(g, 1.94, 1.1, 0.08, 0.2, 0.4, 2, '#ffffff', '#f4f6f8', '#d9dfe6');
+      if (sn) { line(g, [P(0.55, 1.9, 6), P(1.3, 1.92, 6)], '#e5483f', 1.6); g.save(); g.setLineDash([2.4, 2.4]); line(g, [P(0.55, 1.9, 6), P(1.3, 1.92, 6)], '#ffffff', 1.6); g.restore(); line(g, [P(0.55, 1.9, 0), P(0.55, 1.9, 8)], '#8a8f9a', 1); line(g, [P(1.3, 1.92, 0), P(1.3, 1.92, 8)], '#8a8f9a', 1); }
+    } else if (s === 'racetrack') {   // a motor-racing circuit: an asphalt oval with kerbs, a start line, a grandstand, pit garages and cars
+      const sn = A.flags.snow, K = mt(col), OC = 1.0, OR = 1.08;
+      pad(g, 0, 0, 2, 2, '#bfe293', 'rgba(0,0,0,.06)');
+      const kerb = (a, b) => {   // red and white kerb stones along a track edge
+        const p = closed(ovalPts(OC, OR, a, b, 0.5, 3, 56));
+        g.save(); g.lineJoin = 'round'; line(g, p, K, 2.4); g.lineCap = 'butt'; g.setLineDash([3, 3]); line(g, p, '#ffffff', 2.4); g.restore();
+      };
+      poly(g, ovalPts(OC, OR, 0.97, 0.64, 0.2, 3, 56), '#f1f3f5');
+      poly(g, ovalPts(OC, OR, 0.95, 0.62, 0.3, 3, 56), '#4d535c');
+      poly(g, ovalPts(OC, OR, 0.66, 0.34, 0.4, 3, 56), sn ? '#f2f6f9' : '#8fd06a');
+      g.save(); g.setLineDash([2, 3]); line(g, closed(ovalPts(OC, OR, 0.805, 0.48, 0.5, 3, 56)), 'rgba(255,255,255,.4)', 0.7); g.restore();
+      kerb(0.95, 0.62); kerb(0.66, 0.34);
+      // the infield: a timing building and a few trees
+      boxC(g, 0.62, 0.9, 0.26, 0.16, 0.4, 9, '#f4f6f8'); poly(g, onL(0.62, 0.9, 0.26, 0.16, 0.4, 9, 0.1, 0.9, 0.35, 0.8), '#6c8fb0'); roof(g, 0.6, 0.88, 0.3, 0.2, 9.4, 3, K, 'c');
+      [[1.15, 1.05, 3], [1.35, 0.98, 5], [1.5, 1.14, 4]].forEach(([c, r, v]) => put(g, 'bush', c, r, 0.6, v));
+      // the chequered start and finish line
+      for (let i = 0; i < 6; i++) for (let j = 0; j < 2; j++) poly(g, diamond(1.3 + j * 0.05, 1.42 + i * 0.047, 0.05, 0.047, 0.5), (i + j) % 2 ? '#1f252d' : '#ffffff');
+      // the grandstand at the back: stepped seats full of fans, under a roof
+      const seat = [K, '#ffffff', K, shade(K, -0.2)];
+      for (let t = 3; t >= 0; t--) {
+        box(g, 0.3, 0.32 - t * 0.085, 1.4, 0.1, 0, 4 + t * 4, shade(seat[t], 0.1), seat[t], shade(seat[t], -0.2));
+        for (let k = 0; k < 20; k++) { const p = P(0.34 + k * 0.07, 0.34 - t * 0.085, 4 + t * 4); circle(g, p[0], p[1] - 1.2, 1.1, pick(['#f7c53a', '#3f86e0', '#ffffff', '#e5483f', '#2a9f78', '#f3c9a0'], k * 3 + t * 5)); }
+      }
+      [0.36, 1.0, 1.64].forEach((c) => line(g, [P(c, 0.44, 4), P(c, 0.44, 19)], '#c3c9d1', 1));
+      poly(g, [P(0.26, 0.46, 19), P(1.74, 0.46, 19), P(1.74, 0.46, 16.5), P(0.26, 0.46, 16.5)], '#d3d9e0');
+      poly(g, [P(0.26, 0.46, 19), P(1.74, 0.46, 19), P(1.74, 0.0, 24), P(0.26, 0.0, 24)], sn ? '#f7fafd' : '#f4f6f8');
+      poly(g, [P(0.26, 0.46, 19), P(1.74, 0.46, 19), P(1.74, 0.4, 19.6), P(0.26, 0.4, 19.6)], K);
+      // the pit garages along the near side: a row of bays with coloured doors
+      boxC(g, 0.35, 1.76, 1.3, 0.16, 0, 7, '#eef0f3');
+      for (let k = 0; k < 6; k++) poly(g, onL(0.35, 1.76, 1.3, 0.16, 0, 7, 0.05 + k * 0.16, 0.17 + k * 0.16, 0, 0.72), k % 2 ? '#3a4250' : shade(K, -0.1));
+      poly(g, diamond(0.35, 1.76, 1.3, 0.16, 7), sn ? '#f7fafd' : '#dfe4ea'); line(g, [P(0.35, 1.92, 7), P(1.65, 1.92, 7), P(1.65, 1.76, 7)], K, 1.4);
+      // three racing cars, two close together on the near straight
+      racer(g, 0.52, 1.46, 'c', mt('#e53935')); racer(g, 0.8, 1.55, 'c', mt('#3f86e0')); racer(g, 1.35, 0.52, 'c', mt('#f7c53a'));
+      // the start gantry and two floodlight poles
+      [1.4, 1.68].forEach((r) => box(g, 1.28, r, 0.05, 0.05, 0, 16, '#f4f6f8', '#e6e9ed', '#cdd3da'));
+      box(g, 1.28, 1.4, 0.05, 0.33, 16, 3, K, shade(K, -0.1), shade(K, -0.25));
+      [[0.1, 1.3], [1.9, 0.75]].forEach(([c, r]) => { const p = P(c, r); line(g, [p, [p[0], p[1] - 28]], '#9aa1ab', 1.2); poly(g, [[p[0] - 5, p[1] - 33], [p[0] + 5, p[1] - 33], [p[0] + 5, p[1] - 28], [p[0] - 5, p[1] - 28]], '#3a4250'); for (let k = 0; k < 4; k++) circle(g, p[0] - 3.6 + k * 2.4, p[1] - 30.5, 0.9, '#fff6c8'); });
     } else if (s === 'port') {
       pad(g, 0, 0, 2, 2, '#d4cfc6');
       for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++) containerBox(g, 0.2 + i * 0.5, 0.3 + j * 0.5, 0, (i + j) % 2 ? 2 : 1, i * 3 + j);
@@ -732,6 +1000,97 @@
       for (let i = 0; i < 7; i++) { const a = (i + 0.5) * Math.PI / 7; line(g, [[0, -60], [-Math.cos(a) * 76, -26 + Math.sin(a) * 30]], 'rgba(120,130,150,.35)', 1); }
       A.roundRect(g, -26, -22, 52, 18, 3, '#2b2350'); g.fillStyle = '#7cf2ff'; g.font = '800 9px Fredoka, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('LIVE!', 0, -12.6);
       g.restore();
+      return;
+    }
+    if (s === 'aquadome') {   // an indoor water park: a huge glass dome with palms, a spiral slide and a pool inside, a lobby and a car park
+      const K = rival ? '#8a8f9a' : col, mt = (c) => (rival ? mix(c, '#9aa1ab', 0.7) : c), DC = 1.6, DR = 1.08, rad = 1.45;
+      pad(g, 0, 0, 3, 3, sn ? '#eef3f7' : '#dcd9d2');
+      // the car park at the right front edge: stalls, cars, a lamp
+      poly(g, diamond(1.85, 1.9, 1.05, 1.0, 0.2), sn ? '#f6f8fa' : '#c7c4bc');
+      for (let k = 0; k <= 4; k++) line(g, [P(1.95 + k * 0.2, 1.98, 0.3), P(1.95 + k * 0.2, 2.3, 0.3)], 'rgba(255,255,255,.8)', 0.8);
+      for (let k = 0; k <= 4; k++) line(g, [P(1.95 + k * 0.2, 2.5, 0.3), P(1.95 + k * 0.2, 2.82, 0.3)], 'rgba(255,255,255,.8)', 0.8);
+      for (let k = 0; k < 4; k++) { [[2.03, 2.0], [2.03, 2.52]].forEach(([c0, r0], row) => { if ((k + row) % 3 === 2) return; const cc = pick(['#e05a5a', '#5aa6dd', '#f2c14e', '#f5f5f5', '#6cc08f', '#3d4a5c'], k * 2 + row * 5); box(g, c0 + k * 0.2, r0, 0.13, 0.27, 0.3, 3.6, shade(cc, 0.2), cc, shade(cc, -0.2)); }); }
+      // the dome: a low drum, the water park inside, then the glass over it
+      const b = P(DC, DR, 7), rx = rad * 1.414 * HW, ry = rx / 2;
+      shadowBox(g, 0.5, 0.4, 2.2, 1.6, 40);
+      cyl(g, DC, DR, rad, 0, 7, '#eef2f5', '#e6ecf1');
+      ellipse(g, b[0], b[1], rx * 0.96, ry * 0.96, sn ? '#f4f7fa' : '#f1dfae');
+      ellipse(g, b[0], b[1] + 0.5, rx * 0.86, ry * 0.86, '#35b8e8'); ellipse(g, b[0] - 2, b[1], rx * 0.7, ry * 0.7, '#6fd6f0');
+      [[-0.4, 0.2, 0.4], [-0.1, 0.55, 0.3], [0.35, 0.3, 0.35]].forEach(([dx, dy, k]) => { const p = [b[0] + dx * rx, b[1] + dy * ry]; g.beginPath(); g.ellipse(p[0], p[1], rx * k * 0.7, ry * k * 0.5, 0, Math.PI * 1.1, Math.PI * 1.9); g.strokeStyle = 'rgba(255,255,255,.8)'; g.lineWidth = 1; g.stroke(); });
+      put(g, 'palm', DC - 0.9, DR - 0.3, 1.2, 2, 7); put(g, 'palm', DC + 0.95, DR - 0.25, 1.0, 1, 7);
+      // a spiral slide round a white tower; the far side of the spiral goes behind it
+      const spi = []; for (let i = 0; i <= 64; i++) { const t = (i / 64) * Math.PI * 4 + 0.6; spi.push({ p: P(DC + Math.cos(t) * 0.38, DR + Math.sin(t) * 0.38, 8 + 42 - 38 * (i / 64)), back: Math.sin(t) < 0 }); }
+      const runs = []; spi.forEach((q, i) => { const last = runs[runs.length - 1]; if (last && last.back === q.back) last.pts.push(q.p); else runs.push({ back: q.back, pts: [q.p], i }); });
+      const drawRuns = (back) => runs.forEach((r) => { if (r.back === back && r.pts.length > 1) ribbon(g, r.pts, r.i % 2 ? mt('#ff5a8a') : mt('#ffc83d'), 3); });
+      drawRuns(true);
+      cyl(g, DC, DR, 0.08, 8, 44, '#f4f6f8'); const tp = P(DC, DR, 52); ellipse(g, tp[0], tp[1], 8, 4, K); ellipse(g, tp[0], tp[1] - 1.4, 5.4, 2.7, shade(K, 0.3));
+      drawRuns(false);
+      put(g, 'palm', DC - 0.2, DR + 0.9, 1.2, 0, 7);
+      parasol(g, DC + 0.85, DR + 0.6, mt('#ff5a8a'), 7); parasol(g, DC - 1.0, DR + 0.55, mt('#f7c53a'), 7);
+      glassDome(g, b[0], b[1], rx, 74, '#9fdcf5');
+      const fp = P(DC, DR, 81); line(g, [fp, [fp[0], fp[1] - 10]], '#e9eef2', 1.3); poly(g, [[fp[0], fp[1] - 10], [fp[0] + 7, fp[1] - 8], [fp[0], fp[1] - 5.6]], K);
+      // the lobby in front: a glass hall with a canopy and the name on a sign
+      shadowBox(g, 0.28, 2.05, 1.1, 0.55, 20);
+      glassBox(g, 0.28, 2.05, 1.1, 0.55, 0, 14, '#bfe0f0', 2);
+      poly(g, onL(0.28, 2.05, 1.1, 0.55, 0, 14, 0.4, 0.6, 0, 0.7), '#3d5470');
+      box(g, 0.2, 1.97, 1.26, 0.7, 14, 2.5, '#ffffff', '#f4f6f8', '#d3d9e0');
+      const sg = P(0.83, 2.72, 22); A.roundRect(g, sg[0] - 22, sg[1] - 5, 44, 10, 3, K);
+      g.fillStyle = '#ffffff'; g.font = '800 6px Fredoka, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('AQUADOME', sg[0], sg[1] + 0.3);
+      put(g, 'palm', 0.1, 2.45, 0.62, 1); put(g, 'palm', 1.56, 2.7, 0.62, 2);
+      const lp = P(1.78, 2.15); line(g, [lp, [lp[0], lp[1] - 24]], '#9aa1ab', 1.1); circle(g, lp[0], lp[1] - 25, 2, '#fff6c8');
+      return;
+    }
+    if (s === 'bigstadium') {   // a big football stadium: a tall oval bowl with tiered stands full of fans, a roof ring, a striped pitch, four floodlight masts, a giant screen
+      const K = rival ? '#8a8f9a' : col, CC = 1.5, CR = 1.5, A0 = 1.55, B0 = 1.4, NN = 2.6, WH = 28;
+      pad(g, 0, 0, 3, 3, sn ? '#eef3f7' : '#d6d3cc');
+      const mast = (c, r) => {   // a floodlight mast: a tall pole with a bank of lamps
+        const p = P(c, r, 0), h = 56; line(g, [[p[0] + 1.4, p[1]], [p[0] + 1.4, p[1] - h]], 'rgba(40,60,40,.14)', 2.4); line(g, [p, [p[0], p[1] - h]], '#e9edf1', 2.2);
+        poly(g, [[p[0] - 10, p[1] - h - 9], [p[0] + 10, p[1] - h - 9], [p[0] + 10, p[1] - h], [p[0] - 10, p[1] - h]], '#38424f');
+        for (let i = 0; i < 2; i++) for (let k = 0; k < 4; k++) circle(g, p[0] - 7.5 + k * 5, p[1] - h - 6.2 + i * 4.2, 1.5, '#fff6c8');
+      };
+      mast(0.02, 1.6); mast(1.6, 0.02); mast(1.3, 2.9); mast(2.9, 1.3);
+      shadowBox(g, 0.3, 0.3, 2.4, 2.4, 40);
+      // the bowl: an outer wall (lit on the left), a rim, and the seats stepping down to the pitch
+      const outer = ovalPts(CC, CR, A0, B0, 0, NN, 72), arc = lowerArc(outer), xl = arc[0][0], xr = arc[arc.length - 1][0];
+      const band = (z0, z1, fill) => poly(g, arc.map((p) => [p[0], p[1] - z0]).concat(arc.slice().reverse().map((p) => [p[0], p[1] - z1])), fill);
+      const wall = '#e7ecf1', gw = g.createLinearGradient(xl, 0, xr, 0); gw.addColorStop(0, shade(wall, 0.2)); gw.addColorStop(0.5, wall); gw.addColorStop(1, shade(wall, -0.3));
+      band(0, WH, gw);
+      const gk = g.createLinearGradient(xl, 0, xr, 0); gk.addColorStop(0, shade(K, 0.1)); gk.addColorStop(0.5, K); gk.addColorStop(1, shade(K, -0.3));
+      band(WH * 0.12, WH * 0.34, gk);
+      arc.forEach((p, i) => { if (i % 3 === 0) line(g, [[p[0], p[1] - WH * 0.34], [p[0], p[1] - WH]], 'rgba(60,80,110,.16)', 0.8); });
+      [0.2, 0.5, 0.8].forEach((f) => { const p = arc[Math.round((arc.length - 1) * f)]; poly(g, [[p[0] - 2.6, p[1] - 0.5], [p[0] + 2.6, p[1] - 0.5], [p[0] + 2.6, p[1] - 6], [p[0] - 2.6, p[1] - 6]], '#3a4962'); });
+      const rim = outer.map((p) => [p[0], p[1] - WH]);
+      poly(g, rim, '#f3f5f8');
+      g.save(); g.beginPath(); rim.forEach((p, i) => (i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1]))); g.closePath(); g.clip();
+      const tiers = [[0.95, WH - 4, shade(K, -0.12)], [0.87, WH - 9.5, shade(K, 0.3)], [0.79, WH - 14.5, shade(K, 0.02)], [0.71, WH - 18.5, '#e4e9ee'], [0.64, WH - 22, sn ? '#e4ecf1' : '#79b857']];
+      tiers.forEach(([k, z, fill], i) => {
+        poly(g, ovalPts(CC, CR, A0 * k, B0 * k, z, NN, 72), fill);
+        if (i < 3) { const nk = tiers[i + 1], mk = (k + nk[0]) / 2, mz = (z + nk[1]) / 2; ovalPts(CC, CR, A0 * mk, B0 * mk, mz, NN, 60).forEach((p, j) => { if (j % 2 === 0) circle(g, p[0], p[1] + 0.8, 1, pick(['#ffffff', '#f7c53a', '#e5483f', '#dfe9f5', '#2a9f78', '#ffffff'], j * 5 + i * 3)); }); }
+      });
+      // the pitch: mown stripes, white lines, centre circle, penalty areas and goals
+      const pz = WH - 22, pc = 0.78, pr = 0.5, pitchC = sn ? ['#eef4f8', '#e3ecf2'] : ['#5fb24a', '#6cc156'];
+      for (let k = 0; k < 8; k++) poly(g, [P(CC - pc + k * pc / 4, CR - pr, pz), P(CC - pc + (k + 1) * pc / 4, CR - pr, pz), P(CC - pc + (k + 1) * pc / 4, CR + pr, pz), P(CC - pc + k * pc / 4, CR + pr, pz)], pitchC[k % 2]);
+      const wl = sn ? '#b9c7d2' : 'rgba(255,255,255,.9)', pl = (pts) => line(g, pts.map(([c, r]) => P(c, r, pz + 0.1)), wl, 0.8);
+      pl([[CC - pc, CR - pr], [CC + pc, CR - pr], [CC + pc, CR + pr], [CC - pc, CR + pr], [CC - pc, CR - pr]]); pl([[CC, CR - pr], [CC, CR + pr]]);
+      pl([[CC - pc, CR - 0.26], [CC - pc + 0.2, CR - 0.26], [CC - pc + 0.2, CR + 0.26], [CC - pc, CR + 0.26]]); pl([[CC + pc, CR - 0.26], [CC + pc - 0.2, CR - 0.26], [CC + pc - 0.2, CR + 0.26], [CC + pc, CR + 0.26]]);
+      pl(Array.from({ length: 25 }, (_, i) => [CC + Math.cos(i / 24 * Math.PI * 2) * 0.17, CR + Math.sin(i / 24 * Math.PI * 2) * 0.17]));
+      [-1, 1].forEach((sd) => { const gp = [P(CC + sd * pc, CR - 0.08, pz), P(CC + sd * (pc + 0.04), CR - 0.08, pz + 3), P(CC + sd * (pc + 0.04), CR + 0.08, pz + 3), P(CC + sd * pc, CR + 0.08, pz)]; line(g, gp, '#ffffff', 0.7); });
+      g.restore();
+      // the roof ring over the stands, with a coloured inner edge
+      const rz = WH + 6, ro = ovalPts(CC, CR, A0 * 1.04, B0 * 1.04, rz, NN, 72), ri = ovalPts(CC, CR, A0 * 0.86, B0 * 0.86, rz, NN, 72), arcR = lowerArc(ovalPts(CC, CR, A0 * 1.04, B0 * 1.04, 0, NN, 72));
+      poly(g, arcR.map((p) => [p[0], p[1] - WH - 2]).concat(arcR.slice().reverse().map((p) => [p[0], p[1] - rz])), '#c3ccd6');
+      g.beginPath(); ro.forEach((p, i) => (i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1]))); g.closePath(); ri.forEach((p, i) => (i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1]))); g.closePath(); g.fillStyle = sn ? '#fafcfe' : '#f6f8fa'; g.fill('evenodd');
+      line(g, closed(ri), K, 1.6);
+      for (let i = 0; i < ro.length; i += 6) line(g, [ro[i], [(ro[i][0] * 3 + ri[i][0]) / 4, (ro[i][1] * 3 + ri[i][1]) / 4]], 'rgba(120,135,155,.35)', 0.7);
+      // the giant screen over the far end, and the name on the front wall
+      const top = ro.reduce((a, p) => (p[1] < a[1] ? p : a), ro[0]), scx = top[0], scy = top[1] - 1;
+      line(g, [[scx - 12, scy], [scx - 12, scy - 8]], '#8a8f9a', 1.4); line(g, [[scx + 12, scy], [scx + 12, scy - 8]], '#8a8f9a', 1.4);
+      A.roundRect(g, scx - 18, scy - 21, 36, 14, 2, '#2b2f3c'); A.roundRect(g, scx - 16, scy - 19, 32, 10, 1.4, rival ? '#9aa1ab' : '#2f7fd6');
+      if (!rival) { ellipse(g, scx - 8, scy - 14, 4.4, 3.2, '#ffffff'); g.fillStyle = '#f7c53a'; g.fillRect(scx + 0, scy - 17, 12, 1.8); g.fillStyle = '#e5483f'; g.fillRect(scx + 0, scy - 13.6, 9, 1.8); }
+      const fr = arc.reduce((a, p) => (p[1] > a[1] ? p : a), arc[0]), px = fr[0], q = arc.reduce((a, p) => (Math.abs(p[0] - px) < Math.abs(a[0] - px) ? p : a), arc[0]), py = q[1] - WH * 0.5 + 6;
+      A.roundRect(g, px - 28, py - 12, 56, 13, 3, '#ffffff'); A.roundRect(g, px - 26.5, py - 10.5, 53, 10, 2, K);
+      g.fillStyle = '#ffffff'; g.font = '800 7.6px Fredoka, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('FOOTBALL', px, py - 5.3);
+      [[0.5, 2.9], [2.9, 0.6], [1.0, 3.0]].forEach(([c, r], i) => put(g, 'bush', c, r, 0.8, i + 2));
       return;
     }
     if (s === 'robotfactory') {

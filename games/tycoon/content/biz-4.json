@@ -348,6 +348,925 @@
           {"text":"Let a fizzy-drink company paint its logo on the rocket","spend":"none","rev":1,"costs":0,"risk":0,"rep":0,"timing":"short","grade":"ok","skill":"marketing","result":"The sponsor money is nice for a few months, and the bright rocket looks great in photos. Then the deal ends.","lesson":"Sponsors are a nice bonus, but they're not a plan."},
           {"text":"Raise extra money and start building a hotel in space too","spend":"mid","rev":0,"costs":2,"risk":1,"rep":0,"timing":"now","grade":"poor","skill":"strategy","result":"The space-hotel plans swallow the money long before your rockets fly regularly. Your shareholders are not happy.","lesson":"Raise money for a clear plan, not just because people are offering it."}
         ] }
-      ] }
+      ] },
+    {
+      "id": "wavepark",
+      "pitch": "A big tropical water park with a wave pool, tall tube slides and a lazy river.",
+      "earns": "Tickets and season passes, plus food, drinks, lockers, rented cabanas and tickets sold together with nearby hotels.",
+      "costs": "Hundreds of summer staff and lifeguards, pumps and chemicals, huge water and power bills, slide checks and loan repayments.",
+      "risks": "A rainy summer, a too-full hot day, dirty water, a safety scare, fake reviews and newer rival parks.",
+      "tip": "Most of your money comes in a few summer months but costs run all year, so plan carefully and save for the quiet ones.",
+      "cases": [
+        {
+          "id": "wavepark-1",
+          "title": "The summer crew",
+          "story": "Your park opens in May. On a hot day 9,000 guests will come, so you need 300 summer workers, including 90 lifeguards. A staffing agency can send people next week for a 25% fee.",
+          "options": [
+            {
+              "text": "Hire in March, run a 3-week lifeguard course and pay a bonus to those who stay",
+              "spend": "low",
+              "rev": 1,
+              "costs": 1,
+              "risk": -1,
+              "rep": 2,
+              "timing": "slow",
+              "grade": "best",
+              "skill": "people",
+              "result": "The crew arrives trained, knows the slides by heart and stays until September. Few workers quit, so you hire and train far less in the middle of summer.",
+              "lesson": "Training people early and rewarding those who stay costs less than constantly replacing them."
+            },
+            {
+              "text": "Pay a little more than other summer jobs so good people choose you",
+              "spend": "none",
+              "rev": 1,
+              "costs": 1,
+              "risk": -1,
+              "rep": 1,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "people",
+              "result": "The best young workers choose your park, and the queue for jobs is long. Bills rise a little, but guests notice the friendlier team.",
+              "lesson": "Fair pay is how you win the best people, and they win you the customers."
+            },
+            {
+              "text": "Make experienced head lifeguards team leaders, with a buddy for each newcomer",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "people",
+              "result": "New workers learn fast from the buddies, and every slide has a leader. Mistakes get fixed quietly before a guest ever sees them.",
+              "lesson": "Experienced people teaching new ones spreads good habits quickly."
+            },
+            {
+              "text": "Let the agency supply everyone: fast, but the fee is high",
+              "spend": "none",
+              "rev": 1,
+              "costs": 1,
+              "risk": 0,
+              "rep": 0,
+              "timing": "now",
+              "grade": "ok",
+              "skill": "operations",
+              "result": "The workers arrive on time, but they leave for better jobs in July. You pay the fee again and again.",
+              "lesson": "Agencies are fine for a rush, but it costs more than building your own team."
+            },
+            {
+              "text": "Hire a third fewer lifeguards at first and add more if it gets busy",
+              "spend": "none",
+              "rev": 0,
+              "costs": -1,
+              "risk": 1,
+              "rep": -2,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "safety",
+              "result": "The first hot Saturday has far too few lifeguards for the wave pool. Guests see it, the news hears about it, and you hire in a panic.",
+              "lesson": "You cannot add lifeguards after something goes wrong: be ready before the crowd arrives."
+            }
+          ]
+        },
+        {
+          "id": "wavepark-2",
+          "title": "The cloudy lazy river",
+          "story": "After a record Saturday with 9,000 guests, the lazy river is cloudy and smells strong. You are nearly out of pool chemicals. A man in a van offers 30 unlabelled barrels at half price, cash today: 'Same stuff, the label fell off.'",
+          "options": [
+            {
+              "text": "Buy the cheap unlabelled barrels: half price, cash today",
+              "spend": "none",
+              "rev": 0,
+              "costs": -2,
+              "risk": 1,
+              "rep": -3,
+              "timing": "now",
+              "penalty": "low",
+              "grade": "trap",
+              "skill": "safety",
+              "result": "Nobody knows what is in the barrels. Hundreds of children go home with itchy eyes, the health office shuts the slides for a week and you refund tickets.",
+              "lesson": "Never put something in the water if you cannot read the label and name the maker."
+            },
+            {
+              "text": "Close the river, test the water, order labelled chemicals from your supplier",
+              "spend": "low",
+              "rev": 1,
+              "costs": 0,
+              "risk": -1,
+              "rep": 2,
+              "timing": "now",
+              "grade": "best",
+              "skill": "safety",
+              "result": "Guests grumble for an afternoon, then read the test results on a board by the gate. By Sunday the water sparkles, and visitors post about how clean it is.",
+              "lesson": "Close first, fix properly and show your proof: trust is worth one lost afternoon."
+            },
+            {
+              "text": "Sign a yearly deal with a licensed supplier that promises emergency deliveries",
+              "spend": "none",
+              "rev": 0,
+              "costs": -1,
+              "risk": -1,
+              "rep": 0,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "operations",
+              "result": "The supplier gives a lower price for a yearly order, and a van arrives within hours whenever you run low. You never panic-buy again.",
+              "lesson": "A trusted supplier on a good contract is cheaper than a bargain in an emergency."
+            },
+            {
+              "text": "Fit sensors that test the water every ten minutes and alert the team",
+              "spend": "low",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "operations",
+              "result": "A sensor beeps on a Wednesday when the water drifts off. The team fixes it in minutes, before any guest notices.",
+              "lesson": "Machines that watch all day catch small problems before they become big ones."
+            },
+            {
+              "text": "Pour in double the usual chemicals to clear the water fast",
+              "spend": "none",
+              "rev": 0,
+              "costs": 1,
+              "risk": 1,
+              "rep": -1,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "safety",
+              "result": "Too much chlorine makes eyes sting and skin itch, and guests leave coughing. The water still looks cloudy, and you used up the rest of your chemicals.",
+              "lesson": "More is not safer: water care follows exact measurements, not guesses."
+            }
+          ]
+        },
+        {
+          "id": "wavepark-3",
+          "title": "Stars, hotels and a quick fix",
+          "story": "A new park across town has 4.8 stars online, and yours has 4.1. A marketing firm offers 500 five-star reviews for $4,000. A beach hotel group also wants to sell your tickets together with its rooms.",
+          "options": [
+            {
+              "text": "Buy 500 five-star reviews for $4,000 and catch up with the rival",
+              "spend": "none",
+              "rev": 2,
+              "costs": 0,
+              "risk": 1,
+              "rep": -3,
+              "timing": "now",
+              "penalty": "low",
+              "grade": "trap",
+              "skill": "ethics",
+              "result": "A website spots reviews copied from other places and a newspaper reports on your fake stars. The consumer watchdog fines you, and real guests stop believing you.",
+              "lesson": "Fake reviews trick your own future customers, and they do get found out."
+            },
+            {
+              "text": "Ask happy guests for honest reviews at the exit and answer angry ones kindly",
+              "spend": "none",
+              "rev": 2,
+              "costs": 0,
+              "risk": 0,
+              "rep": 2,
+              "timing": "slow",
+              "grade": "best",
+              "skill": "marketing",
+              "result": "A sign with a code at every exit brings in 2,000 real reviews. You answer the 2-star ones kindly, fix two slow queues and climb to 4.6 stars.",
+              "lesson": "Honest reviews take longer, but they last and they show you what to fix."
+            },
+            {
+              "text": "Agree a hotel package, with a daily ticket limit so the park never overfills",
+              "spend": "none",
+              "rev": 2,
+              "costs": 0,
+              "risk": 0,
+              "rep": 0,
+              "timing": "now",
+              "grade": "good",
+              "skill": "strategy",
+              "result": "Beach hotels sell your tickets with their rooms, and weekday visits jump. Capping the tickets means a hot Saturday never feels crowded.",
+              "lesson": "Partners bring customers you could not reach alone, so agree limits and prices clearly."
+            },
+            {
+              "text": "Invite family bloggers for a free day and ask them to say it was a gift",
+              "spend": "low",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "short",
+              "grade": "good",
+              "skill": "marketing",
+              "result": "Twenty families post about their day and say clearly that the visit was a gift. Bookings rise for a few weeks and then settle down.",
+              "lesson": "It is fine to give away free visits, as long as you tell people what is a gift."
+            },
+            {
+              "text": "Cut all ticket prices by a third for the whole summer",
+              "spend": "none",
+              "rev": -1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 0,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "pricing",
+              "result": "More families come, but you earn less from each one and the rival cuts its prices too. Staff are busier and profits are smaller.",
+              "lesson": "A rival can copy a price cut in a day, but it cannot copy being better."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "amusement",
+      "pitch": "A fun park with a carousel, a drop tower, a coaster, bumper cars and food stalls.",
+      "earns": "Gate tickets and wristbands, season passes, food and drinks, games and party packages. Sunny summer days bring the biggest crowds.",
+      "costs": "Ride staff, daily safety checks and repairs, electricity, insurance, and new rides to keep families coming back.",
+      "risks": "Rainy or very hot weeks, a ride breaking down, a safety scare in the news, and a new rival park opening with bigger rides.",
+      "tip": "Be clear about prices and strict about safety rules: families who feel treated fairly come back every summer.",
+      "cases": [
+        {
+          "id": "amusement-1",
+          "title": "Wristbands and the fast pass",
+          "story": "Opening day is close. On busy days the queue for your coaster could last 90 minutes. A wristband for all rides could cost $32. You could also sell a Fast Pass that lets guests skip the queue, and families are asking about season passes.",
+          "options": [
+            {
+              "text": "One clear wristband price, plus a Fast Pass limited to 1 guest in 5",
+              "spend": "none",
+              "rev": 2,
+              "costs": 0,
+              "risk": -1,
+              "rep": 2,
+              "timing": "now",
+              "grade": "best",
+              "skill": "pricing",
+              "result": "Everyone sees both prices on the website before they come. The Fast Pass brings in extra money, and the normal queue still moves, so nobody feels cheated.",
+              "lesson": "Extra-fee options work when the price is clear and the normal ticket stays fair."
+            },
+            {
+              "text": "Sell cheaper early-bird season passes to local families",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "slow",
+              "flag": "loyal",
+              "grade": "good",
+              "skill": "marketing",
+              "result": "Hundreds of families buy passes before the gates even open. They come again and again, and spend on food each time.",
+              "lesson": "Selling early gives you money and loyal guests before the season starts."
+            },
+            {
+              "text": "Build an app that tells guests when their turn is, so they wait in the shade",
+              "spend": "mid",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 2,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "operations",
+              "result": "Guests play games and eat ice cream while they wait, instead of standing in a line. They spend more, and the queue complaints nearly stop.",
+              "lesson": "A shorter wait feels better, and a happy guest with free time spends more."
+            },
+            {
+              "text": "Charge only $12 at the gate and make guests pay for each ride separately",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": 1,
+              "rep": -1,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "pricing",
+              "result": "Parents add up the ride prices and decide a day out costs too much. Many families choose the park down the road with one simple price.",
+              "lesson": "If guests cannot guess what a day costs, they often stay at home."
+            },
+            {
+              "text": "Advertise 'Entry $15' and add ride, locker and Fast Pass fees at the very end",
+              "spend": "none",
+              "rev": 2,
+              "costs": 0,
+              "risk": 1,
+              "rep": -3,
+              "timing": "now",
+              "penalty": "low",
+              "grade": "trap",
+              "skill": "ethics",
+              "result": "The low price brings crowds, then parents find a $60 bill at the end. The shoppers' watchdog is called, you refund the fees, and angry reviews pile up.",
+              "lesson": "A price that hides its extras is a trick, and guests never forget it."
+            }
+          ]
+        },
+        {
+          "id": "amusement-2",
+          "title": "The pushy dad at the drop tower",
+          "story": "Dev's son is seven and 8 cm too short for the drop tower. Dev is cross, says all his friends are going on it, and offers to sign a paper saying it's his own risk. Other families in the queue are watching.",
+          "options": [
+            {
+              "text": "Keep the rule kindly, and show them rides he can enjoy plus a grow-tall card",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": -1,
+              "rep": 2,
+              "timing": "now",
+              "grade": "best",
+              "skill": "safety",
+              "result": "Dev grumbles, then the boy loves the bumper cars. The grow-tall card brings them back next summer, and a watching mum tells her friends how kindly it was done.",
+              "lesson": "Say no to a risky request, then say yes to something safe."
+            },
+            {
+              "text": "Put a friendly height wall at the entrance so families know before they queue",
+              "spend": "low",
+              "rev": 1,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "operations",
+              "result": "Children measure themselves by a painted giraffe and choose rides that fit. Fewer families wait for 40 minutes only to be turned away.",
+              "lesson": "Show a rule early and fewer people get upset about it later."
+            },
+            {
+              "text": "Teach ride crews to say no calmly, with a manager they can call at once",
+              "spend": "low",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 2,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "people",
+              "result": "Next time a parent shouts, the crew member stays friendly and the manager arrives within minutes. Fewer arguments reach the queue.",
+              "lesson": "Staff who feel backed up stay calm when guests do not."
+            },
+            {
+              "text": "Say 'rules are rules' and have security walk the family out of the park",
+              "spend": "none",
+              "rev": -1,
+              "costs": 0,
+              "risk": 0,
+              "rep": -2,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "people",
+              "result": "The rule was right, but the way you handled it was not. Dev posts a video of the family leaving and the comments are unkind to your park.",
+              "lesson": "You can be right and still handle a guest badly."
+            },
+            {
+              "text": "Let the boy ride, as long as Dev signs the paper",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 1,
+              "rep": -3,
+              "timing": "now",
+              "penalty": "mid",
+              "grade": "trap",
+              "skill": "safety",
+              "result": "The safety inspector hears about it. A signed paper cannot undo a safety rule, so the tower closes for a week and you pay a fine.",
+              "lesson": "A signature never makes an unsafe ride safe. Height rules protect the child, not just you."
+            }
+          ]
+        },
+        {
+          "id": "amusement-3",
+          "title": "The sponsor with free lights",
+          "story": "Zing Drinks offers $400,000 a year for naming your main street, plus 5,000 free glowing lights for evening 'Glow Nights'. Its cheap electrician can start tonight and says there's no need for a licensed inspector.",
+          "options": [
+            {
+              "text": "Say yes, but a licensed electrician must fit and certify every light",
+              "spend": "low",
+              "rev": 2,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "best",
+              "skill": "safety",
+              "result": "Zing's money arrives, the inspector signs every cable, and Glow Nights make your park a late-evening favourite. Zing is happy to wait two weeks for a safe job.",
+              "lesson": "Accept good money, but never let a sponsor's speed overrule your safety checks."
+            },
+            {
+              "text": "Ask two other companies for offers and pick the best partner",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "money",
+              "result": "A phone company offers $520,000 and matching lights. Zing improves its offer too, and you choose the better deal for your park.",
+              "lesson": "Compare offers before saying yes: the first deal is rarely the best."
+            },
+            {
+              "text": "Use the lights only at the gate and food area, far from cables and rides",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "operations",
+              "result": "The glowing gate looks wonderful and makes a great photo spot. The rides stay as they were, and your safety officer relaxes.",
+              "lesson": "You can say yes to part of a deal and keep the risky part out."
+            },
+            {
+              "text": "Let your own handyman team fit the lights to save the electrician's fee",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 1,
+              "rep": -1,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "safety",
+              "result": "Two circuits trip on a damp evening, so Glow Night ends early. The insurer asks why a qualified electrician was not used.",
+              "lesson": "Electrical work needs a qualified person, however handy your team is."
+            },
+            {
+              "text": "Accept the free lights and the cheap electrician: it's quick and costs nothing",
+              "spend": "none",
+              "rev": 2,
+              "costs": -1,
+              "risk": 1,
+              "rep": -3,
+              "timing": "now",
+              "penalty": "high",
+              "grade": "trap",
+              "skill": "safety",
+              "result": "On the first rainy night the lights spark near the drop tower and the whole park goes dark. The park closes for repairs, and Zing quietly walks away.",
+              "lesson": "'Free' becomes expensive if it skips safety checks near crowds."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "racetrack",
+      "pitch": "A racing circuit with grandstands, pit garages, big race days and a kids' karting centre.",
+      "earns": "Race-day tickets and parking, sponsors, TV deals, karting, and track-day fees paid by drivers, plus food and souvenirs.",
+      "costs": "Safety barriers, marshals and medics, track surfaces, insurance, electricity, and the crews who run each event.",
+      "risks": "An accident on track, rain cancelling race days, angry neighbours over the noise, sponsors who vanish, and costly repairs to the surface.",
+      "tip": "Never trade safety for a big payday: a track trusted by drivers, fans and neighbours earns for decades.",
+      "cases": [
+        {
+          "id": "racetrack-1",
+          "title": "Barriers before the grandstand",
+          "story": "Your first race weekend is 10 weeks away and you have $1 million left. A 12,000-seat grandstand costs $700,000. Safety barriers, run-off areas and a trained marshal team cost about $800,000. Children keep asking about go-karts.",
+          "options": [
+            {
+              "text": "Pay for barriers, run-off areas and a certified marshal team first",
+              "spend": "high",
+              "rev": 2,
+              "costs": 0,
+              "risk": -1,
+              "rep": 2,
+              "timing": "slow",
+              "grade": "best",
+              "skill": "safety",
+              "result": "The motor-sport inspectors give you the top licence. Drivers love a safe, tidy circuit, and top teams book your first weekend for their practice.",
+              "lesson": "Safety comes first on a track, and it pays back in licences, drivers and trust."
+            },
+            {
+              "text": "Open a kids' karting experience with helmets, suits and trained instructors",
+              "spend": "mid",
+              "rev": 2,
+              "costs": 0,
+              "risk": 0,
+              "rep": 1,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "operations",
+              "result": "Children queue to try karting at weekends, and parents watch from the café. It earns money long before the first big race.",
+              "lesson": "A smaller activity can earn while the big project is still being built."
+            },
+            {
+              "text": "Build a first-aid centre and agree a fast-help plan with the local hospital",
+              "spend": "low",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "safety",
+              "result": "On race days a medic team waits trackside and the hospital knows the plan. Drivers and families feel safe because everything is ready.",
+              "lesson": "Plan for the day you hope never happens, and people will trust you every other day."
+            },
+            {
+              "text": "Run track days for local drivers only, with no crowds, until all is ready",
+              "spend": "low",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 0,
+              "timing": "slow",
+              "grade": "ok",
+              "skill": "strategy",
+              "result": "Track days earn a steady trickle of money and let your team practise. But without a big race you earn less and fans forget you exist.",
+              "lesson": "Starting small is safe, but a business also needs customers who can find it."
+            },
+            {
+              "text": "Build the big grandstand first and add the barriers when ticket sales come in",
+              "spend": "high",
+              "rev": 1,
+              "costs": 0,
+              "risk": 1,
+              "rep": -1,
+              "timing": "slow",
+              "grade": "poor",
+              "skill": "safety",
+              "result": "Inspectors will not give a race licence without barriers. The grandstand sits empty for months while you wait for the money to finish the job.",
+              "lesson": "Spend first on what you must have, then on what looks impressive."
+            }
+          ]
+        },
+        {
+          "id": "racetrack-2",
+          "title": "The quiet village letter",
+          "story": "People in the village 2 km away signed a letter. Engines are too loud on race days, and the council may stop evening races. Evening races bring in your biggest crowds, about $40,000 a night.",
+          "options": [
+            {
+              "text": "Meet the neighbours: 8 pm engine curfew, quiet weekdays, tree-covered banks",
+              "spend": "mid",
+              "rev": 1,
+              "costs": 0,
+              "risk": -1,
+              "rep": 2,
+              "timing": "slow",
+              "grade": "best",
+              "skill": "people",
+              "result": "Some evening races move to afternoons, but the council drops its threat. The banks and trees mute the sound, and the village stops writing letters.",
+              "lesson": "A fair compromise with neighbours protects your licence, and your future."
+            },
+            {
+              "text": "Give the village free tickets and a neighbours' day, and share race dates early",
+              "spend": "low",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 2,
+              "timing": "slow",
+              "flag": "loyal",
+              "grade": "good",
+              "skill": "marketing",
+              "result": "Families from the village come to the neighbours' day and meet the drivers. Several become regular fans and stop minding the noise.",
+              "lesson": "People complain less about a place they feel part of."
+            },
+            {
+              "text": "Make every car pass a sound test at the gate and use quieter engine rules",
+              "spend": "low",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "operations",
+              "result": "A few very loud cars are turned away, and the rest get quieter. The village notices the change straight away.",
+              "lesson": "Fixing the cause of a problem works better than apologising for it."
+            },
+            {
+              "text": "Tell them the track was here first and carry on as before",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": 1,
+              "rep": -2,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "people",
+              "result": "The council sets a 6 pm ban without asking you, and your biggest evening crowds disappear. The village is now your loudest critic.",
+              "lesson": "If you refuse to talk, someone else will decide for you."
+            },
+            {
+              "text": "Cover the council's noise monitor on race days so the readings look low",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 1,
+              "rep": -3,
+              "timing": "now",
+              "penalty": "mid",
+              "grade": "trap",
+              "skill": "ethics",
+              "result": "An inspector finds the cover and a police report follows. The council fines you, evening races stop for a month, and every reading is now doubted.",
+              "lesson": "Hiding a problem is never cheaper than fixing it, and it is dishonest."
+            }
+          ]
+        },
+        {
+          "id": "racetrack-3",
+          "title": "The Night Grand Prix offer",
+          "story": "SpeedKings, a race organiser, offers $3 million to hold a Night Grand Prix with TV cameras. It wants 30,000 seats (your safe limit is 20,000) and only half of the marshals, 'to save money'. It also wants seats on the run-off grass.",
+          "options": [
+            {
+              "text": "Hold it at the safe limit, every marshal post staffed, and share the TV money",
+              "spend": "low",
+              "rev": 3,
+              "costs": 0,
+              "risk": 0,
+              "rep": 2,
+              "timing": "short",
+              "grade": "best",
+              "skill": "strategy",
+              "result": "SpeedKings grumbles, then agrees to the safe plan. 20,000 fans enjoy a smooth night, TV viewers see a tidy event, and you make a lot of money.",
+              "lesson": "Say yes to the business and no to the unsafe parts. Negotiate, don't walk away."
+            },
+            {
+              "text": "Ask two tracks that worked with SpeedKings how the events went",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "ethics",
+              "result": "One track says SpeedKings paid late and cut corners. You ask for part of the fee up front, and the deal is safer for you.",
+              "lesson": "Ask others who have done business with a partner before you sign."
+            },
+            {
+              "text": "Tell your insurer and the motor-sport body, and get both to approve the plan",
+              "spend": "low",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "flag": "insured",
+              "grade": "good",
+              "skill": "safety",
+              "result": "The insurer says a crowd of 30,000 would not be covered. With the extra approval, you are protected if anything goes wrong.",
+              "lesson": "Check that your insurance covers what you plan to do, before you do it."
+            },
+            {
+              "text": "Say no to all big events: the track is not ready for TV",
+              "spend": "none",
+              "rev": -1,
+              "costs": 0,
+              "risk": -1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "strategy",
+              "result": "SpeedKings takes its event to a rival circuit and TV viewers watch it there. Your track stays safe, but nobody sees what you could do.",
+              "lesson": "Playing it safe is good, but turning away every chance can cost you too."
+            },
+            {
+              "text": "Say yes to SpeedKings' plan exactly as written: 30,000 seats, half the marshals",
+              "spend": "none",
+              "rev": 3,
+              "costs": -1,
+              "risk": 1,
+              "rep": -3,
+              "timing": "now",
+              "penalty": "high",
+              "grade": "trap",
+              "skill": "safety",
+              "result": "The motor-sport body hears about it and cancels your licence before the event. Tickets are refunded, TV leaves, and the $3 million never arrives.",
+              "lesson": "A big payday never excuses a plan that puts a crowd at risk."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "golf",
+      "pitch": "A golf course with fairways, greens, a pond, a clubhouse, a cafe and a driving range.",
+      "earns": "Yearly member fees, green fees from visitors, lessons, buggy hire, the cafe, the shop and the driving range.",
+      "costs": "Greenkeepers, water and fertiliser for the grass, mowers and buggies, clubhouse staff, insurance and the loan on the land.",
+      "risks": "A dry summer, a wet spell that closes the course, members leaving, a rival course, and tempting offers for your land.",
+      "tip": "The land and the grass are your product: look after them, and think very long before you sell any of it.",
+      "cases": [
+        {
+          "id": "golf-1",
+          "title": "Members or pay-per-round?",
+          "story": "Your course opens next month. Members would pay $1,800 a year and play as often as they like; visitors would pay $60 a round. Weekends fill up but weekdays are quiet. How will you sell the course?",
+          "options": [
+            {
+              "text": "Offer both: yearly members plus pay-per-round, with cheaper weekday rounds",
+              "spend": "none",
+              "rev": 2,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "slow",
+              "flag": "loyal",
+              "grade": "best",
+              "skill": "pricing",
+              "result": "Members bring steady money in the quiet months, and visitors pay full price at weekends. The cheaper weekday rounds fill the empty mornings.",
+              "lesson": "Two kinds of customer give you steady income and room to grow."
+            },
+            {
+              "text": "Start a junior and beginners' programme with the local schools",
+              "spend": "low",
+              "rev": 1,
+              "costs": 0,
+              "risk": 0,
+              "rep": 2,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "marketing",
+              "result": "Children come after school, and their parents often join in. Some of those families become members when the juniors outgrow their lessons.",
+              "lesson": "Teach children today and you are growing tomorrow's customers."
+            },
+            {
+              "text": "Open with half-price weekday rounds for the first month",
+              "spend": "low",
+              "rev": 2,
+              "costs": 0,
+              "risk": 0,
+              "rep": 0,
+              "timing": "short",
+              "grade": "good",
+              "skill": "pricing",
+              "result": "Weekday mornings fill up, and many visitors return at the full price once they have enjoyed your greens.",
+              "lesson": "A short offer lets people try you, as long as your normal price is fair too."
+            },
+            {
+              "text": "Sell only yearly memberships: the money arrives at the start",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": -1,
+              "rep": -2,
+              "timing": "now",
+              "grade": "ok",
+              "skill": "strategy",
+              "result": "The money is safe early, but passing visitors are turned away and the course feels like a closed club. Newcomers go elsewhere.",
+              "lesson": "Steady money is good, but locking customers out limits how far you can grow."
+            },
+            {
+              "text": "Charge only $60 a round and hope the weekdays fill up",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": 1,
+              "rep": 0,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "money",
+              "result": "Weekends are busy, but weekdays stay empty. In every rainy week the income drops, with no steady money behind it.",
+              "lesson": "Living on pay-per-round alone makes your income bounce up and down."
+            }
+          ]
+        },
+        {
+          "id": "golf-2",
+          "title": "A dry summer",
+          "story": "It is a hot, dry summer. The council asks everyone to use less water, and your water bill is $9,000 a month. The greens are turning yellow and members want green grass. A salesman has a cheap answer.",
+          "options": [
+            {
+              "text": "Water at night with moisture sensors, using recycled pond water",
+              "spend": "mid",
+              "rev": 1,
+              "costs": -2,
+              "risk": -1,
+              "rep": 2,
+              "timing": "slow",
+              "flag": "eco",
+              "grade": "best",
+              "skill": "operations",
+              "result": "Sensors water only where the grass is thirsty, and night watering wastes less in the sun. The bill drops by a third and the greens stay healthy.",
+              "lesson": "The green choice and the money-saving choice can be the same choice."
+            },
+            {
+              "text": "Let the rough turn brown but keep greens and fairways watered",
+              "spend": "none",
+              "rev": 0,
+              "costs": -1,
+              "risk": 0,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "strategy",
+              "result": "A sign explains that the brown patches are saving water. Players understand, and the course saves money without hurting the game.",
+              "lesson": "Save on what customers barely notice, and protect what they really care about."
+            },
+            {
+              "text": "Plant tougher grass on the edges that needs far less water",
+              "spend": "mid",
+              "rev": 0,
+              "costs": -1,
+              "risk": -1,
+              "rep": 1,
+              "timing": "slow",
+              "flag": "eco",
+              "grade": "good",
+              "skill": "operations",
+              "result": "The new grass takes a season to settle, then stays green on half the water. Next summer the bill is lower and nobody frets.",
+              "lesson": "A small investment now can lower your bills every summer after."
+            },
+            {
+              "text": "Buy a cheap 'miracle' spray that keeps grass green with no water",
+              "spend": "low",
+              "rev": 1,
+              "costs": 0,
+              "risk": 1,
+              "rep": -2,
+              "timing": "now",
+              "penalty": "mid",
+              "grade": "trap",
+              "skill": "safety",
+              "result": "The spray washes into the pond and harms the fish and frogs. The council steps in and you pay for the clean-up.",
+              "lesson": "If a product sounds too good to be true, find out what is in it before you use it."
+            },
+            {
+              "text": "Save money by cutting the greenkeepers' hours",
+              "spend": "none",
+              "rev": -2,
+              "costs": -1,
+              "risk": 0,
+              "rep": -2,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "people",
+              "result": "Weeds creep in, bunkers go unraked and the greens turn bumpy. Members say the course looks tired, and some leave for the club down the road.",
+              "lesson": "Skilled people make the course good: cut them and you cut your product."
+            }
+          ]
+        },
+        {
+          "id": "golf-3",
+          "title": "An offer for your land",
+          "story": "A developer offers $1.5 million for the four holes beside the road, to build flats. You would keep 14 holes. 'The offer ends on Friday,' says the developer. The contract is 60 pages long.",
+          "options": [
+            {
+              "text": "Get the land valued, then offer a 25-year lease on a small corner instead",
+              "spend": "low",
+              "rev": 2,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "slow",
+              "grade": "best",
+              "skill": "strategy",
+              "result": "The valuer says the road holes are worth far more than offered. The developer leases the car-park corner, you earn rent every year and keep all 18 holes.",
+              "lesson": "Land is rare. Lease it or keep it, and sell only when the price and the plan are clearly right."
+            },
+            {
+              "text": "Sign on Friday: the cash is big and the developer is in a hurry",
+              "spend": "none",
+              "rev": 1,
+              "costs": 0,
+              "risk": 1,
+              "rep": -1,
+              "timing": "now",
+              "penalty": "mid",
+              "grade": "trap",
+              "skill": "safety",
+              "result": "A hidden clause lets the developer build tall flats right beside your tees. Golfers complain about the noise and the dust, and the course loses its calm.",
+              "lesson": "Pressure to sign by Friday is a warning: have someone you trust read every page first."
+            },
+            {
+              "text": "Add floodlit driving range bays for evening practice",
+              "spend": "mid",
+              "rev": 2,
+              "costs": 0,
+              "risk": 0,
+              "rep": 0,
+              "timing": "slow",
+              "grade": "good",
+              "skill": "strategy",
+              "result": "The bays fill with office workers and families after work. Land you already own is now earning money every evening.",
+              "lesson": "Make your land earn more before you even think about selling it."
+            },
+            {
+              "text": "Ask members and neighbours what they think before you decide",
+              "spend": "none",
+              "rev": 0,
+              "costs": 0,
+              "risk": -1,
+              "rep": 1,
+              "timing": "now",
+              "grade": "good",
+              "skill": "people",
+              "result": "Members love the full 18 holes, and neighbours say flats would mean years of noisy building. Their views make your decision stronger.",
+              "lesson": "The people who use your business often see what a big offer hides."
+            },
+            {
+              "text": "Sell the four holes and use the cash to pay off part of the loan",
+              "spend": "none",
+              "rev": -2,
+              "costs": -1,
+              "risk": 0,
+              "rep": -1,
+              "timing": "now",
+              "grade": "poor",
+              "skill": "money",
+              "result": "Members are upset about the smaller course and fewer visitors come. The loan is smaller, but so is the income that pays it.",
+              "lesson": "Selling the thing that earns your money to pay a bill can leave you poorer."
+            }
+          ]
+        }
+      ]
+    }
   ]
 }

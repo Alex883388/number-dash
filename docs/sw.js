@@ -1,7 +1,7 @@
 // Number Arcade offline cache (the home page and every game). Everything is served from the cache first, and refreshed in the
 // background, so the game opens instantly (even with no internet) and picks up a new version
-// on the next launch. The build replaces 4c28ad242b with a hash of the page.
-const CACHE = 'number-dash-4c28ad242b';
+// on the next launch. The build replaces cfda3dcdc0 with a hash of the page.
+const CACHE = 'number-dash-cfda3dcdc0';
 const CORE = ['./', './index.html', './dash/', './dash/index.html', './ladder/', './ladder/index.html', './pair/', './pair/index.html', './pop/', './pop/index.html', './spell/', './spell/index.html', './quest/', './quest/index.html', './memory/', './memory/index.html', './robot/', './robot/index.html', './tycoon/', './tycoon/index.html', './mech/', './mech/index.html', './castle/', './castle/index.html', './family/', './family/index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', (e) => {

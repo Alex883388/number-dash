@@ -88,7 +88,8 @@ module.exports = [
   { touchEl: '#buyUnder' }, { sleep: 300 },
   { log: `[!!${T}.G.land[${T}.G.biz[0].plot], ${T}.TY.rentFor(${T}.G, ${T}.G.biz[0])]` },
   // insurance: a policy for the stand, then stopped again
-  { eval: `(() => { sessionStorage.setItem('c0', ${T}.G.cash); return document.querySelector('#pbody .ins').textContent.slice(0, 40); })()` },
+  // (a storm already queued by the city's random weather would stop an insurer selling the policy: clear it first)
+  { eval: `(() => { const L = ${T}.G.live; L.inc = L.inc.filter((y) => y.on || y.done); ${T}.render(); sessionStorage.setItem('c0', ${T}.G.cash); return document.querySelector('#pbody .ins').textContent.slice(0, 40); })()` },
   { touchEl: '#pbody [data-insure]' }, { sleep: 300 },
   { log: `[${T}.G.biz[0].ins, ${T}.G.stats.insured, +sessionStorage.getItem('c0') - ${T}.G.cash, ${T}.TY.premium(${T}.G, ${T}.G.biz[0]), !!document.querySelector('#pbody .ins.on'), ${T}.G.handbook.premium > 0]` },
   { shot: 'ty-12b-insured' },
